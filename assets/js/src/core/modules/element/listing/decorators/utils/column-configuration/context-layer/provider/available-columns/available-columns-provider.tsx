@@ -53,11 +53,15 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
       const columnsMappedByGroup: Record<string, AvailableColumn[]> = {}
 
       availableColumns.forEach((column) => {
-        if (columnsMappedByGroup[column.group] === undefined) {
-          columnsMappedByGroup[column.group] = []
-        }
+        const groups = Array.isArray(column.group) ? column.group : [column.group]
 
-        columnsMappedByGroup[column.group].push(column)
+        groups.forEach((group) => {
+          if (columnsMappedByGroup[group] === undefined) {
+            columnsMappedByGroup[group] = []
+          }
+
+          columnsMappedByGroup[group].push(column)
+        })
       })
 
       return {

@@ -14,7 +14,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'preview',
-    group: 'system',
+    group: ['system'],
     sortable: false,
     editable: false,
     exportable: false,
@@ -27,7 +27,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'id',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -40,7 +40,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'type',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -53,7 +53,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'filename',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -66,7 +66,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'fullpath',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
