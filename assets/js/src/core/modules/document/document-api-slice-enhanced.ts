@@ -10,6 +10,8 @@
 
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './document-api-slice.gen'
+import { getPrefix } from '@sdk/api'
+import type { DocumentRenderletRenderApiArg, DocumentRenderletRenderApiResponse } from './document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES],
@@ -51,6 +53,48 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
     }
   }
+}).injectEndpoints({
+  endpoints: (build) => ({
+    documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
+      queryFn: async (arg, api, extraOptions, baseQuery) => {
+        console.log('Custom documentRenderletRender queryFn called with arg:', arg)
+        
+        const result = await baseQuery({
+          url: `${getPrefix()}/documents/renderlet/render`,
+          params: {
+            id: arg.id,
+            type: arg.type,
+            controller: arg.controller,
+            parentDocumentId: arg.parentDocumentId,
+            template: arg.template,
+          },
+          responseHandler: (response) => response.blob()
+        })
+   
+        if (result.error) {
+          if (result.error.data instanceof Blob) {
+            try {
+              const text = await result.error.data.text()
+              const jsonData = JSON.parse(text)
+              return { 
+                error: {
+                  ...result.error,
+                  data: jsonData
+                }
+              }
+            } catch {
+              return { error: result.error }
+            }
+          }
+          return { error: result.error }
+        }
+        
+        return { data: result.data as Blob }
+      },
+      providesTags: ["Documents"]
+    })
+  }),
+  overrideExisting: true
 })
 
 export type * from './document-api-slice.gen'
@@ -69,7 +113,8 @@ export const {
   useDocumentDocTypeUpdateByIdMutation,
   useDocumentDocTypeDeleteMutation,
   useDocumentPageSnippetAreaBlockRenderQuery,
-  useLazyDocumentPageSnippetAreaBlockRenderQuery
+  useLazyDocumentPageSnippetAreaBlockRenderQuery,
+  useDocumentRenderletRenderQuery
 } = api
 
 export { api }
