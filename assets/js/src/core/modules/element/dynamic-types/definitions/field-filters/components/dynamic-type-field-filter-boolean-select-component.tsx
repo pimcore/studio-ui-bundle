@@ -42,13 +42,18 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
 
   const [_value, setValue] = useState<number>(data as number)
 
+  const defaultOptions = [
+    { label: 'True', value: 1 },
+    { label: 'False', value: -1 },
+    { label: 'Empty', value: 0 }]
+
   let formattedOptions: DefaultOptionType[] = []
   if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
     formattedOptions = config.fieldDefinition.options.map((opt) => ({
       label: opt.key,
       value: opt.value
     }))
-  }
+  } else formattedOptions = defaultOptions
 
   return (
     <Select
