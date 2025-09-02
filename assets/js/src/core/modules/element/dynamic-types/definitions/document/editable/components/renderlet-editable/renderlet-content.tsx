@@ -211,7 +211,7 @@ export const RenderletContent = ({
     return t('drop-element-here')
   }
 
-  const errorContent = !isNil(actualError)
+  const errorContent = !isNil(actualError) || isFetchError
     ? (
       <Alert
         description={ getErrorMessage() }
