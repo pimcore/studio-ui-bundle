@@ -8,32 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useLinkDataType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/hooks/use-link-data-type'
 import { useStyles } from './document-link.styles'
 import type { LinkProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { DocumentLinkPreview } from '../link-preview/document-link-preview'
-import { isNil } from 'lodash'
 import cn from 'classnames'
 
-export interface DocumentLinkProps extends Omit<LinkProps, 'PreviewComponent' | 'inline'> {
-  containerRef?: React.RefObject<HTMLDivElement>
+export interface DocumentLinkProps extends Omit<LinkProps, 'PreviewComponent'> {
+
 }
 
 export const DocumentLink = (props: DocumentLinkProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { containerRef, ...linkProps } = props
 
   const { renderPreview, renderActions } = useLinkDataType({
-    ...linkProps,
+    ...props,
     PreviewComponent: DocumentLinkPreview
   })
-
-  useEffect(() => {
-    if (!isNil(containerRef) && !isNil(containerRef.current)) {
-      containerRef.current.style.display = 'inline'
-    }
-  }, [containerRef])
 
   const actions = renderActions()
   const positioningClass = actions.length === 1 ? styles.documentLinkActionsSingle : styles.documentLinkActions
