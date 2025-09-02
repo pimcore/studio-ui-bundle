@@ -58,7 +58,6 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
         allowedTargets={ allowedTargets }
         allowedTypes={ allowedTypes }
         className={ props.config?.class }
-        containerRef={ props.containerRef }
         disabledFields={ disabledFields }
         inherited={ props.inherited }
         onChange={ props.onChange }
