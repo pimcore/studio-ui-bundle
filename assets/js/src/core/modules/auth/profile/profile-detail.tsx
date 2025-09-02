@@ -27,7 +27,7 @@ import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
-import {useLanguageLookup} from "@Pimcore/modules/translations/hooks/use-language-lookup";
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
 interface IProfileDetail {
   id: number
@@ -131,7 +131,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                     name="language"
                   >
                     <Select
-                      options={ availableAdminLanguages.map((language:string) => ({
+                      options={ availableAdminLanguages.map((language: string) => ({
                         value: language,
                         label: getDisplayName(language)
                       })) }
@@ -144,7 +144,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                     name="dateTime"
                   >
                     <Select
-                      options={ availableAdminLanguages.map((language:string) => ({
+                      options={ availableAdminLanguages.map((language: string) => ({
                         value: language,
                         label: getDisplayName(language)
                       })) }

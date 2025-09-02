@@ -96,10 +96,10 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           name="language"
         >
           <Select
-            options={availableAdminLanguages.map((language:string) => ({
+            options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
-            }))}
+            })) }
             placeholder={ t('user-management.language') }
           />
         </Form.Item>
@@ -137,7 +137,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           name="dateTime"
         >
           <Select
-            options={ availableAdminLanguages.map((language:string) => ({
+            options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
             })) }
