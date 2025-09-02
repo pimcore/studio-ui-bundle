@@ -165,10 +165,34 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
+  // Helper function to compare groups that can be strings, arrays, or nested arrays
+  const areGroupsEqual = (group1: any, group2: any): boolean => {
+    // Normalize groups to string arrays for comparison
+    const normalizeGroup = (group: any): string[] => {
+      if (typeof group === 'string') {
+        return group.split('.')
+      }
+      if (Array.isArray(group)) {
+        return group.flat().map(part => String(part))
+      }
+      return [String(group)]
+    }
+
+    const normalizedGroup1 = normalizeGroup(group1)
+    const normalizedGroup2 = normalizeGroup(group2)
+
+    // Compare arrays by length and content
+    if (normalizedGroup1.length !== normalizedGroup2.length) {
+      return false
+    }
+
+    return normalizedGroup1.every((part, index) => part === normalizedGroup2[index])
+  }
+
   const getFilteredTypes = (column: any): object[] => {
     return column?.children?.filter((child: any) => {
       const isEditable: boolean = child.editable === true
-      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
+      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && areGroupsEqual(child.group, item.group))
       const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
 
       return isEditable && hasDynamicType && !isAlreadyInBatchEditList

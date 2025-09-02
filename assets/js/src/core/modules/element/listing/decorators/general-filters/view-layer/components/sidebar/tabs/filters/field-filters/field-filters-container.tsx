@@ -13,6 +13,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { isEmpty, isNil } from 'lodash'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
@@ -100,38 +101,100 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     return hasDynamicType && !isIgnoredField && !isNoneType && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
-  const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
-    const groupedItems: Record<string, DropdownProps['menu']['items']> = {}
+  const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {
+    // Helper function to create nested menu structure from group paths
+    const createNestedStructure = (columns: typeof availableFilterColumns): any[] => {
+      const groupTree: Record<string, any> = {}
+      let menuIndex = 0
 
-    availableFilterColumns.forEach((column) => {
-      const groups = Array.isArray(column.group) ? column.group : [column.group]
+      // Build the tree structure by processing each column's group(s)
+      columns.forEach((column) => {
+        const groups = Array.isArray(column.group) ? column.group : [column.group]
 
-      groups.forEach((group) => {
-        if (groupedItems[group] === undefined) {
-          groupedItems[group] = []
-        }
+        groups.forEach((groupPath) => {
+          let groupParts: string[] = []
 
-        let translationKey = `${column.key}`
+          // Handle different group path formats:
+          // 1. String: "assets.metadata" -> ["assets", "metadata"]
+          // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
+          // 3. Nested array: [["Attributes", "attributes", "Bodywork"]] -> ["Attributes", "attributes", "Bodywork"]
+          if (typeof groupPath === 'string') {
+            groupParts = groupPath.split('.')
+          } else if (Array.isArray(groupPath)) {
+            // If it's an array, flatten it and convert all elements to strings
+            groupParts = groupPath.flat().map(part => String(part))
+          } else {
+            // Fallback for any other type
+            groupParts = [String(groupPath)]
+          }
 
-        if ('fieldDefinition' in column.config) {
-          const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-          translationKey = fieldDefinition?.title ?? column.key
-        }
+          let currentLevel = groupTree
 
-        groupedItems[group].push({
-          key: column.key,
-          label: t(translationKey),
-          onClick: () => { handleColumnClick(column) }
+          // Navigate/create the nested tree structure
+          groupParts.forEach((part, index) => {
+            if (isNil(currentLevel[part])) {
+              currentLevel[part] = {
+                items: [], // Columns that belong directly to this group level
+                subGroups: {} // Nested sub-groups
+              }
+            }
+
+            // If this is the final part of the group path, add the column to this level
+            if (index === groupParts.length - 1) {
+              currentLevel[part].items.push(column)
+            } else {
+              // Move deeper into the tree structure
+              currentLevel = currentLevel[part].subGroups
+            }
+          })
         })
       })
-    })
 
-    return Object.keys(groupedItems).map((group) => ({
-      key: group,
-      label: t(group),
-      children: groupedItems[group]
-    }))
-  }, [availableFilterColumns])
+      // Convert the tree structure into Ant Design menu format
+      const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
+        return Object.entries(tree).map(([groupName, groupData]) => {
+          const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
+          const menuItem: any = {
+            key: `group-${menuIndex++}`,
+            label: t(groupName)
+          }
+
+          // Process sub-groups recursively
+          const subGroupItems = !isEmpty(Object.keys(groupData.subGroups as Record<string, any>))
+            ? convertTreeToMenuItems(groupData.subGroups as Record<string, any>, currentPath)
+            : []
+
+          // Create menu items for columns at this level
+          const columnItems = groupData.items.map((column: AvailableColumn) => {
+            let translationKey = `${column.key}`
+
+            if ('fieldDefinition' in column.config && !isNil(column.config)) {
+              const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+              translationKey = fieldDefinition?.title ?? column.key
+            }
+
+            return {
+              key: column.key,
+              label: t(translationKey),
+              onClick: () => { handleColumnClick(column) }
+            }
+          })
+
+          // Combine sub-groups and column items as children
+          const allChildren = [...subGroupItems, ...columnItems]
+          if (allChildren.length > 0) {
+            menuItem.children = allChildren
+          }
+
+          return menuItem
+        })
+      }
+
+      return convertTreeToMenuItems(groupTree)
+    }
+
+    return createNestedStructure(availableFilterColumns)
+  }, [availableFilterColumns, t])
 
   console.log({ filters })
 
@@ -145,7 +208,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         onChange={ onFilterChange }
       />
 
-      <Dropdown menu={ { items: getFilteredDropDownMenuItems() } }>
+      <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
         <IconTextButton
           icon={ { value: 'new' } }
           type='link'
