@@ -17,6 +17,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
 interface ICustomisationAccordion {
   isAdmin?: boolean
@@ -24,6 +25,7 @@ interface ICustomisationAccordion {
 const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages } = useSettings()
+  const { getDisplayName } = useLanguageLookup()
   const [roleOptions, setRoleOptions] = useState<any[]>([])
   const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
 
@@ -94,10 +96,10 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           name="language"
         >
           <Select
-            options={ availableAdminLanguages.map((language) => ({
-              value: language.language,
-              label: language.display
-            })) }
+            options={availableAdminLanguages.map((language) => ({
+              value: language,
+              label: getDisplayName(language)
+            }))}
             placeholder={ t('user-management.language') }
           />
         </Form.Item>
@@ -136,8 +138,8 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
         >
           <Select
             options={ availableAdminLanguages.map((language) => ({
-              value: language.language,
-              label: language.display
+              value: language,
+              label: getDisplayName(language)
             })) }
             placeholder={ t('user-management.dateTime') }
           />
