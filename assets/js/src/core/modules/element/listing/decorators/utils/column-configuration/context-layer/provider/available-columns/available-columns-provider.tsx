@@ -29,6 +29,14 @@ export interface OnMenuItemClickEvent {
 
 export type OnMenuItemClick = (column: AvailableColumn) => void
 
+/**
+ * Data structure for the available columns context.
+ * Supports nested menu structure based on group property:
+ * - Single group: group: "assets" creates a single-level menu
+ * - Nested group: group: "assets.metadata" creates "assets" > "metadata" submenu
+ * - Array group: group: ["Attributes", "attributes", "Bodywork"] creates "Attributes" > "attributes" > "Bodywork" submenu
+ * - Multiple groups: group: [["Attributes", "Engine"], "system"] creates items in both "Attributes" > "Engine" and "system"
+ */
 export interface AvailableColumnsData {
   availableColumns: AvailableColumn[]
   setAvailableColumns: (availableColumns: AvailableColumn[]) => void
@@ -49,27 +57,70 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
   const getAvailableColumnsDropdown: AvailableColumnsData['getAvailableColumnsDropdown'] = useMemo(() => {
     return (onMenuItemClick: OnMenuItemClick): DropdownProps => {
-      let index = 0
-      const columnsMappedByGroup: Record<string, AvailableColumn[]> = {}
+      // Helper function to create nested menu structure from group paths
+      const createNestedStructure = (columns: AvailableColumn[]) => {
+        const groupTree: Record<string, any> = {}
+        let menuIndex = 0
 
-      availableColumns.forEach((column) => {
-        const groups = Array.isArray(column.group) ? column.group : [column.group]
+        // Build the tree structure by processing each column's group(s)
+        columns.forEach((column) => {
+          const groups = Array.isArray(column.group) ? column.group : [column.group]
+          
+          groups.forEach((groupPath) => {
+            let groupParts: string[] = []
+            
+            // Handle different group path formats:
+            // 1. String: "assets.metadata" -> ["assets", "metadata"]
+            // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
+            // 3. Nested array: [["Attributes", "attributes", "Bodywork"]] -> ["Attributes", "attributes", "Bodywork"]
+            if (typeof groupPath === 'string') {
+              groupParts = groupPath.split('.')
+            } else if (Array.isArray(groupPath)) {
+              // If it's an array, flatten it and convert all elements to strings
+              groupParts = groupPath.flat().map(part => String(part))
+            } else {
+              // Fallback for any other type
+              groupParts = [String(groupPath)]
+            }
 
-        groups.forEach((group) => {
-          if (columnsMappedByGroup[group] === undefined) {
-            columnsMappedByGroup[group] = []
-          }
+            let currentLevel = groupTree
 
-          columnsMappedByGroup[group].push(column)
+            // Navigate/create the nested tree structure
+            groupParts.forEach((part, index) => {
+              if (!currentLevel[part]) {
+                currentLevel[part] = {
+                  items: [], // Columns that belong directly to this group level
+                  subGroups: {} // Nested sub-groups
+                }
+              }
+
+              // If this is the final part of the group path, add the column to this level
+              if (index === groupParts.length - 1) {
+                currentLevel[part].items.push(column)
+              } else {
+                // Move deeper into the tree structure
+                currentLevel = currentLevel[part].subGroups
+              }
+            })
+          })
         })
-      })
 
-      return {
-        menu: {
-          items: Object.entries(columnsMappedByGroup).map(([key, value]) => ({
-            key: index++,
-            label: t(key),
-            children: value.map((column) => {
+        // Convert the tree structure into Ant Design menu format
+        const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
+          return Object.entries(tree).map(([groupName, groupData]) => {
+            const currentPath = parentPath ? `${parentPath}.${groupName}` : groupName
+            const menuItem: any = {
+              key: `group-${menuIndex++}`,
+              label: t(groupName)
+            }
+
+            // Process sub-groups recursively
+            const subGroupItems = Object.keys(groupData.subGroups).length > 0 
+              ? convertTreeToMenuItems(groupData.subGroups, currentPath)
+              : []
+
+            // Create menu items for columns at this level
+            const columnItems = groupData.items.map((column: AvailableColumn) => {
               let translationKey = `${column.key}`
 
               if ('fieldDefinition' in column.config) {
@@ -88,11 +139,27 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 }
               }
             })
-          }))
+
+            // Combine sub-groups and column items as children
+            const allChildren = [...subGroupItems, ...columnItems]
+            if (allChildren.length > 0) {
+              menuItem.children = allChildren
+            }
+
+            return menuItem
+          })
+        }
+
+        return convertTreeToMenuItems(groupTree)
+      }
+
+      return {
+        menu: {
+          items: createNestedStructure(availableColumns)
         }
       }
     }
-  }, [availableColumns])
+  }, [availableColumns, t])
 
   return useMemo(() => (
     <AvailableColumnsContext.Provider value={ { availableColumns, setAvailableColumns, getAvailableColumnsDropdown } }>
