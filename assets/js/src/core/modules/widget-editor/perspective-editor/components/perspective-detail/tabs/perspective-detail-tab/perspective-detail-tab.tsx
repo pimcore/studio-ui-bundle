@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button } from '@Pimcore/components/button/button'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
@@ -23,12 +22,11 @@ import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective
 import { type FormInstance } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@sdk/components'
 
 export interface PerspectiveForm {
   name: string
 }
-import { Button } from '@sdk/components'
-import React, { useState } from 'react'
 
 interface PerspectiveDetailTabProps {
   id: string | undefined
@@ -98,18 +96,18 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               />
             </Form.Item>
           </FormKit.Panel>
-            <Button onClick={ () => { setIconSelectorOpen(true) } }>
-                Open Icon Selector
-            </Button>
-            <IconSelector
-                onCancel={ () => { setIconSelectorOpen(false) } }
-                onSelect={ (iconName) => {
-                    setSelectedIcon(iconName)
-                    setIconSelectorOpen(false)
-                } }
-                open={ iconSelectorOpen }
-                selectedIcon={ selectedIcon }
-            />
+          <Button onClick={ () => { setIconSelectorOpen(true) } }>
+            Open Icon Selector
+          </Button>
+          <IconSelector
+            onCancel={ () => { setIconSelectorOpen(false) } }
+            onSelect={ (iconName) => {
+              setSelectedIcon(iconName)
+              setIconSelectorOpen(false)
+            } }
+            open={ iconSelectorOpen }
+            selectedIcon={ selectedIcon }
+          />
         </Content>
 
         <Toolbar justify="space-between">

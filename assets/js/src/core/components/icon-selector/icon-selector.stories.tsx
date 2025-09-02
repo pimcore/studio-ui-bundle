@@ -44,22 +44,22 @@ const IconSelectorDemo = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <div style={{ marginBottom: '20px' }}>
+    <div style={ { padding: '20px' } }>
+      <div style={ { marginBottom: '20px' } }>
         <p>Current selected icon: <strong>{selectedIcon}</strong></p>
         <IconButton
-          icon={{ value: selectedIcon }}
-          onClick={handleOpen}
+          icon={ { value: selectedIcon } }
+          onClick={ handleOpen }
         >
           Select Icon
         </IconButton>
       </div>
 
       <IconSelector
-        onCancel={handleClose}
-        onSelect={handleSelect}
-        open={open}
-        selectedIcon={selectedIcon}
+        onCancel={ handleClose }
+        onSelect={ handleSelect }
+        open={ open }
+        selectedIcon={ selectedIcon }
       />
     </div>
   )

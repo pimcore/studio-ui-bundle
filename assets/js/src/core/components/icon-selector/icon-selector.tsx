@@ -19,12 +19,13 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface IconSelectorProps {
   open: boolean
   onCancel: () => void
-  onSelect: (iconName: string) => void
-  selectedIcon?: string
+  onSelect: (icon: ElementIcon) => void
+  selectedIcon?: ElementIcon
 }
 
 export const IconSelector = ({
@@ -41,7 +42,7 @@ export const IconSelector = ({
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
-  const [currentSelectedIcon, setCurrentSelectedIcon] = useState<string | undefined>(selectedIcon)
+  const [currentSelectedIcon, setCurrentSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
   const filteredIcons = useMemo(() => {
     const iconsArray = Array.from(allIcons)
@@ -73,7 +74,7 @@ export const IconSelector = ({
   }, [filteredIcons, currentPage, pageSize])
 
   const handleIconClick = useCallback((iconName: string) => {
-    setCurrentSelectedIcon(iconName)
+    setCurrentSelectedIcon({ type: 'name', value: iconName })
   }, [])
 
   const handleSave = useCallback(() => {
@@ -163,7 +164,7 @@ export const IconSelector = ({
         <div className={ styles.iconGrid }>
           {paginatedIcons.map(([iconName]) => (
             <Space
-              className={ `${styles.iconCard} ${currentSelectedIcon === iconName ? styles.selectedCard : ''}` }
+              className={ `${styles.iconCard} ${currentSelectedIcon?.value === iconName ? styles.selectedCard : ''}` }
               key={ iconName }
               onClick={ () => { handleIconClick(iconName) } }
               size='mini'
@@ -193,7 +194,7 @@ export const IconSelector = ({
                 ? (
                   <Icon
                     options={ { height: 16, width: 16 } }
-                    value={ currentSelectedIcon }
+                    value={ currentSelectedIcon.value }
                   />
                   )
                 : (
