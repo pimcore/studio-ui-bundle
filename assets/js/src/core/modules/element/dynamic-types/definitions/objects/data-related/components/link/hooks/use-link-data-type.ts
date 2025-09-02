@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createElement } from 'react'
+import type React from 'react'
+import { createElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
@@ -71,7 +72,7 @@ export const useLinkDataType = (props: Omit<LinkProps, 'useAbsoluteLayout'>): Us
     if (isNil(PreviewComponent)) {
       throw new Error('PreviewComponent is required')
     }
-    
+
     return createElement(PreviewComponent, {
       className: cn('studio-inherited-overlay', props.className),
       inherited: props.inherited,
