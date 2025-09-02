@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import React from 'react'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -19,11 +29,11 @@ export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
 
   return (
     <Select
-      {...selectProps}
-      onChange={handleChange}
-      options={options as any}
-      style={{ maxWidth: toCssDimension(maxWidth) }}
-      value={value}
+      { ...selectProps }
+      onChange={ handleChange }
+      options={ options as any }
+      style={ { maxWidth: toCssDimension(maxWidth) } }
+      value={ value }
     />
   )
 }

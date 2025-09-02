@@ -34,10 +34,10 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
     if (options === null) {
       return undefined
     }
-   
+
     return options.map((option) => {
       let booleanValue: boolean | null
-      
+
       if (option.value === -1) {
         booleanValue = false
       } else if (option.value === 1) {
@@ -45,7 +45,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
       } else {
         booleanValue = null
       }
-      
+
       return {
         label: option.key,
         value: booleanValue
@@ -55,8 +55,6 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
 
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     const options = this.convertOptions(props.options)
-    console.log("BooleanSelect props.value:", props.value)
-    console.log("BooleanSelect options:", options)
     return (
       <BooleanSelect
         className={ props.className }

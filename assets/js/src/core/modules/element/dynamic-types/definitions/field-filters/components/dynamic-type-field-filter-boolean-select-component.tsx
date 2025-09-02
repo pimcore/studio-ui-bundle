@@ -15,7 +15,7 @@ import { type DefaultOptionType } from 'antd/es/select'
 
 interface IObjectSelectConfig {
   fieldDefinition: {
-    options: Array<{ key: string, value: string | number }>
+    options: Array<{ key: string, value: number }>
     fieldtype?: string
   }
 }
@@ -24,7 +24,7 @@ interface IAssetSelectConfig {
   options: string[]
 }
 
-const transformBooleanSelectValueToBooleanNull = (value: string | number): boolean | null => {  
+const transformBooleanSelectValueToBooleanNull = (value: number): boolean | null => {
   switch (value) {
     case -1:
       return false
@@ -36,33 +36,31 @@ const transformBooleanSelectValueToBooleanNull = (value: string | number): boole
   return null
 }
 
-
 export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
 
-
-  const [_value, setValue] = useState(transformBooleanSelectValueToBooleanNull(data))
+  const [_value, setValue] = useState<number>(data as number)
 
   let formattedOptions: DefaultOptionType[] = []
   if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
-      formattedOptions = config.fieldDefinition.options.map((opt) => ({
-        label: opt.key,
-        value: transformBooleanSelectValueToBooleanNull(opt.value) as any
-      }))
-    }
+    formattedOptions = config.fieldDefinition.options.map((opt) => ({
+      label: opt.key,
+      value: opt.value
+    }))
+  }
 
   return (
     <Select
       onBlur={ onBlur }
-      onChange={ (value: boolean | null) => { setValue(value) } }
-      options={ formattedOptions as any } 
+      onChange={ (value: number) => { setValue(value) } }
+      options={ formattedOptions }
       style={ { width: '100%' } }
       value={ _value }
     />
   )
 
   function onBlur (): void {
-       setData(_value)
+    setData(transformBooleanSelectValueToBooleanNull(_value))
   }
 }
