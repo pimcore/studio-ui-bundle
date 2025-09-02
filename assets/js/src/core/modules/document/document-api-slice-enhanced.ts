@@ -12,6 +12,7 @@ import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimc
 import { api as baseApi } from './document-api-slice.gen'
 import { getPrefix } from '@sdk/api'
 import type { DocumentRenderletRenderApiArg, DocumentRenderletRenderApiResponse } from './document-api-slice.gen'
+import { isNil } from 'lodash'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES],
@@ -70,7 +71,7 @@ const api = baseApi.enhanceEndpoints({
           responseHandler: (response) => response.blob()
         })
    
-        if (result.error) {
+        if (!isNil(result.error)) {
           if (result.error.data instanceof Blob) {
             try {
               const text = await result.error.data.text()
