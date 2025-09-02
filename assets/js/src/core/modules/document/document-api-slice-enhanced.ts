@@ -58,7 +58,6 @@ const api = baseApi.enhanceEndpoints({
   endpoints: (build) => ({
     documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
       queryFn: async (arg, api, extraOptions, baseQuery) => {
-        
         const result = await baseQuery({
           url: `${getPrefix()}/documents/renderlet/render`,
           params: {
@@ -66,17 +65,17 @@ const api = baseApi.enhanceEndpoints({
             type: arg.type,
             controller: arg.controller,
             parentDocumentId: arg.parentDocumentId,
-            template: arg.template,
+            template: arg.template
           },
-          responseHandler: (response) => response.blob()
+          responseHandler: async (response) => await response.blob()
         })
-   
+
         if (!isNil(result.error)) {
           if (result.error.data instanceof Blob) {
             try {
               const text = await result.error.data.text()
               const jsonData = JSON.parse(text)
-              return { 
+              return {
                 error: {
                   ...result.error,
                   data: jsonData
@@ -88,10 +87,10 @@ const api = baseApi.enhanceEndpoints({
           }
           return { error: result.error }
         }
-        
+
         return { data: result.data as Blob }
       },
-      providesTags: ["Documents"]
+      providesTags: ['Documents']
     })
   }),
   overrideExisting: true
