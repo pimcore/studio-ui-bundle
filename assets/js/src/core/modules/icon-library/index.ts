@@ -208,6 +208,7 @@ import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
+import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
@@ -1018,6 +1019,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'shared-users',
       component: sharedUsers
+    })
+    iconLibrary.register({
+      name: 'shield-plus',
+      component: shieldPlus
     })
     iconLibrary.register({
       name: 'shield',

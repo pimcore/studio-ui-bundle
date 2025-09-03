@@ -20,6 +20,7 @@ import { useStyle } from '@Pimcore/modules/user/management/tree/tree-container.s
 import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
+import { TreeAutocomplete } from '@Pimcore/modules/user/roles/tree/tree-autocomplete'
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
@@ -65,13 +66,13 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
           actions={ [
             {
               key: 'add-role',
-              label: t('tree.actions.add-role'),
-              icon: <Icon value='add-user'></Icon>,
+              label: t('tree.actions.role'),
+              icon: <Icon value='shield-plus'></Icon>,
               onClick: () => { handleAddRole(0) }
             },
             {
               key: 'add-folder',
-              label: t('tree.actions.add-folder'),
+              label: t('tree.actions.folder'),
               icon: <Icon value='folder-plus'></Icon>,
               onClick: () => { handleAddFolder(0) }
             }
@@ -83,6 +84,8 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
       <Content
         className={ classNames.join(', ') }
       >
+        <TreeAutocomplete />
+
         <Tree
           defaultExpandedKeys={ expandedKeys }
           draggable
