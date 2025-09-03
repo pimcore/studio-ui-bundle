@@ -12,6 +12,7 @@ import { type Meta, type StoryObj } from '@storybook/react'
 import { IconSelector } from './icon-selector'
 import React, { useState } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 const config: Meta = {
   title: 'Components/General/IconSelector',
@@ -28,7 +29,7 @@ type Story = StoryObj<typeof config>
 
 const IconSelectorDemo = (): React.JSX.Element => {
   const [open, setOpen] = useState(false)
-  const [selectedIcon, setSelectedIcon] = useState<string>('folder')
+  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>(undefined)
 
   const handleOpen = (): void => {
     setOpen(true)
@@ -38,17 +39,17 @@ const IconSelectorDemo = (): React.JSX.Element => {
     setOpen(false)
   }
 
-  const handleSelect = (iconName: string): void => {
-    setSelectedIcon(iconName)
+  const handleSelect = (icon: ElementIcon): void => {
+    setSelectedIcon(icon)
     setOpen(false)
   }
 
   return (
     <div style={ { padding: '20px' } }>
       <div style={ { marginBottom: '20px' } }>
-        <p>Current selected icon: <strong>{selectedIcon}</strong></p>
+        <p>Current selected icon: <strong>{selectedIcon?.value ?? 'None'}</strong></p>
         <IconButton
-          icon={ { value: selectedIcon } }
+          icon={ { value: selectedIcon?.value ?? 'folder' } }
           onClick={ handleOpen }
         >
           Select Icon
