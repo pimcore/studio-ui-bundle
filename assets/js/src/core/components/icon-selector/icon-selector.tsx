@@ -195,24 +195,20 @@ export const IconSelector = ({
             align="center"
             gap="small"
           >
-            <span>{t('icon-selector.current-selection')}</span>
+            {!isUndefined(currentSelectedIcon) && 
+            <><span>{t('icon-selector.current-selection')}</span>
             <Flex
               align='center'
               className={ styles.selectionPreview }
               justify='center'
             >
-              {!isUndefined(currentSelectedIcon)
-                ? (
                   <Icon
                     options={ { height: 16, width: 16 } }
                     type={ currentSelectedIcon.type }
                     value={ currentSelectedIcon.value }
                   />
-                  )
-                : (
-                  <span className={ styles.noSelection }>{t('icon-selector.no-selection')}</span>
-                  )}
             </Flex>
+            </>}
             {!isUndefined(currentSelectedIcon) && (
             <IconButton
               icon={ { value: 'trash' } }
