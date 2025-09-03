@@ -14,7 +14,6 @@ import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './icon-selector.styles'
@@ -39,8 +38,6 @@ export const IconSelector = ({
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
 
   const { styles } = useStyles()
-  const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
-  const allIcons = iconLibrary.getIcons()
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -69,23 +66,25 @@ export const IconSelector = ({
   }, [iconSetRegistry])
 
   const filteredIcons = useMemo(() => {
-    const iconsArray = Array.from(allIcons)
+    let iconsToFilter: ElementIcon[] = []
 
-    let filtered = iconsArray.filter(([name]) =>
-      name.toLowerCase().includes(searchValue.toLowerCase())
-    )
-
-    if (activeTab !== 'all') {
+    if (activeTab === 'all') {
+      iconSetRegistry.getDynamicTypes().forEach(iconSet => {
+        iconsToFilter.push(...iconSet.getIcons())
+      })
+    } else {
       const iconSet = iconSetRegistry.getDynamicTypes().find(set => set.id === activeTab)
       if (!isUndefined(iconSet)) {
-        const iconSetIcons = iconSet.getIcons()
-        const iconSetIconNames = iconSetIcons.map(icon => icon.value)
-        filtered = filtered.filter(([name]) => iconSetIconNames.includes(name))
+        iconsToFilter = iconSet.getIcons()
       }
     }
 
+    const filtered = iconsToFilter
+      .filter(icon => icon.value.toLowerCase().includes(searchValue.toLowerCase()))
+      .map(icon => [icon.value, ''] as [string, string])
+
     return filtered
-  }, [allIcons, searchValue, activeTab, iconSetRegistry])
+  }, [searchValue, activeTab, iconSetRegistry])
 
   const paginatedIcons = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize
