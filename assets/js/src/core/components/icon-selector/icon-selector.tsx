@@ -81,7 +81,6 @@ export const IconSelector = ({
 
     const filtered = iconsToFilter
       .filter(icon => icon.value.toLowerCase().includes(searchValue.toLowerCase()))
-      .map(icon => [icon.value, ''] as [string, string])
 
     return filtered
   }, [searchValue, activeTab, iconSetRegistry])
@@ -92,8 +91,8 @@ export const IconSelector = ({
     return filteredIcons.slice(startIndex, endIndex)
   }, [filteredIcons, currentPage, pageSize])
 
-  const handleIconClick = useCallback((iconName: string) => {
-    setCurrentSelectedIcon({ type: 'name', value: iconName })
+  const handleIconClick = useCallback((icon: ElementIcon) => {
+    setCurrentSelectedIcon(icon)
   }, [])
 
   const handleSave = useCallback(() => {
@@ -168,18 +167,19 @@ export const IconSelector = ({
         />
 
         <div className={ styles.iconGrid }>
-          {paginatedIcons.map(([iconName]) => (
+          {paginatedIcons.map((icon) => (
             <Space
-              className={ `${styles.iconCard} ${currentSelectedIcon?.value === iconName ? styles.selectedCard : ''}` }
-              key={ iconName }
-              onClick={ () => { handleIconClick(iconName) } }
+              className={ `${styles.iconCard} ${currentSelectedIcon?.value === icon.value ? styles.selectedCard : ''}` }
+              key={ icon.value }
+              onClick={ () => { handleIconClick(icon) } }
               size='mini'
             >
               <Icon
                 options={ { height: 24, width: 24 } }
-                value={ iconName }
+                type={ icon.type }
+                value={ icon.value }
               />
-              <span className={ styles.iconName }>{iconName}</span>
+              <span className={ styles.iconName }>{icon.value}</span>
             </Space>
           ))}
         </div>
@@ -200,6 +200,7 @@ export const IconSelector = ({
                 ? (
                   <Icon
                     options={ { height: 16, width: 16 } }
+                    type={ currentSelectedIcon.type }
                     value={ currentSelectedIcon.value }
                   />
                   )
