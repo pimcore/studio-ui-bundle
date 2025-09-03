@@ -212,6 +212,9 @@ import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
 import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
+import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
+import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -465,3 +468,8 @@ container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSinglet
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()
+
+// Icon set
+container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
