@@ -20,6 +20,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
 
 export interface IconSelectorProps {
   open: boolean
@@ -34,6 +35,9 @@ export const IconSelector = ({
   onSelect,
   selectedIcon
 }: IconSelectorProps): React.JSX.Element => {
+
+  const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
+
   const { styles } = useStyles()
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const allIcons = iconLibrary.getIcons()
@@ -44,6 +48,26 @@ export const IconSelector = ({
   const [activeTab, setActiveTab] = useState<string>('all')
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
+  const tabItems = useMemo(() => {
+    const items = [
+      {
+        key: 'all',
+        label: t('icon-selector.all-icons'),
+        children: null
+      }
+    ]
+
+    iconSetRegistry.getDynamicTypes().forEach((iconSet) => {
+      items.push({
+        key: iconSet.id,
+        label: iconSet.name,
+        children: null
+      })
+    })
+
+    return items
+  }, [iconSetRegistry])
+
   const filteredIcons = useMemo(() => {
     const iconsArray = Array.from(allIcons)
 
@@ -51,21 +75,17 @@ export const IconSelector = ({
       name.toLowerCase().includes(searchValue.toLowerCase())
     )
 
-    if (activeTab === 'pimcore') {
-      // FOR DEMO - delete when implementing tab
-      filtered = filtered.filter(([name]) =>
-        name.startsWith('pimcore') ||
-        name.includes('data-object') ||
-        name.includes('document') ||
-        name.includes('asset') ||
-        name.includes('folder') ||
-        name.includes('user') ||
-        name.includes('workflow')
-      )
+    if (activeTab !== 'all') {
+      const iconSet = iconSetRegistry.getDynamicTypes().find(set => set.id === activeTab)
+      if (!isUndefined(iconSet)) {
+        const iconSetIcons = iconSet.getIcons()
+        const iconSetIconNames = iconSetIcons.map(icon => icon.value)
+        filtered = filtered.filter(([name]) => iconSetIconNames.includes(name))
+      }
     }
 
     return filtered
-  }, [allIcons, searchValue, activeTab])
+  }, [allIcons, searchValue, activeTab, iconSetRegistry])
 
   const paginatedIcons = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize
@@ -112,19 +132,6 @@ export const IconSelector = ({
       setPageSize(newPageSize)
     }
   }, [])
-
-  const tabItems = [
-    {
-      key: 'all',
-      label: t('icon-selector.all-icons'),
-      children: null
-    },
-    {
-      key: 'pimcore',
-      label: t('icon-selector.pimcore-library'),
-      children: null
-    }
-  ]
 
   return (
     <Modal
