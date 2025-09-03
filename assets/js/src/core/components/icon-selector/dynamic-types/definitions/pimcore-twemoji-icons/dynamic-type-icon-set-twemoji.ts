@@ -11,6 +11,7 @@
 import { ElementIcon } from "@Pimcore/modules/asset/asset-api-slice.gen";
 import { DynamicTypeIconSetAbstract } from "../dynamic-type-icon-set-abstract";
 import { injectable } from "inversify";
+import { TWEMOJI_ICONS_LIST_COMPLETE } from "./twemoji-icons-list-complete";
 
 @injectable()
 export class DynamicTypeIconSetTwemoji extends DynamicTypeIconSetAbstract {
@@ -20,7 +21,12 @@ export class DynamicTypeIconSetTwemoji extends DynamicTypeIconSetAbstract {
   name: string = 'Twemoji'
 
   getIcons (): ElementIcon[] {
-    return [{type: "name", value: "eye"}]
+    const iconsList = TWEMOJI_ICONS_LIST_COMPLETE;
+    
+    return iconsList.map((iconName) => ({
+      type: 'path' as const,
+      value: `icons/twemoji/${iconName}.svg`
+    }))
   }
   
 }
