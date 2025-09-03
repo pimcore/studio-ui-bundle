@@ -33,7 +33,7 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
           <Switch
             disabled={ isDisabled }
             labelRight={ t('user-management.admin') }
-            size={'small'}
+            size={ 'small' }
           />
         </Form.Item>
 

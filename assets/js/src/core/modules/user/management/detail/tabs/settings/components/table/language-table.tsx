@@ -60,6 +60,12 @@ export const LanguageTable = ({
 
   const columnHelper = createColumnHelper()
   const tableColumns = [
+    ...onChangeOrder !== null && onChangeOrder !== undefined
+      ? [columnHelper.accessor('order', {
+          header: '',
+          size: 40
+        })]
+      : [],
     columnHelper.accessor('name', {
       header: t('user-management.settings.language.name'),
       meta: {
@@ -128,6 +134,7 @@ export const LanguageTable = ({
   }
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
+    console.log('onUpdateCellData', { rowIndex, columnId, value, rowData })
     const updatedGridData = gridData.map((item, index) => {
       if (index === rowIndex) {
         if (columnId === 'edit') {
@@ -155,12 +162,14 @@ export const LanguageTable = ({
               autoWidth
               columns={ tableColumns }
               data={ gridData }
+              enableRowDrag={ onChangeOrder !== null && onChangeOrder !== undefined }
+              handleDragEnd={ (evt) => { handleOrder(evt.active.id as number, evt.over?.id as number) } }
               onUpdateCellData={ onUpdateCellData }
               setRowId={ (row) => row.cid }
             />
-          )}
+              )}
         </>
-      )}
+        )}
     </div>
   )
 }
