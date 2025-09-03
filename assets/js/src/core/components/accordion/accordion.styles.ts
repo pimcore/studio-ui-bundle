@@ -162,7 +162,7 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-collapse-item {
           background: ${token.colorBgContainer};
           border: 1px solid ${token.colorBorderSecondary};
-          border-radius: ${token.borderRadius}px;
+          border-radius: ${token.borderRadiusLG}px;
         }
         
         .ant-collapse-header {
@@ -179,10 +179,6 @@ export const useStyles = createStyles(({ token, css }) => {
         }
         
         &.ant-collapse-small {
-          .ant-collapse-item {
-            border-radius: ${token.borderRadiusSM}px;
-          }
-          
           .ant-collapse-header {
             padding: ${token.paddingXS}px ${token.paddingSM}px;
           }
