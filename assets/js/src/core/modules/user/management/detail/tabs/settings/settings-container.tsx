@@ -116,6 +116,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       name="active"
                     >
                       <Switch
+                          size={'small'}
                         disabled={ user?.id === openedUser?.id }
                         labelRight={ t('user-management.active') }
                       />
@@ -155,8 +156,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
-                    <Switch labelRight={ t('user-management.two-factor-authentication') } />
+                  <Form.Item style={ { marginBottom: '0' } } name={ 'twoFactorAuthenticationEnabled' }>
+                    <Switch size={'small'} labelRight={ t('user-management.two-factor-authentication') } />
                   </Form.Item>
                 </>
               }

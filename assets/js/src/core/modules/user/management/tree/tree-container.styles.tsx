@@ -15,11 +15,11 @@ export const useStyle = createStyles(({ token, css }) => {
     treeContainer: css`
       margin-top: ${token.paddingSM}px;
 
-      .simple-tree--search {
-        margin: ${token.paddingSM}px ${token.paddingSM}px ${token.paddingXS}px;
+      .tree--search {
+        margin: ${token.paddingSM}px ${token.paddingSM}px 0;
       }
       
-      :has(.simple-tree--search) {
+      :has(.tree--search) {
         margin-top: 0;
       }
     `

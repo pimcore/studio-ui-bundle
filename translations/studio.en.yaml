@@ -635,7 +635,7 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
-user-management.tree.all: All Users
+user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
@@ -693,8 +693,8 @@ user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
-user-management.firstname: Firstname
-user-management.lastname: Lastname
+user-management.firstname: First name
+user-management.lastname: Last name
 user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale

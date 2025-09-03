@@ -81,6 +81,7 @@ export const useStyles = createStyles(({ token, css }) => {
               align-items: center;
               justify-content: center;
               margin: 0 ${token.marginXXS}px;
+              align-self: center;
             }
 
             .accordion__chevron {
@@ -98,6 +99,10 @@ export const useStyles = createStyles(({ token, css }) => {
             order: 1;
             margin-left: 5px;
         }
+      
+      .ant-form-item:last-child {
+        margin-bottom: 0;
+      }
     `,
     table: css`
       width: min-content;
