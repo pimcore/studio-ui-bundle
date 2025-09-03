@@ -25,7 +25,7 @@ export class DynamicTypeIconSetTwemoji extends DynamicTypeIconSetAbstract {
     
     return iconsList.map((iconName) => ({
       type: 'path' as const,
-      value: `icons/twemoji/${iconName}.svg`
+      value: `/bundles/pimcorestudioui/img/icons/twemoji/${iconName}.svg`
     }))
   }
   
