@@ -179,7 +179,12 @@ export const IconSelector = ({
                 type={ icon.type }
                 value={ icon.value }
               />
-              <span className={ styles.iconName }>{icon.value}</span>
+              <span className={ styles.iconName }>
+                {icon.type === 'path' 
+                  ? icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
+                  : icon.value
+                }
+              </span>
             </Space>
           ))}
         </div>
