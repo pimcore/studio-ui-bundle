@@ -11,6 +11,7 @@
 import React from 'react'
 import { DatePicker } from '@sdk/components'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface DateEditableValue {
   value?: string | null
@@ -33,6 +34,8 @@ export const DateEditable = ({
   onChange,
   inherited
 }: DateEditableProps): React.JSX.Element => {
+  const fieldWidths = useFieldWidth()
+  
   const handleOverwrite = (): void => {
     onChange?.(value ?? null)
   }
@@ -41,12 +44,18 @@ export const DateEditable = ({
     onChange?.(newValue)
   }
 
+  const containerStyle = {
+    width: '100%',
+    maxWidth: fieldWidths?.small
+  }
+
   return (
     <InheritanceOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
+      style={ containerStyle }
     >
       <DatePicker
         allowClear
@@ -54,6 +63,7 @@ export const DateEditable = ({
         disabled={ inherited }
         onChange={ handleChange }
         outputType="dateString"
+        style={ containerStyle }
         value={ value }
       />
     </InheritanceOverlay>

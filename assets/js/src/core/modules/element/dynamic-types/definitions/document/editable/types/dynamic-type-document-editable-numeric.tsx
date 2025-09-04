@@ -30,8 +30,8 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
     return (
       <NumericEditable
         config={ props.config }
-        defaultFieldWidth={ props.defaultFieldWidth }
         inherited={ props.inherited }
+        onChange={ props.onChange }
         value={ props.value }
       />
     )

@@ -11,8 +11,8 @@
 import React from 'react'
 import { InputNumber } from '@sdk/components'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
-import cn from 'classnames'
 import { toCssDimension } from '@sdk/utils'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface NumericEditableValue {
   value?: number | null
@@ -32,20 +32,16 @@ interface NumericEditableProps {
   config?: NumericEditableConfig
   onChange?: (value: number | null) => void
   inherited?: boolean
-  defaultFieldWidth?: {
-    small: number
-    medium: number
-    large: number
-  }
 }
 
 export const NumericEditable = ({
   value,
   config,
   onChange,
-  inherited,
-  defaultFieldWidth
+  inherited
 }: NumericEditableProps): React.JSX.Element => {
+  const defaultFieldWidth = useFieldWidth()
+  
   const handleOverwrite = (): void => {
     onChange?.(value ?? null)
   }
@@ -54,20 +50,26 @@ export const NumericEditable = ({
     onChange?.(newValue)
   }
 
+  const containerStyle = {
+    width: '100%',
+    maxWidth: toCssDimension(config?.width, defaultFieldWidth?.small)
+  }
+
   return (
     <InheritanceOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
+      style={ containerStyle }
     >
       <InputNumber
-        className={ cn('w-full', config?.class) }
+        className={ config?.class }
         disabled={ inherited }
         max={ config?.maxValue }
         min={ config?.minValue }
         onChange={ handleChange }
-        style={ { maxWidth: toCssDimension(config?.width, defaultFieldWidth?.small) } }
+        style={ containerStyle }
         value={ value }
       />
     </InheritanceOverlay>
