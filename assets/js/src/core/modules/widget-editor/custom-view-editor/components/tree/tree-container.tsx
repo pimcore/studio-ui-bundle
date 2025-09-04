@@ -13,14 +13,18 @@ import { isNil, isString, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
-import { usePerspectiveWidgetGetConfigCollectionQuery, type WidgetConfig } from '@sdk/api/perspectives'
+import { usePerspectiveWidgetGetConfigCollectionQuery } from '@sdk/api/perspectives'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api, type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openWidget } = useWidgetEditorContext()
-  const { data: widgets } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const { openWidget, createWidget, setIsLoading, isLoading } = useWidgetEditorContext()
+  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const dispatch = useAppDispatch()
 
   const generateTreeStructure = (widgets: WidgetConfig[]): TreeDataItem[] => {
     const tmpTreeData: TreeDataItem[] = []
@@ -30,7 +34,7 @@ export const TreeContainer = (): React.JSX.Element => {
         tmpTreeData.push({
           title: item.name,
           key: item.id,
-          icon: <Icon value={ item.icon.value } />
+          icon: <Icon value={item.icon.value} />
         })
       })
     }
@@ -78,39 +82,56 @@ export const TreeContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ (
+      renderToolbar={(
         <Toolbar justify="space-between">
           <IconButton
-            icon={ { value: 'refresh' } }
-            title={ t('refresh') }
+            icon={{ value: 'refresh' }}
+            loading={isLoading || isFetching}
+            title={t('refresh')}
+            onClick={() => {
+              setIsLoading(true)
+
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.WIDGETS()
+                )
+              )
+
+              setIsLoading(false)
+            }}
           />
 
           <IconTextButton
-            icon={ { value: 'new' } }
+            icon={{ value: 'new' }}
+            onClick={createWidget}
+            loading={isLoading || isFetching}
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
-      ) }
+      )}
     >
-      <Content padded>
+      <Content
+        padded
+        loading={isLoading || isFetching}
+      >
         <SearchInput
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
-          onClear={ clearSearch }
-          onSearch={ handleSearch }
-          value={ searchTerm }
+          onChange={(e) => { setSearchTerm(e.target.value) }}
+          onClear={clearSearch}
+          onSearch={handleSearch}
+          value={searchTerm}
           withoutAddon
         />
         <TreeElement
-          hasRoot={ false }
-          onSelected={ (key) => {
+          hasRoot={false}
+          onSelected={(key) => {
             const widget = widgets!.items.find((w) => isString(w.id) && isString(key) && w.id === key)
 
             if (widget !== undefined) {
               void openWidget(widget.id, widget.widgetType)
             }
-          } }
-          treeData={ treeDataFiltered }
+          }}
+          treeData={treeDataFiltered}
         />
       </Content>
     </ContentLayout>

@@ -8,9 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
-import React, { createContext, useMemo, useState } from 'react'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { Form, Modal } from '@sdk/components'
+import React, { createContext, Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { CreateWidgetForm } from '../components/widget-create-form/widget-create-form'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
+import { InputRef } from 'antd'
 
 interface WidgetEditorProviderProps {
   children?: React.ReactNode
@@ -20,8 +24,12 @@ export interface WidgetEditorContextProps {
   activeTabId: string | undefined
   setActiveTabId: (id: string | undefined) => void
   widgets: WidgetConfig[]
+  setWidgets: Dispatch<SetStateAction<WidgetConfig[]>>
   openWidget: (id: string, type: string) => Promise<void>
   closeWidget: (id: string) => void
+  createWidget: () => Promise<void>
+  isLoading: boolean
+  setIsLoading: (loading: boolean) => void
 }
 
 export const WidgetEditorContext = createContext<WidgetEditorContextProps | undefined>(undefined)
@@ -30,6 +38,18 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
   const [widgets, setWidgets] = useState<WidgetConfig[]>([])
   const { getWidgetById } = useWidgetEditor()
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const { createWidget: createWidgetHook } = useWidgetEditor()
+  const { t } = useTranslation()
+  const [tmpForm] = Form.useForm()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const inputRef = React.useRef<InputRef>(null)
+
+  useEffect(() => {
+    if (isModalOpen) {
+      inputRef.current?.focus()
+    }
+  }, [isModalOpen])
 
   const openWidget = async (id: string, type: string): Promise<void> => {
     const widget = await getWidgetById(id, type)
@@ -67,17 +87,56 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
     }
   }
 
+  const createWidget = async (): Promise<void> => {
+    setIsModalOpen(true)
+  }
+
+  const submit = async (): Promise<any> => {
+    await tmpForm.validateFields()
+      .then(async () => {
+        setIsLoading(true)
+        const values = tmpForm.getFieldsValue()
+        const { name, widgetType } = values as CreateWidgetForm
+
+        await createWidgetHook(name, widgetType, () => {
+          setIsModalOpen(false)
+
+          tmpForm.resetFields()
+        })
+
+        setIsLoading(false)
+      })
+  }
+
   const contextValue: WidgetEditorContextProps = useMemo(() => ({
     activeTabId,
     setActiveTabId,
     widgets,
+    setWidgets,
     openWidget,
-    closeWidget
-  }), [activeTabId, widgets])
+    closeWidget,
+    createWidget,
+    isLoading,
+    setIsLoading
+  }), [activeTabId, widgets, isLoading])
 
   return (
-    <WidgetEditorContext.Provider value={ contextValue }>
+    <WidgetEditorContext.Provider value={contextValue}>
       {children}
+
+      <Modal
+        open={isModalOpen}
+        size='M'
+        okText={t('widget-editor.create-modal.create')}
+        onCancel={() => {
+          setIsModalOpen(false)
+        }}
+        onOk={async () => {
+          await submit()
+        }}
+      >
+        <CreateWidgetForm form={tmpForm} inputRef={inputRef} />
+      </Modal>
     </WidgetEditorContext.Provider>
   )
 }

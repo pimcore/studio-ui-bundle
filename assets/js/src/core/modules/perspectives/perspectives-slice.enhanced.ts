@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './perspectives-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
@@ -19,6 +19,20 @@ const api = baseApi.enhanceEndpoints({
     },
     perspectiveCreate: {
       invalidatesTags: () => [tagNames.PERSPECTIVES]
+    },
+    perspectiveWidgetGetConfigCollection: {
+      providesTags: (result): Tag[] => {
+        const tags: Tag[] = []
+
+        result?.items.forEach((widget) => {
+          tags.push(...providingTags.WIDGET_DETAIL(widget.id))
+        })
+
+        return [...tags, ...providingTags.WIDGETS()]
+      }
+    },
+    perspectiveWidgetDelete: {
+      invalidatesTags: () => []
     }
   }
 })
