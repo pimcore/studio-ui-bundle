@@ -10,6 +10,7 @@
 
 import React, { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
 import { Text } from '@Pimcore/components/text/text'
@@ -29,6 +30,7 @@ interface IUsersRolesDropdownProps {
   initialSharedUsers: number[]
   handleClose: () => void
   handleApplyChanges: ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }) => void
+  placement: 'top' | 'bottom'
 }
 
 interface IRenderSelectProps {
@@ -38,7 +40,7 @@ interface IRenderSelectProps {
   selectedOptions: number[]
 }
 
-export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, handleClose, handleApplyChanges }: IUsersRolesDropdownProps): React.JSX.Element => {
+export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, handleClose, handleApplyChanges, placement = 'bottom' }: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
 
   const [sharedUsersList, setSharedUsersList] = useState<number[]>(initialSharedUsers ?? [])
@@ -123,7 +125,11 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
   ]
 
   return (
-    <div className={ styles.dropdown }>
+    <div className={ cn(styles.dropdown, {
+      [styles.dropdownBottom]: placement === 'bottom',
+      [styles.dropdownTop]: placement === 'top'
+    }) }
+    >
       <Tabs
         centered
         className={ styles.tabs }

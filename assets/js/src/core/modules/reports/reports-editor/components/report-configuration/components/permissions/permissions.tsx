@@ -128,6 +128,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
             handleClose={ handleClose }
             initialSharedRoles={ initialRoleList }
             initialSharedUsers={ initialUserList }
+            placement="top"
             roleList={ roleList }
             userList={ userList }
           />
