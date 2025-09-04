@@ -195,7 +195,7 @@ export const IconSelector = ({
             gap="small"
           >
             {!isUndefined(currentSelectedIcon) ?
-            <><span>{t('icon-selector.current-selection')}</span>
+            <><span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
             <Flex
               align='center'
               className={ styles.selectionPreview }

@@ -18,12 +18,11 @@ export const useStyles = createStyles(({ token, css }) => {
       grid-template-rows: repeat(4, 76px);
       gap: 8px;
       justify-content: center;
-      max-height: 345px;
-      width: 835px;
+      max-height: 328px;
       overflow-y: auto;
       margin-top: 8px;
       margin-bottom: 8px;
-      scrollbar-gutter: stable; 
+      scrollbar-gutter: stable both-edges; 
 
     `,
 
@@ -81,6 +80,10 @@ export const useStyles = createStyles(({ token, css }) => {
     noSelection: css`
       color: ${token.colorTextSecondary};
       font-style: italic;
+    `,
+
+    selectionLabel: css`
+      color: ${token.colorTextDescription};
     `,
 
     iconSelectorModal: css`
