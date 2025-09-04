@@ -11,9 +11,9 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { DynamicTypeIconSetPimcoreDefault } from './dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
-import { DynamicTypeIconSetTwemoji } from './dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
-import { DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
+import { type DynamicTypeIconSetPimcoreDefault } from './dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
+import { type DynamicTypeIconSetTwemoji } from './dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
 
 moduleSystem.registerModule({
   onInit: () => {

@@ -3700,4 +3700,4 @@ export const TWEMOJI_ICONS_LIST_COMPLETE: string[] = [
   'a9',
   'ae',
   'e50a'
-];
+]

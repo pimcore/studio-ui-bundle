@@ -19,7 +19,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
+import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
 
 export interface IconSelectorProps {
   open: boolean
@@ -34,7 +34,6 @@ export const IconSelector = ({
   onSelect,
   selectedIcon
 }: IconSelectorProps): React.JSX.Element => {
-
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
 
   const { styles } = useStyles()
@@ -45,7 +44,7 @@ export const IconSelector = ({
   const [activeTab, setActiveTab] = useState<string>('all')
   const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
-  const resetSelector = () => {
+  const resetSelector = (): void => {
     setSearchValue('')
     setCurrentPage(1)
     setPageSize(40)
@@ -92,11 +91,11 @@ export const IconSelector = ({
     return filteredIcons.slice(startIndex, endIndex)
   }, [filteredIcons, currentPage, pageSize])
 
-  const handleIconClick = (icon: ElementIcon) => {
+  const handleIconClick = (icon: ElementIcon): void => {
     setPreviewSelectedIcon(icon)
   }
 
-  const handleSave = () => {
+  const handleSave = (): void => {
     if (!isUndefined(previewSelectedIcon)) {
       onSelect(previewSelectedIcon)
     }
@@ -104,26 +103,26 @@ export const IconSelector = ({
     onCancel()
   }
 
-  const handleCancel = () => {    
+  const handleCancel = (): void => {
     resetSelector()
     onCancel()
   }
 
-  const handleClearSelection = () => {
+  const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
   }
 
-  const handleSearch = (value: string) => {
+  const handleSearch = (value: string): void => {
     setSearchValue(value)
     setCurrentPage(1)
   }
 
-  const handleRefresh = () => {
+  const handleRefresh = (): void => {
     setSearchValue('')
     setCurrentPage(1)
   }
 
-  const handlePageChange = (page: number, newPageSize?: number) => {
+  const handlePageChange = (page: number, newPageSize?: number): void => {
     setCurrentPage(page)
     if (!isUndefined(newPageSize)) {
       setPageSize(newPageSize)
@@ -158,7 +157,7 @@ export const IconSelector = ({
 
         <SearchInput
           maxWidth={ '1000px' }
-          onChange={ (e) => setSearchValue(e.target.value) }
+          onChange={ (e) => { setSearchValue(e.target.value) } }
           onSearch={ handleSearch }
           placeholder={ t('icon-selector.search-placeholder') }
           value={ searchValue }
@@ -180,7 +179,7 @@ export const IconSelector = ({
                 value={ icon.value }
               />
               <span className={ styles.iconName }>
-                {icon.type === 'path' 
+                {icon.type === 'path'
                   ? icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
                   : icon.value
                 }
@@ -195,24 +194,30 @@ export const IconSelector = ({
             align="center"
             gap="small"
           >
-          <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
+            <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
             <Flex
               align='center'
               className={ styles.selectionPreview }
               justify='center'
             >
-                  {!isUndefined(previewSelectedIcon) ? <Icon
+              {!isUndefined(previewSelectedIcon)
+                ? (
+                  <Icon
                     options={ { height: 16, width: 16 } }
                     type={ previewSelectedIcon.type }
                     value={ previewSelectedIcon.value }
-                  /> : <div></div>}
+                  />
+                  )
+                : <div></div>}
             </Flex>
-            {!isUndefined(previewSelectedIcon) && <IconButton
+            {!isUndefined(previewSelectedIcon) && (
+            <IconButton
               icon={ { value: 'trash' } }
               onClick={ handleClearSelection }
               title={ t('icon-selector.clear-selection') }
               type='default'
-            />}
+            />
+            )}
           </Flex>
 
           <Flex
@@ -220,27 +225,27 @@ export const IconSelector = ({
             gap="small"
           >
             <Split>
-          <Flex
-            align="center"
-          >
-            <IconButton
-              icon={ { value: 'refresh' } }
-              onClick={ handleRefresh }
-              title={ t('refresh') }
-              variant='minimal'
-              theme='secondary'
-            />
-            </Flex>
-            <Pagination
-              current={ currentPage }
-              defaultPageSize={ pageSize }
-              onChange={ handlePageChange }
-              pageSizeOptions={ [40, 80, 120] }
-              showSizeChanger
-              showTotal={ (total) => t('pagination.show-total', { total }) }
-              total={ filteredIcons.length }
-            />
-          </Split>
+              <Flex
+                align="center"
+              >
+                <IconButton
+                  icon={ { value: 'refresh' } }
+                  onClick={ handleRefresh }
+                  theme='secondary'
+                  title={ t('refresh') }
+                  variant='minimal'
+                />
+              </Flex>
+              <Pagination
+                current={ currentPage }
+                defaultPageSize={ pageSize }
+                onChange={ handlePageChange }
+                pageSizeOptions={ [40, 80, 120] }
+                showSizeChanger
+                showTotal={ (total) => t('pagination.show-total', { total }) }
+                total={ filteredIcons.length }
+              />
+            </Split>
           </Flex>
         </Flex>
       </Flex>

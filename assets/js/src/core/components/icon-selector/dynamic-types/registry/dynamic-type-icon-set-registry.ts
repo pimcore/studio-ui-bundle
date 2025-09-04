@@ -12,7 +12,6 @@ import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type DynamicTypeIconSetAbstract } from '../definitions/dynamic-type-icon-set-abstract'
 
-
 @injectable()
 export class DynamicTypeIconSetRegistry extends DynamicTypeRegistryAbstract<DynamicTypeIconSetAbstract> {
 }

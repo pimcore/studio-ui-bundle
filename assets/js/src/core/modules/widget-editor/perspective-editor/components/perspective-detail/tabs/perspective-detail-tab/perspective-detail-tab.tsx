@@ -24,6 +24,7 @@ import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
+import { isNull, isUndefined } from 'lodash'
 
 export interface PerspectiveForm {
   name: string
@@ -40,15 +41,13 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<PerspectiveForm>()
+  const [iconSelectorOpen, setIconSelectorOpen] = useState(false)
+
   const initialValues: PerspectiveForm = {
     name: perspective?.name ?? '',
     icon: perspective?.icon
   }
-
-  console.log("form input state:", form.getFieldsValue(), "current icon:", Form.useWatch('icon', form));
-  
-  const [iconSelectorOpen, setIconSelectorOpen] = useState(false)
-    const currentIcon = Form.useWatch('icon', form)
+  const currentIcon = Form.useWatch('icon', form)
 
   if (perspective === undefined) {
     return <></>
@@ -103,26 +102,35 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
                 placeholder={ t('perspective-editor.form.name.placeholder') }
               />
             </Form.Item>
-            
+
             <Form.Item
               name="icon"
-              style={{ display: 'none' }}
+              style={ { display: 'none' } }
             >
               <input type="hidden" />
             </Form.Item>
           </FormKit.Panel>
-          <Flex align="center" gap="small">
+          <Flex
+            align="center"
+            gap="small"
+          >
             <Button onClick={ () => { setIconSelectorOpen(true) } }>
               Open Icon Selector
             </Button>
-            {currentIcon && (
+            {!isUndefined(currentIcon) && !isNull(currentIcon) && (
               <>
-                <Flex align="center" gap="small">
-                  <Icon value={ currentIcon.value } type={ currentIcon.type } />
+                <Flex
+                  align="center"
+                  gap="small"
+                >
+                  <Icon
+                    type={ currentIcon.type }
+                    value={ currentIcon.value }
+                  />
                   <span>Selected: {currentIcon.value}</span>
                 </Flex>
-                <Button 
-                  onClick={ () => { 
+                <Button
+                  onClick={ () => {
                     form.setFieldsValue({ icon: undefined })
                   } }
                   size="small"

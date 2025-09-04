@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type MappingAlgorithm } from 'antd'
-import { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface PimcoreThemeConfig {
   token?: Record<string, unknown>
@@ -25,6 +25,5 @@ export abstract class DynamicTypeIconSetAbstract implements DynamicTypeAbstract 
 
   abstract readonly name: string
 
-  abstract getIcons (): ElementIcon[] 
-
+  abstract getIcons (): ElementIcon[]
 }
