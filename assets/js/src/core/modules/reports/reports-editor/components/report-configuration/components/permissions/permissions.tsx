@@ -23,9 +23,11 @@ import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useStyles } from '../../report-configuration.styles'
 
 export const Permissions = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
@@ -66,6 +68,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
     <Icon
+      className={ styles.permissionIcon }
       options={ { width: size ?? 12, height: size ?? 12 } }
       value={ iconName }
     />
@@ -100,22 +103,23 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
 
   const renderRightLabelComponent = (): JSX.Element | string | undefined => {
     const renderGlobalView = (): React.JSX.Element => (
-      <Text>{t('common.globally')}</Text>
+      <Text className={ styles.permissionLabel }>{t('common.globally')}</Text>
     )
 
     const renderUserView = (): React.JSX.Element => (
       <>
         <Flex gap={ 10 }>
-          <Text>
+          <Text className={ styles.permissionLabel }>
             {renderIcon('user')} {t('user-management.user')} | {renderIcon('shield')} {t('user-management.role')}
           </Text>
           <Flex
             align="center"
+            className={ styles.permissionUpdateButton }
             gap={ 8 }
             onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
           >
             {renderIcon('edit', 16)}
-            <Text>{t('button.add-edit')}</Text>
+            <Text className={ styles.permissionUpdateButtonText }>{t('button.add-edit')}</Text>
           </Flex>
         </Flex>
         {isOpenDropdown && (
@@ -149,6 +153,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
         <TagList
           itemGap="mini"
           list={ getSharedUsersRolesList() }
+          tagListItemClassNames={ styles.permissionTag }
         />
       )}
     </FormKit.Panel>
