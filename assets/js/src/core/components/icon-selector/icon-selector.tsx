@@ -24,7 +24,7 @@ import { DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-typ
 export interface IconSelectorProps {
   open: boolean
   onCancel: () => void
-  onSelect: (icon: ElementIcon) => void
+  onSelect: (icon: ElementIcon | undefined) => void
   selectedIcon?: ElementIcon
 }
 
@@ -43,13 +43,14 @@ export const IconSelector = ({
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
-  const [currentSelectedIcon, setCurrentSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
+  const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
   const resetSelector = () => {
     setSearchValue('')
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
+    setPreviewSelectedIcon(selectedIcon)
   }
 
   const tabItems = [
@@ -92,25 +93,24 @@ export const IconSelector = ({
   }, [filteredIcons, currentPage, pageSize])
 
   const handleIconClick = (icon: ElementIcon) => {
-    setCurrentSelectedIcon(icon)
+    setPreviewSelectedIcon(icon)
   }
 
   const handleSave = () => {
-    if (!isUndefined(currentSelectedIcon)) {
-      onSelect(currentSelectedIcon)
+    if (!isUndefined(previewSelectedIcon)) {
+      onSelect(previewSelectedIcon)
     }
-   resetSelector()
-   onCancel()
+    resetSelector()
+    onCancel()
   }
 
   const handleCancel = () => {    
-    setCurrentSelectedIcon(undefined)
     resetSelector()
     onCancel()
   }
 
   const handleClearSelection = () => {
-    setCurrentSelectedIcon(undefined)
+    setPreviewSelectedIcon(undefined)
   }
 
   const handleSearch = (value: string) => {
@@ -121,7 +121,6 @@ export const IconSelector = ({
   const handleRefresh = () => {
     setSearchValue('')
     setCurrentPage(1)
-    setCurrentSelectedIcon(selectedIcon)
   }
 
   const handlePageChange = (page: number, newPageSize?: number) => {
@@ -136,7 +135,7 @@ export const IconSelector = ({
       className={ styles.iconSelectorModal }
       footer={ <ModalFooter divider>
         <Button
-          disabled={ isUndefined(currentSelectedIcon) }
+          disabled={ isUndefined(previewSelectedIcon) }
           onClick={ handleSave }
           type="primary"
         >
@@ -170,7 +169,7 @@ export const IconSelector = ({
         <div className={ styles.iconGrid }>
           {paginatedIcons.map((icon) => (
             <Space
-              className={ `${styles.iconCard} ${currentSelectedIcon?.value === icon.value ? styles.selectedCard : ''}` }
+              className={ `${styles.iconCard} ${previewSelectedIcon?.value === icon.value && previewSelectedIcon?.type === icon.type ? styles.selectedCard : ''}` }
               key={ icon.value }
               onClick={ () => { handleIconClick(icon) } }
               size='mini'
@@ -202,13 +201,13 @@ export const IconSelector = ({
               className={ styles.selectionPreview }
               justify='center'
             >
-                  {!isUndefined(currentSelectedIcon) ? <Icon
+                  {!isUndefined(previewSelectedIcon) ? <Icon
                     options={ { height: 16, width: 16 } }
-                    type={ currentSelectedIcon.type }
-                    value={ currentSelectedIcon.value }
+                    type={ previewSelectedIcon.type }
+                    value={ previewSelectedIcon.value }
                   /> : <div></div>}
             </Flex>
-            {!isUndefined(currentSelectedIcon) && <IconButton
+            {!isUndefined(previewSelectedIcon) && <IconButton
               icon={ { value: 'trash' } }
               onClick={ handleClearSelection }
               title={ t('icon-selector.clear-selection') }
