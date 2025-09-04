@@ -78,7 +78,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'notifications',
       label: t('user-menu.notifications'),
-      icon: <Badge count={ 5 } />,
+      icon: <div className={'user-menu__item-icon'}><Badge count={ 5 } /></div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
       extra: isAllowed(UserPermission.SendNotifications)
@@ -92,19 +92,22 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
             size={ 'small' }
           >{t('user-menu.notification.send')}</Button>
           )
-        : null
+        : null,
+      gap: 4
     },
     {
       key: 'myprofile',
       label: getUserName(),
-      icon: <Icon value={ 'user' } />,
-      onClick: () => { openMainWidget(USERPROFILE) }
+      icon: <div className={'user-menu__item-icon'}><Icon value={ 'user' } /></div>,
+      onClick: () => { openMainWidget(USERPROFILE) },
+      gap: 4
     },
     {
       key: 'logout',
       label: t('user-menu.log-out'),
-      icon: <Icon value={ 'log-out' } />,
-      onClick: handleLogout
+      icon: <div className={'user-menu__item-icon'}><Icon value={ 'log-out' } /></div>,
+      onClick: handleLogout,
+      gap: 4
     }
   ]
 

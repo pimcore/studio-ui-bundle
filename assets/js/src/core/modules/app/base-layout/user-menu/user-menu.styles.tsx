@@ -24,6 +24,11 @@ export const useStyle = createStyles(({ token, css }) => {
       .ant-dropdown-menu-item .ant-flex {
         width: 100%;
       }
+      
+      .user-menu__item-icon {
+        width: 20px;
+        line-height: 1;
+      }
     
       .ant-badge .ant-badge-count {
         background: ${token.colorPrimary};
