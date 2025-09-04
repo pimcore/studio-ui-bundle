@@ -194,28 +194,24 @@ export const IconSelector = ({
             align="center"
             gap="small"
           >
-            {!isUndefined(currentSelectedIcon) ?
-            <><span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
+          <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
             <Flex
               align='center'
               className={ styles.selectionPreview }
               justify='center'
             >
-                  <Icon
+                  {!isUndefined(currentSelectedIcon) ? <Icon
                     options={ { height: 16, width: 16 } }
                     type={ currentSelectedIcon.type }
                     value={ currentSelectedIcon.value }
-                  />
+                  /> : <div></div>}
             </Flex>
-            <IconButton
+            {!isUndefined(currentSelectedIcon) && <IconButton
               icon={ { value: 'trash' } }
               onClick={ handleClearSelection }
               title={ t('icon-selector.clear-selection') }
               type='default'
-            />
-             </>
-             :
-             <div></div>}
+            />}
           </Flex>
 
           <Flex
@@ -223,12 +219,17 @@ export const IconSelector = ({
             gap="small"
           >
             <Split>
+          <Flex
+            align="center"
+          >
             <IconButton
               icon={ { value: 'refresh' } }
               onClick={ handleRefresh }
               title={ t('refresh') }
               variant='minimal'
+              theme='secondary'
             />
+            </Flex>
             <Pagination
               current={ currentPage }
               defaultPageSize={ pageSize }

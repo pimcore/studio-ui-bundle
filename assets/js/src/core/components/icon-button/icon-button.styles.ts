@@ -19,7 +19,7 @@ export const useStyles = createStyles(({ token, css }) => {
       line-height: 0;
 
       &.icon-button--theme-secondary {
-        color: ${token.colorText};
+        color: ${token.colorIcon};
       }
       
       &.icon-button--hide-shadow {

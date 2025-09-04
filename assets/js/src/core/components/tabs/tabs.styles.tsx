@@ -33,13 +33,11 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-nav .ant-tabs-tab button {
-      color: ${token.itemColor}
+        color: ${token.itemColor};
       }
 
-      .ant-tabs-tab-active .ant-tabs-tab-btn {
-        font-weight: 400;
-        text-shadow: none;
-        color: ${token.itemActiveColor} 
+      .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn button {
+        color: ${token.itemActiveColor} !important;
       }
 
       &.ant-tabs-card.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab {

@@ -73,6 +73,7 @@ export const useStyles = createStyles(({ token, css }) => {
       border-radius: ${token.borderRadius}px;
       background-color: ${token.colorBgContainer};
       width: 54px;
+      color: ${token.colorIcon};
     `,
 
     noSelection: css`
