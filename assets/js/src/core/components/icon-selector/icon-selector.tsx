@@ -45,25 +45,18 @@ export const IconSelector = ({
   const [activeTab, setActiveTab] = useState<string>('all')
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
-  const tabItems = useMemo(() => {
-    const items = [
-      {
-        key: 'all',
-        label: t('icon-selector.all-icons'),
-        children: null
-      }
-    ]
-
-    iconSetRegistry.getDynamicTypes().forEach((iconSet) => {
-      items.push({
-        key: iconSet.id,
-        label: iconSet.name,
-        children: null
-      })
-    })
-
-    return items
-  }, [iconSetRegistry])
+  const tabItems = [
+    {
+      key: 'all',
+      label: t('icon-selector.all-icons'),
+      children: null
+    },
+    ...iconSetRegistry.getDynamicTypes().map((iconSet) => ({
+      key: iconSet.id,
+      label: iconSet.name,
+      children: null
+    }))
+  ]
 
   const filteredIcons = useMemo(() => {
     let iconsToFilter: ElementIcon[] = []
