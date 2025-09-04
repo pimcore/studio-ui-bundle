@@ -28,6 +28,7 @@ export interface UseAreablockControlsParams {
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
   onOpenDialog?: (areaKey: string) => void
+  onToggleHidden?: (element: HTMLElement) => void
 }
 
 export interface UseAreablockControlsReturn {
@@ -43,7 +44,8 @@ export const useAreablockControls = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onMoveArea,
-  onOpenDialog
+  onOpenDialog,
+  onToggleHidden
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const {
     activeId,
@@ -142,6 +144,7 @@ export const useAreablockControls = ({
               onMoveAreaUp={ onMoveAreaUp }
               onOpenDialog={ onOpenDialog }
               onRemoveArea={ handleRemoveArea }
+              onToggleHidden={ onToggleHidden }
             />
           )
           const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
@@ -162,7 +165,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
     renderAreablockToolbar

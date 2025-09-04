@@ -19,7 +19,7 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
-import { useDocumentRenderletRenderQuery } from '@Pimcore/modules/document/document-api-slice.gen'
+import { useDocumentRenderletRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type RenderletValue, type RenderletEditableConfig } from './renderlet-editable'
 import { useParams } from 'react-router-dom'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -211,7 +211,7 @@ export const RenderletContent = ({
     return t('drop-element-here')
   }
 
-  const errorContent = !isNil(actualError)
+  const errorContent = !isNil(actualError) || isFetchError
     ? (
       <Alert
         description={ getErrorMessage() }

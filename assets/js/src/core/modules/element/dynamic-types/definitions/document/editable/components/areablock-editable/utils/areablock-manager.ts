@@ -33,13 +33,38 @@ export class AreablockManager extends AbstractBlockManager {
     return elements.map(element => {
       const key = this.getElementKey(element)
       const type = this.getElementType(element)
-      const hidden = element.getAttribute('data-hidden') === 'true'
+      const hidden = this.isElementHidden(element)
 
       return {
         key: key ?? '',
         type: type ?? '',
         hidden
       }
+    })
+  }
+
+  isElementHidden (element: HTMLElement): boolean {
+    return element.getAttribute('data-hidden') === 'true'
+  }
+
+  setElementHidden (element: HTMLElement, hidden: boolean): void {
+    if (hidden) {
+      element.setAttribute('data-hidden', 'true')
+    } else {
+      element.removeAttribute('data-hidden')
+    }
+  }
+
+  toggleElementHidden (element: HTMLElement): boolean {
+    const isHidden = this.isElementHidden(element)
+    this.setElementHidden(element, !isHidden)
+    return !isHidden
+  }
+
+  applyStylestoAreaEntries (areaEntryClass: string): void {
+    const elements = this.queryElements()
+    elements.forEach(element => {
+      element.classList.add(areaEntryClass)
     })
   }
 }

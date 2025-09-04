@@ -12,50 +12,28 @@ import React from 'react'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { toCssDimension } from '@Pimcore/utils/css'
 
-export interface BooleanSelectProps extends SelectProps {
+export interface BooleanSelectProps extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
   value?: boolean | null
   className?: string
   maxWidth?: string
-  onChange?: (value?: boolean | null) => void
+  onChange?: (value: boolean | null) => void
+  options?: Array<{ label: string, value: boolean | null }>
 }
 
 export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
-  const booleanSelectValue = props.value ?? null
+  const { value, onChange, maxWidth, options, ...selectProps } = props
 
-  const mapValue = (value?: boolean | null): number | undefined => {
-    if (value === undefined) {
-      return undefined
-    }
-    if (value === null) {
-      return 0
-    }
-
-    return value ? 1 : -1
-  }
-
-  const reverseMapValue = (value?: number): boolean | null | undefined => {
-    if (value === undefined) {
-      return undefined
-    }
-    if (value === 0) {
-      return null
-    }
-
-    return value === 1
-  }
-
-  const onChange = (value?: number): void => {
-    const newValue = reverseMapValue(value)
-
-    props.onChange?.(newValue ?? null)
+  const handleChange = (selectedValue: boolean | null): void => {
+    onChange?.(selectedValue)
   }
 
   return (
     <Select
-      { ...props }
-      onChange={ onChange }
-      style={ { maxWidth: toCssDimension(props.maxWidth) } }
-      value={ mapValue(booleanSelectValue) }
+      { ...selectProps }
+      onChange={ handleChange }
+      options={ options as any }
+      style={ { maxWidth: toCssDimension(maxWidth) } }
+      value={ value }
     />
   )
 }

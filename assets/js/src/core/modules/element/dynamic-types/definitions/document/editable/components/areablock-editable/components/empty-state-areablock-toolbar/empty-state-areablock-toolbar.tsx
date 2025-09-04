@@ -12,7 +12,7 @@ import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Dropdown } from 'antd'
-import { useAreablockEditableStyles } from '../../areablock-editable.styles'
+import { useStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
@@ -38,7 +38,7 @@ export const EmptyStateAreablockToolbar = ({
   config,
   onClick
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
+  const { styles } = useStyles()
 
   const { menuItems } = useAreablockMenu({
     config,

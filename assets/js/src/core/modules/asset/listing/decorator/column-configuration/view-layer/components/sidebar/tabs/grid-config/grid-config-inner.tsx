@@ -148,7 +148,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     })
   }
 
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: string }> {
+  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: AvailableColumn['group'] }> {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,

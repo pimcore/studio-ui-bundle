@@ -29,6 +29,7 @@ export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditabl
     return (
       <ContentEditable
         className={ props.config?.class }
+        inherited={ props.inherited }
         nowrap={ props.config?.nowrap }
         placeholder={ props.config?.placeholder }
         required={ props.config?.required }
