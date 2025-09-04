@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
-import { useAreablockEditableStyles } from './areablock-editable.styles'
 import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
 import { configUtils } from './utils/areablock-utils'
+import { AreablockDialog } from './components/areablock-dialog/areablock-dialog'
 
 export interface AreaType {
   name: string
@@ -35,6 +35,7 @@ export interface AreablockEditableConfig {
   reload?: boolean
   allowed?: string[]
   types?: AreaType[]
+  group?: Record<string, string[]>
   blockStateStack?: any
 }
 
@@ -65,10 +66,31 @@ export const AreablockEditable = ({
   containerRef,
   disabled = false
 }: AreablockEditableProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
+
+  const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
+
+  const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
+
+  const handleOpenDialog = useCallback((areaKey: string) => {
+    setOpenDialogs(prev => new Set(prev).add(areaKey))
+  }, [])
+
+  const handleCloseDialog = useCallback((areaKey: string) => {
+    setOpenDialogs(prev => {
+      const newSet = new Set(prev)
+      newSet.delete(areaKey)
+      return newSet
+    })
+  }, [])
+
+  const handleToggleHidden = useCallback((element: HTMLElement) => {
+    areablockManager.toggleElementHidden(element)
+    const newValue = areablockManager.getAreablockValue()
+    onChange?.(newValue)
+  }, [areablockManager, onChange])
 
   const {
     dynamicEditables,
@@ -82,49 +104,42 @@ export const AreablockEditable = ({
     value: currentValue,
     onChange,
     config,
-    disabled,
-    onOperationComplete: (limitReached) => {
-      const elements = areablockManager.queryElements()
-      elements.forEach(element => { updateControls(element, limitReached) })
-    }
+    disabled
   })
 
-  const { initializeControls, updateControls, clearEmptyState, renderAreablockToolbar } = useAreablockControls({
+  const { renderAreablockToolbar } = useAreablockControls({
     areablockManager,
-    areaTypes: configUtils.getAvailableTypes(config),
+    areaTypes,
+    config,
     onAddArea: addArea,
     onRemoveArea: removeArea,
     onMoveAreaUp: moveAreaUp,
     onMoveAreaDown: moveAreaDown,
-    onMoveArea: moveArea
+    onMoveArea: moveArea,
+    onOpenDialog: handleOpenDialog,
+    onToggleHidden: handleToggleHidden
   })
 
-  const refreshControls = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
-    const container = areablockManager.getContainer()
-    if (isNil(container)) return
-
-    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-
-    if (elements.length < 1) {
-      initializeControls()
-    } else {
-      clearEmptyState()
-      container.classList.remove('pimcore_area_buttons')
-      elements.forEach(element => {
-        updateControls(element, limitReached)
-      })
-    }
-  }, [areablockManager, config?.limit, initializeControls, updateControls, clearEmptyState])
-
-  useEffect(() => {
-    refreshControls()
-  }, [currentValue, refreshControls])
-
   return (
-    <div className={ `${styles.areablockContainer} ${className ?? ''}` }>
+    <div className={ className }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
       {renderAreablockToolbar()}
+
+      {Array.from(openDialogs).map(areaKey => {
+        const element = areablockManager.findElementByKey(areaKey)
+        if (isNil(element)) return null
+
+        return (
+          <AreablockDialog
+            areablockName={ editableName }
+            editableDefinitions={ dynamicEditables }
+            element={ element }
+            isOpen
+            key={ `dialog-${areaKey}` }
+            onClose={ () => { handleCloseDialog(areaKey) } }
+          />
+        )
+      })}
     </div>
   )
 }

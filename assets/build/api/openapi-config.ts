@@ -84,6 +84,10 @@ const config: ConfigFile = {
     {
       pattern: 'translationGetList',
       type: 'query'
+    },
+    {
+      pattern: 'documentPageSnippetAreaBlockRender',
+      type: 'query'
     }
   ],
   outputFiles: {

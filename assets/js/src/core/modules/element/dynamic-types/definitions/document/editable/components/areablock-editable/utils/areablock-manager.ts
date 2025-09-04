@@ -8,101 +8,63 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
 import { type AreablockValue } from '../areablock-editable'
+import { AbstractBlockManager } from '../../../managers/abstract-block-manager'
 
-export class AreablockManager {
-  private readonly editableName: string
-  private readonly containerRef?: React.RefObject<HTMLDivElement>
-
-  constructor (editableName: string, containerRef?: React.RefObject<HTMLDivElement>) {
-    this.editableName = editableName
-    this.containerRef = containerRef
+export class AreablockManager extends AbstractBlockManager {
+  protected getEditableType (): string {
+    return 'areablock'
   }
 
-  getContainer (): HTMLDivElement | null {
-    return this.containerRef?.current ?? null
-  }
-
-  getEditableName (): string {
-    return this.editableName
-  }
-
-  queryElements (): HTMLElement[] {
-    const container = this.getContainer()
-    if (isNil(container)) return []
-
-    return Array.from(container.querySelectorAll('.pimcore_area_entry'))
-  }
-
-  findElementIndex (element: HTMLElement): number {
-    const elements = this.queryElements()
-    return elements.indexOf(element)
-  }
-
-  getElementKey (element: HTMLElement): string | null {
-    return element.getAttribute('key')
+  protected getElementSelector (): string {
+    return '.pimcore_area_entry'
   }
 
   getElementType (element: HTMLElement): string | null {
     return element.getAttribute('type')
   }
 
-  setElementKey (element: HTMLElement, key: string): void {
-    element.setAttribute('key', key)
-  }
-
   setElementType (element: HTMLElement, type: string): void {
     element.setAttribute('type', type)
   }
 
-  parseElementKey (element: HTMLElement): number {
-    const key = this.getElementKey(element)
-    return parseInt(key ?? '0', 10)
-  }
-
-  calculateNextKey (): number {
-    const elements = this.queryElements()
-    if (elements.length === 0) return 1
-
-    let nextKey = 0
-
-    for (const element of elements) {
-      const currentKey = this.parseElementKey(element)
-      if (currentKey > nextKey) {
-        nextKey = currentKey
-      }
-    }
-
-    return nextKey + 1
-  }
-
-  ensureAllElementKeys (): HTMLElement[] {
-    const elements = this.queryElements()
-
-    elements.forEach(element => {
-      const key = this.getElementKey(element)
-      if (isNil(key) || key === '') {
-        this.setElementKey(element, this.calculateNextKey().toString())
-      }
-    })
-
-    return elements
-  }
-
   getAreablockValue (): AreablockValue {
     const elements = this.ensureAllElementKeys()
-
     return elements.map(element => {
       const key = this.getElementKey(element)
       const type = this.getElementType(element)
-      const hidden = element.getAttribute('data-hidden') === 'true'
+      const hidden = this.isElementHidden(element)
 
       return {
         key: key ?? '',
         type: type ?? '',
         hidden
       }
+    })
+  }
+
+  isElementHidden (element: HTMLElement): boolean {
+    return element.getAttribute('data-hidden') === 'true'
+  }
+
+  setElementHidden (element: HTMLElement, hidden: boolean): void {
+    if (hidden) {
+      element.setAttribute('data-hidden', 'true')
+    } else {
+      element.removeAttribute('data-hidden')
+    }
+  }
+
+  toggleElementHidden (element: HTMLElement): boolean {
+    const isHidden = this.isElementHidden(element)
+    this.setElementHidden(element, !isHidden)
+    return !isHidden
+  }
+
+  applyStylestoAreaEntries (areaEntryClass: string): void {
+    const elements = this.queryElements()
+    elements.forEach(element => {
+      element.classList.add(areaEntryClass)
     })
   }
 }

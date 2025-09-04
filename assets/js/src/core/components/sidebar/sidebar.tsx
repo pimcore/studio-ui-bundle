@@ -9,20 +9,27 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState } from 'react'
+import React, { isValidElement, useState, useContext } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { SidebarContext } from './sidebar-provider'
+import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'
   highlights?: Array<ISidebarEntry['key']>
+  translateTooltips?: boolean
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const sidebarContext = useContext(SidebarContext)
+  const { t } = useTranslation()
+
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
     return {
@@ -37,15 +44,25 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
       label: 'TRANSLATED_LABEL'
     }
   })
-  const [activeTab, setActiveTab] = useState<string>('')
+
+  const [localActiveTab, setLocalActiveTab] = useState<string>('')
+
+  // Use context active tab if available, otherwise use local state
+  const activeTab = sidebarContext?.activeTab ?? localActiveTab
+  const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   function handleSidebarClick (key: string): void {
-    if (key === activeTab) {
-      setActiveTab('')
-      return
+    if (sidebarContext !== null && sidebarContext !== undefined) {
+      // When using context, use the toggleTab method
+      sidebarContext.toggleTab(key)
+    } else {
+      // Fallback to local state behavior
+      if (key === activeTab) {
+        setActiveTab('')
+        return
+      }
+      setActiveTab(key)
     }
-
-    setActiveTab(key)
   }
 
   return (
@@ -61,7 +78,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 <Tooltip
                   key={ entry.key }
                   placement="left"
-                  title={ entry?.tooltip }
+                  title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                 >
                   <div
                     aria-controls={ entry.key }

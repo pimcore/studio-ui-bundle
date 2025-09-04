@@ -78,8 +78,6 @@ export const BatchActions = (): React.JSX.Element => {
           }
         })
 
-        console.log('response: ', response)
-
         if (isUndefined(response.data?.jobRunId)) {
           trackError(new GeneralError('JobRunId is undefined'))
           throw new Error('JobRunId is undefined')

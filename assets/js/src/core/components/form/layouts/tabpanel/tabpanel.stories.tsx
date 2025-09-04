@@ -38,6 +38,12 @@ const meta: Meta<typeof FormKitTabpanel> = {
       control: 'text',
       description: 'Tabpanel title displayed at the top'
     },
+    theme: {
+      control: 'radio',
+      options: ['default', 'fieldset', 'card-with-highlight', 'border-highlight'],
+      description: 'Visual theme for the tabpanel',
+      defaultValue: 'card-with-highlight'
+    },
     border: {
       control: 'boolean',
       description: 'Whether to show a border around the tabpanel'
@@ -335,4 +341,271 @@ const VerticalTabsComponent = (): React.JSX.Element => {
 
 export const VerticalTabs: Story = {
   render: () => <VerticalTabsComponent />
+}
+
+// Default theme
+export const DefaultTheme: Story = {
+  render: () => {
+    const [form] = Form.useForm()
+    const items = [
+      {
+        label: 'General',
+        children: (
+          <Panel>
+            <Form.Item
+              label="Name"
+              name="name"
+            >
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      },
+      {
+        label: 'Advanced',
+        children: (
+          <Panel>
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
+              <Input placeholder="Enter API key" />
+            </Form.Item>
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      }
+    ]
+
+    return (
+      <div style={ { maxWidth: '600px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
+          <FormKitTabpanel
+            border
+            items={ items }
+            theme="default"
+            title="Default Theme Tabpanel"
+          />
+        </FormKit>
+      </div>
+    )
+  }
+}
+
+// Fieldset theme
+export const FieldsetTheme: Story = {
+  render: () => {
+    const [form] = Form.useForm()
+    const items = [
+      {
+        label: 'General',
+        children: (
+          <Panel>
+            <Form.Item
+              label="Name"
+              name="name"
+            >
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      },
+      {
+        label: 'Advanced',
+        children: (
+          <Panel>
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
+              <Input placeholder="Enter API key" />
+            </Form.Item>
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      }
+    ]
+
+    return (
+      <div style={ { maxWidth: '600px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
+          <FormKitTabpanel
+            border
+            items={ items }
+            theme="fieldset"
+            title="Fieldset Theme Tabpanel"
+          />
+        </FormKit>
+      </div>
+    )
+  }
+}
+
+// Border highlight theme
+export const BorderHighlightTheme: Story = {
+  render: () => {
+    const [form] = Form.useForm()
+    const items = [
+      {
+        label: 'General',
+        children: (
+          <Panel>
+            <Form.Item
+              label="Name"
+              name="name"
+            >
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      },
+      {
+        label: 'Advanced',
+        children: (
+          <Panel>
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
+              <Input placeholder="Enter API key" />
+            </Form.Item>
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
+            </Form.Item>
+          </Panel>
+        )
+      }
+    ]
+
+    return (
+      <div style={ { maxWidth: '600px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
+          <FormKitTabpanel
+            border
+            items={ items }
+            theme="border-highlight"
+            title="Border Highlight Theme Tabpanel"
+          />
+        </FormKit>
+      </div>
+    )
+  }
+}
+
+// All themes comparison for form tabpanels
+export const AllFormTabpanelThemes: Story = {
+  render: () => {
+    const [form] = Form.useForm()
+    const createItems = (suffix: string): any[] => [
+      {
+        label: 'Tab 1',
+        children: (
+          <Panel>
+            <Form.Item
+              label="Field A"
+              name={ `fieldA${suffix}` }
+            >
+              <Input placeholder="Enter value" />
+            </Form.Item>
+          </Panel>
+        )
+      },
+      {
+        label: 'Tab 2',
+        children: (
+          <Panel>
+            <Form.Item
+              label="Field B"
+              name={ `fieldB${suffix}` }
+            >
+              <Input placeholder="Enter value" />
+            </Form.Item>
+          </Panel>
+        )
+      }
+    ]
+
+    return (
+      <div style={ { maxWidth: '800px', display: 'grid', gap: '24px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
+          <FormKitTabpanel
+            border
+            items={ createItems('1') }
+            theme="card-with-highlight"
+            title="Card with Highlight (Default)"
+          />
+
+          <FormKitTabpanel
+            border
+            items={ createItems('2') }
+            theme="default"
+            title="Default Theme"
+          />
+
+          <FormKitTabpanel
+            border
+            items={ createItems('3') }
+            theme="fieldset"
+            title="Fieldset Theme"
+          />
+
+          <FormKitTabpanel
+            border
+            items={ createItems('4') }
+            theme="border-highlight"
+            title="Border Highlight Theme"
+          />
+        </FormKit>
+      </div>
+    )
+  }
 }

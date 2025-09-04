@@ -54,10 +54,10 @@ export const createImageThumbnailUrl = (assetId: number, settings: ImageThumbnai
   }
   params.append('resizeMode', resizeMode)
   if (width !== undefined) {
-    params.append('width', width.toString())
+    params.append('width', Math.round(width).toString())
   }
   if (height !== undefined) {
-    params.append('height', height.toString())
+    params.append('height', Math.round(height).toString())
   }
   if (quality !== undefined) {
     params.append('quality', quality.toString())

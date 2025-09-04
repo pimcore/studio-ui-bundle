@@ -65,6 +65,7 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
+  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -77,13 +78,14 @@ export const serviceIds = {
 
   'DynamicTypes/FieldFilter/DataObjectAdapter': 'DynamicTypes/FieldFilter/DataObjectAdapter',
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
-  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
-  'DynamicTypes/FieldFilter/Textarea': 'DynamicTypes/FieldFilter/Textarea',
-  'DynamicTypes/FieldFilter/Wysiwyg': 'DynamicTypes/FieldFilter/Wysiwyg',
+  'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
+  'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
+  'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
-  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
-  'DynamicTypes/FieldFilter/Checkbox': 'DynamicTypes/FieldFilter/Checkbox',
+  'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
+  'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
+  'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',

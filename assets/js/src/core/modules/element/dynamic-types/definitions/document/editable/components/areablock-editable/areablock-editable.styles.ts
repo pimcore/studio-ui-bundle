@@ -10,11 +10,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useAreablockEditableStyles = createStyles(({ token }) => ({
-  areablockContainer: {
-    position: 'relative',
-    minHeight: '20px'
-  },
+export const useStyles = createStyles(({ token }) => ({
 
   areablockToolstrip: {
     display: 'inline-block',
@@ -23,13 +19,10 @@ export const useAreablockEditableStyles = createStyles(({ token }) => ({
     marginBottom: token.marginXS
   },
 
-  dragDropTarget: {
-    outline: `1px dashed ${token.colorPrimaryBorder} !important`,
-    outlineOffset: '5px !important'
-  },
-
-  dragActive: {
-    opacity: '0.3 !important',
-    backgroundColor: `${token.colorPrimaryBg} !important`
+  areaEntry: {
+    '&[data-hidden="true"] .pimcore_area_content': {
+      filter: 'blur(1px)',
+      opacity: 0.5
+    }
   }
 }))

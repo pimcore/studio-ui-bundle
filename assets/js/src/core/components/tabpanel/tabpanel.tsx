@@ -11,7 +11,7 @@
 import React from 'react'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
-import { Box } from '../box/box'
+import { Box, type BoxProps } from '../box/box'
 
 export interface TabpanelItem {
   key?: string
@@ -32,6 +32,8 @@ export interface TabpanelProps {
   hasStickyHeader?: boolean
   extra?: React.ReactNode
   extraPosition?: 'start' | 'end'
+  theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
+  contentPadding?: BoxProps['padding']
   onClose?: (tabKey: string) => void
   size?: ITabsProps['size']
 }
@@ -42,6 +44,8 @@ export const Tabpanel = ({
   collapsed,
   collapsible,
   title,
+  theme = 'card-with-highlight',
+  contentPadding = 'none',
   hasStickyHeader = false,
   extra,
   extraPosition,
@@ -71,9 +75,10 @@ export const Tabpanel = ({
       border={ border }
       collapsed={ collapsed }
       collapsible={ collapsible }
-      contentPadding='none'
+      contentPadding={ contentPadding }
       extra={ extra }
       extraPosition={ extraPosition }
+      theme={ theme }
       title={ title }
     >
       <Tabs

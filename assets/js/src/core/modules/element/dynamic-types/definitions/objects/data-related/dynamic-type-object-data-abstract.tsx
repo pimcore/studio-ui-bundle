@@ -27,6 +27,10 @@ import React, { type ReactElement, type ReactNode } from 'react'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
+import { type DynamicTypeFieldFilterAbstract, type AbstractFieldFilterDefinition } from '../../field-filters/dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterRegistry } from '@sdk/modules/element'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -75,6 +79,7 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
+  protected readonly dynamicTypeFieldFilterType: InstanceType<typeof DynamicTypeFieldFilterAbstract> = container.get(serviceIds['DynamicTypes/FieldFilter/None'])
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
   supportsBatchAppendModes: boolean = false
@@ -155,5 +160,10 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined
+  }
+
+  getFieldFilterComponent (props: AbstractFieldFilterDefinition): ReactElement<AbstractFieldFilterDefinition> {
+    const fieldFilterRegistry = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
+    return fieldFilterRegistry.getComponent(this.dynamicTypeFieldFilterType.id, props)
   }
 }

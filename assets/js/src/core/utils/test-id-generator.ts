@@ -271,19 +271,29 @@ export const createTableRowTestId = (rowIdentifier: number | string): string => 
 
 /**
  * Creates a test ID for table cells.
- * Combines row identifier and column ID.
- *
  * @param rowIdentifier - Row index (number) or row ID (string)
  * @param columnId - Column identifier
  * @returns Formatted test ID string
- *
- * @example
- * createTableCellTestId(0, 'cpath')
- * // Returns: 'cell-0-cpath'
- *
- * createTableCellTestId('asset-123', 'permissions')
- * // Returns: 'cell-asset-123-permissions'
  */
 export const createTableCellTestId = (rowIdentifier: number | string, columnId: string): string => {
   return buildTestId(['cell', rowIdentifier, columnId])
+}
+
+/**
+ * Creates a test ID for context menu containers.
+ * @param elementType - Element type (asset, document, data-object)
+ * @param nodeId - Node ID for context-specific menus
+ * @returns Formatted test ID string
+ */
+export const createContextMenuContainerTestId = (elementType: ElementType, nodeId: number | string): string => {
+  return buildTestId(['context-menu', elementType, String(nodeId)])
+}
+
+/**
+ * Creates consistent test IDs for context menu items based on their key.
+ * @param key - Menu item key (action name)
+ * @returns Formatted test ID string
+ */
+export const createContextMenuItemTestId = (key: string): string => {
+  return buildTestId(['context-menu-item', key])
 }

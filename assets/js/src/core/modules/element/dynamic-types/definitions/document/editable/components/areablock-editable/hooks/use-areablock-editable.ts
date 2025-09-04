@@ -8,18 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useState, useRef, useContext } from 'react'
-import { isNil, isArray, isEmpty } from 'lodash'
+import { useCallback, useState, useRef, useContext, useEffect } from 'react'
+import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
-import {
-  areablockValueUtils,
-  configUtils
-} from '../utils/areablock-utils'
+import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
+import { areablockValueUtils, configUtils } from '../utils/areablock-utils'
+import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
+import { useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useStyles } from '../areablock-editable.styles'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -27,7 +29,6 @@ export interface UseAreablockEditableParams {
   onChange?: (value: AreablockValue) => void
   config?: AreablockEditableConfig
   disabled?: boolean
-  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseAreablockEditableReturn {
@@ -41,16 +42,33 @@ export interface UseAreablockEditableReturn {
 
 export const useAreablockEditable = ({
   areablockManager,
-  value = [],
   onChange,
   config,
-  disabled = false,
-  onOperationComplete
+  disabled = false
 }: UseAreablockEditableParams): UseAreablockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
+  const [triggerAreaBlockRender] = useLazyDocumentPageSnippetAreaBlockRenderQuery()
+  const { styles } = useStyles()
+
+  const applyStylesToAreaEntries = useCallback(() => {
+    areablockManager.applyStylestoAreaEntries(styles.areaEntry)
+  }, [areablockManager])
+
+  useEffect(() => {
+    applyStylesToAreaEntries()
+  }, [applyStylesToAreaEntries])
+
+  const { hideElementUntilRendered } = usePendingElementsReveal({
+    dynamicEditables,
+    getContainer: () => areablockManager.getContainer()
+  })
+
+  const parseBlockStateStack = (blockStateStack?: any): object | null => {
+    return isString(blockStateStack) ? JSON.parse(blockStateStack) : null
+  }
 
   const getAreaEditableNames = (element: HTMLElement): string[] => {
     const elementKey = areablockManager.getElementKey(element)
@@ -69,15 +87,10 @@ export const useAreablockEditable = ({
   }, [onChange])
 
   const handlePostOperation = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
+    areablockManager.ensureAllElementKeys()
     const newValue = areablockManager.getAreablockValue()
     onChange?.(newValue)
-
-    if (!isNil(onOperationComplete)) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(limitReached)
-    }
-  }, [onChange, onOperationComplete, config?.limit, areablockManager])
+  }, [onChange, areablockManager])
 
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     if (disabled) return
@@ -90,7 +103,6 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-
     const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
     const nextKey = areablockManager.calculateNextKey()
 
@@ -108,21 +120,8 @@ export const useAreablockEditable = ({
     }
 
     try {
-      const placeholderElement = document.createElement('div')
-      placeholderElement.className = 'pimcore-areablock-placeholder'
-      placeholderElement.setAttribute('data-placeholder-key', nextKey.toString())
-      placeholderElement.style.display = 'none'
-
       const container = areablockManager.getContainer()
-      if (!isNil(container)) {
-        if (isEmpty(currentElements)) {
-          container.appendChild(placeholderElement)
-        } else if (!isNil(currentElements[index - 1])) {
-          currentElements[index - 1].insertAdjacentElement('afterend', placeholderElement)
-        } else if (!isNil(currentElements[index])) {
-          currentElements[index].insertAdjacentElement('beforebegin', placeholderElement)
-        }
-      }
+      if (isNil(container)) return
 
       const saveData = areablockManager.getAreablockValue()
       saveData.splice(index, 0, {
@@ -131,57 +130,65 @@ export const useAreablockEditable = ({
         hidden: false
       })
 
-      const response = await fetch('/admin/page/areabrick-render-index-editmode', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          documentId: documentId.toString(),
+      const { error, data } = await triggerAreaBlockRender({
+        id: documentId,
+        body: {
           name: areablockManager.getEditableName(),
-          realName: areablockManager.getEditableName(),
-          index: index.toString(),
-          blockStateStack: config?.blockStateStack ?? JSON.stringify([{ blocks: [], indexes: [] }]),
-          areablockConfig: JSON.stringify(config ?? {}),
-          areablockData: JSON.stringify(saveData)
-        })
+          realName: areablockManager.getRealEditableName(),
+          index,
+          blockStateStack: parseBlockStateStack(config?.blockStateStack),
+          areaBlockConfig: config ?? {},
+          areaBlockData: saveData
+        }
       })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      if (!isUndefined(error)) {
+        trackError(new ApiError(error))
+        return
       }
 
-      const result = await response.json()
-
-      if (!isNil(result.htmlCode) && !isNil(placeholderElement.parentNode)) {
+      if (!isNil(data?.htmlCode)) {
         const tempDiv = document.createElement('div')
-        tempDiv.innerHTML = result.htmlCode
+        tempDiv.innerHTML = data.htmlCode
         const newElement = tempDiv.firstElementChild
 
         if (!isNil(newElement)) {
-          placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
+          const newAreaElement = newElement as HTMLElement
+
+          hideElementUntilRendered(newAreaElement)
+
+          const existingElements = areablockManager.queryElements()
+
+          if (existingElements.length === 0) {
+            container.appendChild(newAreaElement)
+            const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
+            newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+          } else if (!isNil(existingElements[index - 1])) {
+            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
+          } else if (!isNil(existingElements[index])) {
+            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
+          }
+
+          const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
+          newAreaElement.appendChild(dropzoneContainer)
+          applyStylesToAreaEntries()
         }
       }
 
-      if (!isNil(result.editableDefinitions) && isArray(result.editableDefinitions)) {
-        result.editableDefinitions.forEach((editableDef: AbstractDocumentEditableDefinition) => {
-          const editableData = { type: editableDef.type, data: editableDef.config }
-          initializeData({ [editableDef.name]: editableData })
-        })
-
-        setDynamicEditables(prev => [...prev, ...result.editableDefinitions])
+      if (!isNil(data?.editableDefinitions) && isArray(data?.editableDefinitions)) {
+        const editableDefinitions = data.editableDefinitions as AbstractDocumentEditableDefinition[]
+        const editablesData = createEditableDataFromDefinitions(editableDefinitions)
+        initializeData(editablesData)
+        setDynamicEditables(prev => [...prev, ...editableDefinitions])
       }
 
       handlePostOperation()
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
       console.error('Failed to add area:', error)
-      const placeholders = areablockManager.getContainer()?.querySelectorAll(`[data-placeholder-key="${nextKey}"]`)
-      placeholders?.forEach(placeholder => { placeholder.remove() })
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, initializeData])
-
+  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 
@@ -208,11 +215,9 @@ export const useAreablockEditable = ({
     }
 
     element.remove()
-
     if (!isEmpty(editableNamesToRemove)) {
       removeValues(editableNamesToRemove)
     }
-
     handlePostOperation()
   }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, areablockManager])
 
@@ -239,13 +244,8 @@ export const useAreablockEditable = ({
     }
   }
 
-  const moveAreaUp = (element: HTMLElement): void => {
-    moveAreaByDirection(element, 'up')
-  }
-
-  const moveAreaDown = (element: HTMLElement): void => {
-    moveAreaByDirection(element, 'down')
-  }
+  const moveAreaUp = (element: HTMLElement): void => { moveAreaByDirection(element, 'up') }
+  const moveAreaDown = (element: HTMLElement): void => { moveAreaByDirection(element, 'down') }
 
   const moveArea = useCallback((fromIndex: number, toIndex: number): void => {
     if (disabled) return

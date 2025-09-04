@@ -20,12 +20,13 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
-import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_EDIT, TAB_VERSIONS } from '../../shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
     const snippetEditorTabManager = container.get<SnippetTabManager>(serviceIds['Document/Editor/SnippetTabManager'])
 
+    snippetEditorTabManager.register(TAB_EDIT)
     snippetEditorTabManager.register(TAB_PROPERTIES)
     snippetEditorTabManager.register(TAB_VERSIONS)
     snippetEditorTabManager.register(TAB_SCHEDULE)

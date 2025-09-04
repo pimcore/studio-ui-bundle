@@ -12,25 +12,56 @@ import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Dropdown } from 'antd'
-import { useAreablockEditableStyles } from '../../areablock-editable.styles'
-import { type AreaType } from '../../areablock-editable'
-import { useTranslation } from 'react-i18next'
+import { useStyles } from '../../areablock-editable.styles'
+import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
+import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
+import { configUtils } from '../../utils/areablock-utils'
+import { isString } from 'lodash'
+import { EditableDropzoneContent } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/dropzone-content'
+
+interface DropInfo {
+  type: string
+  data?: {
+    areablockType?: string
+  }
+}
 
 export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   onClick: (areaType?: string) => Promise<void>
 }
 
 export const EmptyStateAreablockToolbar = ({
   areaTypes,
+  config,
   onClick
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
-  const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const { menuItems } = useAreablockMenu({
+    config,
+    onAddArea: (areaType: string) => { void onClick(areaType) }
+  })
+
+  const handleDropzoneItem = async (info: DropInfo, index: number): Promise<void> => {
+    if (info.type === 'areablock-type' && isString(info.data?.areablockType)) {
+      await onClick(info.data.areablockType)
+    }
+  }
+
+  const isValidDrop = (info: DropInfo): boolean => {
+    if (info.type !== 'areablock-type' || !isString(info.data?.areablockType)) {
+      return false
+    }
+
+    const areablockType = info.data.areablockType
+    return configUtils.isTypeAllowed(config, areablockType)
+  }
 
   const renderAddButton = (): React.ReactNode => {
     if (areaTypes.length === 1) {
-      // Single area type - direct button
       return (
         <IconButton
           icon={ { value: 'new' } }
@@ -40,16 +71,9 @@ export const EmptyStateAreablockToolbar = ({
       )
     }
 
-    // Multiple area types - dropdown button
-    const dropdownItems = areaTypes.map(areaType => ({
-      key: areaType.type,
-      label: t(areaType.name),
-      onClick: () => { void onClick(areaType.type) }
-    }))
-
     return (
       <Dropdown
-        menu={ { items: dropdownItems } }
+        menu={ { items: menuItems } }
         placement="bottomLeft"
         trigger={ ['click'] }
       >
@@ -62,11 +86,20 @@ export const EmptyStateAreablockToolbar = ({
   }
 
   return (
-    <ToolStrip
-      className={ styles.areablockToolstrip }
-      theme="inverse"
-    >
-      {renderAddButton()}
-    </ToolStrip>
+    <>
+      <EditableDropzoneContent />
+      <ToolStrip
+        className={ styles.areablockToolstrip }
+        theme="inverse"
+      >
+        {renderAddButton()}
+      </ToolStrip>
+      <EditableDropzone
+        id="empty-areablock-toolbar-dropzone"
+        index={ 0 }
+        isValidDrop={ isValidDrop }
+        onDropItem={ handleDropzoneItem }
+      />
+    </>
   )
 }

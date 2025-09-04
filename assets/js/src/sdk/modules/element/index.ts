@@ -43,16 +43,15 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/ty
 export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-checkbox-component'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-datetime-component'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-select-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-text-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
 
 export { TypeIconCell as DependenciesTypeIconCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_dependencies/type-icon-cell'
 export { TypeIconCell as MetadataTypeIconCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_meta-data/type-icon-cell/type-icon-cell'
@@ -113,9 +112,11 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/image-gallery'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/input-quantity-value/input-quantity-value'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/localized-fields'
+export * from '@Pimcore/components/form/localisation/localized-fields/localized-fields'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
+// @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
+// @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/object-brick/object-brick'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/quantity-value/quantity-value'

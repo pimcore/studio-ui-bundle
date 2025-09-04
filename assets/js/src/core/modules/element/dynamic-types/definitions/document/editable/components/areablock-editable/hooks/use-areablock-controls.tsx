@@ -8,168 +8,116 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { isNull } from 'lodash'
-import { useAreablockEditableStyles } from '../areablock-editable.styles'
+import React, { useCallback } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType } from '../areablock-editable'
+import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
-import { useTranslation } from 'react-i18next'
-import { AreablockDragOverlay } from '../components/areablock-drag-overlay/areablock-drag-overlay'
 import { SortableAreablockToolbar } from '../components/sortable-areablock-toolbar/sortable-areablock-toolbar'
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type DragStartEvent,
-  type DragOverEvent
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable'
+import { useAreablockDropzones } from './use-areablock-dropzones'
+import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
+import { configUtils } from '../utils/areablock-utils'
 
 export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   onAddArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  onOpenDialog?: (areaKey: string) => void
+  onToggleHidden?: (element: HTMLElement) => void
 }
 
 export interface UseAreablockControlsReturn {
-  updateControls: (element: HTMLElement, limitReached: boolean) => void
-  initializeControls: () => void
-  clearEmptyState: () => void
   renderAreablockToolbar: () => React.JSX.Element
 }
 
 export const useAreablockControls = ({
   areablockManager,
   areaTypes,
+  config,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
-  onMoveArea
+  onMoveArea,
+  onOpenDialog,
+  onToggleHidden
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
-  const { styles } = useAreablockEditableStyles()
-  const { t } = useTranslation()
-  const limitReachedRef = useRef<boolean>(false)
-  const [activeId, setActiveId] = useState<string | null>(null)
-  const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
+  const {
+    activeId,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    dropzonePortals,
+    dragOverlayTitle,
+    refreshDropzones,
+    removeFirstDropzone
+  } = useAreablockDropzones({
+    areablockManager,
+    areaTypes,
+    onMoveArea,
+    onDropAreablock: async (areaType: string, index: number) => {
+      const elements = areablockManager.queryElements()
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5
-      }
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
-  )
-
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(event.active.id as string)
-  }, [])
-
-  const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { over } = event
-
-    const allAreaEntries = areablockManager.queryElements()
-    allAreaEntries.forEach(element => {
-      const key = areablockManager.getElementKey(element)
-
-      if (key === over?.id) {
-        element.classList.add(styles.dragDropTarget)
+      if (index === 0) {
+        await handleAddArea(null, areaType)
+      } else if (index >= elements.length) {
+        const lastElement = elements[elements.length - 1]
+        await handleAddArea(lastElement, areaType)
       } else {
-        element.classList.remove(styles.dragDropTarget)
-      }
-    })
-  }, [areablockManager, styles])
-
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event
-
-    setActiveId(null)
-
-    const allAreaEntries = areablockManager.queryElements()
-    allAreaEntries.forEach(element => {
-      element.style.transform = ''
-      element.style.transition = ''
-      element.classList.remove(styles.dragActive, styles.dragDropTarget)
-    })
-
-    if (over !== null && active.id !== over.id) {
-      const currentAreaEntries = areablockManager.queryElements()
-
-      const originalActiveIndex = currentAreaEntries.findIndex(el => areablockManager.getElementKey(el) === active.id)
-      const originalOverIndex = currentAreaEntries.findIndex(el => areablockManager.getElementKey(el) === over.id)
-
-      if (originalActiveIndex !== -1 && originalOverIndex !== -1 && originalActiveIndex !== originalOverIndex) {
-        onMoveArea(originalActiveIndex, originalOverIndex)
+        const targetElement = elements[index - 1]
+        await handleAddArea(targetElement, areaType)
       }
     }
-  }, [areablockManager, onMoveArea, styles])
+  })
 
-  const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
-    const buttonsContainer = element.querySelector('.pimcore_area_buttons')
+  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+    await onAddArea(element, areaType)
+    refreshDropzones()
+  }, [onAddArea, refreshDropzones])
 
-    if (isNull(buttonsContainer)) {
-      return
+  const handleRemoveArea = useCallback((element: HTMLElement) => {
+    const currentAreaEntries = areablockManager.queryElements()
+    const isLastItem = currentAreaEntries.length === 1
+
+    onRemoveArea(element)
+
+    if (isLastItem) {
+      removeFirstDropzone()
     }
+  }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-    limitReachedRef.current = limitReached
-
-    const buttonElements = buttonsContainer.querySelectorAll('.pimcore_area_plus, .pimcore_area_minus, .pimcore_area_up, .pimcore_area_down, .pimcore_area_type')
-    buttonElements.forEach(button => {
-      (button as HTMLElement).style.display = 'none'
-    })
-  }, [])
-
-  const initializeControls = useCallback((): void => {
-    const container = areablockManager.getContainer()
-    if (isNull(container)) return
-
-    if (emptyStatePortal !== null) return
-
+  const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
+        config={ config }
         onClick={ async (areaType) => {
-          setEmptyStatePortal(null)
-
-          setTimeout(() => {
-            void onAddArea(null, areaType)
-          }, 0)
+          await handleAddArea(null, areaType)
         } }
       />
     )
-
-    const portal = ReactDOM.createPortal(emptyStateToolbar, container)
-    setEmptyStatePortal(portal)
-  }, [areablockManager, areaTypes, onAddArea, emptyStatePortal])
-
-  const clearEmptyState = useCallback((): void => {
-    setEmptyStatePortal(null)
-  }, [])
+    return ReactDOM.createPortal(emptyStateToolbar, container)
+  }, [areaTypes, config, handleAddArea])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
 
     const currentAreaEntries = areablockManager.queryElements()
+    const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
 
-    if (currentAreaEntries.length === 0 && emptyStatePortal !== null) {
-      portals.push(emptyStatePortal)
+    if (currentAreaEntries.length === 0) {
+      const container = areablockManager.getContainer()
+      if (container !== null) {
+        const portal = createEmptyStatePortal(container)
+        portals.push(portal)
+      }
+    } else {
+      portals.push(...dropzonePortals)
     }
 
     const areaKeys = currentAreaEntries
@@ -184,17 +132,19 @@ export const useAreablockControls = ({
         if (areaKey !== null) {
           const sortableToolbar = (
             <SortableAreablockToolbar
-              activeId={ activeId }
               areaTypes={ areaTypes }
               areablockManager={ areablockManager }
               buttonsContainer={ buttonsContainer as HTMLElement }
+              config={ config }
               element={ areaEntry }
               id={ areaKey }
-              limitReached={ limitReachedRef.current }
-              onAddArea={ onAddArea }
+              limitReached={ limitReached }
+              onAddArea={ handleAddArea }
               onMoveAreaDown={ onMoveAreaDown }
               onMoveAreaUp={ onMoveAreaUp }
-              onRemoveArea={ onRemoveArea }
+              onOpenDialog={ onOpenDialog }
+              onRemoveArea={ handleRemoveArea }
+              onToggleHidden={ onToggleHidden }
             />
           )
           const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
@@ -204,41 +154,20 @@ export const useAreablockControls = ({
     })
 
     return (
-      <DndContext
-        collisionDetection={ closestCenter }
+      <EditableSortContext
+        activeId={ activeId }
+        dragOverlayTitle={ dragOverlayTitle }
+        items={ areaKeys }
         onDragEnd={ handleDragEnd }
         onDragOver={ handleDragOver }
         onDragStart={ handleDragStart }
-        sensors={ sensors }
       >
-        <SortableContext
-          items={ areaKeys }
-          strategy={ verticalListSortingStrategy }
-        >
-          <>{portals}</>
-        </SortableContext>
-        <AreablockDragOverlay
-          activeId={ activeId }
-          t={ t }
-        />
-      </DndContext>
+        <>{portals}</>
+      </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddArea, onRemoveArea, onMoveAreaUp, onMoveAreaDown, t, activeId, emptyStatePortal])
-
-  const cleanupControls = useCallback(() => {
-    setEmptyStatePortal(null)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      cleanupControls()
-    }
-  }, [cleanupControls])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
-    updateControls,
-    initializeControls,
-    clearEmptyState,
     renderAreablockToolbar
   }
 }

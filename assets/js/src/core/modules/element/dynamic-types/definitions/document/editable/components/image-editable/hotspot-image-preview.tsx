@@ -50,6 +50,8 @@ interface DocumentHotspotImagePreviewProps {
   altText?: string
   onAltTextChange?: (alt: string) => void
   hideAltTextInput?: boolean
+  isImageLoaded?: boolean
+  onImageLoadedChange?: (isLoaded: boolean) => void
 }
 
 export const DocumentHotspotImagePreview = ({
@@ -73,7 +75,9 @@ export const DocumentHotspotImagePreview = ({
   lastImageDimensions,
   altText,
   onAltTextChange,
-  hideAltTextInput
+  hideAltTextInput,
+  isImageLoaded,
+  onImageLoadedChange
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
@@ -173,11 +177,12 @@ export const DocumentHotspotImagePreview = ({
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
+        onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
         thumbnailSettings={ value.crop }
         width={ width }
       />
-      {hideAltTextInput !== true && (
+      {hideAltTextInput !== true && isImageLoaded !== false && (
         <Input
           className={ styles.altTextOverlay }
           disabled={ disabled }

@@ -2,6 +2,9 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+widget.missing-context.title: "Missing Context"
+widget.missing-context.description: "No related element found"
+widget.missing-tab-context.description: "This feature is not supported for the related element"
 block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
@@ -17,6 +20,8 @@ sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
 sidebar.clear-all-filters: Clear all filters
+add-areas: Add areas
+content-settings: Content Settings
 site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
@@ -773,8 +778,8 @@ navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.reports: Reports
-navigation.custom-reports: Custom Reports
+navigation.reports: All Reports
+navigation.custom-reports: Custom Reports Configuration
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
@@ -1028,6 +1033,8 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+creatable-select.invalid-option: Invalid option
+drag-snippet-here: Drag a snippet here
 drop-snippet-here: Drop a snippet here
 drop-document-here: Drop a document here
 drop-document-asset-here: Drop a document asset here
@@ -1057,6 +1064,9 @@ application-logger.filter.component: Component
 application-logger.filter.related-object-id: Related Object ID
 application-logger.filter.message: Message
 application-logger.filter.pid: Pid
+application-logger.refresh-interval: Refresh interval
+application-logger.refresh-interval.select: Select the refresh frequency
+application-logger.refresh-interval.seconds: "{{seconds}} seconds"
 application-logger.filter.priority-level.1: Emergency
 application-logger.filter.priority-level.2: Alert
 application-logger.filter.priority-level.3: Critical
@@ -1096,8 +1106,6 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
-moving-area: Moving area...
-moving-block: Moving block...
 unsupported_feature: Unsupported feature - please check system requirements!
 document.version.comparison.error.title: Version Comparison Error
 document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
@@ -1130,3 +1138,15 @@ test-email.validation.from.email.type: Please provide a valid sender email addre
 test-email.validation.to.required: Please provide a recipient email address
 test-email.validation.to.email.type: Please provide a valid recipient email address
 test-email.validation.subject.required: Please provide a subject
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspectives Editor
+navigation.widget-editor.perspective-editor: Perspectives Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
+refresh: Refresh
+perspective-editor.add-modal.title: Add a new Perspective
+perspective-editor.add-modal.name.label: Enter the name of the new perspective
+perspective-editor.add-modal.name.validation: Please enter a valid perspective name
+perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.delete.success: Perspective deleted successfully
+edit.label: Edit
