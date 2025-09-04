@@ -12,6 +12,7 @@ import React from 'react'
 import MissingContext from '@Pimcore/modules/element/editor/detached-tab/missing-context'
 import DetachedTabContent from '@Pimcore/modules/element/editor/detached-tab/detached-tab-content'
 import { useGlobalElementContext } from '@Pimcore/modules/element/hooks/use-global-element-context'
+import { useTranslation } from 'react-i18next'
 
 interface IDetachedTabProps {
   tabKey: string
@@ -19,9 +20,10 @@ interface IDetachedTabProps {
 
 export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element => {
   const { context } = useGlobalElementContext()
+  const { t } = useTranslation()
 
   if (context === undefined) {
-    return <MissingContext />
+    return <MissingContext description={ t('widget.missing-context.description') } />
   }
 
   return (

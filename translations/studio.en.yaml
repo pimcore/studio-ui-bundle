@@ -2,6 +2,9 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+widget.missing-context.title: "Missing Context"
+widget.missing-context.description: "No related element found"
+widget.missing-tab-context.description: "This feature is not supported for the related element"
 block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
@@ -65,6 +68,8 @@ upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
+document.editable.inheritance.overwrite: Overwrite
+document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -775,8 +780,8 @@ navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.reports: Reports
-navigation.custom-reports: Custom Reports
+navigation.reports: All Reports
+navigation.custom-reports: Custom Reports Configuration
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
@@ -1150,3 +1155,4 @@ widget-editor.create-form.widgetType.element_tree: Element Tree
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+edit.label: Edit

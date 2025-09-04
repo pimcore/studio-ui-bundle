@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
 
@@ -21,7 +22,7 @@ export interface SelectedColumn {
   exportable?: boolean
   frontendType?: string
   locale?: string | null
-  group?: string
+  group?: AvailableColumn['group']
   originalApiDefinition?: Record<string, any>
   meta?: Record<string, any>
 }

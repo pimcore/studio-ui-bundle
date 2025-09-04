@@ -10,7 +10,7 @@
 
 import React, { type ComponentType } from 'react'
 import { type MenuItemType } from '@Pimcore/components/menu/menu'
-import { Flex, Menu } from 'antd'
+import { Menu } from 'antd'
 import { useStyles } from './default-item.styles'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { createContextMenuItemTestId } from '@Pimcore/utils/test-id-generator'
@@ -37,26 +37,20 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
         { ...props }
         className={ classes.join(' ') }
       >
-        <Flex
-          align='center'
-          gap={ 8 }
-        >
-          {props.isLoading === true && (
-            <Spin
-              tip='Loading'
-              type='classic'
-            />
-          )}
+        {props.isLoading === true && (
+        <Spin
+          tip='Loading'
+          type='classic'
+        />
+        )}
 
-          {icon}
+        {icon}
 
-          <span>{label}</span>
+        <span>{label}</span>
 
-          {props.extra !== undefined && (
+        {props.extra !== undefined && (
           <>{props.extra}</>
-          )}
-
-        </Flex>
+        )}
       </Component>
     )
   }

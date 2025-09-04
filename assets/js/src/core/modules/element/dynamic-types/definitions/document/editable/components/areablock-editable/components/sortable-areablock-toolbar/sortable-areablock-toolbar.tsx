@@ -13,7 +13,7 @@ import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from 'antd'
-import { useAreablockEditableStyles } from '../../areablock-editable.styles'
+import { useStyles } from '../../areablock-editable.styles'
 import { type AreablockManager } from '../../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +33,7 @@ export interface SortableAreablockToolbarProps {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onOpenDialog?: (areaKey: string) => void
+  onToggleHidden?: (element: HTMLElement) => void
 }
 
 export const SortableAreablockToolbar = ({
@@ -47,9 +48,10 @@ export const SortableAreablockToolbar = ({
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
-  onOpenDialog
+  onOpenDialog,
+  onToggleHidden
 }: SortableAreablockToolbarProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
+  const { styles } = useStyles()
   const { t } = useTranslation()
   const { listeners } = useSortableElement({ id, element })
 
@@ -62,6 +64,7 @@ export const SortableAreablockToolbar = ({
   const elementIndex = areablockManager.findElementIndex(element)
   const isFirst = elementIndex === 0
   const isLast = elementIndex === elements.length - 1
+  const isHidden = areablockManager.isElementHidden(element)
 
   const elementType = areablockManager.getElementType(element)
   const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
@@ -130,6 +133,17 @@ export const SortableAreablockToolbar = ({
       />
     )
   }
+
+  // Add hide/show button
+  buttons.push(
+    <IconButton
+      icon={ { value: isHidden ? 'eye-off' : 'eye' } }
+      key="visibility"
+      onClick={ () => { onToggleHidden?.(element) } }
+      size="small"
+      title={ t(isHidden ? 'areablock.show' : 'areablock.hide') }
+    />
+  )
 
   deleteButton = (
     <IconButton

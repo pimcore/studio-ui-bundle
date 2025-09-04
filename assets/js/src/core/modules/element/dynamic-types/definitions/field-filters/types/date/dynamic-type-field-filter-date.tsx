@@ -27,4 +27,12 @@ export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
       <DynamicTypeFieldFilterDateComponent { ...props } />
     )
   }
+
+  shouldApply (value: any): boolean {
+    if (value == null || typeof value !== 'object') {
+      return false
+    }
+
+    return value.on != null || value.from != null || value.to != null
+  }
 }

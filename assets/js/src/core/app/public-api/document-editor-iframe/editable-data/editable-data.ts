@@ -22,10 +22,14 @@ export interface DocumentEditableApi {
   updateValue: (key: string, value: ValueType) => void
   initializeValues: (initialValues: Record<string, ValueType>) => void
   removeValues: (keysToRemove: string[]) => void
+  getInheritanceState: (key: string) => boolean
+  setInheritanceState: (key: string, inherited: boolean) => void
+  initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
   private values: Record<string, ValueType> = {}
+  private inheritanceState: Record<string, boolean> = {}
 
   getValues (forApi: boolean = false): Record<string, ValueType> {
     if (!forApi) {
@@ -64,6 +68,18 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.values[key]
     }
+  }
+
+  getInheritanceState (key: string): boolean {
+    return this.inheritanceState[key] ?? false
+  }
+
+  setInheritanceState (key: string, inherited: boolean): void {
+    this.inheritanceState[key] = inherited
+  }
+
+  initializeInheritanceState (inheritanceState: Record<string, boolean>): void {
+    Object.assign(this.inheritanceState, inheritanceState)
   }
 
   private getEditableDefinitions (): AbstractDocumentEditableDefinition[] {

@@ -96,7 +96,7 @@ export const useAssetDimensions = (): UseAssetDimensionsReturn => {
 
     if (isEmpty) {
       updateEmptyState(true)
-      return assetTargetDimensionsRef.current
+      return !hasEverHadImageRef.current ? null : assetTargetDimensionsRef.current
     }
 
     if (cachedDimensionsRef.current !== null) {

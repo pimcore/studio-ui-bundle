@@ -16,6 +16,49 @@ import { pqlFilterType } from '../context-layer/provider/pql-filter/pql-filter-p
 import { usePqlFilter } from '../context-layer/provider/pql-filter/use-pql-filter'
 import { useFieldFilters } from '../context-layer/provider/field-filters/use-field-filters'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import { type ColumnFilter } from '@tanstack/react-table'
+
+const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
+  return columnFilters.map(({ filterType, ...rest }) => ({
+    ...rest,
+    ...(filterType !== undefined && { type: filterType })
+  }))
+}
+
+const shouldApplyFieldFilter = (
+  filter: any,
+  availableColumns: any[],
+  hasType: (params: any) => boolean,
+  getType: (params: any) => any
+): boolean => {
+  const column = availableColumns.find(col => col.key === filter.key)
+  const frontendType = column?.frontendType ?? filter.type ?? 'string'
+
+  if (!hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] })) {
+    return false
+  }
+
+  const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
+  if (dynamicType === null || !('dynamicTypeFieldFilterType' in dynamicType)) {
+    return false
+  }
+
+  const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+  return fieldFilterType.shouldApply(filter.filterValue)
+}
+
+const getApplicableFieldFilters = (
+  filters: any[],
+  availableColumns: any[],
+  hasType: (params: any) => boolean,
+  getType: (params: any) => any
+): any[] => {
+  return filters.filter((filter) =>
+    shouldApplyFieldFilter(filter, availableColumns, hasType, getType)
+  )
+}
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
@@ -25,14 +68,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { onlyDirectChildren } = useDirectChildrenFilter()
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
-
-    const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-      // Override 'type' with 'filterType' for specific cases (e.g., 'dataobject.adapter')
-      return columnFilters.map(({ filterType, ...rest }) => ({
-        ...rest,
-        ...(filterType !== undefined && { type: filterType })
-      }))
-    }
+    const { hasType, getType } = useDynamicTypeResolver()
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
@@ -56,7 +92,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }
 
       if (fieldFilters.length > 0) {
-        newColumnFilters.push(...fieldFilters)
+        const applicableFieldFilters = getApplicableFieldFilters(fieldFilters, availableColumns, hasType, getType)
+        newColumnFilters.push(...applicableFieldFilters as ColumnFilter[])
       }
 
       return {
