@@ -118,7 +118,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
         {isOpenDropdown && (
           <UsersRolesDropdown
             handleApplyChanges={ handleApplyUsersRolesChanges }
-            handleClose={ () => { setIsOpenDropdown(false) } }
+            handleClose={ handleClose }
             initialSharedRoles={ initialSharedRoles }
             initialSharedUsers={ initialSharedUsers }
             roleList={ props?.roleList }
