@@ -13,6 +13,14 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     dropdownItem: css`
+      display: flex;
+      align-items: center;
+      
+      .ant-dropdown-menu-title-content {
+        display: flex;
+        gap: ${token.marginXS}px;
+      }
+      
       &.ant-dropdown-menu-item-active {
         background-color: ${token.colorBgContainer} !important;
 
