@@ -12,9 +12,9 @@ import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-sl
 import { Form, Modal } from '@sdk/components'
 import React, { createContext, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CreateWidgetForm } from '../components/widget-create-form/widget-create-form'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
 import { type InputRef } from 'antd'
+import { CreateWidgetForm, WidgetForm } from '../components/widget-create-form/widget-create-form'
 
 interface WidgetEditorProviderProps {
   children?: React.ReactNode
@@ -96,7 +96,7 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
       .then(async () => {
         setIsLoading(true)
         const values = tmpForm.getFieldsValue()
-        const { name, widgetType } = values as CreateWidgetForm
+        const { name, widgetType } = values as WidgetForm
 
         await createWidgetHook(name, widgetType, () => {
           setIsModalOpen(false)
@@ -121,23 +121,26 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   }), [activeTabId, widgets, isLoading])
 
   return (
-    <WidgetEditorContext.Provider value={ contextValue }>
+    <WidgetEditorContext.Provider value={contextValue}>
       {children}
 
       <Modal
-        okText={ t('widget-editor.create-modal.create') }
-        onCancel={ () => {
+        okText={t('widget-editor.create-modal.create')}
+        onCancel={() => {
           setIsModalOpen(false)
-        } }
-        onOk={ async () => {
+        }}
+        onOk={async () => {
           await submit()
-        } }
-        open={ isModalOpen }
+        }}
+        okButtonProps={{
+          loading: isLoading
+        }}
+        open={isModalOpen}
         size='M'
       >
         <CreateWidgetForm
-          form={ tmpForm }
-          inputRef={ inputRef }
+          form={tmpForm}
+          inputRef={inputRef}
         />
       </Modal>
     </WidgetEditorContext.Provider>

@@ -12,14 +12,25 @@ import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags
 import { api as baseApi } from './perspectives-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.PERSPECTIVES],
+  addTagTypes: [
+    tagNames.PERSPECTIVES,
+    tagNames.PERSPECTIVE_DETAIL,
+    tagNames.WIDGETS,
+    tagNames.WIDGET_DETAIL
+  ],
   endpoints: {
     perspectiveGetConfigCollection: {
-      providesTags: () => providingTags.PERSPECTIVES()
+      providesTags: (result): Tag[] => {
+        const tags: Tag[] = []
+
+        result?.items.forEach((perspective) => {
+          tags.push(...providingTags.PERSPECTIVE_DETAIL(perspective.id))
+        })
+
+        return [...tags, ...providingTags.PERSPECTIVES()]
+      }
     },
-    perspectiveCreate: {
-      invalidatesTags: () => [tagNames.PERSPECTIVES]
-    },
+
     perspectiveWidgetGetConfigCollection: {
       providesTags: (result): Tag[] => {
         const tags: Tag[] = []
@@ -30,6 +41,9 @@ const api = baseApi.enhanceEndpoints({
 
         return [...tags, ...providingTags.WIDGETS()]
       }
+    },
+    perspectiveWidgetCreate: {
+      invalidatesTags: () => []
     },
     perspectiveWidgetDelete: {
       invalidatesTags: () => []

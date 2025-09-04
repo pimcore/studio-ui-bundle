@@ -59,6 +59,7 @@ export const tagNames = {
   RECYCLE_BIN: 'RECYCLE_BIN',
   RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL',
   PERSPECTIVES: 'PERSPECTIVES',
+  PERSPECTIVE_DETAIL: 'PERSPECTIVE_DETAIL',
   WIDGETS: 'WIDGETS',
   WIDGET_DETAIL: 'WIDGET_DETAIL'
 }
@@ -124,6 +125,7 @@ export const providingTags = {
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
+  PERSPECTIVE_DETAIL: (id: string) => [{ type: tagNames.PERSPECTIVE_DETAIL, id }],
   WIDGETS: () => [tagNames.WIDGETS],
   WIDGET_DETAIL: (id: string) => [{ type: tagNames.WIDGET_DETAIL, id }]
 }

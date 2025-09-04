@@ -51,8 +51,15 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
         trackError(new ApiError(response.error))
       }
 
-      void success(t('widget-editor.create.success'))
       onFinish?.(name)
+
+      dispatch(
+        api.util.invalidateTags(
+          invalidatingTags.WIDGETS()
+        )
+      )
+
+      void success(t('widget-editor.create.success'))
     } catch {
       trackError(new GeneralError('Failed to create new widget.'))
     }
