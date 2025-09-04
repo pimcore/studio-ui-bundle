@@ -233,7 +233,7 @@ export const IconSelector = ({
               current={ currentPage }
               defaultPageSize={ pageSize }
               onChange={ handlePageChange }
-              pageSizeOptions={ [20, 40, 80, 120] }
+              pageSizeOptions={ [40, 80, 120] }
               showSizeChanger
               showTotal={ (total) => t('pagination.show-total', { total }) }
               total={ filteredIcons.length }
