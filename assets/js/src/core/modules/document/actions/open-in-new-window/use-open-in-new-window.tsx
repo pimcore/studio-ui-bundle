@@ -60,6 +60,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       const urlObj = new URL(url, window.location.origin)
       if (!isNil(options?.preview) && options?.preview) {
         urlObj.searchParams.set('pimcore_preview', 'true')
+        urlObj.searchParams.set('pimcore_studio_preview', 'true')
         urlObj.searchParams.set('_dc', Date.now().toString())
       }
       url = urlObj.toString()
