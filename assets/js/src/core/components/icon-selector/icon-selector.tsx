@@ -45,6 +45,13 @@ export const IconSelector = ({
   const [activeTab, setActiveTab] = useState<string>('all')
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
 
+  const resetSelector = () => {
+    setSearchValue('')
+    setCurrentPage(1)
+    setPageSize(40)
+    setActiveTab('all')
+  }
+
   const tabItems = [
     {
       key: 'all',
@@ -92,17 +99,13 @@ export const IconSelector = ({
     if (!isUndefined(currentSelectedIcon)) {
       onSelect(currentSelectedIcon)
     }
-    onCancel()
+   resetSelector()
+   onCancel()
   }
 
   const handleCancel = () => {    
-    console.log("here");
-    
     setCurrentSelectedIcon(undefined)
-    setSearchValue('')
-    setCurrentPage(1)
-    setPageSize(40)
-    setActiveTab('all')
+    resetSelector()
     onCancel()
   }
 
@@ -156,8 +159,10 @@ export const IconSelector = ({
 
         <SearchInput
           maxWidth={ '1000px' }
+          onChange={ (e) => setSearchValue(e.target.value) }
           onSearch={ handleSearch }
           placeholder={ t('icon-selector.search-placeholder') }
+          value={ searchValue }
           withPrefix={ false }
           withoutAddon={ false }
         />
