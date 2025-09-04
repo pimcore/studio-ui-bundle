@@ -10,7 +10,6 @@
 
 import React, { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
 import { Text } from '@Pimcore/components/text/text'
@@ -22,12 +21,14 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
-import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 
 interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
+  initialSharedRoles: number[]
   userList?: UserGetCollectionApiResponse
+  initialSharedUsers: number[]
   handleClose: () => void
+  handleApplyChanges: ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }) => void
 }
 
 interface IRenderSelectProps {
@@ -37,12 +38,8 @@ interface IRenderSelectProps {
   selectedOptions: number[]
 }
 
-export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
-  const { gridConfig, setGridConfig } = useGridConfig()
+export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, handleClose, handleApplyChanges }: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
-
-  const initialSharedUsers = gridConfig?.sharedUsers as number[]
-  const initialSharedRoles = gridConfig?.sharedRoles as number[]
 
   const [sharedUsersList, setSharedUsersList] = useState<number[]>(initialSharedUsers ?? [])
   const [sharedRolesList, setSharedRolesList] = useState<number[]>(initialSharedRoles ?? [])
@@ -56,19 +53,6 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
 
   const handleChangeSharedRoles = (rolesIdList: number[]): void => {
     setSharedRolesList(rolesIdList)
-  }
-
-  const handleApplyChanges = (): void => {
-    if (!isEmpty(gridConfig)) {
-      setGridConfig({
-        ...gridConfig,
-        shareGlobal: false,
-        sharedUsers: sharedUsersList,
-        sharedRoles: sharedRolesList
-      })
-
-      handleClose()
-    }
   }
 
   const renderLabel = ({ labelName, iconName }: { labelName?: string, iconName: string }): React.JSX.Element => (
@@ -156,7 +140,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
             </Button>,
             <Button
               key="apply"
-              onClick={ handleApplyChanges }
+              onClick={ () => { handleApplyChanges({ sharedUsers: sharedUsersList, sharedRoles: sharedRolesList }) } }
               type="primary"
             >
               {t('button.apply')}

@@ -8,17 +8,141 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
+import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
+import { Switch } from '@Pimcore/components/switch/switch'
+import { Form } from '@Pimcore/components/form/form'
+import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-list'
+import type { TagProps } from '@Pimcore/components/tag/tag'
+import { Text } from '@Pimcore/components/text/text'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from 'antd'
+import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { isUndefined } from 'lodash'
 
 export const Permissions = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const { data: roleList } = useRoleGetCollectionQuery()
+  const { data: userList } = useUserGetCollectionQuery()
+
+  console.log('userList: ', userList)
+
+  const [isSharedGlobally, setIsSharedGlobally] = useState(currentData.sharedGlobally)
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+
+  const handleClose = (): void => { setIsOpenDropdown(false) }
+
+  const initialUserList = useMemo(() => {
+    return currentData.sharedUserNames
+      .map(item => userList?.items.find(user => user.username === item)?.id)
+      .filter(id => !isUndefined(id))
+  }, [currentData.sharedUserNames])
+
+  const initialRoleList = useMemo(() => {
+    return currentData.sharedRoleNames
+      .map(item => roleList?.items.find(role => role.name === item)?.id)
+      .filter(id => !isUndefined(id))
+  }, [currentData.sharedRoleNames])
+
+  const handleApplyChanges = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
+    console.log('----->>>>> sharedUsers: ', sharedUsers)
+    console.log('----->>>>> sharedRoles: ', sharedRoles)
+
+    handleClose()
+  }
+
+  const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
+    <Icon
+      options={ { width: size ?? 12, height: size ?? 12 } }
+      value={ iconName }
+    />
+  )
+
+  const getSharedUsersRolesList = (): TagListProps['list'] => {
+    const usersList: TagProps[] = []
+    const rolesList: TagProps[] = []
+
+    const getTagItem = ({ label, iconName }: { label?: string, iconName: string }): TagProps => ({
+      children: (
+        <Text
+          ellipsis
+          style={ { maxWidth: '148px' } }
+          type="secondary"
+        >{label}</Text>
+      ),
+      icon: renderIcon(iconName),
+      bordered: false
+    })
+
+    currentData.sharedUserNames.forEach((item) => {
+      usersList.push(getTagItem({ label: item, iconName: 'user' }))
+    })
+
+    currentData.sharedRoleNames.forEach((item) => {
+      rolesList.push(getTagItem({ label: item, iconName: 'shield' }))
+    })
+
+    return [usersList, rolesList]
+  }
+
+  const renderRightLabelComponent = (): JSX.Element | string | undefined => {
+    const renderGlobalView = (): React.JSX.Element => (
+      <Text>{t('common.globally')}</Text>
+    )
+
+    const renderUserView = (): React.JSX.Element => (
+      <>
+        <Flex gap={ 10 }>
+          <Text>
+            {renderIcon('user')} {t('user-management.user')} | {renderIcon('shield')} {t('user-management.role')}
+          </Text>
+          <Flex
+            align="center"
+            gap={ 8 }
+            onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
+          >
+            {renderIcon('edit', 16)}
+            <Text>{t('button.add-edit')}</Text>
+          </Flex>
+        </Flex>
+        {isOpenDropdown && (
+          <UsersRolesDropdown
+            handleApplyChanges={ handleApplyChanges }
+            handleClose={ handleClose }
+            initialSharedRoles={ initialRoleList }
+            initialSharedUsers={ initialUserList }
+            roleList={ roleList }
+            userList={ userList }
+          />
+        )}
+      </>
+    )
+
+    return isSharedGlobally ? renderGlobalView() : renderUserView()
+  }
+
+  console.log('currentData: ', currentData)
+
   return (
     <FormKit.Panel title={ t('reports.editor.permissions.title') }>
-      Content
+      <Form.Item name="sharedGlobally">
+        <Switch
+          labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
+          labelRight={ renderRightLabelComponent() }
+          onChange={ (checked) => { setIsSharedGlobally(checked) } }
+        />
+      </Form.Item>
+      { !isSharedGlobally && (
+        <TagList
+          itemGap="mini"
+          list={ getSharedUsersRolesList() }
+        />
+      )}
     </FormKit.Panel>
   )
 }

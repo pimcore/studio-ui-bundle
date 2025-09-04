@@ -44,6 +44,9 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
 
   const { gridConfig, setGridConfig } = useGridConfig()
 
+  const initialSharedUsers = gridConfig?.sharedUsers as number[]
+  const initialSharedRoles = gridConfig?.sharedRoles as number[]
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -65,6 +68,21 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           shareGlobal: isSharedGlobally
         })
       }
+    }
+  }
+
+  const handleClose = (): void => { setIsOpenDropdown(false) }
+
+  const handleApplyUsersRolesChanges = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
+    if (!isEmpty(gridConfig)) {
+      setGridConfig({
+        ...gridConfig,
+        shareGlobal: false,
+        sharedUsers,
+        sharedRoles
+      })
+
+      handleClose()
     }
   }
 
@@ -99,7 +117,10 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
         </Flex>
         {isOpenDropdown && (
           <UsersRolesDropdown
+            handleApplyChanges={ handleApplyUsersRolesChanges }
             handleClose={ () => { setIsOpenDropdown(false) } }
+            initialSharedRoles={ initialSharedRoles }
+            initialSharedUsers={ initialSharedUsers }
             roleList={ props?.roleList }
             userList={ props?.userList }
           />
