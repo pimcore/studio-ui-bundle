@@ -12,6 +12,7 @@ import React, { useRef, useEffect } from 'react'
 import { isNil, isNull, isString } from 'lodash'
 import { escapeHtml, pasteHtmlAtCaret, stripTags } from '@Pimcore/utils/html'
 import { useStyles } from './content-editable.styles'
+import { InheritanceOverlay, type InheritanceOverlayProps } from '../inheritance-overlay/inheritance-overlay'
 import cn from 'classnames'
 
 export interface ContentEditableProps {
@@ -24,6 +25,8 @@ export interface ContentEditableProps {
   nowrap?: boolean
   allowMultiLine?: boolean
   className?: string
+  disabled?: boolean
+  inherited?: boolean
 }
 
 const ContentEditable = ({
@@ -35,7 +38,9 @@ const ContentEditable = ({
   height,
   nowrap,
   allowMultiLine = false,
-  className
+  className,
+  disabled = false,
+  inherited = false
 }: ContentEditableProps): JSX.Element => {
   const { styles } = useStyles()
   const contentRef = useRef<HTMLDivElement>(null)
@@ -77,9 +82,8 @@ const ContentEditable = ({
       }
       currentValueRef.current = value
     }
-  }, [value, allowMultiLine])
+  }, [value, allowMultiLine, inherited])
 
-  // Handle content changes from user input
   const handleContentChange = (): void => {
     if (isNull(contentRef.current)) {
       return
@@ -183,20 +187,36 @@ const ContentEditable = ({
     return styles
   }
 
+  const computedStyles = getStyles()
+
+  const getDisplayType = (): InheritanceOverlayProps['display'] => {
+    return computedStyles.display as InheritanceOverlayProps['display'] ?? 'inline'
+  }
+
+  const handleOverwrite = (): void => {
+    onChange?.(value ?? '')
+  }
+
   return (
-    <div
-      className={ cn(styles.contentEditable, className) }
-      contentEditable
-      data-empty={ isEmpty }
-      data-placeholder={ placeholder }
-      data-required={ required }
-      onInput={ handleContentChange }
-      onKeyDown={ handleKeyDown }
-      onPaste={ handlePaste }
-      ref={ contentRef }
-      role="none"
-      style={ getStyles() }
-    />
+    <InheritanceOverlay
+      display={ getDisplayType() }
+      isInherited={ inherited }
+      onOverwrite={ handleOverwrite }
+    >
+      <div
+        className={ cn(styles.contentEditable, className) }
+        contentEditable={ !disabled }
+        data-empty={ isEmpty }
+        data-placeholder={ placeholder }
+        data-required={ required }
+        onInput={ disabled ? undefined : handleContentChange }
+        onKeyDown={ disabled ? undefined : handleKeyDown }
+        onPaste={ disabled ? undefined : handlePaste }
+        ref={ contentRef }
+        role="none"
+        style={ computedStyles }
+      />
+    </InheritanceOverlay>
   )
 }
 
