@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space, Split } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
@@ -91,47 +91,49 @@ export const IconSelector = ({
     return filteredIcons.slice(startIndex, endIndex)
   }, [filteredIcons, currentPage, pageSize])
 
-  const handleIconClick = useCallback((icon: ElementIcon) => {
+  const handleIconClick = (icon: ElementIcon) => {
     setCurrentSelectedIcon(icon)
-  }, [])
+  }
 
-  const handleSave = useCallback(() => {
+  const handleSave = () => {
     if (!isUndefined(currentSelectedIcon)) {
       onSelect(currentSelectedIcon)
     }
     onCancel()
-  }, [currentSelectedIcon, onSelect, onCancel])
+  }
 
-  const handleCancel = useCallback(() => {
-    setCurrentSelectedIcon(selectedIcon)
+  const handleCancel = () => {    
+    console.log("here");
+    
+    setCurrentSelectedIcon(undefined)
     setSearchValue('')
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
     onCancel()
-  }, [selectedIcon, onCancel])
+  }
 
-  const handleClearSelection = useCallback(() => {
+  const handleClearSelection = () => {
     setCurrentSelectedIcon(undefined)
-  }, [])
+  }
 
-  const handleSearch = useCallback((value: string) => {
+  const handleSearch = (value: string) => {
     setSearchValue(value)
     setCurrentPage(1)
-  }, [])
+  }
 
-  const handleRefresh = useCallback(() => {
+  const handleRefresh = () => {
     setSearchValue('')
     setCurrentPage(1)
     setCurrentSelectedIcon(selectedIcon)
-  }, [selectedIcon])
+  }
 
-  const handlePageChange = useCallback((page: number, newPageSize?: number) => {
+  const handlePageChange = (page: number, newPageSize?: number) => {
     setCurrentPage(page)
     if (!isUndefined(newPageSize)) {
       setPageSize(newPageSize)
     }
-  }, [])
+  }
 
   return (
     <Modal
