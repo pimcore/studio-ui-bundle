@@ -22,6 +22,7 @@ export interface InheritanceOverlayProps {
   onOverwrite: () => void
   className?: string
   display?: 'inline' | 'inline-block' | 'block'
+  addIconSpacing?: boolean
 }
 
 export const InheritanceOverlay = ({
@@ -29,9 +30,10 @@ export const InheritanceOverlay = ({
   isInherited,
   onOverwrite,
   className,
-  display = 'inline-block'
+  display = 'inline-block',
+  addIconSpacing = false
 }: InheritanceOverlayProps): React.JSX.Element | null => {
-  const { styles } = useStyles(display)
+  const { styles } = useStyles({ display, addIconSpacing })
   const { t } = useTranslation()
 
   const menuItems: MenuProps['items'] = [

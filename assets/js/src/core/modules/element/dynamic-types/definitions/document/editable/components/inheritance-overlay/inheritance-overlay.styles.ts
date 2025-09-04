@@ -10,11 +10,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }, displayType: string) => {
+export const useStyles = createStyles((
+  { token, css },
+  { display, addIconSpacing }: { display?: string, addIconSpacing?: boolean }
+) => {
+  const iconSize = 16
+  const iconPadding = addIconSpacing === true ? iconSize + (2 * token.paddingXXS) + token.paddingSM : 0
+
   return {
     container: css`
       position: relative;
-      display: ${displayType === 'inline-block' ? 'inline-flex' : displayType};
+      display: ${display ?? 'inline-block'};
+      padding-right: ${iconPadding}px;
     `,
 
     inheritanceBackground: css`
@@ -29,6 +36,7 @@ export const useStyles = createStyles(({ token, css }, displayType: string) => {
       align-items: flex-start;
       justify-content: flex-end;
       padding: ${token.paddingXXS}px;
+      z-index: 10;
       
       &:hover {
         border-color: ${token.colorPrimary};
