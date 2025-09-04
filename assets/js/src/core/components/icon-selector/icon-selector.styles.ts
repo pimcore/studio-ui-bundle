@@ -19,9 +19,12 @@ export const useStyles = createStyles(({ token, css }) => {
       gap: 8px;
       justify-content: center;
       max-height: 345px;
+      width: 835px;
       overflow-y: auto;
-      padding-top: ${token.paddingXS}px;
-      padding-bottom: ${token.paddingXS}px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      scrollbar-gutter: stable; 
+
     `,
 
     iconCard: css`
