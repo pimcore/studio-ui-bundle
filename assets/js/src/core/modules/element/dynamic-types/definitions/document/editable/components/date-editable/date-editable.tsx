@@ -35,7 +35,7 @@ export const DateEditable = ({
   inherited
 }: DateEditableProps): React.JSX.Element => {
   const fieldWidths = useFieldWidth()
-  
+
   const handleOverwrite = (): void => {
     onChange?.(value ?? null)
   }

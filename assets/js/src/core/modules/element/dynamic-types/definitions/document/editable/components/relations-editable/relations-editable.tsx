@@ -9,20 +9,28 @@
  */
 
 import React from 'react'
-import { ManyToOneRelation, type ManyToOneRelationProps } from '@sdk/modules/element'
+import { Form } from 'antd'
+import { ManyToManyRelation, type ManyToManyRelationProps } from '@Pimcore/components/many-to-many-relation'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { toCssDimension } from '@sdk/utils'
+import { ManyToManyRelationLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
+import { isEmpty, isNil } from 'lodash'
 
-interface RelationEditableProps extends ManyToOneRelationProps {
+interface RelationsEditableProps extends ManyToManyRelationProps {
   inherited?: boolean
+  title?: string
+  name?: string
 }
 
-export const RelationEditable = ({
+export const RelationsEditable = ({
   inherited,
   width,
+  height,
+  title,
+  name,
   ...otherProps
-}: RelationEditableProps): React.JSX.Element => {
+}: RelationsEditableProps): React.JSX.Element => {
   const fieldWidth = useFieldWidth()
 
   const handleOverwrite = (): void => {
@@ -34,19 +42,35 @@ export const RelationEditable = ({
     maxWidth: toCssDimension(width, fieldWidth.large)
   }
 
+  const showLabel = !isNil(title) && !isEmpty(title)
+
   return (
+
     <InheritanceOverlay
-      addIconSpacing
       display="block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
       style={ containerStyle }
     >
-      <ManyToOneRelation
-        { ...otherProps }
-        disabled={ otherProps.disabled === true || inherited === true }
-        width={ width }
-      />
+      <Form.Item
+        label={ showLabel
+          ? (
+            <ManyToManyRelationLabel
+              label={ title }
+              name={ name ?? '' }
+            />
+            )
+          : undefined }
+        layout="vertical"
+      >
+        <ManyToManyRelation
+          { ...otherProps }
+          disabled={ otherProps.disabled === true || inherited === true }
+          height={ height }
+          width={ width }
+        />
+
+      </Form.Item>
     </InheritanceOverlay>
   )
 }

@@ -13,9 +13,6 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { type ManyToOneRelationValue } from '@sdk/modules/element'
 import { isEmpty, isNil } from 'lodash'
 import { RelationEditable } from '../components/relation-editable/relation-editable'
-import { InheritanceOverlay } from '../components/inheritance-overlay/inheritance-overlay'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
-import { toCssDimension } from '@sdk/utils'
 
 export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -56,8 +53,8 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         className={ props.config?.class }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
-        width={ props.config?.width }
         inherited={ props.inherited }
+        width={ props.config?.width }
       />
     )
   }

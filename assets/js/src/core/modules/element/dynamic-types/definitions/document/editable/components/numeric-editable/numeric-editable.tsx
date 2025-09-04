@@ -41,7 +41,7 @@ export const NumericEditable = ({
   inherited
 }: NumericEditableProps): React.JSX.Element => {
   const defaultFieldWidth = useFieldWidth()
-  
+
   const handleOverwrite = (): void => {
     onChange?.(value ?? null)
   }

@@ -9,11 +9,11 @@
  */
 
 import React, { useState, useMemo } from 'react'
-import { Alert, Form } from '@sdk/components'
+import { Alert } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds, useInjection } from '@sdk/app'
-import { isNil, isUndefined, isEqual } from 'lodash'
+import { isNil, isEqual } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
@@ -86,25 +86,10 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
     )
   }
 
-  const label = editableType.getLabel(editableProps)
-
   return (
     <ErrorBoundary>
       <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
-        {
-        !isUndefined(label)
-          ? (
-            <Form.Item
-              label={ label }
-              layout="vertical"
-            >
-              { renderEditableComponent }
-            </Form.Item>
-            )
-          : (
-              renderEditableComponent
-            )
-      }
+        { renderEditableComponent }
       </FieldWidthProvider>
     </ErrorBoundary>
   )
