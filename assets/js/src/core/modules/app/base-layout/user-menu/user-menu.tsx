@@ -92,22 +92,19 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
             size={ 'small' }
           >{t('user-menu.notification.send')}</Button>
           )
-        : null,
-      gap: 4
+        : null
     },
     {
       key: 'myprofile',
       label: getUserName(),
       icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
-      onClick: () => { openMainWidget(USERPROFILE) },
-      gap: 4
+      onClick: () => { openMainWidget(USERPROFILE) }
     },
     {
       key: 'logout',
       label: t('user-menu.log-out'),
       icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'log-out' } /></div>,
-      onClick: handleLogout,
-      gap: 4
+      onClick: handleLogout
     }
   ]
 

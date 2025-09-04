@@ -20,8 +20,9 @@ export const useStyle = createStyles(({ token, css }) => {
       .user-menu__item-extra {
         margin-left: auto;
       }
-      
-      .ant-dropdown-menu-item .ant-flex {
+
+      .ant-dropdown-menu-title-content.ant-dropdown-menu-title-content {
+        gap: ${token.marginXXS}px;
         width: 100%;
       }
       

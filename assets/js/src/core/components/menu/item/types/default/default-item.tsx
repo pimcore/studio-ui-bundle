@@ -21,7 +21,7 @@ export interface DefaultItemProps extends MenuItemType {
 }
 
 export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<DefaultItemProps> => {
-  const DecoratedMenuItem = ({ label, key, selectable, id, icon, itemKey, gap = 8, ...props }: DefaultItemProps): React.JSX.Element => {
+  const DecoratedMenuItem = ({ label, key, selectable, id, icon, itemKey, ...props }: DefaultItemProps): React.JSX.Element => {
     const { styles } = useStyles()
     const classes = [styles.dropdownItem]
 
@@ -37,10 +37,6 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
         { ...props }
         className={ classes.join(' ') }
       >
-        <Flex
-          align='center'
-          gap={ gap }
-        >
           {props.isLoading === true && (
             <Spin
               tip='Loading'
@@ -55,8 +51,6 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
           {props.extra !== undefined && (
           <>{props.extra}</>
           )}
-
-        </Flex>
       </Component>
     )
   }
