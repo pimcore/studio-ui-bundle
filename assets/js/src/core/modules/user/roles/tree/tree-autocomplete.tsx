@@ -26,7 +26,8 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
   const { t } = useTranslation()
   const { openRole, searchRoleByText } = useRoleHelper()
 
-  const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
+  // const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
+  const [searchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
   // const { Text } = Typography
   const { styles } = useStyles()
