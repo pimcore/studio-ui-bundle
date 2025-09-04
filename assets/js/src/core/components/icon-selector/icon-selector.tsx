@@ -106,6 +106,8 @@ export const IconSelector = ({
     setCurrentSelectedIcon(selectedIcon)
     setSearchValue('')
     setCurrentPage(1)
+    setPageSize(40)
+    setActiveTab('all')
     onCancel()
   }, [selectedIcon, onCancel])
 

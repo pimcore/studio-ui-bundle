@@ -43,6 +43,7 @@ export const useStyles = createStyles(({ token, css }) => {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transform: translateY(-1px);
         background-color: ${token.colorPrimaryBg};
+        border-color: ${token.colorPrimaryBorder};
       }
     `,
 
@@ -69,7 +70,7 @@ export const useStyles = createStyles(({ token, css }) => {
     selectionPreview: css`
       min-height: 32px;
       padding: ${token.paddingXXS}px ${token.paddingXS}px;
-      border: 1px solid ${token.colorBorder};
+      border: 1px solid ${token.colorPrimaryBorder};
       border-radius: ${token.borderRadius}px;
       background-color: ${token.colorBgContainer};
       width: 54px;
