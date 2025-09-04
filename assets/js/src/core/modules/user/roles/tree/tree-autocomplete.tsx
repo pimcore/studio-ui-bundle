@@ -9,13 +9,14 @@
  */
 
 import React, { useState } from 'react'
-import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
+// import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
+import { AutoComplete, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { UserOutlined } from '@ant-design/icons'
+// import { UserOutlined } from '@ant-design/icons'
 import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import {useRoleHelper} from "@Pimcore/modules/user/roles/hooks/use-roles-helper";
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 
 interface ITreeAutocompleteProps {
   loading?: boolean
@@ -23,11 +24,11 @@ interface ITreeAutocompleteProps {
 
 const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openRole, searchRoleByText} = useRoleHelper()
+  const { openRole, searchRoleByText } = useRoleHelper()
 
   const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
-  const { Text } = Typography
+  // const { Text } = Typography
   const { styles } = useStyles()
 
   const onSearch = (value: string): void => {

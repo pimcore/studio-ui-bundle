@@ -15,9 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
-import type {DragEndEvent} from "@dnd-kit/core";
-import {isEqual, isNil} from "lodash";
-import {arrayMove} from "@dnd-kit/sortable";
+import type { DragEndEvent } from '@dnd-kit/core'
+import { isEqual, isNil } from 'lodash'
+import { arrayMove } from '@dnd-kit/sortable'
 
 interface ITableProps {
   data: any[]
@@ -81,7 +81,6 @@ export const LanguageTable = ({
       })
     }
   }
-
 
   const columnHelper = createColumnHelper()
   const tableColumns = [
