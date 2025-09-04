@@ -38,6 +38,7 @@ export const getTabTokens = (token): TabsToken => {
     itemHoverColor: token.colorPrimaryHover,
     itemActiveColor: token.colorPrimaryActive,
     cardGutter: token.marginXXS / 2,
+    borderRadiusMD: 6,
     ...(token?.Tabs ?? {})
   }
 
@@ -143,6 +144,7 @@ export const useStyles = createStyles(({ token, css }) => {
         .flexlayout__border_inner_tab_container {
           width: calc(100svh - 12px);
           justify-content: flex-end;
+          gap: 2px;
         }
   
         .flexlayout__border_inner_tab_container_left, .flexlayout__border_inner_tab_container_right {
@@ -210,12 +212,12 @@ export const useStyles = createStyles(({ token, css }) => {
           background: transparent;
           width: 40px;
           justify-content: center;
-          border-radius: ${token.borderRadiusSM}px;
-          transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
+          border-radius: ${tabToken.borderRadiusMD}px;
+          transition: all ${token.motionDurationSlow} ${token.motionEaseInOut}, border-top-width 0.1s ease;
   
           &--selected {
             color: ${tabToken.itemActiveColor};
-            border-top: 1.5px solid ${token.colorBorderActive};
+            border-top: 2px solid ${token.colorBorderActive};
             background: ${token.controlItemBgHover};
           }
         }
