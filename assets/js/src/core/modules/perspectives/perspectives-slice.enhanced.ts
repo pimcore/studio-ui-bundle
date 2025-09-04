@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './perspectives-slice.gen'
 
 const api = baseApi.enhanceEndpoints({

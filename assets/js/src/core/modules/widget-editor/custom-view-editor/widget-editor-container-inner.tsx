@@ -28,14 +28,14 @@ export const WidgetEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.widget-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer key={'widget-editor.widget-editor.main.detailTab'} />
+      <WidgetDetailContainer key={ 'widget-editor.widget-editor.main.detailTab' } />
     ]
   }
 
   return (
     <ConfigLayout
-      leftItem={sidebar}
-      rightItem={main}
+      leftItem={ sidebar }
+      rightItem={ main }
     />
   )
 }

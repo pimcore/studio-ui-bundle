@@ -10,11 +10,11 @@
 
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { Form, Modal } from '@sdk/components'
-import React, { createContext, Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import React, { createContext, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CreateWidgetForm } from '../components/widget-create-form/widget-create-form'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
-import { InputRef } from 'antd'
+import { type InputRef } from 'antd'
 
 interface WidgetEditorProviderProps {
   children?: React.ReactNode
@@ -121,21 +121,24 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   }), [activeTabId, widgets, isLoading])
 
   return (
-    <WidgetEditorContext.Provider value={contextValue}>
+    <WidgetEditorContext.Provider value={ contextValue }>
       {children}
 
       <Modal
-        open={isModalOpen}
-        size='M'
-        okText={t('widget-editor.create-modal.create')}
-        onCancel={() => {
+        okText={ t('widget-editor.create-modal.create') }
+        onCancel={ () => {
           setIsModalOpen(false)
-        }}
-        onOk={async () => {
+        } }
+        onOk={ async () => {
           await submit()
-        }}
+        } }
+        open={ isModalOpen }
+        size='M'
       >
-        <CreateWidgetForm form={tmpForm} inputRef={inputRef} />
+        <CreateWidgetForm
+          form={ tmpForm }
+          inputRef={ inputRef }
+        />
       </Modal>
     </WidgetEditorContext.Provider>
   )

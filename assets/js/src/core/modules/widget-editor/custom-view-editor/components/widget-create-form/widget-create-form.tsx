@@ -1,23 +1,32 @@
-import { Form } from "@Pimcore/components/form/form";
-import { Input, Select } from "@sdk/components";
-import { FormInstance, InputRef } from "antd";
-import React from "react";
-import { useTranslation } from "react-i18next";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { Input, Select } from '@sdk/components'
+import { type FormInstance, type InputRef } from 'antd'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 enum WidgetTypes {
   ElementTree = 'element_tree'
 }
 
-//TODO: replace "any" with api interface
-export interface CreateWidgetForm {
+export interface WidgetForm {
   name: string
   widgetType: WidgetTypes
 }
 
 interface CreateWidgetFormProps {
-  form: FormInstance<CreateWidgetForm>
+  form: FormInstance<WidgetForm>
   inputRef?: React.RefObject<InputRef>
-  initialValues?: Partial<CreateWidgetForm>
+  initialValues?: Partial<WidgetForm>
 }
 
 export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidgetFormProps): React.JSX.Element => {
@@ -36,7 +45,7 @@ export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidget
         label={t('widget-editor.create-form.name')}
         name="name"
         rules={[
-          { required: true, message: t('widget-editor.create-form.name.required') },
+          { required: true, message: t('widget-editor.create-form.name.required') }
         ]}
       >
         <Input ref={inputRef} />
@@ -56,5 +65,5 @@ export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidget
         />
       </Form.Item>
     </Form>
-  );
-};
+  )
+}
