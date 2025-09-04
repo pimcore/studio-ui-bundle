@@ -35,6 +35,11 @@ export const useStyle = createStyles(({ token, css }) => {
         width: 20px;
         height: 20px;
         border-radius: 100%;
+        font-size: 8px;
+        font-weight: ${token.fontWeightStrong};
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     `
   }
