@@ -34,26 +34,27 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
     setSearchValue(value)
 
     searchRoleByText(searchValue).then(response => {
-      setSearchOptions(response.items.map((item) => ({
-        value: item.id.toString(),
-        label: (
-          <Row
-            gutter={ 8 }
-            wrap={ false }
-          >
-            <Col flex="none">
-              <Avatar
-                icon={ <UserOutlined /> }
-                size={ 26 }
-              />
-            </Col>
-            <Col flex="auto">
-              <div>{item.username}</div>
-              <Text strong>{t('roles.search.id')}: </Text> {item.id}
-            </Col>
-          </Row>
-        )
-      })))
+      console.log('todo search response', response)
+      // setSearchOptions(response.items.map((item) => ({
+      //   value: item.id.toString(),
+      //   label: (
+      //     <Row
+      //       gutter={ 8 }
+      //       wrap={ false }
+      //     >
+      //       <Col flex="none">
+      //         <Avatar
+      //           icon={ <UserOutlined /> }
+      //           size={ 26 }
+      //         />
+      //       </Col>
+      //       <Col flex="auto">
+      //         <div>{item.username}</div>
+      //         <Text strong>{t('roles.search.id')}: </Text> {item.id}
+      //       </Col>
+      //     </Row>
+      //   )
+      // })))
     }).catch(e => { trackError(new GeneralError('An error occured while searching for a user')) })
   }
 

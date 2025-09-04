@@ -25,6 +25,7 @@ import {
   type RoleFolderDeleteByIdApiResponse,
   type RoleGetByIdApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
+import type {PimcoreStudioApiUserSearchApiResponse} from "@Pimcore/modules/auth/user/user-api-slice.gen";
 
 interface IAddRoleArgs {
   parentId: number
@@ -43,6 +44,7 @@ interface IUseRoleReturn {
   updateRoleById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   moveRoleById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   getRoleCollection: () => Promise<RoleGetCollectionApiResponse>
+  searchRoleByText: (query: string) => Promise<Boolean>
   activeId: number
   getAllIds: number[]
 }
@@ -85,6 +87,12 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { data }: any = await dispatch(api.endpoints.roleGetTree.initiate({ parentId }))
 
     return data
+  }
+
+  async function searchRoleByText (query: string): Promise<Boolean> {
+    console.log('todo')
+    // const { data }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
+    return true
   }
 
   async function addNewRole (props: IAddRoleArgs): Promise<{ data: RoleCreateApiResponse, error: Error }> {
@@ -187,6 +195,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     updateRoleById,
     moveRoleById,
     getRoleCollection,
+    searchRoleByText,
     activeId,
     getAllIds
   }
