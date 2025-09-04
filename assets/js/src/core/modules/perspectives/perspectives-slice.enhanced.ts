@@ -30,7 +30,12 @@ const api = baseApi.enhanceEndpoints({
         return [...tags, ...providingTags.PERSPECTIVES()]
       }
     },
-
+    perspectiveCreate: {
+      invalidatesTags: () => []
+    },
+    perspectiveDelete: {
+      invalidatesTags: () => []
+    },
     perspectiveWidgetGetConfigCollection: {
       providesTags: (result): Tag[] => {
         const tags: Tag[] = []
