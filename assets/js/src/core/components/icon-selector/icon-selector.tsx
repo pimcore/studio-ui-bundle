@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo, useState, useCallback } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space } from '@sdk/components'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space, Split } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -133,6 +133,7 @@ export const IconSelector = ({
 
   return (
     <Modal
+      className={ styles.iconSelectorModal }
       footer={ <ModalFooter divider>
         <Button
           disabled={ isUndefined(currentSelectedIcon) }
@@ -146,7 +147,6 @@ export const IconSelector = ({
       onCancel={ handleCancel }
       open={ open }
       size="ML"
-      title={ t('icon-selector.title') }
     >
       <Flex
         gap="small"
@@ -195,7 +195,7 @@ export const IconSelector = ({
             align="center"
             gap="small"
           >
-            {!isUndefined(currentSelectedIcon) && 
+            {!isUndefined(currentSelectedIcon) ?
             <><span>{t('icon-selector.current-selection')}</span>
             <Flex
               align='center'
@@ -208,25 +208,27 @@ export const IconSelector = ({
                     value={ currentSelectedIcon.value }
                   />
             </Flex>
-            </>}
-            {!isUndefined(currentSelectedIcon) && (
             <IconButton
               icon={ { value: 'trash' } }
               onClick={ handleClearSelection }
               title={ t('icon-selector.clear-selection') }
               type='default'
             />
-            )}
+             </>
+             :
+             <div></div>}
           </Flex>
 
           <Flex
             align="center"
             gap="small"
           >
+            <Split>
             <IconButton
               icon={ { value: 'refresh' } }
               onClick={ handleRefresh }
               title={ t('refresh') }
+              variant='minimal'
             />
             <Pagination
               current={ currentPage }
@@ -237,6 +239,7 @@ export const IconSelector = ({
               showTotal={ (total) => t('pagination.show-total', { total }) }
               total={ filteredIcons.length }
             />
+          </Split>
           </Flex>
         </Flex>
       </Flex>

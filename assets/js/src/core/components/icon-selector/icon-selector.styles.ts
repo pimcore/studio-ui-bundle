@@ -79,6 +79,12 @@ export const useStyles = createStyles(({ token, css }) => {
     noSelection: css`
       color: ${token.colorTextSecondary};
       font-style: italic;
+    `,
+
+    iconSelectorModal: css`
+      .ant-modal-content {
+        gap: 0 !important;
+      }
     `
   }
 })

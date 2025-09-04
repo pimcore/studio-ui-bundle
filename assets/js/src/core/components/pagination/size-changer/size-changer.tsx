@@ -17,13 +17,15 @@ interface SizeChangerProps {
   defaultSize: number
   handleChange: (pageSize: number) => void
   label: string
+  width?: number
 }
 
 export const SizeChanger = ({
   sizeOptions,
   defaultSize,
   handleChange,
-  label
+  label,
+  width
 }: SizeChangerProps): React.JSX.Element => {
   let isDefaultPageSizeOptionValid = false
   const options: DefaultOptionType[] = []
@@ -48,6 +50,7 @@ export const SizeChanger = ({
       defaultValue={ defaultSize }
       onChange={ handleChange }
       options={ options }
+      width={ width }
     />
   )
 }
