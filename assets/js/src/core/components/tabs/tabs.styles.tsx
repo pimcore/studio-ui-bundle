@@ -37,7 +37,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab-active .ant-tabs-tab-btn {
-        font-weight: 600;
+        font-weight: 400;
         text-shadow: none;
         color: ${token.itemActiveColor} 
       }
