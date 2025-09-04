@@ -104,7 +104,10 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
         <SourceDefinition currentData={ currentData } />
         <ColumnConfiguration currentData={ currentData } />
         <ChartSettings currentData={ currentData } />
-        <Permissions currentData={ currentData } />
+        <Permissions
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
         {isActive && renderSaveButton()}
       </FormKit>
       )}

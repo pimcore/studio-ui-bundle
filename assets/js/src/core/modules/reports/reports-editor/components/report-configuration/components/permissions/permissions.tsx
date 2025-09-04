@@ -10,8 +10,11 @@
 
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
+import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Form } from '@Pimcore/components/form/form'
@@ -19,18 +22,13 @@ import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-lis
 import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Flex } from 'antd'
-import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
-import { isUndefined } from 'lodash'
+import { Flex } from '@Pimcore/components/flex/flex'
 
-export const Permissions = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const Permissions = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
-
-  console.log('userList: ', userList)
 
   const [isSharedGlobally, setIsSharedGlobally] = useState(currentData.sharedGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
@@ -50,8 +48,18 @@ export const Permissions = ({ currentData }: IReportConfigurationSectionProps): 
   }, [currentData.sharedRoleNames])
 
   const handleApplyChanges = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
-    console.log('----->>>>> sharedUsers: ', sharedUsers)
-    console.log('----->>>>> sharedRoles: ', sharedRoles)
+    const updatedSharedUsers = sharedUsers
+      .map(id => userList?.items.find(user => user.id === id)?.username)
+      .filter(name => !isUndefined(name))
+    const updatedSharedRoles = sharedRoles
+      .map(id => roleList?.items.find(role => role.id === id)?.name)
+      .filter(name => !isUndefined(name))
+
+    updateFormData?.({
+      ...currentData,
+      sharedUserNames: updatedSharedUsers,
+      sharedRoleNames: updatedSharedRoles
+    })
 
     handleClose()
   }
