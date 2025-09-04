@@ -47,9 +47,9 @@ const IconSelectorDemo = (): React.JSX.Element => {
   return (
     <div style={ { padding: '20px' } }>
       <div style={ { marginBottom: '20px' } }>
-        <p>Current selected icon: <strong>{selectedIcon?.value ?? 'None'}</strong></p>
+        <p>Current selected icon: <strong>{selectedIcon}</strong></p>
         <IconButton
-          icon={ { value: selectedIcon?.value ?? 'folder' } }
+          icon={ { value: selectedIcon } }
           onClick={ handleOpen }
         >
           Select Icon
