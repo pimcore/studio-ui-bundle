@@ -14,15 +14,14 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     iconGrid: css`
       display: grid;
-      grid-template-columns: repeat(10, 71px);
+      grid-template-columns: repeat(10, 75px);
       grid-template-rows: repeat(4, 76px);
       gap: 8px;
       justify-content: center;
       max-height: 345px;
       overflow-y: auto;
-      padding: ${token.paddingXS}px;
-      border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
+      padding-top: ${token.paddingXS}px;
+      padding-bottom: ${token.paddingXS}px;
     `,
 
     iconCard: css`
@@ -85,6 +84,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-modal-content {
         gap: 0 !important;
       }
+
     `
   }
 })

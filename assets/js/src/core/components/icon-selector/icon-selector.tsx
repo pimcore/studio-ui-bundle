@@ -149,7 +149,6 @@ export const IconSelector = ({
       size="ML"
     >
       <Flex
-        gap="small"
         vertical
       >
         <Tabs
