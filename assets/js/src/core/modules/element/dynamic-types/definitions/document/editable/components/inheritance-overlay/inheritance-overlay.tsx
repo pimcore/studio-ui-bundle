@@ -23,6 +23,7 @@ export interface InheritanceOverlayProps {
   className?: string
   display?: 'inline' | 'inline-block' | 'block'
   addIconSpacing?: boolean
+  hideButtons?: boolean
   style?: React.CSSProperties
 }
 
@@ -33,9 +34,10 @@ export const InheritanceOverlay = ({
   className,
   display = 'inline-block',
   addIconSpacing = false,
+  hideButtons = false,
   style
 }: InheritanceOverlayProps): React.JSX.Element | null => {
-  const { styles } = useStyles({ display, addIconSpacing })
+  const { styles } = useStyles({ display, addIconSpacing, hideButtons })
   const { t } = useTranslation()
 
   const menuItems: MenuProps['items'] = [

@@ -12,7 +12,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles((
   { token, css },
-  { display, addIconSpacing }: { display?: string, addIconSpacing?: boolean }
+  { display, addIconSpacing, hideButtons }: { display?: string, addIconSpacing?: boolean, hideButtons?: boolean }
 ) => {
   const iconSize = 16
   const iconPadding = addIconSpacing === true ? iconSize + (2 * token.paddingXXS) + token.paddingSM : 0
@@ -24,6 +24,7 @@ export const useStyles = createStyles((
       padding-right: ${iconPadding}px;
       .ant-btn {
         background-color: ${token.colorBgContainerDisabled} !important;
+        ${hideButtons === true ? 'display: none !important;' : ''}
       }
     `,
 
