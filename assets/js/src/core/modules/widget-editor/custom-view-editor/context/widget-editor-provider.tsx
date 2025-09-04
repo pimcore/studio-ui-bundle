@@ -14,7 +14,7 @@ import React, { createContext, type Dispatch, type SetStateAction, useEffect, us
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
 import { type InputRef } from 'antd'
-import { CreateWidgetForm, WidgetForm } from '../components/widget-create-form/widget-create-form'
+import { CreateWidgetForm, type WidgetForm } from '../components/widget-create-form/widget-create-form'
 
 interface WidgetEditorProviderProps {
   children?: React.ReactNode
@@ -121,26 +121,26 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   }), [activeTabId, widgets, isLoading])
 
   return (
-    <WidgetEditorContext.Provider value={contextValue}>
+    <WidgetEditorContext.Provider value={ contextValue }>
       {children}
 
       <Modal
-        okText={t('widget-editor.create-modal.create')}
-        onCancel={() => {
-          setIsModalOpen(false)
-        }}
-        onOk={async () => {
-          await submit()
-        }}
-        okButtonProps={{
+        okButtonProps={ {
           loading: isLoading
-        }}
-        open={isModalOpen}
+        } }
+        okText={ t('widget-editor.create-modal.create') }
+        onCancel={ () => {
+          setIsModalOpen(false)
+        } }
+        onOk={ async () => {
+          await submit()
+        } }
+        open={ isModalOpen }
         size='M'
       >
         <CreateWidgetForm
-          form={tmpForm}
-          inputRef={inputRef}
+          form={ tmpForm }
+          inputRef={ inputRef }
         />
       </Modal>
     </WidgetEditorContext.Provider>
