@@ -38,7 +38,6 @@ export const getTabTokens = (token): TabsToken => {
     itemHoverColor: token.colorPrimaryHover,
     itemActiveColor: token.colorPrimaryActive,
     cardGutter: token.marginXXS / 2,
-    borderRadiusMD: 6,
     ...(token?.Tabs ?? {})
   }
 
@@ -212,7 +211,7 @@ export const useStyles = createStyles(({ token, css }) => {
           background: transparent;
           width: 40px;
           justify-content: center;
-          border-radius: ${tabToken.borderRadiusMD}px;
+          border-radius: ${token.borderRadius}px;
           transition: all ${token.motionDurationSlow} ${token.motionEaseInOut}, border-top-width 0.1s ease;
   
           &--selected {
