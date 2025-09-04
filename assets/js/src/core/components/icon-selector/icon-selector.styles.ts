@@ -14,7 +14,7 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     iconGrid: css`
       display: grid;
-      grid-template-columns: repeat(10, 75px);
+      grid-template-columns: repeat(10, 1fr);
       grid-template-rows: repeat(4, 76px);
       gap: 8px;
       justify-content: center;
@@ -22,8 +22,6 @@ export const useStyles = createStyles(({ token, css }) => {
       overflow-y: auto;
       margin-top: 8px;
       margin-bottom: 8px;
-      scrollbar-gutter: stable both-edges; 
-
     `,
 
     iconCard: css`
