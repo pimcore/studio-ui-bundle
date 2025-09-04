@@ -22,6 +22,9 @@ export const useStyles = createStyles((
       position: relative;
       display: ${display ?? 'inline-block'};
       padding-right: ${iconPadding}px;
+      .ant-btn {
+        background-color: ${token.colorBgContainerDisabled} !important;
+      }
     `,
 
     inheritanceBackground: css`

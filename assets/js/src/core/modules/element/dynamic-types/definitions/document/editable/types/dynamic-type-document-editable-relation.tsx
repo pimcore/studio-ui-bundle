@@ -10,8 +10,12 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ManyToOneRelation, type ManyToOneRelationValue } from '@sdk/modules/element'
+import { type ManyToOneRelationValue } from '@sdk/modules/element'
 import { isEmpty, isNil } from 'lodash'
+import { RelationEditable } from '../components/relation-editable/relation-editable'
+import { InheritanceOverlay } from '../components/inheritance-overlay/inheritance-overlay'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { toCssDimension } from '@sdk/utils'
 
 export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -42,7 +46,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
 
   getEditableDataComponent (props: RelationEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToOneRelation
+      <RelationEditable
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
         allowedClasses={ props.config?.classes }
@@ -53,6 +57,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         width={ props.config?.width }
+        inherited={ props.inherited }
       />
     )
   }
