@@ -50,7 +50,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     }
 
     // Use settingsData.url if available and not in preview mode
-    if ((isNil(options?.preview) || (options?.preview)) && !isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
+    if ((isNil(options?.preview) || !options?.preview) && !isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
       const url: string = data.settingsData.url
       window.open(url)
       onFinish?.()
