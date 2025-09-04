@@ -10,11 +10,10 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Select } from '@sdk/components'
 import { isNil } from 'lodash'
-import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
 import i18n from '@Pimcore/app/i18n'
+import { MultiSelectEditable } from '../components/multiselect-editable/multiselect-editable'
 
 export type MultiSelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -33,15 +32,13 @@ export class DynamicTypeDocumentEditableMultiSelect extends DynamicTypeDocumentE
     })) ?? []
 
     return (
-      <Select
+      <MultiSelectEditable
         className={ props.config?.class }
-        mode="multiple"
-        optionFilterProp="label"
+        inherited={ props.inherited }
+        onChange={ props.onChange }
         options={ options }
-        style={ {
-          width: '100%',
-          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.large)
-        } }
+        value={ props.value }
+        width={ props.config?.width }
       />
     )
   }

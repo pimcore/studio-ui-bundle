@@ -23,6 +23,7 @@ export interface InheritanceOverlayProps {
   className?: string
   display?: 'inline' | 'inline-block' | 'block'
   addIconSpacing?: boolean
+  style?: React.CSSProperties
 }
 
 export const InheritanceOverlay = ({
@@ -31,7 +32,8 @@ export const InheritanceOverlay = ({
   onOverwrite,
   className,
   display = 'inline-block',
-  addIconSpacing = false
+  addIconSpacing = false,
+  style
 }: InheritanceOverlayProps): React.JSX.Element | null => {
   const { styles } = useStyles({ display, addIconSpacing })
   const { t } = useTranslation()
@@ -50,7 +52,10 @@ export const InheritanceOverlay = ({
 
   if (!isNil(children)) {
     return (
-      <div className={ `${styles.container} ${className ?? ''}` }>
+      <div
+        className={ `${styles.container} ${className ?? ''}` }
+        style={ style }
+      >
         <Dropdown
           menu={ { items: menuItems } }
           placement="bottomLeft"

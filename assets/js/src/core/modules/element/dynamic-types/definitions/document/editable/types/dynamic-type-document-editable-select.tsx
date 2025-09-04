@@ -10,11 +10,10 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { CreatableSelect } from '@sdk/components'
 import { isEmpty, isNil, isArray } from 'lodash'
-import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
 import i18n from '@Pimcore/app/i18n'
+import { SelectEditable } from '../components/select-editable/select-editable'
 
 export type SelectStoreEntry = [string | number | null, string] | string | number
 
@@ -51,18 +50,14 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
     const isEditable = Boolean(props.config?.editable)
 
     return (
-      <CreatableSelect
-        allowClear
-        allowDuplicates={ false }
+      <SelectEditable
         className={ props.config?.class }
-        creatable={ isEditable }
-        optionFilterProp="label"
+        editable={ isEditable }
+        inherited={ props.inherited }
+        onChange={ props.onChange }
         options={ baseOptions }
-        showSearch
-        style={ {
-          width: '100%',
-          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.medium)
-        } }
+        value={ props.value }
+        width={ props.config?.width }
       />
     )
   }
