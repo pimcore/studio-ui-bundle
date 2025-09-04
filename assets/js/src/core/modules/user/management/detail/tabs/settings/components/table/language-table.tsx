@@ -15,6 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import type {DragEndEvent} from "@dnd-kit/core";
+import {isEqual, isNil} from "lodash";
+import {arrayMove} from "@dnd-kit/sortable";
 
 interface ITableProps {
   data: any[]
@@ -57,6 +60,28 @@ export const LanguageTable = ({
       onChangeOrder(updatedGridData.map((item) => item.abbreviation))
     }
   }
+
+  const handleDragEnd = (event: DragEndEvent): void => {
+    const { active, over } = event
+
+    if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
+      setGridData(prev => {
+        const oldIndex = prev.findIndex(row => row.abbreviation === active.id)
+        const newIndex = prev.findIndex(row => row.abbreviation === over.id)
+
+        if (oldIndex === -1 || newIndex === -1) return prev
+
+        const reorderedData = arrayMove(prev, oldIndex, newIndex)
+
+        if (onChangeOrder !== null && onChangeOrder !== undefined) {
+          onChangeOrder(reorderedData.map((item) => item.abbreviation))
+        }
+
+        return reorderedData
+      })
+    }
+  }
+
 
   const columnHelper = createColumnHelper()
   const tableColumns = [
@@ -163,9 +188,9 @@ export const LanguageTable = ({
               columns={ tableColumns }
               data={ gridData }
               enableRowDrag={ onChangeOrder !== null && onChangeOrder !== undefined }
-              handleDragEnd={ (evt) => { handleOrder(evt.active.id as number, evt.over?.id as number) } }
+              handleDragEnd={ handleDragEnd }
               onUpdateCellData={ onUpdateCellData }
-              setRowId={ (row) => row.cid }
+              setRowId={ (row) => row.abbreviation }
             />
               )}
         </>
