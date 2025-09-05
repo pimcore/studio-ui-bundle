@@ -18,10 +18,10 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil, isUndefined } from 'lodash'
-import React, { type ReactNode, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { type DocType, type DocumentDocTypeListApiResponse, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
+import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
@@ -29,11 +29,11 @@ import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 
-interface UseAddPageHookReturn {
-  addPageTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+interface UseAddDocumentHookReturn {
+  addDocumentTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
-export const useAddPage = (): UseAddPageHookReturn => {
+export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
   const { t } = useTranslation()
   const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({ })
   const { openDocument } = useDocumentHelper()
@@ -49,7 +49,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
 
     if (isLoading) {
       return [{
-        key: 'add-page-loading',
+        key: 'add-document-loading',
         type: 'custom',
         component: (<Spin type="classic" />)
       }]
@@ -58,6 +58,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
     }
 
     const structuredDocumentTypes = [...(documentTypes.items)]
+      .filter(docType => docType.type === type) // Filter for a certain docType
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, DocType[]>>((acc, docType) => {
       const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
@@ -79,24 +80,40 @@ export const useAddPage = (): UseAddPageHookReturn => {
       if (group !== 'undefined') {
         documentHierarchy.push({
           label: t(group),
-          key: 'add-page-group-' + group,
+          key: 'add-document-group-' + type + group,
           icon: <Icon value={ 'folder' } />,
           children: docTypes.map(docType => getDocumentEntry(docType, node))
         })
       }
     }
 
+    // add blank entry
+    documentHierarchy.push({
+      label: '> Blank',
+      key: 'blank' + type,
+      icon: <Icon
+        subIconName='new'
+        subIconVariant='green'
+        value='snippet'
+            />,
+      onClick: () => {
+        const parentId = parseInt(node.id)
+        createDocument(null, parentId)
+      }
+    })
+
     return documentHierarchy
   }
 
   const getDocumentEntry = (docType: DocType, node: TreeNodeProps): ItemType => {
+  // todo change icon value based on docType icon when available
     return {
       label: t(docType.name),
       key: docType.id,
       icon: <Icon
         subIconName='new'
         subIconVariant={ 'green' }
-        value={ 'document' }
+        value={ 'snippet' } // document, mail-02, snippet+, newsletter+
             />,
       onClick: () => {
         const parentId = parseInt(node.id)
@@ -153,14 +170,14 @@ export const useAddPage = (): UseAddPageHookReturn => {
     )
   }
 
-  const createDocument = (docType: DocType, parentId: number): void => {
+  const createDocument = (docType: DocType | null, parentId: number): void => {
     form.resetFields() // Always reset before opening
     const submitForm = async (): Promise<void> => {
       await form.validateFields()
         .then(async () => {
           const values = form.getFieldsValue()
           const { title, navigationName, key } = values
-          await createDocumentMutation(docType.id, key as string, title as string, navigationName as string, parentId)
+          await createDocumentMutation(!isNil(docType) ? docType.id : null, key as string, title as string, navigationName as string, parentId)
         })
     }
 
@@ -180,7 +197,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
   }
 
   const createDocumentMutation = async (
-    docTypeId: string,
+    docTypeId: string | null,
     key: string,
     title: string,
     navigationName: string,
@@ -190,7 +207,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
       parentId,
       documentAddParameters: {
         key,
-        type: 'page',
+        type,
         title,
         navigationName,
         docTypeId,
@@ -216,23 +233,23 @@ export const useAddPage = (): UseAddPageHookReturn => {
     }
   }
 
-  const isAddPageHidden = (node: TreeNodeProps): boolean => {
+  const isAddDocumentHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.Add) ||
       !checkElementPermission(node.permissions, 'create') ||
       isEmpty(getDocumentEntries(node))
   }
 
-  const addPageTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const addDocumentTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
-      label: t('document.action.add-page'),
-      key: ContextMenuActionName.addPage,
-      icon: <Icon value={ 'folder' } />,
-      hidden: isAddPageHidden(node),
+      label: t(`document.action.add-${type}`),
+      key: `add${type}`, // todo: use ContextMenuActionName -> get from options
+      icon: <Icon value={ 'folder' } />, // todo: change according to type
+      hidden: isAddDocumentHidden(node),
       children: getDocumentEntries(node)
     }
   }
 
   return {
-    addPageTreeContextMenuItem
+    addDocumentTreeContextMenuItem
   }
 }

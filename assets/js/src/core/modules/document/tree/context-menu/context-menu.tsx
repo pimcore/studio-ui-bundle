@@ -22,7 +22,7 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
-import { useAddPage } from '../../actions/add-page/use-add-page'
+import { useAddDocument } from '../../actions/add-page/use-add-document'
 
 export interface DocumentTreeContextMenuProps {
   node: TreeNodeProps
@@ -32,7 +32,10 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
   const { addFolderTreeContextMenuItem } = useAddFolder('document')
-  const { addPageTreeContextMenuItem } = useAddPage()
+  const { addDocumentTreeContextMenuItem: addPageTreeContextMenuItem } = useAddDocument('page')
+  const { addDocumentTreeContextMenuItem: addSnippetTreeContextMenuItem } = useAddDocument('snippet')
+  const { addDocumentTreeContextMenuItem: addEmailTreeContextMenuItem } = useAddDocument('email')
+  const { addDocumentTreeContextMenuItem: addNewsletterTreeContextMenuItem } = useAddDocument('newsletter')
   const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('document')
@@ -44,6 +47,9 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
     addPageTreeContextMenuItem(node),
+    addSnippetTreeContextMenuItem(node),
+    addEmailTreeContextMenuItem(node),
+    addNewsletterTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
