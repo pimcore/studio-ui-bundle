@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, useRef } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
@@ -39,6 +39,11 @@ export const InheritanceOverlay = ({
 }: InheritanceOverlayProps): React.JSX.Element | null => {
   const { styles } = useStyles({ display, addIconSpacing, hideButtons })
   const { t } = useTranslation()
+  
+  const wasEverInheritedRef = useRef(isInherited)
+  if (isInherited && !wasEverInheritedRef.current) {
+    wasEverInheritedRef.current = true
+  }
 
   const menuItems: MenuProps['items'] = [
     {
@@ -48,16 +53,22 @@ export const InheritanceOverlay = ({
     }
   ]
 
-  if (!isInherited) {
-    return !isNil(children) ? <>{children}</> : null
+  if (isNil(children)) {
+    return null
   }
 
-  if (!isNil(children)) {
-    return (
-      <div
-        className={ `${styles.container} ${className ?? ''}` }
-        style={ style }
-      >
+  // Never inherited: no wrapper needed
+  if (!wasEverInheritedRef.current) {
+    return <>{children}</>
+  }
+
+  // Use stable wrapper div to prevent React from unmounting children when isInherited changes
+  return (
+    <div
+      className={ isInherited ? `${styles.container} ${className ?? ''}` : '' }
+      style={ isInherited ? style : { display: 'contents' } }
+    >
+      {isInherited && (
         <Dropdown
           menu={ { items: menuItems } }
           placement="bottomLeft"
@@ -71,10 +82,8 @@ export const InheritanceOverlay = ({
             </div>
           </Tooltip>
         </Dropdown>
-        {children}
-      </div>
-    )
-  }
-
-  return null
+      )}
+      {children}
+    </div>
+  )
 }

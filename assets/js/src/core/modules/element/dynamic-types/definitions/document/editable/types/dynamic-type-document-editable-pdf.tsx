@@ -36,7 +36,6 @@ export class DynamicTypeDocumentEditablePdf extends DynamicTypeDocumentEditableA
       <PdfEditable
         config={ props.config }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
         inherited={ props.inherited }
       />
     )

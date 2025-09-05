@@ -176,11 +176,6 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
     // Determine the shape based on whether a PDF is selected
     const droppableShape = !isNil(pdfValue?.id) ? 'angular' : 'round'
 
-    // Don't enable file system drag and drop if disabled
-    if (disabled) {
-      return <>{children}</>
-    }
-
     return (
       <InlineUpload
         assetType="document"

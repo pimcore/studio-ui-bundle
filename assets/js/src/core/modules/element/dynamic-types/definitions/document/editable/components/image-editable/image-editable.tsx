@@ -196,7 +196,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     const droppableShape = !isNil(imageValue?.id) ? 'angular' : 'round'
 
     // Don't enable file system drag and drop if inline upload is disabled
-    if (props.config?.disableInlineUpload === true || disabled) {
+    if (props.config?.disableInlineUpload === true) {
       return (
         <Droppable
           isValidContext={ () => !disabled }
@@ -267,7 +267,6 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
               hideAltTextInput={ props.config?.hidetext }
               imgAttributes={ props.config?.imgAttributes }
               isImageLoaded={ isImageLoaded }
-              key={ imageValue.id }
               lastImageDimensions={ smartDimensions }
               onAltTextChange={ handleAltTextChange }
               onChange={ handleHotspotImageChange }

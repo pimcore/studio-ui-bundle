@@ -74,7 +74,6 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       <ImageEditable
         config={ props.config }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }
         inherited={ props.inherited }
