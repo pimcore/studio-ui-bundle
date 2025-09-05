@@ -139,7 +139,7 @@ export const RedirectsToolbar = ({
             </IconTextButton>
           </div>
         </Flex>
-        {redirectRowsLength > 0
+        {totalItems > 0
           ? (
             <Split>
               <Flex align='center'>
