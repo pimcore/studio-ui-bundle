@@ -133,6 +133,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 key: column.key,
                 label: t(translationKey),
                 group: column.group,
+                mainType: column.type,
                 frontendType: column.frontendType,
                 editable: column.editable,
                 onClick: () => {
