@@ -14,6 +14,7 @@ import { type DragAndDropInfo } from '@sdk/components'
 import { RenderletContent } from './renderlet-content'
 import { isNil } from 'lodash'
 import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
+import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 
 export interface RenderletValue {
   id?: number
@@ -39,13 +40,17 @@ export interface RenderletEditableProps {
   config?: RenderletEditableConfig
   onChange: (value: RenderletValue | null) => void
   className?: string
+  inherited?: boolean
+  disabled?: boolean
 }
 
 export const RenderletEditable = ({
   value,
   config,
   onChange,
-  className
+  className,
+  inherited = false,
+  disabled = false
 }: RenderletEditableProps): React.JSX.Element => {
   const getConfigType = (dndType: string): string => {
     return dndType === 'data-object' ? 'object' : dndType
@@ -90,19 +95,30 @@ export const RenderletEditable = ({
     return !isNil(info.data?.id) && !isNil(info.data?.type)
   }
 
+  const handleOverwrite = (): void => {
+    onChange(value ?? null)
+  }
+
   return (
-    <Droppable
-      disableDndActiveIndicator
-      isValidContext={ (info: DragAndDropInfo) => allElementTypes.includes(info.type) }
-      isValidData={ isValidData }
-      onDrop={ handleDrop }
+    <InheritanceOverlay
+      display={ isNil(config?.width) ? 'block' : undefined }
+      isInherited={inherited}
+      onOverwrite={handleOverwrite}
+      noPadding
     >
-      <RenderletContent
-        className={ className }
-        config={ config }
-        onChange={ onChange }
-        value={ value }
-      />
-    </Droppable>
+      <Droppable
+        disableDndActiveIndicator
+        isValidContext={ (info: DragAndDropInfo) => disabled ? false : allElementTypes.includes(info.type) }
+        isValidData={ isValidData }
+        onDrop={ handleDrop }
+      >
+        <RenderletContent
+          className={ className }
+          config={ config }
+          onChange={ onChange }
+          value={ value }
+        />
+      </Droppable>
+    </InheritanceOverlay>
   )
 }
