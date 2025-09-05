@@ -75,6 +75,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
@@ -111,6 +112,7 @@ import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
 import group from '@Pimcore/assets/icons/group.inline.svg?react'
+import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
 import heading from '@Pimcore/assets/icons/heading.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
@@ -194,6 +196,7 @@ import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
+import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
@@ -470,6 +473,10 @@ moduleSystem.registerModule({
       component: details
     })
     iconLibrary.register({
+      name: 'document-link',
+      component: documentLink
+    })
+    iconLibrary.register({
       name: 'document-types',
       component: documentTypes
     })
@@ -612,6 +619,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'group',
       component: group
+    })
+    iconLibrary.register({
+      name: 'hardlink',
+      component: hardlink
     })
     iconLibrary.register({
       name: 'heading',
@@ -944,6 +955,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'show-details',
       component: showDetails
+    })
+    iconLibrary.register({
+      name: 'snippet',
+      component: snippet
     })
     iconLibrary.register({
       name: 'spinner',
