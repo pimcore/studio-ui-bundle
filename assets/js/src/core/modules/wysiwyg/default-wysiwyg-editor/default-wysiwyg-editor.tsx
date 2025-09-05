@@ -9,16 +9,18 @@
  */
 
 import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
-import { type WysiwygEditorRef, type WysiwygProps } from '../interface/wysiwyg'
+import { WysiwygContext, type WysiwygEditorRef, type WysiwygProps } from '../interface/wysiwyg'
 import { isNull } from 'lodash'
 import { useStyles } from './default-wysiwyg-editor.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { type DragAndDropInfo } from '@sdk/components'
 
 export const DefaultWysiwygEditor = forwardRef<WysiwygEditorRef, WysiwygProps>(
-  ({ value, onChange, disabled, width }, ref): React.JSX.Element => {
+  ({ value, onChange, disabled, width, height, placeholder, context }, ref): React.JSX.Element => {
     const editorRef = useRef<HTMLDivElement>(null)
     const { styles } = useStyles()
+
+    const isEmpty = !value || value.trim() === '' || value === '<p></p>' || value === '<br>'
 
     useImperativeHandle(ref, (): WysiwygEditorRef => ({
       onDrop: (info: DragAndDropInfo): void => {
@@ -40,11 +42,13 @@ export const DefaultWysiwygEditor = forwardRef<WysiwygEditorRef, WysiwygProps>(
     return (
       <div>
         <div
-          className={ styles.editor }
+          className={ context === WysiwygContext.DOCUMENT ? styles.editorDocument : styles.editor }
           contentEditable={ disabled !== true }
+          data-empty={ isEmpty }
+          data-placeholder={ placeholder }
           onInput={ handleInput }
           ref={ editorRef }
-          style={ { maxWidth: toCssDimension(width) } }
+          style={ { maxWidth: toCssDimension(width), minHeight: toCssDimension(height) } }
         />
       </div>
     )

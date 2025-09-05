@@ -10,15 +10,39 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Wysiwyg, WysiwygContext } from '@sdk/modules/wysiwyg'
+import { WysiwygEditable } from '../components/wysiwyg-editable/wysiwyg-editable'
+import { WysiwygContext } from '@sdk/modules/wysiwyg'
+
+export interface WysiwygEditableConfig {
+  width?: string | number
+  height?: string | number
+  maxCharacters?: number
+  placeholder?: string
+  editorConfig?: Record<string, any>
+  class?: string
+}
+
+export type WysiwygEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
+  config?: WysiwygEditableConfig
+}
 
 export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEditableAbstract {
   id: string = 'wysiwyg'
   initializeInIframe: boolean = true
 
-  getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+  getEditableDataComponent (props: WysiwygEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <Wysiwyg context={ WysiwygContext.DOCUMENT } />
+      <WysiwygEditable
+        context={WysiwygContext.DOCUMENT}
+        inherited={props.inherited}
+        value={props.value}
+        onChange={props.onChange}
+        width={props.config?.width}
+        height={props.config?.height}
+        maxCharacters={props.config?.maxCharacters}
+        placeholder={props.config?.placeholder}
+        editorConfig={props.config?.editorConfig}
+      />
     )
   }
 }
