@@ -11,7 +11,7 @@
 import React, { type Key, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty, Space } from 'antd'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isUndefined, uniq } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -56,7 +56,7 @@ export const FieldFilters = (): React.JSX.Element => {
         type,
         frontendType,
         config: {
-          options: fieldOptions
+          options: uniq(fieldOptions)
         }
       }
     ])
