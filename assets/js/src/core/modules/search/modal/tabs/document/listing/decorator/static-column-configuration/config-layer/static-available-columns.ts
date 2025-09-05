@@ -76,7 +76,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
     frontendType: 'document-link',
     filterable: true
   },
-  
+
   {
     config: [],
     key: 'title',
@@ -91,16 +91,16 @@ export const staticAvailableColumns: AvailableColumn[] = [
     filterable: false
   },
   {
-    "config": [],
-    "key": "published",
-    "group": ["system"],
-    "sortable": true,
-    "editable": true,
-    "exportable": true,
-    "localizable": false,
-    "locale": null,
-    "type": "system.boolean",
-    "frontendType": "boolean",
-    "filterable": true,
+    config: [],
+    key: 'published',
+    group: ['system'],
+    sortable: true,
+    editable: true,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.boolean',
+    frontendType: 'boolean',
+    filterable: true
   }
 ]
