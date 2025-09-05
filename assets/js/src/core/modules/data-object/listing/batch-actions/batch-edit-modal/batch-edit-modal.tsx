@@ -189,27 +189,63 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     return normalizedGroup1.every((part, index) => part === normalizedGroup2[index])
   }
 
-  const getFilteredTypes = (column: any): object[] => {
-    return column?.children?.filter((child: any) => {
-      const isEditable: boolean = child.editable === true
-      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && areGroupsEqual(child.group, item.group))
-      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
+  // Helper function to check if a column item should be included in batch edit options
+  const shouldIncludeColumnItem = (item: any): boolean => {
+    const isEditable: boolean = item.editable === true
+    const isAlreadyInBatchEditList = batchEdits.some(batchItem => 
+      item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
+    )
+    const hasDynamicType = hasType({ 
+      target: 'BATCH_EDIT', 
+      dynamicTypeIds: [item?.mainType, item?.frontendType as string] 
+    })
 
-      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
+    return isEditable && hasDynamicType && !isAlreadyInBatchEditList
+  }
+
+  // Recursively filter the dropdown menu while preserving the nested structure
+  const filterDropdownItems = (items: any[]): any[] => {
+    return items.map((item: any) => {
+      // If this item has children, it's a group - process its children recursively
+      if (item.children !== undefined) {
+        const filteredChildren = filterDropdownItems(item.children)
+        return {
+          ...item,
+          children: filteredChildren
+        }
+      } else {
+        // This is a column item - check if it should be included
+        return shouldIncludeColumnItem(item) ? item : null
+      }
+    }).filter(item => {
+      // Remove null items and groups with no valid children
+      if (item === null) return false
+      if (item.children !== undefined) {
+        return item.children.length > 0
+      }
+      return true
     })
   }
 
   const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
     if (isUndefined(availableDropdownList)) return []
 
-    return availableDropdownList.map((column: any) => {
-      return {
-        ...column,
-        children: getFilteredTypes(column)
+    return filterDropdownItems(availableDropdownList)
+  }, [availableDropdownList, batchEdits])
+  // Check if the dropdown list has any selectable items (recursively)
+  const hasSelectableItems = (items: any[]): boolean => {
+    return items.some((item: any) => {
+      if (item.children !== undefined) {
+        // This is a group - check if it has selectable children
+        return hasSelectableItems(item.children)
+      } else {
+        // This is a column item - it's selectable
+        return true
       }
     })
-  }, [availableDropdownList])
-  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
+  }
+
+  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList() ?? [])
 
   return (
     <WindowModal
