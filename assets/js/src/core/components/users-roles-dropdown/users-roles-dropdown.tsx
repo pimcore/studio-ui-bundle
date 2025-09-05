@@ -30,7 +30,7 @@ interface IUsersRolesDropdownProps {
   initialSharedUsers: number[]
   handleClose: () => void
   handleApplyChanges: ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }) => void
-  placement: 'top' | 'bottom'
+  placement?: 'top' | 'bottom'
 }
 
 interface IRenderSelectProps {
