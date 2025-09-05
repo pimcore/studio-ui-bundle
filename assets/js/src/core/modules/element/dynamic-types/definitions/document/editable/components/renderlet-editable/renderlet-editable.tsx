@@ -102,9 +102,9 @@ export const RenderletEditable = ({
   return (
     <InheritanceOverlay
       display={ isNil(config?.width) ? 'block' : undefined }
-      isInherited={inherited}
-      onOverwrite={handleOverwrite}
+      isInherited={ inherited }
       noPadding
+      onOverwrite={ handleOverwrite }
     >
       <Droppable
         disableDndActiveIndicator

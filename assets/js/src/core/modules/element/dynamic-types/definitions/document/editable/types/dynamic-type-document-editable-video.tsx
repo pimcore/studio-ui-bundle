@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { VideoComponent } from '../components/video/video'
+import { VideoEditable } from '../components/video-editable/video-editable'
 import { type VideoType, type VideoValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
 import { injectable } from 'inversify'
 import { isNull, isNil } from 'lodash'
@@ -43,12 +43,13 @@ export class DynamicTypeDocumentEditableVideo extends DynamicTypeDocumentEditabl
 
   getEditableDataComponent (props: VideoEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <VideoComponent
+      <VideoEditable
         allowedVideoTypes={ props.config?.allowedTypes }
         className={ props.config?.class }
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         height={ props.config?.height }
+        inherited={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }
         width={ props.config?.width }

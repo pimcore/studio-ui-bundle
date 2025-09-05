@@ -18,10 +18,14 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     editButton: css`
-      position: absolute;
+      position: absolute !important;
       top: ${token.paddingXS}px;
       right: ${token.paddingXS}px;
       z-index: 10;
+      background-color: ${token.colorBgContainer};
+      border: 1px solid ${token.colorBorder};
+      border-radius: ${token.borderRadius}px;
+      box-shadow: ${token.boxShadow};
     `
   }
 })
