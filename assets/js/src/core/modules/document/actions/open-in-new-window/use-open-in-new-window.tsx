@@ -22,6 +22,7 @@ import { has, isNil, isString, isUndefined } from 'lodash'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { createPreviewUrl } from '@Pimcore/modules/document/utils/preview-url-helper'
 
 export interface UseOpenInNewWindowHookReturn {
   openInNewWindow: (documentId: number, onFinish?: () => void, options?: { preview?: boolean }) => Promise<void>
@@ -56,15 +57,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       onFinish?.()
     } else if (!isNil(data?.fullPath)) {
       // Use fullPath (for preview or if settingsData.url is not available)
-      let url: string = data.fullPath
-      const urlObj = new URL(url, window.location.origin)
-      if (!isNil(options?.preview) && options?.preview) {
-        urlObj.searchParams.set('pimcore_preview', 'true')
-        urlObj.searchParams.set('pimcore_studio_preview', 'true')
-        urlObj.searchParams.set('_dc', Date.now().toString())
-      }
-      url = urlObj.toString()
-      window.open(url)
+      window.open(createPreviewUrl(data.fullPath, Boolean(options?.preview)))
       onFinish?.()
     } else {
       console.error('Failed to fetch document data', data)
