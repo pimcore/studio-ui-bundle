@@ -17,9 +17,11 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useColumns } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/hooks/use-columns'
+import { useStyles } from '../../report-configuration.styles'
 
 export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const tableColumns = useColumns()
   const columnConfigurationsData = currentData?.columnConfigurations
@@ -61,6 +63,7 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
     <FormKit.Panel title={ t('reports.editor.manage-column-configuration.title') }>
       <Grid
         autoWidth
+        className={ styles.grid }
         columns={ tableColumns }
         data={ columnConfigurationsData }
         enableRowDrag

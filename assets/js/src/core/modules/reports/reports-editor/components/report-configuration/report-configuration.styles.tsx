@@ -12,6 +12,11 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    grid: css`
+      width: 100%;
+      overflow-y: scroll;
+    `,
+
     permissionLabel: css`
       color: ${token.colorTextLabel};
     `,
