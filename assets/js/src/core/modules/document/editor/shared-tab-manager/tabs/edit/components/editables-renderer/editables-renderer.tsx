@@ -26,7 +26,7 @@ export interface EditablesRendererProps {
 export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const apiInitialized = useRef(false)
-  const { initializeData, notifyReady } = useDocumentEditor()
+  const { initializeData, notifyReady, initializeInheritanceState } = useDocumentEditor()
   const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
   const { id: documentId } = useContext(DocumentContext)
 
@@ -50,8 +50,17 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
     return initialData
   }
 
+  const getInitialInheritanceState = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, boolean> => {
+    const inheritanceState: Record<string, boolean> = {}
+    editableDefinitions.forEach((editable) => {
+      inheritanceState[editable.name] = editable.inherited
+    })
+    return inheritanceState
+  }
+
   if (!apiInitialized.current) {
     initializeData(getInitialData(editableDefinitions))
+    initializeInheritanceState(getInitialInheritanceState(editableDefinitions))
     apiInitialized.current = true
   }
 

@@ -48,7 +48,7 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
       }
     }) ?? []
 
-    const isEditable = props.config?.editable !== false
+    const isEditable = Boolean(props.config?.editable)
 
     return (
       <CreatableSelect

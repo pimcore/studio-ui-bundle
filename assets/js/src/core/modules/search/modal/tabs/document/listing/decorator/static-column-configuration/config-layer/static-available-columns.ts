@@ -14,7 +14,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'id',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -26,21 +26,8 @@ export const staticAvailableColumns: AvailableColumn[] = [
   },
   {
     config: [],
-    key: 'title',
-    group: 'system',
-    sortable: true,
-    editable: false,
-    exportable: true,
-    localizable: false,
-    locale: null,
-    type: 'system.string',
-    frontendType: 'input',
-    filterable: false
-  },
-  {
-    config: [],
     key: 'type',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -53,7 +40,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'filename',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -66,7 +53,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'description',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -79,7 +66,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
   {
     config: [],
     key: 'fullpath',
-    group: 'system',
+    group: ['system'],
     sortable: true,
     editable: false,
     exportable: true,
@@ -89,10 +76,24 @@ export const staticAvailableColumns: AvailableColumn[] = [
     frontendType: 'document-link',
     filterable: true
   },
+  
+  {
+    config: [],
+    key: 'title',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'input',
+    filterable: false
+  },
   {
     "config": [],
     "key": "published",
-    "group": "system",
+    "group": ["system"],
     "sortable": true,
     "editable": true,
     "exportable": true,

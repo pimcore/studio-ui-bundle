@@ -12,7 +12,7 @@ import { type DefaultOptionType } from 'antd/es/select'
 import { isUndefined } from 'lodash'
 
 export type SelectOptionType = DefaultOptionType & {
-  displayValue?: string
+  displayValue?: string | boolean
 }
 
 export interface SelectOptionsConfig {

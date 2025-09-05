@@ -86,6 +86,12 @@ export const AreablockEditable = ({
     })
   }, [])
 
+  const handleToggleHidden = useCallback((element: HTMLElement) => {
+    areablockManager.toggleElementHidden(element)
+    const newValue = areablockManager.getAreablockValue()
+    onChange?.(newValue)
+  }, [areablockManager, onChange])
+
   const {
     dynamicEditables,
     addArea,
@@ -110,7 +116,8 @@ export const AreablockEditable = ({
     onMoveAreaUp: moveAreaUp,
     onMoveAreaDown: moveAreaDown,
     onMoveArea: moveArea,
-    onOpenDialog: handleOpenDialog
+    onOpenDialog: handleOpenDialog,
+    onToggleHidden: handleToggleHidden
   })
 
   return (

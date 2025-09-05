@@ -10,6 +10,7 @@
 
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { createImageThumbnailUrl, type ImageThumbnailSettings } from './custom-image-thumbnail'
+import { isNil } from 'lodash'
 
 interface AssetPreviewUrlParams {
   assetId: number
@@ -30,21 +31,24 @@ export const getAssetPreviewUrl = ({
     return undefined
   }
 
+  const roundedWidth = Math.round(width)
+  const roundedHeight = !isNil(height) ? Math.round(height) : undefined
+
   if (assetType === 'video') {
-    if (height === undefined) {
-      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&frame=true&aspectRatio=true`
+    if (isNil(height)) {
+      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${roundedWidth}&frame=true&aspectRatio=true`
     }
-    return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
+    return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${roundedWidth}&height=${roundedHeight}&frame=true&aspectRatio=true`
   }
 
   const defaultSettings: ImageThumbnailSettings = {
-    width,
+    width: roundedWidth,
     mimeType: 'JPEG',
     frame: true
   }
 
-  if (height !== undefined) {
-    defaultSettings.height = height
+  if (!isNil(height)) {
+    defaultSettings.height = roundedHeight
   }
 
   return createImageThumbnailUrl(assetId, {

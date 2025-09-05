@@ -17,7 +17,7 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
-import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
+import { useDocumentGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
 import React from 'react'
 import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
@@ -29,7 +29,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 const defaultProps = {
   ...listingDefaultProps,
   ViewComponent: DefaultView,
-  useDataQuery: useAssetGetSearchQuery,
+  useDataQuery: useDocumentGetSearchQuery,
   useDataQueryHelper,
   useElementId: useRootElementId
 }

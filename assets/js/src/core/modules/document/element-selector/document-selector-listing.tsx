@@ -21,7 +21,7 @@ import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-ty
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
 import { DefaultView } from './view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
-import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
+import { useDocumentGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { useDataQueryHelper } from '@Pimcore/modules/asset/listing/data-layer/use-data-query-helper'
 import { useRootElementId } from '@Pimcore/modules/asset/listing/hooks/use-root-element-id'
@@ -31,7 +31,7 @@ import { StaticColumnConfigurationDecorator } from '@Pimcore/modules/search/moda
 const defaultProps = {
   ...listingDefaultProps,
   ViewComponent: DefaultView,
-  useDataQuery: useAssetGetSearchQuery,
+  useDataQuery: useDocumentGetSearchQuery,
   useDataQueryHelper,
   useElementId: useRootElementId
 }

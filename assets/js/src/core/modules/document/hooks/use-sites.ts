@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Site, useDocumentsListAvailableSitesQuery } from '@Pimcore/modules/document/sites-slice.gen'
+import { type Site, useDocumentsListAvailableSitesQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface UseSitesReturn {
   getSiteById: (siteId: number) => Site | undefined

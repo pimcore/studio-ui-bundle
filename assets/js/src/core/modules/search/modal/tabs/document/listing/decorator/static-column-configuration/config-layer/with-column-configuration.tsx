@@ -25,7 +25,7 @@ export const withColumnConfiguration = (Component: AbstractDecoratorProps['Confi
 
     useEffect(() => {
       const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
-      const initialSelectedColumnKeys = ['type', 'fullpath', 'preview']
+      const initialSelectedColumnKeys = ['type', 'fullpath', 'title']
 
       for (const column of staticAvailableColumns) {
         if (initialSelectedColumnKeys.includes(column.key)) {
