@@ -35,8 +35,6 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
       <WysiwygEditable
         context={WysiwygContext.DOCUMENT}
         inherited={props.inherited}
-        value={props.value}
-        onChange={props.onChange}
         width={props.config?.width}
         height={props.config?.height}
         maxCharacters={props.config?.maxCharacters}
