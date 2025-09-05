@@ -12,7 +12,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles((
   { token, css },
-  { display, addIconSpacing, hideButtons }: { display?: string, addIconSpacing?: boolean, hideButtons?: boolean }
+  { display, addIconSpacing, hideButtons, noPadding, shape }: { display?: string, addIconSpacing?: boolean, hideButtons?: boolean, noPadding?: boolean, shape?: 'round' | 'angular' }
 ) => {
   const iconSize = 16
   const iconPadding = addIconSpacing === true ? iconSize + (2 * token.paddingXXS) + token.paddingMD : 0
@@ -21,7 +21,7 @@ export const useStyles = createStyles((
     container: css`
       position: relative;
       display: ${display ?? 'inline-block'};
-      padding: ${token.paddingXXS}px;
+      ${noPadding !== true ? `padding: ${token.paddingXXS}px;` : ''}
       padding-right: ${iconPadding}px;
 
       .ant-btn {
@@ -35,7 +35,7 @@ export const useStyles = createStyles((
       position: absolute;
       background: ${token.colorFillSecondary};
       border: 1px dashed ${token.colorPrimaryBorder};
-      border-radius: ${token.borderRadius}px;
+      ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
       cursor: pointer;
       display: flex;
       align-items: flex-start;

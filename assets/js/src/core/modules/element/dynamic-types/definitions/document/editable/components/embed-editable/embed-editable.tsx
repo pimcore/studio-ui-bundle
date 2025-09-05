@@ -14,37 +14,53 @@ import { EditableEmptyPlaceholder } from '@Pimcore/components/editable-empty-pla
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { isEmpty, isNull } from 'lodash'
-import { useStyles } from './embed.styles'
+import { useStyles } from './embed-editable.styles'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import { toCssDimension } from '@sdk/utils'
+import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 
 export interface EmbedValue {
   url: string
 }
 
-export interface EmbedComponentProps {
+export interface EmbedEditableProps {
   value?: EmbedValue | null
   onChange?: (value: EmbedValue | null) => void
   disabled?: boolean
+  inherited?: boolean
   className?: string
   containerRef?: React.RefObject<HTMLDivElement>
+  width?: string | number
+  height?: string | number
 }
 
-export const EmbedComponent = ({ value, onChange, disabled, className, containerRef }: EmbedComponentProps): React.JSX.Element => {
+export const EmbedEditable = ({ 
+  value, 
+  onChange, 
+  disabled, 
+  inherited = false, 
+  className, 
+  containerRef,
+  width,
+  height
+}: EmbedEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { input } = useFormModal()
   const { styles } = useStyles()
-  const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
 
   const currentUrl = value?.url ?? ''
   const hasUrl = !isEmpty(currentUrl)
+  const isDisabled = disabled || inherited
+
+  const handleOverwrite = (): void => {
+    onChange?.(value ?? null)
+  }
 
   useEffect(() => {
     if (!isNull(containerRef?.current)) {
       const iframeElement = containerRef.current.querySelector('iframe')
-      setIframe(iframeElement)
 
       if (!isNull(iframeElement) && isNull(wrapperElement)) {
         const iframeWidth = iframeElement.width ?? iframeElement.getAttribute('width')
@@ -57,6 +73,7 @@ export const EmbedComponent = ({ value, onChange, disabled, className, container
         wrapper.className = cn(styles.wrapper, className)
         wrapper.style.width = cssWidth
         wrapper.style.height = cssHeight
+        wrapper.style.position = 'relative' // Ensure positioning context for absolute overlay
 
         containerRef.current.parentNode?.insertBefore(wrapper, containerRef.current)
         wrapper.appendChild(containerRef.current)
@@ -67,7 +84,7 @@ export const EmbedComponent = ({ value, onChange, disabled, className, container
   }, [containerRef, className, wrapperElement])
 
   const handleEditUrl = (): void => {
-    if (disabled === true) return
+    if (isDisabled === true) return
 
     input({
       title: t('embed.url-modal.title'),
@@ -86,31 +103,56 @@ export const EmbedComponent = ({ value, onChange, disabled, className, container
     })
   }
 
-  if (!hasUrl) {
-    return (
-      <EditableEmptyPlaceholder
-        buttonText={ t('embed.add-url') }
-        disabled={ disabled }
-        onClick={ handleEditUrl }
-        text={ t('embed.placeholder') }
-      />
-    )
-  }
-
-  if (isNull(iframe) || isNull(wrapperElement)) {
-    return <></>
-  }
-
-  return ReactDOM.createPortal(
-    <IconButton
-      className={ styles.editButton }
-      disabled={ disabled }
-      icon={ { value: 'edit' } }
-      onClick={ handleEditUrl }
-      size="small"
-      title={ t('embed.edit-url') }
-      type="default"
-    />,
-    wrapperElement
+  // Always wrap with InheritanceOverlay
+  return (
+    <>
+      {!hasUrl ? (
+        <InheritanceOverlay
+          display="block"
+          isInherited={inherited}
+          onOverwrite={handleOverwrite}
+          noPadding
+          style={width !== undefined ? { maxWidth: toCssDimension(width) } : undefined}
+        >
+          <EditableEmptyPlaceholder
+            buttonText={ t('embed.add-url') }
+            disabled={ isDisabled }
+            onClick={ handleEditUrl }
+            text={ t('embed.placeholder') }
+            width={ width }
+            height={ height }
+          />
+        </InheritanceOverlay>
+      ) : (
+        <>
+          {!isNull(wrapperElement) && ReactDOM.createPortal(
+            <InheritanceOverlay
+              display="block"
+              isInherited={inherited}
+              onOverwrite={handleOverwrite}
+              hideButtons
+              noPadding
+              shape="angular"
+              style={{ 
+                position: 'absolute',
+                inset: 0
+              }}
+            >
+              <IconButton
+                className={ styles.editButton }
+                disabled={ isDisabled }
+                icon={ { value: 'edit' } }
+                onClick={ handleEditUrl }
+                size="small"
+                title={ t('embed.edit-url') }
+                type="default"
+                style={{ pointerEvents: 'auto' }}
+              />
+            </InheritanceOverlay>,
+            wrapperElement
+          )}
+        </>
+      )}
+    </>
   )
 }

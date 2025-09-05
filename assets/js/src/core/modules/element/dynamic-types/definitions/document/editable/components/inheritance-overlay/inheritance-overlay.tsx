@@ -17,13 +17,15 @@ import { isNil } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface InheritanceOverlayProps {
-  children?: ReactNode
   isInherited: boolean
   onOverwrite: () => void
   className?: string
-  display?: 'inline' | 'inline-block' | 'block'
-  addIconSpacing?: boolean
+  children?: React.ReactNode
+  display?: string
   hideButtons?: boolean
+  addIconSpacing?: boolean
+  noPadding?: boolean
+  shape?: 'round' | 'angular'
   style?: React.CSSProperties
 }
 
@@ -35,9 +37,11 @@ export const InheritanceOverlay = ({
   display = 'inline-block',
   addIconSpacing = false,
   hideButtons = false,
+  noPadding = false,
+  shape = 'round',
   style
 }: InheritanceOverlayProps): React.JSX.Element | null => {
-  const { styles } = useStyles({ display, addIconSpacing, hideButtons })
+  const { styles } = useStyles({ display, addIconSpacing, hideButtons, noPadding, shape })
   const { t } = useTranslation()
   
   const wasEverInheritedRef = useRef(isInherited)

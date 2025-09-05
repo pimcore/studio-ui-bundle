@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { EmbedComponent } from '../components/embed/embed'
+import { EmbedEditable } from '../components/embed-editable/embed-editable'
 
 export type EmbedEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -26,10 +26,12 @@ export class DynamicTypeDocumentEditableEmbed extends DynamicTypeDocumentEditabl
 
   getEditableDataComponent (props: EmbedEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <EmbedComponent
+      <EmbedEditable
         className={ props.config?.class }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
+        inherited={ props.inherited }
+        width={ props.config?.width }
+        height={ props.config?.height }
       />
     )
   }
