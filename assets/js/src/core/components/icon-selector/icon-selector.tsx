@@ -65,24 +65,25 @@ export const IconSelector = ({
     }))
   ]
 
-  const filteredIcons = useMemo(() => {
-    let iconsToFilter: ElementIcon[] = []
+  const getAllIcons = (): ElementIcon[] => {
+    const allIconSets = iconSetRegistry.getDynamicTypes()
+    return allIconSets.flatMap(iconSet => iconSet.getIcons())
+  }
 
-    if (activeTab === 'all') {
-      iconSetRegistry.getDynamicTypes().forEach(iconSet => {
-        iconsToFilter.push(...iconSet.getIcons())
-      })
-    } else {
-      const iconSet = iconSetRegistry.getDynamicTypes().find(set => set.id === activeTab)
-      if (!isUndefined(iconSet)) {
-        iconsToFilter = iconSet.getIcons()
-      }
+  const getIconsForTab = (tabId: string): ElementIcon[] => {
+    if (tabId === 'all') {
+      return getAllIcons()
     }
 
-    const filtered = iconsToFilter
-      .filter(icon => icon.value.toLowerCase().includes(searchValue.toLowerCase()))
+    const iconSet = iconSetRegistry.getDynamicTypes().find(set => set.id === tabId)
+    return !isUndefined(iconSet) ? iconSet.getIcons() : []
+  }
 
-    return filtered
+  const filteredIcons = useMemo(() => {
+    const iconsToFilter = getIconsForTab(activeTab)
+    return iconsToFilter.filter(icon =>
+      icon.value.toLowerCase().includes(searchValue.toLowerCase())
+    )
   }, [searchValue, activeTab, iconSetRegistry])
 
   const paginatedIcons = useMemo(() => {
@@ -120,6 +121,49 @@ export const IconSelector = ({
   const handleRefresh = (): void => {
     setSearchValue('')
     setCurrentPage(1)
+  }
+
+  const getIconDisplayName = (icon: ElementIcon): string => {
+    if (icon.type === 'path') {
+      return icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
+    }
+    return icon.value
+  }
+
+  const getIconCardClassName = (icon: ElementIcon): string => {
+    const isSelected = previewSelectedIcon?.value === icon.value &&
+                      previewSelectedIcon?.type === icon.type
+    return `${styles.iconCard} ${isSelected ? styles.selectedCard : ''}`
+  }
+
+  const renderIconCard = (icon: ElementIcon): React.JSX.Element => (
+    <Space
+      className={ getIconCardClassName(icon) }
+      key={ icon.value }
+      onClick={ () => { handleIconClick(icon) } }
+      size='mini'
+    >
+      <Icon
+        options={ { height: 24, width: 24 } }
+        type={ icon.type }
+        value={ icon.value }
+      />
+      <span className={ styles.iconName }>
+        {getIconDisplayName(icon)}
+      </span>
+    </Space>
+  )
+
+  const renderPreviewIcon = (): React.JSX.Element => {
+    return !isUndefined(previewSelectedIcon)
+      ? (
+        <Icon
+          options={ { height: 16, width: 16 } }
+          type={ previewSelectedIcon.type }
+          value={ previewSelectedIcon.value }
+        />
+        )
+      : <div></div>
   }
 
   const handlePageChange = (page: number, newPageSize?: number): void => {
@@ -166,26 +210,7 @@ export const IconSelector = ({
         />
 
         <div className={ styles.iconGrid }>
-          {paginatedIcons.map((icon) => (
-            <Space
-              className={ `${styles.iconCard} ${previewSelectedIcon?.value === icon.value && previewSelectedIcon?.type === icon.type ? styles.selectedCard : ''}` }
-              key={ icon.value }
-              onClick={ () => { handleIconClick(icon) } }
-              size='mini'
-            >
-              <Icon
-                options={ { height: 24, width: 24 } }
-                type={ icon.type }
-                value={ icon.value }
-              />
-              <span className={ styles.iconName }>
-                {icon.type === 'path'
-                  ? icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
-                  : icon.value
-                }
-              </span>
-            </Space>
-          ))}
+          {paginatedIcons.map(renderIconCard)}
         </div>
         <Flex
           justify="space-between"
@@ -200,15 +225,7 @@ export const IconSelector = ({
               className={ styles.selectionPreview }
               justify='center'
             >
-              {!isUndefined(previewSelectedIcon)
-                ? (
-                  <Icon
-                    options={ { height: 16, width: 16 } }
-                    type={ previewSelectedIcon.type }
-                    value={ previewSelectedIcon.value }
-                  />
-                  )
-                : <div></div>}
+              {renderPreviewIcon()}
             </Flex>
             {!isUndefined(previewSelectedIcon) && (
             <IconButton
