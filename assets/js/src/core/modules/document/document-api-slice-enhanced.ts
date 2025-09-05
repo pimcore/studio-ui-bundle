@@ -113,7 +113,8 @@ export const {
   useDocumentDocTypeDeleteMutation,
   useDocumentPageSnippetAreaBlockRenderQuery,
   useLazyDocumentPageSnippetAreaBlockRenderQuery,
-  useDocumentRenderletRenderQuery
+  useDocumentRenderletRenderQuery,
+  useDocumentsListAvailableSitesQuery
 } = api
 
 export { api }

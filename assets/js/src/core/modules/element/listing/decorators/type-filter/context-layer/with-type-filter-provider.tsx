@@ -20,8 +20,7 @@ export const withTypeFilterProvider = (Component: AbstractDecoratorProps['Contex
     const registries: Record<ElementType, string> = {
       [elementTypes.dataObject]: serviceIds['DynamicTypes/ObjectRegistry'],
       [elementTypes.asset]: serviceIds['DynamicTypes/AssetRegistry'],
-      // @todo map that to the correct registry when we start implementing the documents
-      [elementTypes.document]: serviceIds['DynamicTypes/AssetRegistry']
+      [elementTypes.document]: serviceIds['DynamicTypes/DocumentRegistry']
     }
 
     if (config?.elementType === undefined) {

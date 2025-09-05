@@ -68,6 +68,8 @@ upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
+document.editable.inheritance.overwrite: Overwrite
+document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -1148,5 +1150,14 @@ perspective-editor.add-modal.title: Add a new Perspective
 perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
+widget-editor.create-modal.create: Create Widget
+widget-editor.create-form.name: Name
+widget-editor.create-form.name.required: Please enter a valid name
+widget-editor.create-form.widgetType: Widget Type
+widget-editor.create-form.widgetType.element_tree: Element Tree
+widget-editor.form.name.placeholder: Enter widget name
+widget-editor.create.success: Widget created successfully
+widget-editor.delete.success: Widget deleted successfully
 edit.label: Edit

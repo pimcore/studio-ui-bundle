@@ -67,10 +67,15 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
         trackError(new ApiError(response.error as ApiErrorData))
       }
 
-      // TODO: clear perspective list cache tag
+      onFinish?.(value)
+
+      dispatch(
+        api.util.invalidateTags(
+          invalidatingTags.PERSPECTIVES()
+        )
+      )
 
       void success(t('perspective-editor.create.success'))
-      onFinish?.(value)
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
     }

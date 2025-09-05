@@ -20,6 +20,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
   'DynamicTypes/EditableDialogLayoutRegistry': 'DynamicTypes/EditableDialogLayoutRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
+  'DynamicTypes/DocumentRegistry': 'DynamicTypes/DocumentRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
   'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
@@ -238,6 +239,15 @@ export const serviceIds = {
   // Document editable dialog layout
   'DynamicTypes/EditableDialogLayout/Tabpanel': 'DynamicTypes/EditableDialogLayout/Tabpanel',
   'DynamicTypes/EditableDialogLayout/Panel': 'DynamicTypes/EditableDialogLayout/Panel',
+
+  // Document types
+  'DynamicTypes/Document/Page': 'DynamicTypes/Document/Page',
+  'DynamicTypes/Document/Newsletter': 'DynamicTypes/Document/Newsletter',
+  'DynamicTypes/Document/Snippet': 'DynamicTypes/Document/Snippet',
+  'DynamicTypes/Document/Link': 'DynamicTypes/Document/Link',
+  'DynamicTypes/Document/Hardlink': 'DynamicTypes/Document/Hardlink',
+  'DynamicTypes/Document/Email': 'DynamicTypes/Document/Email',
+  'DynamicTypes/Document/Folder': 'DynamicTypes/Document/Folder',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',

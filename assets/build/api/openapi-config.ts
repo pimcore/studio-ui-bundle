@@ -54,6 +54,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'documentGetSearch',
+      type: 'query',
+    },
+    {
       pattern: 'assetGetSearch',
       type: 'query',
     },
@@ -156,9 +160,6 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/unit\//i)
-    },
-    '../../js/src/core/modules/document/sites-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/documents\/sites\//i)
     },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)

@@ -1,0 +1,106 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+
+export const staticAvailableColumns: AvailableColumn[] = [
+  {
+    config: [],
+    key: 'id',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.id',
+    frontendType: 'id',
+    filterable: true
+  },
+  {
+    config: [],
+    key: 'type',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'input',
+    filterable: false
+  },
+  {
+    config: [],
+    key: 'filename',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'input',
+    filterable: true
+  },
+  {
+    config: [],
+    key: 'description',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'input',
+    filterable: true
+  },
+  {
+    config: [],
+    key: 'fullpath',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'document-link',
+    filterable: true
+  },
+
+  {
+    config: [],
+    key: 'title',
+    group: ['system'],
+    sortable: true,
+    editable: false,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.string',
+    frontendType: 'input',
+    filterable: false
+  },
+  {
+    config: [],
+    key: 'published',
+    group: ['system'],
+    sortable: true,
+    editable: true,
+    exportable: true,
+    localizable: false,
+    locale: null,
+    type: 'system.boolean',
+    frontendType: 'boolean',
+    filterable: true
+  }
+]
