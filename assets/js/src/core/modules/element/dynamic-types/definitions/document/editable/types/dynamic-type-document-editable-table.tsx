@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Table } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/table'
+import { TableEditable } from '../components/table-editable/table-editable'
 import { type TableValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/hooks/use-table-value'
 import { isNil, isEmpty } from 'lodash'
 import { toCssDimension } from '@sdk/utils'
@@ -32,11 +32,12 @@ export class DynamicTypeDocumentEditableTable extends DynamicTypeDocumentEditabl
 
   getEditableDataComponent (props: TableEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <Table
+      <TableEditable
         className={ props.config?.class }
         cols={ props.config?.defaults?.cols ?? 2 }
         rows={ props.config?.defaults?.rows ?? 2 }
         width={ toCssDimension(props.config?.width, props.defaultFieldWidth.large) }
+        inherited={ props.inherited }
       />
     )
   }
