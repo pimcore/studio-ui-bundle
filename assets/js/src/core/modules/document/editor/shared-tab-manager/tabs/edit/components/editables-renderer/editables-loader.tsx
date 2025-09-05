@@ -76,6 +76,6 @@ export const EditablesLoader = ({ editableDefinitions }: EditablesLoaderProps): 
   }
 
   return (
-    <EditablesRenderer editableDefinitions={editableDefinitions} />
+    <EditablesRenderer editableDefinitions={ editableDefinitions } />
   )
 }

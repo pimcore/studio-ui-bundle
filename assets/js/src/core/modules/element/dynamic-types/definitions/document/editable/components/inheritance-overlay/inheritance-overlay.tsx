@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
@@ -43,7 +43,7 @@ export const InheritanceOverlay = ({
 }: InheritanceOverlayProps): React.JSX.Element | null => {
   const { styles } = useStyles({ display, addIconSpacing, hideButtons, noPadding, shape })
   const { t } = useTranslation()
-  
+
   const wasEverInheritedRef = useRef(isInherited)
   if (isInherited && !wasEverInheritedRef.current) {
     wasEverInheritedRef.current = true

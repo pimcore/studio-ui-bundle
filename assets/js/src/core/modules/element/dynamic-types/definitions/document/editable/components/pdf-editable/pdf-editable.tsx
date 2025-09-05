@@ -142,7 +142,7 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
         key: 'empty',
         icon: <Icon value="trash" />,
         label: t('empty'),
-        disabled: disabled,
+        disabled,
         onClick: handleEmptyValue
       }
     )
@@ -160,14 +160,14 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
       key: 'search',
       icon: <Icon value="search" />,
       label: t('search'),
-      disabled: disabled,
+      disabled,
       onClick: openElementSelector
     },
     {
       key: 'upload',
       icon: <Icon value="upload-cloud" />,
       label: t('upload'),
-      disabled: disabled,
+      disabled,
       onClick: handleUpload
     }
   )
@@ -200,12 +200,12 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
   }, [props.config?.uploadPath, disabled, handleFileSystemUpload, handleReplacePdf, pdfValue?.id])
 
   return (
-    <InheritanceOverlay 
-      display={!isNil(smartDimensions?.width ?? width) || hasPdf ? 'inline-block' : 'block'}
+    <InheritanceOverlay
+      display={ !isNil(smartDimensions?.width ?? width) || hasPdf ? 'inline-block' : 'block' }
       hideButtons
-      isInherited={isInherited}
-      onOverwrite={handleOverwrite}
-      style={{minWidth: MIN_WIDTH}}
+      isInherited={ isInherited }
+      onOverwrite={ handleOverwrite }
+      style={ { minWidth: MIN_WIDTH } }
     >
       {renderDroppableContent(
         hasPdf

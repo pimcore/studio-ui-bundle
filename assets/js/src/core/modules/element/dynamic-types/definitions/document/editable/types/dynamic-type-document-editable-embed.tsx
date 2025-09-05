@@ -29,9 +29,9 @@ export class DynamicTypeDocumentEditableEmbed extends DynamicTypeDocumentEditabl
       <EmbedEditable
         className={ props.config?.class }
         containerRef={ props.containerRef }
+        height={ props.config?.height }
         inherited={ props.inherited }
         width={ props.config?.width }
-        height={ props.config?.height }
       />
     )
   }

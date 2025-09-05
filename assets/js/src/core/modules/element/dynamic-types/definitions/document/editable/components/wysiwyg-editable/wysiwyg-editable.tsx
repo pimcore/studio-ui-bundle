@@ -32,17 +32,17 @@ export const WysiwygEditable = ({
   return (
     <InheritanceOverlay
       display="block"
-      isInherited={inherited}
-      onOverwrite={handleOverwrite}
-      style={{ maxWidth: toCssDimension(width) }}
+      isInherited={ inherited }
+      onOverwrite={ handleOverwrite }
+      style={ { maxWidth: toCssDimension(width) } }
     >
       <Wysiwyg
-        {...wysiwygProps}
-        context={context}
-        value={value}
-        onChange={onChange}
-        width={width}
-        disabled={inherited}
+        { ...wysiwygProps }
+        context={ context }
+        disabled={ inherited }
+        onChange={ onChange }
+        value={ value }
+        width={ width }
       />
     </InheritanceOverlay>
   )

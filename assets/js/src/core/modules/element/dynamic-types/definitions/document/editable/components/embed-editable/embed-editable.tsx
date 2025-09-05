@@ -35,12 +35,12 @@ export interface EmbedEditableProps {
   height?: string | number
 }
 
-export const EmbedEditable = ({ 
-  value, 
-  onChange, 
-  disabled, 
-  inherited = false, 
-  className, 
+export const EmbedEditable = ({
+  value,
+  onChange,
+  disabled,
+  inherited = false,
+  className,
   containerRef,
   width,
   height
@@ -52,7 +52,7 @@ export const EmbedEditable = ({
 
   const currentUrl = value?.url ?? ''
   const hasUrl = !isEmpty(currentUrl)
-  const isDisabled = disabled || inherited
+  const isDisabled = Boolean(disabled) || Boolean(inherited)
 
   const handleOverwrite = (): void => {
     onChange?.(value ?? null)
@@ -84,7 +84,7 @@ export const EmbedEditable = ({
   }, [containerRef, className, wrapperElement])
 
   const handleEditUrl = (): void => {
-    if (isDisabled === true) return
+    if (isDisabled) return
 
     input({
       title: t('embed.url-modal.title'),
@@ -106,53 +106,55 @@ export const EmbedEditable = ({
   // Always wrap with InheritanceOverlay
   return (
     <>
-      {!hasUrl ? (
-        <InheritanceOverlay
-          display="block"
-          isInherited={inherited}
-          onOverwrite={handleOverwrite}
-          noPadding
-          style={width !== undefined ? { maxWidth: toCssDimension(width) } : undefined}
-        >
-          <EditableEmptyPlaceholder
-            buttonText={ t('embed.add-url') }
-            disabled={ isDisabled }
-            onClick={ handleEditUrl }
-            text={ t('embed.placeholder') }
-            width={ width }
-            height={ height }
-          />
-        </InheritanceOverlay>
-      ) : (
-        <>
-          {!isNull(wrapperElement) && ReactDOM.createPortal(
-            <InheritanceOverlay
-              display="block"
-              isInherited={inherited}
-              onOverwrite={handleOverwrite}
-              hideButtons
-              noPadding
-              shape="angular"
-              style={{ 
-                position: 'absolute',
-                inset: 0
-              }}
-            >
-              <IconButton
-                className={ styles.editButton }
-                disabled={ isDisabled }
-                icon={ { value: 'edit' } }
-                onClick={ handleEditUrl }
-                size="small"
-                title={ t('embed.edit-url') }
-                type="default"
-                style={{ pointerEvents: 'auto' }}
-              />
-            </InheritanceOverlay>,
-            wrapperElement
+      {!hasUrl
+        ? (
+          <InheritanceOverlay
+            display="block"
+            isInherited={ inherited }
+            noPadding
+            onOverwrite={ handleOverwrite }
+            style={ width !== undefined ? { maxWidth: toCssDimension(width) } : undefined }
+          >
+            <EditableEmptyPlaceholder
+              buttonText={ t('embed.add-url') }
+              disabled={ isDisabled }
+              height={ height }
+              onClick={ handleEditUrl }
+              text={ t('embed.placeholder') }
+              width={ width }
+            />
+          </InheritanceOverlay>
+          )
+        : (
+          <>
+            {!isNull(wrapperElement) && ReactDOM.createPortal(
+              <InheritanceOverlay
+                display="block"
+                hideButtons
+                isInherited={ inherited }
+                noPadding
+                onOverwrite={ handleOverwrite }
+                shape="angular"
+                style={ {
+                  position: 'absolute',
+                  inset: 0
+                } }
+              >
+                <IconButton
+                  className={ styles.editButton }
+                  disabled={ isDisabled }
+                  icon={ { value: 'edit' } }
+                  onClick={ handleEditUrl }
+                  size="small"
+                  style={ { pointerEvents: 'auto' } }
+                  title={ t('embed.edit-url') }
+                  type="default"
+                />
+              </InheritanceOverlay>,
+              wrapperElement
+            )}
+          </>
           )}
-        </>
-      )}
     </>
   )
 }

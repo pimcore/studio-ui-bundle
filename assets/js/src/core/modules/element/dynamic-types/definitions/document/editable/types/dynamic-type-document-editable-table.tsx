@@ -35,9 +35,9 @@ export class DynamicTypeDocumentEditableTable extends DynamicTypeDocumentEditabl
       <TableEditable
         className={ props.config?.class }
         cols={ props.config?.defaults?.cols ?? 2 }
+        inherited={ props.inherited }
         rows={ props.config?.defaults?.rows ?? 2 }
         width={ toCssDimension(props.config?.width, props.defaultFieldWidth.large) }
-        inherited={ props.inherited }
       />
     )
   }

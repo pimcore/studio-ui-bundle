@@ -31,17 +31,17 @@ export const TableEditable = ({
   return (
     <InheritanceOverlay
       display="block"
-      isInherited={inherited}
-      onOverwrite={handleOverwrite}
       hideButtons
-      style={{ maxWidth: toCssDimension(width) }}
+      isInherited={ inherited }
+      onOverwrite={ handleOverwrite }
+      style={ { maxWidth: toCssDimension(width) } }
     >
       <Table
-        disabled={inherited}
-        width={width}
-        value={value}
-        onChange={onChange}
-        {...tableProps}
+        disabled={ inherited }
+        onChange={ onChange }
+        value={ value }
+        width={ width }
+        { ...tableProps }
       />
     </InheritanceOverlay>
   )

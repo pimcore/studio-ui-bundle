@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Alert } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
@@ -47,7 +47,7 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
     defaultFieldWidth: EDITABLE_DEFAULT_FIELD_WIDTHS,
     containerRef
   }), [editableDefinition, isInherited, containerRef])
-  
+
   const renderEditableComponent = useMemo((): React.ReactElement => {
     if (isNil(editableType)) {
       return <></>

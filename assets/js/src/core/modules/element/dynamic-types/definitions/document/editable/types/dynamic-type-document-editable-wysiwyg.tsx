@@ -33,13 +33,13 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
   getEditableDataComponent (props: WysiwygEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <WysiwygEditable
-        context={WysiwygContext.DOCUMENT}
-        inherited={props.inherited}
-        width={props.config?.width}
-        height={props.config?.height}
-        maxCharacters={props.config?.maxCharacters}
-        placeholder={props.config?.placeholder}
-        editorConfig={props.config?.editorConfig}
+        context={ WysiwygContext.DOCUMENT }
+        editorConfig={ props.config?.editorConfig }
+        height={ props.config?.height }
+        inherited={ props.inherited }
+        maxCharacters={ props.config?.maxCharacters }
+        placeholder={ props.config?.placeholder }
+        width={ props.config?.width }
       />
     )
   }

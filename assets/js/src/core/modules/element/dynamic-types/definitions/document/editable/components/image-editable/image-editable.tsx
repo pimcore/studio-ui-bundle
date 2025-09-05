@@ -121,12 +121,12 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   }
 
   const { openModal: openCropModal } = useCropModal({
-    disabled: disabled,
+    disabled,
     onChange: handleCropChange
   })
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
-    disabled: disabled,
+    disabled,
     onChange: (hotspots) => {
       if (!isNil(imageValue?.id)) {
         const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
@@ -242,12 +242,12 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   }
 
   return (
-    <InheritanceOverlay 
-      display={!isNil(smartDimensions?.width ?? width) || hasImage ? 'inline-block' : 'block'}
-      isInherited={isInherited}
-      onOverwrite={handleOverwrite}
+    <InheritanceOverlay
+      display={ !isNil(smartDimensions?.width ?? width) || hasImage ? 'inline-block' : 'block' }
       hideButtons
-      style={{minWidth: MIN_WIDTH}}
+      isInherited={ isInherited }
+      onOverwrite={ handleOverwrite }
+      style={ { minWidth: MIN_WIDTH } }
     >
       {renderDroppableContent(
         hasImage
