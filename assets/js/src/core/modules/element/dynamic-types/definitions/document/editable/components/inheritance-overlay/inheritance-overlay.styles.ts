@@ -10,26 +10,43 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }, displayType: string) => {
+export const useStyles = createStyles((
+  { token, css },
+  { display, addIconSpacing, hideButtons, noPadding, shape }: { display?: string, addIconSpacing?: boolean, hideButtons?: boolean, noPadding?: boolean, shape?: 'round' | 'angular' }
+) => {
+  const iconSize = 16
+  const iconPadding = addIconSpacing === true ? iconSize + (2 * token.paddingXXS) + token.paddingMD : 0
+
   return {
     container: css`
       position: relative;
-      display: ${displayType === 'inline-block' ? 'inline-flex' : displayType};
+      display: ${display ?? 'inline-block'};
+      ${noPadding !== true ? `padding: ${token.paddingXXS}px;` : ''}
+      padding-right: ${iconPadding}px;
+
+      .ant-btn {
+        background-color: ${token.colorBgContainerDisabled} !important;
+        ${hideButtons === true ? 'display: none !important;' : ''}
+      }
+        
+      .pimcore_editable_droppable_overlay {
+        display: none;
+      }
     `,
 
     inheritanceBackground: css`
+      inset: 0;
       position: absolute;
-      inset: -${token.paddingXXS}px;
       background: ${token.colorFillSecondary};
       border: 1px dashed ${token.colorPrimaryBorder};
-      border-radius: ${token.borderRadius}px;
+      ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
       cursor: pointer;
-      min-height: 34px;
       display: flex;
       align-items: flex-start;
       justify-content: flex-end;
       padding: ${token.paddingXXS}px;
-      
+      z-index: 10;
+      overflow: hidden;
       &:hover {
         border-color: ${token.colorPrimary};
       }

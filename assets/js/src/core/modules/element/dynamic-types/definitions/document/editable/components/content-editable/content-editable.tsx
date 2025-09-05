@@ -190,7 +190,7 @@ const ContentEditable = ({
   const computedStyles = getStyles()
 
   const getDisplayType = (): InheritanceOverlayProps['display'] => {
-    return computedStyles.display as InheritanceOverlayProps['display'] ?? 'inline'
+    return computedStyles.display as InheritanceOverlayProps['display'] ?? 'block'
   }
 
   const handleOverwrite = (): void => {

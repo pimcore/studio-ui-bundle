@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { DocumentPdfEditable } from '../components/pdf-editable/pdf-editable'
+import { PdfEditable } from '../components/pdf-editable/pdf-editable'
 import { injectable } from 'inversify'
 
 export interface PdfEditableConfig {
@@ -33,10 +33,10 @@ export class DynamicTypeDocumentEditablePdf extends DynamicTypeDocumentEditableA
 
   getEditableDataComponent (props: PdfEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <DocumentPdfEditable
+      <PdfEditable
         config={ props.config }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
+        inherited={ props.inherited }
       />
     )
   }

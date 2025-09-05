@@ -9,26 +9,17 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { useRef, useEffect, createRef, useContext } from 'react'
+import React, { useRef, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull, isUndefined } from 'lodash'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useDocumentEditor } from '../../hooks/use-document-editor'
-import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 
 export interface EditablesRendererProps {
   editableDefinitions: AbstractDocumentEditableDefinition[]
 }
 
 export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProps): React.JSX.Element => {
-  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
-  const apiInitialized = useRef(false)
-  const { initializeData, notifyReady, initializeInheritanceState } = useDocumentEditor()
   const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
-  const { id: documentId } = useContext(DocumentContext)
 
   // Create refs for each editable if they don't exist
   editableDefinitions.forEach(editable => {
@@ -36,46 +27,6 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
       editableContainerRefs.current[editable.id] = createRef<HTMLDivElement>()
     }
   })
-
-  const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
-    const initialData: Record<string, any> = {}
-    editableDefinitions.forEach((editable) => {
-      const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
-
-      initialData[editable.name] = {
-        type: editable.type,
-        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data, editable)
-      }
-    })
-    return initialData
-  }
-
-  const getInitialInheritanceState = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, boolean> => {
-    const inheritanceState: Record<string, boolean> = {}
-    editableDefinitions.forEach((editable) => {
-      inheritanceState[editable.name] = editable.inherited
-    })
-    return inheritanceState
-  }
-
-  if (!apiInitialized.current) {
-    initializeData(getInitialData(editableDefinitions))
-    initializeInheritanceState(getInitialInheritanceState(editableDefinitions))
-    apiInitialized.current = true
-  }
-
-  // Notify parent that the iframe is ready after initialization
-  useEffect(() => {
-    if (apiInitialized.current) {
-      notifyReady()
-
-      try {
-        documentEditableRegistry.notifyDocumentReady(documentId, editableDefinitions)
-      } catch (error) {
-        console.warn('Could not process document ready events:', error)
-      }
-    }
-  }, [notifyReady, editableDefinitions, documentId, documentEditableRegistry])
 
   return (
     <>

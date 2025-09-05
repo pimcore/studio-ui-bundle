@@ -10,11 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Checkbox, Flex, Text } from '@sdk/components'
-import {
-  FieldLabel
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
-import { isUndefined } from 'lodash'
+import { CheckboxEditable } from '../components/checkbox-editable/checkbox-editable'
 
 export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -24,58 +20,17 @@ export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition
   }
 }
 
-interface CheckboxWrapperProps {
-  value?: any
-  onChange?: (checked: boolean) => void
-  className?: string
-  label?: string
-  name?: string
-  [key: string]: any // For other props that get spread to Checkbox
-}
-
-// Wrapper component to add a horizontal label if needed
-const CheckboxWrapper = ({ value, onChange, className, label, name, ...otherProps }: CheckboxWrapperProps): React.JSX.Element => {
-  const handleChange = (e: any): void => {
-    const checked = e.target?.checked ?? e
-    onChange?.(Boolean(checked))
-  }
-
-  const checkboxProps = {
-    ...otherProps,
-    checked: Boolean(value),
-    className,
-    onChange: handleChange
-  }
-
-  if (!isUndefined(label)) {
-    return (
-      <Flex
-        align="center"
-        gap="extra-small"
-      >
-        <Checkbox { ...checkboxProps } />
-        <Text>
-          <FieldLabel
-            label={ label }
-            name={ name }
-          />
-        </Text>
-      </Flex>
-    )
-  }
-
-  return <Checkbox { ...checkboxProps } />
-}
-
 export class DynamicTypeDocumentEditableCheckbox extends DynamicTypeDocumentEditableAbstract {
   id: string = 'checkbox'
 
   getEditableDataComponent (props: CheckboxEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <CheckboxWrapper
+      <CheckboxEditable
         className={ props.config?.class }
-        label={ props.config?.label }
+        config={ props.config }
+        inherited={ props.inherited }
         name={ props.name }
+        value={ props.value }
       />
     )
   }

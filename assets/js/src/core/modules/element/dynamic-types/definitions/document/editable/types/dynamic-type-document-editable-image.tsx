@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { DocumentImageEditable } from '../components/image-editable/image-editable'
+import { ImageEditable } from '../components/image-editable/image-editable'
 import { isNil } from 'lodash'
 
 export interface ImageEditableConfig {
@@ -71,12 +71,10 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
 
   getEditableDataComponent (props: ImageEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <DocumentImageEditable
+      <ImageEditable
         config={ props.config }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
-        onChange={ (newValue) => props.onChange?.(newValue) }
-        value={ props.value }
+        inherited={ props.inherited }
       />
     )
   }

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { useRef } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
@@ -17,11 +17,16 @@ import { isNil } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface InheritanceOverlayProps {
-  children?: ReactNode
   isInherited: boolean
   onOverwrite: () => void
   className?: string
-  display?: 'inline' | 'inline-block' | 'block'
+  children?: React.ReactNode
+  display?: string
+  hideButtons?: boolean
+  addIconSpacing?: boolean
+  noPadding?: boolean
+  shape?: 'round' | 'angular'
+  style?: React.CSSProperties
 }
 
 export const InheritanceOverlay = ({
@@ -29,10 +34,20 @@ export const InheritanceOverlay = ({
   isInherited,
   onOverwrite,
   className,
-  display = 'inline-block'
+  display = 'inline-block',
+  addIconSpacing = false,
+  hideButtons = false,
+  noPadding = false,
+  shape = 'round',
+  style
 }: InheritanceOverlayProps): React.JSX.Element | null => {
-  const { styles } = useStyles(display)
+  const { styles } = useStyles({ display, addIconSpacing, hideButtons, noPadding, shape })
   const { t } = useTranslation()
+
+  const wasEverInheritedRef = useRef(isInherited)
+  if (isInherited && !wasEverInheritedRef.current) {
+    wasEverInheritedRef.current = true
+  }
 
   const menuItems: MenuProps['items'] = [
     {
@@ -42,13 +57,22 @@ export const InheritanceOverlay = ({
     }
   ]
 
-  if (!isInherited) {
-    return !isNil(children) ? <>{children}</> : null
+  if (isNil(children)) {
+    return null
   }
 
-  if (!isNil(children)) {
-    return (
-      <div className={ `${styles.container} ${className ?? ''}` }>
+  // Never inherited: no wrapper needed
+  if (!wasEverInheritedRef.current) {
+    return <>{children}</>
+  }
+
+  // Use stable wrapper div to prevent React from unmounting children when isInherited changes
+  return (
+    <div
+      className={ isInherited ? `${styles.container} ${className ?? ''}` : '' }
+      style={ isInherited ? style : { display: 'contents' } }
+    >
+      {isInherited && (
         <Dropdown
           menu={ { items: menuItems } }
           placement="bottomLeft"
@@ -62,10 +86,8 @@ export const InheritanceOverlay = ({
             </div>
           </Tooltip>
         </Dropdown>
-        {children}
-      </div>
-    )
-  }
-
-  return null
+      )}
+      {children}
+    </div>
+  )
 }

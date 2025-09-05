@@ -33,3 +33,5 @@ export * from '@Pimcore/modules/document/editor/types/page/tab-manager/page-tab-
 export * from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 
 export * from '@Pimcore/modules/document/editor/widget'
+
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/inheritance-overlay/inheritance-overlay'
