@@ -51,6 +51,7 @@ export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
       onBlur={ onBlur }
       onChange={ (value: string) => { setValue(value) } }
       options={ formattedOptions }
+      showSearch={ rawConfig?.showSearch ?? false }
       style={ { width: '100%' } }
       value={ _value }
     />

@@ -59,7 +59,8 @@ export const FieldFilters = (): React.JSX.Element => {
         type,
         frontendType,
         config: {
-          options: uniq(fieldOptions)
+          options: uniq(fieldOptions),
+          showSearch: frontendType === 'select'
         }
       }
     ])
