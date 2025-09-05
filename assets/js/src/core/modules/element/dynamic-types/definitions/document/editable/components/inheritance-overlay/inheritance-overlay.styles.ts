@@ -28,6 +28,10 @@ export const useStyles = createStyles((
         background-color: ${token.colorBgContainerDisabled} !important;
         ${hideButtons === true ? 'display: none !important;' : ''}
       }
+        
+      .pimcore_editable_droppable_overlay {
+        display: none;
+      }
     `,
 
     inheritanceBackground: css`
