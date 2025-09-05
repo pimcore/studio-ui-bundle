@@ -34,6 +34,7 @@ import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/fac
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -173,87 +174,17 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
-  // Helper function to compare groups that can be strings, arrays, or nested arrays
-  const areGroupsEqual = (group1: any, group2: any): boolean => {
-    // Normalize groups to string arrays for comparison
-    const normalizeGroup = (group: any): string[] => {
-      if (typeof group === 'string') {
-        return group.split('.')
-      }
-      if (Array.isArray(group)) {
-        return group.flat().map(part => String(part))
-      }
-      return [String(group)]
-    }
-
-    const normalizedGroup1 = normalizeGroup(group1)
-    const normalizedGroup2 = normalizeGroup(group2)
-
-    // Compare arrays by length and content
-    if (normalizedGroup1.length !== normalizedGroup2.length) {
-      return false
-    }
-
-    return normalizedGroup1.every((part, index) => part === normalizedGroup2[index])
-  }
-
-  // Helper function to check if a column item should be included in batch edit options
-  const shouldIncludeColumnItem = (item: any): boolean => {
-    const isEditable: boolean = item.editable === true
-    const isAlreadyInBatchEditList = batchEdits.some(batchItem => 
-      item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
-    )
-    const hasDynamicType = hasType({ 
-      target: 'BATCH_EDIT', 
-      dynamicTypeIds: [item?.frontendType as string] 
-    })
-
-    return isEditable && hasDynamicType && !isAlreadyInBatchEditList
-  }
-
-  // Recursively filter the dropdown menu while preserving the nested structure
-  const filterDropdownItems = (items: any[]): any[] => {
-    return items.map((item: any) => {
-      // If this item has children, it's a group - process its children recursively
-      if (item.children !== undefined) {
-        const filteredChildren = filterDropdownItems(item.children)
-        return {
-          ...item,
-          children: filteredChildren
-        }
-      } else {
-        // This is a column item - check if it should be included
-        return shouldIncludeColumnItem(item) ? item : null
-      }
-    }).filter(item => {
-      // Remove null items and groups with no valid children
-      if (item === null) return false
-      if (item.children !== undefined) {
-        return item.children.length > 0
-      }
-      return true
-    })
-  }
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
     if (isUndefined(availableDropdownList)) return []
 
-    return filterDropdownItems(availableDropdownList)
-  }, [availableDropdownList, batchEdits])
-  // Check if the dropdown list has any selectable items (recursively)
-  const hasSelectableItems = (items: any[]): boolean => {
-    return items.some((item: any) => {
-      if (item.children !== undefined) {
-        // This is a group - check if it has selectable children
-        return hasSelectableItems(item.children)
-      } else {
-        // This is a column item - it's selectable
-        return true
-      }
-    })
-  }
+    return filterDropdownItems(
+      availableDropdownList as Array<ItemType<MenuItemType>>,
+      batchEdits,
+      hasType
+    )
+  }, [availableDropdownList, batchEdits, hasType])
 
-  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList() ?? [])
+  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
 
   return (
     <WindowModal
