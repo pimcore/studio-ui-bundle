@@ -14,6 +14,7 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
   const columnHelper = createColumnHelper()
 
   return [
+    columnHelper.accessor('rowDragCol', { header: '', size: 40 }),
     columnHelper.accessor('name', {
       header: 'Name',
       meta: { type: 'text-cell' }
