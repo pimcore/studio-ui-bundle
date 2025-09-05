@@ -60,6 +60,44 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
           ]
         }
       }
+    }),
+    columnHelper.accessor('filterDrilldown', {
+      header: 'Filter Drilldown',
+      meta: {
+        type: 'select',
+        editable: true,
+        config: {
+          options: [
+            { label: 'Empty', value: '' },
+            { label: 'Only Filter', value: 'only_filter' },
+            { label: 'Filter and Show', value: 'filter_and_show' }
+          ]
+        }
+      }
+    }),
+    columnHelper.accessor('width', {
+      header: 'Width',
+      meta: { type: 'number-cell', editable: true }
+    }),
+    columnHelper.accessor('label', {
+      header: 'Label',
+      meta: { type: 'text-cell', editable: true }
+    }),
+    columnHelper.accessor('action', {
+      header: 'Action',
+      meta: {
+        type: 'select',
+        editable: true,
+        config: {
+          options: [
+            { label: 'None', value: '' },
+            { label: 'Open Document', value: 'openDocument' },
+            { label: 'Open Asset', value: 'openAsset' },
+            { label: 'Open Object', value: 'openObject' },
+            { label: 'Open URL', value: 'openUrl' }
+          ]
+        }
+      }
     })
   ]
 }
