@@ -10,45 +10,15 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { createColumnHelper } from '@tanstack/react-table'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { useColumns } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/hooks/use-columns'
 
 export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const columnHelper = createColumnHelper()
-
-  const tableColumns = [
-    columnHelper.accessor('name', {
-      header: 'Name',
-      meta: {
-        type: 'text-cell'
-      }
-    }),
-    columnHelper.accessor('display', {
-      header: 'Display',
-      meta: {
-        type: 'checkbox',
-        editable: true
-      }
-    }),
-    columnHelper.accessor('export', {
-      header: 'Export',
-      meta: {
-        type: 'checkbox',
-        editable: true
-      }
-    }),
-    columnHelper.accessor('order', {
-      header: 'Order',
-      meta: {
-        type: 'checkbox',
-        editable: true
-      }
-    })
-  ]
+  const tableColumns = useColumns()
 
   const handleUpdateCellData = ({ rowIndex, columnId, value }): void => {
     const updatedColumnConfigurations = currentData?.columnConfigurations?.map((item, index) => {
