@@ -87,6 +87,8 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
+    if (isEmpty(chartDetailData)) return
+
     const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
 
     const newAddColumnMenu = columnConfigurationsList
@@ -98,7 +100,7 @@ export const FieldFilters = (): React.JSX.Element => {
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportDetailData, fieldFilters])
+  }, [chartDetailData, reportDetailData, fieldFilters])
 
   return (
     <>
