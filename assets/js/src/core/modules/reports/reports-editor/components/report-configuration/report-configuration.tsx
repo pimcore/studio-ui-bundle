@@ -17,12 +17,13 @@ import {
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
+import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type ReportFormData, useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
-import { SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
+import { REFETCH_BTN_PORTAL_ID, SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 import { GeneralSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/general-settings/general-settings'
 import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/source-definition/source-definition'
 import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
@@ -36,7 +37,7 @@ interface IReportConfigurationProps {
 }
 
 export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
-  const { isLoading, data } = useCustomReportsReportQuery({ name: report.id })
+  const { isLoading, data, isFetching, refetch } = useCustomReportsReportQuery({ name: report.id })
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
   const { updateReport } = useReportActions()
@@ -75,6 +76,15 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
     })
   }
 
+  const renderRefetchButton = (): React.JSX.Element => (
+    <Portal targetId={ REFETCH_BTN_PORTAL_ID }>
+      <Refetch
+        isFetching={ isFetching }
+        refetch={ refetch }
+      />
+    </Portal>
+  )
+
   const renderSaveButton = (): React.JSX.Element => (
     <Portal targetId={ SAVE_BTN_PORTAL_ID }>
       <Button
@@ -111,6 +121,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
           currentData={ currentData }
           updateFormData={ updateFormData }
         />
+        {isActive && renderRefetchButton()}
         {isActive && renderSaveButton()}
       </FormKit>
       )}

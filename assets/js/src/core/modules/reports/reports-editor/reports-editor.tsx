@@ -16,16 +16,12 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
-import {
-  ReportConfiguration
-} from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
-import {
-  type BundleCustomReportsConfigurationTreeNode,
-  useCustomReportsConfigGetTreeQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
+import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { useStyles } from './reports-editor.styles'
 
+export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
 export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
 
 export const ReportsEditor = (): React.JSX.Element => {
@@ -88,7 +84,8 @@ export const ReportsEditor = (): React.JSX.Element => {
     return (
       <ContentLayout
         renderToolbar={ (
-          <Toolbar justify="flex-end">
+          <Toolbar justify="space-between">
+            <PortalSlot id={ REFETCH_BTN_PORTAL_ID } />
             <PortalSlot id={ SAVE_BTN_PORTAL_ID } />
           </Toolbar>
         ) }
