@@ -41,7 +41,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       localizable: currentColumn?.localizable,
       locale: filter?.locale,
       config: currentColumn?.config,
-      nameTooltip: currentColumn?.group ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
+      nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
     }
   }), [fieldFilters, availableColumns])
 
@@ -81,7 +81,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         localizable: column.localizable,
         locale: column.locale,
         config: column.config,
-        nameTooltip: column?.group ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
         ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     ])
