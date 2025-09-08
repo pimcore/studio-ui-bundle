@@ -15,17 +15,17 @@ import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
  */
 export const createPreviewUrl = (baseUrl: string, addPreviewParameters: boolean = true): string => {
   const urlObj = new URL(baseUrl, window.location.origin)
-  
+
   if (addPreviewParameters) {
     urlObj.searchParams.set('pimcore_preview', 'true')
     urlObj.searchParams.set('pimcore_studio_preview', 'true')
   }
-  
+
   const url = urlObj.toString()
-  
+
   if (addPreviewParameters) {
     return addCacheBusterToUrl(url, '_dc')
   }
-  
+
   return url
 }
