@@ -124,10 +124,8 @@ export const useAreablockControls = ({
         const portal = createEmptyStatePortal(container)
         portals.push(portal)
       }
-    } else {
-      if (!isInherited) {
-        portals.push(...dropzonePortals)
-      }
+    } else if (!isInherited) {
+      portals.push(...dropzonePortals)
     }
 
     const areaKeys = currentAreaEntries

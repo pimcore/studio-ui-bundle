@@ -48,13 +48,19 @@ export const ToolStrip = ({
   const { styles, theme: token } = useStyles()
   const [isHovered, setIsHovered] = React.useState(false)
 
+  const isActivated = (() => {
+    if (disabled) return false
+    if (activateOnHover) return isHovered
+    return true
+  })()
+
   const classNames = cn(
     'tool-strip',
     styles['tool-strip'],
     `tool-strip--theme-${toolStripTheme}`,
     {
       'tool-strip--activate-on-hover': activateOnHover && !disabled,
-      'tool-strip--activated': disabled ? false : (activateOnHover ? isHovered : true),
+      'tool-strip--activated': isActivated,
       'tool-strip--rounded': rounded,
       'tool-strip--disabled': disabled
     },
@@ -62,7 +68,6 @@ export const ToolStrip = ({
   )
 
   const themeConfig = React.useMemo(() => {
-    const isActivated = disabled ? false : (activateOnHover ? isHovered : true)
 
     const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined): {
       Button: {
@@ -126,7 +131,7 @@ export const ToolStrip = ({
         components: createColorMapping(disabledColor, disabledColor)
       }
     }
-  }, [toolStripTheme, activateOnHover, isHovered, token, disabled])
+  }, [toolStripTheme, isActivated, token, disabled])
 
   const dragHandleProps = React.useMemo(() => {
     if (typeof dragger === 'object') {
@@ -143,7 +148,6 @@ export const ToolStrip = ({
     if (disabled) {
       draggerColor = token.Button?.primaryColor
     } else {
-      const isActivated = activateOnHover ? isHovered : true
       const isInverseTheme = toolStripTheme === 'inverse'
       const activeColor = isInverseTheme ? token.colorButtonInverse : token.colorText
       const inactiveColor = isInverseTheme ? token.colorInactiveInverse : token.colorTextDisabled

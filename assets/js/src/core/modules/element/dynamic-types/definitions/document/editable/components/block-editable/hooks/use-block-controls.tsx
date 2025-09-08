@@ -103,10 +103,8 @@ export const useBlockControls = ({
         const portal = createEmptyStatePortal(container)
         portals.push(portal)
       }
-    } else {
-      if (!isInherited) {
-        portals.push(...dropzonePortals)
-      }
+    } else if (!isInherited) {
+      portals.push(...dropzonePortals)
     }
 
     const blockKeys = currentBlockEntries
