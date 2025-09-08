@@ -103,7 +103,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
 
   const renderRightLabelComponent = (): JSX.Element | string | undefined => {
     const renderGlobalView = (): React.JSX.Element => (
-      <Text className={ styles.permissionLabel }>{t('common.globally')}</Text>
+      <Text>{t('common.globally')}</Text>
     )
 
     const renderUserView = (): React.JSX.Element => (
