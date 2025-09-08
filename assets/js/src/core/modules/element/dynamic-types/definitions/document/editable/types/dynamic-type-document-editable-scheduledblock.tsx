@@ -1,0 +1,76 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
+import { ScheduledblockEditable, type ScheduledblockEditableConfig, type ScheduledblockValue } from '../components/scheduledblock-editable/scheduledblock-editable'
+import { ScheduledblockManager } from '../components/scheduledblock-editable/utils/scheduledblock-manager'
+
+export interface ScheduledblockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
+  config?: ScheduledblockEditableConfig
+}
+
+// Track operation types for different editables
+const operationTracker = new Map<string, 'modify' | 'add' | 'delete'>()
+
+export const setScheduledblockOperation = (editableName: string, operationType: 'modify' | 'add' | 'delete' | null): void => {
+  if (operationType) {
+    operationTracker.set(editableName, operationType)
+  } else {
+    operationTracker.delete(editableName)
+  }
+}
+
+export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocumentEditableAbstract {
+  id: string = 'scheduledblock'
+
+  getEditableDataComponent (props: ScheduledblockEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+    return (
+      <ScheduledblockEditable
+        className={ props.config?.class }
+        config={ props.config }
+        containerRef={ props.containerRef }
+        disabled={ props.inherited }
+        editableName={ props.name }
+        isInherited={ props.inherited }
+        onChange={ (newValue) => props.onChange?.(newValue) }
+        value={ props.value }
+      />
+    )
+  }
+
+  transformValue (value: any, props: ScheduledblockEditableDefinition): ScheduledblockValue {
+    const scheduledblockManager = new ScheduledblockManager(props.name, props.containerRef)
+    return scheduledblockManager.getScheduledblockValue()
+  }
+
+  reloadOnChange (props: ScheduledblockEditableDefinition): boolean {
+    // Check if there's an active operation type for this specific editable
+    const operationType = operationTracker.get(props.name)
+    
+    if (operationType) {
+      // Clear the operation type after checking
+      operationTracker.delete(props.name)
+      
+      // Only reload for add/delete operations, not for modify operations
+      if (operationType === 'modify') {
+        return false
+      }
+      
+      // For add/delete operations, check the config
+      if (operationType === 'add' || operationType === 'delete') {
+        return Boolean(props.config?.reload)
+      }
+    }
+    
+    // Default behavior - check config
+    return Boolean(props.config?.reload)
+  }
+}
