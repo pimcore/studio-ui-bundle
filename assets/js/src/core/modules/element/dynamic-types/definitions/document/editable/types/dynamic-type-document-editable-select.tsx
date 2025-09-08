@@ -11,7 +11,6 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { isEmpty, isNil } from 'lodash'
-import i18n from '@Pimcore/app/i18n'
 import { SelectEditable } from '../components/select-editable/select-editable'
 import { transformDocumentEditableStoreToOptions, type DocumentEditableStoreEntry } from '../utils/select-options'
 
