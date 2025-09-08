@@ -57,12 +57,12 @@ export const SelectEditable = ({
         allowClear
         allowDuplicates={ false }
         className={ className }
-        popupClassName={ className }
         creatable={ editable }
         disabled={ inherited }
         onChange={ onChange }
         optionFilterProp="label"
         options={ options }
+        popupClassName={ className }
         showSearch
         style={ containerStyle }
         value={ value }

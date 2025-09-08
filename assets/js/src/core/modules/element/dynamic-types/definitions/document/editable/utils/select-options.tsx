@@ -24,17 +24,17 @@ export const transformDocumentEditableStoreToOptions = (
   return store?.map((item: DocumentEditableStoreEntry) => {
     if (isArray(item)) {
       const [value, label] = item
-      
+
       return {
         value: String(value),
-        label: <SanitizeHtml html={label} />
+        label: <SanitizeHtml html={ label } />
       }
     } else {
       const stringValue = String(item)
-      
+
       return {
         value: stringValue,
-        label: <SanitizeHtml html={stringValue} />
+        label: <SanitizeHtml html={ stringValue } />
       }
     }
   }) ?? []
