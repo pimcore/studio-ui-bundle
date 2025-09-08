@@ -62,6 +62,7 @@ export const SelectEditable = ({
         onChange={ onChange }
         optionFilterProp="label"
         options={ options }
+        popupClassName={ className }
         showSearch
         style={ containerStyle }
         value={ value }
