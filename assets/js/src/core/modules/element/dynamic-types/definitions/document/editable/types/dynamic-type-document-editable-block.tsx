@@ -28,6 +28,7 @@ export class DynamicTypeDocumentEditableBlock extends DynamicTypeDocumentEditabl
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
+        isInherited={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }
       />
