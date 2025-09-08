@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 /**

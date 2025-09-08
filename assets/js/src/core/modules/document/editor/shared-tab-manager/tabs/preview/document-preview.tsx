@@ -33,10 +33,9 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
     }
   }, [document?.draftData?.modificationDate, isVisible])
 
-  // Generate the preview URL using the centralized utility
   const previewUrl = useMemo(() => {
     if (!isNil(document?.fullPath)) {
-      return createPreviewUrl(document.fullPath) // Uses default addPreviewParameters: true
+      return createPreviewUrl(document.fullPath)
     }
     return ''
   }, [document?.fullPath, refreshKey])
