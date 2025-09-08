@@ -87,5 +87,5 @@ export const TAB_VARIANTS: IEditorTab = {
   icon: <Icon value="data-object-variant" />,
   children: <VariantsContainer />,
   isDetachable: true,
-  hidden: (elementApi) => !("showVariants" in elementApi && elementApi?.showVariants === true)
+  hidden: (elementApi) => !("allowVariants" in elementApi && elementApi?.allowVariants === true)
 }
