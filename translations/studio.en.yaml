@@ -995,6 +995,33 @@ reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
 reports.editor.source-definition.title: Source Definition
 reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
+reports.editor.manage-column-configuration.name: Name
+reports.editor.manage-column-configuration.display: Display
+reports.editor.manage-column-configuration.export: Export
+reports.editor.manage-column-configuration.order: Order
+reports.editor.manage-column-configuration.filter-type: Filter Type
+reports.editor.manage-column-configuration.filter-type.empty: Empty
+reports.editor.manage-column-configuration.filter-type.text: Text
+reports.editor.manage-column-configuration.filter-type.number: Number
+reports.editor.manage-column-configuration.filter-type.date: Date
+reports.editor.manage-column-configuration.filter-type.bool: Bool
+reports.editor.manage-column-configuration.display-type: Display Type
+reports.editor.manage-column-configuration.display-type.none: None
+reports.editor.manage-column-configuration.display-type.text: Text
+reports.editor.manage-column-configuration.display-type.date: Date
+reports.editor.manage-column-configuration.display-type.hide: Hide
+reports.editor.manage-column-configuration.filter-drilldown: Filter Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Empty
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Only Filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filter and Show
+reports.editor.manage-column-configuration.width: Width
+reports.editor.manage-column-configuration.label: Label
+reports.editor.manage-column-configuration.action: Action
+reports.editor.manage-column-configuration.action.none: None
+reports.editor.manage-column-configuration.action.open-document: Open Document
+reports.editor.manage-column-configuration.action.open-asset: Open Asset
+reports.editor.manage-column-configuration.action.open-object: Open Object
+reports.editor.manage-column-configuration.action.open-url: Open URL
 reports.editor.chart-settings.title: Chart Settings
 reports.editor.permissions.title: Permissions
 loading: Loading...

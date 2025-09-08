@@ -9,93 +9,95 @@
  */
 
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 
 export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
   const columnHelper = createColumnHelper()
+  const { t } = useTranslation()
 
   return [
     columnHelper.accessor('rowDragCol', { header: '', size: 40 }),
     columnHelper.accessor('name', {
-      header: 'Name',
+      header: t('reports.editor.manage-column-configuration.name'),
       meta: { type: 'text-cell' }
     }),
     columnHelper.accessor('display', {
-      header: 'Display',
+      header: t('reports.editor.manage-column-configuration.display'),
       meta: { type: 'checkbox', editable: true }
     }),
     columnHelper.accessor('export', {
-      header: 'Export',
+      header: t('reports.editor.manage-column-configuration.export'),
       meta: { type: 'checkbox', editable: true }
     }),
     columnHelper.accessor('order', {
-      header: 'Order',
+      header: t('reports.editor.manage-column-configuration.order'),
       meta: { type: 'checkbox', editable: true }
     }),
     columnHelper.accessor('filterType', {
-      header: 'Filter Type',
+      header: t('reports.editor.manage-column-configuration.filter-type'),
       meta: {
         type: 'select',
         editable: true,
         config: {
           options: [
-            { label: 'Empty', value: '' },
-            { label: 'Text', value: 'string' },
-            { label: 'Number', value: 'numeric' },
-            { label: 'Date', value: 'date' },
-            { label: 'Bool', value: 'boolean' }
+            { label: t('reports.editor.manage-column-configuration.filter-type.empty'), value: '' },
+            { label: t('reports.editor.manage-column-configuration.filter-type.text'), value: 'string' },
+            { label: t('reports.editor.manage-column-configuration.filter-type.number'), value: 'numeric' },
+            { label: t('reports.editor.manage-column-configuration.filter-type.date'), value: 'date' },
+            { label: t('reports.editor.manage-column-configuration.filter-type.bool'), value: 'boolean' }
           ]
         }
       }
     }),
     columnHelper.accessor('displayType', {
-      header: 'Display Type',
+      header: t('reports.editor.manage-column-configuration.display-type'),
       meta: {
         type: 'select',
         editable: true,
         config: {
           options: [
-            { label: 'None', value: '' },
-            { label: 'Text', value: 'text' },
-            { label: 'Date', value: 'date' },
-            { label: 'Hide', value: 'hide' }
+            { label: t('reports.editor.manage-column-configuration.display-type.none'), value: '' },
+            { label: t('reports.editor.manage-column-configuration.display-type.text'), value: 'text' },
+            { label: t('reports.editor.manage-column-configuration.display-type.date'), value: 'date' },
+            { label: t('reports.editor.manage-column-configuration.display-type.hide'), value: 'hide' }
           ]
         }
       }
     }),
     columnHelper.accessor('filterDrilldown', {
-      header: 'Filter Drilldown',
+      header: t('reports.editor.manage-column-configuration.filter-drilldown'),
       meta: {
         type: 'select',
         editable: true,
         config: {
           options: [
-            { label: 'Empty', value: '' },
-            { label: 'Only Filter', value: 'only_filter' },
-            { label: 'Filter and Show', value: 'filter_and_show' }
+            { label: t('reports.editor.manage-column-configuration.filter-drilldown.empty'), value: '' },
+            { label: t('reports.editor.manage-column-configuration.filter-drilldown.only-filter'), value: 'only_filter' },
+            { label: t('reports.editor.manage-column-configuration.filter-drilldown.filter-and-show'), value: 'filter_and_show' }
           ]
         }
       }
     }),
     columnHelper.accessor('width', {
-      header: 'Width',
+      header: t('reports.editor.manage-column-configuration.width'),
       meta: { type: 'number-cell', editable: true }
     }),
     columnHelper.accessor('label', {
-      header: 'Label',
+      header: t('reports.editor.manage-column-configuration.label'),
       meta: { type: 'text-cell', editable: true }
     }),
     columnHelper.accessor('action', {
-      header: 'Action',
+      header: t('reports.editor.manage-column-configuration.action'),
       meta: {
         type: 'select',
         editable: true,
         config: {
           options: [
-            { label: 'None', value: '' },
-            { label: 'Open Document', value: 'openDocument' },
-            { label: 'Open Asset', value: 'openAsset' },
-            { label: 'Open Object', value: 'openObject' },
-            { label: 'Open URL', value: 'openUrl' }
+            { label: t('reports.editor.manage-column-configuration.action.none'), value: '' },
+            { label: t('reports.editor.manage-column-configuration.action.open-document'), value: 'openDocument' },
+            { label: t('reports.editor.manage-column-configuration.action.open-asset'), value: 'openAsset' },
+            { label: t('reports.editor.manage-column-configuration.action.open-object'), value: 'openObject' },
+            { label: t('reports.editor.manage-column-configuration.action.open-url'), value: 'openUrl' }
           ]
         }
       }
