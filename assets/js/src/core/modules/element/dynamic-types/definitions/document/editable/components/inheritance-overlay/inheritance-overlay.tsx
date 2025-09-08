@@ -9,10 +9,10 @@
  */
 
 import React, { useRef } from 'react'
-import { Dropdown, type MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useTranslation } from 'react-i18next'
 import { useStyles } from './inheritance-overlay.styles'
+import { useInheritanceMenu } from '../../hooks/use-inheritance-menu'
 import { isNil } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
@@ -42,31 +42,21 @@ export const InheritanceOverlay = ({
   style
 }: InheritanceOverlayProps): React.JSX.Element | null => {
   const { styles } = useStyles({ display, addIconSpacing, hideButtons, noPadding, shape })
-  const { t } = useTranslation()
+  const { inheritanceMenuItems, inheritanceTooltip } = useInheritanceMenu({ onOverwrite })
 
   const wasEverInheritedRef = useRef(isInherited)
   if (isInherited && !wasEverInheritedRef.current) {
     wasEverInheritedRef.current = true
   }
 
-  const menuItems: MenuProps['items'] = [
-    {
-      key: 'overwrite',
-      label: t('document.editable.inheritance.overwrite'),
-      onClick: onOverwrite
-    }
-  ]
-
   if (isNil(children)) {
     return null
   }
 
-  // Never inherited: no wrapper needed
   if (!wasEverInheritedRef.current) {
     return <>{children}</>
   }
 
-  // Use stable wrapper div to prevent React from unmounting children when isInherited changes
   return (
     <div
       className={ isInherited ? `${styles.container} ${className ?? ''}` : '' }
@@ -74,11 +64,11 @@ export const InheritanceOverlay = ({
     >
       {isInherited && (
         <Dropdown
-          menu={ { items: menuItems } }
+          menu={ { items: inheritanceMenuItems } }
           placement="bottomLeft"
           trigger={ ['click', 'contextMenu'] }
         >
-          <Tooltip title={ t('document.editable.inheritance.tooltip') }>
+          <Tooltip title={ inheritanceTooltip }>
             <div className={ styles.inheritanceBackground }>
               <div className={ styles.inheritanceIcon }>
                 <Icon value="inheritance-active" />

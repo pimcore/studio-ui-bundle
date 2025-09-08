@@ -26,6 +26,8 @@ export interface UseBlockControlsParams {
   onMoveBlockUp: (element: HTMLElement) => void
   onMoveBlockDown: (element: HTMLElement) => void
   onMoveBlock: (fromIndex: number, toIndex: number) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export interface UseBlockControlsReturn {
@@ -39,7 +41,9 @@ export const useBlockControls = ({
   onRemoveBlock,
   onMoveBlockUp,
   onMoveBlockDown,
-  onMoveBlock
+  onMoveBlock,
+  isInherited = false,
+  onOverwrite
 }: UseBlockControlsParams): UseBlockControlsReturn => {
   const {
     activeId,
@@ -74,13 +78,17 @@ export const useBlockControls = ({
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateBlockToolbar
+        isInherited={ isInherited }
         onClick={ () => {
-          handleAddBlock(null, 1)
+          if (!isInherited) {
+            handleAddBlock(null, 1)
+          }
         } }
+        onOverwrite={ onOverwrite }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
-  }, [handleAddBlock])
+  }, [handleAddBlock, isInherited, onOverwrite])
 
   const renderBlockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
@@ -96,7 +104,9 @@ export const useBlockControls = ({
         portals.push(portal)
       }
     } else {
-      portals.push(...dropzonePortals)
+      if (!isInherited) {
+        portals.push(...dropzonePortals)
+      }
     }
 
     const blockKeys = currentBlockEntries
@@ -115,11 +125,13 @@ export const useBlockControls = ({
               buttonsContainer={ buttonsContainer as HTMLElement }
               element={ blockEntry }
               id={ blockKey }
+              isInherited={ isInherited }
               key={ blockKey }
               limitReached={ limitReached }
               onAddBlock={ handleAddBlock }
               onMoveBlockDown={ onMoveBlockDown }
               onMoveBlockUp={ onMoveBlockUp }
+              onOverwrite={ onOverwrite }
               onRemoveBlock={ handleRemoveBlock }
             />
           )
@@ -141,7 +153,7 @@ export const useBlockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [blockManager, config, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, onMoveBlockUp, onMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [blockManager, config, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, onMoveBlockUp, onMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderBlockToolbar
