@@ -97,6 +97,7 @@ export const ReportsEditor = (): React.JSX.Element => {
           items={ tabItems }
           onChange={ handleChangeTab }
           onClose={ handleCloseTab }
+          rootClassName={ styles.tabsContainer }
         />
       </ContentLayout>
     )
