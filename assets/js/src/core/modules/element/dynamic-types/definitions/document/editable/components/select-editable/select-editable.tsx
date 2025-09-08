@@ -57,6 +57,7 @@ export const SelectEditable = ({
         allowClear
         allowDuplicates={ false }
         className={ className }
+        popupClassName={ className }
         creatable={ editable }
         disabled={ inherited }
         onChange={ onChange }
