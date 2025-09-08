@@ -220,6 +220,7 @@ import { DynamicTypeDocumentLink } from '@Pimcore/modules/element/dynamic-types/
 import { DynamicTypeDocumentNewsletter } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-newsletter'
 import { DynamicTypeDocumentSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-snippet'
 import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
+import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/variant/tab-manager/object-tab-manager'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -244,6 +245,7 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 // Data Objects
 container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/VariantTabManager']).to(VariantTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
 
 // Documents
