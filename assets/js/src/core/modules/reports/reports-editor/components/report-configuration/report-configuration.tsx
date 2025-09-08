@@ -64,7 +64,11 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
     const bundleCustomReportUpdateData = {
       ...currentData,
       ...normalizeDataSourceConfig(currentData),
-      ...normalizeChartData(currentData)
+      ...normalizeChartData(currentData),
+      ...(currentData.sharedGlobally && {
+        sharedRoleNames: [],
+        sharedUserNames: []
+      })
     }
 
     void updateReport({

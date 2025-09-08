@@ -139,8 +139,6 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
     return isSharedGlobally ? renderGlobalView() : renderUserView()
   }
 
-  console.log('currentData: ', currentData)
-
   return (
     <FormKit.Panel title={ t('reports.editor.permissions.title') }>
       <Form.Item name="sharedGlobally">
