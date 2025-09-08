@@ -18,6 +18,7 @@ import { LanguageSelection } from '../language-selection'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '../flex/flex'
 import { isNil } from 'lodash'
+import { Tooltip } from '../tooltip/tooltip'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -61,10 +62,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   const items: StackListProps['items'] = _data.map((filter) => {
     return {
       id: filter.id,
-
       key: filter.id,
       title: filter.id,
-      children: <Tag>{filter.id}</Tag>,
+      children: <Tooltip title={ filter.nameTooltip }>
+        <Tag>{filter.id}</Tag>
+        </Tooltip>,
       body: (
         <DynamicFilter
           { ...filter }
