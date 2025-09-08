@@ -1023,6 +1023,14 @@ reports.editor.manage-column-configuration.action.open-asset: Open Asset
 reports.editor.manage-column-configuration.action.open-object: Open Object
 reports.editor.manage-column-configuration.action.open-url: Open URL
 reports.editor.chart-settings.title: Chart Settings
+reports.editor.chart-settings.chart-type: Chart Type
+reports.editor.chart-settings.chart-type.none: None
+reports.editor.chart-settings.chart-type.pie-chart: Pie Chart
+reports.editor.chart-settings.chart-type.line-chart: Line Chart
+reports.editor.chart-settings.chart-type.bar-chart: Bar Chart
+reports.editor.chart-settings.settings: Settings
+reports.editor.chart-settings.x-axis: X-Axis
+reports.editor.chart-settings.y-axis: Y-Axis
 reports.editor.permissions.title: Permissions
 loading: Loading...
 please-wait: Please wait...

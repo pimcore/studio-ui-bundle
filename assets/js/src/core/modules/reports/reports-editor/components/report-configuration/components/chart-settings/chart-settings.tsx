@@ -17,15 +17,15 @@ import { Conditional } from '@Pimcore/components/form/conditional/conditional'
 import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/modules/reports/constants'
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
-const CHART_OPTIONS = [
-  { value: '', label: 'None' },
-  { value: CHART_TYPE_PIE, label: 'Pie Chart' },
-  { value: CHART_TYPE_LINE, label: 'Line Chart' },
-  { value: CHART_TYPE_BAR, label: 'Bar Chart' }
-]
-
 export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const CHART_OPTIONS = [
+    { value: '', label: t('reports.editor.chart-settings.chart-type.none') },
+    { value: CHART_TYPE_PIE, label: t('reports.editor.chart-settings.chart-type.pie-chart') },
+    { value: CHART_TYPE_LINE, label: t('reports.editor.chart-settings.chart-type.line-chart') },
+    { value: CHART_TYPE_BAR, label: t('reports.editor.chart-settings.chart-type.bar-chart') }
+  ]
 
   const chartSelectOptions = useMemo(() => {
     return currentData.columnConfigurations.map((column) => ({
@@ -50,7 +50,7 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
   return (
     <FormKit.Panel title={ t('reports.editor.chart-settings.title') }>
       <Form.Item
-        label="Chart Type"
+        label={ t('reports.editor.chart-settings.chart-type') }
         name="chartType"
       >
         <Select options={ CHART_OPTIONS } />
@@ -60,30 +60,30 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
         <FormKit.Panel
           border
           theme="fieldset"
-          title="Settings"
+          title={ t('reports.editor.chart-settings.settings') }
         >
-          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
-          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.x-axis'), name: 'xAxis' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.y-axis'), name: 'yAxis' })}
         </FormKit.Panel>
       </Conditional>
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_LINE }>
         <FormKit.Panel
           border
           theme="fieldset"
-          title="Settings"
+          title={ t('reports.editor.chart-settings.settings') }
         >
-          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
-          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis', mode: 'multiple' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.x-axis'), name: 'xAxis' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.y-axis'), name: 'yAxis', mode: 'multiple' })}
         </FormKit.Panel>
       </Conditional>
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_BAR }>
         <FormKit.Panel
           border
           theme="fieldset"
-          title="Settings"
+          title={ t('reports.editor.chart-settings.settings') }
         >
-          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
-          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis', mode: 'multiple' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.x-axis'), name: 'xAxis' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.y-axis'), name: 'yAxis', mode: 'multiple' })}
         </FormKit.Panel>
       </Conditional>
     </FormKit.Panel>
