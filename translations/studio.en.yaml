@@ -985,6 +985,14 @@ reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
 reports.editor.content.validation.message: The customer report name is invalid
 reports.editor.general-settings.title: General Settings
+reports.editor.general-settings.name-label: Name
+reports.editor.general-settings.display-name-label: Display Name
+reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.group-label: Name an existing group or create new group
+reports.editor.general-settings.group-tooltip: You have to use the exact same name as the existing menu label. If the name is different or new - a new group will be created.
+reports.editor.general-settings.report-class-label: Report Class
+reports.editor.general-settings.group-icon-class-label: Group Icon Class
+reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
 reports.editor.source-definition.title: Source Definition
 reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
 reports.editor.chart-settings.title: Chart Settings

@@ -18,10 +18,11 @@ import { Switch } from '@Pimcore/components/switch/switch'
 export const GeneralSettings = (): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const renderInputItem = ({ label, name, disabled = false }: { label: string, name: string, disabled?: boolean }): React.JSX.Element => (
+  const renderInputItem = ({ label, name, disabled = false, tooltip }: { label: string, name: string, disabled?: boolean, tooltip?: string }): React.JSX.Element => (
     <Form.Item
       label={ label }
       name={ name }
+      tooltip={ tooltip }
     >
       <Input disabled={ disabled } />
     </Form.Item>
@@ -29,14 +30,18 @@ export const GeneralSettings = (): React.JSX.Element => {
 
   return (
     <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
-      {renderInputItem({ label: 'Name', name: 'name', disabled: true })}
-      {renderInputItem({ label: 'Display Name', name: 'niceName' })}
-      {renderInputItem({ label: 'Icon Class', name: 'iconClass' })}
-      {renderInputItem({ label: 'Group', name: 'group' })}
-      {renderInputItem({ label: 'Report Class', name: 'reportClass' })}
-      {renderInputItem({ label: 'Group Icon Class', name: 'groupIconClass' })}
+      {renderInputItem({ label: t('reports.editor.general-settings.name-label'), name: 'name', disabled: true })}
+      {renderInputItem({ label: t('reports.editor.general-settings.display-name-label'), name: 'niceName' })}
+      {renderInputItem({ label: t('reports.editor.general-settings.icon-class-label'), name: 'iconClass' })}
+      {renderInputItem({
+        label: t('reports.editor.general-settings.group-label'),
+        name: 'group',
+        tooltip: t('reports.editor.general-settings.group-tooltip')
+      })}
+      {renderInputItem({ label: t('reports.editor.general-settings.report-class-label'), name: 'reportClass' })}
+      {renderInputItem({ label: t('reports.editor.general-settings.group-icon-class-label'), name: 'groupIconClass' })}
       <Form.Item name="menuShortcut">
-        <Switch labelRight="Create Shortcut in Menu" />
+        <Switch labelRight={ t('reports.editor.general-settings.shortcut-menu-label') } />
       </Form.Item>
     </FormKit.Panel>
   )
