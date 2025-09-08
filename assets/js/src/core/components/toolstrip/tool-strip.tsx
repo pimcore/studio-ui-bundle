@@ -68,7 +68,6 @@ export const ToolStrip = ({
   )
 
   const themeConfig = React.useMemo(() => {
-
     const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined): {
       Button: {
         colorLink: string | undefined
