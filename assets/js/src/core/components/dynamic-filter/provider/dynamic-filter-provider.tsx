@@ -20,6 +20,7 @@ export interface IDynamicFilter {
   localizable?: boolean
   locale?: string | null
   name?: string
+  nameTooltip?: string
 }
 
 export interface DynamicFilterData extends IDynamicFilter {

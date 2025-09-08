@@ -40,7 +40,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       frontendType: currentColumn?.frontendType,
       localizable: currentColumn?.localizable,
       locale: filter?.locale,
-      config: currentColumn?.config
+      config: currentColumn?.config,
+      nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
     }
   }), [fieldFilters, availableColumns])
 
@@ -64,10 +65,10 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const handleColumnClick = (column: AvailableColumn): void => {
     const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
 
-    let inferedFilterType: DynamicTypeFieldFilterAbstract | null = null
+    let inferredFilterType: DynamicTypeFieldFilterAbstract | null = null
 
     if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
-      inferedFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
     }
 
     setFilters((prevFilters) => [
@@ -80,7 +81,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         localizable: column.localizable,
         locale: column.locale,
         config: column.config,
-        ...(inferedFilterType !== null && { filterType: inferedFilterType.getFieldFilterType() })
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     ])
   }
@@ -195,8 +197,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
     return createNestedStructure(availableFilterColumns)
   }, [availableFilterColumns, t])
-
-  console.log({ filters })
 
   return (
     <Space
