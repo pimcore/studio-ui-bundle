@@ -56,9 +56,9 @@ export const GridConfigList = (): React.JSX.Element => {
 
       type: isAdvancedColumn ? 'collapse' : 'default',
       children: (
-        () => isAdvancedColumn ? 
-          <Tag color='purple'>{advancedColumnName}</Tag> : 
-          <Tooltip title={Array.isArray(column.group) ? column.group.join('/') : undefined}><Tag>{t(`${translationKey}`)}</Tag></Tooltip>
+        () => isAdvancedColumn
+          ? <Tag color='purple'>{advancedColumnName}</Tag>
+          : <Tooltip title={ Array.isArray(column.group) ? column.group.join('/') : undefined }><Tag>{t(`${translationKey}`)}</Tag></Tooltip>
       )(),
 
       ...(column.key === 'advanced'

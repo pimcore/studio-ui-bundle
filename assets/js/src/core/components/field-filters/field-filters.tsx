@@ -66,7 +66,7 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       title: filter.id,
       children: <Tooltip title={ filter.nameTooltip }>
         <Tag>{filter.id}</Tag>
-        </Tooltip>,
+      </Tooltip>,
       body: (
         <DynamicFilter
           { ...filter }
