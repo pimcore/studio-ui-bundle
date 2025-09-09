@@ -25,8 +25,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
 
-// Constants
-const SLIDER_RANGE: [number, number] = [0, 86400] // 24 hours in seconds
+const SLIDER_RANGE: [number, number] = [0, 86400]
 
 export interface ScheduledblockEditableConfig {
   limit?: number
@@ -69,7 +68,6 @@ export const ScheduledblockEditable = ({
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
   const [sliderMarks, setSliderMarks] = useState<Record<number, string>>({})
 
-  // Track operation type for reloadOnChange decision
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
     setScheduledblockOperation(editableName, operationType)
   }, [editableName])
@@ -94,22 +92,18 @@ export const ScheduledblockEditable = ({
     disabled
   })
 
-  // Convert timestamp to percentage for slider
   const timestampToSliderValue = useCallback((timestamp: number, dateStart: number): number => {
     return timestamp - dateStart
   }, [])
 
-  // Convert slider value to timestamp
   const sliderValueToTimestamp = useCallback((sliderValue: number, dateStart: number): number => {
     return dateStart + sliderValue
   }, [])
 
-  // Format time for display
   const formatTime = useCallback((timestamp: number): string => {
     return dayjs.unix(timestamp).format('HH:mm')
   }, [])
 
-  // Load timestamps for selected date
   const loadTimestampsForDate = useCallback((date: Dayjs) => {
     const dateStart = date.startOf('day').unix()
     const dateEnd = date.endOf('day').unix()
@@ -117,7 +111,6 @@ export const ScheduledblockEditable = ({
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(validEntries, dateStart, dateEnd)
 
-    // Create slider marks for timestamps on this day
     const marks: Record<number, string> = {}
     dayEntries.forEach(entry => {
       const sliderValue = timestampToSliderValue(entry.date, dateStart)
@@ -126,23 +119,19 @@ export const ScheduledblockEditable = ({
 
     setSliderMarks(marks)
 
-    // Only auto-select if current timestamp is NOT within this day
     const isCurrentTimestampOnThisDay = currentTimestamp && 
       currentTimestamp >= dateStart && 
       currentTimestamp <= dateEnd
 
     if (isCurrentTimestampOnThisDay) {
-      // Current entry is on this day - keep it active, no auto-selection
       return
     }
 
-    // Current entry is not on this day - auto-select an appropriate entry
     if (dayEntries.length > 0) {
       const firstEntry = dayEntries[0]
       showElementByKey(firstEntry.key)
       setCurrentTimestamp(firstEntry.date)
     } else {
-      // Show latest previous element if no elements on this day
       const latestPrevious = scheduledblockValueUtils.getLatestPreviousEntry(validEntries, dateStart)
       if (latestPrevious) {
         showElementByKey(latestPrevious.key)
@@ -154,14 +143,11 @@ export const ScheduledblockEditable = ({
     }
   }, [value, currentTimestamp, timestampToSliderValue, formatTime, showElementByKey, hideAllElements])
 
-  // Handle date change
   const handleDateChange = useCallback((date: Dayjs | null) => {
     if (isNil(date)) return
     setSelectedDate(date)
-    // Don't call loadTimestampsForDate here - let the useEffect handle it
   }, [])
 
-  // Handle modify entry time (via popover)
   const handleModifyEntry = useCallback((entryKey: string, newTimestamp: number) => {
     if (disabled) return
 
@@ -175,15 +161,12 @@ export const ScheduledblockEditable = ({
 
     onChange?.(updatedEntries)
     
-    // Update the DOM element's date attribute
     const element = scheduledblockManager.findElementByKey(entryKey)
     if (element) {
       scheduledblockManager.setElementDate(element, newTimestamp)
     }
   }, [disabled, value, onChange, scheduledblockManager, setScheduledblockOperationType])
 
-  // Open modify popover
-  // Handle modify confirm via DatePicker change
   const handleModifyDateChange = useCallback((entryKey: string, newDateTime: Dayjs | null) => {
     if (newDateTime) {
       const validEntries = isArray(value) ? value : []
@@ -195,18 +178,15 @@ export const ScheduledblockEditable = ({
         const entryDate = dayjs.unix(oldTimestamp)
         const dayChanged = !entryDate.isSame(newDateTime, 'day')
         
-        // Apply the modification
         handleModifyEntry(entryKey, newTimestamp)
         
         if (dayChanged) {
-          // Day changed - jump to the new day
           setTimeout(() => {
             setSelectedDate(newDateTime)
             setCurrentTimestamp(newTimestamp)
             showElementByKey(entryKey)
           }, 0)
         } else {
-          // Same day - refresh timeline
           loadTimestampsForDate(selectedDate)
           setCurrentTimestamp(newTimestamp)
           showElementByKey(entryKey)
@@ -215,12 +195,10 @@ export const ScheduledblockEditable = ({
     }
   }, [value, handleModifyEntry, loadTimestampsForDate, showElementByKey, selectedDate])
 
-  // Handle slider change
   const handleSliderChange = useCallback((sliderValue: number) => {
     const dateStart = selectedDate.startOf('day').unix()
     const timestamp = sliderValueToTimestamp(sliderValue, dateStart)
     
-    // Find the entry closest to this timestamp
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(
       validEntries, 
@@ -240,14 +218,12 @@ export const ScheduledblockEditable = ({
     }
   }, [selectedDate, sliderValueToTimestamp, value, showElementByKey])
 
-  // Handle add block
   const handleAddBlock = useCallback(() => {
     setScheduledblockOperationType('add')
     const newDate = selectedDate.toDate()
     addBlock(newDate)
   }, [selectedDate, addBlock, setScheduledblockOperationType])
 
-  // Handle delete entry
   const handleDeleteEntry = useCallback((entryKey: string) => {
     if (disabled) return
 
@@ -256,17 +232,14 @@ export const ScheduledblockEditable = ({
     const entryToDelete = validEntries.find(entry => entry.key === entryKey)
     
     if (entryToDelete) {
-      // Find the DOM element and remove it
       const element = scheduledblockManager.findElementByKey(entryKey)
       if (element) {
         removeBlock(element)
       }
 
-      // Update the value array
       const updatedEntries = validEntries.filter(entry => entry.key !== entryKey)
       onChange?.(updatedEntries)
 
-      // If this was the current entry, hide all elements
       if (currentTimestamp === entryToDelete.date) {
         setCurrentTimestamp(null)
         hideAllElements()
@@ -274,19 +247,16 @@ export const ScheduledblockEditable = ({
     }
   }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, hideAllElements, setScheduledblockOperationType])
 
-  // Handle jump to entry
   const handleJumpToEntry = useCallback((entryDate: Dayjs, entryKey: string) => {
     setSelectedDate(entryDate)
     setCurrentTimestamp(entryDate.unix())
     showElementByKey(entryKey)
   }, [showElementByKey])
 
-  // Initialize on mount only (empty deps = runs once)
   useEffect(() => {
     loadTimestampsForDate(selectedDate)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // Handle selectedDate changes (smart auto-selection based on current timestamp)
   useEffect(() => {
     loadTimestampsForDate(selectedDate)
   }, [selectedDate, loadTimestampsForDate])
@@ -319,7 +289,6 @@ export const ScheduledblockEditable = ({
               step={ 1 }
               value={ currentSliderValue }
             />
-            {/* Clickable markers overlay */}
             {Object.entries(sliderMarks).map(([sliderValue, timeLabel]) => {
               const validEntries = isArray(value) ? value : []
               const dateStart = selectedDate.startOf('day').unix()
