@@ -232,10 +232,6 @@ export const ScheduledblockEditable = ({
 
   useEffect(() => {
     loadTimestampsForDate(selectedDate)
-  }, [])
-
-  useEffect(() => {
-    loadTimestampsForDate(selectedDate)
   }, [selectedDate, loadTimestampsForDate])
 
   return (
