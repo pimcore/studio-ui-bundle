@@ -10,7 +10,6 @@
 
 import { type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type BatchEdit } from '../batch-edit-provider'
-import { DynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/dynamic-type-resolver'
 import { UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { container } from '@Pimcore/app/depency-injection'
 import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
