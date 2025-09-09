@@ -71,7 +71,6 @@ export const ScheduledblockEditable = ({
   const [modifyingEntry, setModifyingEntry] = useState<ScheduledblockEntry | null>(null)
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
   const [isDatePickerClosing, setIsDatePickerClosing] = useState<boolean>(false)
-  const [isInitialized, setIsInitialized] = useState<boolean>(false)
 
   // Track operation type for reloadOnChange decision
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
@@ -209,19 +208,26 @@ export const ScheduledblockEditable = ({
       // Apply the modification
       handleModifyEntry(modifyingEntry.key, newTimestamp)
       
-      // Close popover and reset state
-      setModifyPopoverOpen(null)
-      setModifyingEntry(null)
-      setDatePickerOpen(false)
-      setIsDatePickerClosing(false)
-      
       if (dayChanged) {
-        // Day changed - jump to the new day and activate the modified entry
-        setSelectedDate(newDateTime)
-        setCurrentTimestamp(newTimestamp)
-        showElementByKey(modifyingEntry.key)
+        // Day changed - close everything immediately and jump to the new day
+        setModifyPopoverOpen(null)
+        setModifyingEntry(null)
+        setDatePickerOpen(false)
+        setIsDatePickerClosing(false)
+        
+        // Use setTimeout to ensure state updates are processed before date change
+        setTimeout(() => {
+          setSelectedDate(newDateTime)
+          setCurrentTimestamp(newTimestamp)
+          showElementByKey(modifyingEntry.key)
+        }, 0)
       } else {
-        // Same day - refresh timeline first, then activate with new timestamp
+        // Same day - close popover and refresh timeline
+        setModifyPopoverOpen(null)
+        setModifyingEntry(null)
+        setDatePickerOpen(false)
+        setIsDatePickerClosing(false)
+        
         loadTimestampsForDate(selectedDate, true) // Refresh with new data
         setCurrentTimestamp(newTimestamp) // Set the new timestamp immediately
         showElementByKey(modifyingEntry.key)
@@ -370,20 +376,15 @@ export const ScheduledblockEditable = ({
     ]
   }, [value, formatDateTime, loadTimestampsForDate, showElementByKey, cleanupTimestamps, t])
 
-  // Initialize on mount only
+  // Initialize on mount only (empty deps = runs once)
   useEffect(() => {
-    if (isInitialized) return
-
-    // Initial load with auto-selection
     loadTimestampsForDate(selectedDate, false)
-    setIsInitialized(true)
-  }, [loadTimestampsForDate, selectedDate, isInitialized])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle selectedDate changes (rebuild marks only, no auto-selection)
   useEffect(() => {
-    if (!isInitialized) return // Don't run until after initial load
     loadTimestampsForDate(selectedDate, true) // Skip auto-select
-  }, [selectedDate, loadTimestampsForDate, isInitialized])
+  }, [selectedDate, loadTimestampsForDate])
 
   const currentSliderValue = useMemo(() => {
     if (isNil(currentTimestamp)) return 0
