@@ -173,7 +173,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     return filterDropdownItems(
       availableDropdownList as Array<ItemType<MenuItemType>>,
       batchEdits,
-      hasType, 
+      hasType,
       getType
     )
   }, [availableDropdownList, batchEdits, hasType, getType])
@@ -189,7 +189,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         footer={ <ModalFooter
           divider
           justify={ 'space-between' }
-                >
+                 >
           <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
             <IconTextButton
               disabled={ isEmptyDropdownList }

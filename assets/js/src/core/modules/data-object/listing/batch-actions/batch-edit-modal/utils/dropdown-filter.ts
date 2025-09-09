@@ -10,9 +10,9 @@
 
 import { type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type BatchEdit } from '../batch-edit-provider'
-import { UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { type UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { container } from '@Pimcore/app/depency-injection'
-import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 // Helper function to compare groups that can be strings, arrays, or nested arrays
@@ -55,12 +55,12 @@ export const shouldIncludeColumnItem = (
     dynamicTypeIds: [item?.mainType, item?.frontendType as string]
   })
 
-  let isAllowedInBatchEdit = false;
-  const objectTypeRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry']);
+  let isAllowedInBatchEdit = false
+  const objectTypeRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   if (objectTypeRegistry.hasDynamicType(item?.frontendType as string)) {
-    const objectType = objectTypeRegistry.getDynamicType(item?.frontendType as string);
-    isAllowedInBatchEdit = objectType.isAllowedInBatchEdit;
+    const objectType = objectTypeRegistry.getDynamicType(item?.frontendType as string)
+    isAllowedInBatchEdit = objectType.isAllowedInBatchEdit
   }
 
   return isEditable && hasDynamicType && !isAlreadyInBatchEditList && isAllowedInBatchEdit
