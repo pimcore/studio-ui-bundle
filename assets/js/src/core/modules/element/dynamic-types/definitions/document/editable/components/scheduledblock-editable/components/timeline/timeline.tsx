@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Slider } from 'antd'
 import { isArray } from 'lodash'
 import dayjs, { type Dayjs } from 'dayjs'
 import { TimelineMarker } from '../timeline-marker/timeline-marker'
 import { useTimelineStyles } from './timeline.styles'
+import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
 
 const SLIDER_RANGE: [number, number] = [0, 86400]
@@ -21,8 +22,7 @@ const SLIDER_RANGE: [number, number] = [0, 86400]
 export interface TimelineProps {
   value: ScheduledblockValue
   selectedDate: Dayjs
-  sliderMarks: Record<number, string>
-  currentSliderValue: number
+  currentTimestamp: number | null
   disabled?: boolean
   onSliderChange: (value: number) => void
   onModifyDateChange: (entryKey: string, newDateTime: Dayjs | null) => void
@@ -33,8 +33,7 @@ export interface TimelineProps {
 export const Timeline = ({
   value,
   selectedDate,
-  sliderMarks,
-  currentSliderValue,
+  currentTimestamp,
   disabled = false,
   onSliderChange,
   onModifyDateChange,
@@ -43,6 +42,10 @@ export const Timeline = ({
 }: TimelineProps): React.JSX.Element => {
   const { styles } = useTimelineStyles()
 
+  const formatTime = (timestamp: number): string => {
+    return dayjs.unix(timestamp).format('HH:mm')
+  }
+
   const timestampToSliderValue = (timestamp: number, dateStart: number): number => {
     return timestamp - dateStart
   }
@@ -50,6 +53,27 @@ export const Timeline = ({
   const sliderValueToTimestamp = (sliderValue: number, dateStart: number): number => {
     return dateStart + sliderValue
   }
+
+  const sliderMarks = useMemo(() => {
+    const dateStart = selectedDate.startOf('day').unix()
+    const dateEnd = selectedDate.endOf('day').unix()
+    const validEntries = isArray(value) ? value : []
+    const dayEntries = scheduledblockValueUtils.getTimestampsForDate(validEntries, dateStart, dateEnd)
+
+    const marks: Record<number, string> = {}
+    dayEntries.forEach(entry => {
+      const sliderValue = timestampToSliderValue(entry.date, dateStart)
+      marks[sliderValue] = formatTime(entry.date)
+    })
+
+    return marks
+  }, [value, selectedDate])
+
+  const currentSliderValue = useMemo(() => {
+    if (!currentTimestamp) return 0
+    const dateStart = selectedDate.startOf('day').unix()
+    return timestampToSliderValue(currentTimestamp, dateStart)
+  }, [currentTimestamp, selectedDate])
 
   return (
     <div className={styles.sliderContainer}>

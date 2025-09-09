@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { DatePicker, Dropdown, Modal, Popover } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -33,37 +33,40 @@ export const TimelineMarker = ({
 }: TimelineMarkerProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  // Internal state for this marker's interactions
   const [modifyPopoverOpen, setModifyPopoverOpen] = useState<boolean>(false)
   const [markerDropdownOpen, setMarkerDropdownOpen] = useState<boolean>(false)
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
-  const [isDatePickerClosing, setIsDatePickerClosing] = useState<boolean>(false)
+  const [shouldCloseAfterChange, setShouldCloseAfterChange] = useState<boolean>(false)
 
-  // Handle opening modify popover
   const handleOpenModifyPopover = useCallback(() => {
     setMarkerDropdownOpen(false)
     setModifyPopoverOpen(true)
-    // Auto-open the DatePicker when popover opens
     setTimeout(() => setDatePickerOpen(true), 100)
   }, [])
 
-  // Handle modify cancel (close popover)
   const handleModifyCancel = useCallback(() => {
     setModifyPopoverOpen(false)
     setDatePickerOpen(false)
-    setIsDatePickerClosing(false)
+    setShouldCloseAfterChange(false)
   }, [])
 
-  // Handle modify date change
   const handleModifyDateChange = useCallback((newDateTime: Dayjs | null) => {
     if (newDateTime) {
+      setShouldCloseAfterChange(true)
       onModifyDateChange(entry.key, newDateTime)
-      // Close the popover after modification
-      handleModifyCancel()
     }
-  }, [entry.key, onModifyDateChange, handleModifyCancel])
+  }, [entry.key, onModifyDateChange])
 
-  // Create dropdown menu items for marker interaction
+  useEffect(() => {
+    if (shouldCloseAfterChange) {
+      const timer = setTimeout(() => {
+        handleModifyCancel()
+      }, 50)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [shouldCloseAfterChange, handleModifyCancel])
+
   const getMarkerDropdownItems = useCallback(() => [
     {
       key: 'modify',
@@ -85,7 +88,6 @@ export const TimelineMarker = ({
     }
   ], [t, entry.key, handleOpenModifyPopover, onDeleteEntry])
 
-  // Create popover content for modify functionality
   const modifyPopoverContent = (
     <div style={{ padding: '8px' }}>
       <DatePicker
@@ -100,17 +102,13 @@ export const TimelineMarker = ({
         style={{ width: '200px' }}
         open={datePickerOpen}
         onOpenChange={(open) => {
+          setDatePickerOpen(open)
           if (!open) {
-            // DatePicker is closing - set flag to prevent popover interference
-            setIsDatePickerClosing(true)
-            setDatePickerOpen(false)
-            // Close everything after a brief delay to ensure DatePicker finishes its closing
             setTimeout(() => {
-              handleModifyCancel()
-            }, 50)
-          } else {
-            setDatePickerOpen(true)
-            setIsDatePickerClosing(false)
+              if (modifyPopoverOpen) {
+                handleModifyCancel()
+              }
+            }, 100)
           }
         }}
         autoFocus
@@ -125,8 +123,7 @@ export const TimelineMarker = ({
       trigger={[]}
       open={modifyPopoverOpen}
       onOpenChange={(open) => {
-        if (!open && !isDatePickerClosing) {
-          // Only handle popover closing if DatePicker isn't already handling the close
+        if (!open) {
           setDatePickerOpen(false)
           handleModifyCancel()
         }
@@ -144,13 +141,11 @@ export const TimelineMarker = ({
           style={{ left: `${markerPosition}%` }}
           onClick={(e) => {
             e.stopPropagation()
-            // Left click - activate the entry (normal behavior)
             onEntryClick(entry)
           }}
           onContextMenu={(e) => {
             e.preventDefault()
             e.stopPropagation()
-            // Right click - show context menu
             setMarkerDropdownOpen(!markerDropdownOpen)
           }}
         />

@@ -64,7 +64,6 @@ export const ScheduledblockEditable = ({
 
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
-  const [sliderMarks, setSliderMarks] = useState<Record<number, string>>({})
 
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
     setScheduledblockOperation(editableName, operationType)
@@ -90,24 +89,12 @@ export const ScheduledblockEditable = ({
     disabled
   })
 
-  const formatTime = useCallback((timestamp: number): string => {
-    return dayjs.unix(timestamp).format('HH:mm')
-  }, [])
-
   const loadTimestampsForDate = useCallback((date: Dayjs) => {
     const dateStart = date.startOf('day').unix()
     const dateEnd = date.endOf('day').unix()
 
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(validEntries, dateStart, dateEnd)
-
-    const marks: Record<number, string> = {}
-    dayEntries.forEach(entry => {
-      const sliderValue = entry.date - dateStart
-      marks[sliderValue] = formatTime(entry.date)
-    })
-
-    setSliderMarks(marks)
 
     const isCurrentTimestampOnThisDay = currentTimestamp && 
       currentTimestamp >= dateStart && 
@@ -131,7 +118,7 @@ export const ScheduledblockEditable = ({
         setCurrentTimestamp(null)
       }
     }
-  }, [value, currentTimestamp, formatTime, showElementByKey, hideAllElements])
+  }, [value, currentTimestamp, showElementByKey, hideAllElements])
 
   const handleDateChange = useCallback((date: Dayjs | null) => {
     if (isNil(date)) return
@@ -251,12 +238,6 @@ export const ScheduledblockEditable = ({
     loadTimestampsForDate(selectedDate)
   }, [selectedDate, loadTimestampsForDate])
 
-  const currentSliderValue = useMemo(() => {
-    if (isNil(currentTimestamp)) return 0
-    const dateStart = selectedDate.startOf('day').unix()
-    return currentTimestamp - dateStart
-  }, [currentTimestamp, selectedDate])
-
   return (
     <div className={ `${styles.scheduledblockContainer} ${className ?? ''}` }>
       <div className={ styles.controlsContainer }>
@@ -271,8 +252,7 @@ export const ScheduledblockEditable = ({
         <Timeline
           value={value}
           selectedDate={selectedDate}
-          sliderMarks={sliderMarks}
-          currentSliderValue={currentSliderValue}
+          currentTimestamp={currentTimestamp}
           disabled={disabled}
           onSliderChange={handleSliderChange}
           onModifyDateChange={handleModifyDateChange}
