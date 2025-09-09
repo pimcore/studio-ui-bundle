@@ -12,7 +12,7 @@ import { DatePicker, Dropdown, Modal, Popover, Slider, TimePicker } from 'antd'o
 
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
-import { DatePicker, Dropdown, Modal, Slider } from 'antd'
+import { DatePicker, Slider } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
@@ -20,6 +20,7 @@ import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
 import { scheduledblockValueUtils } from './utils/scheduledblock-utils'
 import { TimelineMarker } from './components/timeline-marker/timeline-marker'
+import { TimestampDropdown } from './components/timestamp-dropdown/timestamp-dropdown'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
@@ -106,11 +107,6 @@ export const ScheduledblockEditable = ({
   // Format time for display
   const formatTime = useCallback((timestamp: number): string => {
     return dayjs.unix(timestamp).format('HH:mm')
-  }, [])
-
-  // Format date and time for dropdown labels
-  const formatDateTime = useCallback((timestamp: number): string => {
-    return dayjs.unix(timestamp).format('YYYY-MM-DD HH:mm')
   }, [])
 
   // Load timestamps for selected date
@@ -278,52 +274,12 @@ export const ScheduledblockEditable = ({
     }
   }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, hideAllElements, setScheduledblockOperationType])
 
-  // Create dropdown menu items
-  const getDropdownItems = useCallback(() => {
-    const validEntries = isArray(value) ? value : []
-    const sortedEntries = scheduledblockValueUtils.sortByDate(validEntries)
-
-    const jumpItems = sortedEntries.map(entry => ({
-      key: `jump-${entry.key}`,
-      label: formatDateTime(entry.date),
-      onClick: () => {
-        const entryDate = dayjs.unix(entry.date)
-        setSelectedDate(entryDate)
-        setCurrentTimestamp(entry.date)
-        showElementByKey(entry.key)
-      }
-    }))
-
-    if (jumpItems.length > 0) {
-      jumpItems.push({ type: 'divider', key: 'divider' } as any)
-    }
-
-    return [
-      ...jumpItems,
-      {
-        key: 'delete-past',
-        label: t('scheduled-block-delete-all-in-past'),
-        danger: true,
-        onClick: () => {
-          Modal.confirm({
-            title: t('scheduled-block-really-delete-past'),
-            onOk: () => cleanupTimestamps(false)
-          })
-        }
-      },
-      {
-        key: 'delete-all',
-        label: t('scheduled-block-delete-all'),
-        danger: true,
-        onClick: () => {
-          Modal.confirm({
-            title: t('scheduled-block-really-delete-all'),
-            onOk: () => cleanupTimestamps(true)
-          })
-        }
-      }
-    ]
-  }, [value, formatDateTime, showElementByKey, cleanupTimestamps, t])
+  // Handle jump to entry
+  const handleJumpToEntry = useCallback((entryDate: Dayjs, entryKey: string) => {
+    setSelectedDate(entryDate)
+    setCurrentTimestamp(entryDate.unix())
+    showElementByKey(entryKey)
+  }, [showElementByKey])
 
   // Initialize on mount only (empty deps = runs once)
   useEffect(() => {
@@ -400,16 +356,12 @@ export const ScheduledblockEditable = ({
             title={ t('add-scheduled-block') }
           />
 
-          <Dropdown
-            disabled={ disabled }
-            menu={{ items: getDropdownItems() }}
-            trigger={ ['click'] }
-          >
-            <IconButton
-              icon={{ value: 'clock' }}
-              title={ t('jump-to-timestamp') }
-            />
-          </Dropdown>
+          <TimestampDropdown
+            value={value}
+            disabled={disabled}
+            onJumpToEntry={handleJumpToEntry}
+            onCleanupTimestamps={cleanupTimestamps}
+          />
         </div>
       </div>
 
