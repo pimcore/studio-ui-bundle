@@ -994,6 +994,7 @@ reports.editor.general-settings.report-class-label: Report Class
 reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
 reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
 reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
 reports.editor.manage-column-configuration.name: Name
 reports.editor.manage-column-configuration.display: Display
