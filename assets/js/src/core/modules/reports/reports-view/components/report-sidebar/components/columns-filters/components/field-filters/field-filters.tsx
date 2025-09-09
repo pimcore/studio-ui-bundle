@@ -11,7 +11,7 @@
 import React, { type Key, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty, Space } from 'antd'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined, reject, uniq } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -45,7 +45,10 @@ export const FieldFilters = (): React.JSX.Element => {
 
     const id = getLabelValue(column)
     const fieldName = column.name
-    const fieldOptions = chartDetailData?.items.map(item => item.data[fieldName])
+    const fieldOptions = reject(
+      chartDetailData?.items.map(item => item.data[fieldName]),
+      value => isNull(value)
+    )
 
     setFieldFilters([
       ...fieldFilters,
@@ -56,7 +59,8 @@ export const FieldFilters = (): React.JSX.Element => {
         type,
         frontendType,
         config: {
-          options: fieldOptions
+          options: uniq(fieldOptions),
+          showSearch: frontendType === 'select'
         }
       }
     ])
@@ -83,6 +87,8 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
+    if (isEmpty(chartDetailData)) return
+
     const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
 
     const newAddColumnMenu = columnConfigurationsList
@@ -94,7 +100,7 @@ export const FieldFilters = (): React.JSX.Element => {
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportDetailData, fieldFilters])
+  }, [chartDetailData, reportDetailData, fieldFilters])
 
   return (
     <>
