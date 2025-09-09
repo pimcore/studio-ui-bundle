@@ -88,8 +88,7 @@ export const ScheduledblockEditable = ({
     activeElement,
     showElementByKey,
     hideAllElements,
-    cleanupTimestamps,
-    getActiveElementTimestamp
+    cleanupTimestamps
   } = useScheduledblockEditable({
     scheduledblockManager,
     value,
@@ -119,7 +118,7 @@ export const ScheduledblockEditable = ({
   }, [])
 
   // Load timestamps for selected date
-  const loadTimestampsForDate = useCallback((date: Dayjs, skipAutoSelect: boolean = false) => {
+  const loadTimestampsForDate = useCallback((date: Dayjs) => {
     const dateStart = date.startOf('day').unix()
     const dateEnd = date.endOf('day').unix()
 
@@ -135,10 +134,17 @@ export const ScheduledblockEditable = ({
 
     setSliderMarks(marks)
 
-    // Skip auto-selection if requested (e.g., when jumping to specific item)
-    if (skipAutoSelect) return
+    // Only auto-select if current timestamp is NOT within this day
+    const isCurrentTimestampOnThisDay = currentTimestamp && 
+      currentTimestamp >= dateStart && 
+      currentTimestamp <= dateEnd
 
-    // Show first element of the day or latest previous
+    if (isCurrentTimestampOnThisDay) {
+      // Current entry is on this day - keep it active, no auto-selection
+      return
+    }
+
+    // Current entry is not on this day - auto-select an appropriate entry
     if (dayEntries.length > 0) {
       const firstEntry = dayEntries[0]
       showElementByKey(firstEntry.key)
@@ -154,7 +160,7 @@ export const ScheduledblockEditable = ({
         setCurrentTimestamp(null)
       }
     }
-  }, [value, timestampToSliderValue, formatTime, showElementByKey, hideAllElements])
+  }, [value, currentTimestamp, timestampToSliderValue, formatTime, showElementByKey, hideAllElements])
 
   // Handle date change
   const handleDateChange = useCallback((date: Dayjs | null) => {
@@ -228,7 +234,7 @@ export const ScheduledblockEditable = ({
         setDatePickerOpen(false)
         setIsDatePickerClosing(false)
         
-        loadTimestampsForDate(selectedDate, true) // Refresh with new data
+        loadTimestampsForDate(selectedDate) // Refresh with new data
         setCurrentTimestamp(newTimestamp) // Set the new timestamp immediately
         showElementByKey(modifyingEntry.key)
       }
@@ -374,16 +380,16 @@ export const ScheduledblockEditable = ({
         }
       }
     ]
-  }, [value, formatDateTime, loadTimestampsForDate, showElementByKey, cleanupTimestamps, t])
+  }, [value, formatDateTime, showElementByKey, cleanupTimestamps, t])
 
   // Initialize on mount only (empty deps = runs once)
   useEffect(() => {
-    loadTimestampsForDate(selectedDate, false)
+    loadTimestampsForDate(selectedDate)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Handle selectedDate changes (rebuild marks only, no auto-selection)
+  // Handle selectedDate changes (smart auto-selection based on current timestamp)
   useEffect(() => {
-    loadTimestampsForDate(selectedDate, true) // Skip auto-select
+    loadTimestampsForDate(selectedDate)
   }, [selectedDate, loadTimestampsForDate])
 
   const currentSliderValue = useMemo(() => {
