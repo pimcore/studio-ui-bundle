@@ -10,50 +10,29 @@
 
 import { createStyles } from 'antd-style'
 
-export const useScheduledblockEditableStyles = createStyles(({ token }) => ({
-  scheduledblockContainer: {
-    position: 'relative'
-  },
+export const useStyles = createStyles(({ css, token }) => {
+  return {
+    scheduledblockContainer: css`
+      position: relative;
+    `,
 
-  controlsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: token.marginSM,
-    marginBottom: token.marginSM,
-    padding: token.paddingSM,
-    backgroundColor: token.colorFillQuaternary,
-    borderRadius: token.borderRadius
-  },
+    controlsContainer: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginSM}px;
+      margin-bottom: ${token.marginSM}px;
+      padding: ${token.paddingSM}px;
+      background-color: ${token.colorFillQuaternary};
+      border-radius: ${token.borderRadius}px;
+    `,
 
-  datePickerContainer: {
-    minWidth: '120px'
-  },
+    datePickerContainer: css`
+      min-width: 120px;
+    `,
 
-  buttonsContainer: {
-    display: 'flex',
-    gap: token.marginXS
-  },
-
-  timelineMarker: {
-    position: 'absolute',
-    top: '-8px',
-    transform: 'translateX(-50%)',
-    width: '16px',
-    height: '16px',
-    backgroundColor: token.colorPrimary,
-    borderRadius: '50%',
-    border: `2px solid ${token.colorBgContainer}`,
-    cursor: 'pointer',
-    zIndex: 1,
-
-    '&:hover': {
-      backgroundColor: token.colorPrimaryHover,
-      transform: 'translateX(-50%) scale(1.1)'
-    },
-
-    '&.active': {
-      backgroundColor: token.colorSuccess,
-      transform: 'translateX(-50%) scale(1.2)'
-    }
+    buttonsContainer: css`
+      display: flex;
+      gap: ${token.marginXS}px;
+    `
   }
-}))
+})

@@ -13,7 +13,7 @@ import { Slider } from 'antd'
 import { isArray } from 'lodash'
 import dayjs, { type Dayjs } from 'dayjs'
 import { TimelineMarker } from '../timeline-marker/timeline-marker'
-import { useTimelineStyles } from './timeline.styles'
+import { useStyles } from './timeline.styles'
 import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
 
@@ -40,7 +40,7 @@ export const Timeline = ({
   onEntryClick,
   onDeleteEntry
 }: TimelineProps): React.JSX.Element => {
-  const { styles } = useTimelineStyles()
+  const { styles } = useStyles()
 
   const formatTime = (timestamp: number): string => {
     return dayjs.unix(timestamp).format('HH:mm')

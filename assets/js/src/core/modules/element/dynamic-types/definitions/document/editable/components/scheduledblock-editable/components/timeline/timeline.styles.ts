@@ -10,30 +10,32 @@
 
 import { createStyles } from 'antd-style'
 
-export const useTimelineStyles = createStyles(({ token }) => ({
-  sliderContainer: {
-    flex: 1,
-    minWidth: '200px',
-    padding: `0 ${token.paddingSM}px`
-  },
+export const useStyles = createStyles(({ css, token }) => {
+  return {
+    sliderContainer: css`
+      flex: 1;
+      min-width: 200px;
+      padding: 0 ${token.paddingSM}px;
+    `,
 
-  sliderWrapper: {
-    position: 'relative'
-  },
+    sliderWrapper: css`
+      position: relative;
+    `,
 
-  markerOverlay: {
-    position: 'absolute',
-    top: '-10px',
-    transform: 'translateX(-50%)',
-    width: '20px',
-    height: '20px',
-    backgroundColor: 'transparent',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    zIndex: 10,
+    markerOverlay: css`
+      position: absolute;
+      top: -10px;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
 
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.1)'
-    }
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    `
   }
-}))
+})

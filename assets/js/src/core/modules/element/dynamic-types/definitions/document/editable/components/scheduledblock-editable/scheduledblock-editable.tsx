@@ -14,7 +14,7 @@ import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DatePicker } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
+import { useStyles } from './scheduledblock-editable.styles'
 import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
 import { scheduledblockValueUtils } from './utils/scheduledblock-utils'
@@ -50,7 +50,7 @@ export const ScheduledblockEditable = ({
   disabled = false,
   isInherited = false
 }: ScheduledblockEditableProps): React.JSX.Element => {
-  const { styles } = useScheduledblockEditableStyles()
+  const { styles } = useStyles()
   const { t } = useTranslation()
 
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
