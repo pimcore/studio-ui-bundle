@@ -58,8 +58,8 @@ export const shouldIncludeColumnItem = (
   let isAllowedInBatchEdit = false;
   const objectTypeRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry']);
 
-  if (objectTypeRegistry.hasDynamicType(item?.frontendType)) {
-    const objectType = objectTypeRegistry.getDynamicType(item?.frontendType);
+  if (objectTypeRegistry.hasDynamicType(item?.frontendType as string)) {
+    const objectType = objectTypeRegistry.getDynamicType(item?.frontendType as string);
     isAllowedInBatchEdit = objectType.isAllowedInBatchEdit;
   }
 
