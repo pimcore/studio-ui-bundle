@@ -16,6 +16,7 @@ import { TimelineMarker } from '../timeline-marker/timeline-marker'
 import { useStyles } from './timeline.styles'
 import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
+import cn from 'classnames'
 
 const SLIDER_RANGE: [number, number] = [0, 86400]
 
@@ -79,7 +80,7 @@ export const Timeline = ({
 
   return (
     <div className={styles.sliderContainer}>
-      <div className={isNil(currentSliderValue) ? styles.sliderWrapperNoValue : undefined}>
+      <div className={cn(styles.sliderWrapper, {[styles.sliderWrapperNoValue]: isNil(currentSliderValue)})}>
         <Slider
           disabled={disabled}
           marks={sliderMarks}

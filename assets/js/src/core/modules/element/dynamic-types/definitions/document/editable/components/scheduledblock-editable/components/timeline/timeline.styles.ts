@@ -22,6 +22,11 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
+    
+    sliderWrapper: css`
+      position: relative;
+    `,
+    
     sliderWrapperNoValue: css`
       .ant-slider-handle {
         display: none;
