@@ -374,25 +374,10 @@ export const ScheduledblockEditable = ({
   useEffect(() => {
     if (isInitialized) return
 
-    // Check if we have a stored date to restore (only on initial mount)
-    const documentId = (window as any).editWindow?.document?.id
-    if (documentId) {
-      const tmpStoreId = `pimcore_scheduled_block_tmp_date_${documentId}_${editableName}`
-      const globalManager = (window.top as any)?.pimcore?.globalmanager
-      if (globalManager?.get && globalManager.get(tmpStoreId)) {
-        const storedDate = globalManager.get(tmpStoreId)
-        globalManager.remove(tmpStoreId)
-        setSelectedDate(dayjs(storedDate))
-        loadTimestampsForDate(dayjs(storedDate), false)
-        setIsInitialized(true)
-        return
-      }
-    }
-
     // Initial load with auto-selection
     loadTimestampsForDate(selectedDate, false)
     setIsInitialized(true)
-  }, [editableName, loadTimestampsForDate, selectedDate, isInitialized])
+  }, [loadTimestampsForDate, selectedDate, isInitialized])
 
   // Handle selectedDate changes (rebuild marks only, no auto-selection)
   useEffect(() => {
