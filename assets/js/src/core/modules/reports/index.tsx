@@ -21,12 +21,21 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { api } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import {
+  type DynamicTypeDefinitionRegistry
+} from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
+import {
+  type DynamicTypeDefinitionSqlAdapter
+} from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/types/dynamic-type-definition-sql-adapter'
 
 const REPORTS_SECTION_NAME = 'Reporting'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+    const sourceDefinitionRegistry = container.get<DynamicTypeDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
+
+    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeDefinitionSqlAdapter>(serviceIds['DynamicTypes/ReportDefinition/Sql']))
 
     mainNavRegistryService.registerMainNavItem({
       path: `${REPORTS_SECTION_NAME}/Reports`,

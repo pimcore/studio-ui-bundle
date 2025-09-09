@@ -14,3 +14,15 @@ export interface IReportConfigurationSectionProps {
   currentData: ReportFormData
   updateFormData?: (data: ReportFormData) => void
 }
+
+export interface ISQLSourceDefinition {
+  from: string
+  groupby: string
+  orderby?: string
+  orderbydir?: string | null
+  sql: string
+  type: string
+  where: string
+}
+
+export type ISourceDefinition = null | ISQLSourceDefinition

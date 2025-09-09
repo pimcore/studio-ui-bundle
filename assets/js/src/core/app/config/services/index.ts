@@ -68,6 +68,8 @@ import { DynamicTypeMetaDataInput } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-object'
 import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-select'
 import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-textarea'
+import { DynamicTypeDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
+import { DynamicTypeDefinitionSqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/types/dynamic-type-definition-sql-adapter'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 import { DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 import { DynamicTypeObjectLayoutPanel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-panel'
@@ -338,6 +340,10 @@ container.bind(serviceIds['DynamicTypes/Metadata/Input']).to(DynamicTypeMetaData
 container.bind(serviceIds['DynamicTypes/Metadata/Object']).to(DynamicTypeMetaDataObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDataSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
+
+// Report registry
+container.bind(serviceIds['DynamicTypes/ReportDefinitionRegistry']).to(DynamicTypeDefinitionRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ReportDefinition/Sql']).to(DynamicTypeDefinitionSqlAdapter).inSingletonScope()
 
 // Object layout
 container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()
