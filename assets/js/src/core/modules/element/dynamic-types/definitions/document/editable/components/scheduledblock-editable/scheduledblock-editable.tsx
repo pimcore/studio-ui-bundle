@@ -13,7 +13,7 @@ import { DatePicker, Dropdown, Modal, Popover, Slider, TimePicker } from 'antd'o
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DatePicker } from 'antd'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Button } from '@Pimcore/components/button/button'
 import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
 import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
@@ -182,7 +182,7 @@ export const ScheduledblockEditable = ({
 
   const handleAddBlock = useCallback(() => {
     setScheduledblockOperationType('add')
-    const newDate = selectedDate.toDate()
+    const newDate = selectedDate.startOf('day').toDate()
     addBlock(newDate)
   }, [selectedDate, addBlock, setScheduledblockOperationType])
 
@@ -215,6 +215,14 @@ export const ScheduledblockEditable = ({
           />
         </div>
 
+        <Button
+          disabled={ disabled }
+          onClick={ handleAddBlock }
+          type="default"
+        >
+          {t('add')}
+        </Button>
+
         <Timeline
           value={value}
           selectedDate={selectedDate}
@@ -230,13 +238,6 @@ export const ScheduledblockEditable = ({
         />
 
         <div className={ styles.buttonsContainer }>
-          <IconButton
-            disabled={ disabled }
-            icon={{ value: 'plus' }}
-            onClick={ handleAddBlock }
-            title={ t('add-scheduled-block') }
-          />
-
           <TimestampDropdown
             value={value}
             disabled={disabled}
