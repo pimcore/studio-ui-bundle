@@ -109,46 +109,36 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       const groupTree: Record<string, any> = {}
       let menuIndex = 0
 
-      // Build the tree structure by processing each column's group(s)
+      // Build the tree structure by processing each column's group
       columns.forEach((column) => {
-        const groups = Array.isArray(column.group) ? column.group : [column.group]
+        // Handle the group - it's always a one-dimensional array representing a single group path
+        let groupParts: string[] = []
 
-        groups.forEach((groupPath) => {
-          let groupParts: string[] = []
+        if (Array.isArray(column.group)) {
+          // Convert array elements to strings
+          groupParts = column.group.map(part => String(part))
+        } else {
+          return
+        }
 
-          // Handle different group path formats:
-          // 1. String: "assets.metadata" -> ["assets", "metadata"]
-          // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
-          // 3. Nested array: [["Attributes", "attributes", "Bodywork"]] -> ["Attributes", "attributes", "Bodywork"]
-          if (typeof groupPath === 'string') {
-            groupParts = groupPath.split('.')
-          } else if (Array.isArray(groupPath)) {
-            // If it's an array, flatten it and convert all elements to strings
-            groupParts = groupPath.flat().map(part => String(part))
-          } else {
-            // Fallback for any other type
-            groupParts = [String(groupPath)]
+        let currentLevel = groupTree
+
+        // Navigate/create the nested tree structure
+        groupParts.forEach((part, index) => {
+          if (isNil(currentLevel[part])) {
+            currentLevel[part] = {
+              items: [], // Columns that belong directly to this group level
+              subGroups: {} // Nested sub-groups
+            }
           }
 
-          let currentLevel = groupTree
-
-          // Navigate/create the nested tree structure
-          groupParts.forEach((part, index) => {
-            if (isNil(currentLevel[part])) {
-              currentLevel[part] = {
-                items: [], // Columns that belong directly to this group level
-                subGroups: {} // Nested sub-groups
-              }
-            }
-
-            // If this is the final part of the group path, add the column to this level
-            if (index === groupParts.length - 1) {
-              currentLevel[part].items.push(column)
-            } else {
-              // Move deeper into the tree structure
-              currentLevel = currentLevel[part].subGroups
-            }
-          })
+          // If this is the final part of the group path, add the column to this level
+          if (index === groupParts.length - 1) {
+            currentLevel[part].items.push(column)
+          } else {
+            // Move deeper into the tree structure
+            currentLevel = currentLevel[part].subGroups
+          }
         })
       })
 
