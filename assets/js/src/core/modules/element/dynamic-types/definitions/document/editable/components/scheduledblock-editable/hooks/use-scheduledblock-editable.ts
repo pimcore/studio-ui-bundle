@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useState, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import { isNil } from 'lodash'
-import { type ScheduledblockEditableConfig, type ScheduledblockValue } from '../scheduledblock-editable'
+import { type ScheduledblockValue } from '../scheduledblock-editable'
 import { type ScheduledblockManager } from '../utils/scheduledblock-manager'
 import {
   scheduledblockValueUtils
@@ -18,16 +18,13 @@ import {
 
 export interface UseScheduledblockEditableParams {
   scheduledblockManager: ScheduledblockManager
-  value?: ScheduledblockValue
   onChange?: (value: ScheduledblockValue) => void
-  config?: ScheduledblockEditableConfig
   disabled?: boolean
 }
 
 export interface UseScheduledblockEditableReturn {
   addBlock: (date: Date) => void
   removeBlock: (element: HTMLElement) => void
-  activeElement: HTMLElement | null
   showElementByKey: (key: string) => void
   hideAllElements: () => void
   cleanupTimestamps: (allTimestamps: boolean) => void
@@ -35,12 +32,9 @@ export interface UseScheduledblockEditableReturn {
 
 export const useScheduledblockEditable = ({
   scheduledblockManager,
-  value = [],
   onChange,
-  config,
   disabled = false
 }: UseScheduledblockEditableParams): UseScheduledblockEditableReturn => {
-  const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
   const reloadModeElementsRef = useRef<HTMLElement[]>(scheduledblockManager.queryElements())
 
   const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
@@ -56,7 +50,6 @@ export const useScheduledblockEditable = ({
     elements.forEach(element => {
       element.style.display = 'none'
     })
-    setActiveElement(null)
   }, [scheduledblockManager])
 
   const showElementByKey = useCallback((key: string) => {
@@ -64,7 +57,6 @@ export const useScheduledblockEditable = ({
     const element = scheduledblockManager.findElementByKey(key)
     if (!isNil(element)) {
       element.style.display = 'block'
-      setActiveElement(element)
     }
   }, [hideAllElements, scheduledblockManager])
 
@@ -128,7 +120,6 @@ export const useScheduledblockEditable = ({
   return {
     addBlock,
     removeBlock,
-    activeElement,
     showElementByKey,
     hideAllElements,
     cleanupTimestamps

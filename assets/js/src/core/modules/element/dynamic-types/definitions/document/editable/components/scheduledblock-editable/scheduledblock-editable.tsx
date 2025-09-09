@@ -75,15 +75,12 @@ export const ScheduledblockEditable = ({
   const {
     addBlock,
     removeBlock,
-    activeElement,
     showElementByKey,
     hideAllElements,
     cleanupTimestamps
   } = useScheduledblockEditable({
     scheduledblockManager,
-    value,
     onChange,
-    config,
     disabled
   })
 
