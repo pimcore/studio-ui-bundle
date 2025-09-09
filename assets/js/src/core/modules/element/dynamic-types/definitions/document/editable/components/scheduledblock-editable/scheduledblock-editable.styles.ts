@@ -55,9 +55,5 @@ export const useScheduledblockEditableStyles = createStyles(({ token }) => ({
       backgroundColor: token.colorSuccess,
       transform: 'translateX(-50%) scale(1.2)'
     }
-  },
-
-  blockContent: {
-    marginTop: token.marginSM
   }
 }))

@@ -14,7 +14,6 @@ import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DatePicker } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
 import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
@@ -74,7 +73,6 @@ export const ScheduledblockEditable = ({
   }, [editableName, containerRef])
 
   const {
-    dynamicEditables,
     addBlock,
     removeBlock,
     activeElement,
@@ -274,10 +272,6 @@ export const ScheduledblockEditable = ({
             onCleanupTimestamps={cleanupTimestamps}
           />
         </div>
-      </div>
-
-      <div className={ styles.blockContent }>
-        <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
       </div>
     </div>
   )

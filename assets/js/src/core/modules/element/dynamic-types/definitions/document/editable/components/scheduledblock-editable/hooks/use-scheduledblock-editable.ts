@@ -10,13 +10,10 @@
 
 import { useCallback, useState, useRef, useEffect } from 'react'
 import { isNil } from 'lodash'
-import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
-import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
-import { type ScheduledblockEditableConfig, type ScheduledblockValue, type ScheduledblockEntry } from '../scheduledblock-editable'
+import { type ScheduledblockEditableConfig, type ScheduledblockValue } from '../scheduledblock-editable'
 import { type ScheduledblockManager } from '../utils/scheduledblock-manager'
 import {
-  scheduledblockValueUtils,
-  configUtils
+  scheduledblockValueUtils
 } from '../utils/scheduledblock-utils'
 
 export interface UseScheduledblockEditableParams {
@@ -28,7 +25,6 @@ export interface UseScheduledblockEditableParams {
 }
 
 export interface UseScheduledblockEditableReturn {
-  dynamicEditables: AbstractDocumentEditableDefinition[]
   addBlock: (date: Date) => void
   removeBlock: (element: HTMLElement) => void
   activeElement: HTMLElement | null
@@ -44,8 +40,6 @@ export const useScheduledblockEditable = ({
   config,
   disabled = false
 }: UseScheduledblockEditableParams): UseScheduledblockEditableReturn => {
-  const { initializeData, getValues, removeValues } = useDocumentEditor()
-  const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
   const reloadModeElementsRef = useRef<HTMLElement[]>(scheduledblockManager.queryElements())
 
@@ -56,20 +50,6 @@ export const useScheduledblockEditable = ({
     const newValue = scheduledblockValueUtils.elementsToScheduledblockValue(newElements)
     onChange?.(newValue)
   }, [onChange])
-
-  const handlePostOperation = useCallback(() => {
-    scheduledblockManager.ensureAllElementKeys()
-    const newValue = scheduledblockManager.getScheduledblockValue()
-    onChange?.(newValue)
-  }, [onChange, scheduledblockManager])
-
-  const getScheduledblockEditableNames = (element: HTMLElement): string[] => {
-    const elementKey = scheduledblockManager.getElementKey(element)
-    if (isNil(elementKey)) return []
-
-    const currentValues = getValues()
-    return scheduledblockValueUtils.filterEditableNames(Object.keys(currentValues), scheduledblockManager.getEditableName(), elementKey)
-  }
 
   const hideAllElements = useCallback(() => {
     const elements = scheduledblockManager.queryElements()
@@ -91,82 +71,27 @@ export const useScheduledblockEditable = ({
   const addBlock = useCallback((date: Date) => {
     if (disabled) return
 
-    const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : scheduledblockManager.queryElements()
-    if (configUtils.isLimitReached(currentElements.length, limit)) return
-
     const nextKey = scheduledblockManager.calculateNextKey()
     const timestamp = Math.floor(date.getTime() / 1000)
 
-    if (configUtils.isReloadMode(config)) {
-      handleReloadMode((elements) => {
-        const placeholderElement = document.createElement('div')
-        scheduledblockManager.setElementKey(placeholderElement, nextKey.toString())
-        scheduledblockManager.setElementDate(placeholderElement, timestamp)
-        return [...elements, placeholderElement]
-      })
-      return
-    }
-
-    // In normal mode, we need to trigger a document reload to get the new block
-    // This will be handled by the reload mechanism similar to how blocks work
-    const newEntry: ScheduledblockEntry = {
-      key: nextKey.toString(),
-      date: timestamp
-    }
-
-    const newValue = [...value, newEntry]
-    onChange?.(newValue)
-
-    // Store the date for restoration after reload
-    const documentId = (window as any).editWindow?.document?.id
-    if (documentId) {
-      const tmpStoreId = `pimcore_scheduled_block_tmp_date_${documentId}_${scheduledblockManager.getEditableName()}`
-      const globalManager = (window.top as any)?.pimcore?.globalmanager
-      if (globalManager) {
-        globalManager.add(tmpStoreId, date)
-      }
-    }
-
-    // Trigger reload
-    const event = new CustomEvent('pimcore:document:reload')
-    document.dispatchEvent(event)
-  }, [disabled, config, handleReloadMode, value, onChange, scheduledblockManager])
+    handleReloadMode((elements) => {
+      const placeholderElement = document.createElement('div')
+      scheduledblockManager.setElementKey(placeholderElement, nextKey.toString())
+      scheduledblockManager.setElementDate(placeholderElement, timestamp)
+      return [...elements, placeholderElement]
+    })
+  }, [disabled, handleReloadMode, scheduledblockManager])
 
   const removeBlock = useCallback((element: HTMLElement) => {
     if (disabled) return
 
-    if (configUtils.isReloadMode(config)) {
-      const index = scheduledblockManager.findElementIndex(element)
-      handleReloadMode((elements) => {
-        const newElements = [...elements]
-        newElements.splice(index, 1)
-        return newElements
-      })
-      return
-    }
-
-    const editableNamesToRemove = getScheduledblockEditableNames(element)
-
-    const elementKey = scheduledblockManager.getElementKey(element)
-
-    if (!isNil(elementKey)) {
-      const editableName = scheduledblockManager.getEditableName()
-      const namePattern = `${editableName}:${elementKey}.`
-
-      setDynamicEditables(prev =>
-        prev.filter(editable => !editable.name.startsWith(namePattern))
-      )
-    }
-
-    element.remove()
-
-    if (editableNamesToRemove.length > 0) {
-      removeValues(editableNamesToRemove)
-    }
-
-    handlePostOperation()
-  }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, scheduledblockManager])
+    const index = scheduledblockManager.findElementIndex(element)
+    handleReloadMode((elements) => {
+      const newElements = [...elements]
+      newElements.splice(index, 1)
+      return newElements
+    })
+  }, [disabled, handleReloadMode, scheduledblockManager])
 
   const cleanupTimestamps = useCallback((allTimestamps: boolean) => {
     if (disabled) return
@@ -201,7 +126,6 @@ export const useScheduledblockEditable = ({
   }, [scheduledblockManager])
 
   return {
-    dynamicEditables,
     addBlock,
     removeBlock,
     activeElement,

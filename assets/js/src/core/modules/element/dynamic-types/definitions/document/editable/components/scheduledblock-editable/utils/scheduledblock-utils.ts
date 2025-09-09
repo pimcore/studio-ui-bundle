@@ -79,30 +79,4 @@ export const scheduledblockValueUtils = {
   }
 }
 
-/**
- * Configuration utility functions
- */
-export const configUtils = {
-  /**
-   * Gets the effective limit for scheduledblock entries
-   */
-  getEffectiveLimit: (config?: any): number => {
-    return config?.limit ?? 1000000
-  },
-
-  /**
-   * Checks if the limit has been reached
-   */
-  isLimitReached: (currentCount: number, limit: number): boolean => {
-    return currentCount >= limit
-  },
-
-  /**
-   * Checks if reload mode is enabled
-   */
-  isReloadMode: (config?: any): boolean => {
-    return Boolean(config?.reload)
-  }
-}
-
 export { ScheduledblockManager } from './scheduledblock-manager'
