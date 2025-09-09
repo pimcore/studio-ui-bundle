@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { Slider } from 'antd'
-import { isArray } from 'lodash'
+import { isArray, isNil } from 'lodash'
 import dayjs, { type Dayjs } from 'dayjs'
 import { TimelineMarker } from '../timeline-marker/timeline-marker'
 import { useStyles } from './timeline.styles'
@@ -70,14 +70,16 @@ export const Timeline = ({
   }, [value, selectedDate])
 
   const currentSliderValue = useMemo(() => {
-    if (!currentTimestamp) return 0
+    if (!currentTimestamp) return undefined
+    const currentDate = dayjs.unix(currentTimestamp)
+    if (!currentDate.isSame(selectedDate, 'day')) return undefined
     const dateStart = selectedDate.startOf('day').unix()
     return timestampToSliderValue(currentTimestamp, dateStart)
   }, [currentTimestamp, selectedDate])
 
   return (
     <div className={styles.sliderContainer}>
-      <div className={styles.sliderWrapper}>
+      <div className={isNil(currentSliderValue) ? styles.sliderWrapperNoValue : undefined}>
         <Slider
           disabled={disabled}
           marks={sliderMarks}
@@ -85,7 +87,7 @@ export const Timeline = ({
           min={SLIDER_RANGE[0]}
           onChange={onSliderChange}
           step={1}
-          value={currentSliderValue}
+          value={currentSliderValue ?? 0}
         />
         {Object.entries(sliderMarks).map(([sliderValue, timeLabel]) => {
           const validEntries = isArray(value) ? value : []

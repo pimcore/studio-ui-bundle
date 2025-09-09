@@ -16,10 +16,16 @@ export const useStyles = createStyles(({ css, token }) => {
       flex: 1;
       min-width: 200px;
       padding: 0 ${token.paddingSM}px;
+
+      .ant-slider-track {
+        display: none;
+      }
     `,
 
-    sliderWrapper: css`
-      position: relative;
+    sliderWrapperNoValue: css`
+      .ant-slider-handle {
+        display: none;
+      }
     `,
 
     markerOverlay: css`
