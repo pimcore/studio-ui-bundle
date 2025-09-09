@@ -195,13 +195,12 @@ export const ScheduledblockEditable = ({
   }, [selectedDate, addBlock, setScheduledblockOperationType])
 
   const handleDeleteEntry = useCallback((entryKey: string) => {
-    if (disabled) return
-
+    setScheduledblockOperationType('delete')
     const element = scheduledblockManager.findElementByKey(entryKey)
     if (element) {
       removeBlock(element)
     }
-  }, [disabled, scheduledblockManager, removeBlock])
+  }, [scheduledblockManager, removeBlock, setScheduledblockOperationType])
 
   const handleJumpToEntry = useCallback((entryDate: Dayjs, entryKey: string) => {
     setSelectedDate(entryDate)
