@@ -10,15 +10,16 @@ import { DatePicker, Dropdown, Modal, Popover, Slider, TimePicker } from 'antd'o
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
+import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
-import { DatePicker, Dropdown, Modal, Slider, TimePicker, Popover } from 'antd'
+import { DatePicker, Dropdown, Modal, Slider } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
 import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
 import { scheduledblockValueUtils } from './utils/scheduledblock-utils'
+import { TimelineMarker } from './components/timeline-marker/timeline-marker'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
@@ -66,11 +67,6 @@ export const ScheduledblockEditable = ({
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
   const [sliderMarks, setSliderMarks] = useState<Record<number, string>>({})
-  const [markerDropdownOpen, setMarkerDropdownOpen] = useState<string | null>(null)
-  const [modifyPopoverOpen, setModifyPopoverOpen] = useState<string | null>(null)
-  const [modifyingEntry, setModifyingEntry] = useState<ScheduledblockEntry | null>(null)
-  const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
-  const [isDatePickerClosing, setIsDatePickerClosing] = useState<boolean>(false)
 
   // Track operation type for reloadOnChange decision
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
@@ -191,63 +187,37 @@ export const ScheduledblockEditable = ({
   }, [disabled, value, onChange, scheduledblockManager, setScheduledblockOperationType])
 
   // Open modify popover
-  const openModifyPopover = useCallback((entryKey: string) => {
-    const validEntries = isArray(value) ? value : []
-    const entry = validEntries.find(e => e.key === entryKey)
-    
-    if (entry) {
-      setModifyingEntry(entry)
-      setModifyPopoverOpen(entryKey)
-      // Auto-open the DatePicker when popover opens
-      setTimeout(() => setDatePickerOpen(true), 100)
-    }
-  }, [value])
-
   // Handle modify confirm via DatePicker change
-  const handleModifyDateChange = useCallback((newDateTime: Dayjs | null) => {
-    if (modifyingEntry && newDateTime) {
-      const newTimestamp = newDateTime.unix()
-      const oldTimestamp = modifyingEntry.date
-      const entryDate = dayjs.unix(oldTimestamp)
-      const dayChanged = !entryDate.isSame(newDateTime, 'day')
+  const handleModifyDateChange = useCallback((entryKey: string, newDateTime: Dayjs | null) => {
+    if (newDateTime) {
+      const validEntries = isArray(value) ? value : []
+      const entry = validEntries.find(e => e.key === entryKey)
       
-      // Apply the modification
-      handleModifyEntry(modifyingEntry.key, newTimestamp)
-      
-      if (dayChanged) {
-        // Day changed - close everything immediately and jump to the new day
-        setModifyPopoverOpen(null)
-        setModifyingEntry(null)
-        setDatePickerOpen(false)
-        setIsDatePickerClosing(false)
+      if (entry) {
+        const newTimestamp = newDateTime.unix()
+        const oldTimestamp = entry.date
+        const entryDate = dayjs.unix(oldTimestamp)
+        const dayChanged = !entryDate.isSame(newDateTime, 'day')
         
-        // Use setTimeout to ensure state updates are processed before date change
-        setTimeout(() => {
-          setSelectedDate(newDateTime)
+        // Apply the modification
+        handleModifyEntry(entryKey, newTimestamp)
+        
+        if (dayChanged) {
+          // Day changed - jump to the new day
+          setTimeout(() => {
+            setSelectedDate(newDateTime)
+            setCurrentTimestamp(newTimestamp)
+            showElementByKey(entryKey)
+          }, 0)
+        } else {
+          // Same day - refresh timeline
+          loadTimestampsForDate(selectedDate)
           setCurrentTimestamp(newTimestamp)
-          showElementByKey(modifyingEntry.key)
-        }, 0)
-      } else {
-        // Same day - close popover and refresh timeline
-        setModifyPopoverOpen(null)
-        setModifyingEntry(null)
-        setDatePickerOpen(false)
-        setIsDatePickerClosing(false)
-        
-        loadTimestampsForDate(selectedDate) // Refresh with new data
-        setCurrentTimestamp(newTimestamp) // Set the new timestamp immediately
-        showElementByKey(modifyingEntry.key)
+          showElementByKey(entryKey)
+        }
       }
     }
-  }, [modifyingEntry, handleModifyEntry, loadTimestampsForDate, showElementByKey, selectedDate])
-
-  // Handle modify cancel (close popover)
-  const handleModifyCancel = useCallback(() => {
-    setModifyPopoverOpen(null)
-    setModifyingEntry(null)
-    setDatePickerOpen(false)
-    setIsDatePickerClosing(false)
-  }, [])
+  }, [value, handleModifyEntry, loadTimestampsForDate, showElementByKey, selectedDate])
 
   // Handle slider change
   const handleSliderChange = useCallback((sliderValue: number) => {
@@ -306,34 +276,7 @@ export const ScheduledblockEditable = ({
         hideAllElements()
       }
     }
-    
-    setMarkerDropdownOpen(null)
   }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, hideAllElements, setScheduledblockOperationType])
-
-  // Create dropdown menu items for marker interaction
-  const getMarkerDropdownItems = useCallback((entryKey: string) => [
-    {
-      key: 'modify',
-      label: t('modify'),
-      icon: 'edit',
-      onClick: () => {
-        setMarkerDropdownOpen(null)
-        openModifyPopover(entryKey)
-      }
-    },
-    {
-      key: 'delete',
-      label: t('delete'),
-      icon: 'trash',
-      danger: true,
-      onClick: () => {
-        Modal.confirm({
-          title: t('scheduled-block-really-delete-entry'),
-          onOk: () => handleDeleteEntry(entryKey)
-        })
-      }
-    }
-  ], [t, openModifyPopover, handleDeleteEntry])
 
   // Create dropdown menu items
   const getDropdownItems = useCallback(() => {
@@ -431,80 +374,19 @@ export const ScheduledblockEditable = ({
 
               const markerPosition = (Number(sliderValue) / SLIDER_RANGE[1]) * 100
 
-              // Create popover content for modify functionality
-              const modifyPopoverContent = (
-                <div style={{ padding: '8px' }}>
-                  <DatePicker
-                    value={modifyingEntry?.key === entry.key ? dayjs.unix(modifyingEntry.date) : dayjs.unix(entry.date)}
-                    onChange={handleModifyDateChange}
-                    showTime={{
-                      format: 'HH:mm',
-                      hideDisabledOptions: true
-                    }}
-                    format="YYYY-MM-DD HH:mm"
-                    placeholder={t('select-date-and-time')}
-                    style={{ width: '200px' }}
-                    open={modifyPopoverOpen === entry.key && datePickerOpen}
-                    onOpenChange={(open) => {
-                      if (!open) {
-                        // DatePicker is closing - set flag to prevent popover interference
-                        setIsDatePickerClosing(true)
-                        setDatePickerOpen(false)
-                        // Close everything after a brief delay to ensure DatePicker finishes its closing
-                        setTimeout(() => {
-                          handleModifyCancel()
-                        }, 50)
-                      } else {
-                        setDatePickerOpen(true)
-                        setIsDatePickerClosing(false)
-                      }
-                    }}
-                    autoFocus
-                  />
-                </div>
-              )
-
               return (
-                <Popover
-                  key={`popover-${entry.key}`}
-                  content={modifyPopoverContent}
-                  title={t('modify-scheduled-block-time')}
-                  trigger={[]}
-                  open={modifyPopoverOpen === entry.key}
-                  onOpenChange={(open) => {
-                    if (!open && !isDatePickerClosing) {
-                      // Only handle popover closing if DatePicker isn't already handling the close
-                      setDatePickerOpen(false)
-                      handleModifyCancel()
-                    }
+                <TimelineMarker
+                  key={entry.key}
+                  entry={entry}
+                  markerPosition={markerPosition}
+                  onModifyDateChange={handleModifyDateChange}
+                  onEntryClick={(clickedEntry) => {
+                    showElementByKey(clickedEntry.key)
+                    setCurrentTimestamp(clickedEntry.date)
                   }}
-                  placement="top"
-                >
-                  <Dropdown
-                    key={entry.key}
-                    open={markerDropdownOpen === entry.key}
-                    onOpenChange={(open) => setMarkerDropdownOpen(open ? entry.key : null)}
-                    menu={{ items: getMarkerDropdownItems(entry.key) }}
-                    trigger={['contextMenu']}
-                  >
-                    <div 
-                      className={styles.markerOverlay}
-                      style={{ left: `${markerPosition}%` }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        // Left click - activate the entry (normal behavior)
-                        showElementByKey(entry.key)
-                        setCurrentTimestamp(entry.date)
-                      }}
-                      onContextMenu={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        // Right click - show context menu
-                        setMarkerDropdownOpen(markerDropdownOpen === entry.key ? null : entry.key)
-                      }}
-                    />
-                  </Dropdown>
-                </Popover>
+                  onDeleteEntry={handleDeleteEntry}
+                  markerOverlayClassName={styles.markerOverlay}
+                />
               )
             })}
           </div>
