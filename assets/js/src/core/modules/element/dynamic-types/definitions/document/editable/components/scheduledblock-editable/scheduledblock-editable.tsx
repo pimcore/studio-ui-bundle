@@ -23,6 +23,9 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
 
+// Constants
+const SLIDER_RANGE: [number, number] = [0, 86400] // 24 hours in seconds
+
 export interface ScheduledblockEditableConfig {
   limit?: number
   class?: string
@@ -63,14 +66,12 @@ export const ScheduledblockEditable = ({
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
   const [sliderMarks, setSliderMarks] = useState<Record<number, string>>({})
-  const [sliderRange, setSliderRange] = useState<[number, number]>([0, 86400])
   const [markerDropdownOpen, setMarkerDropdownOpen] = useState<string | null>(null)
   const [modifyPopoverOpen, setModifyPopoverOpen] = useState<string | null>(null)
   const [modifyingEntry, setModifyingEntry] = useState<ScheduledblockEntry | null>(null)
-  const [newTime, setNewTime] = useState<Dayjs | null>(null)
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
   const [isDatePickerClosing, setIsDatePickerClosing] = useState<boolean>(false)
-  const isJumpingRef = useRef<boolean>(false)
+  const [isInitialized, setIsInitialized] = useState<boolean>(false)
 
   // Track operation type for reloadOnChange decision
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
@@ -134,7 +135,6 @@ export const ScheduledblockEditable = ({
     })
 
     setSliderMarks(marks)
-    setSliderRange([0, 86400]) // 24 hours in seconds
 
     // Skip auto-selection if requested (e.g., when jumping to specific item)
     if (skipAutoSelect) return
@@ -161,8 +161,8 @@ export const ScheduledblockEditable = ({
   const handleDateChange = useCallback((date: Dayjs | null) => {
     if (isNil(date)) return
     setSelectedDate(date)
-    loadTimestampsForDate(date)
-  }, [loadTimestampsForDate])
+    // Don't call loadTimestampsForDate here - let the useEffect handle it
+  }, [])
 
   // Handle modify entry time (via popover)
   const handleModifyEntry = useCallback((entryKey: string, newTimestamp: number) => {
@@ -177,7 +177,6 @@ export const ScheduledblockEditable = ({
     )
 
     onChange?.(updatedEntries)
-    setCurrentTimestamp(newTimestamp)
     
     // Update the DOM element's date attribute
     const element = scheduledblockManager.findElementByKey(entryKey)
@@ -193,8 +192,6 @@ export const ScheduledblockEditable = ({
     
     if (entry) {
       setModifyingEntry(entry)
-      const entryTime = dayjs.unix(entry.date)
-      setNewTime(entryTime)
       setModifyPopoverOpen(entryKey)
       // Auto-open the DatePicker when popover opens
       setTimeout(() => setDatePickerOpen(true), 100)
@@ -215,23 +212,19 @@ export const ScheduledblockEditable = ({
       // Close popover and reset state
       setModifyPopoverOpen(null)
       setModifyingEntry(null)
-      setNewTime(null)
       setDatePickerOpen(false)
       setIsDatePickerClosing(false)
       
       if (dayChanged) {
-        // Day changed - use the EXACT same logic as dropdown click
-        isJumpingRef.current = true // Set flag to prevent auto-selection
+        // Day changed - jump to the new day and activate the modified entry
         setSelectedDate(newDateTime)
-        loadTimestampsForDate(newDateTime, true) // Skip auto-select
-        showElementByKey(modifyingEntry.key)
         setCurrentTimestamp(newTimestamp)
+        showElementByKey(modifyingEntry.key)
       } else {
-        // Same day - just reactivate the updated item
-        setCurrentTimestamp(newTimestamp)
+        // Same day - refresh timeline first, then activate with new timestamp
+        loadTimestampsForDate(selectedDate, true) // Refresh with new data
+        setCurrentTimestamp(newTimestamp) // Set the new timestamp immediately
         showElementByKey(modifyingEntry.key)
-        // Refresh the current day timeline to update marker position
-        loadTimestampsForDate(selectedDate, true)
       }
     }
   }, [modifyingEntry, handleModifyEntry, loadTimestampsForDate, showElementByKey, selectedDate])
@@ -240,7 +233,6 @@ export const ScheduledblockEditable = ({
   const handleModifyCancel = useCallback(() => {
     setModifyPopoverOpen(null)
     setModifyingEntry(null)
-    setNewTime(null)
     setDatePickerOpen(false)
     setIsDatePickerClosing(false)
   }, [])
@@ -296,7 +288,7 @@ export const ScheduledblockEditable = ({
       const updatedEntries = validEntries.filter(entry => entry.key !== entryKey)
       onChange?.(updatedEntries)
 
-      // If this was the current entry, clear current timestamp
+      // If this was the current entry, hide all elements
       if (currentTimestamp === entryToDelete.date) {
         setCurrentTimestamp(null)
         hideAllElements()
@@ -341,11 +333,9 @@ export const ScheduledblockEditable = ({
       label: formatDateTime(entry.date),
       onClick: () => {
         const entryDate = dayjs.unix(entry.date)
-        isJumpingRef.current = true // Set flag to prevent auto-selection
         setSelectedDate(entryDate)
-        loadTimestampsForDate(entryDate, true) // Skip auto-select
-        showElementByKey(entry.key)
         setCurrentTimestamp(entry.date)
+        showElementByKey(entry.key)
       }
     }))
 
@@ -380,15 +370,13 @@ export const ScheduledblockEditable = ({
     ]
   }, [value, formatDateTime, loadTimestampsForDate, showElementByKey, cleanupTimestamps, t])
 
-  // Initialize on mount and when value changes
+  // Initialize on mount only
   useEffect(() => {
-    // Determine if we should skip auto-selection but STILL rebuild marks
-    const skipAutoSelect = isJumpingRef.current
+    if (isInitialized) return
 
-    // Check if we have a stored date to restore (only on initial mount – when value length changes from 0 -> n or first run)
-    // We still want to honor skipAutoSelect if a jump is in progress
+    // Check if we have a stored date to restore (only on initial mount)
     const documentId = (window as any).editWindow?.document?.id
-    if (!skipAutoSelect && documentId) {
+    if (documentId) {
       const tmpStoreId = `pimcore_scheduled_block_tmp_date_${documentId}_${editableName}`
       const globalManager = (window.top as any)?.pimcore?.globalmanager
       if (globalManager?.get && globalManager.get(tmpStoreId)) {
@@ -396,19 +384,21 @@ export const ScheduledblockEditable = ({
         globalManager.remove(tmpStoreId)
         setSelectedDate(dayjs(storedDate))
         loadTimestampsForDate(dayjs(storedDate), false)
+        setIsInitialized(true)
         return
       }
     }
 
-    // Always rebuild marks when value or selectedDate changes.
-    // When jumping we skip auto-selection but still need the newly modified entry reflected.
-    loadTimestampsForDate(selectedDate, skipAutoSelect)
+    // Initial load with auto-selection
+    loadTimestampsForDate(selectedDate, false)
+    setIsInitialized(true)
+  }, [editableName, loadTimestampsForDate, selectedDate, isInitialized])
 
-    // Reset jump flag AFTER rebuilding with the (possibly) new value
-    if (isJumpingRef.current) {
-      isJumpingRef.current = false
-    }
-  }, [editableName, selectedDate, loadTimestampsForDate])
+  // Handle selectedDate changes (rebuild marks only, no auto-selection)
+  useEffect(() => {
+    if (!isInitialized) return // Don't run until after initial load
+    loadTimestampsForDate(selectedDate, true) // Skip auto-select
+  }, [selectedDate, loadTimestampsForDate, isInitialized])
 
   const currentSliderValue = useMemo(() => {
     if (isNil(currentTimestamp)) return 0
@@ -432,8 +422,8 @@ export const ScheduledblockEditable = ({
             <Slider
               disabled={ disabled }
               marks={ sliderMarks }
-              max={ sliderRange[1] }
-              min={ sliderRange[0] }
+              max={ SLIDER_RANGE[1] }
+              min={ SLIDER_RANGE[0] }
               onChange={ handleSliderChange }
               step={ 1 }
               value={ currentSliderValue }
@@ -447,13 +437,13 @@ export const ScheduledblockEditable = ({
               
               if (!entry) return null
 
-              const markerPosition = (Number(sliderValue) / sliderRange[1]) * 100
+              const markerPosition = (Number(sliderValue) / SLIDER_RANGE[1]) * 100
 
               // Create popover content for modify functionality
               const modifyPopoverContent = (
                 <div style={{ padding: '8px' }}>
                   <DatePicker
-                    value={modifyingEntry?.key === entry.key ? newTime : dayjs.unix(entry.date)}
+                    value={modifyingEntry?.key === entry.key ? dayjs.unix(modifyingEntry.date) : dayjs.unix(entry.date)}
                     onChange={handleModifyDateChange}
                     showTime={{
                       format: 'HH:mm',
