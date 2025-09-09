@@ -10,11 +10,10 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ScheduledblockEditable, type ScheduledblockEditableConfig, type ScheduledblockValue } from '../components/scheduledblock-editable/scheduledblock-editable'
+import { ScheduledblockEditable, type ScheduledblockValue } from '../components/scheduledblock-editable/scheduledblock-editable'
 import { ScheduledblockManager } from '../components/scheduledblock-editable/utils/scheduledblock-manager'
 
-export interface ScheduledblockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
-  config?: ScheduledblockEditableConfig
+export interface ScheduledblockEditableDefinition extends AbstractDocumentEditableDefinition {
 }
 
 // Track operation types for different editables
@@ -34,8 +33,6 @@ export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocume
   getEditableDataComponent (props: ScheduledblockEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <ScheduledblockEditable
-        className={ props.config?.class }
-        config={ props.config }
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
@@ -64,13 +61,13 @@ export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocume
         return false
       }
       
-      // For add/delete operations, check the config
+      // For add/delete operations, always reload since we're using reload-only mode
       if (operationType === 'add' || operationType === 'delete') {
-        return Boolean(props.config?.reload)
+        return true
       }
     }
     
-    // Default behavior - check config
-    return Boolean(props.config?.reload)
+    // Default behavior - always reload since we're using reload-only mode
+    return true
   }
 }

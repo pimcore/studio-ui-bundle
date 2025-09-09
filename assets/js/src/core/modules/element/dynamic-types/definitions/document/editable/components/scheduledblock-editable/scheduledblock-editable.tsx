@@ -24,12 +24,6 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
 
-export interface ScheduledblockEditableConfig {
-  limit?: number
-  class?: string
-  reload?: boolean
-}
-
 export interface ScheduledblockEntry {
   key: string
   date: number
@@ -40,7 +34,6 @@ export type ScheduledblockValue = ScheduledblockEntry[]
 export interface ScheduledblockEditableProps {
   value?: ScheduledblockValue
   onChange?: (value: ScheduledblockValue) => void
-  config?: ScheduledblockEditableConfig
   className?: string
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
@@ -51,7 +44,6 @@ export interface ScheduledblockEditableProps {
 export const ScheduledblockEditable = ({
   value = [],
   onChange,
-  config,
   className,
   editableName,
   containerRef,
