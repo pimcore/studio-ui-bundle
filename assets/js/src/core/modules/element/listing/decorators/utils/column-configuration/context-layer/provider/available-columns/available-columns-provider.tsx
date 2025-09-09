@@ -70,12 +70,12 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
           // - Array of strings/arrays: ["system", ["Attributes", "Engine"]]
           // - Simple array: ["Attributes", "attributes", "Bodywork"]
           let normalizedGroups: Array<string | string[]> = []
-          
+
           if (Array.isArray(column.group)) {
             // Check if this is a nested array structure like [["Attributes", "Engine"], "system"]
             // or a simple array like ["Attributes", "attributes", "Bodywork"]
             const hasNestedArrays = column.group.some(item => Array.isArray(item))
-            
+
             if (hasNestedArrays) {
               // Handle nested array structure - each item becomes a separate group path
               normalizedGroups = column.group
