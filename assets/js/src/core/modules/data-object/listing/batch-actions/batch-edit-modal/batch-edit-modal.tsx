@@ -37,6 +37,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -57,7 +58,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { addJob } = useJobs()
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
-  const { hasType } = useDynamicTypeResolver()
+  const { hasType, getType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
 
   const resetModal = (): void => {
@@ -172,75 +173,78 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     return filterDropdownItems(
       availableDropdownList as Array<ItemType<MenuItemType>>,
       batchEdits,
-      hasType
+      hasType, 
+      getType
     )
-  }, [availableDropdownList, batchEdits, hasType])
+  }, [availableDropdownList, batchEdits, hasType, getType])
 
   const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
 
   return (
-    <WindowModal
-      afterClose={ () => {
-        resetModal()
-      } }
-      footer={ <ModalFooter
-        divider
-        justify={ 'space-between' }
-               >
-        <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
-          <IconTextButton
-            disabled={ isEmptyDropdownList }
-            icon={ { value: 'new' } }
-            type='default'
-          >
-            {t('listing.add-column')}
-          </IconTextButton>
-        </Dropdown>
-        {batchEdits.length > 0 &&
-            (
-            <Flex
-              align={ 'center' }
-              gap={ 'extra-small' }
-            >
-              <IconTextButton
-                icon={ { value: 'close' } }
-                onClick={ () => {
-                  resetModal()
-                } }
-                type='link'
-              >
-                {t('batch-edit.modal-footer.discard-all-changes')}
-              </IconTextButton>
-              <Button
-                onClick={ handleApplyChanges }
-                type='primary'
-              >
-                {t('batch-edit.modal-footer.apply-changes')}
-              </Button>
-            </Flex>
-            )}
-      </ModalFooter> }
-      onCancel={ () => {
-        setBatchEditModalOpen(false)
-      } }
-      open={ batchEditModalOpen }
-      size={ 'XL' }
-      title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
-    >
-      <FieldWidthProvider
-        fieldWidthValues={ {
-          large: 9999,
-          medium: 9999,
-          small: 9999
+    <FieldCollectionProvider>
+      <WindowModal
+        afterClose={ () => {
+          resetModal()
         } }
+        footer={ <ModalFooter
+          divider
+          justify={ 'space-between' }
+                >
+          <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
+            <IconTextButton
+              disabled={ isEmptyDropdownList }
+              icon={ { value: 'new' } }
+              type='default'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </Dropdown>
+          {batchEdits.length > 0 &&
+              (
+              <Flex
+                align={ 'center' }
+                gap={ 'extra-small' }
+              >
+                <IconTextButton
+                  icon={ { value: 'close' } }
+                  onClick={ () => {
+                    resetModal()
+                  } }
+                  type='link'
+                >
+                  {t('batch-edit.modal-footer.discard-all-changes')}
+                </IconTextButton>
+                <Button
+                  onClick={ handleApplyChanges }
+                  type='primary'
+                >
+                  {t('batch-edit.modal-footer.apply-changes')}
+                </Button>
+              </Flex>
+              )}
+        </ModalFooter> }
+        onCancel={ () => {
+          setBatchEditModalOpen(false)
+        } }
+        open={ batchEditModalOpen }
+        size={ 'XL' }
+        title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
       >
-        <Form
-          form={ form }
-          onFinish={ onFormFinish }
+        <FieldWidthProvider
+          fieldWidthValues={ {
+            large: 9999,
+            medium: 9999,
+            small: 9999
+          } }
         >
-          <BatchEditListContainer />
-        </Form>
-      </FieldWidthProvider>
-    </WindowModal>
+          <Form
+            form={ form }
+            onFinish={ onFormFinish }
+          >
+            <BatchEditListContainer />
+          </Form>
+        </FieldWidthProvider>
+      </WindowModal>
+    </FieldCollectionProvider>
   )
 }
