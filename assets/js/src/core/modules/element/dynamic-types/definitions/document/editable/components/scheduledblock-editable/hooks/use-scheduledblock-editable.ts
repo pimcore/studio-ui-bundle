@@ -35,7 +35,6 @@ export interface UseScheduledblockEditableReturn {
   showElementByKey: (key: string) => void
   hideAllElements: () => void
   cleanupTimestamps: (allTimestamps: boolean) => void
-  getActiveElementTimestamp: () => number | null
 }
 
 export const useScheduledblockEditable = ({
@@ -201,12 +200,6 @@ export const useScheduledblockEditable = ({
     })
   }, [scheduledblockManager])
 
-  const getActiveElementTimestamp = useCallback((): number | null => {
-    if (isNil(activeElement)) return null
-    const timestamp = scheduledblockManager.getElementDate(activeElement)
-    return timestamp ?? null
-  }, [activeElement, scheduledblockManager])
-
   return {
     dynamicEditables,
     addBlock,
@@ -214,7 +207,6 @@ export const useScheduledblockEditable = ({
     activeElement,
     showElementByKey,
     hideAllElements,
-    cleanupTimestamps,
-    getActiveElementTimestamp
+    cleanupTimestamps
   }
 }
