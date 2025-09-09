@@ -25,8 +25,6 @@ export interface UseScheduledblockEditableParams {
 export interface UseScheduledblockEditableReturn {
   addBlock: (date: Date) => void
   removeBlock: (element: HTMLElement) => void
-  showElementByKey: (key: string) => void
-  hideAllElements: () => void
   cleanupTimestamps: (allTimestamps: boolean) => void
 }
 
@@ -44,21 +42,6 @@ export const useScheduledblockEditable = ({
     const newValue = scheduledblockValueUtils.elementsToScheduledblockValue(newElements)
     onChange?.(newValue)
   }, [onChange])
-
-  const hideAllElements = useCallback(() => {
-    const elements = scheduledblockManager.queryElements()
-    elements.forEach(element => {
-      element.style.display = 'none'
-    })
-  }, [scheduledblockManager])
-
-  const showElementByKey = useCallback((key: string) => {
-    hideAllElements()
-    const element = scheduledblockManager.findElementByKey(key)
-    if (!isNil(element)) {
-      element.style.display = 'block'
-    }
-  }, [hideAllElements, scheduledblockManager])
 
   const addBlock = useCallback((date: Date) => {
     if (disabled) return
@@ -89,39 +72,27 @@ export const useScheduledblockEditable = ({
     if (disabled) return
 
     const currentTimestamp = Math.floor(Date.now() / 1000)
-    let elementsToRemove: HTMLElement[] = []
 
     if (allTimestamps) {
-      elementsToRemove = scheduledblockManager.queryElements()
+      handleReloadMode(() => [])
     } else {
-      elementsToRemove = scheduledblockManager.queryElements().filter(element => {
-        const date = scheduledblockManager.getElementDate(element)
-        return !isNil(date) && date < currentTimestamp
+      handleReloadMode((elements) => {
+        return elements.filter(element => {
+          const date = scheduledblockManager.getElementDate(element)
+          return isNil(date) || date >= currentTimestamp
+        })
       })
     }
-
-    elementsToRemove.forEach(element => {
-      removeBlock(element)
-    })
-
-    // Trigger reload to update the UI
-    const event = new CustomEvent('pimcore:document:reload')
-    document.dispatchEvent(event)
-  }, [disabled, removeBlock, scheduledblockManager])
+  }, [disabled, handleReloadMode, scheduledblockManager])
 
   // Initialize elements visibility
   useEffect(() => {
-    const elements = scheduledblockManager.queryElements()
-    elements.forEach(element => {
-      element.style.display = 'none'
-    })
+    scheduledblockManager.hideAllElements()
   }, [scheduledblockManager])
 
   return {
     addBlock,
     removeBlock,
-    showElementByKey,
-    hideAllElements,
     cleanupTimestamps
   }
 }

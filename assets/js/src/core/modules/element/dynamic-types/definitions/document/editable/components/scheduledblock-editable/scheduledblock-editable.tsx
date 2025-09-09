@@ -75,8 +75,6 @@ export const ScheduledblockEditable = ({
   const {
     addBlock,
     removeBlock,
-    showElementByKey,
-    hideAllElements,
     cleanupTimestamps
   } = useScheduledblockEditable({
     scheduledblockManager,
@@ -101,19 +99,19 @@ export const ScheduledblockEditable = ({
 
     if (dayEntries.length > 0) {
       const firstEntry = dayEntries[0]
-      showElementByKey(firstEntry.key)
+      scheduledblockManager.showElementByKey(firstEntry.key)
       setCurrentTimestamp(firstEntry.date)
     } else {
       const latestPrevious = scheduledblockValueUtils.getLatestPreviousEntry(validEntries, dateStart)
       if (latestPrevious) {
-        showElementByKey(latestPrevious.key)
+        scheduledblockManager.showElementByKey(latestPrevious.key)
         setCurrentTimestamp(latestPrevious.date)
       } else {
-        hideAllElements()
+        scheduledblockManager.hideAllElements()
         setCurrentTimestamp(null)
       }
     }
-  }, [value, currentTimestamp, showElementByKey, hideAllElements])
+  }, [value, currentTimestamp, scheduledblockManager])
 
   const handleDateChange = useCallback((date: Dayjs | null) => {
     if (isNil(date)) return
@@ -156,16 +154,16 @@ export const ScheduledblockEditable = ({
           setTimeout(() => {
             setSelectedDate(newDateTime)
             setCurrentTimestamp(newTimestamp)
-            showElementByKey(entryKey)
+            scheduledblockManager.showElementByKey(entryKey)
           }, 0)
         } else {
           loadTimestampsForDate(selectedDate)
           setCurrentTimestamp(newTimestamp)
-          showElementByKey(entryKey)
+          scheduledblockManager.showElementByKey(entryKey)
         }
       }
     }
-  }, [value, handleModifyEntry, loadTimestampsForDate, showElementByKey, selectedDate])
+  }, [value, handleModifyEntry, loadTimestampsForDate, scheduledblockManager, selectedDate])
 
   const handleSliderChange = useCallback((sliderValue: number) => {
     const dateStart = selectedDate.startOf('day').unix()
@@ -185,10 +183,10 @@ export const ScheduledblockEditable = ({
     }, dayEntries[0])
 
     if (closestEntry) {
-      showElementByKey(closestEntry.key)
+      scheduledblockManager.showElementByKey(closestEntry.key)
       setCurrentTimestamp(closestEntry.date)
     }
-  }, [selectedDate, value, showElementByKey])
+  }, [selectedDate, value, scheduledblockManager])
 
   const handleAddBlock = useCallback(() => {
     setScheduledblockOperationType('add')
@@ -214,16 +212,16 @@ export const ScheduledblockEditable = ({
 
       if (currentTimestamp === entryToDelete.date) {
         setCurrentTimestamp(null)
-        hideAllElements()
+        scheduledblockManager.hideAllElements()
       }
     }
-  }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, hideAllElements, setScheduledblockOperationType])
+  }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, setScheduledblockOperationType])
 
   const handleJumpToEntry = useCallback((entryDate: Dayjs, entryKey: string) => {
     setSelectedDate(entryDate)
     setCurrentTimestamp(entryDate.unix())
-    showElementByKey(entryKey)
-  }, [showElementByKey])
+    scheduledblockManager.showElementByKey(entryKey)
+  }, [scheduledblockManager])
 
   useEffect(() => {
     loadTimestampsForDate(selectedDate)
@@ -248,7 +246,7 @@ export const ScheduledblockEditable = ({
           onSliderChange={handleSliderChange}
           onModifyDateChange={handleModifyDateChange}
           onEntryClick={(clickedEntry) => {
-            showElementByKey(clickedEntry.key)
+            scheduledblockManager.showElementByKey(clickedEntry.key)
             setCurrentTimestamp(clickedEntry.date)
           }}
           onDeleteEntry={handleDeleteEntry}

@@ -64,4 +64,19 @@ export class ScheduledblockManager extends AbstractBlockManager {
     const elements = this.queryElements()
     return elements.find(element => this.getElementDate(element) === date) ?? null
   }
+
+  hideAllElements (): void {
+    const elements = this.queryElements()
+    elements.forEach(element => {
+      element.style.display = 'none'
+    })
+  }
+
+  showElementByKey (key: string): void {
+    this.hideAllElements()
+    const element = this.findElementByKey(key)
+    if (!isNil(element)) {
+      element.style.display = 'block'
+    }
+  }
 }
