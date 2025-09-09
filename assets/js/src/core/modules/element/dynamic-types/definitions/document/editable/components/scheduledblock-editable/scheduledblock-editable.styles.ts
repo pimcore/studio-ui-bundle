@@ -29,32 +29,6 @@ export const useScheduledblockEditableStyles = createStyles(({ token }) => ({
     minWidth: '120px'
   },
 
-  sliderContainer: {
-    flex: 1,
-    minWidth: '200px',
-    padding: `0 ${token.paddingSM}px`
-  },
-
-  sliderWrapper: {
-    position: 'relative'
-  },
-
-  markerOverlay: {
-    position: 'absolute',
-    top: '-10px',
-    transform: 'translateX(-50%)',
-    width: '20px',
-    height: '20px',
-    backgroundColor: 'transparent',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    zIndex: 10,
-
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.1)'
-    }
-  },
-
   buttonsContainer: {
     display: 'flex',
     gap: token.marginXS

@@ -12,20 +12,18 @@ import { DatePicker, Dropdown, Modal, Popover, Slider, TimePicker } from 'antd'o
 
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { isArray, isNil } from 'lodash'
-import { DatePicker, Slider } from 'antd'
+import { DatePicker } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useScheduledblockEditableStyles } from './scheduledblock-editable.styles'
 import { useScheduledblockEditable } from './hooks/use-scheduledblock-editable'
 import { ScheduledblockManager } from './utils/scheduledblock-manager'
 import { scheduledblockValueUtils } from './utils/scheduledblock-utils'
-import { TimelineMarker } from './components/timeline-marker/timeline-marker'
 import { TimestampDropdown } from './components/timestamp-dropdown/timestamp-dropdown'
+import { Timeline } from './components/timeline/timeline'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
-
-const SLIDER_RANGE: [number, number] = [0, 86400]
 
 export interface ScheduledblockEditableConfig {
   limit?: number
@@ -92,14 +90,6 @@ export const ScheduledblockEditable = ({
     disabled
   })
 
-  const timestampToSliderValue = useCallback((timestamp: number, dateStart: number): number => {
-    return timestamp - dateStart
-  }, [])
-
-  const sliderValueToTimestamp = useCallback((sliderValue: number, dateStart: number): number => {
-    return dateStart + sliderValue
-  }, [])
-
   const formatTime = useCallback((timestamp: number): string => {
     return dayjs.unix(timestamp).format('HH:mm')
   }, [])
@@ -113,7 +103,7 @@ export const ScheduledblockEditable = ({
 
     const marks: Record<number, string> = {}
     dayEntries.forEach(entry => {
-      const sliderValue = timestampToSliderValue(entry.date, dateStart)
+      const sliderValue = entry.date - dateStart
       marks[sliderValue] = formatTime(entry.date)
     })
 
@@ -141,7 +131,7 @@ export const ScheduledblockEditable = ({
         setCurrentTimestamp(null)
       }
     }
-  }, [value, currentTimestamp, timestampToSliderValue, formatTime, showElementByKey, hideAllElements])
+  }, [value, currentTimestamp, formatTime, showElementByKey, hideAllElements])
 
   const handleDateChange = useCallback((date: Dayjs | null) => {
     if (isNil(date)) return
@@ -197,7 +187,7 @@ export const ScheduledblockEditable = ({
 
   const handleSliderChange = useCallback((sliderValue: number) => {
     const dateStart = selectedDate.startOf('day').unix()
-    const timestamp = sliderValueToTimestamp(sliderValue, dateStart)
+    const timestamp = dateStart + sliderValue
     
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(
@@ -216,7 +206,7 @@ export const ScheduledblockEditable = ({
       showElementByKey(closestEntry.key)
       setCurrentTimestamp(closestEntry.date)
     }
-  }, [selectedDate, sliderValueToTimestamp, value, showElementByKey])
+  }, [selectedDate, value, showElementByKey])
 
   const handleAddBlock = useCallback(() => {
     setScheduledblockOperationType('add')
@@ -264,8 +254,8 @@ export const ScheduledblockEditable = ({
   const currentSliderValue = useMemo(() => {
     if (isNil(currentTimestamp)) return 0
     const dateStart = selectedDate.startOf('day').unix()
-    return timestampToSliderValue(currentTimestamp, dateStart)
-  }, [currentTimestamp, selectedDate, timestampToSliderValue])
+    return currentTimestamp - dateStart
+  }, [currentTimestamp, selectedDate])
 
   return (
     <div className={ `${styles.scheduledblockContainer} ${className ?? ''}` }>
@@ -278,44 +268,20 @@ export const ScheduledblockEditable = ({
           />
         </div>
 
-        <div className={ styles.sliderContainer }>
-          <div className={ styles.sliderWrapper }>
-            <Slider
-              disabled={ disabled }
-              marks={ sliderMarks }
-              max={ SLIDER_RANGE[1] }
-              min={ SLIDER_RANGE[0] }
-              onChange={ handleSliderChange }
-              step={ 1 }
-              value={ currentSliderValue }
-            />
-            {Object.entries(sliderMarks).map(([sliderValue, timeLabel]) => {
-              const validEntries = isArray(value) ? value : []
-              const dateStart = selectedDate.startOf('day').unix()
-              const timestamp = sliderValueToTimestamp(Number(sliderValue), dateStart)
-              const entry = validEntries.find(e => e.date === timestamp)
-              
-              if (!entry) return null
-
-              const markerPosition = (Number(sliderValue) / SLIDER_RANGE[1]) * 100
-
-              return (
-                <TimelineMarker
-                  key={entry.key}
-                  entry={entry}
-                  markerPosition={markerPosition}
-                  onModifyDateChange={handleModifyDateChange}
-                  onEntryClick={(clickedEntry) => {
-                    showElementByKey(clickedEntry.key)
-                    setCurrentTimestamp(clickedEntry.date)
-                  }}
-                  onDeleteEntry={handleDeleteEntry}
-                  markerOverlayClassName={styles.markerOverlay}
-                />
-              )
-            })}
-          </div>
-        </div>
+        <Timeline
+          value={value}
+          selectedDate={selectedDate}
+          sliderMarks={sliderMarks}
+          currentSliderValue={currentSliderValue}
+          disabled={disabled}
+          onSliderChange={handleSliderChange}
+          onModifyDateChange={handleModifyDateChange}
+          onEntryClick={(clickedEntry) => {
+            showElementByKey(clickedEntry.key)
+            setCurrentTimestamp(clickedEntry.date)
+          }}
+          onDeleteEntry={handleDeleteEntry}
+        />
 
         <div className={ styles.buttonsContainer }>
           <IconButton
