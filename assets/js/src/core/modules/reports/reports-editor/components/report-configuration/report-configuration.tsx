@@ -115,7 +115,10 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
       } }
       >
         <GeneralSettings />
-        <SourceDefinition currentData={ currentData } />
+        <SourceDefinition
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
         <ColumnConfiguration
           currentData={ currentData }
           updateFormData={ updateFormData }

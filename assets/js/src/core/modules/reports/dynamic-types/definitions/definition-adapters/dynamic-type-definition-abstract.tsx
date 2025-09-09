@@ -11,12 +11,11 @@
 import { type ReactElement } from 'react'
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
 @injectable()
 export abstract class DynamicTypeDefinitionAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   abstract readonly label: string
 
-  abstract getElement (props: IReportConfigurationSectionProps): ReactElement
+  abstract getElement (): ReactElement
 }

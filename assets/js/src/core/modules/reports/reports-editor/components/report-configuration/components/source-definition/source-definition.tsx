@@ -83,12 +83,9 @@ export const SourceDefinition = ({ currentData }: IReportConfigurationSectionPro
           />
         </Form.Item>
       )}
-      {currentAdapter?.getElement({
-        currentData,
-        updateFormData: (data) => {
-          console.log('----- data: ', data)
-        }
-      })}
+      <Form.Item name="dataSourceConfig">
+        {currentAdapter?.getElement()}
+      </Form.Item>
     </FormKit.Panel>
   )
 }
