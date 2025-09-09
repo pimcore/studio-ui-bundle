@@ -197,25 +197,11 @@ export const ScheduledblockEditable = ({
   const handleDeleteEntry = useCallback((entryKey: string) => {
     if (disabled) return
 
-    setScheduledblockOperationType('delete')
-    const validEntries = isArray(value) ? value : []
-    const entryToDelete = validEntries.find(entry => entry.key === entryKey)
-    
-    if (entryToDelete) {
-      const element = scheduledblockManager.findElementByKey(entryKey)
-      if (element) {
-        removeBlock(element)
-      }
-
-      const updatedEntries = validEntries.filter(entry => entry.key !== entryKey)
-      onChange?.(updatedEntries)
-
-      if (currentTimestamp === entryToDelete.date) {
-        setCurrentTimestamp(null)
-        scheduledblockManager.hideAllElements()
-      }
+    const element = scheduledblockManager.findElementByKey(entryKey)
+    if (element) {
+      removeBlock(element)
     }
-  }, [disabled, value, onChange, scheduledblockManager, removeBlock, currentTimestamp, setScheduledblockOperationType])
+  }, [disabled, scheduledblockManager, removeBlock])
 
   const handleJumpToEntry = useCallback((entryDate: Dayjs, entryKey: string) => {
     setSelectedDate(entryDate)
