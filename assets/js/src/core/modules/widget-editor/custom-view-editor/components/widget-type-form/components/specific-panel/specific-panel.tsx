@@ -29,14 +29,8 @@ export const SpecificPanel = (): React.JSX.Element => {
         name="rootFolder"
       >
         <ManyToOneRelation
-          onChange={(value: ManyToOneRelationValueType) => {
-            form.setFieldValue('rootFolder', value?.fullPath || null)
-          }}
           allowToClearRelation
-          assetInlineDownloadAllowed
-          assetsAllowed
           dataObjectsAllowed
-          documentsAllowed
         />
       </Form.Item>
 

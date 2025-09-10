@@ -9,7 +9,7 @@ import { Spin } from "@Pimcore/components/spin/spin"
 import { useStyles } from './allowed-context-menu.styles'
 import { elementTypes } from "@Pimcore/types/enums/element/element-type"
 
-export const AssetContextMenuOptions = (): React.JSX.Element => {
+export const AssetContextMenuOptionsPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { assetContextMenuItems, isLoading } = useWidgetTypeForm()
   const { styles } = useStyles()

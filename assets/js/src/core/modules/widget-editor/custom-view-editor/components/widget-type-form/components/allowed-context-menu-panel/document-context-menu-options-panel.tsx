@@ -9,14 +9,14 @@ import { Spin } from "@Pimcore/components/spin/spin"
 import { useStyles } from './allowed-context-menu.styles'
 import { elementTypes } from "@Pimcore/types/enums/element/element-type"
 
-export const DataObjectContextMenuOptions = (): React.JSX.Element => {
+export const DocumentContextMenuOptionsPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { dataObjectContextMenuItems, isLoading } = useWidgetTypeForm()
+  const { documentContextMenuItems, isLoading } = useWidgetTypeForm()
   const { styles } = useStyles()
 
   if (isLoading) {
     return (
-      <Conditional condition={(values) => values.elementType === elementTypes.dataObject}>
+      <Conditional condition={(values) => values.elementType === elementTypes.document}>
         <FormKit.Panel
           title={t('widget-editor.widget-form.allowed-context-menu.title')}
           collapsible
@@ -29,14 +29,14 @@ export const DataObjectContextMenuOptions = (): React.JSX.Element => {
   }
 
   return (
-    <Conditional condition={(values) => values.elementType === elementTypes.dataObject}>
+    <Conditional condition={(values) => values.elementType === elementTypes.document}>
       <FormKit.Panel
         title={t('widget-editor.widget-form.allowed-context-menu.title')}
         collapsible
         collapsed={false}
       >
         <div className={styles.allowedContextMenuOptions}>
-          {dataObjectContextMenuItems.map(permission => (
+          {documentContextMenuItems.map(permission => (
             <Form.Item
               key={permission}
               name={`contextPermissions[${permission}]`}
