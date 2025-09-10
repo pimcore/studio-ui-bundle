@@ -22,6 +22,7 @@ import { Timeline } from './components/timeline/timeline'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
+import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 
 export interface ScheduledblockEntry {
   key: string
@@ -37,7 +38,7 @@ export interface ScheduledblockEditableProps {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
-  isInherited?: boolean
+  inherited?: boolean
 }
 
 export const ScheduledblockEditable = ({
@@ -47,7 +48,7 @@ export const ScheduledblockEditable = ({
   editableName,
   containerRef,
   disabled = false,
-  isInherited = false
+  inherited = false
 }: ScheduledblockEditableProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
@@ -55,6 +56,12 @@ export const ScheduledblockEditable = ({
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
   const [controlsContainer, setControlsContainer] = useState<HTMLElement | null>(null)
+
+  const isDisabled = Boolean(disabled) || Boolean(inherited)
+
+  const handleOverwrite = (): void => {
+    onChange?.(value ?? [])
+  }
 
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
     setScheduledblockOperation(editableName, operationType)
@@ -71,7 +78,7 @@ export const ScheduledblockEditable = ({
   } = useScheduledblockEditable({
     scheduledblockManager,
     onChange,
-    disabled
+    disabled: isDisabled
   })
 
   const loadTimestampsForDate = useCallback((date: Dayjs) => {
@@ -111,7 +118,7 @@ export const ScheduledblockEditable = ({
   }, [])
 
   const handleModifyEntry = useCallback((entryKey: string, newTimestamp: number) => {
-    if (disabled) return
+    if (isDisabled) return
 
     setScheduledblockOperationType('modify')
     const validEntries = isArray(value) ? value : []
@@ -127,7 +134,7 @@ export const ScheduledblockEditable = ({
     if (!isNil(element)) {
       scheduledblockManager.setElementDate(element, newTimestamp)
     }
-  }, [disabled, value, onChange, scheduledblockManager, setScheduledblockOperationType])
+  }, [isDisabled, value, onChange, scheduledblockManager, setScheduledblockOperationType])
 
   const handleModifyDateChange = useCallback((entryKey: string, newDateTime: Dayjs | null) => {
     if (!isNil(newDateTime)) {
@@ -212,49 +219,57 @@ export const ScheduledblockEditable = ({
   }, [containerRef])
 
   const scheduledblockContent = (
-    <div className={ `${styles.scheduledblockContainer} ${className ?? ''}` }>
-      <div className={ styles.controlsContainer }>
-        <div className={ styles.datePickerContainer }>
-          <DatePicker
-            allowClear={ false }
-            disabled={ disabled }
-            onChange={ handleDateChange }
-            value={ selectedDate }
-          />
-        </div>
+    <InheritanceOverlay
+      display="block"
+      hideButtons
+      isInherited={ inherited }
+      noPadding
+      onOverwrite={ handleOverwrite }
+    >
+      <div className={ `${styles.scheduledblockContainer} ${className ?? ''}` }>
+        <div className={ styles.controlsContainer }>
+          <div className={ styles.datePickerContainer }>
+            <DatePicker
+              allowClear={ false }
+              disabled={ isDisabled }
+              onChange={ handleDateChange }
+              value={ selectedDate }
+            />
+          </div>
 
-        <Button
-          disabled={ disabled }
-          onClick={ handleAddBlock }
-          type="default"
-        >
-          {t('add')}
-        </Button>
+          <Button
+            disabled={ isDisabled }
+            onClick={ handleAddBlock }
+            type="default"
+          >
+            {t('add')}
+          </Button>
 
-        <Timeline
-          currentTimestamp={ currentTimestamp }
-          disabled={ disabled }
-          onDeleteEntry={ handleDeleteEntry }
-          onEntryClick={ (clickedEntry) => {
-            scheduledblockManager.showElementByKey(clickedEntry.key)
-            setCurrentTimestamp(clickedEntry.date)
-          } }
-          onModifyDateChange={ handleModifyDateChange }
-          onSliderChange={ handleSliderChange }
-          selectedDate={ selectedDate }
-          value={ value }
-        />
-
-        <div className={ styles.buttonsContainer }>
-          <TimestampDropdown
-            disabled={ disabled }
-            onCleanupTimestamps={ cleanupTimestamps }
-            onJumpToEntry={ handleJumpToEntry }
+          <Timeline
+            currentTimestamp={ currentTimestamp }
+            disabled={ isDisabled }
+            onDeleteEntry={ handleDeleteEntry }
+            onEntryClick={ (clickedEntry) => {
+              scheduledblockManager.showElementByKey(clickedEntry.key)
+              setCurrentTimestamp(clickedEntry.date)
+            } }
+            onModifyDateChange={ handleModifyDateChange }
+            onSliderChange={ handleSliderChange }
+            selectedDate={ selectedDate }
             value={ value }
           />
+
+          <div className={ styles.buttonsContainer }>
+            <TimestampDropdown
+              disabled={ isDisabled }
+              onCleanupTimestamps={ cleanupTimestamps }
+              onJumpToEntry={ handleJumpToEntry }
+              value={ value }
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </InheritanceOverlay>
   )
 
   return (

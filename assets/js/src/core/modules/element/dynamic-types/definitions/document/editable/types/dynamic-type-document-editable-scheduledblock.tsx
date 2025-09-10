@@ -38,7 +38,7 @@ export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocume
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
-        isInherited={ props.inherited }
+        inherited={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }
       />
