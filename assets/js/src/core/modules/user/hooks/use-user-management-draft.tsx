@@ -70,7 +70,6 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     fetchUser().then((data) => {
       dispatch(userFetched({
         ...data,
-        twoFactorAuthenticationEnabled: false, //TODO - does not match API anymore
         modified: false,
         changes: {},
         modifiedCells: {}
