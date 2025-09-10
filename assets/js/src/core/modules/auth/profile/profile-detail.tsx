@@ -51,7 +51,10 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,
-        contentLanguages: user?.contentLanguages
+        contentLanguages: user?.contentLanguages,
+        password: '',
+        passwordConfirmation: '',
+        oldPassword: ''
       })
 
       setKeyBindingsModified(false)
@@ -184,9 +187,9 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                 children: <>
                   <Form.Item
                     label={ t('user-profile.password-old') }
-                    name={ 'passwordOld' }
+                    name={ 'oldPassword' }
                   >
-                    <Input />
+                    <Input.Password />
                   </Form.Item>
 
                   <Form.Item
@@ -194,15 +197,17 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                     name={ 'password' }
                     rules={ [{ min: 10 }] }
                   >
-                    <Input suffix={ <IconButton
-                      icon={ { value: 'locked' } }
-                      onClick={ () => {
-                        const newPassword = generatePassword()
-                        form.setFieldValue('password', newPassword)
-                      } }
-                      title={ t('user-management.generate-password') }
-                      variant={ 'minimal' }
-                                    /> }
+                    <Input
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
+                          const newPassword = generatePassword()
+                          form.setFieldValue('password', newPassword)
+                          setModifiedCells({ password: newPassword })
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
                     />
                   </Form.Item>
                   <Form.Item
