@@ -16,6 +16,8 @@ export const useStyles = createStyles(({ css, token }) => {
       flex: 1;
       min-width: 200px;
       padding: 0 ${token.paddingSM}px;
+      display: flex;
+      align-items: center;
 
       .ant-slider-track {
         display: none;
@@ -23,6 +25,7 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     sliderWrapper: css`
+      width: 100%;
       
       .ant-slider-handle {
         display: none;

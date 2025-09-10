@@ -21,9 +21,11 @@ export const useStyles = createStyles(({ css, token }) => {
       align-items: center;
       gap: ${token.marginSM}px;
       margin-bottom: ${token.marginSM}px;
-      padding: ${token.paddingSM}px;
-      background-color: ${token.colorFillQuaternary};
+      padding: ${token.paddingXXS}px ${token.paddingSM}px ;
+      background-color: ${token.colorBgContainer};
+      border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
+      min-height: 70px;
     `,
 
     datePickerContainer: css`
