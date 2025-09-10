@@ -182,7 +182,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
         active: user.active,
         admin: user.admin,
         classes: user.classes,
-        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
+        twoFactorAuthenticationEnabled: false, //TODO - does not match API anymore: user.twoFactorAuthenticationEnabled,
         language: user.language,
         welcomeScreen: user.welcomeScreen,
         memorizeTabs: user.memorizeTabs,

@@ -463,8 +463,8 @@ export type User = {
     permissions: object;
     /** ID List of roles the user is assigned */
     roles: object;
-    /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData[];
+    /** Two Factor Authentication Enabled */
+    twoFactorAuthenticationEnabled: boolean;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
@@ -537,7 +537,7 @@ export type UserPermission = {
     };
     /** Key of the Permission */
     key: string;
-    /** Category of the Permission */
+    /** Category og the Permission */
     category: string;
 };
 export type SimpleUser = {
