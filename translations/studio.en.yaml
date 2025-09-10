@@ -1084,6 +1084,7 @@ embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
+document.open-preview-in-new-window: Open Preview in new window
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1166,3 +1167,12 @@ widget-editor.widget-form.filters.title: Filters
 widget-editor.widget-form.filters.pql: PQL Statement
 widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
 edit.label: Edit
+
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search
+icon-selector.current-selection: Current Selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save

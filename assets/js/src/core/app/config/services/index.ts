@@ -211,7 +211,18 @@ import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
+import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
+import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
+import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
+import { DynamicTypeDocumentFolder } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-folder'
+import { DynamicTypeDocumentHardlink } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-hardlink'
+import { DynamicTypeDocumentLink } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-link'
+import { DynamicTypeDocumentNewsletter } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-newsletter'
+import { DynamicTypeDocumentSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-snippet'
 import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
+import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
+import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
 
 // Component registry
@@ -428,6 +439,16 @@ container.bind(serviceIds['DynamicTypes/EditableDialogLayoutRegistry']).to(Dynam
 container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']).to(DynamicTypeEditableDialogLayoutTabpanel).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Panel']).to(DynamicTypeEditableDialogLayoutPanel).inSingletonScope()
 
+// Document Types
+container.bind(serviceIds['DynamicTypes/DocumentRegistry']).to(DynamicTypeDocumentRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Page']).to(DynamicTypeDocumentPage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Email']).to(DynamicTypeDocumentEmail).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Folder']).to(DynamicTypeDocumentFolder).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Hardlink']).to(DynamicTypeDocumentHardlink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Link']).to(DynamicTypeDocumentLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Newsletter']).to(DynamicTypeDocumentNewsletter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Snippet']).to(DynamicTypeDocumentSnippet).inSingletonScope()
+
 // Asset Types
 container.bind(serviceIds['DynamicTypes/AssetRegistry']).to(DynamicTypeAssetRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Asset/Archive']).to(DynamicTypeAssetArchive).inSingletonScope()
@@ -466,6 +487,11 @@ container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSinglet
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()
+
+// Icon set
+container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
 
 // Perspective & Widget Editor
 container.bind(serviceIds['WidgetEditor/WidgetTypeRegistry']).to(WidgetTypeRegistry).inSingletonScope()

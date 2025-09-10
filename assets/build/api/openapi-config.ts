@@ -54,6 +54,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'documentGetSearch',
+      type: 'query',
+    },
+    {
       pattern: 'assetGetSearch',
       type: 'query',
     },

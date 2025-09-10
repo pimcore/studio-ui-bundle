@@ -10,17 +10,13 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { CreatableSelect } from '@sdk/components'
-import { isEmpty, isNil, isArray } from 'lodash'
-import { toCssDimension } from '@sdk/utils'
-import { type SelectOptionType } from '@sdk/modules/element'
-import i18n from '@Pimcore/app/i18n'
-
-export type SelectStoreEntry = [string | number | null, string] | string | number
+import { isEmpty, isNil } from 'lodash'
+import { SelectEditable } from '../components/select-editable/select-editable'
+import { transformDocumentEditableStoreToOptions, type DocumentEditableStoreEntry } from '../utils/select-options'
 
 export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
-    store: SelectStoreEntry[]
+    store: DocumentEditableStoreEntry[]
     width?: number
     class?: string
     defaultValue?: string
@@ -33,36 +29,19 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
   id: string = 'select'
 
   getEditableDataComponent (props: SelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    const baseOptions: SelectOptionType[] = props.config?.store?.map((item: SelectStoreEntry) => {
-      if (isArray(item)) {
-        const [value, label] = item
-        return {
-          value: String(value),
-          label: i18n.t(label)
-        }
-      } else {
-        return {
-          value: String(item),
-          label: String(item)
-        }
-      }
-    }) ?? []
+    const baseOptions = transformDocumentEditableStoreToOptions(props.config?.store)
 
     const isEditable = Boolean(props.config?.editable)
 
     return (
-      <CreatableSelect
-        allowClear
-        allowDuplicates={ false }
+      <SelectEditable
         className={ props.config?.class }
-        creatable={ isEditable }
-        optionFilterProp="label"
+        editable={ isEditable }
+        inherited={ props.inherited }
+        onChange={ props.onChange }
         options={ baseOptions }
-        showSearch
-        style={ {
-          width: '100%',
-          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.medium)
-        } }
+        value={ props.value }
+        width={ props.config?.width }
       />
     )
   }

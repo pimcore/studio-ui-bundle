@@ -15,6 +15,7 @@ import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
 import { useAreaControl } from '../../provider/area-control/use-area-control'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { DocumentSelectorListing } from '@Pimcore/modules/document/element-selector/document-selector-listing'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
@@ -51,7 +52,7 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       label: 'Documents',
       forceRender: true,
       children: <div style={ { height: '65vh' } }>
-        @todo
+        <DocumentSelectorListing />
       </div>
     })
   }

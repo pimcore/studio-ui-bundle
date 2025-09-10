@@ -51,7 +51,7 @@ export const EditableHtmlDropContainer = ({
   const { getStateClasses } = useDroppable()
 
   const renderDroppableOverlay = (): React.JSX.Element => (
-    <div className={ styles.droppableOverlay }>
+    <div className={ cn(styles.droppableOverlay, 'pimcore_editable_droppable_overlay') }>
       <span className={ styles.droppableOverlayBox }>
         <Icon
           options={ { height: 24, width: 24 } }

@@ -120,7 +120,7 @@ export const RedirectsToolbar = ({
               {t('redirects.clean-up')}
             </IconTextButton>
             <IconTextButton
-              disabled={ redirectsFetching || exportLoading }
+              disabled={ redirectRowsLength < 1 || redirectsFetching || exportLoading }
               icon={ { value: 'download' } }
               loading={ exportLoading }
               onClick={ handleExport }
@@ -139,23 +139,35 @@ export const RedirectsToolbar = ({
             </IconTextButton>
           </div>
         </Flex>
-        <Split>
-          <Flex align='center'>
-            <IconButton
-              disabled={ redirectsFetching }
-              icon={ { value: 'refresh' } }
-              onClick={ onRefresh }
-              variant='minimal'
-            />
-          </Flex>
-          <Pagination
-            current={ currentPage }
-            onChange={ handlePageChange }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ totalItems }
-          />
-        </Split>
+        {totalItems > 0
+          ? (
+            <Split>
+              <Flex align='center'>
+                <IconButton
+                  disabled={ redirectsFetching }
+                  icon={ { value: 'refresh' } }
+                  onClick={ onRefresh }
+                  variant='minimal'
+                />
+              </Flex>
+              <Pagination
+                current={ currentPage }
+                onChange={ handlePageChange }
+                showSizeChanger
+                showTotal={ (total) => t('pagination.show-total', { total }) }
+                total={ totalItems }
+              />
+            </Split>
+            )
+          : (
+            <Flex align='center'>
+              <IconButton
+                disabled={ redirectsFetching }
+                icon={ { value: 'refresh' } }
+                onClick={ onRefresh }
+              />
+            </Flex>
+            )}
       </Toolbar>
 
       <CsvImportModal

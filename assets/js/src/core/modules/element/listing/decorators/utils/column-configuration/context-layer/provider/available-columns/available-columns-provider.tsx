@@ -65,20 +65,37 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
         // Build the tree structure by processing each column's group(s)
         columns.forEach((column) => {
-          const groups = Array.isArray(column.group) ? column.group : [column.group]
+          // Normalize groups to handle different input formats:
+          // - Single string: "assets.metadata"
+          // - Array of strings/arrays: ["system", ["Attributes", "Engine"]]
+          // - Simple array: ["Attributes", "attributes", "Bodywork"]
+          let normalizedGroups: Array<string | string[]> = []
 
-          groups.forEach((groupPath) => {
+          if (Array.isArray(column.group)) {
+            // Check if this is a nested array structure like [["Attributes", "Engine"], "system"]
+            // or a simple array like ["Attributes", "attributes", "Bodywork"]
+            const hasNestedArrays = column.group.some(item => Array.isArray(item))
+
+            if (hasNestedArrays) {
+              // Handle nested array structure - each item becomes a separate group path
+              normalizedGroups = column.group
+            } else {
+              // Handle simple array - treat as single group path
+              normalizedGroups = [column.group]
+            }
+          }
+
+          normalizedGroups.forEach((groupPath) => {
             let groupParts: string[] = []
 
             // Handle different group path formats:
             // 1. String: "assets.metadata" -> ["assets", "metadata"]
             // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
-            // 3. Nested array: [["Attributes", "attributes", "Bodywork"]] -> ["Attributes", "attributes", "Bodywork"]
             if (typeof groupPath === 'string') {
               groupParts = groupPath.split('.')
             } else if (Array.isArray(groupPath)) {
-              // If it's an array, flatten it and convert all elements to strings
-              groupParts = groupPath.flat().map(part => String(part))
+              // Convert all elements to strings
+              groupParts = groupPath.map(part => String(part))
             } else {
               // Fallback for any other type
               groupParts = [String(groupPath)]
@@ -133,6 +150,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 key: column.key,
                 label: t(translationKey),
                 group: column.group,
+                mainType: column.type,
                 frontendType: column.frontendType,
                 editable: column.editable,
                 onClick: () => {
