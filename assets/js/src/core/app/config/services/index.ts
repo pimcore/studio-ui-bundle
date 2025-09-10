@@ -23,6 +23,7 @@ import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
+import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
 import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/listing/dynamic-type-listing-registry'
 import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/definitions/listing/types/dynamic-type-listing-asset-link'
@@ -483,6 +484,9 @@ container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobCompone
 
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()
+
+// Asset services
+container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSingletonScope()
 
 // Theme system
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()

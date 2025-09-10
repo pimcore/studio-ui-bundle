@@ -55,6 +55,7 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
+  'Asset/ThumbnailService': 'Asset/ThumbnailService',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',

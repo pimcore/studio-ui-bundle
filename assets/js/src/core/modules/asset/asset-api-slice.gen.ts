@@ -64,9 +64,25 @@ const injectedRtkApi = api
                         height: queryArg.height,
                         quality: queryArg.quality,
                         dpi: queryArg.dpi,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
                     },
                 }),
                 providesTags: ["Assets"],
+            }),
+            assetDocumentStreamDynamic: build.mutation<
+                AssetDocumentStreamDynamicApiResponse,
+                AssetDocumentStreamDynamicApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/dynamic`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
             }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
@@ -95,6 +111,11 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/thumbnail/${queryArg.thumbnailName}`,
                     params: {
                         page: queryArg.page,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
                     },
                 }),
                 providesTags: ["Assets"],
@@ -251,6 +272,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamDynamic: build.mutation<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/dynamic`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
                 AssetImageDownloadByFormatApiArg
@@ -283,6 +312,14 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                        mimeType: queryArg.mimeType,
+                    },
                 }),
                 providesTags: ["Assets"],
             }),
@@ -473,6 +510,24 @@ export type AssetDocumentStreamCustomApiArg = {
     quality?: number;
     /** Dpi of downloaded image */
     dpi?: number;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetDocumentStreamDynamicApiResponse =
+    /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
+export type AssetDocumentStreamDynamicApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        dynamicConfig: object;
+    };
 };
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
@@ -496,6 +551,15 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     page?: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -698,14 +762,23 @@ export type AssetImageStreamCustomApiArg = {
     /** Force resize */
     forceResize?: boolean;
     cropPercent?: boolean;
-    /** CropWidth of downloaded image */
-    cropWidth?: number;
-    /** CropHeight of downloaded image */
-    cropHeight?: number;
-    /** CropTop of downloaded image */
-    cropTop?: number;
-    /** CropLeft of downloaded image */
-    cropLeft?: number;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetImageStreamDynamicApiResponse =
+    /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
+export type AssetImageStreamDynamicApiArg = {
+    /** Id of the asset */
+    id: number;
+    body: {
+        dynamicConfig: object;
+    };
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -739,6 +812,17 @@ export type AssetImageStreamByThumbnailApiArg = {
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+    /** Mime type of steamed image. */
+    mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
 export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
@@ -1254,6 +1338,7 @@ export const {
     useAssetGetTextDataByIdQuery,
     useAssetDocumentDownloadCustomQuery,
     useAssetDocumentStreamCustomQuery,
+    useAssetDocumentStreamDynamicMutation,
     useAssetDocumentStreamPreviewQuery,
     useAssetDocumentDownloadByThumbnailQuery,
     useAssetDocumentStreamByThumbnailQuery,
@@ -1274,6 +1359,7 @@ export const {
     useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
+    useAssetImageStreamDynamicMutation,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,
