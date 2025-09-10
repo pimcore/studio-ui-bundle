@@ -10,6 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { isEmpty, isNil } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -44,6 +45,8 @@ const createDefaultColumnConfig = (name: string): ReportFormData['columnConfigur
 })
 
 export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   const { data: columnConfigData } = useCustomReportsColumnConfigListQuery({
     name: currentData.name,
     bundleCustomReportsDataSourceConfig: {
@@ -97,13 +100,13 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
       theme="fieldset"
       title="Sql"
     >
-      {renderTextAreaItem({ label: 'SELECT (eg. a,b,c)*', name: ['dataSourceConfig', 'sql'] })}
-      {renderTextAreaItem({ label: 'FROM (eg. d INNER JOIN e ON c.a = e.b)*', name: ['dataSourceConfig', 'from'] })}
-      {renderTextAreaItem({ label: "WHERE (eg. c = 'some_value')", name: ['dataSourceConfig', 'where'] })}
-      {renderTextAreaItem({ label: 'GROUP BY (eg. b, c )', name: ['dataSourceConfig', 'groupby'] })}
-      {renderTextAreaItem({ label: 'Initial Order by Field (eg. b, c )', name: ['dataSourceConfig', 'orderby'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-select-field'), name: ['dataSourceConfig', 'sql'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-from-field'), name: ['dataSourceConfig', 'from'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-where-field'), name: ['dataSourceConfig', 'where'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-group-by-field'), name: ['dataSourceConfig', 'groupby'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-initial-field-order'), name: ['dataSourceConfig', 'orderby'] })}
       <Form.Item
-        label={ 'Initial Order by Direction ' }
+        label={ t('reports.editor.source-definition.sql-initial-direction-order') }
         name={ ['dataSourceConfig', 'orderbydir'] }
       >
         <Select options={ ORDER_BY_DIRECTIONS } />
