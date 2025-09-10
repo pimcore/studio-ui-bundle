@@ -8,18 +8,60 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Select } from '@Pimcore/components/select/select'
+import { uuid } from '@Pimcore/utils/uuid'
+import { useCustomReportsColumnConfigListQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
+import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
+
+interface ISqlAdapterProps extends IReportConfigurationSectionProps {
+  value?: object
+}
 
 const ORDER_BY_DIRECTIONS = [
   { value: 'ASC', label: 'ASC' },
   { value: 'DESC', label: 'DESC' }
 ]
 
-export const SqlAdapter = (): React.JSX.Element => {
+export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterProps): React.JSX.Element => {
+  const { data: columnConfigData } = useCustomReportsColumnConfigListQuery({
+    name: currentData.name,
+    bundleCustomReportsDataSourceConfig: {
+      configuration: value!
+    }
+  }, { skip: isNil(value) })
+
+  useEffect(() => {
+    if (!isNil(columnConfigData)) {
+      const columnConfigurations: ReportFormData['columnConfigurations'] = columnConfigData.items.map((item) => {
+        return {
+          id: uuid(),
+          [COLUMN_KEYS.NAME]: item.name,
+          [COLUMN_KEYS.DISPLAY]: true,
+          [COLUMN_KEYS.EXPORT]: true,
+          [COLUMN_KEYS.ORDER]: true,
+          [COLUMN_KEYS.FILTER_TYPE]: null,
+          [COLUMN_KEYS.DISPLAY_TYPE]: null,
+          [COLUMN_KEYS.FILTER_DRILLDOWN]: null,
+          [COLUMN_KEYS.WIDTH]: null,
+          [COLUMN_KEYS.LABEL]: '',
+          [COLUMN_KEYS.ACTION]: ''
+        }
+      })
+
+      updateFormData?.({
+        ...currentData,
+        columnConfigurations
+      })
+    }
+  }, [columnConfigData])
+
   const renderTextAreaItem = ({ label, name }: { label: string, name: string[] }): React.JSX.Element => (
     <Form.Item
       label={ label }

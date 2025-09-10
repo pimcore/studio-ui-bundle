@@ -23,7 +23,7 @@ import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-edito
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
 
-export const SourceDefinition = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -84,7 +84,7 @@ export const SourceDefinition = ({ currentData }: IReportConfigurationSectionPro
         </Form.Item>
       )}
       <Form.Item name="dataSourceConfig">
-        {currentAdapter?.getElement()}
+        {currentAdapter?.getElement({ currentData, updateFormData })}
       </Form.Item>
     </FormKit.Panel>
   )

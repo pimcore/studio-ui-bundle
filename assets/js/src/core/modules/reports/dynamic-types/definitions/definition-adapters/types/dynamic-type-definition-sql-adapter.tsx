@@ -10,7 +10,6 @@
 
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
-import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 import { DynamicTypeDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-abstract'
 import { SqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/components/sql-adapter/sql-adapter'
 
@@ -19,7 +18,7 @@ export class DynamicTypeDefinitionSqlAdapter extends DynamicTypeDefinitionAbstra
   id = 'sql'
   label = 'Sql'
 
-  getElement (props: IReportConfigurationSectionProps): ReactElement {
+  getElement (props: any): ReactElement {
     return <SqlAdapter { ...props } />
   }
 }
