@@ -200,6 +200,7 @@ import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynam
 import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { DynamicTypeDocumentEditableRenderlet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
+import { DynamicTypeDocumentEditableScheduledblock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
@@ -425,6 +426,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Pdf']).to(DynamicTypeDo
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Renderlet']).to(DynamicTypeDocumentEditableRenderlet).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/ScheduledBlock']).to(DynamicTypeDocumentEditableScheduledblock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTypeDocumentEditableSnippet).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()
