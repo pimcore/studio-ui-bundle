@@ -9,14 +9,11 @@
  */
 
 import { Form } from '@Pimcore/components/form/form'
-import { Input, Select } from '@sdk/components'
+import { Input } from '@sdk/components'
 import { type FormInstance, type InputRef } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
-enum WidgetTypes {
-  ElementTree = 'element_tree'
-}
+import { WidgetTypes, WidgetTypeSelect } from '../widget-type-select/widget-type-select'
 
 export interface WidgetForm {
   name: string
@@ -34,35 +31,28 @@ export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidget
 
   return (
     <Form
-      form={ form }
-      initialValues={ {
+      form={form}
+      initialValues={{
         widgetType: WidgetTypes.ElementTree,
         ...initialValues
-      } }
+      }}
       layout="vertical"
     >
       <Form.Item
-        label={ t('widget-editor.create-form.name') }
+        label={t('widget-editor.create-form.name')}
         name="name"
-        rules={ [
+        rules={[
           { required: true, message: t('widget-editor.create-form.name.required') }
-        ] }
+        ]}
       >
-        <Input ref={ inputRef } />
+        <Input ref={inputRef} />
       </Form.Item>
 
       <Form.Item
-        label={ t('widget-editor.create-form.widgetType') }
+        label={t('widget-editor.create-form.widgetType')}
         name="widgetType"
       >
-        <Select
-          options={ [
-            {
-              label: t(`widget-editor.create-form.widgetType.${WidgetTypes.ElementTree}`),
-              value: WidgetTypes.ElementTree
-            }
-          ] }
-        />
+        <WidgetTypeSelect />
       </Form.Item>
     </Form>
   )

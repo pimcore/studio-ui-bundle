@@ -8,118 +8,34 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { FormKit } from '@Pimcore/components/form/form-kit'
 import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/custom-view-editor/context/hooks/use-widget-editor-context'
-import { useWidgetEditor } from '@Pimcore/modules/widget-editor/custom-view-editor/hooks/use-widget-editor'
-import { Button, Content, Flex, Form, IconButton, Input, Toolbar } from '@sdk/components'
-import { type FormInstance } from 'antd'
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-export interface WidgetForm {
-  name: string
-}
+import React from 'react'
+import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
+import { WidgetForm } from '../../../widget-type-form/widget-form'
+import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
+import { container } from '@sdk/app'
 
 interface WidgetDetailTabProps {
   id: string
 }
 
+
+//TODO: add registry to support different widget types with different forms
+
 export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const { widgets, setWidgets, setIsLoading, isLoading } = useWidgetEditorContext()
-  const { updateWidget, removeWithConfirmation } = useWidgetEditor()
+  const { widgets } = useWidgetEditorContext()
   const widget = widgets.find(w => w.id === id)
-  const [form] = Form.useForm<FormInstance<WidgetForm>>()
-  const initialValues: WidgetForm = {
-    name: widget?.name ?? ''
-  }
-  const [formData, setFormData] = useState<WidgetForm>(initialValues)
 
   if (widget === undefined) {
     return <></>
   }
 
+  const widgetType = container.get<WidgetTypeRegistry>('WidgetEditor/WidgetTypeRegistry').getWidgetType(widget.widgetType)
+  const { form: Form } = widgetType!
+
   return (
-    <FormKit
-      formProps={ {
-        form,
-        initialValues,
-        onFinish: async (values: WidgetForm) => {
-          console.table(values)
-          setIsLoading(true)
-
-          await updateWidget(widget.id, widget.widgetType, {
-            ...values as any
-          }, () => {
-            setWidgets((prev) => {
-              const updated = prev.map((w) => (w.id === id ? { ...w, ...values } : w))
-              return updated
-            })
-          })
-            .finally(() => {
-              setIsLoading(false)
-            })
-        }
-      } }
-    >
-      <Flex
-        className='makeTabsGreatAgain'
-        justify='space-between'
-        vertical
-      >
-        <Content
-          padded
-          padding={ {
-            x: 'small',
-            y: 'none'
-          } }
-        >
-          <FormKit.Panel>
-            <Form.Item
-              label="Name"
-              name="name"
-              required
-            >
-              <Input
-                onChange={ (e) => { setFormData({ ...formData, name: e.target.value }) } }
-                placeholder={ t('widget-editor.form.name.placeholder') }
-              />
-            </Form.Item>
-          </FormKit.Panel>
-        </Content>
-
-        <Toolbar justify="space-between">
-          <div>
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
-                form.resetFields()
-              } }
-              title={ t('refresh') }
-            />
-
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                removeWithConfirmation(widget.id, widget.widgetType, () => {
-                  setWidgets((prev) => prev.filter((w) => w.id !== widget.id))
-                })
-              } }
-              title={ t('delete') }
-            />
-          </div>
-
-          <Button
-            htmlType='submit'
-            loading={ isLoading }
-            type='primary'
-          >
-            {t('save')}
-          </Button>
-        </Toolbar>
-      </Flex>
-    </FormKit>
+    <WidgetFormProvider widget={widget}>
+      <WidgetForm form={Form} />
+    </WidgetFormProvider>
   )
 }

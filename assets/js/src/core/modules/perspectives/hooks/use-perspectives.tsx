@@ -18,9 +18,10 @@ import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import {
   api,
+  PerspectiveConfigDetail,
   type PerspectiveConfig, type PerspectiveGetConfigCollectionApiResponse
 } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
-import trackError, { ApiError } from '../../app/error-handler'
+import trackError, { ApiError, GeneralError } from '../../app/error-handler'
 import { isPlainObject, isUndefined } from 'lodash'
 import { App } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +33,7 @@ import { Box } from '@Pimcore/components/box/box'
 export interface UsePerspectiveSwitcherReturn {
   switchPerspective: (perspective: PerspectiveConfig) => Promise<void>
   loadPerspective: (perspectiveId: string) => Promise<any>
+  loadPerspectiveById: (perspectiveId: string) => Promise<PerspectiveConfigDetail | undefined>
   getPerspectiveConfigCollection: () => Promise<PerspectiveGetConfigCollectionApiResponse | undefined>
   isLoading: boolean
 }
@@ -43,6 +45,28 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
   const [isLoading, setIsLoading] = useState(false)
   const { modal } = App.useApp()
   const { t } = useTranslation()
+
+  const loadPerspectiveById = async (perspectiveId: string): Promise<PerspectiveConfigDetail | undefined> => {
+    try {
+      const perspectiveFetcher = dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
+      const result = await perspectiveFetcher
+      const { data, isSuccess, isError, error } = result
+
+      if (isError) {
+        trackError(new ApiError(error))
+        return undefined
+      }
+
+      if (isSuccess && isPlainObject(data)) {
+        return data
+      }
+
+      return undefined
+    } catch (error) {
+      trackError(new GeneralError(`Error loading perspective (\`${perspectiveId}\`) information`))
+      return undefined
+    }
+  }
 
   const loadPerspective = async (perspectiveId: string): Promise<any> => {
     const perspectiveFetcher = dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
@@ -56,7 +80,7 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
           dispatch(updateOuterModel(getInitialModelJson()))
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await perspectiveFetcher
   }
@@ -67,17 +91,17 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
       title: <Flex
         align="center"
         gap="small"
-             >
+      >
         <Spin type="classic" />
         {t('perspective.switching.title')}
       </Flex>,
       content: <div>
-        <Box margin={ { bottom: 'small' } }>
+        <Box margin={{ bottom: 'small' }}>
           {t('perspective.switching.description')}:
         </Box>
         <IconTextButton
           color="primary"
-          icon={ perspective.icon }
+          icon={perspective.icon}
           variant="filled"
         >
           {t(perspective.name)}
@@ -109,5 +133,11 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
     return data
   }
 
-  return { switchPerspective, loadPerspective, getPerspectiveConfigCollection, isLoading }
+  return {
+    switchPerspective,
+    loadPerspective,
+    loadPerspectiveById,
+    getPerspectiveConfigCollection,
+    isLoading
+  }
 }

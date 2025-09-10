@@ -212,6 +212,7 @@ import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
 import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
+import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -465,3 +466,6 @@ container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSinglet
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()
+
+// Perspective & Widget Editor
+container.bind(serviceIds['WidgetEditor/WidgetTypeRegistry']).to(WidgetTypeRegistry).inSingletonScope()

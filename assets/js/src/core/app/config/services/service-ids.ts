@@ -267,5 +267,8 @@ export const serviceIds = {
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
 
   // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
+
+  // Perspective & Widget Editor
+  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry',
 }
