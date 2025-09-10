@@ -10,7 +10,7 @@
 
 import { injectable } from 'inversify'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { isNil, isBoolean, isNumber, isUndefined } from 'lodash'
+import { isNil, isBoolean, isNumber, isUndefined, isEmpty } from 'lodash'
 
 export type AssetType = 'image' | 'document' | 'video'
 
@@ -29,7 +29,7 @@ export interface NamedThumbnailDefinition extends BaseThumbnailDefinition {
   cropHeight?: number
   cropTop?: number
   cropLeft?: number
-      // Document and video specific
+  // Document and video specific
   page?: number
 }
 
@@ -73,21 +73,20 @@ const VIDEO_PARAMS: Array<keyof CustomThumbnailDefinition> = [
 
 @injectable()
 export class ThumbnailService {
-
   /**
    * Generate thumbnail URL based on the thumbnail definition.
    * Auto-detects between named and custom thumbnails based on presence of thumbnailName.
    * Always returns a URL string for the thumbnail.
    */
-  getThumbnailUrl(definition: ThumbnailDefinition): string {
-    if ('thumbnailName' in definition && definition.thumbnailName) {
+  getThumbnailUrl (definition: ThumbnailDefinition): string {
+    if ('thumbnailName' in definition && !isEmpty(definition.thumbnailName)) {
       return this.generateNamedThumbnailUrl(definition)
     } else {
       return this.generateCustomThumbnailUrl(definition as CustomThumbnailDefinition)
     }
   }
 
-  private generateNamedThumbnailUrl(definition: NamedThumbnailDefinition): string {
+  private generateNamedThumbnailUrl (definition: NamedThumbnailDefinition): string {
     const { assetId, assetType, thumbnailName } = definition
     const baseUrl = `${getPrefix()}/assets/${assetId}`
     let path: string
@@ -101,10 +100,10 @@ export class ThumbnailService {
     }
 
     const queryString = params.toString()
-    return `${baseUrl}${path}${queryString ? `?${queryString}` : ''}`
+    return `${baseUrl}${path}${!isEmpty(queryString) ? `?${queryString}` : ''}`
   }
 
-  private generateCustomThumbnailUrl(definition: CustomThumbnailDefinition): string {
+  private generateCustomThumbnailUrl (definition: CustomThumbnailDefinition): string {
     const { assetId, assetType } = definition
     const baseUrl = `${getPrefix()}/assets/${assetId}`
     let path: string
@@ -128,7 +127,7 @@ export class ThumbnailService {
     }
 
     const queryString = params.toString()
-    return `${baseUrl}${path}${queryString ? `?${queryString}` : ''}`
+    return `${baseUrl}${path}${!isEmpty(queryString) ? `?${queryString}` : ''}`
   }
 
   private buildQueryParams (definition: Record<string, any>, keys: string[]): URLSearchParams {

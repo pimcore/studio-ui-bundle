@@ -16,10 +16,10 @@ import { isNil } from 'lodash'
 /**
  * Utility function to generate a thumbnail URL
  * Auto-detects between named and custom thumbnails based on presence of thumbnailName
- * 
+ *
  * @param definition - The thumbnail definition object
  * @returns The thumbnail URL string, or null if definition is null
- * 
+ *
  * @example
  * ```typescript
  * // Named thumbnail (auto-detected by presence of thumbnailName)
@@ -28,7 +28,7 @@ import { isNil } from 'lodash'
  *   assetType: 'image',
  *   thumbnailName: 'myThumbnail'
  * })
- * 
+ *
  * // Custom thumbnail (auto-detected by absence of thumbnailName)
  * const customUrl = getThumbnailUrl({
  *   assetId: 123,
@@ -41,7 +41,7 @@ import { isNil } from 'lodash'
  */
 export const getThumbnailUrl = (definition: ThumbnailDefinition | null): string | null => {
   if (isNil(definition)) return null
-  
+
   const thumbnailService = container.get<ThumbnailService>(serviceIds['Asset/ThumbnailService'])
   return thumbnailService.getThumbnailUrl(definition)
 }
