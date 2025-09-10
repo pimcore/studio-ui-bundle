@@ -47,7 +47,7 @@ export const scheduledblockValueUtils = {
 
     return previousEntries.reduce((latest, current) =>
       current.date > latest.date ? current : latest
-    )
+    , previousEntries[0])
   },
 
   /**
