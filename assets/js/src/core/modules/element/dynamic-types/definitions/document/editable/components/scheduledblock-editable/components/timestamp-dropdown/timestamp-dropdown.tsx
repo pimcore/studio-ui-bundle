@@ -9,13 +9,13 @@
  */
 
 import React, { useCallback } from 'react'
-import { Dropdown, Icon, useFormModal } from '@sdk/components'
+import { Dropdown, type DropdownProps, Icon, useFormModal } from '@sdk/components'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
 import { isArray } from 'lodash'
 import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
-import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
+import { type ScheduledblockValue } from '../../scheduledblock-editable'
 import { formatDateTime } from '@sdk/utils'
 
 export interface TimestampDropdownProps {
@@ -38,7 +38,7 @@ export const TimestampDropdown = ({
     const validEntries = isArray(value) ? value : []
     const sortedEntries = scheduledblockValueUtils.sortByDate(validEntries)
 
-    const jumpItems = sortedEntries.map(entry => ({
+    const jumpItems: DropdownProps['menu']['items'] = sortedEntries.map(entry => ({
       key: `jump-${entry.key}`,
       label: formatDateTime({ timestamp: entry.date, dateStyle: 'medium', timeStyle: 'short' }),
       onClick: () => {
@@ -48,7 +48,7 @@ export const TimestampDropdown = ({
     }))
 
     if (jumpItems.length > 0) {
-      jumpItems.push({ type: 'divider', key: 'divider' } as any)
+      jumpItems.push({ type: 'divider', key: 'divider' })
     }
 
     return [
@@ -60,7 +60,7 @@ export const TimestampDropdown = ({
         onClick: () => {
           confirm({
             title: t('scheduled-block.delete-all-in-past-confirmation'),
-            onOk: () => onCleanupTimestamps(false)
+            onOk: () => { onCleanupTimestamps(false) }
           })
         }
       },
@@ -71,7 +71,7 @@ export const TimestampDropdown = ({
         onClick: () => {
           confirm({
             title: t('scheduled-block.delete-all-confirmation'),
-            onOk: () => onCleanupTimestamps(true)
+            onOk: () => { onCleanupTimestamps(true) }
           })
         }
       }
@@ -80,12 +80,12 @@ export const TimestampDropdown = ({
 
   return (
     <Dropdown
-      disabled={disabled}
-      menu={{ items: getDropdownItems() }}
-      trigger={['click']}
+      disabled={ disabled }
+      menu={ { items: getDropdownItems() } }
+      trigger={ ['click'] }
     >
       <IconButton
-        icon={{ value: 'history' }}
+        icon={ { value: 'history' } }
         type="default"
       />
     </Dropdown>

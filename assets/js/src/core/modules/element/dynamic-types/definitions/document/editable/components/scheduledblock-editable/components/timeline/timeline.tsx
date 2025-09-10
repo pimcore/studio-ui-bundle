@@ -11,7 +11,7 @@
 import React, { useMemo } from 'react'
 import { Slider } from 'antd'
 import type { SliderMarks } from 'antd/es/slider'
-import { isArray } from 'lodash'
+import { isArray, isNil } from 'lodash'
 import dayjs, { type Dayjs } from 'dayjs'
 import { TimelineMarker } from '../timeline-marker/timeline-marker'
 import { useStyles } from './timeline.styles'
@@ -66,13 +66,13 @@ export const Timeline = ({
       marks[sliderValue] = {
         label: (
           <TimelineMarker
-            key={entry.key}
-            entry={entry}
-            onModifyDateChange={onModifyDateChange}
-            onEntryClick={onEntryClick}
-            onDeleteEntry={onDeleteEntry}
-            timeLabel={timeLabel}
-            isActive={isActive}
+            entry={ entry }
+            isActive={ isActive }
+            key={ entry.key }
+            onDeleteEntry={ onDeleteEntry }
+            onEntryClick={ onEntryClick }
+            onModifyDateChange={ onModifyDateChange }
+            timeLabel={ timeLabel }
           />
         )
       }
@@ -82,7 +82,7 @@ export const Timeline = ({
   }, [value, selectedDate, currentTimestamp, onModifyDateChange, onEntryClick, onDeleteEntry])
 
   const currentSliderValue = useMemo(() => {
-    if (!currentTimestamp) return undefined
+    if (isNil(currentTimestamp)) return undefined
     const currentDate = dayjs.unix(currentTimestamp)
     if (!currentDate.isSame(selectedDate, 'day')) return undefined
     const dateStart = selectedDate.startOf('day').unix()
@@ -90,17 +90,17 @@ export const Timeline = ({
   }, [currentTimestamp, selectedDate])
 
   return (
-    <div className={styles.sliderContainer}>
-      <div className={styles.sliderWrapper}>
+    <div className={ styles.sliderContainer }>
+      <div className={ styles.sliderWrapper }>
         <Slider
-          disabled={disabled}
-          marks={sliderMarks}
-          max={SLIDER_RANGE[1]}
-          min={SLIDER_RANGE[0]}
-          onChange={onSliderChange}
-          step={1}
-          value={currentSliderValue ?? 0}
-         />
+          disabled={ disabled }
+          marks={ sliderMarks }
+          max={ SLIDER_RANGE[1] }
+          min={ SLIDER_RANGE[0] }
+          onChange={ onSliderChange }
+          step={ 1 }
+          value={ currentSliderValue ?? 0 }
+        />
       </div>
     </div>
   )

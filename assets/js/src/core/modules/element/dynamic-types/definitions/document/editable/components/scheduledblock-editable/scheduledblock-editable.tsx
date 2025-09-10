@@ -1,7 +1,5 @@
 /**
- * Thiimport React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
-import { isArray, isNil } from 'lodash'
-import { DatePicker, Dropdown, Modal, Popover, Slider, TimePicker } from 'antd'ource file is available under the terms of the
+ * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
@@ -81,8 +79,8 @@ export const ScheduledblockEditable = ({
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(validEntries, dateStart, dateEnd)
 
-    const isCurrentTimestampOnThisDay = currentTimestamp && 
-      currentTimestamp >= dateStart && 
+    const isCurrentTimestampOnThisDay = !isNil(currentTimestamp) &&
+      currentTimestamp >= dateStart &&
       currentTimestamp <= dateEnd
 
     if (isCurrentTimestampOnThisDay) {
@@ -95,7 +93,7 @@ export const ScheduledblockEditable = ({
       setCurrentTimestamp(firstEntry.date)
     } else {
       const latestPrevious = scheduledblockValueUtils.getLatestPreviousEntry(validEntries, dateStart)
-      if (latestPrevious) {
+      if (!isNil(latestPrevious)) {
         scheduledblockManager.showElementByKey(latestPrevious.key)
         setCurrentTimestamp(latestPrevious.date)
       } else {
@@ -115,33 +113,33 @@ export const ScheduledblockEditable = ({
 
     setScheduledblockOperationType('modify')
     const validEntries = isArray(value) ? value : []
-    const updatedEntries = validEntries.map(entry => 
-      entry.key === entryKey 
+    const updatedEntries = validEntries.map(entry =>
+      entry.key === entryKey
         ? { ...entry, date: newTimestamp }
         : entry
     )
 
     onChange?.(updatedEntries)
-    
+
     const element = scheduledblockManager.findElementByKey(entryKey)
-    if (element) {
+    if (!isNil(element)) {
       scheduledblockManager.setElementDate(element, newTimestamp)
     }
   }, [disabled, value, onChange, scheduledblockManager, setScheduledblockOperationType])
 
   const handleModifyDateChange = useCallback((entryKey: string, newDateTime: Dayjs | null) => {
-    if (newDateTime) {
+    if (!isNil(newDateTime)) {
       const validEntries = isArray(value) ? value : []
       const entry = validEntries.find(e => e.key === entryKey)
-      
-      if (entry) {
+
+      if (!isNil(entry)) {
         const newTimestamp = newDateTime.unix()
         const oldTimestamp = entry.date
         const entryDate = dayjs.unix(oldTimestamp)
         const dayChanged = !entryDate.isSame(newDateTime, 'day')
-        
+
         handleModifyEntry(entryKey, newTimestamp)
-        
+
         if (dayChanged) {
           setTimeout(() => {
             setSelectedDate(newDateTime)
@@ -160,11 +158,11 @@ export const ScheduledblockEditable = ({
   const handleSliderChange = useCallback((sliderValue: number) => {
     const dateStart = selectedDate.startOf('day').unix()
     const timestamp = dateStart + sliderValue
-    
+
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(
-      validEntries, 
-      dateStart, 
+      validEntries,
+      dateStart,
       selectedDate.endOf('day').unix()
     )
 
@@ -174,7 +172,7 @@ export const ScheduledblockEditable = ({
       return entryDiff < closestDiff ? entry : closest
     }, dayEntries[0])
 
-    if (closestEntry) {
+    if (!isNil(closestEntry)) {
       scheduledblockManager.showElementByKey(closestEntry.key)
       setCurrentTimestamp(closestEntry.date)
     }
@@ -189,7 +187,7 @@ export const ScheduledblockEditable = ({
   const handleDeleteEntry = useCallback((entryKey: string) => {
     setScheduledblockOperationType('delete')
     const element = scheduledblockManager.findElementByKey(entryKey)
-    if (element) {
+    if (!isNil(element)) {
       removeBlock(element)
     }
   }, [scheduledblockManager, removeBlock, setScheduledblockOperationType])
@@ -209,10 +207,10 @@ export const ScheduledblockEditable = ({
       <div className={ styles.controlsContainer }>
         <div className={ styles.datePickerContainer }>
           <DatePicker
+            allowClear={ false }
             disabled={ disabled }
             onChange={ handleDateChange }
             value={ selectedDate }
-            allowClear={ false }
           />
         </div>
 
@@ -225,25 +223,25 @@ export const ScheduledblockEditable = ({
         </Button>
 
         <Timeline
-          value={value}
-          selectedDate={selectedDate}
-          currentTimestamp={currentTimestamp}
-          disabled={disabled}
-          onSliderChange={handleSliderChange}
-          onModifyDateChange={handleModifyDateChange}
-          onEntryClick={(clickedEntry) => {
+          currentTimestamp={ currentTimestamp }
+          disabled={ disabled }
+          onDeleteEntry={ handleDeleteEntry }
+          onEntryClick={ (clickedEntry) => {
             scheduledblockManager.showElementByKey(clickedEntry.key)
             setCurrentTimestamp(clickedEntry.date)
-          }}
-          onDeleteEntry={handleDeleteEntry}
+          } }
+          onModifyDateChange={ handleModifyDateChange }
+          onSliderChange={ handleSliderChange }
+          selectedDate={ selectedDate }
+          value={ value }
         />
 
         <div className={ styles.buttonsContainer }>
           <TimestampDropdown
-            value={value}
-            disabled={disabled}
-            onJumpToEntry={handleJumpToEntry}
-            onCleanupTimestamps={cleanupTimestamps}
+            disabled={ disabled }
+            onCleanupTimestamps={ cleanupTimestamps }
+            onJumpToEntry={ handleJumpToEntry }
+            value={ value }
           />
         </div>
       </div>

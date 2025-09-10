@@ -9,8 +9,6 @@
  */
 
 import { isNil } from 'lodash'
-import { type ScheduledblockValue } from '../scheduledblock-editable'
-import { scheduledblockValueUtils } from './scheduledblock-utils'
 import { AbstractBlockManager } from '../../../managers/abstract-block-manager'
 
 /**
@@ -32,25 +30,6 @@ export class ScheduledblockManager extends AbstractBlockManager {
     return elements.findIndex(element => element === targetElement)
   }
 
-  ensureElementKey (element: HTMLElement): void {
-    const key = this.getElementKey(element)
-    if (isNil(key)) {
-      const nextKey = this.calculateNextKey()
-      this.setElementKey(element, nextKey.toString())
-    }
-  }
-
-  ensureAllElementKeys (): HTMLElement[] {
-    const elements = this.queryElements()
-    elements.forEach(element => this.ensureElementKey(element))
-    return elements
-  }
-
-  getScheduledblockValue (): ScheduledblockValue {
-    const elements = this.queryElements()
-    return scheduledblockValueUtils.elementsToScheduledblockValue(elements)
-  }
-
   getElementDate (element: HTMLElement): number | null {
     const dateStr = element.getAttribute('date')
     return dateStr !== null ? parseInt(dateStr, 10) : null
@@ -58,11 +37,6 @@ export class ScheduledblockManager extends AbstractBlockManager {
 
   setElementDate (element: HTMLElement, date: number): void {
     element.setAttribute('date', date.toString())
-  }
-
-  findElementByDate (date: number): HTMLElement | null {
-    const elements = this.queryElements()
-    return elements.find(element => this.getElementDate(element) === date) ?? null
   }
 
   hideAllElements (): void {

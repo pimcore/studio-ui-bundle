@@ -9,11 +9,12 @@
  */
 
 import React, { useCallback, useState, useEffect } from 'react'
-import { DatePicker, Dropdown, Modal, Icon, useFormModal, Box } from '@sdk/components'
+import { DatePicker, Dropdown, Icon, useFormModal, Box, type DropdownProps } from '@sdk/components'
 import { Popover, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
 import cn from 'classnames'
+import { isNil } from 'lodash'
 import { type ScheduledblockEntry } from '../../scheduledblock-editable'
 import { useStyles } from './timeline-marker.styles'
 import { formatDateTime } from '@sdk/utils'
@@ -44,10 +45,10 @@ export const TimelineMarker = ({
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
   const [shouldCloseAfterChange, setShouldCloseAfterChange] = useState<boolean>(false)
 
-  const handleOpenModifyPopover = () => {
+  const handleOpenModifyPopover = (): void => {
     setMarkerDropdownOpen(false)
     setModifyPopoverOpen(true)
-    setTimeout(() => setDatePickerOpen(true), 100)
+    setTimeout(() => { setDatePickerOpen(true) }, 100)
   }
 
   const handleModifyCancel = useCallback(() => {
@@ -57,7 +58,7 @@ export const TimelineMarker = ({
   }, [])
 
   const handleModifyDateChange = useCallback((newDateTime: Dayjs | null) => {
-    if (newDateTime) {
+    if (!isNil(newDateTime)) {
       setShouldCloseAfterChange(true)
       onModifyDateChange(entry.key, newDateTime)
     }
@@ -68,12 +69,12 @@ export const TimelineMarker = ({
       const timer = setTimeout(() => {
         handleModifyCancel()
       }, 50)
-      
-      return () => clearTimeout(timer)
+
+      return () => { clearTimeout(timer) }
     }
   }, [shouldCloseAfterChange, handleModifyCancel])
 
-  const getMarkerDropdownItems = () => [
+  const getMarkerDropdownItems = (): DropdownProps['menu']['items'] => [
     {
       key: 'modify',
       label: t('modify'),
@@ -87,7 +88,7 @@ export const TimelineMarker = ({
       onClick: () => {
         confirm({
           title: t('scheduled-block.delete-confirmation'),
-          onOk: () => onDeleteEntry(entry.key)
+          onOk: () => { onDeleteEntry(entry.key) }
         })
       }
     }
@@ -96,16 +97,9 @@ export const TimelineMarker = ({
   const modifyPopoverContent = (
     <Box padding="extra-small">
       <DatePicker
-        value={dayjs.unix(entry.date)}
-        onChange={handleModifyDateChange}
-        showTime={{
-          format: 'HH:mm',
-          hideDisabledOptions: true
-        }}
         format="YYYY-MM-DD HH:mm"
-        style={{ width: '100%' }}
-        open={datePickerOpen}
-        onOpenChange={(open) => {
+        onChange={ handleModifyDateChange }
+        onOpenChange={ (open) => {
           setDatePickerOpen(open)
           if (!open) {
             setTimeout(() => {
@@ -114,57 +108,72 @@ export const TimelineMarker = ({
               }
             }, 100)
           }
-        }}
-        autoFocus
+        } }
+        open={ datePickerOpen }
+        showTime={ {
+          format: 'HH:mm',
+          hideDisabledOptions: true
+        } }
+        style={ { width: '100%' } }
+        value={ dayjs.unix(entry.date) }
       />
     </Box>
   )
 
   return (
     <Popover
-      content={modifyPopoverContent}
-      trigger={[]}
-      open={modifyPopoverOpen}
-      onOpenChange={(open) => {
+      content={ modifyPopoverContent }
+      onOpenChange={ (open) => {
         if (!open) {
           setDatePickerOpen(false)
           handleModifyCancel()
         }
-      }}
+      } }
+      open={ modifyPopoverOpen }
       placement="top"
+      trigger={ [] }
     >
-      <Tooltip 
-        title={formatDateTime({ timestamp: entry.date, dateStyle: 'medium', timeStyle: 'short' })}
+      <Tooltip
         placement="top"
+        title={ formatDateTime({ timestamp: entry.date, dateStyle: 'medium', timeStyle: 'short' }) }
       >
         <Dropdown
-          open={markerDropdownOpen}
-          onOpenChange={setMarkerDropdownOpen}
-          menu={{ items: getMarkerDropdownItems() }}
-          trigger={['contextMenu']}
+          menu={ { items: getMarkerDropdownItems() } }
+          onOpenChange={ setMarkerDropdownOpen }
+          open={ markerDropdownOpen }
+          trigger={ ['contextMenu'] }
         >
-        <div 
-          className={styles.markerOverlay}
-          onClick={(e) => {
-            e.stopPropagation()
-            onEntryClick(entry)
-          }}
-          onContextMenu={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setMarkerDropdownOpen(!markerDropdownOpen)
-          }}
-        >
-          <div 
-            className={cn(styles.markerCircleBase, styles.markerCircle, {
-              [styles.markerCircleActive]: isActive
-            })}
-          />
-          <div className={styles.markerTime}>
-            {timeLabel}
+          <div
+            className={ styles.markerOverlay }
+            onClick={ (e) => {
+              e.stopPropagation()
+              onEntryClick(entry)
+            } }
+            onContextMenu={ (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setMarkerDropdownOpen(!markerDropdownOpen)
+            } }
+            onKeyDown={ (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                e.stopPropagation()
+                onEntryClick(entry)
+              }
+            } }
+            role="button"
+            tabIndex={ 0 }
+          >
+            <div
+              className={ cn(styles.markerCircleBase, styles.markerCircle, {
+                [styles.markerCircleActive]: isActive
+              }) }
+            />
+            <div className={ styles.markerTime }>
+              {timeLabel}
+            </div>
           </div>
-        </div>
-      </Dropdown>
+        </Dropdown>
       </Tooltip>
     </Popover>
   )

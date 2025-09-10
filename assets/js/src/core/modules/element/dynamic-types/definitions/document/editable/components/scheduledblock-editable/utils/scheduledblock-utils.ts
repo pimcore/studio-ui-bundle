@@ -8,21 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, isArray } from 'lodash'
+import { isNil } from 'lodash'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../scheduledblock-editable'
 
 /**
  * Utility functions for scheduledblock operations
  */
 export const scheduledblockValueUtils = {
-  /**
-   * Filters editable names that belong to a specific scheduledblock and key
-   */
-  filterEditableNames: (allNames: string[], scheduledblockName: string, key: string): string[] => {
-    const pattern = `${scheduledblockName}:${key}.`
-    return allNames.filter(name => name.startsWith(pattern))
-  },
-
   /**
    * Converts DOM elements to scheduledblock value format
    */
@@ -34,22 +26,9 @@ export const scheduledblockValueUtils = {
 
       return {
         key: key ?? '0',
-        date: date
+        date
       }
     }).filter(entry => !isNil(entry.key))
-  },
-
-  /**
-   * Validates if value is a valid scheduledblock value
-   */
-  isValidScheduledblockValue: (value: any): value is ScheduledblockValue => {
-    return isArray(value) && value.every(item =>
-      typeof item === 'object' &&
-      'key' in item &&
-      'date' in item &&
-      (typeof item.key === 'string' || typeof item.key === 'number') &&
-      typeof item.date === 'number'
-    )
   },
 
   /**
@@ -66,7 +45,7 @@ export const scheduledblockValueUtils = {
     const previousEntries = entries.filter(entry => entry.date < timestamp)
     if (previousEntries.length === 0) return null
 
-    return previousEntries.reduce((latest, current) => 
+    return previousEntries.reduce((latest, current) =>
       current.date > latest.date ? current : latest
     )
   },
