@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -21,13 +21,27 @@ import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
 interface ISqlAdapterProps extends IReportConfigurationSectionProps {
-  value?: object
+  value: object | null
 }
 
 const ORDER_BY_DIRECTIONS = [
   { value: 'ASC', label: 'ASC' },
   { value: 'DESC', label: 'DESC' }
 ]
+
+const createDefaultColumnConfig = (name: string): ReportFormData['columnConfigurations'][0] => ({
+  id: uuid(),
+  [COLUMN_KEYS.NAME]: name,
+  [COLUMN_KEYS.DISPLAY]: true,
+  [COLUMN_KEYS.EXPORT]: true,
+  [COLUMN_KEYS.ORDER]: true,
+  [COLUMN_KEYS.FILTER_TYPE]: null,
+  [COLUMN_KEYS.DISPLAY_TYPE]: null,
+  [COLUMN_KEYS.FILTER_DRILLDOWN]: null,
+  [COLUMN_KEYS.WIDTH]: null,
+  [COLUMN_KEYS.LABEL]: '',
+  [COLUMN_KEYS.ACTION]: ''
+})
 
 export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterProps): React.JSX.Element => {
   const { data: columnConfigData } = useCustomReportsColumnConfigListQuery({
@@ -39,25 +53,31 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
 
   useEffect(() => {
     if (!isNil(columnConfigData)) {
-      const columnConfigurations: ReportFormData['columnConfigurations'] = columnConfigData.items.map((item) => {
-        return {
-          id: uuid(),
-          [COLUMN_KEYS.NAME]: item.name,
-          [COLUMN_KEYS.DISPLAY]: true,
-          [COLUMN_KEYS.EXPORT]: true,
-          [COLUMN_KEYS.ORDER]: true,
-          [COLUMN_KEYS.FILTER_TYPE]: null,
-          [COLUMN_KEYS.DISPLAY_TYPE]: null,
-          [COLUMN_KEYS.FILTER_DRILLDOWN]: null,
-          [COLUMN_KEYS.WIDTH]: null,
-          [COLUMN_KEYS.LABEL]: '',
-          [COLUMN_KEYS.ACTION]: ''
-        }
-      })
+      const newColumnNames = columnConfigData.items.map(item => item.name)
+      const existingConfig = currentData.columnConfigurations ?? []
+
+      let updatedColumnConfigurations: ReportFormData['columnConfigurations']
+
+      if (isEmpty(existingConfig)) {
+        updatedColumnConfigurations = newColumnNames.map(createDefaultColumnConfig)
+      } else {
+        const existingConfigMap = new Map(existingConfig.map(config => [config.name, config]))
+        const finalConfig: ReportFormData['columnConfigurations'] = []
+
+        newColumnNames.forEach(name => {
+          if (existingConfigMap.has(name)) {
+            finalConfig.push(existingConfigMap.get(name)!)
+          } else {
+            finalConfig.push(createDefaultColumnConfig(name))
+          }
+        })
+
+        updatedColumnConfigurations = finalConfig
+      }
 
       updateFormData?.({
         ...currentData,
-        columnConfigurations
+        columnConfigurations: updatedColumnConfigurations
       })
     }
   }, [columnConfigData])
