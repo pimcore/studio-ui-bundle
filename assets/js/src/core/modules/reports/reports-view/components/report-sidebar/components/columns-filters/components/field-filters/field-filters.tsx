@@ -23,6 +23,7 @@ import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field
 import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 
 const EQUAL_OPERATOR = 'eq'
 
@@ -31,8 +32,9 @@ export const FieldFilters = (): React.JSX.Element => {
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
-  const { reportDetailData, chartDetailData } = useReportDataContext()
+  const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
+  const { data: fullChartDetailData } = useFullChartData({ name: reportDetailData?.name ?? '' })
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
     (!isEmptyValue(column.label) ? column.label : column.name)
@@ -46,7 +48,7 @@ export const FieldFilters = (): React.JSX.Element => {
     const id = getLabelValue(column)
     const fieldName = column.name
     const fieldOptions = reject(
-      chartDetailData?.items.map(item => item.data[fieldName]),
+      fullChartDetailData?.items.map(item => item.data[fieldName]),
       value => isNull(value)
     )
 
@@ -87,7 +89,7 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
-    if (isEmpty(chartDetailData)) return
+    if (isEmpty(fullChartDetailData)) return
 
     const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
 
@@ -100,7 +102,7 @@ export const FieldFilters = (): React.JSX.Element => {
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [chartDetailData, reportDetailData, fieldFilters])
+  }, [fullChartDetailData, reportDetailData, fieldFilters])
 
   return (
     <>
