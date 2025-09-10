@@ -9,7 +9,7 @@
  */
 
 import React, { useCallback } from 'react'
-import { Dropdown, Modal } from 'antd'
+import { Dropdown, Icon, useFormModal } from '@sdk/components'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -32,6 +32,7 @@ export const TimestampDropdown = ({
   onCleanupTimestamps
 }: TimestampDropdownProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { confirm } = useFormModal()
 
   const getDropdownItems = useCallback(() => {
     const validEntries = isArray(value) ? value : []
@@ -54,28 +55,28 @@ export const TimestampDropdown = ({
       ...jumpItems,
       {
         key: 'delete-past',
-        label: t('scheduled-block-delete-all-in-past'),
-        danger: true,
+        label: t('scheduled-block.delete-all-in-past'),
+        icon: <Icon value="trash" />,
         onClick: () => {
-          Modal.confirm({
-            title: t('scheduled-block-really-delete-past'),
+          confirm({
+            title: t('scheduled-block.delete-all-in-past-confirmation'),
             onOk: () => onCleanupTimestamps(false)
           })
         }
       },
       {
         key: 'delete-all',
-        label: t('scheduled-block-delete-all'),
-        danger: true,
+        label: t('scheduled-block.delete-all'),
+        icon: <Icon value="trash" />,
         onClick: () => {
-          Modal.confirm({
-            title: t('scheduled-block-really-delete-all'),
+          confirm({
+            title: t('scheduled-block.delete-all-confirmation'),
             onOk: () => onCleanupTimestamps(true)
           })
         }
       }
     ]
-  }, [value, formatDateTime, onJumpToEntry, onCleanupTimestamps, t])
+  }, [value])
 
   return (
     <Dropdown
@@ -84,8 +85,8 @@ export const TimestampDropdown = ({
       trigger={['click']}
     >
       <IconButton
-        icon={{ value: 'clock' }}
-        title={t('jump-to-timestamp')}
+        icon={{ value: 'history' }}
+        type="default"
       />
     </Dropdown>
   )

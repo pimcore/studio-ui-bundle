@@ -9,7 +9,8 @@
  */
 
 import React, { useCallback, useState, useEffect } from 'react'
-import { DatePicker, Dropdown, Modal, Popover, Tooltip } from 'antd'
+import { DatePicker, Dropdown, Modal, Icon, useFormModal, Box } from '@sdk/components'
+import { Popover, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
 import cn from 'classnames'
@@ -36,17 +37,18 @@ export const TimelineMarker = ({
 }: TimelineMarkerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { confirm } = useFormModal()
 
   const [modifyPopoverOpen, setModifyPopoverOpen] = useState<boolean>(false)
   const [markerDropdownOpen, setMarkerDropdownOpen] = useState<boolean>(false)
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false)
   const [shouldCloseAfterChange, setShouldCloseAfterChange] = useState<boolean>(false)
 
-  const handleOpenModifyPopover = useCallback(() => {
+  const handleOpenModifyPopover = () => {
     setMarkerDropdownOpen(false)
     setModifyPopoverOpen(true)
     setTimeout(() => setDatePickerOpen(true), 100)
-  }, [])
+  }
 
   const handleModifyCancel = useCallback(() => {
     setModifyPopoverOpen(false)
@@ -71,29 +73,28 @@ export const TimelineMarker = ({
     }
   }, [shouldCloseAfterChange, handleModifyCancel])
 
-  const getMarkerDropdownItems = useCallback(() => [
+  const getMarkerDropdownItems = () => [
     {
       key: 'modify',
       label: t('modify'),
-      icon: 'edit',
+      icon: <Icon value="edit" />,
       onClick: handleOpenModifyPopover
     },
     {
       key: 'delete',
       label: t('delete'),
-      icon: 'trash',
-      danger: true,
+      icon: <Icon value="trash" />,
       onClick: () => {
-        Modal.confirm({
-          title: t('scheduled-block-really-delete-entry'),
+        confirm({
+          title: t('scheduled-block.delete-confirmation'),
           onOk: () => onDeleteEntry(entry.key)
         })
       }
     }
-  ], [t, entry.key, handleOpenModifyPopover, onDeleteEntry])
+  ]
 
   const modifyPopoverContent = (
-    <div style={{ padding: '8px' }}>
+    <Box padding="extra-small">
       <DatePicker
         value={dayjs.unix(entry.date)}
         onChange={handleModifyDateChange}
@@ -102,8 +103,7 @@ export const TimelineMarker = ({
           hideDisabledOptions: true
         }}
         format="YYYY-MM-DD HH:mm"
-        placeholder={t('select-date-and-time')}
-        style={{ width: '200px' }}
+        style={{ width: '100%' }}
         open={datePickerOpen}
         onOpenChange={(open) => {
           setDatePickerOpen(open)
@@ -117,7 +117,7 @@ export const TimelineMarker = ({
         }}
         autoFocus
       />
-    </div>
+    </Box>
   )
 
   return (
