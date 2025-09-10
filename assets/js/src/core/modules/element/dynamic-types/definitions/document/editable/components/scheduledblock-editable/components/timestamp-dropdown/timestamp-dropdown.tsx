@@ -16,6 +16,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { isArray } from 'lodash'
 import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
+import { formatDateTime } from '@sdk/utils'
 
 export interface TimestampDropdownProps {
   value: ScheduledblockValue
@@ -32,19 +33,13 @@ export const TimestampDropdown = ({
 }: TimestampDropdownProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  // Format date and time for dropdown labels
-  const formatDateTime = useCallback((timestamp: number): string => {
-    return dayjs.unix(timestamp).format('YYYY-MM-DD HH:mm')
-  }, [])
-
-  // Create dropdown menu items
   const getDropdownItems = useCallback(() => {
     const validEntries = isArray(value) ? value : []
     const sortedEntries = scheduledblockValueUtils.sortByDate(validEntries)
 
     const jumpItems = sortedEntries.map(entry => ({
       key: `jump-${entry.key}`,
-      label: formatDateTime(entry.date),
+      label: formatDateTime({ timestamp: entry.date, dateStyle: 'medium', timeStyle: 'short' }),
       onClick: () => {
         const entryDate = dayjs.unix(entry.date)
         onJumpToEntry(entryDate, entry.key)

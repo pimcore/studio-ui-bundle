@@ -9,12 +9,13 @@
  */
 
 import React, { useCallback, useState, useEffect } from 'react'
-import { DatePicker, Dropdown, Modal, Popover } from 'antd'
+import { DatePicker, Dropdown, Modal, Popover, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
 import cn from 'classnames'
 import { type ScheduledblockEntry } from '../../scheduledblock-editable'
 import { useStyles } from './timeline-marker.styles'
+import { formatDateTime } from '@sdk/utils'
 
 export interface TimelineMarkerProps {
   entry: ScheduledblockEntry
@@ -122,7 +123,6 @@ export const TimelineMarker = ({
   return (
     <Popover
       content={modifyPopoverContent}
-      title={t('modify-scheduled-block-time')}
       trigger={[]}
       open={modifyPopoverOpen}
       onOpenChange={(open) => {
@@ -133,12 +133,16 @@ export const TimelineMarker = ({
       }}
       placement="top"
     >
-      <Dropdown
-        open={markerDropdownOpen}
-        onOpenChange={setMarkerDropdownOpen}
-        menu={{ items: getMarkerDropdownItems() }}
-        trigger={['contextMenu']}
+      <Tooltip 
+        title={formatDateTime({ timestamp: entry.date, dateStyle: 'medium', timeStyle: 'short' })}
+        placement="top"
       >
+        <Dropdown
+          open={markerDropdownOpen}
+          onOpenChange={setMarkerDropdownOpen}
+          menu={{ items: getMarkerDropdownItems() }}
+          trigger={['contextMenu']}
+        >
         <div 
           className={styles.markerOverlay}
           onClick={(e) => {
@@ -161,6 +165,7 @@ export const TimelineMarker = ({
           </div>
         </div>
       </Dropdown>
+      </Tooltip>
     </Popover>
   )
 }
