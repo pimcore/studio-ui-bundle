@@ -79,15 +79,15 @@ export const useScheduledblockEditable = ({
       handleReloadMode((elements) => {
         const entries = scheduledblockValueUtils.elementsToScheduledblockValue(elements)
         const currentlyValidEntry = scheduledblockValueUtils.getLatestPreviousEntry(entries, currentTimestamp)
-        
+
         return elements.filter(element => {
           const date = scheduledblockManager.getElementDate(element)
           const elementKey = scheduledblockManager.getElementKey(element)
-          
-          // Keep if date is null/undefined, or date is in the future, 
+
+          // Keep if date is null/undefined, or date is in the future,
           // or this is the currently valid entry (closest to current time but in the past)
-          return isNil(date) || 
-                 date >= currentTimestamp || 
+          return isNil(date) ||
+                 date >= currentTimestamp ||
                  (!isNil(currentlyValidEntry) && elementKey === currentlyValidEntry.key)
         })
       })
