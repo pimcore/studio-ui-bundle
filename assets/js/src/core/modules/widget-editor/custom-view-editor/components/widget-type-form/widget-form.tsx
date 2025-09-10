@@ -15,7 +15,7 @@ interface WidgetFormProps {
   form: React.ComponentType
 }
 
-export const WidgetForm = ({ form: Form }: WidgetFormProps): React.JSX.Element => {
+export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { form, widget } = useWidgetFormContext()  //Todo: check if its better to use formData.id
   const { isLoading, setWidgets, setIsLoading } = useWidgetEditorContext()
@@ -48,7 +48,7 @@ export const WidgetForm = ({ form: Form }: WidgetFormProps): React.JSX.Element =
           }}
         >
           <GeneralTab />
-          <Form />
+          <TypeSpecificForm />
         </Content>
 
         <Toolbar justify="space-between">

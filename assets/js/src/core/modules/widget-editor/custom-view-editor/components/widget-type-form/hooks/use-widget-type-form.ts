@@ -18,9 +18,6 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-
-      console.log('options', Object.keys(cleanPermissions));
-
       return Object.keys(cleanPermissions) as string[]
     }
 
