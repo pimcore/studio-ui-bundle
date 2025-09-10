@@ -10,13 +10,13 @@
 
 import React, { useMemo } from 'react'
 import { Slider } from 'antd'
-import { isArray, isNil } from 'lodash'
+import type { SliderMarks } from 'antd/es/slider'
+import { isArray } from 'lodash'
 import dayjs, { type Dayjs } from 'dayjs'
 import { TimelineMarker } from '../timeline-marker/timeline-marker'
 import { useStyles } from './timeline.styles'
 import { scheduledblockValueUtils } from '../../utils/scheduledblock-utils'
 import { type ScheduledblockValue, type ScheduledblockEntry } from '../../scheduledblock-editable'
-import cn from 'classnames'
 
 const SLIDER_RANGE: [number, number] = [0, 86400]
 
@@ -51,24 +51,35 @@ export const Timeline = ({
     return timestamp - dateStart
   }
 
-  const sliderValueToTimestamp = (sliderValue: number, dateStart: number): number => {
-    return dateStart + sliderValue
-  }
-
   const sliderMarks = useMemo(() => {
     const dateStart = selectedDate.startOf('day').unix()
     const dateEnd = selectedDate.endOf('day').unix()
     const validEntries = isArray(value) ? value : []
     const dayEntries = scheduledblockValueUtils.getTimestampsForDate(validEntries, dateStart, dateEnd)
 
-    const marks: Record<number, string> = {}
+    const marks: SliderMarks = {}
     dayEntries.forEach(entry => {
       const sliderValue = timestampToSliderValue(entry.date, dateStart)
-      marks[sliderValue] = formatTime(entry.date)
+      const isActive = currentTimestamp === entry.date
+      const timeLabel = formatTime(entry.date)
+
+      marks[sliderValue] = {
+        label: (
+          <TimelineMarker
+            key={entry.key}
+            entry={entry}
+            onModifyDateChange={onModifyDateChange}
+            onEntryClick={onEntryClick}
+            onDeleteEntry={onDeleteEntry}
+            timeLabel={timeLabel}
+            isActive={isActive}
+          />
+        )
+      }
     })
 
     return marks
-  }, [value, selectedDate])
+  }, [value, selectedDate, currentTimestamp, onModifyDateChange, onEntryClick, onDeleteEntry])
 
   const currentSliderValue = useMemo(() => {
     if (!currentTimestamp) return undefined
@@ -80,7 +91,7 @@ export const Timeline = ({
 
   return (
     <div className={styles.sliderContainer}>
-      <div className={cn(styles.sliderWrapper, {[styles.sliderWrapperNoValue]: isNil(currentSliderValue)})}>
+      <div className={styles.sliderWrapper}>
         <Slider
           disabled={disabled}
           marks={sliderMarks}
@@ -89,29 +100,7 @@ export const Timeline = ({
           onChange={onSliderChange}
           step={1}
           value={currentSliderValue ?? 0}
-        />
-        {Object.entries(sliderMarks).map(([sliderValue, timeLabel]) => {
-          const validEntries = isArray(value) ? value : []
-          const dateStart = selectedDate.startOf('day').unix()
-          const timestamp = sliderValueToTimestamp(Number(sliderValue), dateStart)
-          const entry = validEntries.find(e => e.date === timestamp)
-          
-          if (!entry) return null
-
-          const markerPosition = (Number(sliderValue) / SLIDER_RANGE[1]) * 100
-
-          return (
-            <TimelineMarker
-              key={entry.key}
-              entry={entry}
-              markerPosition={markerPosition}
-              onModifyDateChange={onModifyDateChange}
-              onEntryClick={onEntryClick}
-              onDeleteEntry={onDeleteEntry}
-              markerOverlayClassName={styles.markerOverlay}
-            />
-          )
-        })}
+         />
       </div>
     </div>
   )

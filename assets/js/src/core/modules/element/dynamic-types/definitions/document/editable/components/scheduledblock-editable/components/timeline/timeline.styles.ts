@@ -22,30 +22,14 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
-    
     sliderWrapper: css`
-      position: relative;
-    `,
-    
-    sliderWrapperNoValue: css`
+      
       .ant-slider-handle {
         display: none;
       }
-    `,
-
-    markerOverlay: css`
-      position: absolute;
-      top: -10px;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 20px;
-      background-color: transparent;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 10;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+      
+      .ant-slider-dot {
+        display: none;
       }
     `
   }

@@ -12,26 +12,29 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { DatePicker, Dropdown, Modal, Popover } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs, { type Dayjs } from 'dayjs'
+import cn from 'classnames'
 import { type ScheduledblockEntry } from '../../scheduledblock-editable'
+import { useStyles } from './timeline-marker.styles'
 
 export interface TimelineMarkerProps {
   entry: ScheduledblockEntry
-  markerPosition: number
   onModifyDateChange: (entryKey: string, newDateTime: Dayjs | null) => void
   onEntryClick: (entry: ScheduledblockEntry) => void
   onDeleteEntry: (entryKey: string) => void
-  markerOverlayClassName: string
+  timeLabel: string
+  isActive?: boolean
 }
 
 export const TimelineMarker = ({
   entry,
-  markerPosition,
   onModifyDateChange,
   onEntryClick,
   onDeleteEntry,
-  markerOverlayClassName
+  timeLabel,
+  isActive = false
 }: TimelineMarkerProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const [modifyPopoverOpen, setModifyPopoverOpen] = useState<boolean>(false)
   const [markerDropdownOpen, setMarkerDropdownOpen] = useState<boolean>(false)
@@ -137,8 +140,7 @@ export const TimelineMarker = ({
         trigger={['contextMenu']}
       >
         <div 
-          className={markerOverlayClassName}
-          style={{ left: `${markerPosition}%` }}
+          className={styles.markerOverlay}
           onClick={(e) => {
             e.stopPropagation()
             onEntryClick(entry)
@@ -148,7 +150,16 @@ export const TimelineMarker = ({
             e.stopPropagation()
             setMarkerDropdownOpen(!markerDropdownOpen)
           }}
-        />
+        >
+          <div 
+            className={cn(styles.markerCircleBase, styles.markerCircle, {
+              [styles.markerCircleActive]: isActive
+            })}
+          />
+          <div className={styles.markerTime}>
+            {timeLabel}
+          </div>
+        </div>
       </Dropdown>
     </Popover>
   )
