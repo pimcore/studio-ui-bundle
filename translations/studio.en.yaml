@@ -1163,3 +1163,11 @@ scheduled-block.delete-all: Delete all timestamps
 scheduled-block.delete-all-in-past-confirmation: Are you sure you want to delete all past timestamps?
 scheduled-block.delete-all-confirmation: Are you sure you want to delete all timestamps?
 scheduled-block.delete-confirmation: Are you sure you want to delete this entry?
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search
+icon-selector.current-selection: Current Selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save

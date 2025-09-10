@@ -24,7 +24,10 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
   'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
-  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry'
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
+  'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
+  'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji'
 }
 
 export const serviceIds = {
