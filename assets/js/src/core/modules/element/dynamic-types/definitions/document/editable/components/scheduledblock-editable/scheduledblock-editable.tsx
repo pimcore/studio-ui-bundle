@@ -212,6 +212,7 @@ export const ScheduledblockEditable = ({
             disabled={ disabled }
             onChange={ handleDateChange }
             value={ selectedDate }
+            allowClear={ false }
           />
         </div>
 
