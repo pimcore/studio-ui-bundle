@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import { isArray, isNil } from 'lodash'
 import { DatePicker } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
@@ -53,6 +54,7 @@ export const ScheduledblockEditable = ({
 
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs())
   const [currentTimestamp, setCurrentTimestamp] = useState<number | null>(null)
+  const [controlsContainer, setControlsContainer] = useState<HTMLElement | null>(null)
 
   const setScheduledblockOperationType = useCallback((operationType: 'modify' | 'add' | 'delete' | null) => {
     setScheduledblockOperation(editableName, operationType)
@@ -202,7 +204,14 @@ export const ScheduledblockEditable = ({
     loadTimestampsForDate(selectedDate)
   }, [selectedDate, loadTimestampsForDate])
 
-  return (
+  useEffect(() => {
+    if (!isNil(containerRef?.current)) {
+      const container = containerRef.current.querySelector('.pimcore_scheduled_block_controls')
+      setControlsContainer(container as HTMLElement | null)
+    }
+  }, [containerRef])
+
+  const scheduledblockContent = (
     <div className={ `${styles.scheduledblockContainer} ${className ?? ''}` }>
       <div className={ styles.controlsContainer }>
         <div className={ styles.datePickerContainer }>
@@ -246,5 +255,11 @@ export const ScheduledblockEditable = ({
         </div>
       </div>
     </div>
+  )
+
+  return (
+    <>
+      {!isNil(controlsContainer) && ReactDOM.createPortal(scheduledblockContent, controlsContainer)}
+    </>
   )
 }
