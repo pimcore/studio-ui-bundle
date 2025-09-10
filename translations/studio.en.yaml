@@ -1155,4 +1155,14 @@ widget-editor.create-form.widgetType.element_tree: Element Tree
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.widget-form.general.title: General
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.specific.title: Specific
+widget-editor.widget-form.specific.element-type: Element Type
+widget-editor.widget-form.specific.root-folder: Root Folder
+widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.allowed-objects.title: Allowed Objects
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL Statement
+widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
 edit.label: Edit
