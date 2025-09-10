@@ -80,6 +80,10 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
 
       updateFormData?.({
         ...currentData,
+        dataSourceConfig: {
+          type: 'sql',
+          ...currentData.dataSourceConfig
+        },
         columnConfigurations: updatedColumnConfigurations
       })
     }
