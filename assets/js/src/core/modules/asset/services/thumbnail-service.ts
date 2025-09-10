@@ -123,7 +123,7 @@ export class ThumbnailService {
       }
 
       if (isUndefined(definition.mimeType)) {
-        params.set('mimeType', 'PNG')
+        params.set('mimeType', 'JPEG')
       }
     }
 
