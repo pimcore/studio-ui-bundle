@@ -15,11 +15,14 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Select } from '@Pimcore/components/select/select'
+import { Text } from '@Pimcore/components/text/text'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useCustomReportsColumnConfigListQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
+import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 interface ISqlAdapterProps extends IReportConfigurationSectionProps {
   value: object | null
@@ -47,12 +50,15 @@ const createDefaultColumnConfig = (name: string): ReportFormData['columnConfigur
 export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { data: columnConfigData } = useCustomReportsColumnConfigListQuery({
+  const debouncedValue = useDebounce(value, 1000)
+  const { data: columnConfigData, isError, error } = useCustomReportsColumnConfigListQuery({
     name: currentData.name,
     bundleCustomReportsDataSourceConfig: {
-      configuration: value!
+      configuration: debouncedValue!
     }
-  }, { skip: isNil(value) })
+  }, { skip: isNil(debouncedValue) })
+
+  const errorMessage = isError && ('data' in error) && (error.data as IApiErrorDetails)?.message
 
   useEffect(() => {
     if (!isNil(columnConfigData)) {
@@ -115,6 +121,7 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
       >
         <Select options={ ORDER_BY_DIRECTIONS } />
       </Form.Item>
+      {isError && <Text type="danger">{errorMessage}</Text>}
     </FormKit.Panel>
   )
 }
