@@ -12,7 +12,7 @@ import { calculateThumbnailDimensions } from '../../../helpers/calculate-thumbna
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ThumbnailService, type CustomThumbnailDefinition } from '@Pimcore/modules/asset/services/thumbnail-service'
-import { isString } from 'lodash'
+import { isString, isObject } from 'lodash'
 
 interface ThumbnailSizeConfig {
   width?: number | string
@@ -30,6 +30,7 @@ interface ThumbnailUrlConfig extends ThumbnailSizeConfig {
 
 /**
  * Generate thumbnail URL for asset with proper dimensions and settings
+ * Priority: named thumbnails (string) -> dynamic config (object) -> custom thumbnails (fallback)
  */
 export const generateThumbnailUrl = ({
   assetId,
@@ -49,6 +50,16 @@ export const generateThumbnailUrl = ({
       assetId,
       assetType,
       thumbnailName: thumbnailConfig,
+      ...thumbnailSettings
+    })
+  }
+
+  // If thumbnail config is an object, use dynamic thumbnail
+  if (isObject(thumbnailConfig)) {
+    return thumbnailService.getThumbnailUrl({
+      assetId,
+      assetType,
+      dynamicConfig: thumbnailConfig as Record<string, any>,
       ...thumbnailSettings
     })
   }
