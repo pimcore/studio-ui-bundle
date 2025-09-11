@@ -112,7 +112,7 @@ export const IconSelector = ({
     return filteredIcons.slice(startIndex, endIndex)
   }, [filteredIcons, currentPage, pageSize])
 
-  const handleIconClick = (icon: ElementIcon): void => {    
+  const handleIconClick = (icon: ElementIcon): void => {
     setPreviewSelectedIcon(icon)
   }
 
