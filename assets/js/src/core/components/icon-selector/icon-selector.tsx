@@ -171,7 +171,7 @@ export const IconSelector = ({
       ? (
         <Tooltip 
           placement="bottom"
-          title={ getIconDisplayName(previewSelectedIcon) }
+          title={ previewSelectedIcon.value }
         >
           <Icon
             options={ { height: 16, width: 16 } }
