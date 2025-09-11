@@ -21,7 +21,7 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective-editor/hooks/use-perspective-editor'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
 import { isNull, isUndefined } from 'lodash'
@@ -41,7 +41,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<PerspectiveForm>()
-  const [iconSelectorOpen, setIconSelectorOpen] = useState(false)
 
   const initialValues: PerspectiveForm = {
     name: perspective?.name ?? '',
@@ -114,9 +113,18 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             align="center"
             gap="small"
           >
-            <Button onClick={ () => { setIconSelectorOpen(true) } }>
-              Open Icon Selector
-            </Button>
+            <IconSelector
+              onSelect={ (iconData) => {
+                form.setFieldsValue({ icon: iconData })
+              } }
+              selectedIcon={ currentIcon }
+            >
+              {(openModal) => (
+                <Button onClick={ openModal }>
+                  Open Icon Selector
+                </Button>
+              )}
+            </IconSelector>
             {!isUndefined(currentIcon) && !isNull(currentIcon) && (
               <>
                 <Flex
@@ -140,15 +148,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               </>
             )}
           </Flex>
-          <IconSelector
-            onCancel={ () => { setIconSelectorOpen(false) } }
-            onSelect={ (iconData) => {
-              form.setFieldsValue({ icon: iconData })
-              setIconSelectorOpen(false)
-            } }
-            open={ iconSelectorOpen }
-            selectedIcon={ currentIcon }
-          />
         </Content>
 
         <Toolbar justify="space-between">
