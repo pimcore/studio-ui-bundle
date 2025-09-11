@@ -23,15 +23,13 @@ import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynami
 import { CustomIconTab } from './components/custom-icon-tab/custom-icon-tab'
 
 export interface IconSelectorProps {
-  value: ElementIcon | undefined
+  value?: ElementIcon 
   onChange?: (icon: ElementIcon | undefined) => void
-  children: (openModal: () => void) => React.ReactNode
 }
 
 export const IconSelector = ({
   value,
   onChange,
-  children
 }: IconSelectorProps): React.JSX.Element => {
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
 
@@ -198,7 +196,27 @@ export const IconSelector = ({
 
   return (
     <>
-      {children(openModal)}
+    <Flex gap={'extra-small'}>
+
+              <Flex
+                align='center'
+                className={ styles.selectionPreview }
+                justify='center'
+              >
+                {renderPreviewIcon()}
+              </Flex>
+     <IconButton 
+     icon={ { value: 'folder-search' } }
+     onClick={ openModal }
+                     type='default'/>
+                 <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ handleClearSelection }
+                title={ t('icon-selector.clear-selection') }
+                type='default'
+              />
+    </Flex>  
+               
       <Modal
         className={ styles.iconSelectorModal }
         footer={ <ModalFooter divider>

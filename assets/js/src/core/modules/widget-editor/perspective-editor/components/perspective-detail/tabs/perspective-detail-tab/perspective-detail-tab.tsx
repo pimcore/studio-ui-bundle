@@ -105,37 +105,8 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               label="Icon"
               name="icon"
             >
-              <IconSelector>
-                {(openModal) => (
-                  <Button onClick={ openModal }>
-                    Open Icon Selector
-                  </Button>
-                )}
-              </IconSelector>
+              <IconSelector/>
             </Form.Item>
-
-            {!isUndefined(currentIcon) && !isNull(currentIcon) && (
-              <Form.Item label="Selected Icon">
-                <Flex
-                  align="center"
-                  gap="small"
-                >
-                  <Icon
-                    type={ currentIcon.type }
-                    value={ currentIcon.value }
-                  />
-                  <span>Selected: {currentIcon.value}</span>
-                  <Button
-                    onClick={ () => {
-                      form.setFieldsValue({ icon: undefined })
-                    } }
-                    size="small"
-                  >
-                    Clear Icon
-                  </Button>
-                </Flex>
-              </Form.Item>
-            )}
           </FormKit.Panel>
         </Content>
 
