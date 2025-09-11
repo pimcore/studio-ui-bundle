@@ -49,12 +49,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   const formValues = Form.useWatch([], form)
   const currentIcon = Form.useWatch('icon', form)
 
-  // Log form changes for debugging
-  React.useEffect(() => {
-    console.log('Form values changed:', formValues)
-    console.log('Current icon from form watch:', currentIcon)
-  }, [formValues, currentIcon])
-
   if (perspective === undefined) {
     return <></>
   }
@@ -65,12 +59,10 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         form,
         initialValues,
         onFinish: async (values: PerspectiveForm) => {
-          console.log('Form onFinish called with values:', values)
           const formValues = {
             ...values,
             icon: values.icon ?? { type: 'name' as const, value: 'perspective' }
           }
-          console.log('Final form values after processing:', formValues)
           setIsLoading(true)
 
           await updatePerspective(perspective.id, {
@@ -136,7 +128,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
                   <span>Selected: {currentIcon.value}</span>
                   <Button
                     onClick={ () => {
-                      console.log('Clear Icon button clicked')
                       form.setFieldsValue({ icon: undefined })
                     } }
                     size="small"
