@@ -60,7 +60,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
 
   const onSaveClick = (): void => {
     // @todo check twofactorauth handling
-    updateUserById({ id, user: {...user as UserDraft, twoFactorAuthentication: []} }).catch(() => {
+    updateUserById({ id, user: { ...user as UserDraft, twoFactorAuthentication: [] } }).catch(() => {
       console.error('error')
     })
   }

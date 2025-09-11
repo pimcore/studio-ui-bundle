@@ -49,7 +49,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const originalValue = getOriginalValue(objectData, classificationStoreName)
   const inheritanceState = useInheritanceState()
   const fieldName = isArray(classificationStoreName) ? classificationStoreName[classificationStoreName.length - 1] : classificationStoreName
-  const classDefinitions = useClassDefinitions();
+  const classDefinitions = useClassDefinitions()
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -115,7 +115,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   if (classId === undefined) {
     return <></>
   }
-  
+
   return (
     <ClassificationStoreProvider>
       <Form.KeyedList
@@ -126,8 +126,8 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       >
         <ClassificationStoreContent { ...props } />
         <ClassificationStoreModal
-          fieldName={ fieldName }
           classId={ classId }
+          fieldName={ fieldName }
           { ...props }
         />
       </Form.KeyedList>
