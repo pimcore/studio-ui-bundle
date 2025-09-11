@@ -55,6 +55,7 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
+  'Asset/ThumbnailService': 'Asset/ThumbnailService',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
@@ -232,6 +233,7 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
   'DynamicTypes/DocumentEditable/Relations': 'DynamicTypes/DocumentEditable/Relations',
   'DynamicTypes/DocumentEditable/Renderlet': 'DynamicTypes/DocumentEditable/Renderlet',
+  'DynamicTypes/DocumentEditable/ScheduledBlock': 'DynamicTypes/DocumentEditable/ScheduledBlock',
   'DynamicTypes/DocumentEditable/Select': 'DynamicTypes/DocumentEditable/Select',
   'DynamicTypes/DocumentEditable/Snippet': 'DynamicTypes/DocumentEditable/Snippet',
   'DynamicTypes/DocumentEditable/Table': 'DynamicTypes/DocumentEditable/Table',

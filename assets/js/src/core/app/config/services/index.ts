@@ -23,6 +23,7 @@ import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
+import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
 import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/listing/dynamic-type-listing-registry'
 import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/definitions/listing/types/dynamic-type-listing-asset-link'
@@ -200,6 +201,7 @@ import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynam
 import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { DynamicTypeDocumentEditableRenderlet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
+import { DynamicTypeDocumentEditableScheduledblock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
@@ -426,6 +428,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Pdf']).to(DynamicTypeDo
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Renderlet']).to(DynamicTypeDocumentEditableRenderlet).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/ScheduledBlock']).to(DynamicTypeDocumentEditableScheduledblock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTypeDocumentEditableSnippet).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()
@@ -482,6 +485,9 @@ container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobCompone
 
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()
+
+// Asset services
+container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSingletonScope()
 
 // Theme system
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()

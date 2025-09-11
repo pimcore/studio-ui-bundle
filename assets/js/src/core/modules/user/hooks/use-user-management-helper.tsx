@@ -182,7 +182,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
         active: user.active,
         admin: user.admin,
         classes: user.classes,
-        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
+        // @todo check twofactorauth handling
+        twoFactorAuthenticationEnabled: user?.twoFactorAuthentication?.[0]?.enabled ?? false,
         language: user.language,
         welcomeScreen: user.welcomeScreen,
         memorizeTabs: user.memorizeTabs,
@@ -217,7 +218,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
+    // @todo check twofactorauth handling
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, twoFactorAuthenticationEnabled: user?.twoFactorAuthentication?.[0]?.enabled ?? false, parentId } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }

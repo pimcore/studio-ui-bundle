@@ -72,7 +72,9 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
         ...data,
         modified: false,
         changes: {},
-        modifiedCells: {}
+        modifiedCells: {},
+        // @todo check twofactorauth handling
+        twoFactorAuthenticationEnabled: data?.twoFactorAuthentication?.[0]?.enabled ?? false
       }))
     }).catch(() => {
       setIsError(true)

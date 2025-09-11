@@ -181,6 +181,7 @@ import { type DynamicTypeDocumentEditableTable } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { type DynamicTypeDocumentEditableRenderlet } from './definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
+import { type DynamicTypeDocumentEditableScheduledblock } from './definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
 import { type DynamicTypeDocumentEditableAreablock } from './definitions/document/editable/types/dynamic-type-document-editable-areablock'
@@ -352,6 +353,7 @@ moduleSystem.registerModule({
     const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
 
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableBlock>(serviceIds['DynamicTypes/DocumentEditable/Block']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableScheduledblock>(serviceIds['DynamicTypes/DocumentEditable/ScheduledBlock']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))
