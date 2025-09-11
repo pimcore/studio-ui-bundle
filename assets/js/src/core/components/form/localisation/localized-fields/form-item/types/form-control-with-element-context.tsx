@@ -1,0 +1,53 @@
+
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { Children, isValidElement, useMemo } from 'react'
+import { type FormItemProps } from 'antd'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+
+export interface KeyedFormItemControlProps {
+  children: React.ReactNode
+  getValueFromEvent?: FormItemProps['getValueFromEvent']
+  onChange?: (value: any) => void
+  value?: any
+  id?: string
+  disabled?: boolean
+}
+
+export const FormControlWithElementContext = ({ children, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
+  const Child = useMemo(() => Children.only(children), [children])
+  let isDisabled = false
+  const element = useElementContext();
+  const elementDraft = useElementDraft(element.id, element.elementType);
+  const languageSelection = useLanguageSelection();
+
+  if ('permissions' in elementDraft) {
+    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>;
+    const editableLanguages = permissions?.localizedEdit?.split(',') ?? [];
+    isDisabled = !editableLanguages.includes(languageSelection.currentLanguage);
+  }
+
+  if (!isValidElement(Child)) {
+    throw new Error('KeyedFormItemControl only accepts a single child')
+  }
+
+  const Component = Child.type
+
+  return useMemo(() => (
+    <Component
+      { ...Child.props }
+      { ...props }
+      disabled={ props.disabled || isDisabled }
+    />
+  ), [Child, props])
+}

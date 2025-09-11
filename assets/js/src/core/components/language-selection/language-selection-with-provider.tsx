@@ -9,17 +9,17 @@
  */
 
 import { LanguageSelection as BaseLanguageSelection } from './language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import React from 'react'
 import { useLanguageSelection } from './provider/use-language-selection'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export const LanguageSelectionWithProvider = (): React.JSX.Element => {
-  const settings = useSettings()
+  const user = useUser();
   const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
 
   return (
     <BaseLanguageSelection
-      languages={ [...settings.requiredLanguages] }
+      languages={ [...(Array.isArray(user.contentLanguages) ? user.contentLanguages : [])] }
       onSelectLanguage={ setCurrentLanguage }
       selectedLanguage={ currentLanguage }
     />
