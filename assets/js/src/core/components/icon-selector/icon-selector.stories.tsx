@@ -10,7 +10,7 @@
 
 import { type Meta, type StoryObj } from '@storybook/react'
 import { IconSelector } from './icon-selector'
-import React, { useState } from 'react'
+import React from 'react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Form } from '@sdk/components'
 import { FormKit } from '@Pimcore/components/form/form-kit'

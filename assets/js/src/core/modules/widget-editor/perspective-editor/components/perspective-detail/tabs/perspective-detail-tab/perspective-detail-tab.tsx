@@ -23,7 +23,6 @@ import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
-import { isNull, isUndefined } from 'lodash'
 
 export interface PerspectiveForm {
   name: string
@@ -45,7 +44,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
     name: perspective?.name ?? '',
     icon: perspective?.icon
   }
-  const currentIcon = Form.useWatch('icon', form)
 
   if (perspective === undefined) {
     return <></>
@@ -104,7 +102,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               label="Icon"
               name="icon"
             >
-              <IconSelector/>
+              <IconSelector />
             </Form.Item>
           </FormKit.Panel>
         </Content>

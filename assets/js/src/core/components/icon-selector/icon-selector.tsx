@@ -14,23 +14,23 @@ import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
 import { CustomIconTab } from './components/custom-icon-tab/custom-icon-tab'
+import { IconCard } from './components/icon-card'
+import { IconPreview } from './components/icon-preview'
 
 export interface IconSelectorProps {
-  value?: ElementIcon 
+  value?: ElementIcon
   onChange?: (icon: ElementIcon | undefined) => void
 }
 
 export const IconSelector = ({
   value,
-  onChange,
+  onChange
 }: IconSelectorProps): React.JSX.Element => {
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
 
@@ -135,54 +135,6 @@ export const IconSelector = ({
     setCurrentPage(1)
   }
 
-  const getIconDisplayName = (icon: ElementIcon): string => {
-    if (icon.type === 'path') {
-      return icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
-    }
-    return icon.value
-  }
-
-  const getIconCardClassName = (icon: ElementIcon): string => {
-    const isSelected = previewSelectedIcon?.value === icon.value &&
-                      previewSelectedIcon?.type === icon.type
-    return `${styles.iconCard} ${isSelected ? styles.selectedCard : ''}`
-  }
-
-  const renderIconCard = (icon: ElementIcon): React.JSX.Element => (
-    <Space
-      className={ getIconCardClassName(icon) }
-      key={ icon.value }
-      onClick={ () => { handleIconClick(icon) } }
-      size='mini'
-    >
-      <Icon
-        options={ { height: 24, width: 24 } }
-        type={ icon.type }
-        value={ icon.value }
-      />
-      <span className={ styles.iconName }>
-        {getIconDisplayName(icon)}
-      </span>
-    </Space>
-  )
-
-  const renderPreviewIcon = (): React.JSX.Element => {
-    return !isUndefined(previewSelectedIcon)
-      ? (
-        <Tooltip 
-          placement="bottom"
-          title={ previewSelectedIcon.value }
-        >
-          <Icon
-            options={ { height: 16, width: 16 } }
-            type={ previewSelectedIcon.type }
-            value={ previewSelectedIcon.value }
-          />
-        </Tooltip>
-        )
-      : <div></div>
-  }
-
   const handlePageChange = (page: number, newPageSize?: number): void => {
     setCurrentPage(page)
     if (!isUndefined(newPageSize)) {
@@ -192,27 +144,28 @@ export const IconSelector = ({
 
   return (
     <>
-    <Flex gap={'extra-small'}>
+      <Flex gap={ 'extra-small' }>
 
-              <Flex
-                align='center'
-                className={ styles.selectionPreview }
-                justify='center'
-              >
-                {renderPreviewIcon()}
-              </Flex>
-     <IconButton 
-     icon={ { value: 'folder-search' } }
-     onClick={ openModal }
-                     type='default'/>
-                 <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ handleClearSelection }
-                title={ t('icon-selector.clear-selection') }
-                type='default'
-              />
-    </Flex>  
-               
+        <Flex
+          align='center'
+          className={ styles.selectionPreview }
+          justify='center'
+        >
+          <IconPreview icon={ previewSelectedIcon } />
+        </Flex>
+        <IconButton
+          icon={ { value: 'folder-search' } }
+          onClick={ openModal }
+          type='default'
+        />
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ handleClearSelection }
+          title={ t('icon-selector.clear-selection') }
+          type='default'
+        />
+      </Flex>
+
       <Modal
         className={ styles.iconSelectorModal }
         footer={ <ModalFooter divider>
@@ -250,7 +203,14 @@ export const IconSelector = ({
 
           {activeTab !== 'custom' && (
             <div className={ styles.iconGrid }>
-              {paginatedIcons.map(renderIconCard)}
+              {paginatedIcons.map((icon) => (
+                <IconCard
+                  icon={ icon }
+                  isSelected={ previewSelectedIcon?.value === icon.value && previewSelectedIcon?.type === icon.type }
+                  key={ icon.value }
+                  onClick={ () => { handleIconClick(icon) } }
+                />
+              ))}
             </div>
           )}
 
@@ -273,7 +233,7 @@ export const IconSelector = ({
                 className={ styles.selectionPreview }
                 justify='center'
               >
-                {renderPreviewIcon()}
+                <IconPreview icon={ previewSelectedIcon } />
               </Flex>
               {!isUndefined(previewSelectedIcon) && (
               <IconButton
