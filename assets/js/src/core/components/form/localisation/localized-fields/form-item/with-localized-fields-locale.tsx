@@ -13,6 +13,7 @@ import React, { useMemo } from 'react'
 import { useLocalizedFields } from '../provider/localized-fields-provider/use-localized-fields'
 import { isArray } from 'lodash'
 import { Text } from '@Pimcore/components/text/text'
+import { LocalizedFormItemControl } from './localized-form-item-control'
 
 export const withLocalizedFieldsLocale = (Component: typeof Form.Item): typeof Form.Item => {
   const FormItemWithLocalizedFieldsLocale = (props: FormItemProps): React.JSX.Element => {
@@ -24,8 +25,9 @@ export const withLocalizedFieldsLocale = (Component: typeof Form.Item): typeof F
       }
 
       const { locales } = context
-      const { name, label, ...baseProps } = props
+      const { name, label, children, ...baseProps } = props
       const newName = [...(isArray(name) ? name : [name]), locales[0]]
+      const currentChildren = children as unknown as React.ReactNode
       const newLabel = (
         <>
           {label} <Text type='secondary'>({locales[0].toUpperCase()})</Text>
@@ -37,7 +39,11 @@ export const withLocalizedFieldsLocale = (Component: typeof Form.Item): typeof F
           { ...baseProps }
           label={ newLabel }
           name={ newName }
-        />
+        >
+          <LocalizedFormItemControl { ...context }>
+            { currentChildren }
+          </LocalizedFormItemControl>
+        </Component>
       )
     }, [context, props])
   }
