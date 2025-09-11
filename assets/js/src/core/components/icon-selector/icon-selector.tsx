@@ -23,7 +23,7 @@ import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynami
 import { CustomIconTab } from './components/custom-icon-tab/custom-icon-tab'
 
 export interface IconSelectorProps {
-  value?: ElementIcon | undefined
+  value: ElementIcon | undefined
   onChange?: (icon: ElementIcon | undefined) => void
   children: (openModal: () => void) => React.ReactNode
 }
