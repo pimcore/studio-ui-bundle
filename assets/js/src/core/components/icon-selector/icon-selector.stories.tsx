@@ -38,10 +38,10 @@ const IconSelectorDemo = (): React.JSX.Element => {
     <div style={ { padding: '20px' } }>
       <div style={ { marginBottom: '20px' } }>
         <p>Current selected icon: <strong>{selectedIcon?.value ?? 'None'}</strong></p>
-        
+
         <IconSelector
-          value={ selectedIcon }
           onChange={ handleChange }
+          value={ selectedIcon }
         >
           {(openModal) => (
             <IconButton
