@@ -14,7 +14,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/collections`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                         fieldName: queryArg.fieldName,
@@ -31,7 +31,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/groups`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         searchTerm: queryArg.searchTerm,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -48,7 +48,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/key-group-relations`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         searchTerm: queryArg.searchTerm,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -94,8 +94,8 @@ export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List o
 export type ClassificationStoreGetCollectionsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Page number */
     page: number;
     /** Number of items per page */
@@ -112,8 +112,8 @@ export type ClassificationStoreGetGroupsApiResponse = /** status 200 List of cla
 export type ClassificationStoreGetGroupsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Search Term */
     searchTerm?: string;
     /** Page number */
@@ -131,8 +131,8 @@ export type ClassificationStoreGetKeyGroupRelationsApiResponse =
 export type ClassificationStoreGetKeyGroupRelationsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Search Term */
     searchTerm?: string;
     /** Page number */

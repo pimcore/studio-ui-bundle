@@ -20,6 +20,7 @@ import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/o
 import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-value'
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { ClassificationStoreProvider } from './provider'
+import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   storeId: number
@@ -48,6 +49,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const originalValue = getOriginalValue(objectData, classificationStoreName)
   const inheritanceState = useInheritanceState()
   const fieldName = isArray(classificationStoreName) ? classificationStoreName[classificationStoreName.length - 1] : classificationStoreName
+  const classDefinitions = useClassDefinitions();
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -105,6 +107,15 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
     valueRef.current = value
   }, [value])
 
+  if (dataObject === undefined) {
+    return <></>
+  }
+
+  const classId = classDefinitions.getByName(dataObject.className)?.id
+  if (classId === undefined) {
+    return <></>
+  }
+  
   return (
     <ClassificationStoreProvider>
       <Form.KeyedList
@@ -116,7 +127,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
         <ClassificationStoreContent { ...props } />
         <ClassificationStoreModal
           fieldName={ fieldName }
-          objectId={ id }
+          classId={ classId }
           { ...props }
         />
       </Form.KeyedList>
