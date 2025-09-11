@@ -191,8 +191,8 @@ export const DocumentHotspotImagePreview = ({
         lastImageDimensions={ lastImageDimensions }
         onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
-        thumbnailSettings={ stableCropSettings }
         thumbnailConfig={ thumbnailConfig }
+        thumbnailSettings={ stableCropSettings }
         width={ width }
       />
       {hideAltTextInput !== true && isImageLoaded !== false && (

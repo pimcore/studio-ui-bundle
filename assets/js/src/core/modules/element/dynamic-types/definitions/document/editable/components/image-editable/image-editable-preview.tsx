@@ -49,7 +49,6 @@ export const ImageEditablePreview = ({
 
     return generateThumbnailUrl({
       assetId,
-      assetType: 'image',
       width,
       height,
       containerWidth,

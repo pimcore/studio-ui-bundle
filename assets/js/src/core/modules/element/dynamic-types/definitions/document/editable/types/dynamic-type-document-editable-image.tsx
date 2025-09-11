@@ -86,11 +86,11 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
 
     if (typeof value === 'object') {
       const { cropTop, cropLeft, cropWidth, cropHeight, cropPercent, ...otherProps } = value
-      
-      const hasCropData = !isUndefined(cropTop) || !isUndefined(cropLeft) || 
-                         !isUndefined(cropWidth) || !isUndefined(cropHeight) || 
+
+      const hasCropData = !isUndefined(cropTop) || !isUndefined(cropLeft) ||
+                         !isUndefined(cropWidth) || !isUndefined(cropHeight) ||
                          !isUndefined(cropPercent)
-      
+
       return {
         ...otherProps,
         ...(hasCropData && {
@@ -113,9 +113,8 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return null
     }
 
-
     const { crop, ...otherProps } = value
-    
+
     return {
       ...otherProps,
       ...crop
