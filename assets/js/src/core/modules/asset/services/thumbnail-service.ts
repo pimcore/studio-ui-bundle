@@ -126,17 +126,13 @@ export class ThumbnailService {
     const path = `/${assetType}/stream/dynamic`
     const params = new URLSearchParams()
 
-    // Merge dynamic config with any crop settings from the definition
     const finalConfig = { ...dynamicConfig }
-
-    // Inject crop settings if they exist in the definition
-    const cropKeys = ['cropPercent', 'cropWidth', 'cropHeight', 'cropTop', 'cropLeft'] as const
+    const cropKeys = ['cropPercent', 'cropWidth', 'cropHeight', 'cropTop', 'cropLeft']
     cropKeys.forEach(key => {
       if (key in definition && !isNil(definition[key as keyof DynamicThumbnailDefinition])) {
         finalConfig[key] = definition[key as keyof DynamicThumbnailDefinition]
       }
     })
-    console.log('Generate dynamic thumbnail with config:', finalConfig, definition)
     params.set('config', JSON.stringify(finalConfig))
 
     const queryString = params.toString()
