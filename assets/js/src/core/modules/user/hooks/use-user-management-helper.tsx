@@ -175,7 +175,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
 
-    let updateUser: User2 = {
+    const updateUser: User2 = {
       ...user,
       twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false,
       parentId: user.parentId ?? 0
@@ -183,7 +183,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
-      updateUser: updateUser
+      updateUser
     }))
 
     handleNotification(t('user-management.save-user.success'), error)

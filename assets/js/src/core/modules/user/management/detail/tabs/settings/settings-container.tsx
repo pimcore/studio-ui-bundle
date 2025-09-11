@@ -123,7 +123,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
 
                     { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin as number) }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
                         )
                       : null}
                   </Flex>
