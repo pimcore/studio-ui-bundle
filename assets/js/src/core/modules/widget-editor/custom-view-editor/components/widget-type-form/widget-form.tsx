@@ -27,13 +27,13 @@ interface WidgetFormProps {
 
 export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { form, widget } = useWidgetFormContext() // Todo: check if its better to use formData.id
+  const { form, widget } = useWidgetFormContext()
   const { isLoading, setWidgets, setIsLoading } = useWidgetEditorContext()
   const { removeWithConfirmation, updateWidget } = useWidgetEditor()
 
   return (
     <FormKit
-      formProps={ {
+      formProps={{
         form,
         layout: 'vertical',
         initialValues: {
@@ -46,7 +46,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
             setIsLoading(false)
           })
         }
-      } }
+      }}
     >
       <Flex
         className='makeTabsGreatAgain'
@@ -55,10 +55,10 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
       >
         <Content
           padded
-          padding={ {
+          padding={{
             x: 'small',
             y: 'none'
-          } }
+          }}
         >
           <GeneralTab />
           <TypeSpecificForm />
@@ -67,29 +67,29 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
+              disabled={isLoading}
+              icon={{ value: 'refresh' }}
+              onClick={() => {
                 form.resetFields()
-              } }
-              title={ t('refresh') }
+              }}
+              title={t('refresh')}
             />
 
             <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
+              disabled={isLoading}
+              icon={{ value: 'trash' }}
+              onClick={() => {
                 removeWithConfirmation(widget.id, widget.widgetType, () => {
                   setWidgets((prev) => prev.filter((w) => w.id !== widget.id))
                 })
-              } }
-              title={ t('delete') }
+              }}
+              title={t('delete')}
             />
           </div>
 
           <Button
             htmlType='submit'
-            loading={ isLoading }
+            loading={isLoading}
             type='primary'
           >
             {t('save')}

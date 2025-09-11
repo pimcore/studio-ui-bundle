@@ -19,8 +19,6 @@ interface WidgetDetailTabProps {
   id: string
 }
 
-// TODO: add registry to support different widget types with different forms
-
 export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element => {
   const { widgets } = useWidgetEditorContext()
   const widget = widgets.find(w => w.id === id)
@@ -33,8 +31,8 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
   const { form: Form } = widgetType!
 
   return (
-    <WidgetFormProvider widget={ widget }>
-      <WidgetForm form={ Form } />
+    <WidgetFormProvider widget={widget}>
+      <WidgetForm form={Form} />
     </WidgetFormProvider>
   )
 }
