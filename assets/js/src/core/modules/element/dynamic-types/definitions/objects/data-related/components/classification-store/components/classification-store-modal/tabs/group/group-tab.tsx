@@ -20,7 +20,7 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 
 interface GroupTabProps {
   storeId: ClassificationStoreGetGroupsApiArg['storeId']
-  objectId: ClassificationStoreGetGroupsApiArg['objectId']
+  classId: ClassificationStoreGetGroupsApiArg['classId']
   fieldName: ClassificationStoreGetGroupsApiArg['fieldName']
 }
 
@@ -39,7 +39,7 @@ export const GroupTab = (props: GroupTabProps): React.JSX.Element => {
       columns={ columns }
       queryArgs={ {
         storeId: props.storeId,
-        objectId: props.objectId,
+        classId: props.classId,
         fieldName: props.fieldName
       } }
       queryHook={ useClassificationStoreGetGroupsQuery }
