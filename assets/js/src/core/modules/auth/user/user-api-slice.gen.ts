@@ -374,6 +374,8 @@ export type UserInformation = {
     welcomeScreen: boolean;
     /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Allow Dirty Close */
+    allowDirtyClose: boolean;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
@@ -385,7 +387,7 @@ export type UserInformation = {
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
-    twoFactorAuthentication?: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Active studio perspective ID */
     activePerspective: string | null;
     /** Allowed studio perspectives */
@@ -473,7 +475,7 @@ export type User = {
     /** ID List of roles the user is assigned */
     roles: object;
     /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
@@ -523,7 +525,7 @@ export type User2 = {
     /** ID List of roles the user is assigned */
     roles: object;
     /** Two Factor Authentication Enabled */
-    twoFactorAuthenticationEnabled: boolean;
+    twoFactorAuthenticationRequired: boolean;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
