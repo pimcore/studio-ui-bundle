@@ -51,6 +51,7 @@ export interface ImageEditableConfig {
   focal_point_context_menu_item?: boolean
   uploadPath?: string
   disableInlineUpload?: boolean
+  thumbnail?: string | object
 }
 
 interface HotspotImageValue {
@@ -274,6 +275,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
               onResize={ handleImageResize }
               setCropModalOpen={ handleOpenCropModal }
               setMarkerModalOpen={ handleOpenHotspotMarkersModal }
+              thumbnailConfig={ props.config?.thumbnail }
               value={ convertToHotspotImageValue() }
               width={ smartDimensions?.width ?? width }
             />

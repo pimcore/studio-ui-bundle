@@ -55,18 +55,6 @@ export const ResponsiveAssetPreview = ({
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResize(imageContainerRef)
 
-  const stableThumbnailUrlRef = useRef<string | null | undefined>(undefined)
-  const lastThumbnailAssetIdRef = useRef<number | undefined>(undefined)
-
-  if (lastThumbnailAssetIdRef.current !== assetId) {
-    lastThumbnailAssetIdRef.current = assetId
-    stableThumbnailUrlRef.current = undefined
-  }
-
-  if (thumbnailUrl !== undefined && thumbnailUrl !== null && stableThumbnailUrlRef.current === undefined) {
-    stableThumbnailUrlRef.current = thumbnailUrl
-  }
-
   useEffect(() => {
     if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0) {
       onResize?.(currentImageDimensions)
@@ -83,14 +71,10 @@ export const ResponsiveAssetPreview = ({
   }, [assetId, onImageLoadedChange])
 
   const finalImageSrc = useMemo(() => {
-    const stableThumbnailUrl = stableThumbnailUrlRef.current
     if (assetId === undefined) {
       return src
     }
-    if (stableThumbnailUrl === undefined) {
-      return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
-    }
-    return stableThumbnailUrl ?? src
+    return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
   }, [assetId, src, thumbnailUrl])
 
   const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>): void => {

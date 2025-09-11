@@ -8,20 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
-import { getAssetPreviewUrl } from '@Pimcore/components/image-preview/utils/get-asset-preview-url'
 import { calculateThumbnailDimensions } from '../../../helpers/calculate-thumbnail-dimensions'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ThumbnailService, type CustomThumbnailDefinition } from '@Pimcore/modules/asset/services/thumbnail-service'
+import { isString } from 'lodash'
 
 interface ThumbnailSizeConfig {
   width?: number | string
   height?: number | string
   containerWidth: number
-  thumbnailSettings?: ImageThumbnailSettings
+  thumbnailSettings?: Partial<CustomThumbnailDefinition>
+  thumbnailConfig?: string | object
 }
 
 interface ThumbnailUrlConfig extends ThumbnailSizeConfig {
   assetId: number
-  assetType?: 'image' | 'video'
+  assetType: 'image' | 'video'
   fallbackSrc?: string
 }
 
@@ -35,8 +38,22 @@ export const generateThumbnailUrl = ({
   height,
   containerWidth,
   thumbnailSettings,
+  thumbnailConfig,
   fallbackSrc
 }: ThumbnailUrlConfig): string | null | undefined => {
+  const thumbnailService = container.get<ThumbnailService>(serviceIds['Asset/ThumbnailService'])
+
+  // If thumbnail config is a string, use named thumbnail
+  if (isString(thumbnailConfig)) {
+    return thumbnailService.getThumbnailUrl({
+      assetId,
+      assetType,
+      thumbnailName: thumbnailConfig,
+      ...thumbnailSettings
+    })
+  }
+
+  // For custom thumbnails, calculate dimensions and use thumbnail service
   const { thumbnailWidth, thumbnailHeight, resizeMode } = calculateThumbnailDimensions({
     width,
     height,
@@ -49,7 +66,7 @@ export const generateThumbnailUrl = ({
     return null
   }
 
-  const defaultThumbnailSettings: ImageThumbnailSettings = {
+  const defaultThumbnailSettings: Partial<CustomThumbnailDefinition> = {
     frame: false,
     resizeMode,
     mimeType: 'PNG',
@@ -57,22 +74,22 @@ export const generateThumbnailUrl = ({
   }
 
   if (thumbnailWidth !== undefined) {
-    return getAssetPreviewUrl({
+    return thumbnailService.getThumbnailUrl({
       assetId,
       assetType,
       width: thumbnailWidth,
       height: thumbnailHeight,
-      thumbnailSettings: defaultThumbnailSettings
+      ...defaultThumbnailSettings
     })
   }
 
   if (thumbnailHeight !== undefined) {
-    return getAssetPreviewUrl({
+    return thumbnailService.getThumbnailUrl({
       assetId,
       assetType,
       width: 0,
       height: thumbnailHeight,
-      thumbnailSettings: defaultThumbnailSettings
+      ...defaultThumbnailSettings
     })
   }
 
