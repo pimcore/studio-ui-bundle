@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space, Split } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
@@ -22,14 +22,14 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
 
 export interface IconSelectorProps {
-  onSelect: (icon: ElementIcon | undefined) => void
-  selectedIcon?: ElementIcon
+  value?: ElementIcon | undefined
+  onChange?: (icon: ElementIcon | undefined) => void
   children: (openModal: () => void) => React.ReactNode
 }
 
 export const IconSelector = ({
-  onSelect,
-  selectedIcon,
+  value,
+  onChange,
   children
 }: IconSelectorProps): React.JSX.Element => {
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
@@ -41,7 +41,11 @@ export const IconSelector = ({
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
-  const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
+  const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
+
+  useEffect(() => {
+    setPreviewSelectedIcon(value)
+  }, [value])
 
   const openModal = (): void => {
     setOpen(true)
@@ -52,7 +56,7 @@ export const IconSelector = ({
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
-    setPreviewSelectedIcon(selectedIcon)
+    setPreviewSelectedIcon(value)
   }
 
   const closeModal = (): void => {
@@ -105,9 +109,7 @@ export const IconSelector = ({
   }
 
   const handleSave = (): void => {
-    if (!isUndefined(previewSelectedIcon)) {
-      onSelect(previewSelectedIcon)
-    }
+    onChange?.(previewSelectedIcon)
     closeModal()
   }
 
