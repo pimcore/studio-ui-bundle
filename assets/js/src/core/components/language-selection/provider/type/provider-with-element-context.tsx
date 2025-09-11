@@ -12,17 +12,17 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import React, { useMemo, useState } from 'react'
-import { LanguageSelectionContext, LanguageSelectionProviderProps } from '../language-selection-provider'
+import { LanguageSelectionContext, type LanguageSelectionProviderProps } from '../language-selection-provider'
 
 export const ProviderWithElementContext = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
-  const user = useUser();
+  const user = useUser()
   let initialLanguage = user.contentLanguages?.[0] ?? 'en'
-  const element = useElementContext();
-  const elementDraft = useElementDraft(element.id, element.elementType);
+  const element = useElementContext()
+  const elementDraft = useElementDraft(element.id, element.elementType)
 
   if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>;
-    initialLanguage = permissions?.localizedView?.split(',')[0] ?? initialLanguage;
+    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
+    initialLanguage = permissions?.localizedView?.split(',')[0] ?? initialLanguage
   }
 
   const [currentLanguage, setCurrentLanguage] = useState(initialLanguage)

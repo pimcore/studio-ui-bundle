@@ -8,11 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Children, isValidElement, useMemo } from 'react'
+import React from 'react'
 import { type FormItemProps } from 'antd'
-import { useElementContext, useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useLanguageSelection } from '@Pimcore/components/language-selection'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { FormControlWithElementContext } from './types/form-control-with-element-context'
 import { FormControlWithoutContext } from './types/form-control-without-context'
 
@@ -26,9 +24,9 @@ export interface KeyedFormItemControlProps {
 }
 
 export const LocalizedFormItemControl = ({ ...props }: KeyedFormItemControlProps): React.JSX.Element => {
-  const elementContext = useOptionalElementContext();
-  
-  if (elementContext) {
+  const elementContext = useOptionalElementContext()
+
+  if (elementContext !== null) {
     return <FormControlWithElementContext { ...props } />
   }
 

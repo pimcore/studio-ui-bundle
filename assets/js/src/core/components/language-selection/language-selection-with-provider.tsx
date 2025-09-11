@@ -14,7 +14,7 @@ import { useLanguageSelection } from './provider/use-language-selection'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export const LanguageSelectionWithProvider = (): React.JSX.Element => {
-  const user = useUser();
+  const user = useUser()
   const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
 
   return (

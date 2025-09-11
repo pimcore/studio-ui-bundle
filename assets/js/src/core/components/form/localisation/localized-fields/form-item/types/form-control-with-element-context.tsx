@@ -1,3 +1,12 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 /**
  * This source file is available under the terms of the
@@ -27,14 +36,14 @@ export interface KeyedFormItemControlProps {
 export const FormControlWithElementContext = ({ children, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const Child = useMemo(() => Children.only(children), [children])
   let isDisabled = false
-  const element = useElementContext();
-  const elementDraft = useElementDraft(element.id, element.elementType);
-  const languageSelection = useLanguageSelection();
+  const element = useElementContext()
+  const elementDraft = useElementDraft(element.id, element.elementType)
+  const languageSelection = useLanguageSelection()
 
   if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>;
-    const editableLanguages = permissions?.localizedEdit?.split(',') ?? [];
-    isDisabled = !editableLanguages.includes(languageSelection.currentLanguage);
+    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
+    const editableLanguages: string[] = permissions?.localizedEdit?.split(',') ?? []
+    isDisabled = !editableLanguages.includes(languageSelection.currentLanguage)
   }
 
   if (!isValidElement(Child)) {
@@ -47,7 +56,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
     <Component
       { ...Child.props }
       { ...props }
-      disabled={ props.disabled || isDisabled }
+      disabled={ props.disabled !== true ? isDisabled : false }
     />
   ), [Child, props])
 }

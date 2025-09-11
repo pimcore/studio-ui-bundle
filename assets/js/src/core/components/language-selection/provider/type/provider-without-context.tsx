@@ -10,10 +10,10 @@
 
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import React, { useMemo, useState } from 'react'
-import { LanguageSelectionContext, LanguageSelectionProviderProps } from '../language-selection-provider';
+import { LanguageSelectionContext, type LanguageSelectionProviderProps } from '../language-selection-provider'
 
 export const ProviderWithoutContext = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
-  const user = useUser();
+  const user = useUser()
   const initialLanguage = user.contentLanguages?.[0] ?? 'en'
 
   const [currentLanguage, setCurrentLanguage] = useState(initialLanguage)

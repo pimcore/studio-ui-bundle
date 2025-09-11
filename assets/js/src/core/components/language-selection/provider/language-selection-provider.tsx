@@ -32,7 +32,7 @@ export interface LanguageSelectionProviderProps {
 }
 
 export const LanguageSelectionProvider = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
-  const element = useOptionalElementContext();
+  const element = useOptionalElementContext()
 
   if (element !== null) {
     return <ProviderWithElementContext>{ children }</ProviderWithElementContext>
