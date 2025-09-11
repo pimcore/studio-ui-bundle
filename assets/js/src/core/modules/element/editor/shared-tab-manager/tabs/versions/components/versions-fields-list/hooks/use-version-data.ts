@@ -34,7 +34,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {
-    return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
+    return !isEqual(item[versionKeysList[0]] ?? null, item[versionKeysList[1]] ?? null)
   })
 
   const sectionsList = useMemo(() => {
