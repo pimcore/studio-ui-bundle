@@ -31,8 +31,8 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
   const { form: Form } = widgetType!
 
   return (
-    <WidgetFormProvider widget={widget}>
-      <WidgetForm form={Form} />
+    <WidgetFormProvider widget={ widget }>
+      <WidgetForm form={ Form } />
     </WidgetFormProvider>
   )
 }
