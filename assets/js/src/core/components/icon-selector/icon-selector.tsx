@@ -16,6 +16,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -168,11 +169,16 @@ export const IconSelector = ({
   const renderPreviewIcon = (): React.JSX.Element => {
     return !isUndefined(previewSelectedIcon)
       ? (
-        <Icon
-          options={ { height: 16, width: 16 } }
-          type={ previewSelectedIcon.type }
-          value={ previewSelectedIcon.value }
-        />
+        <Tooltip 
+          placement="bottom"
+          title={ getIconDisplayName(previewSelectedIcon) }
+        >
+          <Icon
+            options={ { height: 16, width: 16 } }
+            type={ previewSelectedIcon.type }
+            value={ previewSelectedIcon.value }
+          />
+        </Tooltip>
         )
       : <div></div>
   }
