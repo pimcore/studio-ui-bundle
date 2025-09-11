@@ -73,16 +73,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            assetDocumentStreamDynamic: build.mutation<
+            assetDocumentStreamDynamic: build.query<
                 AssetDocumentStreamDynamicApiResponse,
                 AssetDocumentStreamDynamicApiArg
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/dynamic`,
-                    method: "POST",
-                    body: queryArg.body,
+                    params: {
+                        config: queryArg.config,
+                    },
                 }),
-                invalidatesTags: ["Assets"],
+                providesTags: ["Assets"],
             }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
@@ -272,13 +273,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            assetImageStreamDynamic: build.mutation<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
+            assetImageStreamDynamic: build.query<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/dynamic`,
-                    method: "POST",
-                    body: queryArg.body,
+                    params: {
+                        config: queryArg.config,
+                    },
                 }),
-                invalidatesTags: ["Assets"],
+                providesTags: ["Assets"],
             }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
@@ -525,9 +527,8 @@ export type AssetDocumentStreamDynamicApiResponse =
 export type AssetDocumentStreamDynamicApiArg = {
     /** Id of the document */
     id: number;
-    body: {
-        dynamicConfig: object;
-    };
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
@@ -776,9 +777,8 @@ export type AssetImageStreamDynamicApiResponse =
 export type AssetImageStreamDynamicApiArg = {
     /** Id of the asset */
     id: number;
-    body: {
-        dynamicConfig: object;
-    };
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -1338,7 +1338,7 @@ export const {
     useAssetGetTextDataByIdQuery,
     useAssetDocumentDownloadCustomQuery,
     useAssetDocumentStreamCustomQuery,
-    useAssetDocumentStreamDynamicMutation,
+    useAssetDocumentStreamDynamicQuery,
     useAssetDocumentStreamPreviewQuery,
     useAssetDocumentDownloadByThumbnailQuery,
     useAssetDocumentStreamByThumbnailQuery,
@@ -1359,7 +1359,7 @@ export const {
     useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
-    useAssetImageStreamDynamicMutation,
+    useAssetImageStreamDynamicQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,
