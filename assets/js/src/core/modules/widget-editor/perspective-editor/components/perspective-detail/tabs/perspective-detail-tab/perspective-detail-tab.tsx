@@ -46,7 +46,14 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
     name: perspective?.name ?? '',
     icon: perspective?.icon
   }
+  const formValues = Form.useWatch([], form)
   const currentIcon = Form.useWatch('icon', form)
+
+  // Log form changes for debugging
+  React.useEffect(() => {
+    console.log('Form values changed:', formValues)
+    console.log('Current icon from form watch:', currentIcon)
+  }, [formValues, currentIcon])
 
   if (perspective === undefined) {
     return <></>
@@ -58,11 +65,12 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         form,
         initialValues,
         onFinish: async (values: PerspectiveForm) => {
+          console.log('Form onFinish called with values:', values)
           const formValues = {
             ...values,
             icon: values.icon ?? { type: 'name' as const, value: 'perspective' }
           }
-          console.table(formValues)
+          console.log('Final form values after processing:', formValues)
           setIsLoading(true)
 
           await updatePerspective(perspective.id, {
@@ -103,30 +111,20 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             </Form.Item>
 
             <Form.Item
+              label="Icon"
               name="icon"
-              style={ { display: 'none' } }
             >
-              <input type="hidden" />
+              <IconSelector>
+                {(openModal) => (
+                  <Button onClick={ openModal }>
+                    Open Icon Selector
+                  </Button>
+                )}
+              </IconSelector>
             </Form.Item>
-          </FormKit.Panel>
-          <Flex
-            align="center"
-            gap="small"
-          >
-            <IconSelector
-              onSelect={ (iconData) => {
-                form.setFieldsValue({ icon: iconData })
-              } }
-              selectedIcon={ currentIcon }
-            >
-              {(openModal) => (
-                <Button onClick={ openModal }>
-                  Open Icon Selector
-                </Button>
-              )}
-            </IconSelector>
+
             {!isUndefined(currentIcon) && !isNull(currentIcon) && (
-              <>
+              <Form.Item label="Selected Icon">
                 <Flex
                   align="center"
                   gap="small"
@@ -136,18 +134,19 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
                     value={ currentIcon.value }
                   />
                   <span>Selected: {currentIcon.value}</span>
+                  <Button
+                    onClick={ () => {
+                      console.log('Clear Icon button clicked')
+                      form.setFieldsValue({ icon: undefined })
+                    } }
+                    size="small"
+                  >
+                    Clear Icon
+                  </Button>
                 </Flex>
-                <Button
-                  onClick={ () => {
-                    form.setFieldsValue({ icon: undefined })
-                  } }
-                  size="small"
-                >
-                  Clear Icon
-                </Button>
-              </>
+              </Form.Item>
             )}
-          </Flex>
+          </FormKit.Panel>
         </Content>
 
         <Toolbar justify="space-between">

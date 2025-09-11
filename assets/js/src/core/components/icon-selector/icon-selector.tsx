@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo, useState, useEffect } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space, Split } from '@sdk/components'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -20,6 +20,7 @@ import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
+import { CustomIconTab } from './components/custom-icon-tab/custom-icon-tab'
 
 export interface IconSelectorProps {
   value?: ElementIcon | undefined
@@ -42,6 +43,7 @@ export const IconSelector = ({
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
+  const [customIconPath, setCustomIconPath] = useState<string>('')
 
   useEffect(() => {
     setPreviewSelectedIcon(value)
@@ -56,6 +58,7 @@ export const IconSelector = ({
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
+    setCustomIconPath('')
     setPreviewSelectedIcon(value)
   }
 
@@ -74,7 +77,12 @@ export const IconSelector = ({
       key: iconSet.id,
       label: iconSet.name,
       children: null
-    }))
+    })),
+    {
+      key: 'custom',
+      label: t('icon-selector.custom-icon'),
+      children: null
+    }
   ]
 
   const getAllIcons = (): ElementIcon[] => {
@@ -104,7 +112,7 @@ export const IconSelector = ({
     return filteredIcons.slice(startIndex, endIndex)
   }, [filteredIcons, currentPage, pageSize])
 
-  const handleIconClick = (icon: ElementIcon): void => {
+  const handleIconClick = (icon: ElementIcon): void => {    
     setPreviewSelectedIcon(icon)
   }
 
@@ -119,15 +127,22 @@ export const IconSelector = ({
 
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
+    if (activeTab === 'custom') {
+      setCustomIconPath('')
+    }
+  }
+
+  const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
+    setPreviewSelectedIcon(icon)
+    if (icon?.type === 'path') {
+      setCustomIconPath(icon.value)
+    } else {
+      setCustomIconPath('')
+    }
   }
 
   const handleSearch = (value: string): void => {
     setSearchValue(value)
-    setCurrentPage(1)
-  }
-
-  const handleRefresh = (): void => {
-    setSearchValue('')
     setCurrentPage(1)
   }
 
@@ -219,9 +234,18 @@ export const IconSelector = ({
             withoutAddon={ false }
           />
 
-          <div className={ styles.iconGrid }>
-            {paginatedIcons.map(renderIconCard)}
-          </div>
+          {activeTab !== 'custom' && (
+            <div className={ styles.iconGrid }>
+              {paginatedIcons.map(renderIconCard)}
+            </div>
+          )}
+
+          {activeTab === 'custom' && (
+            <CustomIconTab
+              customIconPath={ customIconPath }
+              onCustomIconPathChange={ handleCustomIconChange }
+            />
+          )}
           <Flex
             justify="space-between"
           >
@@ -247,22 +271,12 @@ export const IconSelector = ({
               )}
             </Flex>
 
-            <Flex
-              align="center"
-              gap="small"
-            >
-              <Split>
-                <Flex
-                  align="center"
-                >
-                  <IconButton
-                    icon={ { value: 'refresh' } }
-                    onClick={ handleRefresh }
-                    theme='secondary'
-                    title={ t('refresh') }
-                    variant='minimal'
-                  />
-                </Flex>
+            {activeTab !== 'custom' && (
+              <Flex
+                align="center"
+                gap="small"
+                justify="flex-end"
+              >
                 <Pagination
                   current={ currentPage }
                   defaultPageSize={ pageSize }
@@ -272,8 +286,8 @@ export const IconSelector = ({
                   showTotal={ (total) => t('pagination.show-total', { total }) }
                   total={ filteredIcons.length }
                 />
-              </Split>
-            </Flex>
+              </Flex>
+            )}
           </Flex>
         </Flex>
       </Modal>

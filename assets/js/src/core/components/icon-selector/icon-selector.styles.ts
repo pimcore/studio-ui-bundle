@@ -86,6 +86,11 @@ export const useStyles = createStyles(({ token, css }) => {
       color: ${token.colorTextDescription};
     `,
 
+    customIconContainer: css`
+      padding-top: ${token.paddingSM}px;
+      padding-bottom: ${token.paddingSM}px;
+    `,
+
     iconSelectorModal: css`
       .ant-modal-content {
         gap: 0 !important;
