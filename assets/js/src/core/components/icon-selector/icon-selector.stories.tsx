@@ -28,40 +28,31 @@ export default config
 type Story = StoryObj<typeof config>
 
 const IconSelectorDemo = (): React.JSX.Element => {
-  const [open, setOpen] = useState(false)
   const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>(undefined)
 
-  const handleOpen = (): void => {
-    setOpen(true)
-  }
-
-  const handleClose = (): void => {
-    setOpen(false)
-  }
-
-  const handleSelect = (icon: ElementIcon): void => {
+  const handleChange = (icon: ElementIcon | undefined): void => {
     setSelectedIcon(icon)
-    setOpen(false)
   }
 
   return (
     <div style={ { padding: '20px' } }>
       <div style={ { marginBottom: '20px' } }>
         <p>Current selected icon: <strong>{selectedIcon?.value ?? 'None'}</strong></p>
-        <IconButton
-          icon={ { value: selectedIcon?.value ?? 'edit' } }
-          onClick={ handleOpen }
+        
+        <IconSelector
+          value={ selectedIcon }
+          onChange={ handleChange }
         >
-          Select Icon
-        </IconButton>
+          {(openModal) => (
+            <IconButton
+              icon={ { value: selectedIcon?.value ?? 'edit' } }
+              onClick={ openModal }
+            >
+              Select Icon
+            </IconButton>
+          )}
+        </IconSelector>
       </div>
-
-      <IconSelector
-        onCancel={ handleClose }
-        onSelect={ handleSelect }
-        open={ open }
-        selectedIcon={ selectedIcon }
-      />
     </div>
   )
 }
