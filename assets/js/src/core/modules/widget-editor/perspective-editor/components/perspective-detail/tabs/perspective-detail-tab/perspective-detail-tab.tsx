@@ -46,7 +46,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
     name: perspective?.name ?? '',
     icon: perspective?.icon
   }
-  const formValues = Form.useWatch([], form)
   const currentIcon = Form.useWatch('icon', form)
 
   if (perspective === undefined) {
