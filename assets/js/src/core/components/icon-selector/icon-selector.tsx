@@ -41,7 +41,6 @@ export const IconSelector = ({
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
-  const [customIconPath, setCustomIconPath] = useState<string>('')
 
   useEffect(() => {
     setPreviewSelectedIcon(value)
@@ -56,7 +55,6 @@ export const IconSelector = ({
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
-    setCustomIconPath('')
     setPreviewSelectedIcon(value)
   }
 
@@ -125,18 +123,10 @@ export const IconSelector = ({
 
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
-    if (activeTab === 'custom') {
-      setCustomIconPath('')
-    }
   }
 
   const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
     setPreviewSelectedIcon(icon)
-    if (icon?.type === 'path') {
-      setCustomIconPath(icon.value)
-    } else {
-      setCustomIconPath('')
-    }
   }
 
   const handleSearch = (value: string): void => {
@@ -260,7 +250,7 @@ export const IconSelector = ({
 
           {activeTab === 'custom' && (
             <CustomIconTab
-              customIconPath={ customIconPath }
+              customIconPath={ previewSelectedIcon?.type === 'path' ? previewSelectedIcon.value : '' }
               onCustomIconPathChange={ handleCustomIconChange }
             />
           )}
