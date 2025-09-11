@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo, useState, useEffect } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space } from '@sdk/components'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
