@@ -13,7 +13,9 @@ export const GeneralTab = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { form } = useWidgetFormContext()
   const [open, setOpen] = useState<boolean>(false)
-  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>(undefined)
+  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>(
+    form.getFieldValue('icon') ?? undefined
+  )
 
   const handleOpen = (): void => {
     setOpen(true)

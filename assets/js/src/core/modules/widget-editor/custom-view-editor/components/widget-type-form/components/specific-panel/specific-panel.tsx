@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next"
 import { useWidgetFormContext } from "../../context/hooks/use-widget-form-context"
 import { ManyToOneRelation, ManyToOneRelationValueType } from "@Pimcore/components/many-to-one-relation/many-to-one-relation"
 import { Switch } from "@Pimcore/components/switch/switch"
+import { InputNumber } from "antd"
+import { elementTypes } from "@sdk/modules/data-object"
 
 export const SpecificPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,7 +32,9 @@ export const SpecificPanel = (): React.JSX.Element => {
       >
         <ManyToOneRelation
           allowToClearRelation
-          dataObjectsAllowed
+          dataObjectsAllowed={form.getFieldValue('elementType') === elementTypes.dataObject}
+          assetsAllowed={form.getFieldValue('elementType') === elementTypes.asset}
+          documentsAllowed={form.getFieldValue('elementType') === elementTypes.document}
         />
       </Form.Item>
 
@@ -38,6 +42,13 @@ export const SpecificPanel = (): React.JSX.Element => {
         name="showRoot"
       >
         <Switch labelRight={t('widget-editor.widget-form.specific.show-root')} />
+      </Form.Item>
+
+      <Form.Item
+        name="pageSize"
+        label={t('widget-editor.widget-form.specific.page-size')}
+      >
+        <InputNumber />
       </Form.Item>
     </FormKit.Panel>
   )

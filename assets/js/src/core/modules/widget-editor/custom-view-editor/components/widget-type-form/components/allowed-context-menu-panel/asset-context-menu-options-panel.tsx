@@ -36,17 +36,20 @@ export const AssetContextMenuOptionsPanel = (): React.JSX.Element => {
         collapsed={false}
       >
         <div className={styles.allowedContextMenuOptions}>
-          {assetContextMenuItems.map(permission => (
-            <Form.Item
-              key={permission}
-              name={`contextPermissions[${permission}]`}
-              valuePropName='checked'
-            >
-              <Switch
-                labelRight={t('widget-editor.widget-form.allowed-context-menu.' + permission)}
-              />
-            </Form.Item>
-          ))}
+          <Form.Group
+            name={'contextPermissions'}
+          >
+            {assetContextMenuItems.map(permission => (
+              <Form.Item
+                key={permission}
+                name={permission}
+              >
+                <Switch
+                  labelRight={t('widget-editor.widget-form.allowed-context-menu.' + permission)}
+                />
+              </Form.Item>
+            ))}
+          </Form.Group>
         </div>
       </FormKit.Panel>
     </Conditional >

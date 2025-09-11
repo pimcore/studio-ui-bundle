@@ -19,7 +19,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
   const { t } = useTranslation()
   const { form, widget } = useWidgetFormContext()  //Todo: check if its better to use formData.id
   const { isLoading, setWidgets, setIsLoading } = useWidgetEditorContext()
-  const { removeWithConfirmation } = useWidgetEditor()
+  const { removeWithConfirmation, updateWidget } = useWidgetEditor()
 
   return (
     <FormKit
@@ -30,8 +30,11 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
           ...widget
         },
         onFinish: async (values: any) => {
+          setIsLoading(true)
           console.table(values)
-          //setIsLoading(true)
+          updateWidget(widget.id, widget.widgetType, values, () => {
+            setIsLoading(false)
+          })
         }
       }}
     >

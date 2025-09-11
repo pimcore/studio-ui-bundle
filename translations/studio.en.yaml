@@ -1164,6 +1164,7 @@ widget-editor.widget-form.specific.title: Specific
 widget-editor.widget-form.specific.element-type: Element Type
 widget-editor.widget-form.specific.root-folder: Root Folder
 widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.specific.page-size: Page Size
 widget-editor.widget-form.allowed-objects.title: Allowed Objects
 widget-editor.widget-form.filters.title: Filters
 widget-editor.widget-form.filters.pql: PQL Statement
