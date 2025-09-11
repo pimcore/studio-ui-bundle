@@ -283,5 +283,5 @@ export const serviceIds = {
   'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
 
   // Perspective & Widget Editor
-  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry',
+  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry'
 }

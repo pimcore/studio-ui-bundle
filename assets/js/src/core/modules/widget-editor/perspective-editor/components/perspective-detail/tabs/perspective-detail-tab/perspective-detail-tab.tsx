@@ -55,7 +55,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
 
   return (
     <FormKit
-      formProps={{
+      formProps={ {
         form,
         initialValues,
         onFinish: async (values: PerspectiveForm) => {
@@ -78,7 +78,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               setIsLoading(false)
             })
         }
-      }}
+      } }
     >
       <Flex
         className='makeTabsGreatAgain'
@@ -87,10 +87,10 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
       >
         <Content
           padded
-          padding={{
+          padding={ {
             x: 'small',
             y: 'none'
-          }}
+          } }
         >
           <FormKit.Panel>
             <Form.Item
@@ -100,7 +100,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             >
               <Input
 
-                placeholder={t('perspective-editor.form.name.placeholder')}
+                placeholder={ t('perspective-editor.form.name.placeholder') }
               />
             </Form.Item>
 
@@ -155,30 +155,30 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              disabled={isLoading}
-              icon={{ value: 'refresh' }}
-              onClick={() => {
+              disabled={ isLoading }
+              icon={ { value: 'refresh' } }
+              onClick={ () => {
                 form.resetFields()
                 form.setFieldsValue(initialValues)
-              }}
-              title={t('refresh')}
+              } }
+              title={ t('refresh') }
             />
 
             <IconButton
-              disabled={isLoading}
-              icon={{ value: 'trash' }}
-              onClick={() => {
+              disabled={ isLoading }
+              icon={ { value: 'trash' } }
+              onClick={ () => {
                 removeWithConfirmation(perspective.id, () => {
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
                 })
-              }}
-              title={t('delete')}
+              } }
+              title={ t('delete') }
             />
           </div>
 
           <Button
             htmlType='submit'
-            loading={isLoading}
+            loading={ isLoading }
             type='primary'
           >
             {t('save')}

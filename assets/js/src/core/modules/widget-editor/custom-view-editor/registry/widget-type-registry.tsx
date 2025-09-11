@@ -10,7 +10,7 @@
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { injectable } from 'inversify'
-import { ComponentType } from 'react'
+import { type ComponentType } from 'react'
 
 export interface WidgetTypeDefinition {
   readonly id: string
@@ -25,12 +25,11 @@ export interface WidgetTypeRegistryInterface {
   overrideWidgetType: (type: WidgetTypeDefinition) => void
 }
 
-
 @injectable()
 export class WidgetTypeRegistry implements WidgetTypeRegistryInterface {
   protected readonly widgetFormTypes = new Map<string, WidgetTypeDefinition>()
 
-  registerWidgetType(type: WidgetTypeDefinition): void {
+  registerWidgetType (type: WidgetTypeDefinition): void {
     if (this.widgetFormTypes.has(type.id)) {
       trackError(new GeneralError(`Widget form type with id "${type.id}" already exists`))
       return
@@ -39,7 +38,7 @@ export class WidgetTypeRegistry implements WidgetTypeRegistryInterface {
     this.widgetFormTypes.set(type.id, type)
   }
 
-  getWidgetType(id: string, throwException: boolean = true): WidgetTypeDefinition | undefined {
+  getWidgetType (id: string, throwException: boolean = true): WidgetTypeDefinition | undefined {
     const widgetFormType = this.widgetFormTypes.get(id)
 
     if (widgetFormType === undefined && throwException) {
@@ -49,15 +48,15 @@ export class WidgetTypeRegistry implements WidgetTypeRegistryInterface {
     return widgetFormType
   }
 
-  hasWidgetType(id: string): boolean {
+  hasWidgetType (id: string): boolean {
     return this.widgetFormTypes.has(id)
   }
 
-  getAllWidgetTypes(): WidgetTypeDefinition[] {
+  getAllWidgetTypes (): WidgetTypeDefinition[] {
     return Array.from(this.widgetFormTypes.values())
   }
 
-  overrideWidgetType(type: WidgetTypeDefinition): void {
+  overrideWidgetType (type: WidgetTypeDefinition): void {
     if (!this.widgetFormTypes.has(type.id)) {
       trackError(new GeneralError(`Widget form type with id "${type.id}" not found`))
       return

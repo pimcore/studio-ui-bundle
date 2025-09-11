@@ -1,6 +1,16 @@
-import { usePerspectiveGetConfigByIdQuery, AssetContextPermissions, DataObjectContextPermissions, DocumentContextPermissions } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
-import { isEmpty } from "lodash"
-import { useMemo } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { usePerspectiveGetConfigByIdQuery, type AssetContextPermissions, type DataObjectContextPermissions, type DocumentContextPermissions } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { isEmpty } from 'lodash'
+import { useMemo } from 'react'
 
 interface UseWidgetTypeFormReturn {
   dataObjectContextMenuItems: string[]
@@ -18,7 +28,7 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions) as string[]
+      return Object.keys(cleanPermissions)
     }
 
     return []
@@ -30,7 +40,7 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions) as string[]
+      return Object.keys(cleanPermissions)
     }
 
     return []
@@ -42,7 +52,7 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions) as string[]
+      return Object.keys(cleanPermissions)
     }
 
     return []

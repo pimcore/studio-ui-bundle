@@ -1,5 +1,15 @@
-import { useContext } from "react"
-import { WidgetFormContext, WidgetFormContextProps } from "../widget-form-provider"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { useContext } from 'react'
+import { WidgetFormContext, type WidgetFormContextProps } from '../widget-form-provider'
 
 export const useWidgetFormContext = (): WidgetFormContextProps => {
   const context = useContext(WidgetFormContext)
@@ -9,5 +19,4 @@ export const useWidgetFormContext = (): WidgetFormContextProps => {
   }
 
   return context
-
 }

@@ -12,15 +12,14 @@ import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/custom-vi
 import React from 'react'
 import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
 import { WidgetForm } from '../../../widget-type-form/widget-form'
-import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
+import { type WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
 import { container } from '@sdk/app'
 
 interface WidgetDetailTabProps {
   id: string
 }
 
-
-//TODO: add registry to support different widget types with different forms
+// TODO: add registry to support different widget types with different forms
 
 export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element => {
   const { widgets } = useWidgetEditorContext()
@@ -34,8 +33,8 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
   const { form: Form } = widgetType!
 
   return (
-    <WidgetFormProvider widget={widget}>
-      <WidgetForm form={Form} />
+    <WidgetFormProvider widget={ widget }>
+      <WidgetForm form={ Form } />
     </WidgetFormProvider>
   )
 }

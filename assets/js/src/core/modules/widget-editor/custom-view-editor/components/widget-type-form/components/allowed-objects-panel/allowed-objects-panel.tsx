@@ -1,11 +1,21 @@
-import { FormKit } from "@Pimcore/components/form/form-kit"
-import { useTranslation } from "react-i18next"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { FormKit } from '@Pimcore/components/form/form-kit'
+import { useTranslation } from 'react-i18next'
 import React from 'react'
-import { useClassDefinitions } from "@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions"
-import { Form } from "@Pimcore/components/form/form"
+import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { Form } from '@Pimcore/components/form/form'
 import { useStyles } from './allowed-objects-panel.styles'
-import { Switch } from "@Pimcore/components/switch/switch"
-import { uniqueId } from "lodash"
+import { Switch } from '@Pimcore/components/switch/switch'
+import { uniqueId } from 'lodash'
 
 export const AllowedObjectsPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -14,21 +24,21 @@ export const AllowedObjectsPanel = (): React.JSX.Element => {
 
   return (
     <FormKit.Panel
-      title={t('widget-editor.widget-form.allowed-objects.title')}
+      collapsed={ false }
       collapsible
-      collapsed={false}
+      title={ t('widget-editor.widget-form.allowed-objects.title') }
     >
-      <div className={styles.allowedObjectsGrid}>
+      <div className={ styles.allowedObjectsGrid }>
         <Form.Group
-          name={'classes'}
+          name={ 'classes' }
         >
           {getClassDefinitionsForCurrentUser().map(classDefinition => (
             <Form.Item
-              key={uniqueId()}
-              name={classDefinition.id}
+              key={ uniqueId() }
+              name={ classDefinition.id }
             >
               <Switch
-                labelRight={classDefinition.name}
+                labelRight={ classDefinition.name }
               />
             </Form.Item>
           ))}

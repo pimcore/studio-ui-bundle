@@ -31,25 +31,25 @@ export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidget
 
   return (
     <Form
-      form={form}
-      initialValues={{
+      form={ form }
+      initialValues={ {
         widgetType: WidgetTypes.ElementTree,
         ...initialValues
-      }}
+      } }
       layout="vertical"
     >
       <Form.Item
-        label={t('widget-editor.create-form.name')}
+        label={ t('widget-editor.create-form.name') }
         name="name"
-        rules={[
+        rules={ [
           { required: true, message: t('widget-editor.create-form.name.required') }
-        ]}
+        ] }
       >
-        <Input ref={inputRef} />
+        <Input ref={ inputRef } />
       </Form.Item>
 
       <Form.Item
-        label={t('widget-editor.create-form.widgetType')}
+        label={ t('widget-editor.create-form.widgetType') }
         name="widgetType"
       >
         <WidgetTypeSelect />

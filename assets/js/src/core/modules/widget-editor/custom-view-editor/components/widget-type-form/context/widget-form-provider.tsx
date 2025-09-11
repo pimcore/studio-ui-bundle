@@ -1,6 +1,16 @@
-import { Form } from "@Pimcore/components/form/form"
-import { WidgetConfig } from "@Pimcore/modules/perspectives/perspectives-slice.enhanced"
-import React, { createContext, Dispatch, SetStateAction, useMemo, useState } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import React, { createContext, type Dispatch, type SetStateAction, useMemo, useState } from 'react'
 
 interface WidgetFormProviderProps {
   children: React.ReactNode
@@ -28,7 +38,7 @@ export const WidgetFormProvider = ({ children, widget }: WidgetFormProviderProps
   }), [widget, form, formData])
 
   return (
-    <WidgetFormContext.Provider value={contextValue}>
+    <WidgetFormContext.Provider value={ contextValue }>
       {children}
     </WidgetFormContext.Provider>
   )

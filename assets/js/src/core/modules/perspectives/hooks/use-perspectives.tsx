@@ -18,7 +18,7 @@ import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import {
   api,
-  PerspectiveConfigDetail,
+  type PerspectiveConfigDetail,
   type PerspectiveConfig, type PerspectiveGetConfigCollectionApiResponse
 } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import trackError, { ApiError, GeneralError } from '../../app/error-handler'
@@ -91,17 +91,17 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
       title: <Flex
         align="center"
         gap="small"
-      >
+             >
         <Spin type="classic" />
         {t('perspective.switching.title')}
       </Flex>,
       content: <div>
-        <Box margin={{ bottom: 'small' }}>
+        <Box margin={ { bottom: 'small' } }>
           {t('perspective.switching.description')}:
         </Box>
         <IconTextButton
           color="primary"
-          icon={perspective.icon}
+          icon={ perspective.icon }
           variant="filled"
         >
           {t(perspective.name)}
