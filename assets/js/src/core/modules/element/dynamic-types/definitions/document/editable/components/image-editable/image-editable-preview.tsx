@@ -17,13 +17,13 @@ import { generateThumbnailUrl } from './utils/thumbnail-sizing'
 interface ImageEditablePreviewProps {
   src?: string
   assetId?: number
-  assetType?: 'image' | 'video'
   width?: number | string
   height?: number | string
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
   thumbnailSettings?: ImageThumbnailSettings
+  thumbnailConfig?: string | object
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
@@ -34,11 +34,11 @@ interface ImageEditablePreviewProps {
 export const ImageEditablePreview = ({
   src,
   assetId,
-  assetType,
   width,
   height,
   containerWidth,
   thumbnailSettings,
+  thumbnailConfig,
   onImageLoadedChange,
   ...props
 }: ImageEditablePreviewProps): React.JSX.Element => {
@@ -49,14 +49,14 @@ export const ImageEditablePreview = ({
 
     return generateThumbnailUrl({
       assetId,
-      assetType,
       width,
       height,
       containerWidth,
       thumbnailSettings,
+      thumbnailConfig,
       fallbackSrc: src
     })
-  }, [assetId, src, width, height, assetType, thumbnailSettings, containerWidth])
+  }, [assetId, src, width, height, thumbnailSettings, thumbnailConfig, containerWidth])
 
   return (
     <ResponsiveAssetPreview

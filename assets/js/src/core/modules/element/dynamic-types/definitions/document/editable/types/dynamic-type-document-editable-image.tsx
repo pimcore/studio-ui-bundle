@@ -11,7 +11,7 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { ImageEditable } from '../components/image-editable/image-editable'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 
 export interface ImageEditableConfig {
   title?: string
@@ -85,7 +85,24 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
     }
 
     if (typeof value === 'object') {
-      return value
+      const { cropTop, cropLeft, cropWidth, cropHeight, cropPercent, ...otherProps } = value
+
+      const hasCropData = !isUndefined(cropTop) || !isUndefined(cropLeft) ||
+                         !isUndefined(cropWidth) || !isUndefined(cropHeight) ||
+                         !isUndefined(cropPercent)
+
+      return {
+        ...otherProps,
+        ...(hasCropData && {
+          crop: {
+            ...(!isUndefined(cropTop) && { cropTop }),
+            ...(!isUndefined(cropLeft) && { cropLeft }),
+            ...(!isUndefined(cropWidth) && { cropWidth }),
+            ...(!isUndefined(cropHeight) && { cropHeight }),
+            ...(!isUndefined(cropPercent) && { cropPercent })
+          }
+        })
+      }
     }
 
     return null
@@ -96,7 +113,12 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return null
     }
 
-    return value
+    const { crop, ...otherProps } = value
+
+    return {
+      ...otherProps,
+      ...crop
+    }
   }
 
   private getImageId (value: ImageEditableValue | null | undefined): number | undefined {

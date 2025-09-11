@@ -17,6 +17,7 @@ export interface PdfEditableConfig {
   width?: number
   height?: number
   uploadPath?: string
+  thumbnail?: string | object
 }
 
 export interface PdfEditableValue {

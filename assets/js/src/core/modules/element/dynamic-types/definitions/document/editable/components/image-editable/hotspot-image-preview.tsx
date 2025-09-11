@@ -52,6 +52,8 @@ interface DocumentHotspotImagePreviewProps {
   hideAltTextInput?: boolean
   isImageLoaded?: boolean
   onImageLoadedChange?: (isLoaded: boolean) => void
+  // Thumbnail config from image editable configuration
+  thumbnailConfig?: string | object
 }
 
 export const DocumentHotspotImagePreview = ({
@@ -77,7 +79,8 @@ export const DocumentHotspotImagePreview = ({
   onAltTextChange,
   hideAltTextInput,
   isImageLoaded,
-  onImageLoadedChange
+  onImageLoadedChange,
+  thumbnailConfig
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
@@ -96,6 +99,15 @@ export const DocumentHotspotImagePreview = ({
     // Same as open - open the asset in the editor where focal point can be set
     handleOpen()
   }
+
+  // Stabilize crop settings to prevent unnecessary URL regeneration
+  const stableCropSettings = useMemo(() => value.crop, [
+    value.crop?.cropLeft,
+    value.crop?.cropTop,
+    value.crop?.cropWidth,
+    value.crop?.cropHeight,
+    value.crop?.cropPercent
+  ])
 
   const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => {
     const items: DropdownProps['menu']['items'] = []
@@ -179,7 +191,8 @@ export const DocumentHotspotImagePreview = ({
         lastImageDimensions={ lastImageDimensions }
         onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
-        thumbnailSettings={ value.crop }
+        thumbnailConfig={ thumbnailConfig }
+        thumbnailSettings={ stableCropSettings }
         width={ width }
       />
       {hideAltTextInput !== true && isImageLoaded !== false && (

@@ -36,6 +36,7 @@ export interface PdfEditableConfig {
   width?: number
   height?: number
   uploadPath?: string
+  thumbnail?: string | object
 }
 
 export interface PdfEditableProps {
@@ -218,6 +219,7 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
               key={ pdfValue.id }
               lastImageDimensions={ smartDimensions }
               onResize={ handlePdfResize }
+              thumbnailConfig={ props.config?.thumbnail }
               width={ smartDimensions?.width ?? width }
             />
             )
