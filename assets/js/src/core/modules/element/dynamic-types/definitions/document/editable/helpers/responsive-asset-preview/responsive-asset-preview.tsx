@@ -51,6 +51,7 @@ export const ResponsiveAssetPreview = ({
   const keyRef = useRef(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const lastAssetIdRef = useRef<number | undefined>(assetId)
+  const lastImageSrcRef = useRef<string | undefined>(undefined)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResize(imageContainerRef)
@@ -67,6 +68,7 @@ export const ResponsiveAssetPreview = ({
       keyRef.current = keyRef.current + 1
       setIsImageLoaded(false)
       onImageLoadedChange?.(false)
+      lastImageSrcRef.current = undefined
     }
   }, [assetId, onImageLoadedChange])
 
@@ -76,6 +78,15 @@ export const ResponsiveAssetPreview = ({
     }
     return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
   }, [assetId, src, thumbnailUrl])
+
+  useEffect(() => {
+    if (finalImageSrc !== lastImageSrcRef.current) {
+      lastImageSrcRef.current = finalImageSrc
+      keyRef.current = keyRef.current + 1
+      setIsImageLoaded(false)
+      onImageLoadedChange?.(false)
+    }
+  }, [finalImageSrc, onImageLoadedChange])
 
   const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>): void => {
     setIsImageLoaded(true)
