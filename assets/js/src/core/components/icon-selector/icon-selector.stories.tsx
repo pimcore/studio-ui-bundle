@@ -32,15 +32,15 @@ const IconSelectorDemo = (): React.JSX.Element => {
 
   return (
     <div style={ { padding: '20px' } }>
-        <div>
-          <Typography.Text strong>Icon Selector:</Typography.Text>
-          <div style={ { marginTop: '8px' } }>
-            <IconSelector
-              value={selectedIcon}
-              onChange={setSelectedIcon}
-            />
-          </div>
+      <div>
+        <Typography.Text strong>Icon Selector:</Typography.Text>
+        <div style={ { marginTop: '8px' } }>
+          <IconSelector
+            onChange={ setSelectedIcon }
+            value={ selectedIcon }
+          />
         </div>
+      </div>
     </div>
   )
 }

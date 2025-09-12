@@ -191,7 +191,8 @@ export const IconSelector = ({
             onChange={ setActiveTab }
           />
 
-           {activeTab !== 'custom' && (<SearchInput
+          {activeTab !== 'custom' && (
+          <SearchInput
             maxWidth={ '1000px' }
             onChange={ (e) => { setSearchValue(e.target.value) } }
             onSearch={ handleSearch }
@@ -199,7 +200,8 @@ export const IconSelector = ({
             value={ searchValue }
             withPrefix={ false }
             withoutAddon={ false }
-          />)}
+          />
+          )}
 
           {activeTab !== 'custom' && (
             <div className={ styles.iconGrid }>
