@@ -178,7 +178,7 @@ export const IconSelector = ({
         className={ styles.iconSelectorModal }
         footer={ <ModalFooter divider>
           <Button
-            disabled={ isUndefined(previewSelectedIcon) }
+            disabled={ isUndefined(previewSelectedIcon) || hasSubmissionError }
             onClick={ handleSave }
             type="primary"
           >
@@ -245,7 +245,7 @@ export const IconSelector = ({
               >
                 <IconPreview 
                   icon={ previewSelectedIcon }
-                  onLoadError={ handleSubmissionError }
+                  onLoadError={ setHasSubmissionError }
                 />
               </Flex>
               {!isUndefined(previewSelectedIcon) && (
