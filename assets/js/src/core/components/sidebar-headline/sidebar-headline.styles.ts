@@ -9,28 +9,50 @@
  */
 
 import { createStyles } from 'antd-style'
+import { type Sizings } from '@Pimcore/utils/sizing'
 
-export const useStyles = createStyles(({ token, css }) => {
+interface StyleProps {
+  marginBottom: Sizings
+}
+
+const getMarginBottomValue = (token: any, size: Sizings): number => {
+  const mapping = {
+    none: 0,
+    mini: token.marginXXS,
+    'extra-small': token.marginXS,
+    small: token.marginSM,
+    normal: token.margin,
+    medium: token.marginMD,
+    large: token.marginLG,
+    'extra-large': token.marginXL,
+    maxi: token.marginXXL
+  }
+  return mapping[size] ?? mapping.normal
+}
+
+export const useStyles = createStyles(({ token, css }, { marginBottom }: StyleProps) => {
+  const marginBottomValue = getMarginBottomValue(token, marginBottom)
+
   return {
     container: css`
       padding: 0 ${token.paddingMD}px;
-      margin-bottom: ${token.marginXS}px;
+      margin-bottom: ${marginBottomValue}px;
     `,
 
     containerWithBorder: css`
-      padding: 0 ${token.paddingMD}px;
+      padding: 0 ${token.paddingXS}px;
       border-bottom: 1px solid ${token.colorBorderSecondary};
-      margin-bottom: ${token.marginXS}px;
+      margin-bottom: ${marginBottomValue}px;
     `,
 
     containerAsFormLabel: css`
       padding: 0 ${token.paddingXXS}px ${token.paddingXXS}px;
-      margin-bottom: ${token.marginXS}px;
+      margin-bottom: ${marginBottomValue}px;
     `,
 
     containerAsFormLabelWithBorder: css`
       padding: 0 ${token.paddingXXS}px ${token.paddingXXS}px;
-      margin-bottom: ${token.marginXS}px;
+      margin-bottom: ${marginBottomValue}px;
       position: relative;
       
       &::after {

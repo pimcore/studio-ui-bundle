@@ -12,21 +12,24 @@ import React from 'react'
 import classNames from 'classnames'
 import { Title } from '@Pimcore/components/title/title'
 import { useStyles } from './sidebar-headline.styles'
+import { type Sizings } from '@Pimcore/utils/sizing'
 
 export interface SidebarHeadlineProps {
   children: React.ReactNode
   withBorder?: boolean
   asFormLabel?: boolean
   className?: string
+  marginBottom?: Sizings
 }
 
 export const SidebarHeadline = ({
   children,
   withBorder = false,
   asFormLabel = false,
-  className
+  className,
+  marginBottom = 'extra-small'
 }: SidebarHeadlineProps): React.JSX.Element => {
-  const { styles } = useStyles()
+  const { styles } = useStyles({ marginBottom })
 
   const containerClassName = classNames(
     asFormLabel

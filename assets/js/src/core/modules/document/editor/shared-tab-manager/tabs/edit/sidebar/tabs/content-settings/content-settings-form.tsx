@@ -23,8 +23,8 @@ import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
-import { debounce, isNull, isUndefined } from 'lodash'
+import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
+import { isNull, isUndefined } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 
@@ -47,6 +47,7 @@ export const ContentSettingsForm = ({
   const settings = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { document, updateSettingsData, updateProperty, addProperty, properties } = useDocumentDraft(documentId)
+  const { debouncedAutoSave } = useSave()
 
   const titleCountRef = useRef<HTMLSpanElement>(null)
   const descriptionCountRef = useRef<HTMLSpanElement>(null)
@@ -58,13 +59,6 @@ export const ContentSettingsForm = ({
   }
 
   const languageProperty = !isNull(properties) && !isUndefined(properties) ? properties.find(prop => prop.key === 'language' && !prop.inherited) : undefined
-
-  const debouncedAutoSave = useCallback(
-    debounce(() => {
-      documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave).catch(console.error)
-    }, 500),
-    [documentId]
-  )
 
   const handleFormChange = useCallback((changedValues: Record<string, any>, allValues: Record<string, any>) => {
     const { language, contentMainDocument, ...settingsDataChanges } = changedValues
@@ -166,16 +160,18 @@ export const ContentSettingsForm = ({
 
       <Form.Item
         label={
-          document?.type === 'page' ? (
-            <SidebarHeadline
-              asFormLabel
-              withBorder
-            >
-              {t('language')}
-            </SidebarHeadline>
-          ) : (
-            t('language')
-          )
+          document?.type === 'page'
+            ? (
+              <SidebarHeadline
+                asFormLabel
+                withBorder
+              >
+                {t('language')}
+              </SidebarHeadline>
+              )
+            : (
+                t('language')
+              )
         }
         name="language"
       >

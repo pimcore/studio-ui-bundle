@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
+import { debounce } from 'lodash'
 import { DocumentContext } from '../../document-provider'
 import { useDocumentDraft } from '../../hooks/use-document-draft'
 import { SaveTaskType } from '@sdk/modules/data-object'
@@ -18,6 +19,7 @@ import { documentSaveService } from '../../services'
 
 export interface UseSaveHookReturn {
   save: (task?: SaveTaskType, onFinish?: () => void) => Promise<void>
+  debouncedAutoSave: () => void
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -33,6 +35,13 @@ export const useSave = (): UseSaveHookReturn => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState<FetchBaseQueryError | SerializedError | undefined>()
+
+  const debouncedAutoSave = useCallback(
+    debounce(() => {
+      documentSaveService.saveDocument(id, SaveTaskType.AutoSave).catch(console.error)
+    }, 500),
+    [id]
+  )
 
   const save = async (task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
     if (document?.changes === undefined) return
@@ -60,6 +69,7 @@ export const useSave = (): UseSaveHookReturn => {
 
   return {
     save,
+    debouncedAutoSave,
     isLoading,
     isSuccess,
     isError,

@@ -20,6 +20,9 @@ import {
 import {
   AreablockTypesSidebar
 } from './sidebar/tabs/areablock-types/areablock-types-sidebar'
+import {
+  NavigationSidebar
+} from './sidebar/tabs/navigation/navigation-sidebar'
 import { checkAreablockTypesVisibility } from './sidebar/visibility/areablock-types-visibility'
 
 moduleSystem.registerModule({
@@ -43,6 +46,15 @@ moduleSystem.registerModule({
             />,
       component: <ContentSettingsSidebar />,
       tooltip: 'content-settings'
+    })
+
+    sidebarManager.registerEntry({
+      key: 'navigation',
+      icon: <Icon
+        value={ 'navigation' }
+            />,
+      component: <NavigationSidebar />,
+      tooltip: 'navigation.sidebar-title'
     })
   }
 })

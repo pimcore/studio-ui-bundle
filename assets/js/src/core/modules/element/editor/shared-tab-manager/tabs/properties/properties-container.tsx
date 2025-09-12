@@ -204,9 +204,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
       <Table
         propertiesTableTab={ propertiesTableTab }
+        showDisallowedPropertyModal={ showDisallowedPropertyModal }
         showDuplicatePropertyModal={ showDuplicatePropertyModal }
         showMandatoryModal={ showMandatoryModal }
-        showDisallowedPropertyModal={ showDisallowedPropertyModal }
       />
     </Content>
   )

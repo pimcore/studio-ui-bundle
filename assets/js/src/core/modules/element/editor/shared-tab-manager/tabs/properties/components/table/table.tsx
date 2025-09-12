@@ -183,7 +183,7 @@ export const Table = ({
     const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
 
     // Prevent changing property key to a disallowed key for specific element types
-    const isChangingKeyToDisallowed = columnId === 'key' && 
+    const isChangingKeyToDisallowed = columnId === 'key' &&
       isDisallowedPropertyKey(value as string, elementType)
 
     if (isChangingKeyToDisallowed) {
