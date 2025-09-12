@@ -133,6 +133,9 @@ export const IconSelector = ({
 
   const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
     setPreviewSelectedIcon(icon)
+    if (isUndefined(icon)) {
+      setHasSubmissionError(false)
+    }
   }
 
   const handleSearch = (value: string): void => {
