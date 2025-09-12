@@ -83,11 +83,7 @@ export const NavigationForm = ({
 
   const handleFormChange = useCallback((changedValues: Record<string, any>) => {
     Object.entries(changedValues).forEach(([key, value]) => {
-      if (key === 'navigation_exclude') {
-        updateNavigationProperty(key, value)
-      } else {
-        updateNavigationProperty(key, value)
-      }
+      updateNavigationProperty(key, value)
     })
   }, [updateNavigationProperty])
 
