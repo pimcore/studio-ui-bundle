@@ -114,6 +114,7 @@ export const IconSelector = ({
 
   const handleIconClick = (icon: ElementIcon): void => {
     setPreviewSelectedIcon(icon)
+    setHasSubmissionError(false)
   }
 
   const handleSave = (): void => {
@@ -127,6 +128,7 @@ export const IconSelector = ({
 
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
+    setHasSubmissionError(false)
   }
 
   const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
@@ -151,14 +153,11 @@ export const IconSelector = ({
 
         <Flex
           align='center'
-          className={ cn(styles.selectionPreview, {
-            [styles.selectionPreviewError]: hasSubmissionError
-          }) }
+          className={ styles.selectionPreview }
           justify='center'
         >
           <IconPreview 
             icon={ previewSelectedIcon }
-            onLoadError={ setHasSubmissionError }
           />
         </Flex>
         <IconButton
@@ -239,7 +238,7 @@ export const IconSelector = ({
               <Flex
                 align='center'
                 className={ cn(styles.selectionPreview, {
-                  [styles.selectionPreviewError]: hasSubmissionError
+                  [styles.selectionPreviewError]: hasSubmissionError && activeTab === 'custom'
                 }) }
                 justify='center'
               >
