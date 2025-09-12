@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SearchInput } from '@sdk/components'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -24,9 +24,13 @@ export const CustomIconTab = ({
   customIconPath,
   onCustomIconPathChange
 }: CustomIconTabProps): React.JSX.Element => {
-    const [customPathValue, setCustomPathValue] = useState<string>('')
+    const [customPathValue, setCustomPathValue] = useState<string>(customIconPath)
 
   const { styles } = useStyles()
+
+  useEffect(() => {
+    setCustomPathValue(customIconPath)
+  }, [customIconPath])
 
   const handleInputSubmission = (): void => {
     if (customPathValue.trim() !== '') {
@@ -51,12 +55,6 @@ export const CustomIconTab = ({
         vertical
       >
         <span>{t('icon-selector.custom-icon-path')}</span>
-        {/* <Input
-          onChange={ handleInputChange }
-          placeholder={ t('icon-selector.custom-icon-path-placeholder') }
-          value={ customIconPath }
-          addonAfter={<Icon value='refresh'/>}
-        /> */}
           <SearchInput
             maxWidth={ '1000px' }
             onChange={ (e) => { setCustomPathValue(e.target.value) } }

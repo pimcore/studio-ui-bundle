@@ -15,6 +15,7 @@ import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Flex } from '@Pimcore/components/flex/flex'
+import cn from 'classnames'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -42,6 +43,7 @@ export const IconSelector = ({
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
+  const [hasSubmissionError, setHasSubmissionError] = useState<boolean>(false)
 
   useEffect(() => {
     setPreviewSelectedIcon(value)
@@ -57,6 +59,7 @@ export const IconSelector = ({
     setPageSize(40)
     setActiveTab('all')
     setPreviewSelectedIcon(value)
+    setHasSubmissionError(false)
   }
 
   const closeModal = (): void => {
@@ -148,10 +151,15 @@ export const IconSelector = ({
 
         <Flex
           align='center'
-          className={ styles.selectionPreview }
+          className={ cn(styles.selectionPreview, {
+            [styles.selectionPreviewError]: hasSubmissionError
+          }) }
           justify='center'
         >
-          <IconPreview icon={ previewSelectedIcon } />
+          <IconPreview 
+            icon={ previewSelectedIcon }
+            onLoadError={ setHasSubmissionError }
+          />
         </Flex>
         <IconButton
           icon={ { value: 'folder-search' } }
@@ -230,10 +238,15 @@ export const IconSelector = ({
               <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
               <Flex
                 align='center'
-                className={ styles.selectionPreview }
+                className={ cn(styles.selectionPreview, {
+                  [styles.selectionPreviewError]: hasSubmissionError
+                }) }
                 justify='center'
               >
-                <IconPreview icon={ previewSelectedIcon } />
+                <IconPreview 
+                  icon={ previewSelectedIcon }
+                  onLoadError={ handleSubmissionError }
+                />
               </Flex>
               {!isUndefined(previewSelectedIcon) && (
               <IconButton
