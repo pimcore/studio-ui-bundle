@@ -12,7 +12,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Input } from '@Pimcore/components/input/input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -21,10 +20,9 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective-editor/hooks/use-perspective-editor'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
-import { isNull, isUndefined } from 'lodash'
 
 export interface PerspectiveForm {
   name: string
@@ -41,13 +39,11 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<PerspectiveForm>()
-  const [iconSelectorOpen, setIconSelectorOpen] = useState(false)
 
   const initialValues: PerspectiveForm = {
     name: perspective?.name ?? '',
     icon: perspective?.icon
   }
-  const currentIcon = Form.useWatch('icon', form)
 
   if (perspective === undefined) {
     return <></>
@@ -63,7 +59,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             ...values,
             icon: values.icon ?? { type: 'name' as const, value: 'perspective' }
           }
-          console.table(formValues)
           setIsLoading(true)
 
           await updatePerspective(perspective.id, {
@@ -105,51 +100,12 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             </Form.Item>
 
             <Form.Item
+              label="Icon"
               name="icon"
-              style={ { display: 'none' } }
             >
-              <input type="hidden" />
+              <IconSelector />
             </Form.Item>
           </FormKit.Panel>
-          <Flex
-            align="center"
-            gap="small"
-          >
-            <Button onClick={ () => { setIconSelectorOpen(true) } }>
-              Open Icon Selector
-            </Button>
-            {!isUndefined(currentIcon) && !isNull(currentIcon) && (
-              <>
-                <Flex
-                  align="center"
-                  gap="small"
-                >
-                  <Icon
-                    type={ currentIcon.type }
-                    value={ currentIcon.value }
-                  />
-                  <span>Selected: {currentIcon.value}</span>
-                </Flex>
-                <Button
-                  onClick={ () => {
-                    form.setFieldsValue({ icon: undefined })
-                  } }
-                  size="small"
-                >
-                  Clear Icon
-                </Button>
-              </>
-            )}
-          </Flex>
-          <IconSelector
-            onCancel={ () => { setIconSelectorOpen(false) } }
-            onSelect={ (iconData) => {
-              form.setFieldsValue({ icon: iconData })
-              setIconSelectorOpen(false)
-            } }
-            open={ iconSelectorOpen }
-            selectedIcon={ currentIcon }
-          />
         </Content>
 
         <Toolbar justify="space-between">

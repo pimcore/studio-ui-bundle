@@ -1219,3 +1219,6 @@ icon-selector.current-selection: Current Selection
 icon-selector.clear-selection: Clear selection
 icon-selector.no-selection: No icon selected
 icon-selector.save: Save
+icon-selector.custom-icon: Custom Icon
+icon-selector.custom-icon-path: Icon Path
+icon-selector.custom-icon-path-placeholder: Enter custom icon path (e.g., /path/to/icon.svg)

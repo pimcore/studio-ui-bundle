@@ -8,48 +8,60 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space, Split } from '@sdk/components'
+import React, { useMemo, useState, useEffect } from 'react'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DynamicTypeIconSetRegistry } from './dynamic-types/registry/dynamic-type-icon-set-registry'
+import { CustomIconTab } from './components/custom-icon-tab/custom-icon-tab'
+import { IconCard } from './components/icon-card'
+import { IconPreview } from './components/icon-preview'
 
 export interface IconSelectorProps {
-  open: boolean
-  onCancel: () => void
-  onSelect: (icon: ElementIcon | undefined) => void
-  selectedIcon?: ElementIcon
+  value?: ElementIcon
+  onChange?: (icon: ElementIcon | undefined) => void
 }
 
 export const IconSelector = ({
-  open,
-  onCancel,
-  onSelect,
-  selectedIcon
+  value,
+  onChange
 }: IconSelectorProps): React.JSX.Element => {
   const iconSetRegistry = useInjection<DynamicTypeIconSetRegistry>(serviceIds['DynamicTypes/IconSetRegistry'])
 
   const { styles } = useStyles()
 
+  const [open, setOpen] = useState<boolean>(false)
   const [searchValue, setSearchValue] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
-  const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(selectedIcon)
+  const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
+
+  useEffect(() => {
+    setPreviewSelectedIcon(value)
+  }, [value])
+
+  const openModal = (): void => {
+    setOpen(true)
+  }
 
   const resetSelector = (): void => {
     setSearchValue('')
     setCurrentPage(1)
     setPageSize(40)
     setActiveTab('all')
-    setPreviewSelectedIcon(selectedIcon)
+    setPreviewSelectedIcon(value)
+  }
+
+  const closeModal = (): void => {
+    setOpen(false)
+    resetSelector()
   }
 
   const tabItems = [
@@ -62,7 +74,12 @@ export const IconSelector = ({
       key: iconSet.id,
       label: iconSet.name,
       children: null
-    }))
+    })),
+    {
+      key: 'custom',
+      label: t('icon-selector.custom-icon'),
+      children: null
+    }
   ]
 
   const getAllIcons = (): ElementIcon[] => {
@@ -97,73 +114,25 @@ export const IconSelector = ({
   }
 
   const handleSave = (): void => {
-    if (!isUndefined(previewSelectedIcon)) {
-      onSelect(previewSelectedIcon)
-    }
-    resetSelector()
-    onCancel()
+    onChange?.(previewSelectedIcon)
+    closeModal()
   }
 
   const handleCancel = (): void => {
-    resetSelector()
-    onCancel()
+    closeModal()
   }
 
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
   }
 
+  const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
+    setPreviewSelectedIcon(icon)
+  }
+
   const handleSearch = (value: string): void => {
     setSearchValue(value)
     setCurrentPage(1)
-  }
-
-  const handleRefresh = (): void => {
-    setSearchValue('')
-    setCurrentPage(1)
-  }
-
-  const getIconDisplayName = (icon: ElementIcon): string => {
-    if (icon.type === 'path') {
-      return icon.value.split('/').pop()?.replace('.svg', '') ?? icon.value
-    }
-    return icon.value
-  }
-
-  const getIconCardClassName = (icon: ElementIcon): string => {
-    const isSelected = previewSelectedIcon?.value === icon.value &&
-                      previewSelectedIcon?.type === icon.type
-    return `${styles.iconCard} ${isSelected ? styles.selectedCard : ''}`
-  }
-
-  const renderIconCard = (icon: ElementIcon): React.JSX.Element => (
-    <Space
-      className={ getIconCardClassName(icon) }
-      key={ icon.value }
-      onClick={ () => { handleIconClick(icon) } }
-      size='mini'
-    >
-      <Icon
-        options={ { height: 24, width: 24 } }
-        type={ icon.type }
-        value={ icon.value }
-      />
-      <span className={ styles.iconName }>
-        {getIconDisplayName(icon)}
-      </span>
-    </Space>
-  )
-
-  const renderPreviewIcon = (): React.JSX.Element => {
-    return !isUndefined(previewSelectedIcon)
-      ? (
-        <Icon
-          options={ { height: 16, width: 16 } }
-          type={ previewSelectedIcon.type }
-          value={ previewSelectedIcon.value }
-        />
-        )
-      : <div></div>
   }
 
   const handlePageChange = (page: number, newPageSize?: number): void => {
@@ -174,98 +143,130 @@ export const IconSelector = ({
   }
 
   return (
-    <Modal
-      className={ styles.iconSelectorModal }
-      footer={ <ModalFooter divider>
-        <Button
-          disabled={ isUndefined(previewSelectedIcon) }
-          onClick={ handleSave }
-          type="primary"
-        >
-          {t('icon-selector.save')}
-        </Button>
-      </ModalFooter>
-      }
-      onCancel={ handleCancel }
-      open={ open }
-      size="ML"
-    >
-      <Flex
-        vertical
-      >
-        <Tabs
-          activeKey={ activeTab }
-          items={ tabItems }
-          onChange={ setActiveTab }
-        />
+    <>
+      <Flex gap={ 'extra-small' }>
 
-        <SearchInput
-          maxWidth={ '1000px' }
-          onChange={ (e) => { setSearchValue(e.target.value) } }
-          onSearch={ handleSearch }
-          placeholder={ t('icon-selector.search-placeholder') }
-          value={ searchValue }
-          withPrefix={ false }
-          withoutAddon={ false }
-        />
-
-        <div className={ styles.iconGrid }>
-          {paginatedIcons.map(renderIconCard)}
-        </div>
         <Flex
-          justify="space-between"
+          align='center'
+          className={ styles.selectionPreview }
+          justify='center'
         >
-          <Flex
-            align="center"
-            gap="small"
-          >
-            <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
-            <Flex
-              align='center'
-              className={ styles.selectionPreview }
-              justify='center'
-            >
-              {renderPreviewIcon()}
-            </Flex>
-            {!isUndefined(previewSelectedIcon) && (
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ handleClearSelection }
-              title={ t('icon-selector.clear-selection') }
-              type='default'
-            />
-            )}
-          </Flex>
+          <IconPreview icon={ previewSelectedIcon } />
+        </Flex>
+        <IconButton
+          icon={ { value: 'folder-search' } }
+          onClick={ openModal }
+          type='default'
+        />
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ handleClearSelection }
+          title={ t('icon-selector.clear-selection') }
+          type='default'
+        />
+      </Flex>
 
-          <Flex
-            align="center"
-            gap="small"
+      <Modal
+        className={ styles.iconSelectorModal }
+        footer={ <ModalFooter divider>
+          <Button
+            disabled={ isUndefined(previewSelectedIcon) }
+            onClick={ handleSave }
+            type="primary"
           >
-            <Split>
+            {t('icon-selector.save')}
+          </Button>
+        </ModalFooter>
+        }
+        onCancel={ handleCancel }
+        open={ open }
+        size="ML"
+      >
+        <Flex
+          vertical
+        >
+          <Tabs
+            activeKey={ activeTab }
+            items={ tabItems }
+            onChange={ setActiveTab }
+          />
+
+          {activeTab !== 'custom' && (
+          <SearchInput
+            maxWidth={ '1000px' }
+            onChange={ (e) => { setSearchValue(e.target.value) } }
+            onSearch={ handleSearch }
+            placeholder={ t('icon-selector.search-placeholder') }
+            value={ searchValue }
+            withPrefix={ false }
+            withoutAddon={ false }
+          />
+          )}
+
+          {activeTab !== 'custom' && (
+            <div className={ styles.iconGrid }>
+              {paginatedIcons.map((icon) => (
+                <IconCard
+                  icon={ icon }
+                  isSelected={ previewSelectedIcon?.value === icon.value && previewSelectedIcon?.type === icon.type }
+                  key={ icon.value }
+                  onClick={ () => { handleIconClick(icon) } }
+                />
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'custom' && (
+            <CustomIconTab
+              customIconPath={ previewSelectedIcon?.type === 'path' ? previewSelectedIcon.value : '' }
+              onCustomIconPathChange={ handleCustomIconChange }
+            />
+          )}
+          <Flex
+            justify="space-between"
+          >
+            <Flex
+              align="center"
+              gap="small"
+            >
+              <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
+              <Flex
+                align='center'
+                className={ styles.selectionPreview }
+                justify='center'
+              >
+                <IconPreview icon={ previewSelectedIcon } />
+              </Flex>
+              {!isUndefined(previewSelectedIcon) && (
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ handleClearSelection }
+                title={ t('icon-selector.clear-selection') }
+                type='default'
+              />
+              )}
+            </Flex>
+
+            {activeTab !== 'custom' && (
               <Flex
                 align="center"
+                gap="small"
+                justify="flex-end"
               >
-                <IconButton
-                  icon={ { value: 'refresh' } }
-                  onClick={ handleRefresh }
-                  theme='secondary'
-                  title={ t('refresh') }
-                  variant='minimal'
+                <Pagination
+                  current={ currentPage }
+                  defaultPageSize={ pageSize }
+                  onChange={ handlePageChange }
+                  pageSizeOptions={ [40, 80, 120] }
+                  showSizeChanger
+                  showTotal={ (total) => t('pagination.show-total', { total }) }
+                  total={ filteredIcons.length }
                 />
               </Flex>
-              <Pagination
-                current={ currentPage }
-                defaultPageSize={ pageSize }
-                onChange={ handlePageChange }
-                pageSizeOptions={ [40, 80, 120] }
-                showSizeChanger
-                showTotal={ (total) => t('pagination.show-total', { total }) }
-                total={ filteredIcons.length }
-              />
-            </Split>
+            )}
           </Flex>
         </Flex>
-      </Flex>
-    </Modal>
+      </Modal>
+    </>
   )
 }
