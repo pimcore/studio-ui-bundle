@@ -19,7 +19,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Tabs } from '../tabs/tabs'
 
 const config: Meta = {
-  title: 'Components/Controls/Pipeline',
+  title: 'Components/Data Entry/Pipeline',
   component: (): React.JSX.Element => {
     const initialValues = {
       pipeline1: {

@@ -91,7 +91,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     visibleFieldDefinitions[key] = field
   }
 
-  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true)
+  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '')
 
   return (
     <ManyToManyRelation

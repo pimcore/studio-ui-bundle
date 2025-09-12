@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isNil, isUndefined } from 'lodash'
-import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type AccessorKeyColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
@@ -21,11 +21,13 @@ import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
+import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -39,6 +41,8 @@ const columnHelper = createColumnHelper()
 export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
   const [isShowLoading, setIsShowLoading] = useState(false)
   const prevReportRef = useRef<string | null>(null)
+
+  const { sorting, setSorting } = useReportDataContext()
 
   useEffect(() => {
     if (currentReport !== prevReportRef.current) {
@@ -58,7 +62,26 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const { columns, setColumns, setInitialColumns } = useColumnsContext()
   const { openElement } = useElementHelper()
+
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const sortingValue = useMemo(() => {
+    return !isUndefined(sorting) ? [{ id: sorting.sortBy, desc: sorting.sortOrder === 'DESC' }] : []
+  }, [sorting])
+
+  const handleSortingChange = (updatedSorting: SortingState): void => {
+    if (updatedSorting.length > 0) {
+      const { id, desc } = updatedSorting[0]
+
+      setSorting({
+        sortBy: id,
+        sortOrder: desc ? 'DESC' : 'ASC'
+      })
+    } else {
+      setSorting(undefined)
+    }
+  }
 
   const handleElementOpen = ({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
     if (actionType === ReportActionType.OPEN_URL) {
@@ -87,7 +110,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     const list: Array<AccessorKeyColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
-      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
+      const isShowColumn = item.display && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
@@ -144,6 +167,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   return (
     <Flex
+      className="h-full"
       gap="small"
       vertical
     >
@@ -162,7 +186,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         </Flex>
       )}
       <Flex
-        gap="extra-small"
+        className="h-full"
+        gap="small"
+        justify="flex-start"
         vertical
       >
         {isShowChart && (
@@ -174,9 +200,14 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         {!isUndefined(chartData) && (
           <Grid
             autoWidth
+            className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableSorting
             isLoading={ isLoading }
+            manualSorting
+            onSortingChange={ handleSortingChange }
+            sorting={ sortingValue }
           />
         )}
       </Flex>

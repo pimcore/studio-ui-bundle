@@ -15,7 +15,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from '@Pimcore/components/icon-or-image/icon-or-image.styles'
 
 interface IconOrImageProps {
-  class: string
+  className: string
   value: string | ElementIcon
   alt?: string
 }
@@ -28,7 +28,7 @@ export const IconOrImage = (props: IconOrImageProps): React.JSX.Element => {
       return (
         <PimcoreImage
           alt={ props.alt }
-          className={ props.class }
+          className={ props.className }
           src={ props.value }
         />
       )

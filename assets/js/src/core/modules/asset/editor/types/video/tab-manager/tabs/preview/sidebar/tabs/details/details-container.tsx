@@ -21,6 +21,9 @@ import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-mana
 import { Content } from '@Pimcore/components/content/content'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
 
 type Callback = () => void
 const noop = (): void => {}
@@ -58,7 +61,14 @@ const DetailContainer = (): React.JSX.Element => {
   )
 
   function setImagePreviewFromBackend (width: number, height: number, then: Callback = noop): void {
-    const url = `${getPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}&aspectRatio=true`
+    const thumbnailService = container.get<ThumbnailService>(serviceIds['Asset/ThumbnailService'])
+    const url = thumbnailService.getThumbnailUrl({
+      assetId: assetContext.id,
+      assetType: 'video',
+      width,
+      height,
+      aspectRatio: true
+    })
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {

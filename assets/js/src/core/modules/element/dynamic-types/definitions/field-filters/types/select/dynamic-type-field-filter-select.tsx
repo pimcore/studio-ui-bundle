@@ -12,13 +12,14 @@ import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterSelectComponent } from '../../components/dynamic-type-field-filter-select-component'
 import { injectable } from 'inversify'
+import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterSelect extends DynamicTypeFieldFilterAbstract {
   id = 'select'
 
   getFieldFilterType (): string {
-    return 'system.string'
+    return FieldFilterFrontendType.String
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {

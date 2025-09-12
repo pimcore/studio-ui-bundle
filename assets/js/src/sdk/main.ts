@@ -9,7 +9,8 @@
  */
 
 import { type Pimcore as PimcoreApi } from '@Pimcore/app/public-api'
-import { type components, type PimcoreThemeConfig, type tokens } from '@Pimcore/modules/app/theme/utils/themes/default-theme'
+import { type components, type tokens } from '@Pimcore/modules/app/theme/utils/themes/theme-tokens'
+import { type PimcoreThemeConfig } from '@Pimcore/modules/app/theme/dynamic-types/definitions/dynamic-type-theme-abstract'
 export { type AbstractModule } from '@Pimcore/app/module-system/module-system'
 export { type IAbstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
 

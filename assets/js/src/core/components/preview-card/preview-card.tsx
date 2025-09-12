@@ -8,15 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button, Card, type MenuRef } from 'antd'
+import { type MenuRef } from 'antd'
 import React, { useRef } from 'react'
-import { useStyle } from './preview-card.styles'
+import cn from 'classnames'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
 import { Dropdown, type DropdownProps } from '../dropdown/dropdown'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { IconOrImage } from '@Pimcore/components/icon-or-image/icon-or-image'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Card } from '@Pimcore/components/card/card'
+import { Button } from '@Pimcore/components/button/button'
+import { useStyle } from './preview-card.styles'
 
 export enum SizeTypes {
   SMALL = 'small',
@@ -34,18 +37,8 @@ interface PreviewCardProps {
 export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
   const { size = SizeTypes.SMALL } = props
   const { styles } = useStyle()
-  const dropdownMenuRef = useRef<MenuRef>(null)
 
-  let classCard: string = ''
-  let classImg: string = 'img'
-  let classImgDiv: string = 'img-container'
-  let classDotsButton: string = 'dots-button'
-  if (size === SizeTypes.MEDIUM) {
-    classCard = 'card-medium'
-    classImg = 'img-medium'
-    classImgDiv = 'img-container-medium'
-    classDotsButton = 'dots-button-medium'
-  }
+  const dropdownMenuRef = useRef<MenuRef>(null)
 
   return (
     <Tooltip
@@ -53,12 +46,12 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
       title={ props.name }
     >
       <Card
-        className={ [styles.card, classCard].join(' ') }
+        className={ cn(styles.card, { [styles.cardMedium]: size === SizeTypes.MEDIUM }) }
         cover={
-          <div className={ classImgDiv }>
+          <div className={ cn(styles.imgContainer, { [styles.imgContainerMedium]: size === SizeTypes.MEDIUM }) }>
             <IconOrImage
               alt={ props.name }
-              class={ classImg }
+              className={ cn(styles.img, { [styles.imgMedium]: size === SizeTypes.MEDIUM }) }
               value={ props.imgSrc! }
             />
           </div>
@@ -72,6 +65,10 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
           }
         } }
       >
+        <Meta
+          className={ styles.metaBlock }
+          title={ props.name }
+        />
         <Dropdown
           menu={ {
             items: props.dropdownItems
@@ -80,18 +77,14 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
           placement='bottomLeft'
         >
           <Button
-            className={ classDotsButton }
-            icon={ <Icon
-              className='dropdown-menu__icon'
-              value="more"
-                   /> }
+            className={ cn(styles.dropdownButton) }
+            icon={ (
+              <Icon value="more" />
+            ) }
             onClick={ (e) => { e.stopPropagation() } }
             size="small"
           />
         </Dropdown>
-        <Meta
-          title={ props.name }
-        />
       </Card>
     </Tooltip>
   )

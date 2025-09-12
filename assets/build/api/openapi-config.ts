@@ -34,6 +34,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectFormatPath',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
       type: 'query'
     },
@@ -48,6 +52,10 @@ const config: ConfigFile = {
     {
       pattern: 'notificationGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'documentGetSearch',
+      type: 'query',
     },
     {
       pattern: 'assetGetSearch',
@@ -79,6 +87,10 @@ const config: ConfigFile = {
     },
     {
       pattern: 'translationGetList',
+      type: 'query'
+    },
+    {
+      pattern: 'documentPageSnippetAreaBlockRender',
       type: 'query'
     }
   ],
@@ -148,9 +160,6 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/unit\//i)
-    },
-    '../../js/src/core/modules/document/sites-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/documents\/sites\//i)
     },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)

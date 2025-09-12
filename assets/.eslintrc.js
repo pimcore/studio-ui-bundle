@@ -9,7 +9,7 @@
  */
 
 module.exports = {
-  ignorePatterns: ['*.gen.ts'],
+  ignorePatterns: ['*.gen.ts', '**/twemoji-icons-list-complete.ts'],
   env: {
     browser: true,
     es2021: true
@@ -45,6 +45,12 @@ module.exports = {
     },
     {
       files: ['*.stories.tsx'],
+      rules: {
+        'max-lines': 'off'
+      }
+    },
+    {
+      files: ['**/twemoji-icons-list-complete.ts'],
       rules: {
         'max-lines': 'off'
       }

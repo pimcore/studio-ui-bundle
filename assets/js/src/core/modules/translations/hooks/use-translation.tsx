@@ -65,26 +65,55 @@ export const useTranslation = (): UseTranslationReturn => {
   const toApiTranslation = (row: TranslationRow, locale: string, domain: string): TranslationData => {
     const localeKey = `_${locale}`
     return {
-      key: row.key,
       translation: (row[localeKey] ?? '') as string,
-      type: row.type,
-      domain
+      locale
     }
   }
 
-  const updateTranslationByKey = async (columnId: string, row: TranslationRow): Promise<{ success: boolean }> => {
+  const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
-      if (!columnId.startsWith('_')) {
-        return { success: true }
+      if (columnId === 'type') {
+        const rowLocales = Object.keys(row)
+          .filter(key => key.startsWith('_'))
+          .map(key => key.substring(1))
+
+        if (rowLocales.length > 0) {
+          const firstLocale = rowLocales[0]
+          const translationData = [toApiTranslation(row, firstLocale, domainParam)]
+
+          const result = await updateTranslation({
+            domain: domainParam,
+            body: {
+              data: [
+                {
+                  key: row.key,
+                  type: row.type,
+                  translationData
+                }
+              ]
+            }
+          })
+
+          return { success: 'data' in result }
+        }
+
+        trackError(new GeneralError('No locales found in translation row data'))
+        return { success: false }
       }
 
       const locale = columnId.substring(1)
-      const translationData = [toApiTranslation(row, locale, domain)]
+      const translationData = [toApiTranslation(row, locale, domainParam)]
 
       const result = await updateTranslation({
-        updateTranslation: {
-          locale,
-          translationData
+        domain: domainParam,
+        body: {
+          data: [
+            {
+              key: row.key,
+              type: row.type,
+              translationData
+            }
+          ]
         }
       })
 

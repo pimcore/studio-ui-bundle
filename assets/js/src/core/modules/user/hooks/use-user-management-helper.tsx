@@ -28,6 +28,7 @@ import {
   type UserDeleteByIdApiArg,
   type UserFolderDeleteByIdApiArg,
   type User,
+  type User2,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import {
@@ -173,34 +174,18 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
   async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
+
+    const updateUser: User2 = {
+      ...user,
+      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false,
+      parentId: user.parentId ?? 0
+    }
+
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
-      updateUser: {
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        active: user.active,
-        admin: user.admin,
-        classes: user.classes,
-        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
-        language: user.language,
-        welcomeScreen: user.welcomeScreen,
-        memorizeTabs: user.memorizeTabs,
-        allowDirtyClose: user.allowDirtyClose,
-        closeWarning: user.closeWarning,
-        permissions: user.permissions,
-        parentId: user.parentId ?? 0,
-        roles: user.roles,
-        contentLanguages: user.contentLanguages,
-        websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
-        websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
-        keyBindings: user.keyBindings,
-        assetWorkspaces: user.assetWorkspaces,
-        dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives
-      }
+      updateUser
     }))
+
 
     if (user.password !== undefined) {
       const { data:_, error:passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
@@ -231,7 +216,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }

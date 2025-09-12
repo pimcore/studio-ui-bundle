@@ -18,7 +18,7 @@ import { useStyles } from './tree-element.styles'
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
   allowDrop?: boolean
-  'data-testid'?: string
+  allowDrag?: boolean
 }
 
 interface ITreeElementProps extends TreeProps {
@@ -31,6 +31,7 @@ interface ITreeElementProps extends TreeProps {
   onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
+  hasRoot?: boolean
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -48,10 +49,11 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onLoadData,
     onExpand,
     withCustomSwitcherIcon,
-    isHideRootChecker = true
+    isHideRootChecker = true,
+    hasRoot = true
   } = props
 
-  const { styles } = useStyles({ isHideRootChecker })
+  const { styles } = useStyles({ isHideRootChecker, hasRoot })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [0])
@@ -62,8 +64,8 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     return (
       <Icon
         options={ {
-          width: 12,
-          height: 12
+          width: 16,
+          height: 16
         } }
         value="chevron-down"
       />
@@ -90,6 +92,11 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
+      onDragStart={ (evt): void => {
+        if (evt.node.allowDrag === false) {
+          evt.event.preventDefault()
+        }
+      } }
       onDrop={ (evt): void => {
         onDragAndDrop?.({
           node: evt.node as TreeDataItem,

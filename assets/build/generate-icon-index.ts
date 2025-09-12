@@ -19,7 +19,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
+const SVG_FOLDER = path.resolve('../public/img/icons/pimcore-icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
 const protectedNames = new Set(['new', 'package', 'import', 'export']);
 
@@ -69,6 +69,11 @@ const modifySvgAttributes = (filePath: string): void => {
 
     if (!hasStroke) {
         svgContent = svgContent.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+    } else {
+        svgContent = svgContent.replace(
+            /fill=(["'])(?!none|white|transparent)(#[0-9a-fA-F]{3,6}|rgb\([^)]+\)|[a-zA-Z]+)\1/g,
+            'fill="currentColor"'
+        );
     }
 
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');

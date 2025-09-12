@@ -26,9 +26,10 @@ import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { useFormGroupOptional } from '@Pimcore/components/form/group/provider/use-form-group-optional'
-import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
+import { useLocalizedFields } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/use-localized-fields'
 import { isArray } from 'lodash'
 import { useFieldWidth } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useCombinedFieldName } from '../providers/combined-field-name-provider/use-combined-field-name'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -51,6 +52,8 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   let virtualFieldName: Array<number | string> = [name]
   const groupContext = useFormGroupOptional()
   const localizedContext = useLocalizedFields()
+  const combinedParentName = useCombinedFieldName()
+  const combinedFieldName: string[] = combinedParentName !== undefined ? [...combinedParentName.combinedFieldNameParent, name] : [name]
 
   if (groupContext !== undefined) {
     virtualFieldName = [...(isArray(groupContext.name) ? groupContext.name : [groupContext.name]), ...virtualFieldName]
@@ -84,6 +87,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     title,
     defaultFieldWidth: fieldWidth,
     name: formFieldName,
+    combinedFieldName: combinedFieldName.join('.'),
     inherited: inheritanceStateValue?.inherited === true,
     noteditable: Boolean(props.noteditable) || disabled
   }

@@ -15,6 +15,9 @@ import {
   type ConsentValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/consent/consent'
 import { Consent as ConsentPreview } from '../../grid-cell-preview/consent/consent'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type ConsentObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -23,6 +26,8 @@ export type ConsentObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract {
   id: string = 'consent'
   gridCellEditMode: EditMode = 'edit-modal'
+
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Select'])
 
   getObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

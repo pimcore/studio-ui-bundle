@@ -8,24 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import React from 'react'
-import { useLanguageSelection } from './provider/use-language-selection'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { PermissionBasedLanguageSelection } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection'
 
 export const LanguageSelection = (): React.JSX.Element => {
-  const settings = useSettings()
-  const { currentLanguage, setCurrentLanguage, hasLocalizedFields } = useLanguageSelection()
+  const { hasLocalizedFields } = useLanguageSelection()
 
   if (!hasLocalizedFields) {
     return <></>
   }
 
-  return (
-    <BaseLanguageSelection
-      languages={ [...settings.requiredLanguages] }
-      onSelectLanguage={ setCurrentLanguage }
-      selectedLanguage={ currentLanguage }
-    />
-  )
+  return <PermissionBasedLanguageSelection />
 }

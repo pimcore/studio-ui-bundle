@@ -10,22 +10,23 @@
 
 import React, { useState, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { LanguageColumnHeader } from './language-column-header'
 import { type TranslationRow } from '../helpers/translation-helpers'
 import { useTranslation } from '../hooks/use-translation'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { EditModal } from '../edit-modal/edit-modal'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
 import { useTranslationDomain } from '../hooks/translation-domain-provider'
+import { type LanguageConfig } from '../hooks/use-translation-languages'
 
 interface Language {
   language: string
   display: string
+  canEdit?: boolean
 }
 
 type TranslationWithActions = TranslationRow & { actions: React.ReactNode }
@@ -34,9 +35,13 @@ interface TableProps {
   translationRows: TranslationRow[]
   setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
   visibleLocales: string[]
+  editableLocales: string[]
+  domainLanguages: LanguageConfig[]
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
-export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
+export const Table = ({ translationRows, setTranslationRows, visibleLocales, editableLocales, domainLanguages, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
   const { updateTranslationByKey } = useTranslation()
   const { domain } = useTranslationDomain()
@@ -44,25 +49,34 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
   const [editingLocale, setEditingLocale] = useState<string>('')
-  const settings = useSettings()
 
-  const availableLanguages = settings?.availableAdminLanguages ?? []
-
-  const languages: Language[] = visibleLocales.map(validLang => {
-    const match = availableLanguages.find(lang => lang.language === validLang)
-    if (isUndefined(match)) {
-      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
-      return { language: validLang, display: validLang }
+  const languages: Language[] = visibleLocales.map(locale => {
+    const domainLang = domainLanguages.find(lang => lang.locale === locale)
+    if (isUndefined(domainLang)) {
+      trackError(new GeneralError(`Language "${locale}" not found in domain languages`))
+      return {
+        language: locale,
+        display: locale.toUpperCase(),
+        canEdit: editableLocales.includes(locale)
+      }
     }
-    return match
+    return {
+      language: domainLang.locale,
+      display: domainLang.displayName,
+      canEdit: editableLocales.includes(locale)
+    }
   }).filter(Boolean)
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
 
-  const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
+  const handleEditCallback = async (rowData: TranslationRow, columnId: string, currentValue?: string): Promise<string> => {
     return await new Promise((resolve) => {
-      setEditingTranslation(rowData)
+      const updatedRowData = currentValue !== undefined
+        ? { ...rowData, [columnId]: currentValue }
+        : rowData
+
+      setEditingTranslation(updatedRowData)
       setEditingLocale(columnId.replace('_', ''))
       setEditResolveFunction(() => resolve)
       setEditModalOpen(true)
@@ -80,15 +94,16 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
           />
         ),
         meta: {
-          editable: true,
+          editable: lang.canEdit ?? false,
           type: 'text',
           callback: true,
-          editCallback: handleEditCallback
+          editCallback: handleEditCallback,
+          htmlDetection: true
         } as any,
         size: 200
       })
     )
-  }, [languages, columnHelper, visibleLocales, handleEditCallback])
+  }, [languages, columnHelper, handleEditCallback])
 
   const typeOptions = [{
     value: 'simple',
@@ -114,6 +129,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
     columnHelper.accessor('actions', {
       header: t('translations.columns.actions'),
       size: 80,
+      enableSorting: false,
       cell: (info) => (
         <ActionsCell
           info={ info }
@@ -121,7 +137,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         />
       )
     })
-  ], [languageColumns, translationRows, visibleLocales])
+  ], [languageColumns, translationRows, visibleLocales, editableLocales])
 
   const onUpdateCellData = async ({
     columnId,
@@ -162,10 +178,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         columns={ tableColumns }
         data={ translationRows }
         enableSorting
+        manualSorting
         modifiedCells={ modifiedCells }
+        onSortingChange={ onSortingChange }
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: TranslationRow) => row.rowId }
+        sorting={ sorting }
       />
 
       <EditModal

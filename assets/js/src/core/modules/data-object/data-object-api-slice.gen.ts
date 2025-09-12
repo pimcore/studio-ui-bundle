@@ -14,6 +14,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectBatchDelete: build.mutation<DataObjectBatchDeleteApiResponse, DataObjectBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
             dataObjectClone: build.mutation<DataObjectCloneApiResponse, DataObjectCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -167,13 +175,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectFormatPath: build.mutation<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+            dataObjectFormatPath: build.query<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/format-path`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
                 query: (queryArg) => ({
@@ -236,6 +244,16 @@ export type DataObjectAddApiArg = {
     /** ParentId of the data-object */
     parentId: number;
     dataObjectAddParameters: DataObjectAdd;
+};
+export type DataObjectBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DataObjectBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
 };
 export type DataObjectCloneApiResponse =
     /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
@@ -680,6 +698,8 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
     /** inheritance */
     inheritance?: object | null;
 };
@@ -730,8 +750,8 @@ export type Column = {
     key: string;
     /** Locale of the Column */
     locale: string | null;
-    /** Group of the Column */
-    group: string;
+    /** Define the group structure */
+    group: object;
 };
 export type GridFilter = {
     /** Page */
@@ -798,8 +818,8 @@ export type GridColumnConfiguration = {
     };
     /** Key */
     key: string;
-    /** Group */
-    group: string;
+    /** Define the group structure */
+    group: object;
     /** Sortable */
     sortable: boolean;
     /** Editable */
@@ -883,6 +903,7 @@ export type SelectOption2 = {
 };
 export const {
     useDataObjectAddMutation,
+    useDataObjectBatchDeleteMutation,
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
@@ -899,7 +920,7 @@ export const {
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectPatchFolderByIdMutation,
-    useDataObjectFormatPathMutation,
+    useDataObjectFormatPathQuery,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,

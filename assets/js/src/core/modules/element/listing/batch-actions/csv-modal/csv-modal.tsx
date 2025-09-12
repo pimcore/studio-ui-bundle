@@ -16,7 +16,6 @@ import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engin
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
-import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -136,6 +135,13 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
     })
 
     if (numberedSelectedRows.length === 0) {
+      const filters = getArgs()?.body?.filters ?? {}
+
+      if (filters !== undefined) {
+        delete filters.page
+        delete filters.pageSize
+      }
+
       const promise = fetchCreateFolderCsv({
         body: {
           folders: [id],
@@ -146,9 +152,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            ...getArgs().body.filters ?? {},
-            page: 1,
-            pageSize: appConfig.maxPageSize,
+            ...filters,
             includeDescendants: true
           }
         }

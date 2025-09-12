@@ -10,9 +10,9 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Link, type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
+import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { isNil, isArray } from 'lodash'
-import { DocumentLinkPreview } from '../components/link-preview/document-link-preview'
+import { LinkEditable } from '../components/link-editable/link-editable'
 
 export type LinkEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -54,8 +54,7 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
     const disabledFields = isArray(props.config?.disabledFields) ? props.config.disabledFields : []
 
     return (
-      <Link
-        PreviewComponent={ DocumentLinkPreview }
+      <LinkEditable
         allowedTargets={ allowedTargets }
         allowedTypes={ allowedTypes }
         className={ props.config?.class }
@@ -80,5 +79,35 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
       fullPath: value.fullPath ?? value.path ?? '',
       direct: value.path ?? null
     }
+  }
+
+  transformValueForApi (value: LinkValue | null, props: LinkEditableDefinition): DocumentLinkEditableValue | null {
+    if (isNil(value)) {
+      return null
+    }
+
+    if (value.linktype === 'internal') {
+      return {
+        ...value,
+        path: value.fullPath ?? '',
+        fullPath: value.fullPath ?? '',
+        internalId: value.internal ?? null,
+        internal: true,
+        internalType: value.internalType ?? undefined
+      }
+    }
+
+    return {
+      ...value,
+      path: value.direct ?? '',
+      fullPath: value.fullPath ?? '',
+      internalId: null,
+      internal: false,
+      internalType: value.internalType ?? undefined
+    }
+  }
+
+  reloadOnChange (props: LinkEditableDefinition, oldValue: any, newValue: any): boolean {
+    return Boolean(props.config?.reload)
   }
 }

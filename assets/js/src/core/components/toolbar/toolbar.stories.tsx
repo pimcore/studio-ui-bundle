@@ -22,7 +22,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 
 const config: Meta = {
-  title: 'Components/Controls/Toolbar',
+  title: 'Components/Layout/Toolbar',
   component: Toolbar,
   parameters: {
     layout: 'fullscreen'

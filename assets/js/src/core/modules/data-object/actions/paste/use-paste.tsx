@@ -11,24 +11,18 @@
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { Element } from '@Pimcore/modules/element/element-helper'
-import { useCopyPaste, type UseCopyPasteHookReturn } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { useDataObjectReplaceContentMutation } from '../../data-object-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-
-interface UsePasteHookParams {
-  storedNode: UseCopyPasteHookReturn['storedNode']
-  nodeTask: UseCopyPasteHookReturn['nodeTask']
-}
+import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
+import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
 
 export interface UsePasteHookReturn {
   pasteAsChildTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -38,15 +32,16 @@ export interface UsePasteHookReturn {
   isPasteMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
-export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePasteHookReturn => {
+export const usePaste = (): UsePasteHookReturn => {
   const { t } = useTranslation()
-  const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
   const { paste } = useCopyPaste('data-object')
   const { treeId } = useTreeId(true)
   const [replaceContentMutation] = useDataObjectReplaceContentMutation()
+  const { getStoredNode } = useTreeCopyPasteContext('data-object')
+  const { isPasteHidden } = usePasteVisibility('data-object')
 
-  const replaceContent = async (storedNode: UsePasteHookParams['storedNode'], node: Element | TreeNodeProps): Promise<void> => {
+  const replaceContent = async (storedNode: StoreNode, node: Element | TreeNodeProps): Promise<void> => {
     dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
 
     const targetId = typeof node.id === 'string' ? parseInt(node.id) : node.id
@@ -78,7 +73,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
-        await paste(parseInt(node.id), { recursive: true, updateReferences: false }, storedNode)
+        await paste(parseInt(node.id), { recursive: true, updateReferences: false }, getStoredNode())
       }
     }
   }
@@ -91,7 +86,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
-        await paste(parseInt(node.id), { recursive: true, updateReferences: true }, storedNode)
+        await paste(parseInt(node.id), { recursive: true, updateReferences: true }, getStoredNode())
       }
     }
   }
@@ -104,7 +99,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
-        await paste(parseInt(node.id), { recursive: false, updateReferences: false }, storedNode)
+        await paste(parseInt(node.id), { recursive: false, updateReferences: false }, getStoredNode())
       }
     }
   }
@@ -115,17 +110,16 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       key: ContextMenuActionName.pasteOnlyContents,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOnlyContentsHidden(node),
-      onClick: async () => { await replaceContent(storedNode, node) }
+      onClick: async () => { await replaceContent(getStoredNode(), node) }
     }
   }
 
   const isPasteOptionHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Paste) ||
-      (storedNode === undefined || nodeTask !== 'copy') ||
-      !checkElementPermission(node.permissions, 'create')
+    return isPasteHidden(node, 'copy')
   }
 
   const isPasteOnlyContentsHidden = (node: Element | TreeNodeProps): boolean => {
+    const storedNode = getStoredNode()
     return isPasteOptionHidden(node) ||
       node.type === 'folder' ||
       node.isLocked ||
@@ -133,8 +127,11 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   }
 
   const isPasteMenuHidden = (node: Element | TreeNodeProps): boolean => {
-    return isPasteOptionHidden(node) &&
-      isPasteOnlyContentsHidden(node)
+    const optionHidden = isPasteOptionHidden(node)
+    const contentsHidden = isPasteOnlyContentsHidden(node)
+    const menuHidden = optionHidden && contentsHidden
+
+    return menuHidden
   }
 
   return {

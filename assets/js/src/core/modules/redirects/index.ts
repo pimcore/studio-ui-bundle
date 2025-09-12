@@ -21,9 +21,10 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Redirects',
+      path: 'ExperienceEcommerce/Redirects',
       label: 'navigation.redirects',
       className: 'item-style-modifier',
+      order: 600,
       permission: UserPermission.Redirects,
       perspectivePermission: NavPermission.Redirects,
       widgetConfig: {

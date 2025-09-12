@@ -30,13 +30,13 @@ export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
   let formattedOptions: DefaultOptionType[] = []
 
-  if ('fieldDefinition' in config) {
+  if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
     formattedOptions = config?.fieldDefinition?.options.map((opt) => ({
       label: opt?.key,
       value: opt?.value
     }))
-  } else {
-    formattedOptions = config?.options?.map((opt) => ({
+  } else if ('options' in config && Array.isArray(config.options)) {
+    formattedOptions = config.options.map((opt) => ({
       label: opt,
       value: opt
     }))
@@ -51,6 +51,7 @@ export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
       onBlur={ onBlur }
       onChange={ (value: string) => { setValue(value) } }
       options={ formattedOptions }
+      showSearch={ rawConfig?.showSearch ?? false }
       style={ { width: '100%' } }
       value={ _value }
     />

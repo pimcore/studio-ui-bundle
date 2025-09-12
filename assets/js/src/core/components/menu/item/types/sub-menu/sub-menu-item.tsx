@@ -12,11 +12,16 @@ import { Menu } from 'antd'
 import { type ItemType, type SubMenuItemType } from '@Pimcore/components/menu/menu'
 import React, { type ComponentType } from 'react'
 import { MenuItem } from '../../menu-item'
+import { createContextMenuItemTestId } from '@Pimcore/utils/test-id-generator'
 
 export const WithExtendedApi = (Component: typeof Menu.SubMenu): ComponentType<SubMenuItemType> => {
-  const ExtendedSubmenu = ({ children, popupOffset, label, ...props }: SubMenuItemType): React.JSX.Element => {
+  const ExtendedSubmenu = ({ children, popupOffset, label, itemKey, ...props }: SubMenuItemType): React.JSX.Element => {
+    // Generate test ID from itemKey (the actual menu item key)
+    const testId = itemKey !== undefined && itemKey !== null ? createContextMenuItemTestId(String(itemKey)) : undefined
+
     return (
       <Component
+        data-testid={ testId }
         title={ label }
         { ...props }
       >

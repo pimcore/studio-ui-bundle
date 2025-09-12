@@ -20,7 +20,11 @@ export interface DocumentEditorContextProps {
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
+  removeValues: (keysToRemove: string[]) => void
   notifyReady: () => void
+  getInheritanceState: (key: string) => boolean
+  setInheritanceState: (key: string, inherited: boolean) => void
+  initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
 }
 
 export const useDocumentEditor = (): DocumentEditorContextProps => {
@@ -36,9 +40,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   }, [])
 
   const updateValue = useCallback((key: string, value: ValueType): void => {
-    const api = getDocumentEditableApi()
-
-    api.updateValue(key, value)
+    getDocumentEditableApi().updateValue(key, value)
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -46,12 +48,10 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     } catch (error) {
       console.warn('Could not notify parent window of value change:', error)
     }
-  }, [getDocumentEditableApi, id])
+  }, [id])
 
   const updateValueWithReload = useCallback((key: string, value: ValueType): void => {
-    const api = getDocumentEditableApi()
-
-    api.updateValue(key, value)
+    getDocumentEditableApi().updateValue(key, value)
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -59,7 +59,35 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     } catch (error) {
       console.warn('Could not trigger reload for value change:', error)
     }
-  }, [getDocumentEditableApi, id])
+  }, [id])
+
+  const getValues = (): Record<string, ValueType> => {
+    return getDocumentEditableApi().getValues()
+  }
+
+  const getValue = (key: string): ValueType => {
+    return getDocumentEditableApi().getValue(key)
+  }
+
+  const initializeData = (data: Record<string, ValueType>): void => {
+    getDocumentEditableApi().initializeValues(data)
+  }
+
+  const removeValues = (keysToRemove: string[]): void => {
+    getDocumentEditableApi().removeValues(keysToRemove)
+  }
+
+  const getInheritanceState = (key: string): boolean => {
+    return getDocumentEditableApi().getInheritanceState(key)
+  }
+
+  const setInheritanceState = (key: string, inherited: boolean): void => {
+    getDocumentEditableApi().setInheritanceState(key, inherited)
+  }
+
+  const initializeInheritanceState = (inheritanceState: Record<string, boolean>): void => {
+    getDocumentEditableApi().initializeInheritanceState(inheritanceState)
+  }
 
   const triggerSaveAndReload = useCallback((): void => {
     try {
@@ -69,21 +97,6 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
       console.warn('Could not trigger save and reload:', error)
     }
   }, [id])
-
-  const getValues = useCallback((): Record<string, ValueType> => {
-    const api = getDocumentEditableApi()
-    return api.getValues()
-  }, [getDocumentEditableApi])
-
-  const getValue = useCallback((key: string): ValueType => {
-    const api = getDocumentEditableApi()
-    return api.getValue(key)
-  }, [getDocumentEditableApi])
-
-  const initializeData = useCallback((data: Record<string, ValueType>): void => {
-    const api = getDocumentEditableApi()
-    api.initializeValues(data)
-  }, [getDocumentEditableApi])
 
   const notifyReady = useCallback((): void => {
     if (!readyNotified.current) {
@@ -104,6 +117,10 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     getValues,
     getValue,
     initializeData,
-    notifyReady
+    removeValues,
+    notifyReady,
+    getInheritanceState,
+    setInheritanceState,
+    initializeInheritanceState
   }
 }

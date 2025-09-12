@@ -19,12 +19,14 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
-import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_EDIT, TAB_VERSIONS, TAB_PREVIEW } from '../../shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
     const emailEditorTabManager = container.get<EmailTabManager>(serviceIds['Document/Editor/EmailTabManager'])
 
+    emailEditorTabManager.register(TAB_EDIT)
+    emailEditorTabManager.register(TAB_PREVIEW)
     emailEditorTabManager.register(TAB_PROPERTIES)
     emailEditorTabManager.register(TAB_VERSIONS)
     emailEditorTabManager.register(TAB_DEPENDENCIES)

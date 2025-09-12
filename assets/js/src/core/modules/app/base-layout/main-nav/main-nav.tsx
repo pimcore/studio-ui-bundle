@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Divider } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
@@ -22,6 +21,7 @@ import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { Divider } from '@sdk/components'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -41,6 +41,14 @@ export const MainNav = (): React.JSX.Element => {
     if (!key.includes('-')) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
     }
+  }
+
+  const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
+    const hasChildren = item.children !== undefined && item.children.length > 0
+    const isOpen = openKeys.includes(index)
+    const isNestedItem = index.includes('-')
+
+    return hasChildren && (isOpen || isNestedItem)
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
@@ -63,10 +71,16 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
             </div>
             )
           : (
-            <button
+            <><button
               className={ 'main-nav__list-btn' }
               data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
               onClick={ () => {
@@ -80,19 +94,40 @@ export const MainNav = (): React.JSX.Element => {
                   setIsOpen(false)
                 }
               } }
-            >
-              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              >
+              {item.icon !== undefined && (
+                openKeys.includes(index)
+                  ? (
+                    <Icon
+                      options={ { width: 16, height: 16 } }
+                      sphere
+                      value={ item.icon }
+                    />
+                    )
+                  : (
+                    <Icon
+                      className={ 'plain-icon' }
+                      value={ item.icon }
+                    />
+                    )
+              )}
               {t(`${item.label}`)}
 
-              {item.children !== undefined && item.children.length > 0
-                ? (
-                  <Icon
-                    className={ 'main-nav__list-btn-icon' }
-                    value={ 'chevron-right' }
-                  />
-                  )
-                : null}
+              {shouldShowChevron(item, index) && (
+                <Icon
+                  className={ 'main-nav__list-chevron-btn-icon' }
+                  options={ { height: 18, width: 18 } }
+                  value={ 'chevron-right' }
+                />
+              )}
             </button>
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
+            </>
             )}
 
         {item.children !== undefined && item.children.length > 0
@@ -107,6 +142,7 @@ export const MainNav = (): React.JSX.Element => {
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
                     data-testid={ `nav-list-level-${level + 1}` }
                   >
+                    {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>

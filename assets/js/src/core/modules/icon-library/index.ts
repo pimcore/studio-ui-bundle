@@ -24,13 +24,16 @@ import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
+import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
+import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -40,6 +43,7 @@ import catalog from '@Pimcore/assets/icons/catalog.inline.svg?react'
 import category from '@Pimcore/assets/icons/category.inline.svg?react'
 import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
+import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
@@ -55,8 +59,10 @@ import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
+import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?react'
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
+import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
@@ -96,6 +102,7 @@ import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
 import expand from '@Pimcore/assets/icons/expand.inline.svg?react'
+import experienceCommerce from '@Pimcore/assets/icons/experience-commerce.inline.svg?react'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg?react'
 import eyeOff from '@Pimcore/assets/icons/eye-off.inline.svg?react'
 import eye from '@Pimcore/assets/icons/eye.inline.svg?react'
@@ -129,6 +136,7 @@ import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
@@ -177,6 +185,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
@@ -184,6 +193,7 @@ import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
 import removePdfThumbnail from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg?react'
 import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg?react'
 import rename from '@Pimcore/assets/icons/rename.inline.svg?react'
+import reporting from '@Pimcore/assets/icons/reporting.inline.svg?react'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg?react'
 import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
@@ -274,6 +284,10 @@ moduleSystem.registerModule({
       component: applicationLogger
     })
     iconLibrary.register({
+      name: 'area-brick',
+      component: areaBrick
+    })
+    iconLibrary.register({
       name: 'arrow-narrow-right',
       component: arrowNarrowRight
     })
@@ -294,12 +308,20 @@ moduleSystem.registerModule({
       component: autoSave
     })
     iconLibrary.register({
+      name: 'automation-integration',
+      component: automationIntegration
+    })
+    iconLibrary.register({
       name: 'batch-selection',
       component: batchSelection
     })
     iconLibrary.register({
       name: 'body-style',
       component: bodyStyle
+    })
+    iconLibrary.register({
+      name: 'book-open-01',
+      component: bookOpen01
     })
     iconLibrary.register({
       name: 'bookmark',
@@ -336,6 +358,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'channels',
       component: channels
+    })
+    iconLibrary.register({
+      name: 'chart-scatter',
+      component: chartScatter
     })
     iconLibrary.register({
       name: 'check-circle',
@@ -398,12 +424,20 @@ moduleSystem.registerModule({
       component: contentDuplicate
     })
     iconLibrary.register({
+      name: 'content-settings',
+      component: contentSettings
+    })
+    iconLibrary.register({
       name: 'content',
       component: content
     })
     iconLibrary.register({
       name: 'copilot',
       component: copilot
+    })
+    iconLibrary.register({
+      name: 'copy-03',
+      component: copy03
     })
     iconLibrary.register({
       name: 'copy',
@@ -562,6 +596,10 @@ moduleSystem.registerModule({
       component: expand
     })
     iconLibrary.register({
+      name: 'experience-commerce',
+      component: experienceCommerce
+    })
+    iconLibrary.register({
       name: 'export',
       component: exportIcon
     })
@@ -692,6 +730,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'language-select',
       component: languageSelect
+    })
+    iconLibrary.register({
+      name: 'layout-grid-02',
+      component: layoutGrid02
     })
     iconLibrary.register({
       name: 'layout',
@@ -886,6 +928,10 @@ moduleSystem.registerModule({
       component: questionmark
     })
     iconLibrary.register({
+      name: 'quick-access',
+      component: quickAccess
+    })
+    iconLibrary.register({
       name: 'redirect',
       component: redirect
     })
@@ -912,6 +958,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'rename',
       component: rename
+    })
+    iconLibrary.register({
+      name: 'reporting',
+      component: reporting
     })
     iconLibrary.register({
       name: 'required-by',

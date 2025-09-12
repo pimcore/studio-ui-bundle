@@ -83,7 +83,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
         <Form.Item
           label={ t('redirects.beginner-modal.type') }
           name="type"
-          rules={ [{ required: true, message: t('redirects.beginner-modal.type') }] }
+          rules={ [{ required: true, message: t('redirects.beginner-modal.type.required') }] }
         >
           <Select
             options={ typeOptions }
@@ -94,7 +94,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
         <Form.Item
           label={ t('redirects.beginner-modal.path') }
           name="path"
-          rules={ [{ required: true, message: t('redirects.beginner-modal.path') }] }
+          rules={ [{ required: true, message: t('redirects.beginner-modal.path.required') }] }
         >
           <Input placeholder={ t('redirects.beginner-modal.path') } />
         </Form.Item>
@@ -102,7 +102,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
         <Form.Item
           label={ t('redirects.beginner-modal.target') }
           name="target"
-          rules={ [{ required: true, message: t('redirects.beginner-modal.target') }] }
+          rules={ [{ required: true, message: t('redirects.beginner-modal.target.required') }] }
         >
           <Input placeholder={ t('redirects.beginner-modal.target') } />
         </Form.Item>

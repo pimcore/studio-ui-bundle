@@ -17,7 +17,7 @@ import { ActionsCell } from './actions-cell'
 import { type SelectOption, type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
-import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
 import { isUndefined } from 'lodash'
 

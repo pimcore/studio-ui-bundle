@@ -33,7 +33,16 @@ const initialState: UserInformation = {
   memorizeTabs: false,
   hasImage: false,
   contentLanguages: [],
-  keyBindings: []
+  keyBindings: [],
+  allowedLanguagesForEditingWebsiteTranslations: [],
+  allowedLanguagesForViewingWebsiteTranslations: [],
+  allowDirtyClose: false,
+  twoFactorAuthentication: {
+    enabled: false,
+    required: false,
+    type: '',
+    active: false
+  }
 }
 
 const slice = createSlice({

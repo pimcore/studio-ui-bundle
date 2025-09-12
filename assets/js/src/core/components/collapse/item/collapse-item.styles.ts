@@ -25,6 +25,10 @@ export const useStyles = createStyles(({ css, token }) => {
         background: transparent;
         border: none;
 
+        .expand-icon {
+          color: ${token.colorIcon}
+        }
+
         &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
           display: flex;
           min-height: 38px;

@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { AreaEditable } from './components/area-editable/area-editable'
+import { AreaEditable } from '../components/area-editable/area-editable'
 
 export interface AreaEditableConfig {
   type?: string

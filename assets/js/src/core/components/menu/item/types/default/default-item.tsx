@@ -10,47 +10,47 @@
 
 import React, { type ComponentType } from 'react'
 import { type MenuItemType } from '@Pimcore/components/menu/menu'
-import { Flex, Menu } from 'antd'
+import { Menu } from 'antd'
 import { useStyles } from './default-item.styles'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { createContextMenuItemTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DefaultItemProps extends MenuItemType {
   id: React.Key
+  itemKey?: React.Key
 }
 
 export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<DefaultItemProps> => {
-  const DecoratedMenuItem = ({ label, key, selectable, id, icon, ...props }: DefaultItemProps): React.JSX.Element => {
+  const DecoratedMenuItem = ({ label, key, selectable, id, icon, itemKey, ...props }: DefaultItemProps): React.JSX.Element => {
     const { styles } = useStyles()
     const classes = [styles.dropdownItem]
 
     classes.push('is-custom-item')
 
+    // Generate test ID from itemKey (the actual menu item key)
+    const testId = itemKey !== undefined && itemKey !== null ? createContextMenuItemTestId(String(itemKey)) : undefined
+
     return (
       <Component
+        data-testid={ testId }
         id={ key as string }
         { ...props }
         className={ classes.join(' ') }
       >
-        <Flex
-          align='center'
-          gap={ 8 }
-        >
-          {props.isLoading === true && (
-            <Spin
-              tip='Loading'
-              type='classic'
-            />
-          )}
+        {props.isLoading === true && (
+        <Spin
+          tip='Loading'
+          type='classic'
+        />
+        )}
 
-          {icon}
+        {icon}
 
-          <span>{label}</span>
+        <span>{label}</span>
 
-          {props.extra !== undefined && (
+        {props.extra !== undefined && (
           <>{props.extra}</>
-          )}
-
-        </Flex>
+        )}
       </Component>
     )
   }

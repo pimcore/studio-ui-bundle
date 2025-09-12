@@ -36,7 +36,7 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
 
     const drillDownFilters = { ...(filters?.drillDownFilters ?? {}) }
 
-    drillDownFilters[field.name!] = String(value)
+    drillDownFilters[field.name] = String(value)
 
     setFilters({
       ...filters,

@@ -23,6 +23,7 @@ export * from '@Pimcore/components/breadcrumb/breadcrumb'
 export * from '@Pimcore/components/box/box'
 export * from '@Pimcore/components/card/card'
 export * from '@Pimcore/components/checkbox/checkbox'
+export * from '@Pimcore/components/code-editor/code-editor'
 export * from '@Pimcore/components/collapse/collapse'
 export * from '@Pimcore/components/color-picker/color-picker'
 export * from '@Pimcore/components/compact/compact'
@@ -121,6 +122,7 @@ export * from '@Pimcore/components/search-input/search-input'
 export * from '@Pimcore/components/segmented/segmented'
 export * from '@Pimcore/components/select/select'
 export * from '@Pimcore/components/sidebar/sidebar'
+export * from '@Pimcore/components/sidebar/title'
 export * from '@Pimcore/components/skeleton/skeleton'
 export * from '@Pimcore/components/skeleton/components/skeleton-avatar/skeleton-avatar'
 export * from '@Pimcore/components/skeleton/components/skeleton-button/skeleton-button'
@@ -170,9 +172,6 @@ export * from '@Pimcore/components/modal/file-list/file-list'
 
 // @todo check if this should really located under the components folder
 export * from '@Pimcore/components/login-form/login-form'
-
-// @todo Is this still needed since we have a completed adapted form with it's own form.item
-export * from '@Pimcore/components/form-item-wrapper/form-item-wrapper'
 
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'

@@ -10,7 +10,7 @@
 
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import React from 'react'
 import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'

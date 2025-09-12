@@ -2,6 +2,10 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+widget.missing-context.title: "Missing Context"
+widget.missing-context.description: "No related element found"
+widget.missing-tab-context.description: "This feature is not supported for the related element"
+block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
@@ -16,6 +20,8 @@ sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
 sidebar.clear-all-filters: Clear all filters
+add-areas: Add areas
+content-settings: Content Settings
 site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
@@ -62,6 +68,8 @@ upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
+document.editable.inheritance.overwrite: Overwrite
+document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -258,6 +266,7 @@ listing.add-column: Add a column
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
+listing.actions.delete: Delete
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
 listing.actions.xlsx-export: Excel Export
@@ -340,6 +349,7 @@ translations.edit-modal.tab.plain-text: Plain Text
 translations.edit-modal.tab.html: HTML
 translations.edit-modal.save: Save
 translations.edit-modal.title: Edit translation
+translations.edit-modal.restore: Restore plain text
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -371,6 +381,7 @@ toggle.advanced-mode: Advanced Mode
 actions.open: Open
 open: Open
 edit: Edit
+modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
@@ -462,6 +473,7 @@ batch-edit.modal-footer.add-a-column: Add a column
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
+batch-delete.job-title: Delete
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -504,12 +516,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
+element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
+element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -756,27 +770,31 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+navigation.quick-access: Quick Access
+navigation.data-management: Data Management
+navigation.experience-ecommerce: Experience & E-commerce
+navigation.asset-management: Asset Management
+navigation.automation-integration: Automation & Integration
+navigation.translations: Translations
+navigation.reporting: Reporting
+navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.marketing: Marketing
-navigation.reports: Reports
-navigation.custom-reports: Custom Reports
+navigation.reports: All Reports
+navigation.custom-reports: Custom Reports Configuration
 navigation.perspectives: Perspectives
 navigation.customise: Customise
-navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
+navigation.power-shortcuts: Power Shortcuts
 navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
-navigation.file: File
-navigation.settings: Settings
-navigation.tools: Tools
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
@@ -807,6 +825,9 @@ redirects.beginner-modal.title: New Beginner Redirect
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Path
 redirects.beginner-modal.target: Target
+redirects.beginner-modal.type.required: Please add a type
+redirects.beginner-modal.path.required: Please add a path
+redirects.beginner-modal.target.required: Please add a target
 redirects.beginner-modal.create: Create
 redirects.beginner-modal.cancel: Cancel
 redirects.csv-import-results.title: Redirects CSV Import Results
@@ -852,6 +873,7 @@ video.settings: Video Settings
 video.poster: Poster-Image
 video.path: Path
 video.dnd-target: Drop a video here
+pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
 reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
@@ -953,10 +975,16 @@ reports.select-report: Select report
 reports.export: Export
 reports.csv-export: CSV Export
 reports.csv-export-with-headers: CSV Export with headers
+reports.show-all-labels: Show all labels
+reports.show-fewer-labels: Show fewer labels
 reports.grid-config.title-columns: Columns
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
 reports.field-filters: Field Filters
+reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
+reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
+reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.content.validation.message: The customer report name is invalid
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
@@ -980,6 +1008,9 @@ widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Value
 email-log.subject: Subject
+email-log.tooltip.resend: Resend Email
+email-log.tooltip.forward: Forward Email
+email-log.tooltip.delete: Delete Email
 email-log.resend.email.success: Email has been resent successfully
 email-log.resend.confirmation.title: Resend Email
 email-log.resend.confirmation.text: Please confirm that you want to send the email again to all recipients.
@@ -1000,7 +1031,15 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+creatable-select.invalid-option: Invalid option
 drag-snippet-here: Drag a snippet here
+drop-snippet-here: Drop a snippet here
+drop-document-here: Drop a document here
+drop-document-asset-here: Drop a document asset here
+drop-asset-here: Drop an asset here
+drop-object-here: Drop an object here
+drop-element-here: Drop an element here
+error-loading-renderlet: Error loading renderlet
 snippet: Snippet
 navigation.application-logger: Application Logger
 widget.application-logger: Application Logger
@@ -1018,11 +1057,14 @@ application-logger.sidebar.search-parameter: Search Parameter
 application-logger.detail-modal.title: Detail information
 application-logger.filter.date-from: From
 application-logger.filter.date-to: To
-application-logger.filter.priority: Log Level
+application-logger.filter.priority: Type
 application-logger.filter.component: Component
 application-logger.filter.related-object-id: Related Object ID
 application-logger.filter.message: Message
 application-logger.filter.pid: Pid
+application-logger.refresh-interval: Refresh interval
+application-logger.refresh-interval.select: Select the refresh frequency
+application-logger.refresh-interval.seconds: "{{seconds}} seconds"
 application-logger.filter.priority-level.1: Emergency
 application-logger.filter.priority-level.2: Alert
 application-logger.filter.priority-level.3: Critical
@@ -1042,6 +1084,8 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+document.open-in-new-window: Open in new window
+document.open-preview-in-new-window: Open Preview in new window
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1061,3 +1105,120 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
+unsupported_feature: Unsupported feature - please check system requirements!
+document.version.comparison.error.title: Version Comparison Error
+document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
+navigation.test-email: Send Test-Email
+test-email.form.from: From
+test-email.form.to: To
+test-email.form.subject: Subject
+test-email.form.contentType: Type
+test-email.form.title: Title
+test-email.form.message: Message
+test-email.form.document: Document
+test-email.form.parameters: Parameters
+test-email.form.parameters.add-parameter: Add Parameter
+test-email-modal-title: Send a Test-Email
+test-email-modal-send: Send
+test-email.contentType.document: Document
+test-email.contentType.html: HTML
+test-email.contentType.text: Text
+test-email.parameters.columns.key: Key
+test-email.parameters.columns.value: Value
+test-email.parameters.add: Add Parameter
+test-email.send.error: An error occurred while sending the test email
+test-email.success.modal.title: Sent Test-Email
+test-email.success.modal.text: Your test-email has been sent. Would you like to keep this window open to send the email again?
+test-email.validation.documentPath.required: Please provide a document path
+test-email.validation.documentParameters.required: Please provide at least one parameter
+test-email.validation.content.required: Please provide a message
+test-email.validation.from.required: Please provide a sender email address
+test-email.validation.from.email.type: Please provide a valid sender email address
+test-email.validation.to.required: Please provide a recipient email address
+test-email.validation.to.email.type: Please provide a valid recipient email address
+test-email.validation.subject.required: Please provide a subject
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspectives Editor
+navigation.widget-editor.perspective-editor: Perspectives Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
+refresh: Refresh
+perspective-editor.add-modal.title: Add a new Perspective
+perspective-editor.add-modal.name.label: Enter the name of the new perspective
+perspective-editor.add-modal.name.validation: Please enter a valid perspective name
+perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.create.success: Perspective created successfully
+perspective-editor.delete.success: Perspective deleted successfully
+widget-editor.create-modal.create: Create Widget
+widget-editor.create-form.name: Name
+widget-editor.create-form.name.required: Please enter a valid name
+widget-editor.create-form.widgetType: Widget Type
+widget-editor.create-form.widgetType.element_tree: Element Tree
+widget-editor.form.name.placeholder: Enter widget name
+widget-editor.create.success: Widget created successfully
+widget-editor.delete.success: Widget deleted successfully
+widget-editor.widget-form.general.title: General
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.general.icon: Icon
+widget-editor.widget-form.general.icon.select: Select Icon
+widget-editor.widget-form.specific.title: Specific
+widget-editor.widget-form.specific.element-type: Element Type
+widget-editor.widget-form.specific.root-folder: Root Folder
+widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.specific.page-size: Page Size
+widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default everything is allowed)
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL Statement
+widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
+widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.copy: Copy
+widget-editor.widget-form.allowed-context-menu.lock: Lock
+widget-editor.widget-form.allowed-context-menu.publish: Publish
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
+widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
+widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.cut: Cut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.refresh: Refresh
+widget-editor.widget-form.allowed-context-menu.unlock: Unlock
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Change Children Sort By
+widget-editor.widget-form.allowed-context-menu.delete: Delete
+widget-editor.widget-form.allowed-context-menu.paste: Paste
+widget-editor.widget-form.allowed-context-menu.rename: Rename
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Upload Zip
+widget-editor.widget-form.allowed-context-menu.hideAdd: Hide Add
+widget-editor.widget-form.allowed-context-menu.addUpload: Upload Files
+widget-editor.widget-form.allowed-context-menu.download: Download
+widget-editor.widget-form.allowed-context-menu.pasteCut: Cut
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
+widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
+widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
+widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
+widget-editor.widget-form.allowed-context-menu.convert: Convert
+widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
+widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
+widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
+widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
+widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
+widget-editor.widget-form.allowed-context-menu.open: Open
+widget-editor.widget-form.allowed-context-menu.addLink: Add Link
+widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
+widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
+edit.label: Edit
+scheduled-block.delete-all-in-past: Delete all past timestamps
+scheduled-block.delete-all: Delete all timestamps
+scheduled-block.delete-all-in-past-confirmation: Are you sure you want to delete all past timestamps?
+scheduled-block.delete-all-confirmation: Are you sure you want to delete all timestamps?
+scheduled-block.delete-confirmation: Are you sure you want to delete this entry?
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search
+icon-selector.current-selection: Current Selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save
+icon-selector.custom-icon: Custom Icon
+icon-selector.custom-icon-path: Icon Path
+icon-selector.custom-icon-path-placeholder: Enter custom icon path (e.g., /path/to/icon.svg)

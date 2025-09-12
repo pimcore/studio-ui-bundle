@@ -8,18 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ThemeProvider as AntdThemeProvider } from 'antd-style'
 import React from 'react'
-import { PimcoreDefaultTheme } from './utils/themes/default-theme'
+import { DynamicThemeProvider } from './dynamic-theme-provider'
 
 interface ThemeProviderProps {
   children: React.ReactNode
+  id?: string
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps): React.JSX.Element => {
+export const ThemeProvider = ({ children, id = 'studio-default-light' }: ThemeProviderProps): React.JSX.Element => {
   return (
-    <AntdThemeProvider theme={ PimcoreDefaultTheme } >
+    <DynamicThemeProvider id={ id }>
       {children}
-    </AntdThemeProvider>
+    </DynamicThemeProvider>
   )
 }

@@ -49,10 +49,6 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
-  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
-    return undefined
-  }
-
   /**
    * Helper method to check if the editable has reload config enabled
    */
@@ -67,5 +63,17 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    */
   reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
+  }
+
+  /**
+   * Called when the document is ready and initialized.
+   * Each dynamic type can implement this to perform type-specific initialization,
+   * such as notifying the parent about special data structures.
+   * @param documentId The ID of the document
+   * @param editableDefinitions All editable definitions in the document
+   */
+  onDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
+    // Default implementation does nothing
+    // Specific dynamic types can override this to perform type-specific actions
   }
 }
