@@ -40,8 +40,6 @@ const IconSelectorDemo = (): React.JSX.Element => {
   return (
     <div style={ { padding: '20px' } }>
       <div style={ { marginBottom: '20px' } }>
-        <p>Current selected icon: <strong>{currentIcon?.value ?? 'None'}</strong></p>
-
         <FormKit
           formProps={ {
             form,
