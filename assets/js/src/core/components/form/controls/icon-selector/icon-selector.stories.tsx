@@ -9,14 +9,15 @@
  */
 
 import { type Meta, type StoryObj } from '@storybook/react'
-import { IconSelector } from './icon-selector'
-import React, { useState } from 'react'
+import React from 'react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { Space } from '@sdk/components'
-import { Typography } from 'antd'
+import { Form } from '@sdk/components'
+import { FormKit } from '@Pimcore/components/form/form-kit'
+import { Content } from '@Pimcore/components/content/content'
+import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 
 const config: Meta = {
-  title: 'Components/General/IconSelector',
+  title: 'Components/Data Entry/Form/Controls/IconSelector',
   component: IconSelector,
   parameters: {
     layout: 'fullscreen'
@@ -28,20 +29,32 @@ export default config
 
 type Story = StoryObj<typeof config>
 
+interface IconFormData {
+  selectedIcon?: ElementIcon
+}
+
 const IconSelectorDemo = (): React.JSX.Element => {
-  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>()
+  const [form] = Form.useForm<IconFormData>()
 
   return (
     <div style={ { padding: '20px' } }>
-        <div>
-          <Typography.Text strong>Icon Selector:</Typography.Text>
-          <div style={ { marginTop: '8px' } }>
-            <IconSelector
-              value={selectedIcon}
-              onChange={setSelectedIcon}
-            />
-          </div>
-        </div>
+      <div style={ { marginBottom: '20px' } }>
+        <FormKit
+          formProps={ {
+            form,
+            layout: 'vertical'
+          } }
+        >
+          <Content padded>
+            <Form.Item
+              label="Select Icon"
+              name="selectedIcon"
+            >
+              <IconSelector />
+            </Form.Item>
+          </Content>
+        </FormKit>
+      </div>
     </div>
   )
 }
