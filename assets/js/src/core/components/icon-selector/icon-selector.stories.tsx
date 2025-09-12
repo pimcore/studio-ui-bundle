@@ -11,8 +11,8 @@
 import { type Meta, type StoryObj } from '@storybook/react'
 import { IconSelector } from './icon-selector'
 import React, { useState } from 'react'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Typography } from 'antd'
 
 const config: Meta = {
   title: 'Components/General/IconSelector',
@@ -28,40 +28,19 @@ export default config
 type Story = StoryObj<typeof config>
 
 const IconSelectorDemo = (): React.JSX.Element => {
-  const [open, setOpen] = useState(false)
-  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>(undefined)
-
-  const handleOpen = (): void => {
-    setOpen(true)
-  }
-
-  const handleClose = (): void => {
-    setOpen(false)
-  }
-
-  const handleSelect = (icon: ElementIcon): void => {
-    setSelectedIcon(icon)
-    setOpen(false)
-  }
+  const [selectedIcon, setSelectedIcon] = useState<ElementIcon | undefined>()
 
   return (
     <div style={ { padding: '20px' } }>
-      <div style={ { marginBottom: '20px' } }>
-        <p>Current selected icon: <strong>{selectedIcon?.value ?? 'None'}</strong></p>
-        <IconButton
-          icon={ { value: selectedIcon?.value ?? 'edit' } }
-          onClick={ handleOpen }
-        >
-          Select Icon
-        </IconButton>
+      <div>
+        <Typography.Text strong>Icon Selector:</Typography.Text>
+        <div style={ { marginTop: '8px' } }>
+          <IconSelector
+            onChange={ setSelectedIcon }
+            value={ selectedIcon }
+          />
+        </div>
       </div>
-
-      <IconSelector
-        onCancel={ handleClose }
-        onSelect={ handleSelect }
-        open={ open }
-        selectedIcon={ selectedIcon }
-      />
     </div>
   )
 }
