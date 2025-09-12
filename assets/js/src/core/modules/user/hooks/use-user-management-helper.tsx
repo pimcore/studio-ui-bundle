@@ -186,14 +186,13 @@ export const useUserManagementHelper = (): UseUserReturn => {
       updateUser
     }))
 
-
     if (user.password !== undefined) {
-      const { data:_, error:passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
-        id: id,
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id,
         body: {
           password: user.password,
           passwordConfirmation: user.password,
-          oldPassword: '',
+          oldPassword: ''
         }
       }))
 
