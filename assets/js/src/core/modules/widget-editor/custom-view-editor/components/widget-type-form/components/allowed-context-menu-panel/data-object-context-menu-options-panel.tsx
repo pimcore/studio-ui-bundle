@@ -44,7 +44,6 @@ export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
         collapsed={ false }
         collapsible
         title={ t('widget-editor.widget-form.allowed-context-menu.title') }
-        tooltip={ 'foobar' }
       >
         <div className={ styles.allowedContextMenuOptions }>
           <Form.Group
