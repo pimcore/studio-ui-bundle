@@ -166,13 +166,17 @@ export const ContentSettingsForm = ({
 
       <Form.Item
         label={
-          <SidebarHeadline
-            asFormLabel
-            withBorder
-          >
-            {t('language')}
-          </SidebarHeadline>
-          }
+          document?.type === 'page' ? (
+            <SidebarHeadline
+              asFormLabel
+              withBorder
+            >
+              {t('language')}
+            </SidebarHeadline>
+          ) : (
+            t('language')
+          )
+        }
         name="language"
       >
         <Select
