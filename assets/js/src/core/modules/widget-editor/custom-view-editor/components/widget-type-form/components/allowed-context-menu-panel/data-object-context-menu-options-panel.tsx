@@ -26,11 +26,11 @@ export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
 
   if (isLoading) {
     return (
-      <Conditional condition={(values) => values.elementType === elementTypes.dataObject}>
+      <Conditional condition={ (values) => values.elementType === elementTypes.dataObject }>
         <FormKit.Panel
-          collapsed={false}
+          collapsed={ false }
           collapsible
-          title={t('widget-editor.widget-form.allowed-context-menu.title')}
+          title={ t('widget-editor.widget-form.allowed-context-menu.title') }
         >
           <Spin />
         </FormKit.Panel>
@@ -39,23 +39,23 @@ export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
   }
 
   return (
-    <Conditional condition={(values) => values.elementType === elementTypes.dataObject}>
+    <Conditional condition={ (values) => values.elementType === elementTypes.dataObject }>
       <FormKit.Panel
-        collapsed={false}
+        collapsed={ false }
         collapsible
-        title={t('widget-editor.widget-form.allowed-context-menu.title')}
+        title={ t('widget-editor.widget-form.allowed-context-menu.title') }
       >
-        <div className={styles.allowedContextMenuOptions}>
+        <div className={ styles.allowedContextMenuOptions }>
           <Form.Group
-            name={'contextPermissions'}
+            name={ 'contextPermissions' }
           >
             {dataObjectContextMenuItems.map(permission => (
               <Form.Item
-                key={permission}
-                name={permission}
+                key={ permission }
+                name={ permission }
               >
                 <Switch
-                  labelRight={t('widget-editor.widget-form.allowed-context-menu.' + permission)}
+                  labelRight={ t('widget-editor.widget-form.allowed-context-menu.' + permission) }
                 />
               </Form.Item>
             ))}
