@@ -21,6 +21,11 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT, TAB_VERSIONS } from '../../shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import {
+  SIDEBAR_AREABLOCK_TYPES,
+  SIDEBAR_CONTENT_SETTINGS
+} from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -34,5 +39,10 @@ moduleSystem.registerModule({
     snippetEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     snippetEditorTabManager.register(TAB_TAGS)
     snippetEditorTabManager.register(TAB_WORKFLOW)
+
+    const snippetSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/SnippetSidebarManager'])
+
+    snippetSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
+    snippetSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
   }
 })

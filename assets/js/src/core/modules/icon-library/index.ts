@@ -157,6 +157,7 @@ import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
 import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg?react'
+import navigation from '@Pimcore/assets/icons/navigation.inline.svg?react'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg?react'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg?react'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg?react'
@@ -814,6 +815,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'multi-select',
       component: multiSelect
+    })
+    iconLibrary.register({
+      name: 'navigation',
+      component: navigation
     })
     iconLibrary.register({
       name: 'new-circle',

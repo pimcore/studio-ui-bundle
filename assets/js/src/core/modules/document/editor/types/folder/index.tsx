@@ -19,6 +19,8 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import { SIDEBAR_CONTENT_SETTINGS } from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,5 +31,9 @@ moduleSystem.registerModule({
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     folderEditorTabManager.register(TAB_TAGS)
     folderEditorTabManager.register(TAB_WORKFLOW)
+
+    const folderSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/FolderSidebarManager'])
+
+    folderSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
   }
 })

@@ -16,6 +16,9 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-form-item-label + .ant-form-item-control:has( .ant-checkbox-wrapper) {
         padding-left: ${token.paddingXXS}px;
       }
+      .ant-form-item-additional {
+        margin-top: ${token.marginXXS}px;  
+      }
     `
   }
 })

@@ -18,9 +18,7 @@ import { isNil } from 'lodash'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DocumentEditorSidebarManager } from './sidebar/sidebar-manager'
+import { getDocumentSidebarManager } from '../../../sidebar/sidebar-manager-helper'
 import { useDocumentEditorSidebarEntries } from './hooks/use-document-editor-sidebar-entries'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { removeDocument } from '@Pimcore/modules/document/document-editor-slice'
@@ -32,7 +30,7 @@ export const EditContainer = (): React.JSX.Element => {
   const iframeRef = useRef<IframeRef>(null)
   const dispatch = useAppDispatch()
 
-  const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
+  const sidebarManager = getDocumentSidebarManager(documentDraft?.type)
   const sidebarButtons = sidebarManager.getButtons()
   const sidebarEntries = useDocumentEditorSidebarEntries()
 
@@ -72,6 +70,7 @@ export const EditContainer = (): React.JSX.Element => {
       <Sidebar
         buttons={ sidebarButtons }
         entries={ sidebarEntries }
+        sizing="medium"
         translateTooltips
       />
       }

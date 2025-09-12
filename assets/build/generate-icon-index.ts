@@ -19,7 +19,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SVG_FOLDER = path.resolve('../public/img/icons/pimcore-icons');
+const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
 const protectedNames = new Set(['new', 'package', 'import', 'export']);
 

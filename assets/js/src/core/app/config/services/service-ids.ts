@@ -70,7 +70,14 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
-  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
+
+  // Document Sidebar Managers
+  'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
+  'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
+  'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',
+  'Document/Editor/Sidebar/LinkSidebarManager': 'Document/Editor/Sidebar/LinkSidebarManager',
+  'Document/Editor/Sidebar/HardlinkSidebarManager': 'Document/Editor/Sidebar/HardlinkSidebarManager',
+  'Document/Editor/Sidebar/FolderSidebarManager': 'Document/Editor/Sidebar/FolderSidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
