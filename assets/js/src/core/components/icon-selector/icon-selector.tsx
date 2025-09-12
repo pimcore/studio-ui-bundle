@@ -113,8 +113,8 @@ export const IconSelector = ({
   }, [filteredIcons, currentPage, pageSize])
 
   const handleIconClick = (icon: ElementIcon): void => {
-    console.log("hwerw");
-    
+    console.log('hwerw')
+
     setPreviewSelectedIcon(icon)
     setHasSubmissionError(false)
   }
