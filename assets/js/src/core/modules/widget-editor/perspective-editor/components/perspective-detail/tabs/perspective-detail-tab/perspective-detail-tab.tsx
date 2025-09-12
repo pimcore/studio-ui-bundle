@@ -99,6 +99,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               required
             >
               <Input
+
                 placeholder={ t('perspective-editor.form.name.placeholder') }
               />
             </Form.Item>

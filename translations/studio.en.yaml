@@ -1157,6 +1157,54 @@ widget-editor.create-form.widgetType.element_tree: Element Tree
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.widget-form.general.title: General
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.general.icon: Icon
+widget-editor.widget-form.general.icon.select: Select Icon
+widget-editor.widget-form.specific.title: Specific
+widget-editor.widget-form.specific.element-type: Element Type
+widget-editor.widget-form.specific.root-folder: Root Folder
+widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.specific.page-size: Page Size
+widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default everything is allowed)
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL Statement
+widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
+widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.copy: Copy
+widget-editor.widget-form.allowed-context-menu.lock: Lock
+widget-editor.widget-form.allowed-context-menu.publish: Publish
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
+widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
+widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.cut: Cut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.refresh: Refresh
+widget-editor.widget-form.allowed-context-menu.unlock: Unlock
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Change Children Sort By
+widget-editor.widget-form.allowed-context-menu.delete: Delete
+widget-editor.widget-form.allowed-context-menu.paste: Paste
+widget-editor.widget-form.allowed-context-menu.rename: Rename
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Upload Zip
+widget-editor.widget-form.allowed-context-menu.hideAdd: Hide Add
+widget-editor.widget-form.allowed-context-menu.addUpload: Upload Files
+widget-editor.widget-form.allowed-context-menu.download: Download
+widget-editor.widget-form.allowed-context-menu.pasteCut: Cut
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
+widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
+widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
+widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
+widget-editor.widget-form.allowed-context-menu.convert: Convert
+widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
+widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
+widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
+widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
+widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
+widget-editor.widget-form.allowed-context-menu.open: Open
+widget-editor.widget-form.allowed-context-menu.addLink: Add Link
+widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
+widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
 edit.label: Edit
 scheduled-block.delete-all-in-past: Delete all past timestamps
 scheduled-block.delete-all: Delete all timestamps

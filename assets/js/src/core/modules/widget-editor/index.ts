@@ -15,6 +15,7 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { PerspectiveEditorContainer } from './perspective-editor/perspective-editor-container'
 import { WidgetEditorContainer } from './custom-view-editor/widget-editor-container'
+import '@Pimcore/modules/widget-editor/custom-view-editor'
 
 moduleSystem.registerModule({
   onInit: () => {
