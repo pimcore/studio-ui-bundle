@@ -12,7 +12,6 @@ import { type Meta, type StoryObj } from '@storybook/react'
 import { IconSelector } from './icon-selector'
 import React, { useState } from 'react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { Space } from '@sdk/components'
 import { Typography } from 'antd'
 
 const config: Meta = {
