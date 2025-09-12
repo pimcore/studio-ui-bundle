@@ -20,19 +20,19 @@ export const GeneralTab = (): React.JSX.Element => {
 
   return (
     <FormKit.Panel
-      collapsed={false}
+      collapsed={ false }
       collapsible
-      title={t('widget-editor.widget-form.general.title')}
+      title={ t('widget-editor.widget-form.general.title') }
     >
       <Form.Item
-        label={t('widget-editor.widget-form.general.name')}
+        label={ t('widget-editor.widget-form.general.name') }
         name="name"
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label={t('widget-editor.widget-form.general.icon')}
+        label={ t('widget-editor.widget-form.general.icon') }
         name="icon"
       >
         <IconSelector />
