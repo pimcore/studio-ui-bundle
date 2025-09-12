@@ -22,7 +22,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const updateCache: UseInlineEditApiUpdateReturn['updateCache'] = (event) => {
     const { update, getGetRequestArgs } = event
     const { id, column: columnToUpdate, value } = update
-    
+
     dispatch(api.util.updateQueryData('dataObjectGetGrid', getGetRequestArgs as DataObjectGetGridApiArg, (oldData) => {
       item_loop:
       for (const item of oldData.items) {
@@ -64,11 +64,11 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
       : update.value
 
     const isPublishedColumn = columnKey === 'published'
-    
+
     const dataItem = {
       id: update.id,
-      ...(isPublishedColumn 
-        ? { 
+      ...(isPublishedColumn
+        ? {
             published: value,
             editableData: {}
           }
