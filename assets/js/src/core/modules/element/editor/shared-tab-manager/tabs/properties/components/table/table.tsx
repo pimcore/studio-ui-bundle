@@ -24,11 +24,13 @@ import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { usePropertiesInitialization } from '@Pimcore/modules/element/hooks/use-properties-initialization'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isDisallowedPropertyKey } from '../../constants/disallowed-keys'
 
 interface ITableProps {
   propertiesTableTab: string
   showDuplicatePropertyModal: () => void
   showMandatoryModal: () => void
+  showDisallowedPropertyModal: () => void
 }
 
 type DataPropertyWithActions = DataProperty & {
@@ -38,7 +40,8 @@ type DataPropertyWithActions = DataProperty & {
 export const Table = ({
   propertiesTableTab,
   showDuplicatePropertyModal,
-  showMandatoryModal
+  showMandatoryModal,
+  showDisallowedPropertyModal
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement, mapToElementType } = useElementHelper()
@@ -57,15 +60,24 @@ export const Table = ({
 
   useEffect(() => {
     if (arePropertiesAvailable) {
-      setGridDataOwn(properties.filter((item) => {
-        return !item.inherited
-      }))
+      const filterProperties = (items: DataProperty[]): DataProperty[] => {
+        return items.filter((item) => {
+          if (isDisallowedPropertyKey(item.key, elementType)) {
+            return false
+          }
+          return true
+        })
+      }
 
-      setGridDataInherited(properties.filter((item) => {
+      setGridDataOwn(filterProperties(properties.filter((item) => {
+        return !item.inherited
+      })))
+
+      setGridDataInherited(filterProperties(properties.filter((item) => {
         return item.inherited
-      }))
+      })))
     }
-  }, [properties])
+  }, [properties, elementType])
 
   useEffect(() => {
     if (modifiedCells.length > 0 && element?.changes.properties === undefined) {
@@ -169,6 +181,15 @@ export const Table = ({
     const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
+
+    // Prevent changing property key to a disallowed key for specific element types
+    const isChangingKeyToDisallowed = columnId === 'key' && 
+      isDisallowedPropertyKey(value as string, elementType)
+
+    if (isChangingKeyToDisallowed) {
+      showDisallowedPropertyModal()
+      return
+    }
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)

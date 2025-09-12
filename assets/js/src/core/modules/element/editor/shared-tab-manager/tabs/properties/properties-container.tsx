@@ -29,6 +29,7 @@ import { Split } from '@Pimcore/components/split/split'
 import { Select } from '@Pimcore/components/select/select'
 import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isDisallowedPropertyKey } from './constants/disallowed-keys'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -47,6 +48,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
     type: 'error'
   })
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+    type: 'error'
+  })
+  const { showModal: showDisallowedPropertyModal, closeModal: closeDisallowedPropertyModal, renderModal: DisallowedPropertyModal } = useModal({
     type: 'error'
   })
   const keyInputValue = useRef<string>('')
@@ -106,6 +110,18 @@ export const PropertiesContainer = (): React.JSX.Element => {
             >
               {t('properties.add-property-mandatory-fields-missing.error')}
             </MandatoryModal>
+
+            <DisallowedPropertyModal
+              footer={ <ModalFooter>
+                <Button
+                  onClick={ closeDisallowedPropertyModal }
+                  type='primary'
+                >{t('button.ok')}</Button>
+              </ModalFooter> }
+              title={ t('properties.property-key-disallowed.title') }
+            >
+              {t('properties.property-key-disallowed.error')}
+            </DisallowedPropertyModal>
 
             {createManualPropertyMode && (
             <Space size="extra-small">
@@ -190,6 +206,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
         propertiesTableTab={ propertiesTableTab }
         showDuplicatePropertyModal={ showDuplicatePropertyModal }
         showMandatoryModal={ showMandatoryModal }
+        showDisallowedPropertyModal={ showDisallowedPropertyModal }
       />
     </Content>
   )
@@ -202,6 +219,12 @@ export const PropertiesContainer = (): React.JSX.Element => {
     const property = data?.items?.find((item) => item.id === value)
 
     if (property === undefined) {
+      return
+    }
+
+    // Prevent creation of disallowed property keys for specific element types
+    if (isDisallowedPropertyKey(property.key, elementType)) {
+      showDisallowedPropertyModal()
       return
     }
 
@@ -240,6 +263,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
     if (!isValidKeyInput || !isValidTypeSelectValue) {
       showMandatoryModal()
+      return
+    }
+
+    if (isDisallowedPropertyKey(keyInputValue.current, elementType)) {
+      showDisallowedPropertyModal()
       return
     }
 
