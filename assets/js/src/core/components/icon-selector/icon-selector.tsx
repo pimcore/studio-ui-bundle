@@ -75,7 +75,7 @@ export const IconSelector = ({
     },
     ...iconSetRegistry.getDynamicTypes().map((iconSet) => ({
       key: iconSet.id,
-      label: iconSet.name,
+      label: t(`icon-selector.${iconSet.name}`),
       children: null
     })),
     {
@@ -198,7 +198,7 @@ export const IconSelector = ({
             onChange={ setActiveTab }
           />
 
-          {activeTab !== 'custom' && (
+          {activeTab !== 'custom' && !hasSubmissionError && (
           <SearchInput
             maxWidth={ '1000px' }
             onSearch={ handleSearch }

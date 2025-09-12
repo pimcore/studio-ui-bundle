@@ -1215,10 +1215,13 @@ icon-selector.title: Icon Selector
 icon-selector.all-icons: All Icons
 icon-selector.pimcore-library: Pimcore Library
 icon-selector.search-placeholder: Search
-icon-selector.current-selection: Current Selection
+icon-selector.current-selection: Current selection
 icon-selector.clear-selection: Clear selection
 icon-selector.no-selection: No icon selected
 icon-selector.save: Save
-icon-selector.custom-icon: Custom Icon
-icon-selector.custom-icon-path: Icon Path
-icon-selector.custom-icon-path-placeholder: Enter custom icon path (e.g., /path/to/icon.svg)
+icon-selector.custom-icon: Custom icon
+icon-selector.custom-icon-path: Custom path
+icon-selector.custom-icon-path-placeholder: Add a custom path and submit
+icon-selector.Twemoji: Twemoji Library
+icon-selector.Pimcore: Pimcore Library
+
