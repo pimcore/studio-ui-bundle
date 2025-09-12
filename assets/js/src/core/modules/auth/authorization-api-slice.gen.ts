@@ -109,6 +109,8 @@ export type UserInformation = {
     welcomeScreen: boolean;
     /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Allow Dirty Close */
+    allowDirtyClose: boolean;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
@@ -120,7 +122,7 @@ export type UserInformation = {
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
-    twoFactorAuthentication?: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Active studio perspective ID */
     activePerspective: string | null;
     /** Allowed studio perspectives */
