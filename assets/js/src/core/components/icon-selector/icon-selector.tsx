@@ -247,7 +247,7 @@ export const IconSelector = ({
                   onLoadError={ setHasSubmissionError }
                 />
               </Flex>
-              {!isUndefined(previewSelectedIcon) && (
+              {!isUndefined(previewSelectedIcon) && !hasSubmissionError && (
               <IconButton
                 icon={ { value: 'trash' } }
                 onClick={ handleClearSelection }
