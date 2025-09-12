@@ -140,6 +140,12 @@ export const IconSelector = ({
     setCurrentPage(1)
   }
 
+  const handleTabChange = (tabKey: string): void => {
+    setActiveTab(tabKey)
+    setSearchValue('')
+    setCurrentPage(1)
+  }
+
   const handlePageChange = (page: number, newPageSize?: number): void => {
     setCurrentPage(page)
     if (!isUndefined(newPageSize)) {
@@ -195,7 +201,7 @@ export const IconSelector = ({
           <Tabs
             activeKey={ activeTab }
             items={ tabItems }
-            onChange={ setActiveTab }
+            onChange={ handleTabChange }
           />
 
           {activeTab !== 'custom' && (
