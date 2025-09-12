@@ -13,5 +13,5 @@ import { injectable } from 'inversify'
 import { type IDocumentContext } from '@Pimcore/modules/document/document-provider'
 
 @injectable()
-export class DocumentEditorSidebarManager extends SidebarManager<IDocumentContext> {
+export class DocumentSidebarManager extends SidebarManager<IDocumentContext> {
 }

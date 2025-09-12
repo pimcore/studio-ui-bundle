@@ -11,9 +11,8 @@
 import { useContext, useMemo } from 'react'
 import { useAppSelector } from '@Pimcore/app/store'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DocumentEditorSidebarManager } from '../sidebar/sidebar-manager'
+import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { getDocumentSidebarManager } from '../../../../sidebar/sidebar-manager-helper'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import { type IDocumentContext } from '@Pimcore/modules/document/document-provider'
 import { selectDocumentEditorState } from '@Pimcore/modules/document/document-editor-slice'
@@ -25,10 +24,11 @@ import { selectDocumentEditorState } from '@Pimcore/modules/document/document-ed
  */
 export const useDocumentEditorSidebarEntries = (): Array<ISidebarEntry<IDocumentContext>> => {
   const documentContext = useContext(DocumentContext)
+  const { document: documentDraft } = useDocumentDraft(documentContext.id)
 
   const documentEditorState = useAppSelector(selectDocumentEditorState)
 
-  const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
+  const sidebarManager = getDocumentSidebarManager(documentDraft?.type)
 
   return useMemo(() => {
     return sidebarManager.getVisibleEntries(documentContext)

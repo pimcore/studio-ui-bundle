@@ -172,7 +172,7 @@ import { EmailTabManager } from '@Pimcore/modules/document/editor/types/email/ta
 import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardlink/tab-manager/hardlink-tab-manager'
 import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
-import { DocumentEditorSidebarManager } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/sidebar/sidebar-manager'
+import { DocumentSidebarManager } from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
@@ -259,7 +259,14 @@ container.bind(serviceIds['Document/Editor/FolderTabManager']).to(FolderTabManag
 container.bind(serviceIds['Document/Editor/HardlinkTabManager']).to(HardlinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/LinkTabManager']).to(LinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/SnippetTabManager']).to(SnippetTabManager).inSingletonScope()
-container.bind(serviceIds['Document/Editor/Edit/SidebarManager']).to(DocumentEditorSidebarManager).inSingletonScope()
+
+// Document Sidebar Managers
+container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/SnippetSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/EmailSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/LinkSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/HardlinkSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/FolderSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

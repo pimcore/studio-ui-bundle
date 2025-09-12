@@ -21,6 +21,12 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT, TAB_VERSIONS, TAB_PREVIEW } from '../../shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import {
+  SIDEBAR_AREABLOCK_TYPES,
+  SIDEBAR_CONTENT_SETTINGS,
+  SIDEBAR_NAVIGATION
+} from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -35,5 +41,11 @@ moduleSystem.registerModule({
     pageEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     pageEditorTabManager.register(TAB_TAGS)
     pageEditorTabManager.register(TAB_WORKFLOW)
+
+    const pageSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/PageSidebarManager'])
+
+    pageSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
+    pageSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    pageSidebarManager.registerEntry(SIDEBAR_NAVIGATION)
   }
 })
