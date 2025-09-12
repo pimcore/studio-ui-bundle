@@ -799,6 +799,10 @@ navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
+navigation.sidebar-title: Navigation
+navigation.name: Name
+navigation.exclude: Exclude from Navigation
+navigation.advanced-settings: Advanced Settings
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
