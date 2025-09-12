@@ -113,6 +113,8 @@ export const IconSelector = ({
   }, [filteredIcons, currentPage, pageSize])
 
   const handleIconClick = (icon: ElementIcon): void => {
+    console.log("hwerw");
+    
     setPreviewSelectedIcon(icon)
     setHasSubmissionError(false)
   }
@@ -129,6 +131,7 @@ export const IconSelector = ({
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
     setHasSubmissionError(false)
+    onChange?.(undefined)
   }
 
   const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
@@ -166,7 +169,7 @@ export const IconSelector = ({
           justify='center'
         >
           <IconPreview
-            icon={ previewSelectedIcon }
+            icon={ value }
           />
         </Flex>
         <IconButton
