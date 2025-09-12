@@ -194,10 +194,8 @@ export const IconSelector = ({
           {activeTab !== 'custom' && (
           <SearchInput
             maxWidth={ '1000px' }
-            onChange={ (e) => { setSearchValue(e.target.value) } }
             onSearch={ handleSearch }
             placeholder={ t('icon-selector.search-placeholder') }
-            value={ searchValue }
             withPrefix={ false }
             withoutAddon={ false }
           />
