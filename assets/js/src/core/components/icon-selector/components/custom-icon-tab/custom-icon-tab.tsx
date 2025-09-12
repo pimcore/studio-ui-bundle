@@ -24,7 +24,7 @@ export const CustomIconTab = ({
   customIconPath,
   onCustomIconPathChange
 }: CustomIconTabProps): React.JSX.Element => {
-    const [customPathValue, setCustomPathValue] = useState<string>(customIconPath)
+  const [customPathValue, setCustomPathValue] = useState<string>(customIconPath)
 
   const { styles } = useStyles()
 
@@ -55,16 +55,16 @@ export const CustomIconTab = ({
         vertical
       >
         <span>{t('icon-selector.custom-icon-path')}</span>
-          <SearchInput
-            maxWidth={ '1000px' }
-            onChange={ (e) => { setCustomPathValue(e.target.value) } }
-            onSearch={ handleInputSubmission }
-            placeholder={ t('icon-selector.custom-icon-path-placeholder') }
-            value={ customPathValue }
-            withPrefix={ false }
-            withoutAddon={ false }
-            searchButtonIcon='refresh'
-          />
+        <SearchInput
+          maxWidth={ '1000px' }
+          onChange={ (e) => { setCustomPathValue(e.target.value) } }
+          onSearch={ handleInputSubmission }
+          placeholder={ t('icon-selector.custom-icon-path-placeholder') }
+          searchButtonIcon='refresh'
+          value={ customPathValue }
+          withPrefix={ false }
+          withoutAddon={ false }
+        />
       </Flex>
     </Flex>
   )

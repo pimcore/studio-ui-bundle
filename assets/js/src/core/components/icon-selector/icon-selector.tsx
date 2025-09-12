@@ -162,7 +162,7 @@ export const IconSelector = ({
           className={ styles.selectionPreview }
           justify='center'
         >
-          <IconPreview 
+          <IconPreview
             icon={ previewSelectedIcon }
           />
         </Flex>
@@ -248,7 +248,7 @@ export const IconSelector = ({
                 }) }
                 justify='center'
               >
-                <IconPreview 
+                <IconPreview
                   icon={ previewSelectedIcon }
                   onLoadError={ setHasSubmissionError }
                 />
