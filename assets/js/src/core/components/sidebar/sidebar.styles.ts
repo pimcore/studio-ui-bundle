@@ -111,6 +111,10 @@ export const useStyle = createStyles(({ token, css }) => {
           display: none;
         }
 
+        &--sizing-medium {
+          width: 272px;
+        }
+
         &--sizing-large {
           width: 432px;
         }

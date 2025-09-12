@@ -32,6 +32,7 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
 
   const renderNode = useMemo(() => {
     if (currentDataType === 'data') {
+      console.log('props', props)
       return (
         <DataComponent
           { ...props as DataComponentProps }

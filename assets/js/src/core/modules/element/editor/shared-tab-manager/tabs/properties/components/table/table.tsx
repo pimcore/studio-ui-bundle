@@ -8,9 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import {
-  type DataProperty as DataPropertyApi
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import React, { useEffect, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -18,7 +15,6 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -26,7 +22,7 @@ import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
-import { uuid } from '@Pimcore/utils/uuid'
+import { usePropertiesInitialization } from '@Pimcore/modules/element/hooks/use-properties-initialization'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface ITableProps {
@@ -48,34 +44,16 @@ export const Table = ({
   const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
-  const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
+  const { element, properties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
   const arePropertiesAvailable = properties !== undefined
   const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
 
-  const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
-    elementType,
-    id
-  })
+  const { isLoading } = usePropertiesInitialization()
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
   const modifiedCellsType = 'properties'
   const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
-
-  const enrichProperties = (data: DataPropertyApi[]): DataProperty[] => {
-    return data.map((item) => {
-      return {
-        ...item,
-        rowId: uuid()
-      }
-    })
-  }
-
-  useEffect(() => {
-    if (data !== undefined && element?.changes.properties === undefined && Array.isArray(data.items)) {
-      setProperties(enrichProperties(data?.items))
-    }
-  }, [data])
 
   useEffect(() => {
     if (arePropertiesAvailable) {

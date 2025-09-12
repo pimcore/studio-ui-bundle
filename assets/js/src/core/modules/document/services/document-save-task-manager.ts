@@ -216,6 +216,10 @@ export class DocumentSaveTaskManager {
       updatedData.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
+    if (!isNil(document.changes?.settingsData) && !isNil(document.settingsData)) {
+      updatedData.settingsData = document.settingsData
+    }
+
     const editableData = this.getEditableData()
     if (Object.keys(editableData).length > 0) {
       updatedData.editableData = editableData

@@ -56,6 +56,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   width?: number | string | null
   inherited?: boolean
   readOnly?: boolean
+  vertical?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -108,6 +109,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
+      vertical={ props.vertical }
     >
       <div className={ styles.droppableWrapper }>
         <Droppable
@@ -130,7 +132,10 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Droppable>
       </div>
-      <Flex gap="extra-small">
+      <Flex
+        gap="extra-small"
+        justify={ props.vertical === true ? 'start' : undefined }
+      >
         {props.allowPathTextInput !== true && (!isNull(value)) && (
           <Tooltip
             key="open"

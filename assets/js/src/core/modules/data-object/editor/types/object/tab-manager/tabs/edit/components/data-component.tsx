@@ -91,7 +91,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     inherited: inheritanceStateValue?.inherited === true,
     noteditable: Boolean(props.noteditable) || disabled
   }
-
+  console.log('Render DataComponent for field type', currentFieldType, _props, props)
   useEffect(() => {
     if (!objectDataType.isCollectionType) {
       objectDataType.handleDefaultValue(_props, form, virtualFieldName)

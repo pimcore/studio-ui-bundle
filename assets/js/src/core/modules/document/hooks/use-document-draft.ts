@@ -25,7 +25,9 @@ import {
   setDraftData,
   publishDraft,
   unpublishDraft,
-  markDocumentEditablesAsModified
+  markDocumentEditablesAsModified,
+  setSettingsDataForDocument,
+  updateSettingsDataForDocument
 } from '../document-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -43,6 +45,7 @@ import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/eleme
 import { isFailedDraftId } from '../document-draft-error-slice'
 import { useModifiedDocumentEditablesDraft, type UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
 import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
+import { useSettingsDataDraft, type UseSettingsDataDraftReturn } from '../draft/hooks/use-settings-data'
 
 export interface UseDocumentDraftReturn extends
   UsePropertiesDraftReturn,
@@ -51,7 +54,8 @@ export interface UseDocumentDraftReturn extends
   UseTrackableChangesDraftReturn,
   UseModifiedDocumentEditablesDraftReturn,
   UseDraftDataReturn,
-  UsePublishedData {
+  UsePublishedData,
+  UseSettingsDataDraftReturn {
   isLoading: boolean
   isError: boolean
   document: undefined | ReturnType<typeof selectDocumentById>
@@ -120,6 +124,13 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     markDocumentEditablesAsModified
   )
 
+  const settingsDataActions = useSettingsDataDraft({
+    id,
+    draft: document,
+    setSettingsDataAction: setSettingsDataForDocument,
+    updateSettingsDataAction: updateSettingsDataForDocument
+  })
+
   const editorType = document?.type === undefined
     ? undefined
     : (typeRegistry.get(document.type) ?? typeRegistry.get('document'))
@@ -135,6 +146,7 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     ...tabsActions,
     ...modifiedDocumentEditablesActions,
     ...draftDataActions,
-    ...publishedActions
+    ...publishedActions,
+    ...settingsDataActions
   }
 }

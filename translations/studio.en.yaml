@@ -215,6 +215,7 @@ aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
+none: None
 yes: Yes
 no: No
 by: By
@@ -489,6 +490,7 @@ export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
@@ -1171,3 +1173,7 @@ icon-selector.current-selection: Current Selection
 icon-selector.clear-selection: Clear selection
 icon-selector.no-selection: No icon selected
 icon-selector.save: Save
+language: Language
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overrides path from tree-structure)
+content-main-document: Content-Main Document
