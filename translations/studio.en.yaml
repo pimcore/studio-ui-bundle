@@ -370,6 +370,8 @@ properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+properties.property-key-disallowed.title: Property key not allowed
+properties.property-key-disallowed.error: This property key is reserved and cannot be used. Please choose a different key name.
 translations.add-translation-mandatory-field-missing.title: Mandatory field missing
 translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
