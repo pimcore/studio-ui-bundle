@@ -22,7 +22,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const updateCache: UseInlineEditApiUpdateReturn['updateCache'] = (event) => {
     const { update, getGetRequestArgs } = event
     const { id, column: columnToUpdate, value } = update
-
+    
     dispatch(api.util.updateQueryData('dataObjectGetGrid', getGetRequestArgs as DataObjectGetGridApiArg, (oldData) => {
       item_loop:
       for (const item of oldData.items) {
@@ -49,7 +49,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
     const { update } = event
     let columnKey = update.column.key
-
+    
     if (update.column.localizable && update.column.locale !== undefined && update.column.locale !== null) {
       const splittedColumnKey = (columnKey ?? '').split('.')
       const columnId = splittedColumnKey[splittedColumnKey.length - 1]
@@ -63,16 +63,24 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
       ? addBatchAppendMode(update.value, BatchAppendMode.Replace)
       : update.value
 
+    const isPublishedColumn = columnKey === 'published'
+    
+    const dataItem: any = {
+      id: update.id
+    }
+
+    if (isPublishedColumn) {
+      dataItem.published = value
+      dataItem.editableData = {}
+    } else {
+      dataItem.editableData = {
+        ...set({}, columnKey ?? '', value)
+      }
+    }
+
     const promise = patchDataObject({
       body: {
-        data: [
-          {
-            id: update.id,
-            editableData: {
-              ...set({}, columnKey ?? '', value)
-            }
-          }
-        ]
+        data: [dataItem]
       }
     })
 
