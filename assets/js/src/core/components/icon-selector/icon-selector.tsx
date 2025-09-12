@@ -198,7 +198,7 @@ export const IconSelector = ({
             onChange={ setActiveTab }
           />
 
-          {activeTab !== 'custom' && !hasSubmissionError && (
+          {activeTab !== 'custom' && (
           <SearchInput
             maxWidth={ '1000px' }
             onSearch={ handleSearch }
