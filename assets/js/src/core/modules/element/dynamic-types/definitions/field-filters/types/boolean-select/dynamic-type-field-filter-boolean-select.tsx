@@ -19,7 +19,7 @@ export class DynamicTypeFieldFilterBooleanSelect extends DynamicTypeFieldFilterA
   id = 'boolean-select'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.Boolean
+    return FieldFilterFrontendType.Select
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
