@@ -25,7 +25,7 @@ interface IAssetSelectConfig {
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
-  const [_value, setValue] = useState(data)
+  const [_value, setValue] = useState<string[]>(data as string[])
 
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
   let formattedOptions: DefaultOptionType[] = []
@@ -46,8 +46,9 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     setValue(data)
   }, [data])
 
-  const handleChange = (value: string | string[]): void => {
+  const handleChange = (value: string[]): void => {
     setValue(value)
+    setData(value)
   }
 
   const handleBlur = (): void => {
