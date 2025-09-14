@@ -10,21 +10,21 @@
 
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterSelectComponent } from '../../components/dynamic-type-field-filter-select-component'
+import { DynamicTypeFieldFilterMultiselectComponent } from '../../components/dynamic-type-field-filter-multiselect-component'
 import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
-export class DynamicTypeFieldFilterSelect extends DynamicTypeFieldFilterAbstract {
-  id = 'select'
+export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbstract {
+  id = 'multiselect'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.String
+    return FieldFilterFrontendType.Select
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
     return (
-      <DynamicTypeFieldFilterSelectComponent />
+      <DynamicTypeFieldFilterMultiselectComponent />
     )
   }
 }
