@@ -24,7 +24,22 @@ interface IAssetSelectConfig {
   options: string[]
 }
 
-const transformBooleanSelectValueToBooleanNull = (value: number): boolean | null => {
+const transformBooleanSelectValueToBooleanNull = (value: number | number[]): boolean | null | Array<boolean | null> => {
+  if (Array.isArray(value)) {
+    return value.map(v => {
+      switch (v) {
+        case -1:
+          return false
+        case 0:
+          return null
+        case 1:
+          return true
+        default:
+          return null
+      }
+    })
+  }
+  
   switch (value) {
     case -1:
       return false
@@ -40,7 +55,7 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
 
-  const [_value, setValue] = useState<number>(data as number)
+  const [_value, setValue] = useState<number | number[]>(data as number | number[])
 
   const defaultOptions = [
     { label: 'True', value: 1 },
@@ -57,8 +72,9 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
 
   return (
     <Select
+      mode="multiple"
       onBlur={ onBlur }
-      onChange={ (value: number) => { setValue(value) } }
+      onChange={ (value: number | number[]) => { setValue(value) } }
       options={ formattedOptions }
       style={ { width: '100%' } }
       value={ _value }
