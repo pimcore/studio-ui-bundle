@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined, isEmpty, find, isNil } from 'lodash'
+import { isUndefined, isEmpty, find, isNil, map, filter } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import { type ColumnDef } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
@@ -21,6 +21,7 @@ import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import {
+  type AdvancedColumnConfig,
   useDataObjectGetAvailableGridColumnsForRelationQuery, useDataObjectGetGridQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
@@ -35,7 +36,7 @@ export interface ManyToManyObjectRelationClassDefinitionProps {
 
 export interface VisibleFieldDefinition {
   additionalAttributes: object
-  config: object
+  config: Array<string | AdvancedColumnConfig>
   editable: boolean
   exportable: boolean
   filterable: boolean
@@ -71,7 +72,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
 
   const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
   const relationField = props?.id
-  const idsList = (props?.value ?? [])?.map(item => item.id)
+  const dataRelationClasses = props?.allowedClasses
 
   const defaultVisibleFieldDefinitions = [
     {
@@ -128,24 +129,31 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     group: col?.group?.[0]
   }))
 
-  const { data: gridFullData } = useDataObjectGetGridQuery({
-    classId: 'Car',
-    body: {
-      folderId: 1,
-      columns: columns ?? [],
-      filters: {
-        page: 1,
-        pageSize: 50,
-        includeDescendants: true,
-        columnFilters: [
-          {
-            type: 'system.ids',
-            filterValue: idsList
-          }
-        ]
+  const queries = dataRelationClasses?.map(classId =>
+    useDataObjectGetGridQuery({
+      classId: getByName(classId)?.id ?? '',
+      body: {
+        folderId: 1,
+        columns: columns ?? [],
+        filters: {
+          page: 1,
+          pageSize: 999,
+          includeDescendants: true,
+          columnFilters: [
+            {
+              type: 'system.ids',
+              filterValue: map(
+                filter(props?.value, { subtype: classId }),
+                'id'
+              )
+            }
+          ]
+        }
       }
-    }
-  }, { skip: isUndefined(classId) })
+    }, { skip: isUndefined(dataRelationClasses) })
+  )
+  const isGridFullDataLoading = queries?.some(q => q.isLoading)
+  const gridFullData = queries?.flatMap(q => q.data?.items ?? [])
 
   const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '')
 
@@ -154,8 +162,12 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       { ...props }
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
-      enrichRowData={ (row: ManyToManyRelationValueItem) => enrichRowData(visibleFieldDefinitions, row) }
-      isLoading={ isAvailableGridColumnsLoading }
+      enrichRowData={ (row: ManyToManyRelationValueItem) => {
+        const rowData = gridFullData?.find(item => item.id === row.id)?.columns ?? []
+
+        return enrichRowData(visibleFieldDefinitions, row, rowData)
+      } }
+      isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
     />
   )
 }

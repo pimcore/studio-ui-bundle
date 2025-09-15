@@ -23,6 +23,7 @@ import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { type GridColumnData } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
@@ -63,17 +64,21 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
   return columnDefinition
 }
 
-export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem): ManyToManyRelationValueItem & Record<string, any> => {
+export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem, rowData: GridColumnData[]): ManyToManyRelationValueItem & Record<string, any> => {
   const additionalColumns = {}
-  for (const key in visibleFieldDefinitions) {
+
+  visibleFieldDefinitions?.forEach(field => {
+    const key = field.key
+    const value = rowData?.find(item => item.key === key)?.value
+
     if (key === 'fullpath') {
       additionalColumns[key] = row.fullPath
     } else if (key === 'classname') {
       additionalColumns[key] = row.subtype
     } else if (key !== 'id') {
-      additionalColumns[key] = 'not-implemented-yet'
+      additionalColumns[key] = value
     }
-  }
+  })
 
   return {
     ...row,
