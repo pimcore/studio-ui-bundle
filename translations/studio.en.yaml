@@ -71,6 +71,9 @@ document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
 document.link.target: Link Target
+document.hardlink.source: Source Document
+document.hardlink.properties-from-source: Use properties from source document
+document.hardlink.children-from-source: Use children from source document
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object

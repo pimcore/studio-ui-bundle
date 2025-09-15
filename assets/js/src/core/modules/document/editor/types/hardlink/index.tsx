@@ -22,11 +22,13 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
 import { SIDEBAR_CONTENT_SETTINGS } from '../../shared-tab-manager/sidebar-definitions'
+import { TAB_HARDLINK_EDIT } from './tab-manager/tabs/edit'
 
 moduleSystem.registerModule({
   onInit: () => {
     const hardlinkEditorTabManager = container.get<HardlinkTabManager>(serviceIds['Document/Editor/HardlinkTabManager'])
 
+    hardlinkEditorTabManager.register(TAB_HARDLINK_EDIT)
     hardlinkEditorTabManager.register(TAB_PROPERTIES)
     hardlinkEditorTabManager.register(TAB_DEPENDENCIES)
     hardlinkEditorTabManager.register(TAB_SCHEDULE)
