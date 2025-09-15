@@ -30,20 +30,14 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const targetAsset: Asset = props.metaData.asset
 
-    if (targetAsset.type !== 'folder') {
-      return (
-        <Component { ...props } />
-      )
-    }
-
-    if (!isTargetAllowed(targetAsset)) {
-      return (
-        <Component { ...props } />
-      )
-    }
-
     const isAssetTargetAllowed = (asset: Asset): boolean => {
       return isTargetAllowed(asset) && asset.type === 'folder'
+    }
+
+    if (!isAssetTargetAllowed(targetAsset)) {
+      return (
+        <Component { ...props } />
+      )
     }
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
