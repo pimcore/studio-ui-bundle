@@ -25,8 +25,6 @@ import {
   DocumentConfigurationSidebar
 } from '../sidebar/tabs/document-configuration/document-configuration-sidebar'
 import { checkAreablockTypesVisibility } from '../sidebar/visibility/areablock-types-visibility'
-import { store } from '@Pimcore/app/store'
-import { selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
 
 export const SIDEBAR_AREABLOCK_TYPES: ISidebarEntry<IDocumentContext> = {
   key: 'areablock-types',

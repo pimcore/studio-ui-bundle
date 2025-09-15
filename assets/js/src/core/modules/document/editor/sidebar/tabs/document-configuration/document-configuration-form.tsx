@@ -34,7 +34,7 @@ interface DocumentConfigurationFormProps {
   apiData: {
     controllers: Array<{ name: string }>
     templates: Array<{ path: string }>
-    predefinedDocTypes: Array<{ id: string; name?: string; controller?: string; template?: string }>
+    predefinedDocTypes: Array<{ id: string, name?: string | null, controller?: string | null, template?: string | null }>
   }
 }
 

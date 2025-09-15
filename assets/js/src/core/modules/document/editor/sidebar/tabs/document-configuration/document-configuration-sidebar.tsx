@@ -71,10 +71,10 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
       <Box padding={ { x: 'extra-small', bottom: 'small' } }>
         {isDataReady && (
           <DocumentConfigurationForm
+            apiData={ apiData }
             documentId={ id }
             documentType={ document?.type }
             initialValues={ initialValues }
-            apiData={ apiData }
           />
         )}
       </Box>
