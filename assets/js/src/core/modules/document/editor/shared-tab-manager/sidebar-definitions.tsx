@@ -21,7 +21,12 @@ import {
 import {
   NavigationSidebar
 } from '../sidebar/tabs/navigation/navigation-sidebar'
+import {
+  DocumentConfigurationSidebar
+} from '../sidebar/tabs/document-configuration/document-configuration-sidebar'
 import { checkAreablockTypesVisibility } from '../sidebar/visibility/areablock-types-visibility'
+import { store } from '@Pimcore/app/store'
+import { selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
 
 export const SIDEBAR_AREABLOCK_TYPES: ISidebarEntry<IDocumentContext> = {
   key: 'areablock-types',
@@ -43,4 +48,11 @@ export const SIDEBAR_NAVIGATION: ISidebarEntry<IDocumentContext> = {
   icon: <Icon value="navigation" />,
   component: <NavigationSidebar />,
   tooltip: 'navigation.sidebar-title'
+}
+
+export const SIDEBAR_DOCUMENT_CONFIGURATION: ISidebarEntry<IDocumentContext> = {
+  key: 'document-configuration',
+  icon: <Icon value="document-configurations" />,
+  component: <DocumentConfigurationSidebar />,
+  tooltip: 'document-configuration.sidebar-title'
 }

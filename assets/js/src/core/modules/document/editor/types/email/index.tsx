@@ -23,7 +23,8 @@ import { TAB_EDIT, TAB_VERSIONS, TAB_PREVIEW } from '../../shared-tab-manager/ta
 import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
 import {
   SIDEBAR_AREABLOCK_TYPES,
-  SIDEBAR_CONTENT_SETTINGS
+  SIDEBAR_CONTENT_SETTINGS,
+  SIDEBAR_DOCUMENT_CONFIGURATION
 } from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
@@ -43,5 +44,6 @@ moduleSystem.registerModule({
 
     emailSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
     emailSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    emailSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
   }
 })
