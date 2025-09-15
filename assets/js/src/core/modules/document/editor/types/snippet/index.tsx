@@ -24,7 +24,8 @@ import { TAB_EDIT, TAB_VERSIONS } from '../../shared-tab-manager/tab-definitions
 import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
 import {
   SIDEBAR_AREABLOCK_TYPES,
-  SIDEBAR_CONTENT_SETTINGS
+  SIDEBAR_CONTENT_SETTINGS,
+  SIDEBAR_DOCUMENT_CONFIGURATION
 } from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
@@ -44,5 +45,6 @@ moduleSystem.registerModule({
 
     snippetSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
     snippetSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    snippetSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
   }
 })

@@ -53,6 +53,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
+  showOpenForTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
   readOnly?: boolean
@@ -90,10 +91,14 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [props.value])
 
   const clickOpenElement = (): void => {
-    if (value !== null && value.textInput !== true) {
-      const elementType = mapToElementType(value.type)
-      if (!isUndefined(elementType)) {
-        openElement({ type: elementType, id: value.id }).catch(() => { })
+    if (value !== null) {
+      if (value.textInput === true) {
+        window.open(value.fullPath, '_blank', 'noopener,noreferrer')
+      } else {
+        const elementType = mapToElementType(value.type)
+        if (!isUndefined(elementType)) {
+          openElement({ type: elementType, id: value.id }).catch(() => { })
+        }
       }
 
       props.onOpenElement?.()
@@ -136,7 +141,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         gap="extra-small"
         justify={ props.vertical === true ? 'start' : undefined }
       >
-        {props.allowPathTextInput !== true && (!isNull(value)) && (
+        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
