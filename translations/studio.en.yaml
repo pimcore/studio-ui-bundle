@@ -70,6 +70,10 @@ document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+document.link.target: Link Target
+document.hardlink.source: Source Document
+document.hardlink.properties-from-source: Use properties from source document
+document.hardlink.children-from-source: Use children from source document
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -993,6 +997,54 @@ reports.editor.delete.content: Do you really want to delete Custom Report "{{rep
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
 reports.editor.content.validation.message: The customer report name is invalid
+reports.editor.general-settings.title: General Settings
+reports.editor.general-settings.name-label: Name
+reports.editor.general-settings.display-name-label: Display Name
+reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.group-label: Name an existing group or create new group
+reports.editor.general-settings.group-tooltip: You have to use the exact same name as the existing menu label. If the name is different or new - a new group will be created.
+reports.editor.general-settings.report-class-label: Report Class
+reports.editor.general-settings.group-icon-class-label: Group Icon Class
+reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
+reports.editor.source-definition.title: Source Definition
+reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
+reports.editor.manage-column-configuration.name: Name
+reports.editor.manage-column-configuration.display: Display
+reports.editor.manage-column-configuration.export: Export
+reports.editor.manage-column-configuration.order: Order
+reports.editor.manage-column-configuration.filter-type: Filter Type
+reports.editor.manage-column-configuration.filter-type.empty: Empty
+reports.editor.manage-column-configuration.filter-type.text: Text
+reports.editor.manage-column-configuration.filter-type.number: Number
+reports.editor.manage-column-configuration.filter-type.date: Date
+reports.editor.manage-column-configuration.filter-type.bool: Bool
+reports.editor.manage-column-configuration.display-type: Display Type
+reports.editor.manage-column-configuration.display-type.none: None
+reports.editor.manage-column-configuration.display-type.text: Text
+reports.editor.manage-column-configuration.display-type.date: Date
+reports.editor.manage-column-configuration.display-type.hide: Hide
+reports.editor.manage-column-configuration.filter-drilldown: Filter Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Empty
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Only Filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filter and Show
+reports.editor.manage-column-configuration.width: Width
+reports.editor.manage-column-configuration.label: Label
+reports.editor.manage-column-configuration.action: Action
+reports.editor.manage-column-configuration.action.none: None
+reports.editor.manage-column-configuration.action.open-document: Open Document
+reports.editor.manage-column-configuration.action.open-asset: Open Asset
+reports.editor.manage-column-configuration.action.open-object: Open Object
+reports.editor.manage-column-configuration.action.open-url: Open URL
+reports.editor.chart-settings.title: Chart Settings
+reports.editor.chart-settings.chart-type: Chart Type
+reports.editor.chart-settings.chart-type.none: None
+reports.editor.chart-settings.chart-type.pie-chart: Pie Chart
+reports.editor.chart-settings.chart-type.line-chart: Line Chart
+reports.editor.chart-settings.chart-type.bar-chart: Bar Chart
+reports.editor.chart-settings.settings: Settings
+reports.editor.chart-settings.x-axis: X-Axis
+reports.editor.chart-settings.y-axis: Y-Axis
+reports.editor.permissions.title: Permissions
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
@@ -1234,3 +1286,22 @@ language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
+never: never
+document-configuration.sidebar-title: Document Configuration
+document-configuration.predefined-document-type: Predefined Document Type
+document-configuration.controller: Controller
+document-configuration.template: Template
+document-configuration.static-page-generator: Static Page Generator
+document-configuration.enable-server-side-static-rendering: Enable server side static rendering
+document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
+document-configuration.last-generated: "Last generated: {{timestamp}}"
+email-settings.sidebar-title: Email Settings
+email-settings.subject: Subject
+email-settings.from: From
+email-settings.reply-to: Reply To
+email-settings.recipients: Recipients
+email-settings.to: To
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
