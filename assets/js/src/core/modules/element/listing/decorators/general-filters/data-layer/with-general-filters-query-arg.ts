@@ -21,9 +21,9 @@ import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dy
 import { type ColumnFilter } from '@tanstack/react-table'
 
 const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-return columnFilters.map(({ filterType, type, ...rest }) => ({
+  return columnFilters.map(({ filterType, type, ...rest }) => ({
     ...rest,
-    ...((filterType !== undefined )? { type: filterType } : { type: type })
+    ...((filterType !== undefined) ? { type: filterType } : { type })
   }))
 }
 
@@ -46,8 +46,8 @@ const shouldApplyFieldFilter = (
   }
 
   if (('dynamicTypeFieldFilterType' in dynamicType)) {
-  const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-  return fieldFilterType.shouldApply(filter.filterValue)
+    const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+    return fieldFilterType.shouldApply(filter.filterValue)
   }
 
   return dynamicType.shouldApply(filter.filterValue)
