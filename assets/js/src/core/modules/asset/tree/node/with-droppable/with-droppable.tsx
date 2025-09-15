@@ -42,7 +42,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const sourceAsset: Asset = info.data
-      
+
       if (!isSourceAllowed(sourceAsset) || !isAssetTargetAllowed(targetAsset)) {
         return
       }

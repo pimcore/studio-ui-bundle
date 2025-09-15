@@ -18,7 +18,10 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
  * Hook that provides functions to check if drag and drop operations are allowed.
  * This includes checking both element permissions and tree node locked state from Redux.
  */
-export const useDndAllowed = () => {
+export const useDndAllowed = (): {
+  isSourceAllowed: (sourceElement: Element) => boolean
+  isTargetAllowed: (targetElement: Element) => boolean
+} => {
   const { treeId } = useTreeId()
   const store = useStore()
 
@@ -27,10 +30,10 @@ export const useDndAllowed = () => {
       return false
     }
 
-    const state = store.getState() as any
+    const state = store.getState() as Record<string, any>
     const sourceNodeState = selectNodeState(state, treeId, sourceElement.id.toString())
-    const isSourceNodeLocked = sourceNodeState?.treeNodeProps?.isLocked ?? false
-    
+    const isSourceNodeLocked = Boolean(sourceNodeState?.treeNodeProps?.isLocked)
+
     return !isSourceNodeLocked
   }
 
