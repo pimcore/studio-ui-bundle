@@ -43,7 +43,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
   }
 
   useEffect(() => {
-    setValue(data)
+    setValue(data as string[])
   }, [data])
 
   const handleChange = (value: string[]): void => {
