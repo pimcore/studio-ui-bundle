@@ -15,18 +15,18 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import {
   TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
-  TAB_PROPERTIES,
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
 import { SIDEBAR_CONTENT_SETTINGS } from '../../shared-tab-manager/sidebar-definitions'
+import { TAB_FOLDER_PROPERTIES } from './tab-manager/tabs/properties/properties-container'
 
 moduleSystem.registerModule({
   onInit: () => {
     const folderEditorTabManager = container.get<FolderTabManager>(serviceIds['Document/Editor/FolderTabManager'])
 
-    folderEditorTabManager.register(TAB_PROPERTIES)
+    folderEditorTabManager.register(TAB_FOLDER_PROPERTIES)
     folderEditorTabManager.register(TAB_DEPENDENCIES)
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     folderEditorTabManager.register(TAB_TAGS)
