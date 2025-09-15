@@ -106,6 +106,20 @@ export const DocumentConfigurationForm = ({
     }
   }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form])
 
+  const lastGeneratedInfo = useMemo(() => {
+    const lastGenerated = document?.settingsData?.staticLastGenerated
+    return (
+      <span>
+        {t('document-configuration.last-generated', {
+          timestamp: isNil(lastGenerated)
+            ? t('never')
+            : ''
+        })}
+        {!isNil(lastGenerated) && <FormattedDateTime timestamp={ lastGenerated } />}
+      </span>
+    )
+  }, [document?.settingsData?.staticLastGenerated])
+
   const showStaticGenerator = documentType === 'page'
 
   return (
@@ -163,19 +177,7 @@ export const DocumentConfigurationForm = ({
           </Form.Item>
 
           <Form.Item
-            extra={ useMemo(() => {
-              const lastGenerated = document?.settingsData?.staticLastGenerated
-              return (
-                <span>
-                  {t('document-configuration.last-generated', {
-                    timestamp: isNil(lastGenerated)
-                      ? t('never')
-                      : ''
-                  })}
-                  {!isNil(lastGenerated) && <FormattedDateTime timestamp={ lastGenerated } />}
-                </span>
-              )
-            }, [document?.settingsData?.staticLastGenerated, t]) }
+            extra={ lastGeneratedInfo }
             label={ t('document-configuration.lifetime-for-static-page') }
             name="staticGeneratorLifetime"
           >
