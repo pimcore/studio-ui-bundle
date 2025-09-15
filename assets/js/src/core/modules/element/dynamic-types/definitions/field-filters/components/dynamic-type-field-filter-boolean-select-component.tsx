@@ -24,26 +24,23 @@ interface IAssetSelectConfig {
   options: string[]
 }
 
-const transformBooleanSelectValueToBooleanNull = (value: number[]): Array<boolean | null> => {
-  return value.map(v => {
-    switch (v) {
-      case -1:
-        return false
-      case 0:
-        return null
-      case 1:
-        return true
-      default:
-        return null
-    }
-  })
+const transformBooleanSelectValueToBooleanNull = (value: number): boolean | null => {
+  switch (value) {
+    case -1:
+      return false
+    case 0:
+      return null
+    case 1:
+      return true
+  }
+  return null
 }
 
 export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
 
-  const [_value, setValue] = useState<number[]>(data as number[])
+  const [_value, setValue] = useState<number>(data as number)
 
   const defaultOptions = [
     { label: 'True', value: 1 },
@@ -58,22 +55,18 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
     }))
   } else formattedOptions = defaultOptions
 
-  const handleChange = (value: number[]): void => {
-    setValue(value)
-  }
-
-  const handleBlur = (): void => {
-    setData(transformBooleanSelectValueToBooleanNull(_value))
-  }
-
   return (
     <Select
       mode="multiple"
-      onBlur={ handleBlur }
-      onChange={ handleChange }
+      onBlur={ onBlur }
+      onChange={ (value: number) => { setValue(value) } }
       options={ formattedOptions }
       style={ { width: '100%' } }
       value={ _value }
     />
   )
+
+  function onBlur (): void {
+    setData(transformBooleanSelectValueToBooleanNull(_value))
+  }
 }
