@@ -74,6 +74,13 @@ document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
 document.hardlink.children-from-source: Use children from source document
+convert-to: Convert to
+convert-document: Convert Document
+convert-document-warning: All content will be lost. Are you sure you want to convert this document?
+page: Page
+email: Email
+link: Link
+hardlink: Hardlink
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
