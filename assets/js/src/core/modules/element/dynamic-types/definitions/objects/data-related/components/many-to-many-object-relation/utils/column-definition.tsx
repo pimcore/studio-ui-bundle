@@ -24,7 +24,7 @@ import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
-export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
@@ -40,8 +40,9 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record
     )
   }
 
-  for (const key in visibleFieldDefinitions) {
-    const field = visibleFieldDefinitions[key]
+  for (const field of visibleFieldDefinitions ?? []) {
+    const key = field.key
+
     columnDefinition.push(
       columnHelper.accessor(key, {
         header: field.title,
@@ -62,7 +63,7 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record
   return columnDefinition
 }
 
-export const enrichRowData = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, row: ManyToManyRelationValueItem): ManyToManyRelationValueItem & Record<string, any> => {
+export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem): ManyToManyRelationValueItem & Record<string, any> => {
   const additionalColumns = {}
   for (const key in visibleFieldDefinitions) {
     if (key === 'fullpath') {
