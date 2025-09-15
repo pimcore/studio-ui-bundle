@@ -30,7 +30,7 @@ interface HardlinkEditFormData {
 export const HardlinkEditContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm<HardlinkEditFormData>()
-  
+
   const { id } = useContext(DocumentContext)
   const { document, updateSettingsData } = useDocumentDraft(id)
 
@@ -40,9 +40,9 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
 
   const initialValues: HardlinkEditFormData = React.useMemo(() => {
     const settingsData = document?.settingsData ?? {}
-    
+
     let sourceDocument: ManyToOneRelationValueType = null
-    
+
     if (!isNil(settingsData.sourceId)) {
       sourceDocument = {
         type: 'document',
@@ -51,7 +51,7 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
         textInput: false
       }
     }
-    
+
     return {
       sourceDocument,
       propertiesFromSource: Boolean(settingsData.propertiesFromSource),
@@ -84,44 +84,45 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
   return (
     <ContentLayout renderSidebar={
       <Sidebar
-        buttons={sidebarButtons}
-        entries={sidebarEntries}
+        buttons={ sidebarButtons }
+        entries={ sidebarEntries }
         sizing="medium"
         translateTooltips
       />
-    }>
+    }
+    >
       <Content padded>
         <Form
-          form={form}
-          initialValues={initialValues}
+          form={ form }
+          initialValues={ initialValues }
           layout="vertical"
         >
           <Form.Item
-            label={t('document.hardlink.source')}
+            label={ t('document.hardlink.source') }
             name="sourceDocument"
           >
             <ManyToOneRelation
               allowToClearRelation
               documentsAllowed
-              onChange={handleSourceDocumentChange}
+              onChange={ handleSourceDocumentChange }
               showOpenForTextInput
             />
           </Form.Item>
 
           <Form.Item
-            label={t('document.hardlink.properties-from-source')}
+            label={ t('document.hardlink.properties-from-source') }
             name="propertiesFromSource"
             valuePropName="checked"
           >
-            <Switch onChange={handlePropertiesFromSourceChange} />
+            <Switch onChange={ handlePropertiesFromSourceChange } />
           </Form.Item>
 
           <Form.Item
-            label={t('document.hardlink.children-from-source')}
+            label={ t('document.hardlink.children-from-source') }
             name="childrenFromSource"
             valuePropName="checked"
           >
-            <Switch onChange={handleChildrenFromSourceChange} />
+            <Switch onChange={ handleChildrenFromSourceChange } />
           </Form.Item>
         </Form>
       </Content>
