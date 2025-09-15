@@ -70,6 +70,7 @@ document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+document.link.target: Link Target
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
