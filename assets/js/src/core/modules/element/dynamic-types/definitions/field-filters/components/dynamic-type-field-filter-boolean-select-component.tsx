@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import React, { useEffect, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
@@ -17,8 +27,8 @@ interface IAssetSelectConfig {
 const numToBool = (value: number): boolean | null => {
   switch (value) {
     case -1: return false
-    case 0:  return null
-    case 1:  return true
+    case 0: return null
+    case 1: return true
     default: return null
   }
 }
@@ -52,22 +62,22 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
   }
 
   useEffect(() => {
-    const incoming = (data as (boolean | null)[] | undefined) ?? []
+    const incoming = (data as Array<boolean | null> | undefined) ?? []
     setValue(incoming.map(boolToNum))
   }, [data])
 
   const handleChange = (value: number[]): void => {
-    setValue(value) 
-    setData(value.map(numToBool)) 
+    setValue(value)
+    setData(value.map(numToBool))
   }
 
   return (
     <Select
       mode="multiple"
-      onChange={handleChange}
-      options={formattedOptions}
-      style={{ width: '100%' }}
-      value={_value}
+      onChange={ handleChange }
+      options={ formattedOptions }
+      style={ { width: '100%' } }
+      value={ _value }
     />
   )
 }
