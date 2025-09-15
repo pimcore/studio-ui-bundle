@@ -51,14 +51,9 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     setData(value)
   }
 
-  const handleBlur = (): void => {
-    setData(_value)
-  }
-
   return (
     <Select
       mode="multiple"
-      onBlur={ handleBlur }
       onChange={ handleChange }
       options={ formattedOptions }
       showSearch={ rawConfig?.showSearch ?? false }
