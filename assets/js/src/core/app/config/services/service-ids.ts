@@ -25,7 +25,10 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
   'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
-  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry'
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
+  'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
+  'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji'
 }
 
 export const serviceIds = {
@@ -53,6 +56,7 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
+  'Asset/ThumbnailService': 'Asset/ThumbnailService',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
@@ -67,7 +71,14 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
-  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
+
+  // Document Sidebar Managers
+  'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
+  'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
+  'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',
+  'Document/Editor/Sidebar/LinkSidebarManager': 'Document/Editor/Sidebar/LinkSidebarManager',
+  'Document/Editor/Sidebar/HardlinkSidebarManager': 'Document/Editor/Sidebar/HardlinkSidebarManager',
+  'Document/Editor/Sidebar/FolderSidebarManager': 'Document/Editor/Sidebar/FolderSidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -232,6 +243,7 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
   'DynamicTypes/DocumentEditable/Relations': 'DynamicTypes/DocumentEditable/Relations',
   'DynamicTypes/DocumentEditable/Renderlet': 'DynamicTypes/DocumentEditable/Renderlet',
+  'DynamicTypes/DocumentEditable/ScheduledBlock': 'DynamicTypes/DocumentEditable/ScheduledBlock',
   'DynamicTypes/DocumentEditable/Select': 'DynamicTypes/DocumentEditable/Select',
   'DynamicTypes/DocumentEditable/Snippet': 'DynamicTypes/DocumentEditable/Snippet',
   'DynamicTypes/DocumentEditable/Table': 'DynamicTypes/DocumentEditable/Table',
@@ -280,5 +292,8 @@ export const serviceIds = {
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
 
   // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
+
+  // Perspective & Widget Editor
+  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry'
 }

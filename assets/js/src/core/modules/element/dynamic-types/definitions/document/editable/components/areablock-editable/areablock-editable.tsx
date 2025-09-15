@@ -55,6 +55,7 @@ export interface AreablockEditableProps {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
+  isInherited?: boolean
 }
 
 export const AreablockEditable = ({
@@ -64,7 +65,8 @@ export const AreablockEditable = ({
   className,
   editableName,
   containerRef,
-  disabled = false
+  disabled = false,
+  isInherited = false
 }: AreablockEditableProps): React.JSX.Element => {
   const currentValue = isArray(value) ? value : []
 
@@ -73,6 +75,10 @@ export const AreablockEditable = ({
   const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
 
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
+
+  const handleOverwrite = useCallback(() => {
+    onChange?.(areablockManager.getAreablockValue())
+  }, [areablockManager, onChange])
 
   const handleOpenDialog = useCallback((areaKey: string) => {
     setOpenDialogs(prev => new Set(prev).add(areaKey))
@@ -117,7 +123,9 @@ export const AreablockEditable = ({
     onMoveAreaDown: moveAreaDown,
     onMoveArea: moveArea,
     onOpenDialog: handleOpenDialog,
-    onToggleHidden: handleToggleHidden
+    onToggleHidden: handleToggleHidden,
+    isInherited,
+    onOverwrite: handleOverwrite
   })
 
   return (

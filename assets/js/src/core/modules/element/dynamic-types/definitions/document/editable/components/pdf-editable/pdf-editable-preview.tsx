@@ -10,6 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { ResponsiveAssetPreview } from '../../helpers/responsive-asset-preview/responsive-asset-preview'
 import { generatePdfThumbnailUrl } from './utils/pdf-thumbnail-sizing'
 
@@ -20,6 +21,8 @@ interface PdfEditablePreviewProps {
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  thumbnailSettings?: ImageThumbnailSettings
+  thumbnailConfig?: string | object
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
@@ -30,6 +33,8 @@ export const PdfEditablePreview = ({
   width,
   height,
   containerWidth,
+  thumbnailSettings,
+  thumbnailConfig,
   ...props
 }: PdfEditablePreviewProps): React.JSX.Element => {
   const thumbnailUrl = useMemo(() => {
@@ -42,9 +47,11 @@ export const PdfEditablePreview = ({
       width,
       height,
       containerWidth,
+      thumbnailSettings,
+      thumbnailConfig,
       fallbackSrc: undefined
     })
-  }, [assetId, width, height, containerWidth])
+  }, [assetId, width, height, containerWidth, thumbnailSettings, thumbnailConfig])
 
   return (
     <ResponsiveAssetPreview

@@ -22,12 +22,12 @@ import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
-  objectId: number
+  classId: string
   fieldName: string
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
-  const { storeId, objectId, fieldName } = props
+  const { storeId, classId, fieldName } = props
 
   const { isOpenModal: isOpen, closeModal } = useClassificationStore()
   const { t } = useTranslation()
@@ -35,7 +35,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
 
   const tabProps = {
     storeId,
-    objectId,
+    classId,
     fieldName
   }
 

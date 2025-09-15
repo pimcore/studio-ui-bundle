@@ -12,7 +12,7 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { isNil, isArray } from 'lodash'
-import { DocumentLink } from '../components/document-link/document-link'
+import { LinkEditable } from '../components/link-editable/link-editable'
 
 export type LinkEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -54,7 +54,7 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
     const disabledFields = isArray(props.config?.disabledFields) ? props.config.disabledFields : []
 
     return (
-      <DocumentLink
+      <LinkEditable
         allowedTargets={ allowedTargets }
         allowedTypes={ allowedTypes }
         className={ props.config?.class }

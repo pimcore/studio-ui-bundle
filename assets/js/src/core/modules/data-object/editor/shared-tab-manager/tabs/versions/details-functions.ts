@@ -8,22 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { differenceWith, every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
+import { differenceWith, get, isEmpty, isEqual, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
-
-const isFieldValueEmpty = (fieldValue: any): boolean => {
-  if (isObject(fieldValue)) {
-    return every(fieldValue, isEmptyValue)
-  }
-
-  return isEmptyValue(fieldValue)
-}
 
 export const getBreadcrumbTitle = (value1: string, value2: string): string => {
   return [value1, value2].filter(Boolean).join('/')
@@ -121,10 +112,6 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
     const mainVersionItem = mainVersionMap.get(key)
     const compareVersionItem = compareVersionMap.get(key)
 
-    const isEmptyField = isFieldValueEmpty(mainVersionItem?.fieldValue) && isFieldValueEmpty(compareVersionItem?.fieldValue)
-
-    if (isEmptyField) { continue }
-
     const hasCompareVersion = !isUndefined(compareVersionItem)
 
     const field: IObjectVersionField = {
@@ -146,7 +133,7 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
     }
 
-    if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
+    if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue ?? null, compareVersionItem?.fieldValue ?? null)) {
       field.isModifiedValue = true
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

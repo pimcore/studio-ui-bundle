@@ -70,6 +70,10 @@ document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+document.link.target: Link Target
+document.hardlink.source: Source Document
+document.hardlink.properties-from-source: Use properties from source document
+document.hardlink.children-from-source: Use children from source document
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -215,6 +219,7 @@ aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
+none: None
 yes: Yes
 no: No
 by: By
@@ -369,6 +374,8 @@ properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+properties.property-key-disallowed.title: Property key not allowed
+properties.property-key-disallowed.error: This property key is reserved and cannot be used. Please choose a different key name.
 translations.add-translation-mandatory-field-missing.title: Mandatory field missing
 translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
@@ -381,6 +388,7 @@ toggle.advanced-mode: Advanced Mode
 actions.open: Open
 open: Open
 edit: Edit
+modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
@@ -488,6 +496,7 @@ export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
@@ -794,6 +803,10 @@ navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
+navigation.sidebar-title: Navigation
+navigation.name: Name
+navigation.exclude: Exclude from Navigation
+navigation.advanced-settings: Advanced Settings
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
@@ -1142,6 +1155,7 @@ embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
+document.open-preview-in-new-window: Open Preview in new window
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1213,4 +1227,91 @@ widget-editor.create-form.widgetType.element_tree: Element Tree
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.widget-form.general.title: General
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.general.icon: Icon
+widget-editor.widget-form.general.icon.select: Select Icon
+widget-editor.widget-form.specific.title: Specific
+widget-editor.widget-form.specific.element-type: Element Type
+widget-editor.widget-form.specific.root-folder: Root Folder
+widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.specific.page-size: Page Size
+widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default everything is allowed)
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL Statement
+widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
+widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.copy: Copy
+widget-editor.widget-form.allowed-context-menu.lock: Lock
+widget-editor.widget-form.allowed-context-menu.publish: Publish
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
+widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
+widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.cut: Cut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.refresh: Refresh
+widget-editor.widget-form.allowed-context-menu.unlock: Unlock
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Change Children Sort By
+widget-editor.widget-form.allowed-context-menu.delete: Delete
+widget-editor.widget-form.allowed-context-menu.paste: Paste
+widget-editor.widget-form.allowed-context-menu.rename: Rename
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Upload Zip
+widget-editor.widget-form.allowed-context-menu.hideAdd: Hide Add
+widget-editor.widget-form.allowed-context-menu.addUpload: Upload Files
+widget-editor.widget-form.allowed-context-menu.download: Download
+widget-editor.widget-form.allowed-context-menu.pasteCut: Cut
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
+widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
+widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
+widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
+widget-editor.widget-form.allowed-context-menu.convert: Convert
+widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
+widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
+widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
+widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
+widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
+widget-editor.widget-form.allowed-context-menu.open: Open
+widget-editor.widget-form.allowed-context-menu.addLink: Add Link
+widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
+widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
 edit.label: Edit
+scheduled-block.delete-all-in-past: Delete all past timestamps
+scheduled-block.delete-all: Delete all timestamps
+scheduled-block.delete-all-in-past-confirmation: Are you sure you want to delete all past timestamps?
+scheduled-block.delete-all-confirmation: Are you sure you want to delete all timestamps?
+scheduled-block.delete-confirmation: Are you sure you want to delete this entry?
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search
+icon-selector.current-selection: Current Selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save
+icon-selector.custom-icon: Custom Icon
+icon-selector.custom-icon-path: Icon Path
+icon-selector.custom-icon-path-placeholder: Enter custom icon path (e.g., /path/to/icon.svg)
+language: Language
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overrides path from tree-structure)
+content-main-document: Content-Main Document
+never: never
+document-configuration.sidebar-title: Document Configuration
+document-configuration.predefined-document-type: Predefined Document Type
+document-configuration.controller: Controller
+document-configuration.template: Template
+document-configuration.static-page-generator: Static Page Generator
+document-configuration.enable-server-side-static-rendering: Enable server side static rendering
+document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
+document-configuration.last-generated: "Last generated: {{timestamp}}"
+email-settings.sidebar-title: Email Settings
+email-settings.subject: Subject
+email-settings.from: From
+email-settings.reply-to: Reply To
+email-settings.recipients: Recipients
+email-settings.to: To
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"

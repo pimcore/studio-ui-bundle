@@ -51,21 +51,10 @@ export const ResponsiveAssetPreview = ({
   const keyRef = useRef(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const lastAssetIdRef = useRef<number | undefined>(assetId)
+  const lastImageSrcRef = useRef<string | undefined>(undefined)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResize(imageContainerRef)
-
-  const stableThumbnailUrlRef = useRef<string | null | undefined>(undefined)
-  const lastThumbnailAssetIdRef = useRef<number | undefined>(undefined)
-
-  if (lastThumbnailAssetIdRef.current !== assetId) {
-    lastThumbnailAssetIdRef.current = assetId
-    stableThumbnailUrlRef.current = undefined
-  }
-
-  if (thumbnailUrl !== undefined && thumbnailUrl !== null && stableThumbnailUrlRef.current === undefined) {
-    stableThumbnailUrlRef.current = thumbnailUrl
-  }
 
   useEffect(() => {
     if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0) {
@@ -79,19 +68,25 @@ export const ResponsiveAssetPreview = ({
       keyRef.current = keyRef.current + 1
       setIsImageLoaded(false)
       onImageLoadedChange?.(false)
+      lastImageSrcRef.current = undefined
     }
   }, [assetId, onImageLoadedChange])
 
   const finalImageSrc = useMemo(() => {
-    const stableThumbnailUrl = stableThumbnailUrlRef.current
     if (assetId === undefined) {
       return src
     }
-    if (stableThumbnailUrl === undefined) {
-      return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
-    }
-    return stableThumbnailUrl ?? src
+    return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
   }, [assetId, src, thumbnailUrl])
+
+  useEffect(() => {
+    if (finalImageSrc !== lastImageSrcRef.current) {
+      lastImageSrcRef.current = finalImageSrc
+      keyRef.current = keyRef.current + 1
+      setIsImageLoaded(false)
+      onImageLoadedChange?.(false)
+    }
+  }, [finalImageSrc, onImageLoadedChange])
 
   const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>): void => {
     setIsImageLoaded(true)
