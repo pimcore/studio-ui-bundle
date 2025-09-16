@@ -28,7 +28,7 @@ export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract
     )
   }
 
-  shouldApply (value: any): boolean {    
+  shouldApply (value: any): boolean {
     if (value == null || typeof value !== 'object') {
       return false
     }
