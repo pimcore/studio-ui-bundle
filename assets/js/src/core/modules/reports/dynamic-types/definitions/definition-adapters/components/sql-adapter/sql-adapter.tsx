@@ -24,9 +24,7 @@ import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/
 import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
-interface ISqlAdapterProps extends IReportConfigurationSectionProps {
-  value: object | null
-}
+interface ISqlAdapterProps extends IReportConfigurationSectionProps {}
 
 const ORDER_BY_DIRECTIONS = [
   { value: 'ASC', label: 'ASC' },
