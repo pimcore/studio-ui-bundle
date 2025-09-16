@@ -42,7 +42,7 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
 
     const isDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
 
-    const dataObjectHeader = column.config?.fieldDefinition?.title as string ?? t(column.key)
+    const dataObjectHeader = isEmptyValue(column.config?.fieldDefinition?.title) ? t(column.key) : column.config?.fieldDefinition?.title
     const defaultHeader = isEmptyValue(column.title) ? t(column.key) : column.title
 
     columnDefinition.push(
@@ -60,10 +60,12 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
               type: column.type,
               editable: false,
               ...(!isEmpty(column.config) && {
-                config: {
-                  dataObjectType: column.frontendType,
-                  dataObjectConfig: column.config
-                }
+                config: isDataObjectColumn
+                  ? {
+                      dataObjectType: column.frontendType,
+                      dataObjectConfig: column.config
+                    }
+                  : getElementCellConfig(disabled)
               })
             },
         size: getColumnWidth(key),
