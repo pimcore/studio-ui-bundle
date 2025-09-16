@@ -69,8 +69,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
       id: update.id,
       ...(isPublishedColumn
         ? {
-            published: value,
-            editableData: {}
+            published: value
           }
         : {
             editableData: {
