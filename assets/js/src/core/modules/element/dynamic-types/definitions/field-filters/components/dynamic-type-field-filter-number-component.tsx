@@ -28,18 +28,18 @@ export interface DynamicTypeFieldFilterNumberProps extends AbstractFieldFilterDe
 export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFilterNumberProps): React.JSX.Element => {
   interface NumberValue {
     setting: NumberFilterSettingValue
-    more: number | null
-    less: number | null
-    value: number | null
+    from: number | null
+    to: number | null
+    is: number | null
   }
 
   const { data: rawData, setData } = useDynamicFilter()
 
   const data: NumberValue = rawData ?? {
     setting: NumberFilterSettingValue.IS,
-    more: null,
-    less: null,
-    value: null
+    from: null,
+    to: null,
+    is: null
   }
 
   const SETTING_OPTIONS = [
@@ -54,40 +54,40 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
   const handleSettingChange = (
     newSetting: NumberFilterSettingValue
   ): void => {
-    const prevData = data ?? { more: null, less: null, value: null, setting: NumberFilterSettingValue.IS }
+    const prevData = data ?? { from: null, to: null, is: null, setting: NumberFilterSettingValue.IS }
 
     if (newSetting === NumberFilterSettingValue.LESS) {
       setData({
         setting: newSetting,
-        more: null,
-        less: prevData.less ?? prevData.value ?? prevData.more ?? null,
-        value: null
+        from: null,
+        to: prevData.to ?? prevData.is ?? prevData.from ?? null,
+        is: null
       })
     } else if (newSetting === NumberFilterSettingValue.MORE) {
       setData({
         setting: newSetting,
-        more: prevData.more ?? prevData.value ?? prevData.less ?? null,
-        less: null,
-        value: null
+        from: prevData.from ?? prevData.is ?? prevData.to ?? null,
+        to: null,
+        is: null
       })
     } else if (newSetting === NumberFilterSettingValue.IS) {
       setData({
         setting: newSetting,
-        more: null,
-        less: null,
-        value: prevData.more ?? prevData.less ?? null
+        from: null,
+        to: null,
+        is: prevData.from ?? prevData.to ?? null
       })
     } else if (newSetting === NumberFilterSettingValue.BETWEEN) {
       setData({
         setting: newSetting,
-        more: prevData.more ?? prevData.value ?? null,
-        less: prevData.less ?? null,
-        value: null
+        from: prevData.from ?? prevData.is ?? null,
+        to: prevData.to ?? null,
+        is: null
       })
     }
   }
 
-  const handleNumberChange = (field: 'value' | 'more' | 'less', value: number | null): void => {
+  const handleNumberChange = (field: 'is' | 'from' | 'to', value: number | null): void => {
     setData({
       ...data,
       setting: currentSetting,
@@ -95,7 +95,7 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
     })
   }
 
-  const handleNumberRangeChange = (field: 'more' | 'less', value: number | null): void => {
+  const handleNumberRangeChange = (field: 'from' | 'to', value: number | null): void => {
     setData({
       ...data,
       setting: data.setting,
@@ -105,11 +105,11 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
 
   const getNumberValue = (): number | null => {
     if (currentSetting === NumberFilterSettingValue.IS) {
-      return data?.value ?? null
+      return data?.is ?? null
     } else if (currentSetting === NumberFilterSettingValue.LESS) {
-      return data?.less ?? null
+      return data?.to ?? null
     } else if (currentSetting === NumberFilterSettingValue.MORE) {
-      return data?.more ?? null
+      return data?.from ?? null
     } else return null
   }
 
@@ -129,17 +129,17 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
         <>
           <InputNumber
             onChange={ (value: number | null) => {
-              handleNumberRangeChange('more', value)
+              handleNumberRangeChange('from', value)
             } }
             placeholder="From"
-            value={ data?.more ?? null }
+            value={ data?.from ?? null }
           />
           <InputNumber
             onChange={ (value: number | null) => {
-              handleNumberRangeChange('less', value)
+              handleNumberRangeChange('to', value)
             } }
             placeholder="To"
-            value={ data?.less ?? null }
+            value={ data?.to ?? null }
           />
         </>
       )}
@@ -147,11 +147,11 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
         <InputNumber
           onChange={ (value: number | null) => {
             if (currentSetting === NumberFilterSettingValue.IS) {
-              handleNumberChange('value', value)
+              handleNumberChange('is', value)
             } else if (currentSetting === NumberFilterSettingValue.LESS) {
-              handleNumberChange('less', value)
+              handleNumberChange('to', value)
             } else if (currentSetting === NumberFilterSettingValue.MORE) {
-              handleNumberChange('more', value)
+              handleNumberChange('from', value)
             }
           } }
           value={ getNumberValue() }
