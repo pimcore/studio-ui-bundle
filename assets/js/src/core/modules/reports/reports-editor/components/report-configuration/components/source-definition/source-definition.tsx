@@ -40,13 +40,8 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
   const adapters = sourceDefinitionService.getDynamicTypes()
   const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
 
-  const dropdownItems = useMemo(() => adapters.map(adapter => ({
+  const sourceDefinitionOptions = useMemo(() => adapters.map(adapter => ({
     key: adapter.id,
-    label: adapter.label
-  })), [adapters])
-
-  const selectOptions = useMemo(() => adapters.map(adapter => ({
-    value: adapter.id,
     label: adapter.label
   })), [adapters])
 
@@ -60,7 +55,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
     return (
       <Dropdown
         menu={ {
-          items: dropdownItems,
+          items: sourceDefinitionOptions,
           onClick: (e) => { handleSourceDefinitionTypeUpdate(e.key) }
         } }
         trigger={ ['click'] }
@@ -96,7 +91,10 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
             label={ t('reports.editor.source-definition.select-source-definition') }
             name="type"
           >
-            <Select options={ selectOptions } />
+            <Select
+              fieldNames={ { label: 'label', value: 'key' } }
+              options={ sourceDefinitionOptions }
+            />
           </Form.Item>
           {currentAdapter?.getElement({ currentData, updateFormData })}
         </Form.Group>
