@@ -150,7 +150,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
           ]
         }
       }
-    }, { skip: isUndefined(dataRelationClasses) })
+    }, { skip: isUndefined(dataRelationClasses) && isEmpty(props.value) })
   )
   const isGridFullDataLoading = queries?.some(q => q.isLoading)
   const gridFullData = queries?.flatMap(q => q.data?.items ?? [])

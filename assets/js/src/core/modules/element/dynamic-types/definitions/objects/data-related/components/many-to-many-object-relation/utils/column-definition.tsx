@@ -41,12 +41,12 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
     )
   }
 
-  for (const field of visibleFieldDefinitions ?? []) {
-    const key = field.key
+  for (const column of visibleFieldDefinitions ?? []) {
+    const key = column.key
 
     columnDefinition.push(
       columnHelper.accessor(key, {
-        header: field.title,
+        header: column.title,
         meta: key === 'fullpath'
           ? {
               type: 'element',
