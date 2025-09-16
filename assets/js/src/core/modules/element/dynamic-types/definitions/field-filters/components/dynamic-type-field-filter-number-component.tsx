@@ -127,18 +127,18 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
 
       {currentSetting === NumberFilterSettingValue.BETWEEN && (
         <>
-          <div>{t('grid.filter.number.from')}</div>
           <InputNumber
             onChange={ (value: number | null) => {
               handleNumberRangeChange('from', value)
             } }
+            placeholder={ t('grid.filter.number.from') }
             value={ data?.from ?? null }
           />
-          <div>{t('grid.filter.number.to')}</div>
           <InputNumber
             onChange={ (value: number | null) => {
               handleNumberRangeChange('to', value)
             } }
+            placeholder={ t('grid.filter.number.to') }
             value={ data?.to ?? null }
           />
         </>
