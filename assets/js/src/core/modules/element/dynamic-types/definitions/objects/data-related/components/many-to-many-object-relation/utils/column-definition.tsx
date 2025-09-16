@@ -9,23 +9,18 @@
  */
 
 import React from 'react'
-import {
-  type VisibleFieldDefinition
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
+import { isEmpty } from 'lodash'
+import { type VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import type {
-  ManyToManyRelationValueItem
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import {
-  getElementCellConfig
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
+import type { ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
+import { getElementCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { isEmptyValue, isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type GridColumnData } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
-export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, disabled: boolean, pathFormatterClass: string, t): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
@@ -43,10 +38,16 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
 
   for (const column of visibleFieldDefinitions ?? []) {
     const key = column.key
+    const type = column.type
+
+    const isDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
+
+    const dataObjectHeader = column.config?.fieldDefinition?.title as string ?? t(column.key)
+    const defaultHeader = isEmptyValue(column.title) ? t(column.key) : column.title
 
     columnDefinition.push(
       columnHelper.accessor(key, {
-        header: column.title,
+        header: isDataObjectColumn ? dataObjectHeader : defaultHeader,
         meta: key === 'fullpath'
           ? {
               type: 'element',
@@ -54,7 +55,17 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
               editable: false,
               config: getElementCellConfig(disabled)
             }
-          : undefined,
+          : {
+              columnKey: key,
+              type: column.type,
+              editable: false,
+              ...(!isEmpty(column.config) && {
+                config: {
+                  dataObjectType: column.frontendType,
+                  dataObjectConfig: column.config
+                }
+              })
+            },
         size: getColumnWidth(key),
         ...(isNonEmptyString(pathFormatterClass) ? { cell: renderFullPathCell } : {})
       })

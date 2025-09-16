@@ -155,7 +155,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const isGridFullDataLoading = queries?.some(q => q.isLoading)
   const gridFullData = queries?.flatMap(q => q.data?.items ?? [])
 
-  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '')
+  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '', t)
 
   return (
     <ManyToManyRelation
