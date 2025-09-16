@@ -125,6 +125,8 @@ grid.filter.datetime.before: Before
 grid.filter.datetime.after: After
 grid.filter.datetime.between: Between
 grid.filter.datetime.on: On
+grid.filter.number.from: From
+grid.filter.number.to: To
 grid.filter.number.is: Is
 grid.filter.number.less: Less than
 grid.filter.number.more: More than
