@@ -162,7 +162,6 @@ export const IconSelector = ({
   return (
     <>
       <Flex gap={ 'extra-small' }>
-
         <Flex
           align='center'
           className={ styles.selectionPreview }
@@ -250,7 +249,7 @@ export const IconSelector = ({
               <Flex
                 align='center'
                 className={ cn(styles.selectionPreview, {
-                  [styles.selectionPreviewError]: hasSubmissionError && activeTab === 'custom'
+                  [styles.selectionPreviewError]: hasSubmissionError
                 }) }
                 justify='center'
               >
