@@ -88,7 +88,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    
     const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
 
     let isNoneType = false
