@@ -10,7 +10,7 @@
 
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
+import { DynamicTypeFieldFilterIdComponent, type DynamicTypeFieldFilterIdProps } from '../../components/dynamic-type-field-filter-id-component'
 import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
 
@@ -22,9 +22,9 @@ export class DynamicTypeFieldFilterId extends DynamicTypeFieldFilterAbstract {
     return FieldFilterFrontendType.Id
   }
 
-  getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterIdProps): ReactElement<DynamicTypeFieldFilterIdProps> {
     return (
-      <DynamicTypeFieldFilterNumberComponent { ...props } />
+      <DynamicTypeFieldFilterIdComponent { ...props } />
     )
   }
 }
