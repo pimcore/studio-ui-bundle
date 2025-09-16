@@ -22,11 +22,15 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
     "publicPath": "/bundles/pimcorestudioui/build/c269c154-9896-4235-be9d-2c75a238a778/"
 ========
     "publicPath": "/bundles/pimcorestudioui/build/f974915f-f9e0-4cde-b520-95d950fcf83c/"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+    "publicPath": "/bundles/pimcorestudioui/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
   },
   "shared": [
     {
@@ -926,11 +930,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js"
           ],
@@ -1197,6 +1205,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.320e0f1c.css"
@@ -1204,6 +1213,10 @@
             "static/css/async/6534.5bdbd468.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ],
           "async": []
         }
@@ -1233,8 +1246,12 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.dd2c2bc8.js"
 ========
             "static/js/async/9485.5e527104.js",
@@ -1516,8 +1533,12 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.5dee1123.js",
 ========
             "static/js/async/9485.5e527104.js",
@@ -1528,6 +1549,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.320e0f1c.css"
@@ -1543,6 +1565,14 @@
             "static/css/async/6534.5bdbd468.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+          ],
+          "async": [
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ]
         }
       }
@@ -1597,11 +1627,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.e0666619.js",
@@ -1883,8 +1917,12 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.5dee1123.js",
 ========
             "static/js/async/9485.5e527104.js",
@@ -1895,6 +1933,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.320e0f1c.css",
@@ -1912,6 +1951,15 @@
             "static/css/async/6534.5bdbd468.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+          ],
+          "async": [
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ]
         }
       }
@@ -2379,11 +2427,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.e0666619.js"
@@ -2663,8 +2715,12 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.5dee1123.js",
 ========
             "static/js/async/9485.5e527104.js",
@@ -2675,6 +2731,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.320e0f1c.css",
@@ -2692,6 +2749,15 @@
             "static/css/async/6534.5bdbd468.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+          ],
+          "async": [
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ]
         }
       }
@@ -2744,11 +2810,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.e0666619.js",
@@ -3029,8 +3099,12 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.5dee1123.js",
 ========
             "static/js/async/9485.5e527104.js",
@@ -3041,6 +3115,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.320e0f1c.css",
@@ -3058,6 +3133,15 @@
             "static/css/async/6534.5bdbd468.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+          ],
+          "async": [
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ]
         }
       }
@@ -3352,11 +3436,15 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css"
 ========
             "static/css/async/6534.5bdbd468.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ],
           "async": []
         }
@@ -3687,11 +3775,15 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css"
 ========
             "static/css/async/6534.5bdbd468.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ],
           "async": []
         }
@@ -3757,11 +3849,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.e0666619.js",
@@ -3785,11 +3881,15 @@
             "static/js/async/__federation_expose_modules__data_object.23e2465f.js",
             "static/js/async/4322.09e1f4cf.js",
             "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/js/async/2384.ef3fe032.js",
 ========
             "static/js/async/9485.5e527104.js",
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/js/async/2384.4acead82.js",
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
             "static/js/async/161.ff32631b.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.b3667e90.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.e0666619.js",
@@ -4057,6 +4157,7 @@
         },
         "css": {
           "sync": [
+<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
 <<<<<<<< HEAD:public/build/c269c154-9896-4235-be9d-2c75a238a778/mf-stats.json
             "static/css/async/6534.1fa5bc5b.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.320e0f1c.css",
@@ -4076,6 +4177,16 @@
             "static/css/async/__federation_expose__internal___mf_bootstrap.d4ee7daa.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d4ee7daa.css"
 >>>>>>>> 830e0c7a3d13398a32bc1f7c8c42abdcdd6b7111:public/build/f974915f-f9e0-4cde-b520-95d950fcf83c/mf-stats.json
+=======
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+          ],
+          "async": [
+            "static/css/async/6534.06eabe8d.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.ec79fe2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.ec79fe2b.css"
+>>>>>>> b51163e88de3de9111432e47f4b5ea4d5a025815:public/build/09de2748-3b1a-4a74-a01f-e5b5031b707b/mf-stats.json
           ]
         }
       }
