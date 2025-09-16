@@ -104,7 +104,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
   return (
     <Content
-      loading={ isLoading || isFetching }
+      loading={ isLoading }
       padded
       padding={ { top: 'none', right: 'extra-small', bottom: 'none', left: 'extra-small' } }
     >
