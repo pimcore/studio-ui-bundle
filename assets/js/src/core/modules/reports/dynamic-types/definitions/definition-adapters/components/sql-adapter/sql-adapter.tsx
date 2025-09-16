@@ -47,10 +47,10 @@ const createDefaultColumnConfig = (name: string): ReportFormData['columnConfigur
   [COLUMN_KEYS.ACTION]: ''
 })
 
-export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterProps): React.JSX.Element => {
+export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const debouncedValue = useDebounce(value, 1000)
+  const debouncedValue = useDebounce(currentData?.dataSourceConfig, 1000)
   const { data: columnConfigData, isError, error } = useCustomReportsColumnConfigListQuery({
     name: currentData.name,
     bundleCustomReportsDataSourceConfig: {
@@ -86,16 +86,12 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
 
       updateFormData?.({
         ...currentData,
-        dataSourceConfig: {
-          type: 'sql',
-          ...currentData.dataSourceConfig
-        },
         columnConfigurations: updatedColumnConfigurations
       })
     }
   }, [columnConfigData])
 
-  const renderTextAreaItem = ({ label, name }: { label: string, name: string[] }): React.JSX.Element => (
+  const renderTextAreaItem = ({ label, name }: { label: string, name: string }): React.JSX.Element => (
     <Form.Item
       label={ label }
       name={ name }
@@ -110,14 +106,14 @@ export const SqlAdapter = ({ currentData, updateFormData, value }: ISqlAdapterPr
       theme="fieldset"
       title="Sql"
     >
-      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-select-field'), name: ['dataSourceConfig', 'sql'] })}
-      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-from-field'), name: ['dataSourceConfig', 'from'] })}
-      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-where-field'), name: ['dataSourceConfig', 'where'] })}
-      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-group-by-field'), name: ['dataSourceConfig', 'groupby'] })}
-      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-initial-field-order'), name: ['dataSourceConfig', 'orderby'] })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-select-field'), name: 'sql' })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-from-field'), name: 'from' })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-where-field'), name: 'where' })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-group-by-field'), name: 'groupby' })}
+      {renderTextAreaItem({ label: t('reports.editor.source-definition.sql-initial-field-order'), name: 'orderby' })}
       <Form.Item
         label={ t('reports.editor.source-definition.sql-initial-direction-order') }
-        name={ ['dataSourceConfig', 'orderbydir'] }
+        name="orderbydir"
       >
         <Select options={ ORDER_BY_DIRECTIONS } />
       </Form.Item>

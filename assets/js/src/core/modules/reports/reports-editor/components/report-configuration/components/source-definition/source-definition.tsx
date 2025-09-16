@@ -19,17 +19,20 @@ import { Text } from '@Pimcore/components/text/text'
 import { type IReportConfigurationSectionProps, type ISourceDefinition } from '@Pimcore/modules/reports/reports-editor/types'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 import { Select } from '@Pimcore/components/select/select'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { type DynamicTypeDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
+import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
 export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const dataSourceType = (currentData.dataSourceConfig as ISourceDefinition)?.type
+  const form = Form.useFormInstance()
 
-  const [currentSourceDefinition, setCurrentSourceDefinition] = useState<string | undefined>(dataSourceType)
+  const [currentSourceDefinition, setCurrentSourceDefinition] = useState<string | undefined>(
+    (currentData.dataSourceConfig as ISourceDefinition)?.type
+  )
 
   const isEmptySourceDefinitionConfig = isUndefined(currentSourceDefinition)
 
@@ -39,8 +42,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
 
   const dropdownItems = useMemo(() => adapters.map(adapter => ({
     key: adapter.id,
-    label: adapter.label,
-    onClick: () => { setCurrentSourceDefinition(adapter.id) }
+    label: adapter.label
   })), [adapters])
 
   const selectOptions = useMemo(() => adapters.map(adapter => ({
@@ -48,10 +50,19 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
     label: adapter.label
   })), [adapters])
 
+  const handleSourceDefinitionTypeUpdate = (type: string): void => {
+    setCurrentSourceDefinition(type)
+
+    form.setFieldsValue({ dataSourceConfig: { type } })
+  }
+
   const renderAddButton = (): React.JSX.Element => {
     return (
       <Dropdown
-        menu={ { items: dropdownItems } }
+        menu={ {
+          items: dropdownItems,
+          onClick: (e) => { handleSourceDefinitionTypeUpdate(e.key) }
+        } }
         trigger={ ['click'] }
       >
         <IconTextButton
@@ -76,16 +87,21 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
         </Text>
       )}
       {!isEmptySourceDefinitionConfig && (
-        <Form.Item label={ t('reports.editor.source-definition.select-source-definition') }>
-          <Select
-            options={ selectOptions }
-            value={ currentSourceDefinition }
-          />
-        </Form.Item>
+      <Flex
+        gap="extra-small"
+        vertical
+      >
+        <Form.Group name="dataSourceConfig">
+          <Form.Item
+            label={ t('reports.editor.source-definition.select-source-definition') }
+            name="type"
+          >
+            <Select options={ selectOptions } />
+          </Form.Item>
+          {currentAdapter?.getElement({ currentData, updateFormData })}
+        </Form.Group>
+      </Flex>
       )}
-      <Form.Item name="dataSourceConfig">
-        {currentAdapter?.getElement({ currentData, updateFormData })}
-      </Form.Item>
     </FormKit.Panel>
   )
 }
