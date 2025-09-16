@@ -57,7 +57,7 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
             }
           : {
               columnKey: key,
-              type: column.type,
+              type: isDataObjectColumn ? column.type : column.frontendType,
               editable: false,
               ...(!isEmpty(column.config) && {
                 config: isDataObjectColumn
