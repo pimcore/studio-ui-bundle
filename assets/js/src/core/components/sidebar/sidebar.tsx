@@ -20,7 +20,7 @@ import { isNil } from 'lodash'
 export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
-  sizing?: 'large' | 'default'
+  sizing?: 'large' | 'medium' | 'default'
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
 }

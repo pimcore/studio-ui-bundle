@@ -74,6 +74,7 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   if (type === 'document') {
+    console.log('props.allowedDocumentTypes', props.allowedDocumentTypes)
     return isValidType(props.allowedDocumentTypes, subType)
   }
 

@@ -27,7 +27,7 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
   id: string = 'consent'
   gridCellEditMode: EditMode = 'edit-modal'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Select'])
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Boolean'])
 
   getObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

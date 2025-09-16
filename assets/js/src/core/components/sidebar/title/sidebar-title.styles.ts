@@ -13,12 +13,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
-      padding: 0 ${token.paddingSM}px;
+      padding: ${token.paddingXS}px ${token.paddingXS}px;
       margin-left: 1px;
     `,
 
     containerWithBorder: css`
-      padding: 0 ${token.paddingSM}px;
+      padding: ${token.paddingXS}px ${token.paddingXS}px;
       margin-left: 1px;
       border-bottom: 1px solid ${token.colorBorderSecondary};
     `,

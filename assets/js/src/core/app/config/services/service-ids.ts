@@ -70,7 +70,14 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
-  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
+
+  // Document Sidebar Managers
+  'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
+  'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
+  'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',
+  'Document/Editor/Sidebar/LinkSidebarManager': 'Document/Editor/Sidebar/LinkSidebarManager',
+  'Document/Editor/Sidebar/HardlinkSidebarManager': 'Document/Editor/Sidebar/HardlinkSidebarManager',
+  'Document/Editor/Sidebar/FolderSidebarManager': 'Document/Editor/Sidebar/FolderSidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -85,9 +92,10 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
   'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
+  'DynamicTypes/FieldFilter/Input': 'DynamicTypes/FieldFilter/Input',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
-  'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
+  'DynamicTypes/FieldFilter/Multiselect': 'DynamicTypes/FieldFilter/Multiselect',
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',

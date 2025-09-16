@@ -20,6 +20,17 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT, TAB_VERSIONS, TAB_PREVIEW } from '../../shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import React from 'react'
+import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  SIDEBAR_AREABLOCK_TYPES,
+  SIDEBAR_CONTENT_SETTINGS,
+  SIDEBAR_DOCUMENT_CONFIGURATION
+} from '../../shared-tab-manager/sidebar-definitions'
+import {
+  EmailSettingsSidebar
+} from '../../sidebar/tabs/email-settings/email-settings-sidebar'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -33,5 +44,17 @@ moduleSystem.registerModule({
     emailEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     emailEditorTabManager.register(TAB_TAGS)
     emailEditorTabManager.register(TAB_WORKFLOW)
+
+    const emailSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/EmailSidebarManager'])
+
+    emailSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
+    emailSidebarManager.registerEntry({
+      key: 'email-settings',
+      icon: <Icon value="email" />,
+      component: <EmailSettingsSidebar />,
+      tooltip: 'email-settings.sidebar-title'
+    })
+    emailSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    emailSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
   }
 })
