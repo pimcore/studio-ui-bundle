@@ -225,7 +225,9 @@ import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dy
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
-import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
+import { DynamicTypeWidgetTypeRegistry, WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import { WidgetRegistry as PerspectiveWidgetRegistry } from '@Pimcore/modules/widget-editor/perspective-editor/registry/widget-registry'
+import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -499,5 +501,6 @@ container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSet
 container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
 
-// Perspective & Widget Editor
-container.bind(serviceIds['WidgetEditor/WidgetTypeRegistry']).to(WidgetTypeRegistry).inSingletonScope()
+// Perspective Ediotor & Widget Editor
+container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/WidgetEditor/ElementTree']).to(DynamicTypeWidgetTypeElementTree).inSingletonScope()

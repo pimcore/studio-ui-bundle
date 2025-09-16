@@ -23,6 +23,7 @@ import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
+import { PerspectiveForm } from '../../../perspective-form/perspective-form'
 
 export interface PerspectiveForm {
   name: string
@@ -34,113 +35,14 @@ interface PerspectiveDetailTabProps {
 }
 
 export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const { perspectives, setPerspectives, setIsLoading, isLoading } = usePerspectiveEditorContext()
-  const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
+  const { perspectives } = usePerspectiveEditorContext()
   const perspective = perspectives.find(p => p.id === id)
-  const [form] = Form.useForm<PerspectiveForm>()
-
-  const initialValues: PerspectiveForm = {
-    name: perspective?.name ?? '',
-    icon: perspective?.icon
-  }
 
   if (perspective === undefined) {
     return <></>
   }
 
   return (
-    <FormKit
-      formProps={ {
-        form,
-        initialValues,
-        onFinish: async (values: PerspectiveForm) => {
-          const formValues = {
-            ...values,
-            icon: values.icon ?? { type: 'name' as const, value: 'perspective' }
-          }
-          setIsLoading(true)
-
-          await updatePerspective(perspective.id, {
-            ...formValues as CreatePerspectiveConfig
-          }, () => {
-            setPerspectives((prev) => {
-              const updated = prev.map((p) => (p.id === id ? { ...p, ...formValues } : p))
-              return updated
-            })
-          })
-            .finally(() => {
-              setIsLoading(false)
-            })
-        }
-      } }
-    >
-      <Flex
-        className='makeTabsGreatAgain'
-        justify='space-between'
-        vertical
-      >
-        <Content
-          padded
-          padding={ {
-            x: 'small',
-            y: 'none'
-          } }
-        >
-          <FormKit.Panel>
-            <Form.Item
-              label="Name"
-              name="name"
-              required
-            >
-              <Input
-
-                placeholder={ t('perspective-editor.form.name.placeholder') }
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Icon"
-              name="icon"
-            >
-              <IconSelector />
-            </Form.Item>
-          </FormKit.Panel>
-        </Content>
-
-        <Toolbar justify="space-between">
-          <div>
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
-                form.resetFields()
-                form.setFieldsValue(initialValues)
-              } }
-              title={ t('refresh') }
-            />
-
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                removeWithConfirmation(perspective.id, () => {
-                  setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
-                })
-              } }
-              title={ t('delete') }
-            />
-          </div>
-
-          <Button
-            htmlType='submit'
-            loading={ isLoading }
-            type='primary'
-          >
-            {t('save')}
-          </Button>
-        </Toolbar>
-      </Flex>
-    </FormKit>
+    <PerspectiveForm perspective={perspective} />
   )
 }

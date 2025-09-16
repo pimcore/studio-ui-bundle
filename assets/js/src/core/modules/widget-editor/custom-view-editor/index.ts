@@ -8,29 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type WidgetTypeRegistry } from './registry/widget-type-registry'
-import { serviceIds } from '@sdk/app'
 import { container } from '@Pimcore/app/depency-injection'
-import { ElementTreeWidgetTypeForm } from './components/widget-type-form/element-tree-widget-type-form'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { serviceIds } from '@sdk/app'
+import { DynamicTypeWidgetTypeElementTree } from './dynmic-types/definitions/dynamic-type-widget-type-element-tree'
+import { DynamicTypeWidgetTypeRegistry } from './dynmic-types/registry/dynamic-type-widget-type-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const widgetRegistry = container.get<WidgetTypeRegistry>(serviceIds['WidgetEditor/WidgetTypeRegistry'])
+    const widgetRegistry = container.get<DynamicTypeWidgetTypeRegistry>(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry'])
 
-    widgetRegistry.registerWidgetType({
-      id: 'element_tree',
-      form: ElementTreeWidgetTypeForm
-    })
-
-    widgetRegistry.registerWidgetType({
-      id: 'foo',
-      form: ElementTreeWidgetTypeForm
-    })
-
-    widgetRegistry.registerWidgetType({
-      id: 'bar',
-      form: ElementTreeWidgetTypeForm
-    })
+    widgetRegistry.registerDynamicType(
+      container.get<DynamicTypeWidgetTypeElementTree>(serviceIds['DynamicTypes/WidgetEditor/ElementTree'])
+    )
   }
 })
