@@ -58,11 +58,10 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   }
 
   const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-
-    const canHaveChildren = elementType === 'asset' 
+    const canHaveChildren = elementType === 'asset'
       ? node.type === 'folder'
       : true
-    
+
     return {
       label: t('element.new-folder'),
       key: ContextMenuActionName.addFolder,
