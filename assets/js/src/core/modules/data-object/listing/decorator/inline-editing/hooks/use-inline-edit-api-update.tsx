@@ -63,16 +63,25 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
       ? addBatchAppendMode(update.value, BatchAppendMode.Replace)
       : update.value
 
-    const promise = patchDataObject({
-      body: {
-        data: [
-          {
-            id: update.id,
+    const isPublishedColumn = columnKey === 'published'
+
+    const dataItem = {
+      id: update.id,
+      ...(isPublishedColumn
+        ? {
+            published: value
+          }
+        : {
             editableData: {
               ...set({}, columnKey ?? '', value)
             }
           }
-        ]
+      )
+    }
+
+    const promise = patchDataObject({
+      body: {
+        data: [dataItem]
       }
     })
 

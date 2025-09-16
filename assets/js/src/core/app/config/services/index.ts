@@ -32,7 +32,7 @@ import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dy
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
-import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
+import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { DynamicTypeFieldFilterBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
@@ -172,7 +172,7 @@ import { EmailTabManager } from '@Pimcore/modules/document/editor/types/email/ta
 import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardlink/tab-manager/hardlink-tab-manager'
 import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
-import { DocumentEditorSidebarManager } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/sidebar/sidebar-manager'
+import { DocumentSidebarManager } from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
@@ -213,6 +213,7 @@ import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
+import { DynamicTypeFieldFilterInput } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input/dynamic-type-field-filter-input'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
 import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
@@ -225,6 +226,7 @@ import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dy
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
+import { WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -259,7 +261,14 @@ container.bind(serviceIds['Document/Editor/FolderTabManager']).to(FolderTabManag
 container.bind(serviceIds['Document/Editor/HardlinkTabManager']).to(HardlinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/LinkTabManager']).to(LinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/SnippetTabManager']).to(SnippetTabManager).inSingletonScope()
-container.bind(serviceIds['Document/Editor/Edit/SidebarManager']).to(DocumentEditorSidebarManager).inSingletonScope()
+
+// Document Sidebar Managers
+container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/SnippetSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/EmailSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/LinkSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/HardlinkSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/Sidebar/FolderSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
@@ -270,9 +279,10 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(Dyna
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFieldFilterFulltext).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Input']).to(DynamicTypeFieldFilterInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTypeFieldFilterMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
@@ -497,3 +507,6 @@ container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
+
+// Perspective & Widget Editor
+container.bind(serviceIds['WidgetEditor/WidgetTypeRegistry']).to(WidgetTypeRegistry).inSingletonScope()
