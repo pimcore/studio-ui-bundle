@@ -39,7 +39,7 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
         <ObjectComponent
           { ...getChildProperties(child, isMainPanel) }
           key={ index }
-          noteditable={ noteditable }
+          noteditable={ child.noteditable === true }
         />
       ))}
     </CorePanel>

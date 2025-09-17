@@ -89,7 +89,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     name: formFieldName,
     combinedFieldName: combinedFieldName.join('.'),
     inherited: inheritanceStateValue?.inherited === true,
-    noteditable: Boolean(props.noteditable) || disabled
+    noteditable: props.noteditable === true || disabled
   }
 
   useEffect(() => {
