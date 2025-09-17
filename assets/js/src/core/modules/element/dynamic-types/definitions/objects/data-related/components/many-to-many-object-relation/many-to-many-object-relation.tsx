@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
@@ -139,7 +139,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     columns: visibleColumns,
     dataValue: props.value
   })
-  const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading)
+  const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading === true || q.isFetching)
   const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
@@ -149,16 +149,21 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     translate: t
   })
 
+  const handleEnrichRowData = useCallback(
+    (row: ManyToManyRelationValueItem) => {
+      const rowData: GridColumnData[] = gridFullData?.find(item => item.id === row.id)?.columns ?? []
+
+      return enrichRowData(visibleFieldDefinitions, row, rowData)
+    },
+    [gridFullData, visibleFieldDefinitions]
+  )
+
   return (
     <ManyToManyRelation
       { ...props }
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
-      enrichRowData={ (row: ManyToManyRelationValueItem) => {
-        const rowData: GridColumnData[] = gridFullData?.find(item => item.id === row.id)?.columns ?? []
-
-        return enrichRowData(visibleFieldDefinitions, row, rowData)
-      } }
+      enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
     />
   )
