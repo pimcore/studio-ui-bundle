@@ -1288,33 +1288,13 @@ icon-selector.title: Icon Selector
 icon-selector.all-icons: All Icons
 icon-selector.pimcore-library: Pimcore Library
 icon-selector.search-placeholder: Search
-icon-selector.current-selection: Current Selection
+icon-selector.current-selection: Current selection
 icon-selector.clear-selection: Clear selection
 icon-selector.no-selection: No icon selected
 icon-selector.save: Save
-icon-selector.custom-icon: Custom Icon
-icon-selector.custom-icon-path: Icon Path
-icon-selector.custom-icon-path-placeholder: Enter custom icon path (e.g., /path/to/icon.svg)
-language: Language
-pretty-url: Pretty URL / URL Slug
-pretty-url-override-notice: (overrides path from tree-structure)
-content-main-document: Content-Main Document
-never: never
-document-configuration.sidebar-title: Document Configuration
-document-configuration.predefined-document-type: Predefined Document Type
-document-configuration.controller: Controller
-document-configuration.template: Template
-document-configuration.static-page-generator: Static Page Generator
-document-configuration.enable-server-side-static-rendering: Enable server side static rendering
-document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
-document-configuration.last-generated: "Last generated: {{timestamp}}"
-email-settings.sidebar-title: Email Settings
-email-settings.subject: Subject
-email-settings.from: From
-email-settings.reply-to: Reply To
-email-settings.recipients: Recipients
-email-settings.to: To
-email-settings.cc: Cc
-email-settings.bcc: Bcc
-email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
-email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
+icon-selector.custom-icon: Custom icon
+icon-selector.custom-icon-path: Custom path
+icon-selector.custom-icon-path-placeholder: Add a custom path and submit
+icon-selector.Twemoji: Twemoji Library
+icon-selector.Pimcore: Pimcore Library
+

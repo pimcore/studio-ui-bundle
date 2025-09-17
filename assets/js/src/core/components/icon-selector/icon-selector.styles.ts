@@ -82,6 +82,10 @@ export const useStyles = createStyles(({ token, css }) => {
       color: ${token.colorIcon};
     `,
 
+    selectionPreviewError: css`
+      border-color: ${token.colorError};
+    `,
+
     noSelection: css`
       color: ${token.colorTextSecondary};
       font-style: italic;
