@@ -23,7 +23,7 @@ const globalContextSlice = createSlice({
   initialState,
   reducers: {
     addGlobalContext: (state, action: PayloadAction<GlobalContext>) => {
-      state.push(action.payload)
+      return [action.payload]
     },
 
     removeGlobalContext: (state, action: PayloadAction<string>) => {
