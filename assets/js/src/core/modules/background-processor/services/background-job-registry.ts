@@ -12,11 +12,28 @@ import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { AbstractBackgroundJobHandler } from '@Pimcore/modules/background-processor/handlers/abstract-background-job-handler'
+import { debounce } from 'lodash'
+
+// Message buffer entry with timestamp for TTL
+interface BufferedMessage {
+  message: any
+  timestamp: number
+}
 
 @injectable()
 export class BackgroundJobRegistry {
   private activeHandlers = new Map<string | number, AbstractBackgroundJobHandler>()
   private globalSubscriptionId: string | null = null
+  
+  // Message buffer for race condition prevention
+  private messageBuffer: BufferedMessage[] = []
+  private readonly MESSAGE_BUFFER_TTL = 30000 // 30 seconds
+  private readonly MAX_BUFFER_SIZE = 1000 // Prevent memory leaks
+  
+  // Debounced cleanup - triggers after message activity stops
+  private debouncedCleanup = debounce(() => {
+    this.cleanupExpiredMessages()
+  }, 5000) // Cleanup 5 seconds after last message
 
   constructor(
     @inject(serviceIds.backgroundProcessor) private readonly backgroundProcessor: BackgroundProcessor
@@ -26,6 +43,9 @@ export class BackgroundJobRegistry {
     console.log('📝 BackgroundJobRegistry: Registering handler', handler.getId())
     
     this.activeHandlers.set(handler.getId(), handler)
+    
+    // Replay any buffered messages that this handler should process
+    this.replayBufferedMessages(handler)
   }
 
   public unregisterHandler(handlerId: string | number): void {
@@ -68,7 +88,10 @@ export class BackgroundJobRegistry {
     }
     
     if (matchingHandlers.length === 0) {
-      console.log('🔍 BackgroundJobRegistry: No handler found for message', message.type, 'Active handlers:', Array.from(this.activeHandlers.keys()))
+      console.log('🔍 BackgroundJobRegistry: No handler found for message', message.type, '- buffering message. Active handlers:', Array.from(this.activeHandlers.keys()))
+      
+      // Buffer the message for potential future handlers
+      this.bufferMessage(message)
       return
     }
     
@@ -81,6 +104,88 @@ export class BackgroundJobRegistry {
         console.error('❌ BackgroundJobRegistry: Error processing message with handler', handler.getId(), error)
       }
     }
+  }
+
+  private bufferMessage(message: any): void {
+    // Clean up buffer if it's getting too large
+    if (this.messageBuffer.length >= this.MAX_BUFFER_SIZE) {
+      console.warn('🚫 BackgroundJobRegistry: Message buffer full, removing oldest messages')
+      this.messageBuffer.splice(0, this.messageBuffer.length - this.MAX_BUFFER_SIZE + 100) // Keep some headroom
+    }
+    
+    this.messageBuffer.push({
+      message,
+      timestamp: Date.now()
+    })
+    
+    console.log('📦 BackgroundJobRegistry: Buffered message', message.type, '- buffer size:', this.messageBuffer.length)
+    
+    // Trigger debounced cleanup after message activity
+    this.debouncedCleanup()
+  }
+
+  private replayBufferedMessages(handler: AbstractBackgroundJobHandler): void {
+    console.log('🔄 BackgroundJobRegistry: Replaying buffered messages for handler', handler.getId())
+    
+    const matchingMessages: BufferedMessage[] = []
+    
+    // Find all buffered messages this handler should process
+    for (const bufferedMsg of this.messageBuffer) {
+      if (handler.shouldHandle(bufferedMsg.message)) {
+        matchingMessages.push(bufferedMsg)
+      }
+    }
+    
+    if (matchingMessages.length > 0) {
+      console.log('📨 BackgroundJobRegistry: Found', matchingMessages.length, 'buffered messages for handler', handler.getId())
+      
+      // Replay messages in chronological order
+      matchingMessages.sort((a, b) => a.timestamp - b.timestamp)
+      
+      for (const bufferedMsg of matchingMessages) {
+        console.log('📨 BackgroundJobRegistry: Replaying buffered message', bufferedMsg.message.type, 'for handler', handler.getId())
+        try {
+          handler.handleMessage(bufferedMsg.message)
+        } catch (error) {
+          console.error('❌ BackgroundJobRegistry: Error replaying message for handler', handler.getId(), error)
+        }
+      }
+      
+      // Remove replayed messages from buffer
+      this.messageBuffer = this.messageBuffer.filter(bufferedMsg => 
+        !matchingMessages.includes(bufferedMsg)
+      )
+    }
+  }
+
+  private cleanupExpiredMessages(): void {
+    const now = Date.now()
+    const originalSize = this.messageBuffer.length
+    
+    this.messageBuffer = this.messageBuffer.filter(bufferedMsg => 
+      (now - bufferedMsg.timestamp) < this.MESSAGE_BUFFER_TTL
+    )
+    
+    const removedCount = originalSize - this.messageBuffer.length
+    if (removedCount > 0) {
+      console.log('🧹 BackgroundJobRegistry: Cleaned up', removedCount, 'expired messages from buffer')
+    }
+  }
+
+  // Cleanup method for when the registry is destroyed
+  public cleanup(): void {
+    // Cancel any pending debounced cleanup
+    this.debouncedCleanup.cancel()
+    
+    // Cleanup all handlers
+    for (const handler of this.activeHandlers.values()) {
+      if (handler.cleanup) {
+        handler.cleanup()
+      }
+    }
+    
+    this.activeHandlers.clear()
+    this.messageBuffer = []
   }
 
   public getActiveHandlerIds(): Array<string | number> {
