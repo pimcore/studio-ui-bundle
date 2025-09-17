@@ -60,9 +60,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
     if (key === 'html' && activeTabKey === 'plain-text') {
       processedValue = processedValue.replace(/\n/g, '<br>')
-    }
-
-    else if (key === 'plain-text' && activeTabKey === 'html') {
+    } else if (key === 'plain-text' && activeTabKey === 'html') {
       processedValue = processedValue.replace(/<br\s*\/?>/gi, '\n')
     }
 
