@@ -53,7 +53,7 @@ export interface VisibleFieldDefinition {
 }
 
 export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyObjectRelationClassDefinitionProps {
-  id: string
+  id?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
