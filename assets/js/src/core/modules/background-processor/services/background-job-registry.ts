@@ -12,76 +12,51 @@ import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 
-export interface DocumentCloneJobHandler {
+export interface BackgroundJobHandler {
   jobRunId: string | number
   callback: (message: any) => void
   cleanup?: () => void
 }
 
 @injectable()
-export class DocumentCloneJobRegistry {
-  private activeJobs = new Map<string | number, DocumentCloneJobHandler>()
+export class BackgroundJobRegistry {
+  private activeJobs = new Map<string | number, BackgroundJobHandler>()
   private globalSubscriptionId: string | null = null
 
   constructor(
     @inject(serviceIds.backgroundProcessor) private readonly backgroundProcessor: BackgroundProcessor
   ) {}
 
-  public registerJob(handler: DocumentCloneJobHandler): void {
-    console.log('📝 DocumentCloneJobRegistry: Registering job', handler.jobRunId)
-    
-    // If this is the first job, establish global subscription
-    if (this.activeJobs.size === 0) {
-      this.ensureGlobalSubscription()
-    }
+  public registerJob(handler: BackgroundJobHandler): void {
+    console.log('📝 BackgroundJobRegistry: Registering job', handler.jobRunId)
     
     this.activeJobs.set(handler.jobRunId, handler)
   }
 
   public unregisterJob(jobRunId: string | number): void {
-    console.log('🗑️ DocumentCloneJobRegistry: Unregistering job', jobRunId)
+    console.log('🗑️ BackgroundJobRegistry: Unregistering job', jobRunId)
     const handler = this.activeJobs.get(jobRunId)
     if (handler?.cleanup) {
       handler.cleanup()
     }
     this.activeJobs.delete(jobRunId)
-    
-    // If no more jobs, cleanup global subscription
-    if (this.activeJobs.size === 0) {
-      this.cleanupGlobalSubscription()
-    }
   }
 
-  private ensureGlobalSubscription(): void {
+  public startGlobalSubscription(): void {
     if (this.globalSubscriptionId !== null) {
       return // Already subscribed
     }
     
     try {
       this.globalSubscriptionId = this.backgroundProcessor.subscribeToProcessMessages({
-        processName: 'document-clone-global',
+        processName: 'background-job-global',
         callback: (message: any) => {
           this.routeMessage(message)
         }
       })
-      console.log('📡 DocumentCloneJobRegistry: Established global subscription with ID:', this.globalSubscriptionId)
+      console.log('📡 BackgroundJobRegistry: Established global subscription with ID:', this.globalSubscriptionId)
     } catch (error) {
       console.error('❌ Failed to establish global subscription:', error)
-    }
-  }
-
-  private cleanupGlobalSubscription(): void {
-    if (this.globalSubscriptionId === null) {
-      return // Not subscribed
-    }
-    
-    try {
-      this.backgroundProcessor.unsubscribeFromProcessMessages(this.globalSubscriptionId)
-      console.log('🔌 DocumentCloneJobRegistry: Cleaned up global subscription')
-    } catch (error) {
-      console.error('❌ Failed to cleanup global subscription:', error)
-    } finally {
-      this.globalSubscriptionId = null
     }
   }
 
@@ -90,16 +65,16 @@ export class DocumentCloneJobRegistry {
     const jobRunId = message.payload?.jobRunId
     
     if (!jobRunId) {
-      console.log('⚠️ DocumentCloneJobRegistry: Message without jobRunId', message)
+      console.log('⚠️ BackgroundJobRegistry: Message without jobRunId', message)
       return
     }
 
     const handler = this.activeJobs.get(jobRunId)
     if (handler) {
-      console.log('📨 DocumentCloneJobRegistry: Routing message to job', jobRunId, message.type)
+      console.log('📨 BackgroundJobRegistry: Routing message to job', jobRunId, message.type)
       handler.callback(message)
     } else {
-      console.log('🔍 DocumentCloneJobRegistry: No handler found for jobRunId', jobRunId, 'Active jobs:', Array.from(this.activeJobs.keys()))
+      console.log('🔍 BackgroundJobRegistry: No handler found for jobRunId', jobRunId, 'Active jobs:', Array.from(this.activeJobs.keys()))
     }
   }
 

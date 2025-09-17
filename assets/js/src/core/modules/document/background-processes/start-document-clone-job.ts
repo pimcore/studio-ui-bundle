@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type DocumentCloneJobRegistry } from './document-clone-job-registry'
+import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -46,7 +46,7 @@ export const startDocumentCloneJob = async (
   
   // Get required services from DI container
   const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
-  const jobRegistry = container.get<DocumentCloneJobRegistry>(serviceIds.documentCloneJobRegistry)
+  const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
   
   try {
     // Make API call using RTK Query endpoints

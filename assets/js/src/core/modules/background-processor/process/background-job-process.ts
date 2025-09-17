@@ -12,13 +12,13 @@ import { injectable, inject } from 'inversify'
 import { AbstractMercureProcess } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DocumentCloneJobRegistry } from './document-clone-job-registry'
+import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
 import { type AbstractMessage } from '@Pimcore/modules/background-processor/process/abstract-background-process'
 
 @injectable()
-export class DocumentCloneGlobalProcess extends AbstractMercureProcess {
-  protected name: string = 'document-clone-global'
-  protected description: string = 'Global process for document clone operations'
+export class BackgroundJobProcess extends AbstractMercureProcess {
+  protected name: string = 'background-job-global'
+  protected description: string = 'Global process for background job operations'
 
   protected topics: string[] = [
     topics['handler-progress'],
@@ -28,19 +28,19 @@ export class DocumentCloneGlobalProcess extends AbstractMercureProcess {
   ]
 
   constructor (
-    @inject(serviceIds.documentCloneJobRegistry) private readonly jobRegistry: DocumentCloneJobRegistry
+    @inject(serviceIds.backgroundJobRegistry) private readonly jobRegistry: BackgroundJobRegistry
   ) {
     super()
   }
 
   public start (): void {
     super.start()
-    console.log('🚀 DocumentCloneGlobalProcess started')
+    console.log('🚀 BackgroundJobProcess started')
   }
 
   public cancel (): void {
     super.cancel()
-    console.log('🛑 DocumentCloneGlobalProcess cancelled')
+    console.log('🛑 BackgroundJobProcess cancelled')
   }
 
   protected sendMessage (message: AbstractMessage): void {
