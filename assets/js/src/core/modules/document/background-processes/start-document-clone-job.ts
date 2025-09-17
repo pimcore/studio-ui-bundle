@@ -12,6 +12,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -108,72 +109,60 @@ export const startDocumentCloneJob = async (
       changes: { status: JobStatus.RUNNING } 
     }))
     
-    // Register job handler for this specific jobRunId
-    jobRegistry.registerJob({
-      jobRunId,
-      callback: (message: any) => {
-        console.log('📨 Job', jobRunId, 'received message:', message.type, message.payload)
-        
-        if (message.type === 'update') {
-          const data = message.payload
-
-          // Update progress
-          if (data?.progress !== undefined) {
-            console.log('📈 Updating progress to:', data.progress)
-            store.dispatch(jobUpdated({
-              id: job.id,
-              changes: {
-                config: {
-                  ...job.config,
-                  progress: data.progress as number
-                }
-              }
-            }))
-          }
-
-          // Update status based on backend response
-          if (data?.status !== undefined) {
-            console.log('🎯 Updating status to:', data.status)
-            
-            // Refresh tree for completion states
-            if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
-              store.dispatch(refreshNodeChildren({ 
-                nodeId: config.parentFolder.toString(), 
-                elementType: config.elementType 
-              }))
+    // Register job handler using the new abstract handler system
+    const handler = new DocumentCloneJobHandler(jobRunId, {
+      onProgress: (progress) => {
+        console.log('📈 Updating progress to:', progress)
+        store.dispatch(jobUpdated({
+          id: job.id,
+          changes: {
+            config: {
+              ...job.config,
+              progress: progress as number
             }
-
-            // Handle specific status updates
-            let jobStatus: JobStatus
-            switch (data.status) {
-              case 'finished':
-                jobStatus = JobStatus.SUCCESS
-                break
-              case 'finished_with_errors':
-                jobStatus = JobStatus.FINISHED_WITH_ERRORS
-                break
-              case 'failed':
-                jobStatus = JobStatus.FAILED
-                break
-              default:
-                return
-            }
-
-            // Update job status
-            store.dispatch(jobUpdated({ 
-              id: job.id, 
-              changes: { status: jobStatus } 
-            }))
-            
-            // Unregister job from registry
-            jobRegistry.unregisterJob(jobRunId)
           }
-        }
+        }))
       },
-      cleanup: () => {
+      onComplete: (success, status) => {
+        console.log('🎯 Job completed with status:', status, 'success:', success)
+        
+        // Refresh tree for completion states
+        store.dispatch(refreshNodeChildren({ 
+          nodeId: config.parentFolder.toString(), 
+          elementType: config.elementType 
+        }))
+
+        // Map backend status to JobStatus
+        let jobStatus: JobStatus
+        switch (status) {
+          case 'finished':
+            jobStatus = JobStatus.SUCCESS
+            break
+          case 'finished_with_errors':
+            jobStatus = JobStatus.FINISHED_WITH_ERRORS
+            break
+          case 'failed':
+            jobStatus = JobStatus.FAILED
+            break
+          default:
+            jobStatus = success ? JobStatus.SUCCESS : JobStatus.FAILED
+        }
+
+        // Update job status
+        store.dispatch(jobUpdated({ 
+          id: job.id, 
+          changes: { status: jobStatus } 
+        }))
+        
+        // Unregister handler from registry
+        jobRegistry.unregisterHandler(jobRunId)
+      },
+      onCleanup: () => {
         console.log('🧹 Cleaning up job', jobRunId)
       }
     })
+    
+    jobRegistry.registerHandler(handler)
     
   } catch (error) {
     console.error('❌ Document clone job failed:', error)

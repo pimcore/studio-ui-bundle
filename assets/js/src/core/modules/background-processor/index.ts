@@ -16,8 +16,14 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 
 // Export the generic background job system
-export { BackgroundJobRegistry, type BackgroundJobHandler } from './services/background-job-registry'
+export { BackgroundJobRegistry } from './services/background-job-registry'
 export { BackgroundJobProcess } from './process/background-job-process'
+export { AbstractBackgroundJobHandler } from './handlers/abstract-background-job-handler'
+export { AbstractJobRunIdHandler } from './handlers/abstract-job-run-id-handler'
+
+// Export example concrete handlers
+export { DocumentCloneJobHandler } from './handlers/document-clone-job-handler'
+export { MessageTypeHandler } from './handlers/message-type-handler'
 
 moduleSystem.registerModule({
   onInit: () => {

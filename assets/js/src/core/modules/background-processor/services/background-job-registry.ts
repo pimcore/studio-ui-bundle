@@ -11,35 +11,30 @@
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-
-export interface BackgroundJobHandler {
-  jobRunId: string | number
-  callback: (message: any) => void
-  cleanup?: () => void
-}
+import { AbstractBackgroundJobHandler } from '@Pimcore/modules/background-processor/handlers/abstract-background-job-handler'
 
 @injectable()
 export class BackgroundJobRegistry {
-  private activeJobs = new Map<string | number, BackgroundJobHandler>()
+  private activeHandlers = new Map<string | number, AbstractBackgroundJobHandler>()
   private globalSubscriptionId: string | null = null
 
   constructor(
     @inject(serviceIds.backgroundProcessor) private readonly backgroundProcessor: BackgroundProcessor
   ) {}
 
-  public registerJob(handler: BackgroundJobHandler): void {
-    console.log('📝 BackgroundJobRegistry: Registering job', handler.jobRunId)
+  public registerHandler(handler: AbstractBackgroundJobHandler): void {
+    console.log('📝 BackgroundJobRegistry: Registering handler', handler.getId())
     
-    this.activeJobs.set(handler.jobRunId, handler)
+    this.activeHandlers.set(handler.getId(), handler)
   }
 
-  public unregisterJob(jobRunId: string | number): void {
-    console.log('🗑️ BackgroundJobRegistry: Unregistering job', jobRunId)
-    const handler = this.activeJobs.get(jobRunId)
+  public unregisterHandler(handlerId: string | number): void {
+    console.log('🗑️ BackgroundJobRegistry: Unregistering handler', handlerId)
+    const handler = this.activeHandlers.get(handlerId)
     if (handler?.cleanup) {
       handler.cleanup()
     }
-    this.activeJobs.delete(jobRunId)
+    this.activeHandlers.delete(handlerId)
   }
 
   public startGlobalSubscription(): void {
@@ -61,28 +56,47 @@ export class BackgroundJobRegistry {
   }
 
   public routeMessage(message: any): void {
-    // Extract jobRunId from message payload
-    const jobRunId = message.payload?.jobRunId
+    console.log('📨 BackgroundJobRegistry: Routing message', message.type)
     
-    if (!jobRunId) {
-      console.log('⚠️ BackgroundJobRegistry: Message without jobRunId', message)
+    // Find all handlers that should handle this message
+    const matchingHandlers: AbstractBackgroundJobHandler[] = []
+    
+    for (const handler of this.activeHandlers.values()) {
+      if (handler.shouldHandle(message)) {
+        matchingHandlers.push(handler)
+      }
+    }
+    
+    if (matchingHandlers.length === 0) {
+      console.log('🔍 BackgroundJobRegistry: No handler found for message', message.type, 'Active handlers:', Array.from(this.activeHandlers.keys()))
       return
     }
-
-    const handler = this.activeJobs.get(jobRunId)
-    if (handler) {
-      console.log('📨 BackgroundJobRegistry: Routing message to job', jobRunId, message.type)
-      handler.callback(message)
-    } else {
-      console.log('🔍 BackgroundJobRegistry: No handler found for jobRunId', jobRunId, 'Active jobs:', Array.from(this.activeJobs.keys()))
+    
+    // Process message with all matching handlers
+    for (const handler of matchingHandlers) {
+      console.log('📨 BackgroundJobRegistry: Processing message with handler', handler.getId(), message.type)
+      try {
+        handler.handleMessage(message)
+      } catch (error) {
+        console.error('❌ BackgroundJobRegistry: Error processing message with handler', handler.getId(), error)
+      }
     }
   }
 
+  public getActiveHandlerIds(): Array<string | number> {
+    return Array.from(this.activeHandlers.keys())
+  }
+
+  public hasActiveHandlers(): boolean {
+    return this.activeHandlers.size > 0
+  }
+
+  // Legacy methods for backward compatibility
   public getActiveJobIds(): Array<string | number> {
-    return Array.from(this.activeJobs.keys())
+    return this.getActiveHandlerIds()
   }
 
   public hasActiveJobs(): boolean {
-    return this.activeJobs.size > 0
+    return this.hasActiveHandlers()
   }
 }
