@@ -91,8 +91,8 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
           onBlur={ onBlur }
           onChange={ onChange }
           ref={ element }
-          value={ textAreaValue }
           style={ callback ? { paddingRight: '36px' } : undefined }
+          value={ textAreaValue }
         />
         { callback && (
           <div style={ { position: 'absolute', top: '5px', right: '8px', zIndex: 1 } }>
