@@ -44,6 +44,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/ty
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-checkbox-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-id-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-text-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'

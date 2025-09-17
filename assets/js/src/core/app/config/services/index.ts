@@ -31,6 +31,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
+import { DynamicTypeFieldFilterId } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
@@ -281,6 +282,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFiel
 container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFieldFilterFulltext).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Input']).to(DynamicTypeFieldFilterInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTypeFieldFilterMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()

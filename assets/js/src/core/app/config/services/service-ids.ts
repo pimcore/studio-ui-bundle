@@ -94,6 +94,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
   'DynamicTypes/FieldFilter/Input': 'DynamicTypes/FieldFilter/Input',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
+  'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Multiselect': 'DynamicTypes/FieldFilter/Multiselect',
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
