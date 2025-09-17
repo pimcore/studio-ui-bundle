@@ -74,6 +74,15 @@ document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
 document.hardlink.children-from-source: Use children from source document
+document.paste-as-new-language-variant: Paste as new language variant
+document.paste-as-new-language-variant-recursive: Paste as new language variant (recursive)
+document.paste-language-recursive-updating-references: Paste language (recursive), updating references
+document.select-language-for-new-document: Select language for New Document
+document.language-required: Please select a language
+document.paste-inheritance: Paste (inheritance)
+document.cloning-document: Cloning Document
+document.tree.copy-paste.cloning-folder: Cloning Folder
+document.tree.copy-paste.replacing-content: Replacing Content
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?
