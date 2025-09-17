@@ -87,7 +87,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
     return (
       <div style={ { position: 'relative', width: '100%' } }>
         <Input.TextArea
-          autoSize={ { minRows: 2 } }
+          autoSize={ { minRows: 1 } }
           onBlur={ onBlur }
           onChange={ onChange }
           ref={ element }
@@ -95,7 +95,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
           style={ callback ? { paddingRight: '36px' } : undefined }
         />
         { callback && (
-          <div style={ { position: 'absolute', top: '8px', right: '8px', zIndex: 1 } }>
+          <div style={ { position: 'absolute', top: '5px', right: '8px', zIndex: 1 } }>
             <IconButton
               icon={ { value: 'edit' } }
               onClick={ async () => { await openEditMode() } }
