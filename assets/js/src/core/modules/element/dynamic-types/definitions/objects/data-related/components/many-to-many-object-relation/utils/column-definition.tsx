@@ -47,14 +47,19 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
     const key = column.key
     const type = column.type
 
-    const isDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
+    const getDataObjectHeader = (value?: string): string => {
+      return isEmptyValue(value) ? translate(key) : value!
+    }
 
-    const dataObjectHeader = isEmptyValue(column.config?.fieldDefinition?.title) ? translate(column.key) : column.config?.fieldDefinition?.title
-    const defaultHeader = isEmptyValue(column.title) ? translate(column.key) : column.title
+    const isAdvancedDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
+    const fieldDefinition = 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
+
+    const advancedDataObjectHeader = getDataObjectHeader(fieldDefinition?.title as string | undefined)
+    const defaultDataObjectHeader = getDataObjectHeader(column.title)
 
     columnDefinition.push(
       columnHelper.accessor(key, {
-        header: isDataObjectColumn ? dataObjectHeader : defaultHeader,
+        header: isAdvancedDataObjectColumn ? advancedDataObjectHeader : defaultDataObjectHeader,
         meta: key === 'fullpath'
           ? {
               type: 'element',
@@ -64,10 +69,10 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
             }
           : {
               columnKey: key,
-              type: isDataObjectColumn ? column.type : column.frontendType,
+              type: isAdvancedDataObjectColumn ? column.type : column.frontendType,
               editable: false,
               ...(!isEmpty(column.config) && {
-                config: isDataObjectColumn
+                config: isAdvancedDataObjectColumn
                   ? {
                       dataObjectType: column.frontendType,
                       dataObjectConfig: column.config
