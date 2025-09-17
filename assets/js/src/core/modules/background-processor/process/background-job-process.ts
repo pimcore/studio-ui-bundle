@@ -9,10 +9,9 @@
  */
 
 import { injectable, inject } from 'inversify'
-import { AbstractMercureProcess } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
+import { AbstractMercureProcess, type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
-import { type AbstractMessage } from '@Pimcore/modules/background-processor/process/abstract-background-process'
 
 @injectable()
 export class BackgroundJobProcess extends AbstractMercureProcess {
@@ -39,11 +38,8 @@ export class BackgroundJobProcess extends AbstractMercureProcess {
     console.log('🛑 BackgroundJobProcess cancelled')
   }
 
-  protected sendMessage (message: AbstractMessage): void {
-    // Route message to job registry for specific job handling
+  protected sendMessage (message: AbstractMercureMessage): void {
+    // Route complete Mercure message to job registry
     this.jobRegistry.routeMessage(message)
-    
-    // Call parent to notify subscribers
-    super.sendMessage(message)
   }
 }

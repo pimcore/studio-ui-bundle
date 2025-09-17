@@ -13,9 +13,9 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { 
   type BackgroundJobRegistry,
   DocumentCloneJobHandler,
-  MessageTypeHandler,
   AbstractBackgroundJobHandler
 } from '@Pimcore/modules/background-processor'
+import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 
 /**
  * Example usage of the new abstract handler system
@@ -34,8 +34,13 @@ export class BackgroundJobExamples {
     const jobRegistry = this.getJobRegistry()
     
     const handler = new DocumentCloneJobHandler(jobRunId, {
+      title: 'Clone Document Job',
+      parentFolder: '/documents',
+      elementType: 'document',
+      sourceId: 123,
+      targetId: 456,
       onProgress: (progress) => {
-        console.log(`📈 Job ${jobRunId} progress: ${progress}%`)
+        console.log(`📈 Job ${jobRunId} progress: ${progress.currentStep}/${progress.totalSteps} - ${progress.message}`)
       },
       onComplete: (success) => {
         console.log(`✅ Job ${jobRunId} completed:`, success ? 'SUCCESS' : 'FAILED')
@@ -50,20 +55,32 @@ export class BackgroundJobExamples {
   }
 
   /**
-   * Example 2: Message type-based handler (for global listeners)
+   * Example 2: Custom progress listener with message filtering
    */
   static registerGlobalProgressListener(): void {
     const jobRegistry = this.getJobRegistry()
     
-    const handler = new MessageTypeHandler('update', (message) => {
-      const progress = message.payload?.progress
-      if (progress !== undefined) {
+    class GlobalProgressHandler extends AbstractBackgroundJobHandler {
+      static readonly TOPICS = ['job.progress.update']
+      
+      shouldHandle(message: AbstractMercureMessage): boolean {
+        const payload = message.payload as any
+        return message.type === 'update' && payload?.progress !== undefined
+      }
+
+      handleMessage(message: AbstractMercureMessage): void {
+        const payload = message.payload as any
+        const progress = payload?.progress
         console.log('🌍 Global progress update:', progress)
         // Could update global progress bar, notifications, etc.
       }
-    }, 'global-progress-listener')
+
+      getId(): string {
+        return 'global-progress-listener'
+      }
+    }
     
-    jobRegistry.registerHandler(handler)
+    jobRegistry.registerHandler(new GlobalProgressHandler())
   }
 
   /**
@@ -73,14 +90,15 @@ export class BackgroundJobExamples {
     const jobRegistry = this.getJobRegistry()
     
     class CustomHandler extends AbstractBackgroundJobHandler {
-      shouldHandle(message: any): boolean {
+      shouldHandle(message: AbstractMercureMessage): boolean {
         // Complex custom logic
+        const payload = message.payload as any
         return message.type === 'update' && 
-               message.payload?.category === 'document' &&
-               message.payload?.priority === 'high'
+               payload?.category === 'document' &&
+               payload?.priority === 'high'
       }
 
-      handleMessage(message: any): void {
+      handleMessage(message: AbstractMercureMessage): void {
         console.log('🎯 Processing high-priority document message:', message)
         // Custom processing logic
       }
@@ -107,16 +125,18 @@ export class BackgroundJobExamples {
         this.jobRunIds = new Set(jobRunIds)
       }
 
-      shouldHandle(message: any): boolean {
-        const jobRunId = message.payload?.jobRunId
+      shouldHandle(message: AbstractMercureMessage): boolean {
+        const payload = message.payload as any
+        const jobRunId = payload?.jobRunId
         return jobRunId !== undefined && this.jobRunIds.has(jobRunId)
       }
 
-      handleMessage(message: any): void {
-        const jobRunId = message.payload?.jobRunId
+      handleMessage(message: AbstractMercureMessage): void {
+        const payload = message.payload as any
+        const jobRunId = payload?.jobRunId
         console.log(`📦 Batch processing message for job ${jobRunId}`)
         
-        if (message.payload?.status === 'finished') {
+        if (payload?.status === 'finished') {
           this.jobRunIds.delete(jobRunId)
           console.log(`✅ Job ${jobRunId} finished. Remaining jobs:`, Array.from(this.jobRunIds))
           

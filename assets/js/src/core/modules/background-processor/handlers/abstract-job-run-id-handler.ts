@@ -9,6 +9,7 @@
  */
 
 import { AbstractBackgroundJobHandler } from './abstract-background-job-handler'
+import { type AbstractMercureMessage } from '../process/abstract-mercure-process'
 
 export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandler {
   protected readonly jobRunId: string | number
@@ -18,9 +19,9 @@ export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandl
     this.jobRunId = jobRunId
   }
 
-  public shouldHandle(message: any): boolean {
+  public shouldHandle(message: AbstractMercureMessage): boolean {
     // Check if message contains jobRunId that matches this handler
-    const messageJobRunId = message.payload?.jobRunId
+    const messageJobRunId = (message.payload as any)?.jobRunId
     return messageJobRunId !== undefined && messageJobRunId === this.jobRunId
   }
 

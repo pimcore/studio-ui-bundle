@@ -14,11 +14,12 @@ import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/
 import { AbstractBackgroundJobHandler } from '@Pimcore/modules/background-processor/handlers/abstract-background-job-handler'
 import { container } from '@Pimcore/app/depency-injection'
 import { type BackgroundJobProcess } from '@Pimcore/modules/background-processor/process/background-job-process'
+import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { debounce } from 'lodash'
 
 // Message buffer entry with timestamp for TTL
 interface BufferedMessage {
-  message: any
+  mercureMessage: AbstractMercureMessage
   timestamp: number
 }
 
@@ -115,7 +116,9 @@ export class BackgroundJobRegistry {
       this.globalSubscriptionId = this.backgroundProcessor.subscribeToProcessMessages({
         processName: 'background-job-global',
         callback: (message: any) => {
-          this.routeMessage(message)
+          // Route complete Mercure message
+          console.log('📡 BackgroundJobRegistry: Received message via global subscription:', message.type)
+          this.routeMessage(message as AbstractMercureMessage)
         }
       })
       console.log('📡 BackgroundJobRegistry: Established global subscription with ID:', this.globalSubscriptionId)
@@ -124,38 +127,47 @@ export class BackgroundJobRegistry {
     }
   }
 
-  public routeMessage(message: any): void {
-    console.log('📨 BackgroundJobRegistry: Routing message', message.type)
+  public routeMessage(mercureMessage: AbstractMercureMessage): void {
+    console.log('📨 BackgroundJobRegistry: Routing message', mercureMessage.type)
+    
+    // Validate topic registration
+    const eventData = JSON.parse(mercureMessage.event.data as string)
+    const eventTopic = eventData.topic || eventData['@topic']
+    
+    if (eventTopic && !this.registeredTopics.has(eventTopic)) {
+      return
+    }
+    
     
     // Find all handlers that should handle this message
     const matchingHandlers: AbstractBackgroundJobHandler[] = []
     
     for (const handler of this.activeHandlers.values()) {
-      if (handler.shouldHandle(message)) {
+      if (handler.shouldHandle(mercureMessage)) {
         matchingHandlers.push(handler)
       }
     }
     
     if (matchingHandlers.length === 0) {
-      console.log('🔍 BackgroundJobRegistry: No handler found for message', message.type, '- buffering message. Active handlers:', Array.from(this.activeHandlers.keys()))
+      console.log('🔍 BackgroundJobRegistry: No handler found for message', mercureMessage.type, '- buffering message. Active handlers:', Array.from(this.activeHandlers.keys()))
       
       // Buffer the message for potential future handlers
-      this.bufferMessage(message)
+      this.bufferMessage(mercureMessage)
       return
     }
     
     // Process message with all matching handlers
     for (const handler of matchingHandlers) {
-      console.log('📨 BackgroundJobRegistry: Processing message with handler', handler.getId(), message.type)
+      console.log('📨 BackgroundJobRegistry: Processing message with handler', handler.getId(), mercureMessage.type)
       try {
-        handler.handleMessage(message)
+        handler.handleMessage(mercureMessage)
       } catch (error) {
         console.error('❌ BackgroundJobRegistry: Error processing message with handler', handler.getId(), error)
       }
     }
   }
 
-  private bufferMessage(message: any): void {
+  private bufferMessage(mercureMessage: AbstractMercureMessage): void {
     // Clean up buffer if it's getting too large
     if (this.messageBuffer.length >= this.MAX_BUFFER_SIZE) {
       console.warn('🚫 BackgroundJobRegistry: Message buffer full, removing oldest messages')
@@ -163,11 +175,11 @@ export class BackgroundJobRegistry {
     }
     
     this.messageBuffer.push({
-      message,
+      mercureMessage,
       timestamp: Date.now()
     })
     
-    console.log('📦 BackgroundJobRegistry: Buffered message', message.type, '- buffer size:', this.messageBuffer.length)
+    console.log('📦 BackgroundJobRegistry: Buffered message', mercureMessage.type, '- buffer size:', this.messageBuffer.length)
     
     // Trigger debounced cleanup after message activity
     this.debouncedCleanup()
@@ -180,7 +192,7 @@ export class BackgroundJobRegistry {
     
     // Find all buffered messages this handler should process
     for (const bufferedMsg of this.messageBuffer) {
-      if (handler.shouldHandle(bufferedMsg.message)) {
+      if (handler.shouldHandle(bufferedMsg.mercureMessage)) {
         matchingMessages.push(bufferedMsg)
       }
     }
@@ -192,9 +204,9 @@ export class BackgroundJobRegistry {
       matchingMessages.sort((a, b) => a.timestamp - b.timestamp)
       
       for (const bufferedMsg of matchingMessages) {
-        console.log('📨 BackgroundJobRegistry: Replaying buffered message', bufferedMsg.message.type, 'for handler', handler.getId())
+        console.log('📨 BackgroundJobRegistry: Replaying buffered message', bufferedMsg.mercureMessage.type, 'for handler', handler.getId())
         try {
-          handler.handleMessage(bufferedMsg.message)
+          handler.handleMessage(bufferedMsg.mercureMessage)
         } catch (error) {
           console.error('❌ BackgroundJobRegistry: Error replaying message for handler', handler.getId(), error)
         }

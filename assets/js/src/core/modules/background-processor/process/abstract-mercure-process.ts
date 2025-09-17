@@ -9,7 +9,11 @@
  */
 
 import { appConfig } from '@Pimcore/app/config/app-config'
-import { AbstractBackgroundProcess } from './abstract-background-process'
+import { AbstractBackgroundProcess, type AbstractMessage } from './abstract-background-process'
+
+export interface AbstractMercureMessage extends AbstractMessage {
+  event: MessageEvent
+}
 
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   protected eventSource?: EventSource
@@ -33,8 +37,9 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       const data = JSON.parse(event.data as unknown as string)
       this.sendMessage({
         type: 'update',
-        payload: data
-      })
+        payload: data,
+        event: event
+      } as AbstractMercureMessage)
     }
 
     this.eventSource.onerror = (error: Event) => {

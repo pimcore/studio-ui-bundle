@@ -24,7 +24,6 @@ export { AbstractJobRunIdHandler } from './handlers/abstract-job-run-id-handler'
 
 // Export example concrete handlers
 export { DocumentCloneJobHandler } from './handlers/document-clone-job-handler'
-export { MessageTypeHandler } from './handlers/message-type-handler'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -33,9 +32,7 @@ moduleSystem.registerModule({
     const globalProcess = container.get<BackgroundJobProcess>(serviceIds.backgroundJobProcess)
     
     // Register topics with the registry first
-    //jobRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
-    
-    console.log('🔧 Background job topics registered with registry')
+    jobRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
     
     // Register the generic background job process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)

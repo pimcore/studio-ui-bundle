@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type AbstractMercureMessage } from '../process/abstract-mercure-process'
+
 export abstract class AbstractBackgroundJobHandler {
   /**
    * Static topics that this handler type needs to listen to
@@ -18,12 +20,12 @@ export abstract class AbstractBackgroundJobHandler {
   /**
    * Determines if this handler should process the given message
    */
-  abstract shouldHandle(message: any): boolean
+  abstract shouldHandle(message: AbstractMercureMessage): boolean
 
   /**
    * Processes the message
    */
-  abstract handleMessage(message: any): void
+  abstract handleMessage(message: AbstractMercureMessage): void
 
   /**
    * Optional lifecycle method called when handler is registered

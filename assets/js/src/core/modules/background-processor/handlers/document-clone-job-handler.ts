@@ -9,6 +9,7 @@
  */
 
 import { AbstractJobRunIdHandler } from '@Pimcore/modules/background-processor/handlers/abstract-job-run-id-handler'
+import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -79,12 +80,12 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
     store.dispatch(jobReceived(this.job))
   }
 
-  public handleMessage(message: any): void {
+  public handleMessage(message: AbstractMercureMessage): void {
     console.log('📨 DocumentCloneJobHandler: Processing message for job', this.jobRunId, message.type)
     
     try {
       if (message.type === 'update') {
-        const data = message.payload
+        const data = message.payload as any
 
         // Validate message payload
         if (!data) {
