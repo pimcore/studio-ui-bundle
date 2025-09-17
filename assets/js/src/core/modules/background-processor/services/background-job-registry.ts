@@ -44,6 +44,11 @@ export class BackgroundJobRegistry {
     
     this.activeHandlers.set(handler.getId(), handler)
     
+    // Call lifecycle method if defined
+    if (handler.onRegister) {
+      handler.onRegister()
+    }
+    
     // Replay any buffered messages that this handler should process
     this.replayBufferedMessages(handler)
   }
@@ -51,8 +56,8 @@ export class BackgroundJobRegistry {
   public unregisterHandler(handlerId: string | number): void {
     console.log('🗑️ BackgroundJobRegistry: Unregistering handler', handlerId)
     const handler = this.activeHandlers.get(handlerId)
-    if (handler?.cleanup) {
-      handler.cleanup()
+    if (handler?.onUnregister) {
+      handler.onUnregister()
     }
     this.activeHandlers.delete(handlerId)
   }
@@ -170,22 +175,6 @@ export class BackgroundJobRegistry {
     if (removedCount > 0) {
       console.log('🧹 BackgroundJobRegistry: Cleaned up', removedCount, 'expired messages from buffer')
     }
-  }
-
-  // Cleanup method for when the registry is destroyed
-  public cleanup(): void {
-    // Cancel any pending debounced cleanup
-    this.debouncedCleanup.cancel()
-    
-    // Cleanup all handlers
-    for (const handler of this.activeHandlers.values()) {
-      if (handler.cleanup) {
-        handler.cleanup()
-      }
-    }
-    
-    this.activeHandlers.clear()
-    this.messageBuffer = []
   }
 
   public getActiveHandlerIds(): Array<string | number> {

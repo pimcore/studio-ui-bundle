@@ -13,11 +13,9 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
 import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
-import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { store } from '@Pimcore/app/store'
-import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 
@@ -89,28 +87,15 @@ export const startDocumentCloneJob = async (
     
     console.log('✅ Got jobRunId from API:', jobRunId, '- setting up background job tracking')
     
-    // Create Redux job for progress tracking
-    const job = createDocumentCloneBackgroundJob({
+    // Register job handler using the new abstract handler system
+    const handler = new DocumentCloneJobHandler(jobRunId, {
       title: config.title,
       parentFolder: config.parentFolder.toString(),
       elementType: config.elementType,
       sourceId: config.sourceId,
       targetId: config.targetId,
       parameters: config.parameters,
-      isReplace: config.isReplace,
-      action: async () => 0, // Placeholder action
-      topics: ['document-clone']
-    })
-    
-    // Add job to Redux using store directly
-    store.dispatch(jobReceived(job))
-    
-    // Register job handler using the new abstract handler system
-    const handler = new DocumentCloneJobHandler(jobRunId, {
-      jobId: job.id,
-      parentFolder: config.parentFolder.toString(),
-      elementType: config.elementType,
-      jobConfig: job.config
+      isReplace: config.isReplace
     })
     
     jobRegistry.registerHandler(handler)

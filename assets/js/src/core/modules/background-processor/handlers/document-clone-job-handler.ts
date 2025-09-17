@@ -10,19 +10,23 @@
 
 import { AbstractJobRunIdHandler } from '@Pimcore/modules/background-processor/handlers/abstract-job-run-id-handler'
 import { store } from '@Pimcore/app/store'
-import { jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
+import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 
 export interface DocumentCloneJobConfig {
-  jobId: number
+  title: string
   parentFolder: string
   elementType: ElementType
-  jobConfig: any // The job.config object for progress updates
+  sourceId: number
+  targetId: number
+  parameters?: any
+  isReplace?: boolean
 }
 
 /**
@@ -31,18 +35,33 @@ export interface DocumentCloneJobConfig {
  */
 export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
   private readonly config: DocumentCloneJobConfig
+  private readonly job: any
 
   constructor(
     jobRunId: string | number,
-    config: DocumentCloneJobConfig,
-    customCleanup?: () => void
+    config: DocumentCloneJobConfig
   ) {
     super(jobRunId)
     this.config = config
     
-    if (customCleanup) {
-      this.cleanup = customCleanup
-    }
+    // Create the Redux job internally
+    this.job = createDocumentCloneBackgroundJob({
+      title: config.title,
+      parentFolder: config.parentFolder,
+      elementType: config.elementType,
+      sourceId: config.sourceId,
+      targetId: config.targetId,
+      parameters: config.parameters,
+      isReplace: config.isReplace,
+      action: async () => 0, // Placeholder action
+      topics: ['document-clone']
+    })
+  }
+
+  public onRegister(): void {
+    console.log('📝 DocumentCloneJobHandler: Registering job in Redux store')
+    // Add the job to Redux when handler is registered
+    store.dispatch(jobReceived(this.job))
   }
 
   public handleMessage(message: any): void {
@@ -81,7 +100,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
 
           // Update job status
           store.dispatch(jobUpdated({ 
-            id: this.config.jobId, 
+            id: this.job.id, 
             changes: { status: jobStatus } 
           }))
           
@@ -92,7 +111,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
           // Set job to running when it starts processing
           console.log('🏃 Job is now running')
           store.dispatch(jobUpdated({ 
-            id: this.config.jobId, 
+            id: this.job.id, 
             changes: { status: JobStatus.RUNNING } 
           }))
         }
@@ -106,16 +125,16 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
         if (!data?.status) {
           console.log('🏃 Job appears to be running (received progress update)')
           store.dispatch(jobUpdated({ 
-            id: this.config.jobId, 
+            id: this.job.id, 
             changes: { status: JobStatus.RUNNING } 
           }))
         }
         
         store.dispatch(jobUpdated({
-          id: this.config.jobId,
+          id: this.job.id,
           changes: {
             config: {
-              ...this.config.jobConfig,
+              ...this.job.config,
               progress: data.progress as number
             }
           }
@@ -124,7 +143,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
     }
   }
 
-  cleanup(): void {
-    console.log('🧹 Cleaning up job', this.jobRunId)
+  onUnregister(): void {
+    console.log('🧹 Unregistering job handler', this.jobRunId)
   }
 }

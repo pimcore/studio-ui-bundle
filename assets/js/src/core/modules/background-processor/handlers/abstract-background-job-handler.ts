@@ -20,9 +20,14 @@ export abstract class AbstractBackgroundJobHandler {
   abstract handleMessage(message: any): void
 
   /**
-   * Optional cleanup when handler is removed
+   * Optional lifecycle method called when handler is registered
    */
-  cleanup?(): void
+  onRegister?(): void
+
+  /**
+   * Optional lifecycle method called when handler is unregistered
+   */
+  onUnregister?(): void
 
   /**
    * Unique identifier for this handler
