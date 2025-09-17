@@ -12,6 +12,8 @@ import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { AbstractBackgroundJobHandler } from '@Pimcore/modules/background-processor/handlers/abstract-background-job-handler'
+import { container } from '@Pimcore/app/depency-injection'
+import { type BackgroundJobProcess } from '@Pimcore/modules/background-processor/process/background-job-process'
 import { debounce } from 'lodash'
 
 // Message buffer entry with timestamp for TTL
@@ -24,6 +26,7 @@ interface BufferedMessage {
 export class BackgroundJobRegistry {
   private activeHandlers = new Map<string | number, AbstractBackgroundJobHandler>()
   private globalSubscriptionId: string | null = null
+  private registeredTopics = new Set<string>()
   
   // Message buffer for race condition prevention
   private messageBuffer: BufferedMessage[] = []
@@ -39,8 +42,26 @@ export class BackgroundJobRegistry {
     @inject(serviceIds.backgroundProcessor) private readonly backgroundProcessor: BackgroundProcessor
   ) {}
 
+  /**
+   * Register topics that handlers can use
+   */
+  public registerTopics(topics: string[]): void {
+    topics.forEach(topic => this.registeredTopics.add(topic))
+    console.log(`📡 BackgroundJobRegistry: Registered ${topics.length} topics. Total: ${this.registeredTopics.size}`)
+  }
+
+  /**
+   * Get all registered topics
+   */
+  public getRegisteredTopics(): string[] {
+    return Array.from(this.registeredTopics)
+  }
+
   public registerHandler(handler: AbstractBackgroundJobHandler): void {
     console.log('📝 BackgroundJobRegistry: Registering handler', handler.getId())
+    
+    // Validate that the handler's topics are registered in the process
+    this.validateHandlerTopics(handler)
     
     this.activeHandlers.set(handler.getId(), handler)
     
@@ -51,6 +72,29 @@ export class BackgroundJobRegistry {
     
     // Replay any buffered messages that this handler should process
     this.replayBufferedMessages(handler)
+  }
+
+  private validateHandlerTopics(handler: AbstractBackgroundJobHandler): void {
+    const handlerClass = handler.constructor as any
+    const handlerTopics = handlerClass.TOPICS || []
+    
+    // Validate that all handler topics are registered
+    for (const topic of handlerTopics) {
+      if (!this.registeredTopics.has(topic)) {
+        const errorMessage = [
+          `❌ BackgroundJobRegistry: Handler "${handler.getId()}" uses unregistered topic "${topic}".`,
+          `💡 To register this topic, add it to your module's initialization:`,
+          `   const registry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)`,
+          `   registry.registerTopics(['${topic}'])`,
+          `📋 Available topics: [${this.getRegisteredTopics().join(', ')}]`
+        ].join('\n')
+        
+        console.error(errorMessage)
+        throw new Error(errorMessage)
+      }
+    }
+    
+    console.log(`✅ BackgroundJobRegistry: Handler "${handler.getId()}" topics validated:`, handlerTopics)
   }
 
   public unregisterHandler(handlerId: string | number): void {

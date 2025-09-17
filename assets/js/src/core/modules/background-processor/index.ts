@@ -14,6 +14,7 @@ import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processo
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
 
 // Export the generic background job system
 export { BackgroundJobRegistry } from './services/background-job-registry'
@@ -27,14 +28,20 @@ export { MessageTypeHandler } from './handlers/message-type-handler'
 
 moduleSystem.registerModule({
   onInit: () => {
-    // Register the generic background job process
-    const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
+    // Get services
+    const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
     const globalProcess = container.get<BackgroundJobProcess>(serviceIds.backgroundJobProcess)
     
+    // Register topics with the registry first
+    //jobRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
+    
+    console.log('🔧 Background job topics registered with registry')
+    
+    // Register the generic background job process
+    const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     backgroundProcessor.registerProcess(globalProcess)
 
-    // Start the subscription directly in the module
-    const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
+    // Start the subscription
     jobRegistry.startGlobalSubscription()
   }
 })

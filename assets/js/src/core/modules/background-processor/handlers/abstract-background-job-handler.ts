@@ -10,6 +10,12 @@
 
 export abstract class AbstractBackgroundJobHandler {
   /**
+   * Static topics that this handler type needs to listen to
+   * Override in concrete implementations
+   */
+  static readonly TOPICS: string[] = []
+
+  /**
    * Determines if this handler should process the given message
    */
   abstract shouldHandle(message: any): boolean
@@ -28,6 +34,11 @@ export abstract class AbstractBackgroundJobHandler {
    * Optional lifecycle method called when handler is unregistered
    */
   onUnregister?(): void
+
+  /**
+   * Optional cleanup method for handlers that need to clean up resources
+   */
+  cleanup?(): void
 
   /**
    * Unique identifier for this handler

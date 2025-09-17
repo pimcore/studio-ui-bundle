@@ -10,7 +10,6 @@
 
 import { injectable, inject } from 'inversify'
 import { AbstractMercureProcess } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
-import { topics } from '@Pimcore/modules/execution-engine/topics'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
 import { type AbstractMessage } from '@Pimcore/modules/background-processor/process/abstract-background-process'
@@ -20,17 +19,14 @@ export class BackgroundJobProcess extends AbstractMercureProcess {
   protected name: string = 'background-job-global'
   protected description: string = 'Global process for background job operations'
 
-  protected topics: string[] = [
-    topics['handler-progress'],
-    topics['cloning-finished'],
-    topics['job-finished-with-errors'],
-    topics['job-failed']
-  ]
-
   constructor (
     @inject(serviceIds.backgroundJobRegistry) private readonly jobRegistry: BackgroundJobRegistry
   ) {
     super()
+  }
+
+  protected getTopics (): string[] {
+    return this.jobRegistry.getRegisteredTopics()
   }
 
   public start (): void {

@@ -12,8 +12,9 @@ import { appConfig } from '@Pimcore/app/config/app-config'
 import { AbstractBackgroundProcess } from './abstract-background-process'
 
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
-  protected abstract readonly topics: string[]
   protected eventSource?: EventSource
+
+  protected abstract getTopics (): string[]
 
   public start (): void {
     if (this.eventSource !== undefined) {
@@ -22,7 +23,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
 
     const url = new URL(appConfig.mercureUrl)
 
-    this.topics.forEach(topic => {
+    this.getTopics().forEach(topic => {
       url.searchParams.append('topic', topic)
     })
 

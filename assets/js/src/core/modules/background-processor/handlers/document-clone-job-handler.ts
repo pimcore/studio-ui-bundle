@@ -18,6 +18,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
+import { topics } from '@Pimcore/modules/execution-engine/topics'
 
 export interface DocumentCloneJobConfig {
   title: string
@@ -27,6 +28,9 @@ export interface DocumentCloneJobConfig {
   targetId: number
   parameters?: any
   isReplace?: boolean
+  onProgress?: (progress: { currentStep: number; totalSteps: number; message: string }) => void
+  onComplete?: (success: boolean) => void
+  onCleanup?: () => void
 }
 
 /**
@@ -34,6 +38,16 @@ export interface DocumentCloneJobConfig {
  * Handles all Redux updates and tree refreshing internally
  */
 export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
+  /**
+   * Topics that document clone jobs need to listen to
+   */
+  static readonly TOPICS = [
+    topics['handler-progress'],
+    topics['cloning-finished'],
+    topics['job-finished-with-errors'],
+    topics['job-failed']
+  ]
+
   private readonly config: DocumentCloneJobConfig
   private readonly job: any
 
