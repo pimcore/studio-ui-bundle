@@ -22,6 +22,9 @@ export { GlobalMessageProcess } from './process/global-message-process'
 export { AbstractBackgroundJobHandler } from './handlers/abstract-background-job-handler'
 export { AbstractJobRunIdHandler } from './handlers/abstract-job-run-id-handler'
 
+// Export hooks
+export { useGlobalMessageRegistry } from './hooks/use-global-message-registry'
+
 // Export example concrete handlers
 export { DocumentCloneJobHandler } from './handlers/document-clone-job-handler'
 
