@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined, isEmpty, find, isNil, map, filter } from 'lodash'
+import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import { type ColumnDef } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
@@ -20,10 +20,8 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import {
-  type AdvancedColumnConfig,
-  useDataObjectGetAvailableGridColumnsForRelationQuery, useDataObjectGetGridQuery
-} from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type AdvancedColumnConfig, useDataObjectGetAvailableGridColumnsForRelationQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -74,7 +72,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const relationField = props?.id
   const dataRelationClasses = props?.allowedClasses
 
-  const defaultVisibleFieldDefinitions = [
+  const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
     {
       key: 'id',
       title: 'id',
@@ -98,9 +96,11 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   }, { skip: isUndefined(classId) || isUndefined(relationField) })
 
   const visibleFieldDefinitions: VisibleFieldDefinition[] | undefined = useMemo(() => {
+    if (isAvailableGridColumnsLoading) return undefined
+
     const fieldDefinitions = !isNil(availableGridColumnsData)
       ? availableGridColumnsData?.columns
-      : defaultVisibleFieldDefinitions
+      : DEFAULT_VISIBLE_FIELD_DEFINITIONS
 
     return fieldDefinitions?.map((field) => {
       const newField = { ...field }
@@ -124,36 +124,21 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     })
   }, [availableGridColumnsData])
 
-  const columns = (visibleFieldDefinitions ?? []).map(col => ({
-    ...col,
-    group: col?.group?.[0]
-  }))
-
-  const queries = dataRelationClasses?.map(classId =>
-    useDataObjectGetGridQuery({
-      classId: getByName(classId)?.id ?? '',
-      body: {
-        folderId: 1,
-        columns: columns ?? [],
-        filters: {
-          page: 1,
-          pageSize: 999,
-          includeDescendants: true,
-          columnFilters: [
-            {
-              type: 'system.ids',
-              filterValue: map(
-                filter(props?.value, { subtype: classId }),
-                'id'
-              )
-            }
-          ]
-        }
-      }
-    }, { skip: isUndefined(dataRelationClasses) && isEmpty(props.value) })
+  const visibleColumns = useMemo(() =>
+    (visibleFieldDefinitions ?? []).map(col => ({
+      ...col,
+      group: col?.group?.[0]
+    })),
+  [visibleFieldDefinitions]
   )
-  const isGridFullDataLoading = queries?.some(q => q.isLoading)
-  const gridFullData = queries?.flatMap(q => q.data?.items ?? [])
+
+  const gridDataQueries = useDataObjectGrids({
+    classIds: dataRelationClasses?.map(c => getByName(c)?.id ?? ''),
+    columns: visibleColumns,
+    dataValue: props.value
+  })
+  const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading)
+  const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
 
   const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '', t)
 
