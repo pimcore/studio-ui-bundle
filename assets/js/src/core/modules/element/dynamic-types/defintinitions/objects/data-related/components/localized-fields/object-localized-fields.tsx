@@ -45,7 +45,7 @@ export const ObjectLocalizedFields = ({ children, noteditable, className }: Obje
                 key={ index }
                 { ...child }
                 className={ className }
-                noteditable={ noteditable }
+                noteditable={ noteditable === true || child.noteditable }
               />
             ))}
           </Space>
