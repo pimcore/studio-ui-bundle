@@ -60,6 +60,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
 
   public onRegister(): void {
     console.log('📝 DocumentCloneJobHandler: Registering job in Redux store')
+    
     // Add the job to Redux when handler is registered
     store.dispatch(jobReceived(this.job))
   }
@@ -67,80 +68,118 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
   public handleMessage(message: any): void {
     console.log('📨 DocumentCloneJobHandler: Processing message for job', this.jobRunId, message.type)
     
-    if (message.type === 'update') {
-      const data = message.payload
+    try {
+      if (message.type === 'update') {
+        const data = message.payload
 
-      // Handle status updates first
-      if (data?.status !== undefined) {
-        console.log('🎯 Job status update:', data.status)
-        const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(data.status)
-        
-        if (isComplete) {
-          // Refresh tree for completion states
-          store.dispatch(refreshNodeChildren({ 
-            nodeId: this.config.parentFolder, 
-            elementType: this.config.elementType 
-          }))
+        // Validate message payload
+        if (!data) {
+          console.warn('⚠️ DocumentCloneJobHandler: Received update message with no payload')
+          return
+        }
 
-          // Map backend status to JobStatus
-          let jobStatus: JobStatus
-          switch (data.status) {
-            case 'finished':
-              jobStatus = JobStatus.SUCCESS
-              break
-            case 'finished_with_errors':
-              jobStatus = JobStatus.FINISHED_WITH_ERRORS
-              break
-            case 'failed':
-              jobStatus = JobStatus.FAILED
-              break
-            default:
-              jobStatus = JobStatus.FAILED
-          }
+        // Handle status updates first
+        if (data?.status !== undefined) {
+          this.handleStatusUpdate(data)
+        }
 
-          // Update job status
-          store.dispatch(jobUpdated({ 
-            id: this.job.id, 
-            changes: { status: jobStatus } 
-          }))
-          
-          // Unregister handler from registry
-          const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
-          jobRegistry.unregisterHandler(this.jobRunId)
-        } else if (data.status === 'running') {
-          // Set job to running when it starts processing
-          console.log('🏃 Job is now running')
-          store.dispatch(jobUpdated({ 
-            id: this.job.id, 
-            changes: { status: JobStatus.RUNNING } 
-          }))
+        // Handle progress updates
+        if (data?.progress !== undefined || (data?.currentStep !== undefined && data?.totalSteps !== undefined)) {
+          this.handleProgressUpdate(data)
         }
       }
-
-      // Handle progress updates
-      if (data?.progress !== undefined) {
-        console.log('📈 Updating progress to:', data.progress)
-        
-        // If we get progress but haven't set status to running yet, set it now
-        if (!data?.status) {
-          console.log('🏃 Job appears to be running (received progress update)')
-          store.dispatch(jobUpdated({ 
-            id: this.job.id, 
-            changes: { status: JobStatus.RUNNING } 
-          }))
-        }
-        
-        store.dispatch(jobUpdated({
-          id: this.job.id,
-          changes: {
-            config: {
-              ...this.job.config,
-              progress: data.progress as number
-            }
-          }
-        }))
-      }
+    } catch (error) {
+      console.error('❌ DocumentCloneJobHandler: Error processing message for job', this.jobRunId, error)
+      
+      // Don't re-throw the error to prevent it from bubbling up to the registry
+      // The job should continue processing other messages
     }
+  }
+
+  private handleStatusUpdate(data: any): void {
+    console.log('🎯 Job status update:', data.status)
+    const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(data.status)
+    
+    if (isComplete) {
+      // Refresh tree for completion states
+      store.dispatch(refreshNodeChildren({ 
+        nodeId: this.config.parentFolder, 
+        elementType: this.config.elementType 
+      }))
+
+      // Map backend status to JobStatus
+      let jobStatus: JobStatus
+      switch (data.status) {
+        case 'finished':
+          jobStatus = JobStatus.SUCCESS
+          break
+        case 'finished_with_errors':
+          jobStatus = JobStatus.FINISHED_WITH_ERRORS
+          break
+        case 'failed':
+          jobStatus = JobStatus.FAILED
+          break
+        default:
+          jobStatus = JobStatus.FAILED
+      }
+
+      // Update job status
+      store.dispatch(jobUpdated({ 
+        id: this.job.id, 
+        changes: { status: jobStatus } 
+      }))
+      
+      // Unregister handler from registry
+      const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
+      jobRegistry.unregisterHandler(this.jobRunId)
+    } else if (data.status === 'running') {
+      // Set job to running when it starts processing
+      console.log('🏃 Job is now running')
+      store.dispatch(jobUpdated({ 
+        id: this.job.id, 
+        changes: { status: JobStatus.RUNNING } 
+      }))
+    }
+  }
+
+  private handleProgressUpdate(data: any): void {
+    let calculatedProgress: number
+    
+    if (data?.currentStep !== undefined && data?.totalSteps !== undefined) {
+      // Validate step data
+      if (data.totalSteps <= 0 || data.currentStep < 1 || data.currentStep > data.totalSteps) {
+        console.warn('⚠️ Invalid step data:', { currentStep: data.currentStep, totalSteps: data.totalSteps })
+        return
+      }
+      
+      // Calculate percentage based on currentStep/totalSteps for multi-step jobs
+      calculatedProgress = Math.round(((data.currentStep - 1) / data.totalSteps) * 100)
+      console.log('📈 Multi-step progress: Step', data.currentStep, 'of', data.totalSteps, '=', calculatedProgress + '%')
+    } else {
+      // Use direct progress value if available
+      calculatedProgress = Math.max(0, Math.min(100, data.progress as number)) // Clamp between 0-100
+      console.log('📈 Direct progress:', calculatedProgress + '%')
+    }
+    
+    // If we get progress but haven't set status to running yet, set it now
+    if (!data?.status) {
+      console.log('🏃 Job appears to be running (received progress update)')
+      store.dispatch(jobUpdated({ 
+        id: this.job.id, 
+        changes: { status: JobStatus.RUNNING } 
+      }))
+    }
+    
+    store.dispatch(jobUpdated({
+      id: this.job.id,
+      changes: {
+        config: {
+          ...this.job.config,
+          progress: calculatedProgress,
+          lastUpdated: Date.now() // Force re-render by changing reference
+        }
+      }
+    }))
   }
 
   onUnregister(): void {
