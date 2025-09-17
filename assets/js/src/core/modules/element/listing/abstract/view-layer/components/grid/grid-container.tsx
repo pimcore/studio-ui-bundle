@@ -65,7 +65,12 @@ export const GridContainer = (): React.JSX.Element => {
           return
         }
 
-        const rowColumn = row.columns.find((r) => r.key === currentSelectedColumn.key && r.locale === currentSelectedColumn.locale)
+        let rowColumn = row.columns.find((r) => r.key === currentSelectedColumn.key && r.locale === currentSelectedColumn.locale)
+
+        if (currentSelectedColumn?.type === 'dataobject.classificationstore') {
+          console.log(row.columns);
+          rowColumn = row.columns.find((r) => r?.config?.keyId === currentSelectedColumn?.config?.keyId && r?.config?.groupId === currentSelectedColumn?.config?.groupId && r?.locale === currentSelectedColumn?.locale)
+        }
 
         if (rowColumn === undefined) {
           return

@@ -28,6 +28,7 @@ import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decora
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 
 enum ViewState {
   Edit = 'edit',
@@ -37,14 +38,16 @@ enum ViewState {
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
-  const { getAvailableColumnsDropdown } = useAvailableColumns()
+  const { availableColumns, getAvailableColumnsDropdown } = useAvailableColumns()
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
-  const { columns, setColumns, addColumn } = useTabGridConfig()
+  const { columns, setColumns, addColumn, addColumns } = useTabGridConfig()
+  console.log({columns})
   const { getId } = useElementId()
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
   const { selectedClassDefinition } = useClassDefinitionSelection()
+  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate });
 
   const { isLoading, isFetching, data } = useDataObjectListSavedGridConfigurationsQuery({
     classId: selectedClassDefinition!.id
@@ -93,8 +96,58 @@ export const GridConfigInner = (): React.JSX.Element => {
     }) as AvailableColumn[])
   }, [selectedColumns])
 
+  function onClassificationStoreUpdate(data) {
+    const fieldDefinition = data.modalContext;
+    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore');
+
+    if (baseColumn === undefined) {
+      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name);
+    }
+
+    const columnsToAdd: AvailableColumn[] = [];
+
+    if (data.type === 'group' || data.type === 'group-by-key') {
+      data.data.forEach((group) => {
+        group.keys.forEach((item) => {
+          const itemDefinition = item.definition;
+          console.log({
+            test: {
+            ...baseColumn,
+            frontendType: itemDefinition?.fieldtype,
+            config: {
+              keyId: item.id,
+              groupId: group.id,
+            },
+          }
+          })
+
+          columnsToAdd.push({
+            ...baseColumn,
+            key: `${baseColumn.key}`,
+            frontendType: itemDefinition?.fieldtype,
+            config: {
+              keyId: item.id,
+              groupId: group.id,
+              fieldDefinition: itemDefinition
+            },
+          })
+        })
+      })
+    }
+
+    addColumns(columnsToAdd);
+  }
+
   const onColumnClick = (column: AvailableColumn): void => {
-    addColumn(column)
+    if (column.type === 'dataobject.classificationstore') {
+      const fieldDefinition = column.config.fieldDefinition;
+      openModal({
+        ...fieldDefinition,
+        fieldName: fieldDefinition.name,
+      })
+    } else {
+      addColumn(column)
+    }
   }
 
   const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])

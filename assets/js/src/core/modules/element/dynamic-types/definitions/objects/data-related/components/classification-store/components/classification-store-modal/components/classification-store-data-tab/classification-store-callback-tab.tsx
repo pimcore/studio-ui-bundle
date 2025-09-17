@@ -24,14 +24,14 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
-import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import {
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByGroupQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import type { ClassificationStoreGroupLayout, ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreGroupLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { useClassificationStoreModal } from '../../../../provider/classifcation-store-modal-provider'
 
-interface ClassificationStoreDataTabProps<T> {
+interface ClassificationStoreCallbackTabProps<T> {
   tabId: TabId
   queryHook: (args: any, options?: any) => {
     isLoading: boolean
@@ -43,10 +43,9 @@ interface ClassificationStoreDataTabProps<T> {
   columns: any[]
 }
 
-export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
-  const { operations, values } = useKeyedList()
-  const { activeGroups, groupCollectionMapping, ...activeGroupsData } = values
+export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreCallbackTabProps<T>): React.JSX.Element => {
+  const { getSearchValue, setSearchValue, closeModal } = useClassificationStore()
+  const { fireUpdateEvent } = useClassificationStoreModal({});
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
@@ -78,7 +77,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   const fetchGroupLayoutData = async (groupId: string): Promise<any> => {
     return await fetchGroupLayout({
       // @todo can't work with an object id, should be based on the class id
-      objectId: 327,
+      objectId: 372,
       fieldName: queryArgs.fieldName,
       groupId: parseInt(groupId)
     }).unwrap()
@@ -91,30 +90,12 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const handleApplySelectionClick = async (): Promise<void> => {
     const selectedKeys = Object.keys(selectedItems ?? {})
-
-    const activeGroupsUpdate: Record<string, boolean> = {}
-    const groupCollectionMappingUpdate: Record<string, number | null> = {}
     const promisesList: Array<Promise<any>> = []
 
     for (const key of selectedKeys) {
       if (tabId === TabId.Collection) {
         const promise = fetchCollectionLayoutData(key).then((collectionData) => {
-          const groups = collectionData?.groups ?? []
-
-          return groups.filter((groupItem) => {
-            const isNewGroup = !has(activeGroupsData, String(groupItem.id))
-
-            if (isNewGroup) {
-              operations.add(String(groupItem?.id), {})
-
-              activeGroupsUpdate[groupItem.id] = true
-              groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
-
-              setIsApplyingSelection(true)
-            }
-
-            return isNewGroup
-          })
+          return collectionData.groups;
         })
 
         promisesList.push(promise)
@@ -122,16 +103,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
       if (tabId === TabId.Group) {
         const promise = fetchGroupLayoutData(key).then((groupData) => {
-          if (has(activeGroupsData, String(groupData?.id))) return []
-
-          operations.add(String(groupData?.id), {})
-
-          activeGroupsUpdate[groupData?.id] = true
-          groupCollectionMappingUpdate[groupData?.id] = null
-
-          setIsApplyingSelection(true)
-
-          return [groupData]
+          return groupData
         })
 
         promisesList.push(promise)
@@ -139,34 +111,25 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
       if (tabId === TabId.GroupByKey) {
         const groupId = key.split('-')[0]
+        const itemId = key.split('-')[1]
 
         const promise = fetchGroupLayoutData(groupId).then((groupData) => {
-          if (has(activeGroupsData, String(groupData?.id))) return []
-
-          operations.add(String(groupData?.id), {})
-
-          activeGroupsUpdate[groupData?.id] = true
-          groupCollectionMappingUpdate[groupData?.id] = null
-
-          setIsApplyingSelection(true)
-
-          return [groupData]
+          return {
+            ...groupData,
+            keys: groupData.keys.filter((item: any) => String(item.id) === itemId)
+          }
         })
 
         promisesList.push(promise)
       }
     }
 
-    const results = await Promise.all(promisesList)
-    const allGroups: ClassificationStoreGroupLayout2[] = results.flat()
-    const uniqueGroups = uniqBy(allGroups, 'id')
-    updateCurrentLayoutData([...currentLayoutData, ...uniqueGroups])
 
-    const updatedActiveGroups = { ...values.activeGroups, ...activeGroupsUpdate }
-    const updatedGroupCollectionMapping = { ...values.groupCollectionMapping, ...groupCollectionMappingUpdate }
-
-    operations.update('activeGroups', updatedActiveGroups, false)
-    operations.update('groupCollectionMapping', updatedGroupCollectionMapping, false)
+    const data = await Promise.all(promisesList)
+    fireUpdateEvent({
+      type: tabId,
+      data
+    });
 
     setIsApplyingSelection(false)
     closeModal()

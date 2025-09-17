@@ -21,7 +21,7 @@ import { GroupTab } from './tabs/group/group-tab'
 import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 
-interface ClassificationStoreModalProps extends ClassificationStoreProps {
+export interface ClassificationStoreModalProps extends ClassificationStoreProps {
   classId: string
   fieldName: string
 }

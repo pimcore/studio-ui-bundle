@@ -56,24 +56,45 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   }, [selectedColumns])
 
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    return JSON.stringify({
+    let columnIdentifier: Record<string, any> = {
       uuid: uuid(),
-      key: column?.key?.replaceAll('.', '**'),
+      key: column?.key,
       locale: column.locale
-    })
+    }
+
+    if (column.type === 'dataobject.classificationstore') {
+      columnIdentifier = {
+        uuid: uuid(),
+        locale: column.locale,
+        type: column.type,
+        config: {
+          keyId: column.config?.keyId,
+          groupId: column.config?.groupId
+        }
+      }
+    }
+
+    return JSON.stringify(columnIdentifier).replaceAll('.', '*||*')
   }
 
   const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
     try {
-      JSON.parse(columnIdentifier)
+      JSON.parse(columnIdentifier.replaceAll('*||*', '.'))
     } catch (e) {
       return undefined
     }
 
-    const { key, locale } = JSON.parse(columnIdentifier)
-    const formattedKey = key.replaceAll('**', '.')
+    const { key, locale, config, type } = JSON.parse(columnIdentifier.replaceAll('*||*', '.'))
 
-    return formattedSelectedColumns.find(column => column.key === formattedKey && column.locale === locale)!
+    console.log({key, locale, config, type})
+    console.log({formattedSelectedColumns})
+
+    if (type === 'dataobject.classificationstore' && config?.keyId !== undefined && config?.groupId !== undefined) {
+      // @todo also should check for something unique to identify same classifications in different class properties
+      return formattedSelectedColumns.find(column => type === 'dataobject.classificationstore' && column.config?.keyId === config.keyId && column.config?.groupId === config.groupId && column.locale === locale)
+    }
+
+    return formattedSelectedColumns.find(column => column.key === key && column.locale === locale)!
   }
 
   return useMemo(() => (
