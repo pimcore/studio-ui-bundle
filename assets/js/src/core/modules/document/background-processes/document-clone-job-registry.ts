@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { injectable } from 'inversify'
+import { injectable, inject } from 'inversify'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 
 export interface DocumentCloneJobHandler {
   jobRunId: string | number
@@ -19,9 +21,20 @@ export interface DocumentCloneJobHandler {
 @injectable()
 export class DocumentCloneJobRegistry {
   private activeJobs = new Map<string | number, DocumentCloneJobHandler>()
+  private globalSubscriptionId: string | null = null
+
+  constructor(
+    @inject(serviceIds.backgroundProcessor) private readonly backgroundProcessor: BackgroundProcessor
+  ) {}
 
   public registerJob(handler: DocumentCloneJobHandler): void {
     console.log('📝 DocumentCloneJobRegistry: Registering job', handler.jobRunId)
+    
+    // If this is the first job, establish global subscription
+    if (this.activeJobs.size === 0) {
+      this.ensureGlobalSubscription()
+    }
+    
     this.activeJobs.set(handler.jobRunId, handler)
   }
 
@@ -32,6 +45,44 @@ export class DocumentCloneJobRegistry {
       handler.cleanup()
     }
     this.activeJobs.delete(jobRunId)
+    
+    // If no more jobs, cleanup global subscription
+    if (this.activeJobs.size === 0) {
+      this.cleanupGlobalSubscription()
+    }
+  }
+
+  private ensureGlobalSubscription(): void {
+    if (this.globalSubscriptionId !== null) {
+      return // Already subscribed
+    }
+    
+    try {
+      this.globalSubscriptionId = this.backgroundProcessor.subscribeToProcessMessages({
+        processName: 'document-clone-global',
+        callback: (message: any) => {
+          this.routeMessage(message)
+        }
+      })
+      console.log('📡 DocumentCloneJobRegistry: Established global subscription with ID:', this.globalSubscriptionId)
+    } catch (error) {
+      console.error('❌ Failed to establish global subscription:', error)
+    }
+  }
+
+  private cleanupGlobalSubscription(): void {
+    if (this.globalSubscriptionId === null) {
+      return // Not subscribed
+    }
+    
+    try {
+      this.backgroundProcessor.unsubscribeFromProcessMessages(this.globalSubscriptionId)
+      console.log('🔌 DocumentCloneJobRegistry: Cleaned up global subscription')
+    } catch (error) {
+      console.error('❌ Failed to cleanup global subscription:', error)
+    } finally {
+      this.globalSubscriptionId = null
+    }
   }
 
   public routeMessage(message: any): void {

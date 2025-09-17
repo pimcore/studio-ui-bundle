@@ -11,7 +11,6 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type DocumentCloneGlobalProcess } from './document-clone-process'
 import { type DocumentCloneJobRegistry } from './document-clone-job-registry'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
@@ -47,7 +46,6 @@ export const startDocumentCloneJob = async (
   
   // Get required services from DI container
   const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
-  const globalProcess = container.get<DocumentCloneGlobalProcess>(serviceIds.documentCloneProcess)
   const jobRegistry = container.get<DocumentCloneJobRegistry>(serviceIds.documentCloneJobRegistry)
   
   try {
@@ -110,26 +108,6 @@ export const startDocumentCloneJob = async (
       changes: { status: JobStatus.RUNNING } 
     }))
     
-    // Setup background processor
-    try {
-      backgroundProcessor.registerProcess(globalProcess)
-      console.log('✅ Global process registered')
-    } catch (error) {
-      console.log('🔄 Global process already registered')
-    }
-    
-    // Subscribe to global process messages
-    let subscriberId: string | null = null
-    try {
-      subscriberId = backgroundProcessor.subscribeToProcessMessages({
-        processName: 'document-clone-global',
-        callback: () => {} // Routing happens in the registry
-      })
-      console.log('📡 Subscribed to global process with ID:', subscriberId)
-    } catch (error) {
-      console.log('📡 Already subscribed to global process')
-    }
-    
     // Register job handler for this specific jobRunId
     jobRegistry.registerJob({
       jobRunId,
@@ -189,15 +167,6 @@ export const startDocumentCloneJob = async (
             
             // Unregister job from registry
             jobRegistry.unregisterJob(jobRunId)
-            
-            // Cleanup subscription if no more active jobs
-            setTimeout(() => {
-              const hasActiveJobs = jobRegistry.hasActiveJobs()
-              if (!hasActiveJobs && subscriberId) {
-                console.log('🔌 Job completed, no active jobs remaining, unsubscribing from global process')
-                backgroundProcessor.unsubscribeFromProcessMessages(subscriberId)
-              }
-            }, 100)
           }
         }
       },
