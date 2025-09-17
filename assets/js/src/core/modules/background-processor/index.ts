@@ -9,16 +9,16 @@
  */
 
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type BackgroundJobProcess } from '@Pimcore/modules/background-processor/process/background-job-process'
-import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { type GlobalMessageProcess } from '@Pimcore/modules/background-processor/process/global-message-process'
+import { type GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
 
-// Export the generic background job system
-export { BackgroundJobRegistry } from './services/background-job-registry'
-export { BackgroundJobProcess } from './process/background-job-process'
+// Export the global message system
+export { GlobalMessageRegistry } from './services/global-message-registry'
+export { GlobalMessageProcess } from './process/global-message-process'
 export { AbstractBackgroundJobHandler } from './handlers/abstract-background-job-handler'
 export { AbstractJobRunIdHandler } from './handlers/abstract-job-run-id-handler'
 
@@ -28,17 +28,17 @@ export { DocumentCloneJobHandler } from './handlers/document-clone-job-handler'
 moduleSystem.registerModule({
   onInit: () => {
     // Get services
-    const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
-    const globalProcess = container.get<BackgroundJobProcess>(serviceIds.backgroundJobProcess)
+    const messageRegistry = container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)
+    const globalProcess = container.get<GlobalMessageProcess>(serviceIds.globalMessageProcess)
     
     // Register topics with the registry first
-    jobRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
+    messageRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
     
-    // Register the generic background job process
+    // Register the global message process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     backgroundProcessor.registerProcess(globalProcess)
 
     // Start the subscription
-    jobRegistry.startGlobalSubscription()
+    messageRegistry.startGlobalSubscription()
   }
 })

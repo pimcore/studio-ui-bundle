@@ -17,7 +17,7 @@ import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { type GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
 
@@ -145,8 +145,8 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
       }))
       
       // Unregister handler from registry
-      const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
-      jobRegistry.unregisterHandler(this.jobRunId)
+      const messageRegistry = container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)
+      messageRegistry.unregisterHandler(this.jobRunId)
     } else if (data.status === 'running') {
       // Set job to running when it starts processing
       console.log('🏃 Job is now running')

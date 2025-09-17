@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { type GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
 import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -45,7 +45,7 @@ export const startDocumentCloneJob = async (
   
   // Get required services from DI container
   const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
-  const jobRegistry = container.get<BackgroundJobRegistry>(serviceIds.backgroundJobRegistry)
+  const messageRegistry = container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)
   
   try {
     // Make API call using RTK Query endpoints
@@ -98,7 +98,7 @@ export const startDocumentCloneJob = async (
       isReplace: config.isReplace
     })
     
-    jobRegistry.registerHandler(handler)
+    messageRegistry.registerHandler(handler)
     
   } catch (error) {
     console.error('❌ Document clone job failed:', error)

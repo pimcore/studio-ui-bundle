@@ -40,9 +40,9 @@ export const serviceIds = {
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
   
-  // Generic background job system
-  backgroundJobProcess: 'BackgroundJobProcess',
-  backgroundJobRegistry: 'BackgroundJobRegistry',
+  // Global message system
+  globalMessageProcess: 'GlobalMessageProcess',
+  globalMessageRegistry: 'GlobalMessageRegistry',
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',

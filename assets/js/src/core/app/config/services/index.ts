@@ -203,8 +203,8 @@ import { DynamicTypeDocumentEditableRenderlet } from '@Pimcore/modules/element/d
 import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
 import { DynamicTypeDocumentEditableScheduledblock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { BackgroundJobProcess } from '@Pimcore/modules/background-processor/process/background-job-process'
-import { BackgroundJobRegistry } from '@Pimcore/modules/background-processor/services/background-job-registry'
+import { GlobalMessageProcess } from '@Pimcore/modules/background-processor/process/global-message-process'
+import { GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
 import { DynamicTypeThemeStudioDefaultDark } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-dark/dynamic-type-theme-studio-default-dark'
@@ -497,9 +497,9 @@ container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobCompone
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()
 
-// Generic background job system
-container.bind(serviceIds.backgroundJobRegistry).to(BackgroundJobRegistry).inSingletonScope()
-container.bind(serviceIds.backgroundJobProcess).to(BackgroundJobProcess).inSingletonScope()
+// Global message system
+container.bind(serviceIds.globalMessageRegistry).to(GlobalMessageRegistry).inSingletonScope()
+container.bind(serviceIds.globalMessageProcess).to(GlobalMessageProcess).inSingletonScope()
 
 // Asset services
 container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSingletonScope()
