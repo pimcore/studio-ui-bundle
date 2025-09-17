@@ -85,7 +85,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     return (
-      <div style={ { position: 'relative' } }>
+      <div style={ { position: 'relative', width: '100%' } }>
         <Input.TextArea
           autoSize={ { minRows: 2 } }
           onBlur={ onBlur }
