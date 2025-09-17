@@ -24,6 +24,7 @@ import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
+import { useDocumentPaste } from '@Pimcore/modules/document/actions/paste/use-document-paste'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DocumentTreeContextMenuProps {
@@ -43,11 +44,60 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { publishTreeContextMenuItem } = usePublish('document')
   const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
   const { convertTreeContextMenuItem, canConvert } = useConvert()
+  const {
+    pasteAsChildRecursiveTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteAsChildTreeContextMenuItem,
+    pasteAsNewLanguageVariantTreeContextMenuItem,
+    pasteAsNewLanguageVariantRecursiveTreeContextMenuItem,
+    pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteOnlyContentsTreeContextMenuItem,
+    pasteInheritanceTreeContextMenuItem,
+    pasteAsChildRecursiveInheritanceTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
+    pasteAsChildInheritanceTreeContextMenuItem,
+    pasteAsNewLanguageVariantInheritanceTreeContextMenuItem,
+    pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
+    pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
+    isPasteMenuHidden,
+    isPasteInheritanceMenuHidden,
+    LanguageModal
+  } = useDocumentPaste()
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
+    {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    },
+    {
+      label: t('document.paste-inheritance'),
+      key: 'paste-inheritance',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteInheritanceMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveInheritanceTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
+        pasteAsChildInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
+        pasteInheritanceTreeContextMenuItem(node)
+      ]
+    },
     cutTreeContextMenuItem(node),
     pasteCutContextMenuItem(node),
     publishTreeContextMenuItem(node),
@@ -90,9 +140,12 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   ]
 
   return (
-    <Menu
-      dataTestId={ createContextMenuContainerTestId('document', node.id) }
-      items={ items }
-    />
+    <>
+      <Menu
+        dataTestId={ createContextMenuContainerTestId('document', node.id) }
+        items={ items }
+      />
+      <LanguageModal />
+    </>
   )
 }
