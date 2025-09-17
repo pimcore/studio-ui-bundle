@@ -11,7 +11,7 @@
 import React from 'react'
 import { isEmpty } from 'lodash'
 import { type VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, type ColumnMeta, createColumnHelper } from '@tanstack/react-table'
 import type { ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { getElementCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 import { Flex } from 'antd'
@@ -43,6 +43,31 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
     )
   }
 
+  const getMetaData = (column: VisibleFieldDefinition, isAdvancedDataObjectColumn: boolean): ColumnMeta<unknown, never> | undefined => {
+    const key = column.key
+
+    return key === 'fullpath'
+      ? {
+          type: 'element',
+          autoWidth: true,
+          editable: false,
+          config: getElementCellConfig(disabled)
+        }
+      : {
+          columnKey: key,
+          type: isAdvancedDataObjectColumn ? column.type : column.frontendType,
+          editable: false,
+          ...(!isEmpty(column.config) && {
+            config: isAdvancedDataObjectColumn
+              ? {
+                  dataObjectType: column.frontendType,
+                  dataObjectConfig: column.config
+                }
+              : getElementCellConfig(disabled)
+          })
+        }
+  }
+
   for (const column of visibleFieldDefinitions ?? []) {
     const key = column.key
     const type = column.type
@@ -60,26 +85,7 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
     columnDefinition.push(
       columnHelper.accessor(key, {
         header: isAdvancedDataObjectColumn ? advancedDataObjectHeader : defaultDataObjectHeader,
-        meta: key === 'fullpath'
-          ? {
-              type: 'element',
-              autoWidth: true,
-              editable: false,
-              config: getElementCellConfig(disabled)
-            }
-          : {
-              columnKey: key,
-              type: isAdvancedDataObjectColumn ? column.type : column.frontendType,
-              editable: false,
-              ...(!isEmpty(column.config) && {
-                config: isAdvancedDataObjectColumn
-                  ? {
-                      dataObjectType: column.frontendType,
-                      dataObjectConfig: column.config
-                    }
-                  : getElementCellConfig(disabled)
-              })
-            },
+        meta: getMetaData(column, isAdvancedDataObjectColumn),
         size: getColumnWidth(key),
         ...(isNonEmptyString(pathFormatterClass) ? { cell: renderFullPathCell } : {})
       })
