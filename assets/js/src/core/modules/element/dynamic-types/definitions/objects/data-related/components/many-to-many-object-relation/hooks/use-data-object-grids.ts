@@ -17,18 +17,20 @@ import {
   useDataObjectGetGridQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
+import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 
 interface IUseDataObjectGridsProps {
   classIds?: string[]
+  convertClassName: UseClassDefinitionsReturn['getByName']
   columns?: GridColumnRequest[]
   dataValue?: ManyToManyRelationValue | null
 }
 
-export const useDataObjectGrids = ({ classIds, columns, dataValue }: IUseDataObjectGridsProps): Array<TypedUseQueryHookResult<DataObjectGetGridApiResponse, DataObjectGetGridApiArg, any, any>> => {
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): Array<TypedUseQueryHookResult<DataObjectGetGridApiResponse, DataObjectGetGridApiArg, any, any>> => {
   return (classIds ?? []).map((classId: string) =>
     useDataObjectGetGridQuery(
       {
-        classId,
+        classId: convertClassName(classId)?.id ?? '',
         body: {
           folderId: 1,
           columns,

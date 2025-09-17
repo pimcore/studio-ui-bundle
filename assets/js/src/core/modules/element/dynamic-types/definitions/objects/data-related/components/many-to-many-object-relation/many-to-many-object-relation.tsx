@@ -137,7 +137,8 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   )
 
   const gridDataQueries = useDataObjectGrids({
-    classIds: dataRelationClasses?.map(c => getByName(c)?.id ?? ''),
+    classIds: dataRelationClasses,
+    convertClassName: getByName,
     columns: visibleColumns,
     dataValue: props.value
   })
