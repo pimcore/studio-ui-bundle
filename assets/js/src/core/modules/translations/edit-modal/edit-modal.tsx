@@ -54,6 +54,25 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const showOnlyHtmlTab = originalContentIsHtml && currentFormValueIsHtml
   const showRestoreButton = currentFormValueIsHtml
 
+  const handleTabChange = (key: string): void => {
+    const currentValues = form.getFieldsValue()
+    let processedValue = currentValues.translation ?? ''
+
+    if (key === 'html' && activeTabKey === 'plain-text') {
+      processedValue = processedValue.replace(/\n/g, '<br>')
+    }
+
+    else if (key === 'plain-text' && activeTabKey === 'html') {
+      processedValue = processedValue.replace(/<br\s*\/?>/gi, '\n')
+    }
+
+    form.setFieldsValue({
+      translation: processedValue
+    })
+    setCurrentFormValue(processedValue)
+    setActiveTabKey(key)
+  }
+
   useEffect(() => {
     if (translationRow !== null && props.open) {
       form.setFieldsValue({
@@ -102,7 +121,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       children: (
         <Form.Item name="translation">
           <TextArea
-            rows={ 3 }
+            autoSize={ { minRows: 3, maxRows: 15 } }
           />
         </Form.Item>
       )
@@ -175,7 +194,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
           activeKey={ defaultActiveKey }
           destroyInactiveTabPane
           items={ visibleTabItems }
-          onChange={ (key) => { setActiveTabKey(key) } }
+          onChange={ handleTabChange }
         />
       </Form>
     </Modal>
