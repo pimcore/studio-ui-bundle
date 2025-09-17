@@ -42,8 +42,8 @@ export const serviceIds = {
   backgroundProcessor: 'BackgroundProcessorService',
 
   // Global message system
-  globalMessageProcess: 'GlobalMessageProcess',
-  globalMessageRegistry: 'GlobalMessageRegistry',
+  globalMessageBusProcess: 'GlobalMessageBusProcess',
+  globalMessageBus: 'GlobalMessageBus',
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',

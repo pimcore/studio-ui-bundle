@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractJobRunIdHandler } from '@Pimcore/modules/background-processor/handlers/abstract-job-run-id-handler'
+import { AbstractJobRunIdHandler } from '@Pimcore/modules/global-message-bus/handlers/abstract/abstract-job-run-id-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { useGlobalMessageRegistry } from '@Pimcore/modules/background-processor/hooks/use-global-message-registry'
+import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
 import { isNil } from 'lodash'
@@ -144,7 +144,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
       }))
 
       // Unregister handler from registry
-      const messageRegistry = useGlobalMessageRegistry()
+      const messageRegistry = useGlobalMessageBus()
       messageRegistry.unregisterHandler(String(this.jobRunId))
     } else if (data.status === 'running') {
       // Set job to running when it starts processing

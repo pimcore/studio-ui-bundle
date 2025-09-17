@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AbstractMercureMessage } from '../process/abstract-mercure-process'
+import { type AbstractMercureMessage } from '../../background-processor/process/abstract-mercure-process'
 
-export abstract class AbstractBackgroundJobHandler {
+export abstract class AbstractMessageHandler {
   /**
    * Static topics that this handler type needs to listen to
    * Override in concrete implementations

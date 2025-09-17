@@ -10,12 +10,12 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
+import { type GlobalMessageBus } from '../services/global-message-bus'
 
 /**
- * Hook to access the GlobalMessageRegistry service
+ * Hook to access the GlobalMessageBus service
  * Provides easy access to register/unregister message handlers
  */
-export const useGlobalMessageRegistry = (): GlobalMessageRegistry => {
-  return container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)
+export const useGlobalMessageBus = (): GlobalMessageBus => {
+  return container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
 }

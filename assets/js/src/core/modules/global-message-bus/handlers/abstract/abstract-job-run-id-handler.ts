@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractBackgroundJobHandler } from './abstract-background-job-handler'
-import { type AbstractMercureMessage } from '../process/abstract-mercure-process'
+import { AbstractMessageHandler } from './abstract-message-handler'
+import { type AbstractMercureMessage } from '../../../background-processor/process/abstract-mercure-process'
 
-export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandler {
+export abstract class AbstractJobRunIdHandler extends AbstractMessageHandler {
   protected readonly jobRunId: string | number
 
   constructor (jobRunId: string | number) {
@@ -20,7 +20,6 @@ export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandl
   }
 
   public shouldHandle (message: AbstractMercureMessage): boolean {
-    // Check if message contains jobRunId that matches this handler
     const messageJobRunId = (message.payload as any)?.jobRunId
     return messageJobRunId !== undefined && messageJobRunId === this.jobRunId
   }
@@ -28,9 +27,4 @@ export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandl
   public getId (): string | number {
     return this.jobRunId
   }
-
-  /**
-   * Process the message - to be implemented by concrete handlers
-   */
-  abstract handleMessage (message: any): void
 }

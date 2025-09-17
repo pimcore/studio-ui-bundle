@@ -11,7 +11,7 @@
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type AbstractBackgroundJobHandler } from '@Pimcore/modules/background-processor/handlers/abstract-background-job-handler'
+import { type AbstractMessageHandler } from '../handlers/abstract/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { debounce, isNil } from 'lodash'
 
@@ -22,8 +22,8 @@ interface BufferedMessage {
 }
 
 @injectable()
-export class GlobalMessageRegistry {
-  private readonly activeHandlers = new Map<string | number, AbstractBackgroundJobHandler>()
+export class GlobalMessageBus {
+  private readonly activeHandlers = new Map<string | number, AbstractMessageHandler>()
   private globalSubscriptionId: string | null = null
   private readonly registeredTopics = new Set<string>()
 
@@ -46,7 +46,7 @@ export class GlobalMessageRegistry {
    */
   public registerTopics (topics: string[]): void {
     topics.forEach(topic => this.registeredTopics.add(topic))
-    console.log(`📡 GlobalMessageRegistry: Registered ${topics.length} topics. Total: ${this.registeredTopics.size}`)
+    console.log(`📡 GlobalMessageBus: Registered ${topics.length} topics. Total: ${this.registeredTopics.size}`)
   }
 
   /**
@@ -56,8 +56,8 @@ export class GlobalMessageRegistry {
     return Array.from(this.registeredTopics)
   }
 
-  public registerHandler (handler: AbstractBackgroundJobHandler): void {
-    console.log('📝 GlobalMessageRegistry: Registering handler', handler.getId())
+  public registerHandler (handler: AbstractMessageHandler): void {
+    console.log('📝 GlobalMessageBus: Registering handler', handler.getId())
 
     // Validate that the handler's topics are registered in the process
     this.validateHandlerTopics(handler)
@@ -73,7 +73,7 @@ export class GlobalMessageRegistry {
     this.replayBufferedMessages(handler)
   }
 
-  private validateHandlerTopics (handler: AbstractBackgroundJobHandler): void {
+  private validateHandlerTopics (handler: AbstractMessageHandler): void {
     const handlerClass = handler.constructor as any
     const handlerTopics: string[] = handlerClass.TOPICS ?? []
 
@@ -81,9 +81,9 @@ export class GlobalMessageRegistry {
     for (const topic of handlerTopics) {
       if (!this.registeredTopics.has(topic)) {
         const errorMessage = [
-          `❌ GlobalMessageRegistry: Handler "${String(handler.getId())}" uses unregistered topic "${topic}".`,
+          `❌ GlobalMessageBus: Handler "${String(handler.getId())}" uses unregistered topic "${topic}".`,
           '💡 To register this topic, add it to your module\'s initialization:',
-          '   const registry = container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)',
+          '   const registry = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)',
           `   registry.registerTopics(['${topic}'])`,
           `📋 Available topics: [${this.getRegisteredTopics().join(', ')}]`
         ].join('\n')
@@ -93,11 +93,11 @@ export class GlobalMessageRegistry {
       }
     }
 
-    console.log(`✅ GlobalMessageRegistry: Handler "${handler.getId()}" topics validated:`, handlerTopics)
+    console.log(`✅ GlobalMessageBus: Handler "${handler.getId()}" topics validated:`, handlerTopics)
   }
 
   public unregisterHandler (handlerId: string | number): void {
-    console.log('🗑️ GlobalMessageRegistry: Unregistering handler', handlerId)
+    console.log('🗑️ GlobalMessageBus: Unregistering handler', handlerId)
     const handler = this.activeHandlers.get(handlerId)
     if (!isNil(handler?.onUnregister)) {
       handler.onUnregister()
@@ -112,21 +112,21 @@ export class GlobalMessageRegistry {
 
     try {
       this.globalSubscriptionId = this.backgroundProcessor.subscribeToProcessMessages({
-        processName: 'global-message-process',
+        processName: 'global-message-bus-process',
         callback: (message: any) => {
           // Route complete Mercure message
-          console.log('📡 GlobalMessageRegistry: Received message via global subscription:', message.type)
+          console.log('📡 GlobalMessageBus: Received message via global subscription:', message.type)
           this.routeMessage(message as AbstractMercureMessage)
         }
       })
-      console.log('📡 GlobalMessageRegistry: Established global subscription with ID:', this.globalSubscriptionId)
+      console.log('📡 GlobalMessageBus: Established global subscription with ID:', this.globalSubscriptionId)
     } catch (error) {
       console.error('❌ Failed to establish global subscription:', error)
     }
   }
 
   public routeMessage (mercureMessage: AbstractMercureMessage): void {
-    console.log('📨 GlobalMessageRegistry: Routing message', mercureMessage.type)
+    console.log('📨 GlobalMessageBus: Routing message', mercureMessage.type)
 
     // Validate topic registration
     const eventData = JSON.parse(mercureMessage.event.data as string)
@@ -137,7 +137,7 @@ export class GlobalMessageRegistry {
     }
 
     // Find all handlers that should handle this message
-    const matchingHandlers: AbstractBackgroundJobHandler[] = []
+    const matchingHandlers: AbstractMessageHandler[] = []
 
     for (const handler of this.activeHandlers.values()) {
       if (handler.shouldHandle(mercureMessage)) {
@@ -146,7 +146,7 @@ export class GlobalMessageRegistry {
     }
 
     if (matchingHandlers.length === 0) {
-      console.log('🔍 GlobalMessageRegistry: No handler found for message', mercureMessage.type, '- buffering message. Active handlers:', Array.from(this.activeHandlers.keys()))
+      console.log('🔍 GlobalMessageBus: No handler found for message', mercureMessage.type, '- buffering message. Active handlers:', Array.from(this.activeHandlers.keys()))
 
       // Buffer the message for potential future handlers
       this.bufferMessage(mercureMessage)
@@ -155,11 +155,11 @@ export class GlobalMessageRegistry {
 
     // Process message with all matching handlers
     for (const handler of matchingHandlers) {
-      console.log('📨 GlobalMessageRegistry: Processing message with handler', handler.getId(), mercureMessage.type)
+      console.log('📨 GlobalMessageBus: Processing message with handler', handler.getId(), mercureMessage.type)
       try {
         handler.handleMessage(mercureMessage)
       } catch (error) {
-        console.error('❌ GlobalMessageRegistry: Error processing message with handler', handler.getId(), error)
+        console.error('❌ GlobalMessageBus: Error processing message with handler', handler.getId(), error)
       }
     }
   }
@@ -167,7 +167,7 @@ export class GlobalMessageRegistry {
   private bufferMessage (mercureMessage: AbstractMercureMessage): void {
     // Clean up buffer if it's getting too large
     if (this.messageBuffer.length >= this.MAX_BUFFER_SIZE) {
-      console.warn('🚫 GlobalMessageRegistry: Message buffer full, removing oldest messages')
+      console.warn('🚫 GlobalMessageBus: Message buffer full, removing oldest messages')
       this.messageBuffer.splice(0, this.messageBuffer.length - this.MAX_BUFFER_SIZE + 100) // Keep some headroom
     }
 
@@ -176,14 +176,14 @@ export class GlobalMessageRegistry {
       timestamp: Date.now()
     })
 
-    console.log('📦 GlobalMessageRegistry: Buffered message', mercureMessage.type, '- buffer size:', this.messageBuffer.length)
+    console.log('📦 GlobalMessageBus: Buffered message', mercureMessage.type, '- buffer size:', this.messageBuffer.length)
 
     // Trigger debounced cleanup after message activity
     this.debouncedCleanup()
   }
 
-  private replayBufferedMessages (handler: AbstractBackgroundJobHandler): void {
-    console.log('🔄 GlobalMessageRegistry: Replaying buffered messages for handler', handler.getId())
+  private replayBufferedMessages (handler: AbstractMessageHandler): void {
+    console.log('🔄 GlobalMessageBus: Replaying buffered messages for handler', handler.getId())
 
     const matchingMessages: BufferedMessage[] = []
 
@@ -195,17 +195,17 @@ export class GlobalMessageRegistry {
     }
 
     if (matchingMessages.length > 0) {
-      console.log('📨 GlobalMessageRegistry: Found', matchingMessages.length, 'buffered messages for handler', handler.getId())
+      console.log('📨 GlobalMessageBus: Found', matchingMessages.length, 'buffered messages for handler', handler.getId())
 
       // Replay messages in chronological order
       matchingMessages.sort((a, b) => a.timestamp - b.timestamp)
 
       for (const bufferedMsg of matchingMessages) {
-        console.log('📨 GlobalMessageRegistry: Replaying buffered message', bufferedMsg.mercureMessage.type, 'for handler', handler.getId())
+        console.log('📨 GlobalMessageBus: Replaying buffered message', bufferedMsg.mercureMessage.type, 'for handler', handler.getId())
         try {
           handler.handleMessage(bufferedMsg.mercureMessage)
         } catch (error) {
-          console.error('❌ GlobalMessageRegistry: Error replaying message for handler', handler.getId(), error)
+          console.error('❌ GlobalMessageBus: Error replaying message for handler', handler.getId(), error)
         }
       }
 
@@ -226,7 +226,7 @@ export class GlobalMessageRegistry {
 
     const removedCount = originalSize - this.messageBuffer.length
     if (removedCount > 0) {
-      console.log('🧹 GlobalMessageRegistry: Cleaned up', removedCount, 'expired messages from buffer')
+      console.log('🧹 GlobalMessageBus: Cleaned up', removedCount, 'expired messages from buffer')
     }
   }
 

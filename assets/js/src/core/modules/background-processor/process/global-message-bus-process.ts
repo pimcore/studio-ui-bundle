@@ -11,15 +11,15 @@
 import { injectable, inject } from 'inversify'
 import { AbstractMercureProcess, type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type GlobalMessageRegistry } from '@Pimcore/modules/background-processor/services/global-message-registry'
+import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 
 @injectable()
-export class GlobalMessageProcess extends AbstractMercureProcess {
-  protected name: string = 'global-message-process'
-  protected description: string = 'Global process for message handling operations'
+export class GlobalMessageBusProcess extends AbstractMercureProcess {
+  protected name: string = 'global-message-bus-process'
+  protected description: string = 'Global process for message bus handling operations'
 
   constructor (
-    @inject(serviceIds.globalMessageRegistry) private readonly messageRegistry: GlobalMessageRegistry
+    @inject(serviceIds.globalMessageBus) private readonly messageRegistry: GlobalMessageBus
   ) {
     super()
   }
@@ -30,12 +30,12 @@ export class GlobalMessageProcess extends AbstractMercureProcess {
 
   public start (): void {
     super.start()
-    console.log('🚀 GlobalMessageProcess started')
+    console.log('🚀 GlobalMessageBusProcess started')
   }
 
   public cancel (): void {
     super.cancel()
-    console.log('🛑 GlobalMessageProcess cancelled')
+    console.log('🛑 GlobalMessageBusProcess cancelled')
   }
 
   protected sendMessage (message: AbstractMercureMessage): void {

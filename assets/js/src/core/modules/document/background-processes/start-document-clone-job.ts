@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useGlobalMessageRegistry } from '@Pimcore/modules/background-processor'
-import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
+import { useGlobalMessageBus } from '@Pimcore/modules/background-processor'
+import { DocumentCloneJobHandler } from '@Pimcore/modules/global-message-bus/handlers/document-clone-job-handler'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { store } from '@Pimcore/app/store'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -41,7 +41,7 @@ export const startDocumentCloneJob = async (
   console.log('🚀 Starting document clone job with config:', config)
 
   // Get message registry using the hook
-  const messageRegistry = useGlobalMessageRegistry()
+  const messageRegistry = useGlobalMessageBus()
 
   try {
     // Make API call using RTK Query endpoints
