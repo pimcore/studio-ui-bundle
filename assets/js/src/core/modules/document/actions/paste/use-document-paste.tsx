@@ -8,24 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { Element } from '@Pimcore/modules/element/element-helper'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { setNodeFetching, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@sdk/app'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { useDocumentCloneMutation, useDocumentReplaceContentMutation } from '@Pimcore/modules/document/document-api-slice.gen'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
 import { Modal, Select, Form } from 'antd'
 import { type DocumentCloneParameters } from '@Pimcore/modules/document/document-api-slice.gen'
-import { isNil, isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { startDocumentCloneJob } from '../../background-processes/start-document-clone-job'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
@@ -49,7 +50,7 @@ export interface UseDocumentPasteHookReturn {
   pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   isPasteMenuHidden: (node: Element | TreeNodeProps) => boolean
   isPasteInheritanceMenuHidden: (node: Element | TreeNodeProps) => boolean
-  LanguageModal: React.ComponentType<{}>
+  LanguageModal: React.ComponentType<Record<string, unknown>>
 }
 
 export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
@@ -63,7 +64,7 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
   const { isPasteHidden } = usePasteVisibility('document')
   const settings = useSettings()
   const { addJob, updateJob } = useJobs()
-  
+
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
   const [languageForm] = Form.useForm()
   const [currentLanguageAction, setCurrentLanguageAction] = useState<{
@@ -110,7 +111,6 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
         updateJob,
         dispatch
       )
-      
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
     } finally {
@@ -148,7 +148,6 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
         updateJob,
         dispatch
       )
-      
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
     } finally {
@@ -319,7 +318,7 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
     }
   }
 
-  // Inheritance paste options  
+  // Inheritance paste options
   const pasteInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste'),
@@ -462,24 +461,27 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
     }
   }
 
-  const LanguageModal: React.ComponentType<{}> = () => (
+  const LanguageModal: React.ComponentType<Record<string, unknown>> = () => (
     <Modal
-      title={ t('document.paste-as-new-language-variant') }
-      open={ isLanguageModalVisible }
-      onOk={ handleLanguageModalOk }
-      onCancel={ handleLanguageModalCancel }
-      okText={ t('apply') }
       cancelText={ t('cancel') }
+      okText={ t('apply') }
+      onCancel={ handleLanguageModalCancel }
+      onOk={ handleLanguageModalOk }
+      open={ isLanguageModalVisible }
+      title={ t('document.paste-as-new-language-variant') }
     >
-      <Form form={ languageForm } layout="vertical">
+      <Form
+        form={ languageForm }
+        layout="vertical"
+      >
         <Form.Item
-          name="language"
           label={ t('language') }
+          name="language"
           rules={ [{ required: true, message: t('document.language-required') }] }
         >
           <Select
-            placeholder={ t('document.select-language-for-new-document') }
             options={ availableLanguages }
+            placeholder={ t('document.select-language-for-new-document') }
           />
         </Form.Item>
       </Form>

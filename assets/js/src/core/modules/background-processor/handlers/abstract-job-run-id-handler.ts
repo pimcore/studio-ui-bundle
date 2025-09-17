@@ -14,23 +14,23 @@ import { type AbstractMercureMessage } from '../process/abstract-mercure-process
 export abstract class AbstractJobRunIdHandler extends AbstractBackgroundJobHandler {
   protected readonly jobRunId: string | number
 
-  constructor(jobRunId: string | number) {
+  constructor (jobRunId: string | number) {
     super()
     this.jobRunId = jobRunId
   }
 
-  public shouldHandle(message: AbstractMercureMessage): boolean {
+  public shouldHandle (message: AbstractMercureMessage): boolean {
     // Check if message contains jobRunId that matches this handler
     const messageJobRunId = (message.payload as any)?.jobRunId
     return messageJobRunId !== undefined && messageJobRunId === this.jobRunId
   }
 
-  public getId(): string | number {
+  public getId (): string | number {
     return this.jobRunId
   }
 
   /**
    * Process the message - to be implemented by concrete handlers
    */
-  abstract handleMessage(message: any): void
+  abstract handleMessage (message: any): void
 }

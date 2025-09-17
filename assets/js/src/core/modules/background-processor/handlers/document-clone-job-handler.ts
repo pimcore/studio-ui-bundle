@@ -13,11 +13,12 @@ import { type AbstractMercureMessage } from '@Pimcore/modules/background-process
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
-import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
+import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useGlobalMessageRegistry } from '@Pimcore/modules/background-processor/hooks/use-global-message-registry'
 import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
+import { isNil } from 'lodash'
 
 export interface DocumentCloneJobConfig {
   title: string
@@ -27,7 +28,7 @@ export interface DocumentCloneJobConfig {
   targetId: number
   parameters?: any
   isReplace?: boolean
-  onProgress?: (progress: { currentStep: number; totalSteps: number; message: string }) => void
+  onProgress?: (progress: { currentStep: number, totalSteps: number, message: string }) => void
   onComplete?: (success: boolean) => void
   onCleanup?: () => void
 }
@@ -48,15 +49,15 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
   ]
 
   private readonly config: DocumentCloneJobConfig
-  private readonly job: any
+  private readonly job: AbstractJob
 
-  constructor(
+  constructor (
     jobRunId: string | number,
     config: DocumentCloneJobConfig
   ) {
     super(jobRunId)
     this.config = config
-    
+
     // Create the Redux job internally
     this.job = createDocumentCloneBackgroundJob({
       title: config.title,
@@ -71,22 +72,22 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
     })
   }
 
-  public onRegister(): void {
+  public onRegister (): void {
     console.log('📝 DocumentCloneJobHandler: Registering job in Redux store')
-    
+
     // Add the job to Redux when handler is registered
     store.dispatch(jobReceived(this.job))
   }
 
-  public handleMessage(message: AbstractMercureMessage): void {
+  public handleMessage (message: AbstractMercureMessage): void {
     console.log('📨 DocumentCloneJobHandler: Processing message for job', this.jobRunId, message.type)
-    
+
     try {
       if (message.type === 'update') {
         const data = message.payload as any
 
         // Validate message payload
-        if (!data) {
+        if (isNil(data)) {
           console.warn('⚠️ DocumentCloneJobHandler: Received update message with no payload')
           return
         }
@@ -103,21 +104,21 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
       }
     } catch (error) {
       console.error('❌ DocumentCloneJobHandler: Error processing message for job', this.jobRunId, error)
-      
+
       // Don't re-throw the error to prevent it from bubbling up to the registry
       // The job should continue processing other messages
     }
   }
 
-  private handleStatusUpdate(data: any): void {
+  private handleStatusUpdate (data: any): void {
     console.log('🎯 Job status update:', data.status)
-    const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(data.status)
-    
+    const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
+
     if (isComplete) {
       // Refresh tree for completion states
-      store.dispatch(refreshNodeChildren({ 
-        nodeId: this.config.parentFolder, 
-        elementType: this.config.elementType 
+      store.dispatch(refreshNodeChildren({
+        nodeId: this.config.parentFolder,
+        elementType: this.config.elementType
       }))
 
       // Map backend status to JobStatus
@@ -137,34 +138,34 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
       }
 
       // Update job status
-      store.dispatch(jobUpdated({ 
-        id: this.job.id, 
-        changes: { status: jobStatus } 
+      store.dispatch(jobUpdated({
+        id: this.job.id,
+        changes: { status: jobStatus }
       }))
-      
+
       // Unregister handler from registry
       const messageRegistry = useGlobalMessageRegistry()
-      messageRegistry.unregisterHandler(this.jobRunId)
+      messageRegistry.unregisterHandler(String(this.jobRunId))
     } else if (data.status === 'running') {
       // Set job to running when it starts processing
       console.log('🏃 Job is now running')
-      store.dispatch(jobUpdated({ 
-        id: this.job.id, 
-        changes: { status: JobStatus.RUNNING } 
+      store.dispatch(jobUpdated({
+        id: this.job.id,
+        changes: { status: JobStatus.RUNNING }
       }))
     }
   }
 
-  private handleProgressUpdate(data: any): void {
+  private handleProgressUpdate (data: any): void {
     let calculatedProgress: number
-    
+
     if (data?.currentStep !== undefined && data?.totalSteps !== undefined) {
       // Validate step data
       if (data.totalSteps <= 0 || data.currentStep < 1 || data.currentStep > data.totalSteps) {
         console.warn('⚠️ Invalid step data:', { currentStep: data.currentStep, totalSteps: data.totalSteps })
         return
       }
-      
+
       // Calculate percentage based on currentStep/totalSteps for multi-step jobs
       calculatedProgress = Math.round(((data.currentStep - 1) / data.totalSteps) * 100)
       console.log('📈 Multi-step progress: Step', data.currentStep, 'of', data.totalSteps, '=', calculatedProgress + '%')
@@ -173,21 +174,21 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
       calculatedProgress = Math.max(0, Math.min(100, data.progress as number)) // Clamp between 0-100
       console.log('📈 Direct progress:', calculatedProgress + '%')
     }
-    
+
     // If we get progress but haven't set status to running yet, set it now
-    if (!data?.status) {
+    if (isNil(data?.status)) {
       console.log('🏃 Job appears to be running (received progress update)')
-      store.dispatch(jobUpdated({ 
-        id: this.job.id, 
-        changes: { status: JobStatus.RUNNING } 
+      store.dispatch(jobUpdated({
+        id: this.job.id,
+        changes: { status: JobStatus.RUNNING }
       }))
     }
-    
+
     store.dispatch(jobUpdated({
       id: this.job.id,
       changes: {
         config: {
-          ...this.job.config,
+          ...(this.job.config ?? {}),
           progress: calculatedProgress,
           lastUpdated: Date.now() // Force re-render by changing reference
         }
@@ -195,7 +196,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
     }))
   }
 
-  onUnregister(): void {
+  onUnregister (): void {
     console.log('🧹 Unregistering job handler', this.jobRunId)
   }
 }

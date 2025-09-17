@@ -10,10 +10,11 @@
 
 import { useGlobalMessageRegistry } from '@Pimcore/modules/background-processor'
 import { DocumentCloneJobHandler } from '@Pimcore/modules/background-processor/handlers/document-clone-job-handler'
-import { ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { store } from '@Pimcore/app/store'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
-import { api } from '@Pimcore/modules/document/document-api-slice.gen'
+import { api, type DocumentCloneApiArg } from '@Pimcore/modules/document/document-api-slice.gen'
+import { isNil } from 'lodash'
 
 export interface DocumentCloneJobConfig {
   sourceId: number
@@ -38,15 +39,15 @@ export const startDocumentCloneJob = async (
   dispatch?: any
 ): Promise<void> => {
   console.log('🚀 Starting document clone job with config:', config)
-  
+
   // Get message registry using the hook
   const messageRegistry = useGlobalMessageRegistry()
-  
+
   try {
     // Make API call using RTK Query endpoints
     let result: any
-    
-    if (config.isReplace) {
+
+    if (config.isReplace === true) {
       console.log('📡 Making document replace content API call')
       result = await store.dispatch(
         api.endpoints.documentReplaceContent.initiate({
@@ -56,34 +57,35 @@ export const startDocumentCloneJob = async (
       ).unwrap()
     } else {
       console.log('📡 Making document clone API call')
+      const cloneParams: DocumentCloneApiArg = {
+        id: config.sourceId,
+        parentId: config.targetId,
+        documentCloneParameters: config.parameters ?? {}
+      }
       result = await store.dispatch(
-        api.endpoints.documentClone.initiate({
-          id: config.sourceId,
-          parentId: config.targetId,
-          ...(config.parameters && { documentCloneParameters: config.parameters })
-        })
+        api.endpoints.documentClone.initiate(cloneParams)
       ).unwrap()
     }
-    
+
     const jobRunId = result?.jobRunId
-    
+
     // If no jobRunId, operation completed immediately
-    if (!jobRunId) {
+    if (isNil(jobRunId)) {
       console.log('✅ Document operation completed immediately without background processing')
-      
+
       // Refresh the tree
-      store.dispatch(refreshNodeChildren({ 
-        nodeId: config.parentFolder.toString(), 
-        elementType: config.elementType 
+      store.dispatch(refreshNodeChildren({
+        nodeId: config.parentFolder.toString(),
+        elementType: config.elementType
       }))
-      
+
       return
     }
-    
+
     console.log('✅ Got jobRunId from API:', jobRunId, '- setting up background job tracking')
-    
+
     // Register job handler using the new abstract handler system
-    const handler = new DocumentCloneJobHandler(jobRunId, {
+    const handler = new DocumentCloneJobHandler(String(jobRunId), {
       title: config.title,
       parentFolder: config.parentFolder.toString(),
       elementType: config.elementType,
@@ -92,9 +94,8 @@ export const startDocumentCloneJob = async (
       parameters: config.parameters,
       isReplace: config.isReplace
     })
-    
+
     messageRegistry.registerHandler(handler)
-    
   } catch (error) {
     console.error('❌ Document clone job failed:', error)
     // Re-throw to allow caller to handle

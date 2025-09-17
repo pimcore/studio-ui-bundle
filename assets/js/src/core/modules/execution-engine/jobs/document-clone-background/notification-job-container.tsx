@@ -25,33 +25,33 @@ export const NotificationJobContainer = (props: DocumentCloneBackgroundJobProps)
 
   return (
     <JobView
-      failureButtonActions={[
+      failureButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(props.id) }
         }
-      ]}
+      ] }
 
-      finishedWithErrorsButtonActions={[
+      finishedWithErrorsButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(props.id)
           }
         }
-      ]}
+      ] }
 
-      successButtonActions={[
+      successButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(props.id)
           }
         }
-      ]}
+      ] }
 
-      {...props}
-      progress={props.config.progress}
+      { ...props }
+      progress={ props.config.progress }
     />
   )
 }

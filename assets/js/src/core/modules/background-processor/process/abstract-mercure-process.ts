@@ -38,14 +38,15 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       this.sendMessage({
         type: 'update',
         payload: data,
-        event: event
-      } as AbstractMercureMessage)
+        event
+      })
     }
 
     this.eventSource.onerror = (error: Event) => {
       this.sendMessage({
         type: 'error',
-        payload: error
+        payload: error,
+        event: new MessageEvent('error', { data: error })
       })
       this.cancel()
     }
@@ -59,7 +60,12 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
 
     this.sendMessage({
       type: 'cancel',
-      payload: null
+      payload: null,
+      event: new MessageEvent('cancel')
     })
   };
+
+  protected sendMessage (message: AbstractMercureMessage): void {
+    super.sendMessage(message)
+  }
 }

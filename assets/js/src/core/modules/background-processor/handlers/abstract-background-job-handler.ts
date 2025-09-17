@@ -20,30 +20,30 @@ export abstract class AbstractBackgroundJobHandler {
   /**
    * Determines if this handler should process the given message
    */
-  abstract shouldHandle(message: AbstractMercureMessage): boolean
+  abstract shouldHandle (message: AbstractMercureMessage): boolean
 
   /**
    * Processes the message
    */
-  abstract handleMessage(message: AbstractMercureMessage): void
+  abstract handleMessage (message: AbstractMercureMessage): void
 
   /**
    * Optional lifecycle method called when handler is registered
    */
-  onRegister?(): void
+  onRegister? (): void
 
   /**
    * Optional lifecycle method called when handler is unregistered
    */
-  onUnregister?(): void
+  onUnregister? (): void
 
   /**
    * Optional cleanup method for handlers that need to clean up resources
    */
-  cleanup?(): void
+  cleanup? (): void
 
   /**
    * Unique identifier for this handler
    */
-  abstract getId(): string | number
+  abstract getId (): string | number
 }

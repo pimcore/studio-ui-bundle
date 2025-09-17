@@ -33,10 +33,10 @@ moduleSystem.registerModule({
     // Get services
     const messageRegistry = container.get<GlobalMessageRegistry>(serviceIds.globalMessageRegistry)
     const globalProcess = container.get<GlobalMessageProcess>(serviceIds.globalMessageProcess)
-    
+
     // Register topics with the registry first
     messageRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
-    
+
     // Register the global message process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     backgroundProcessor.registerProcess(globalProcess)
