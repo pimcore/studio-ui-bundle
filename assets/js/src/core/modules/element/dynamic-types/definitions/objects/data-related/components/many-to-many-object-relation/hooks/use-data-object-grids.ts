@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { map, filter, isEmpty, isUndefined } from 'lodash'
+import { map, filter, isUndefined, isNil } from 'lodash'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import {
   type DataObjectGetGridApiArg,
@@ -50,7 +50,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
           }
         }
       },
-      { skip: isUndefined(classIds) && isEmpty(dataValue) }
+      { skip: isUndefined(classIds) && isNil(dataValue) }
     )
   )
 }

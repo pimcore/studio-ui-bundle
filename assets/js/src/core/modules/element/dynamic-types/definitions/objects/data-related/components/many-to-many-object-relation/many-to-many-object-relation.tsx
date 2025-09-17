@@ -128,13 +128,10 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     })
   }, [availableGridColumnsData])
 
-  const visibleColumns = useMemo(() =>
-    (visibleFieldDefinitions ?? []).map(col => ({
-      ...col,
-      group: col?.group?.[0]
-    })),
-  [visibleFieldDefinitions]
-  )
+  const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
+    ...col,
+    group: col?.group?.[0]
+  }))
 
   const gridDataQueries = useDataObjectGrids({
     classIds: dataRelationClasses,
