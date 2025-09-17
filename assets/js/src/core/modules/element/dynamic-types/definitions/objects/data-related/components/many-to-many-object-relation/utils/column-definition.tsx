@@ -20,7 +20,14 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { isEmptyValue, isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type GridColumnData } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
-export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, disabled: boolean, pathFormatterClass: string, t): Array<ColumnDef<any>> => {
+interface IVisibleFieldsToColumnDefinitionsProps {
+  visibleFieldDefinitions?: VisibleFieldDefinition[]
+  disabled: boolean
+  pathFormatterClass: string
+  translate: (key: string) => string
+}
+
+export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, translate }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
@@ -42,8 +49,8 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Visibl
 
     const isDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
 
-    const dataObjectHeader = isEmptyValue(column.config?.fieldDefinition?.title) ? t(column.key) : column.config?.fieldDefinition?.title
-    const defaultHeader = isEmptyValue(column.title) ? t(column.key) : column.title
+    const dataObjectHeader = isEmptyValue(column.config?.fieldDefinition?.title) ? translate(column.key) : column.config?.fieldDefinition?.title
+    const defaultHeader = isEmptyValue(column.title) ? translate(column.key) : column.title
 
     columnDefinition.push(
       columnHelper.accessor(key, {

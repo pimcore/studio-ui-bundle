@@ -20,7 +20,11 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { type AdvancedColumnConfig, useDataObjectGetAvailableGridColumnsForRelationQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import {
+  type AdvancedColumnConfig,
+  type GridColumnData,
+  useDataObjectGetAvailableGridColumnsForRelationQuery
+} from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
@@ -140,7 +144,12 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading)
   const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
 
-  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '', t)
+  const columnDefinition = visibleFieldsToColumnDefinitions({
+    visibleFieldDefinitions,
+    disabled: props.inherited === true || props.disabled === true,
+    pathFormatterClass: props.pathFormatterClass ?? '',
+    translate: t
+  })
 
   return (
     <ManyToManyRelation
@@ -148,7 +157,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
       enrichRowData={ (row: ManyToManyRelationValueItem) => {
-        const rowData = gridFullData?.find(item => item.id === row.id)?.columns ?? []
+        const rowData: GridColumnData[] = gridFullData?.find(item => item.id === row.id)?.columns ?? []
 
         return enrichRowData(visibleFieldDefinitions, row, rowData)
       } }
