@@ -12,10 +12,9 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { usePerspectiveEditorContext } from "../../context/hooks/use-perspective-editor-context"
 import { usePerspectiveEditor } from "../../hooks/use-perspective-editor"
-import { ExtendedWidgetConfig } from "./components/widget-configurator/context/widget-configurator-provider"
-import { WidgetConfigurator } from "./components/widget-configurator/widget-configurator"
-import { SpecificPanel } from "./components/specific-panel/specific-panel"
 import { AllowedMenuEntriesPanel } from "./components/allowed-menu-entries-panel/allowed-menu-entries-panel"
+import { SpecificPanel } from "./components/specific-panel/specific-panel"
+import { ExtendedWidgetConfig } from "./components/widget-configurator/context/widget-configurator-provider"
 
 interface PerspectiveForm {
   perspective: PerspectiveConfigDetail
@@ -53,7 +52,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
         form,
         initialValues,
         onFinish: async (values: OptimizedPerspectiveConfigDetail) => {
-          //setIsLoading(true)
+          setIsLoading(true)
 
           const { widgetsLeft, widgetsRight, widgetsBottom, ...rest } = values
 
