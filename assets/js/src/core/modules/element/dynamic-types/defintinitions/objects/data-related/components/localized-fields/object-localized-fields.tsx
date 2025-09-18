@@ -27,6 +27,8 @@ export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition
 export const ObjectLocalizedFields = ({ children, noteditable, className }: ObjectLocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
+  const isParentNotEditable = noteditable === true
+
   useEffect(() => {
     if (!hasLocalizedFields) setHasLocalizedFields(true)
   }, [])
@@ -45,7 +47,7 @@ export const ObjectLocalizedFields = ({ children, noteditable, className }: Obje
                 key={ index }
                 { ...child }
                 className={ className }
-                noteditable={ noteditable === true || child.noteditable }
+                noteditable={ isParentNotEditable || child.noteditable }
               />
             ))}
           </Space>
