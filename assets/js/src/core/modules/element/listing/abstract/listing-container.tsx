@@ -47,7 +47,7 @@ export const ListingContainer = ({
   useColumnMapper = defaultProps.useColumnMapper,
   useDataQueryHelper,
   useDataQuery,
-  useElementId,
+  useElementId
 }: ListingContainerProps): React.JSX.Element => {
   const settings = {
     ContextComponent,

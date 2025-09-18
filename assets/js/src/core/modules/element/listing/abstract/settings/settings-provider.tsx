@@ -13,7 +13,7 @@ import { type BaseQueryFn, type TypedUseQueryHookResult } from '@reduxjs/toolkit
 import { type useGridOptions } from '../view-layer/components/grid/hooks/use-grid-options'
 import { type useSidebarOptions } from '../view-layer/components/sidebar/hooks/use-sidebar-options'
 import { type DataContextProps } from '../data-layer/provider/data/data-provider'
-import { useColumnMapper } from '../configuration-layer/provider/selected-columns/use-column-mapper'
+import { type useColumnMapper } from '../configuration-layer/provider/selected-columns/use-column-mapper'
 
 export interface UseQueryHelperReturn {
   hasRequiredArgs: () => boolean

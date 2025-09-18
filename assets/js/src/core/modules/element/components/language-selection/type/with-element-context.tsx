@@ -11,7 +11,7 @@
 import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import React from 'react'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
+import { type PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
@@ -24,7 +24,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
   if ('permissions' in elementDraft) {
     const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
     const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
-    let currentAvailableLanguages = (user.contentLanguages as Array<string>)?.filter(lang => viewableLanguages.includes(lang)) ?? []
+    let currentAvailableLanguages = (user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? []
 
     if (viewableLanguages.length === 1 && viewableLanguages[0] === 'default') {
       currentAvailableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
@@ -41,7 +41,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
 
   const onChangeLanguage = (language: string | null): void => {
     if (language === '-') {
-      return props.onChange(null)
+      props.onChange(null); return
     }
 
     props.onChange(language)

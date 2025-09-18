@@ -9,7 +9,6 @@
  */
 
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
 import { useSettings } from '../../../settings/use-settings'
 
@@ -50,9 +49,8 @@ export interface SelectedColumnsProviderProps {
 
 export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
-  const { useColumnMapper } = useSettings();
-  const columnMapper = useColumnMapper();
-
+  const { useColumnMapper } = useSettings()
+  const columnMapper = useColumnMapper()
 
   const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
     return selectedColumns.map(column => ({
@@ -62,15 +60,15 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   }, [selectedColumns])
 
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    return columnMapper.encodeColumnIdentifier(column);
+    return columnMapper.encodeColumnIdentifier(column)
   }
 
   const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
-    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns);
+    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
   }
 
   const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => {
-    return columnMapper.shouldMapDataToColumn(data, column);
+    return columnMapper.shouldMapDataToColumn(data, column)
   }
 
   return useMemo(() => (

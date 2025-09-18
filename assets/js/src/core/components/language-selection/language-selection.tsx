@@ -43,14 +43,19 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
       </Button>
 
       <div className='language-select__current-value'>
-        { language !== '-' ? (
-          <>
-            <FlagIcon value={ transformLanguage(language) } />
-            <span>{language}</span>
-          </>
-        ) : (
-          <Icon value='minus' options={ { width: 18, height: 18 } } />
-        )}
+        { language !== '-'
+          ? (
+            <>
+              <FlagIcon value={ transformLanguage(language) } />
+              <span>{language}</span>
+            </>
+            )
+          : (
+            <Icon
+              options={ { width: 18, height: 18 } }
+              value='minus'
+            />
+            )}
       </div>
 
       <Button

@@ -12,11 +12,9 @@ import React, { useMemo, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
@@ -35,7 +33,6 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 /* eslint-disable react/jsx-key */
 export const GridConfigList = (): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
-  const settings = useSettings()
   const { t } = useTranslation()
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
@@ -104,11 +101,6 @@ export const GridConfigList = (): React.JSX.Element => {
       return <></>
     }
 
-    const languages = [
-      '-',
-      ...settings.requiredLanguages
-    ]
-
     return (
       <PermissionBasedLanguageSelectionControl
         isNullable
@@ -152,7 +144,7 @@ export const GridConfigList = (): React.JSX.Element => {
           ...item,
           meta: {
             ...item.meta,
-            locale: locale
+            locale
           }
         }
       }

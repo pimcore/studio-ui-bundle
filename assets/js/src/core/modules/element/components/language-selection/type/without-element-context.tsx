@@ -11,7 +11,7 @@
 import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import React from 'react'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
+import { type PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
 
 export const WithoutElementContext = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
   const user = useUser()
@@ -25,7 +25,7 @@ export const WithoutElementContext = (props: PermissionBasedLanguageSelectionCon
 
   const onChangeLanguage = (language: string | null): void => {
     if (language === '-') {
-      return props.onChange(null)
+      props.onChange(null); return
     }
 
     props.onChange(language)

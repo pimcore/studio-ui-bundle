@@ -27,7 +27,7 @@ export const ProviderWithElementContext = ({ children }: LanguageSelectionProvid
     if (viewableLanguages.length === 1 && viewableLanguages[0] === 'default') {
       initialLanguage = user.contentLanguages?.[0] ?? 'en'
     } else {
-      initialLanguage = ((user.contentLanguages as Array<string>)?.filter(lang => viewableLanguages.includes(lang)) ?? [])[0] ?? 'en'
+      initialLanguage = ((user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? [])[0] ?? 'en'
     }
   }
 

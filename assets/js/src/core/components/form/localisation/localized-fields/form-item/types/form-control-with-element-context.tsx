@@ -37,7 +37,7 @@ export interface KeyedFormItemControlProps {
 export const FormControlWithElementContext = ({ children, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const Child = useMemo(() => Children.only(children), [children])
   let isDisabled = false
-  const user = useUser();
+  const user = useUser()
   const element = useElementContext()
   const elementDraft = useElementDraft(element.id, element.elementType)
   const languageSelection = useLanguageSelection()
@@ -48,7 +48,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
     if (editableLanguages.length === 1 && editableLanguages[0] === 'default') {
       editableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
     }
-    
+
     isDisabled = !editableLanguages.includes(languageSelection.currentLanguage)
   }
 

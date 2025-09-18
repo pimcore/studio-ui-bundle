@@ -25,8 +25,6 @@ import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { GridConfigModal } from '../grid-config-modal'
 
@@ -60,8 +58,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     isLoading,
     currentUserId
   } = props
-
-  const settings = useSettings()
 
   const { t } = useTranslation()
 

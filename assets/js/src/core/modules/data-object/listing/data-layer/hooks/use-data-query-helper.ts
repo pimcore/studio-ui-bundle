@@ -24,7 +24,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
-  const { currentLanguage } = useLanguageSelection();
+  const { currentLanguage } = useLanguageSelection()
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 

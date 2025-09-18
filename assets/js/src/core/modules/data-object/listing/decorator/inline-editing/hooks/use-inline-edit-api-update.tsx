@@ -20,9 +20,9 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const [patchDataObject] = useDataObjectPatchByIdMutation()
   const dispatch = useAppDispatch()
-  const { currentLanguage } = useLanguageSelection();
-  const {useColumnMapper} = useSettings();
-  const columnMapper = useColumnMapper();
+  const { currentLanguage } = useLanguageSelection()
+  const { useColumnMapper } = useSettings()
+  const columnMapper = useColumnMapper()
 
   const updateCache: UseInlineEditApiUpdateReturn['updateCache'] = (event) => {
     const { update, getGetRequestArgs } = event

@@ -21,9 +21,9 @@ export const PermissionBasedLanguageSelection = (props: PermissionBasedLanguageS
 
   return (
     <PermissionBasedLanguageSelectionControl
+      isNullable={ props.isNullable }
       onChange={ setCurrentLanguage }
       value={ currentLanguage }
-      isNullable={ props.isNullable }
     />
   )
 }

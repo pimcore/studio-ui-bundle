@@ -67,7 +67,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
     const { hasType, getType } = useDynamicTypeResolver()
-    const { currentLanguage } = useLanguageSelection();
+    const { currentLanguage } = useLanguageSelection()
 
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
       return columnFilters.map(({ filterType, type, ...rest }) => ({
