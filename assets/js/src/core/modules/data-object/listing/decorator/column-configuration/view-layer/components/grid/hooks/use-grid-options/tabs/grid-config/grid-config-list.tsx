@@ -22,6 +22,7 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -109,10 +110,10 @@ export const GridConfigList = (): React.JSX.Element => {
     ]
 
     return (
-      <LanguageSelection
-        languages={ languages }
-        onSelectLanguage={ (language) => { onLanguageSelection(uniqueId, column, language) } }
-        selectedLanguage={ column.locale ?? '-' }
+      <PermissionBasedLanguageSelectionControl
+        isNullable
+        onChange={ (language) => { onLanguageSelection(uniqueId, column, language) } }
+        value={ column.locale === undefined ? null : column.locale }
       />
     )
   }
@@ -144,14 +145,14 @@ export const GridConfigList = (): React.JSX.Element => {
     setColumns(newColumns)
   }
 
-  function onLanguageSelection (uniqueId: string, column: AvailableColumn, locale: string): void {
+  function onLanguageSelection (uniqueId: string, column: AvailableColumn, locale: string | null): void {
     const itemList = stackListItems.map((item) => {
       if (item.id === uniqueId) {
         return {
           ...item,
           meta: {
             ...item.meta,
-            locale: transformLanguage(locale)
+            locale: locale
           }
         }
       }

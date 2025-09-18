@@ -11,6 +11,7 @@
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
+import { useSettings } from '../../../settings/use-settings'
 
 export interface SelectedColumn {
   key?: string
@@ -32,13 +33,15 @@ export interface SelectedColumnsContextProps {
   setSelectedColumns: (columns: SelectedColumn[]) => void
   encodeColumnIdentifier: (column: SelectedColumn) => string
   decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn | undefined
+  shouldMapDataToColumn: (data: any, column: SelectedColumn) => boolean
 }
 
 export const SelectedColumnsContext = createContext<SelectedColumnsContextProps>({
   selectedColumns: [],
   setSelectedColumns: () => {},
   encodeColumnIdentifier: () => '',
-  decodeColumnIdentifier: () => undefined
+  decodeColumnIdentifier: () => undefined,
+  shouldMapDataToColumn: () => false
 })
 
 export interface SelectedColumnsProviderProps {
@@ -47,6 +50,9 @@ export interface SelectedColumnsProviderProps {
 
 export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
+  const { useColumnMapper } = useSettings();
+  const columnMapper = useColumnMapper();
+
 
   const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
     return selectedColumns.map(column => ({
@@ -56,28 +62,19 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   }, [selectedColumns])
 
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    return JSON.stringify({
-      uuid: uuid(),
-      key: column?.key?.replaceAll('.', '**'),
-      locale: column.locale
-    })
+    return columnMapper.encodeColumnIdentifier(column);
   }
 
   const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
-    try {
-      JSON.parse(columnIdentifier)
-    } catch (e) {
-      return undefined
-    }
+    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns);
+  }
 
-    const { key, locale } = JSON.parse(columnIdentifier)
-    const formattedKey = key.replaceAll('**', '.')
-
-    return formattedSelectedColumns.find(column => column.key === formattedKey && column.locale === locale)!
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => {
+    return columnMapper.shouldMapDataToColumn(data, column);
   }
 
   return useMemo(() => (
-    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } }>
+    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } }>
       {children}
     </SelectedColumnsContext.Provider>
   ), [formattedSelectedColumns])

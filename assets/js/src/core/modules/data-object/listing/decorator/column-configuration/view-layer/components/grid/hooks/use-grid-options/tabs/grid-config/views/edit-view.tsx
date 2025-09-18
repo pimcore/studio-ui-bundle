@@ -43,8 +43,6 @@ export interface EditViewProps {
   columns: any[]
   gridConfig: GridConfigData['gridConfig']
   currentUserId?: number
-  currentLanguage: string
-  setCurrentLanguage: (language: string) => void
 }
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
@@ -60,9 +58,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     savedGridConfigurations,
     isUpdating,
     isLoading,
-    currentUserId,
-    currentLanguage,
-    setCurrentLanguage
+    currentUserId
   } = props
 
   const settings = useSettings()
@@ -139,14 +135,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
               </Dropdown>
 
               <Flex gap={ 'mini' }>
-                <LanguageSelection
-                  languages={ settings.requiredLanguages.map((value: string) => {
-                    return value
-                  }) }
-                  onSelectLanguage={ setCurrentLanguage }
-                  selectedLanguage={ currentLanguage }
-                />
-
                 <IconButton
                   icon={ { value: 'show-details' } }
                   onClick={ () => { setOpen(true) } }

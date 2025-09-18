@@ -22,7 +22,13 @@ export const ProviderWithElementContext = ({ children }: LanguageSelectionProvid
 
   if ('permissions' in elementDraft) {
     const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    initialLanguage = permissions?.localizedView?.split(',')[0] ?? initialLanguage
+    const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
+
+    if (viewableLanguages.length === 1 && viewableLanguages[0] === 'default') {
+      initialLanguage = user.contentLanguages?.[0] ?? 'en'
+    } else {
+      initialLanguage = ((user.contentLanguages as Array<string>)?.filter(lang => viewableLanguages.includes(lang)) ?? [])[0] ?? 'en'
+    }
   }
 
   const [currentLanguage, setCurrentLanguage] = useState(initialLanguage)

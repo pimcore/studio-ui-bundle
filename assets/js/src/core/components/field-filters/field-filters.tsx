@@ -19,6 +19,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '../flex/flex'
 import { isNil } from 'lodash'
 import { Tooltip } from '../tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -76,11 +77,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       renderRightToolbar: (
         <Flex gap="mini">
           {filter.localizable === true && (
-            <LanguageSelection
+            <PermissionBasedLanguageSelectionControl
               key={ 'language' }
-              languages={ requiredLanguages }
-              onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
-              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
+              onChange={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
+              value={ filter.locale === undefined ? null : filter.locale }
+              isNullable
             />
           )}
           <IconButton
