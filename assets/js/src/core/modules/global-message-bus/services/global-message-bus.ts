@@ -11,7 +11,7 @@
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type AbstractMessageHandler } from '../handlers/abstract/abstract-message-handler'
+import { type AbstractMessageHandler } from '../message-handlers/abstract/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { debounce, isNil } from 'lodash'
 

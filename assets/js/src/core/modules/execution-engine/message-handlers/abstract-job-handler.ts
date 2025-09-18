@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/handlers/abstract/abstract-message-handler'
+import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'

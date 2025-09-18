@@ -9,7 +9,7 @@
  */
 
 // Handlers
-export { AbstractMessageHandler } from './handlers/abstract/abstract-message-handler'
+export { AbstractMessageHandler } from './message-handlers/abstract/abstract-message-handler'
 
 // Services
 export { GlobalMessageBus } from './services/global-message-bus'
