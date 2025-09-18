@@ -29,7 +29,8 @@ import { type DocumentCloneParameters, api, type DocumentCloneApiArg } from '@Pi
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useGlobalMessageBus } from '@Pimcore/modules/background-processor'
-import { StepBasedProgressJobHandler } from '@Pimcore/modules/execution-engine/message-handlers/step-based-progress-job-handler'
+import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
+import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/document-clone-job'
 import { type DocumentCloneJobConfig } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/types'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -63,7 +64,7 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
   const { getStoredNode } = useTreeCopyPasteContext('document')
   const { isPasteHidden } = usePasteVisibility('document')
   const settings = useSettings()
-  const messageRegistry = useGlobalMessageBus()
+  const executionEngine = useExecutionEngine()
 
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
   const [languageForm] = Form.useForm()
@@ -91,57 +92,18 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
     const sourceId = typeof sourceNode.id === 'string' ? parseInt(sourceNode.id) : sourceNode.id
     const targetId = typeof targetNode.id === 'string' ? parseInt(targetNode.id) : targetNode.id
 
-    dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: true }))
+    // Create the job
+    const job = new DocumentCloneJob({
+      sourceId,
+      targetId,
+      parameters,
+      title: t('document.tree.copy-paste.cloning-folder'),
+      treeId,
+      nodeId: String(targetId)
+    })
 
-    try {
-      const cloneParams: DocumentCloneApiArg = {
-        id: sourceId,
-        parentId: targetId,
-        documentCloneParameters: parameters ?? {}
-      }
-      
-      const result = await dispatch(
-        api.endpoints.documentClone.initiate(cloneParams)
-      ).unwrap()
-
-      const jobRunId = result?.jobRunId
-
-      // If no jobRunId, operation completed immediately
-      if (isNil(jobRunId)) {
-        // Refresh the tree
-        dispatch(refreshNodeChildren({
-          nodeId: targetId.toString(),
-          elementType: elementTypes.document
-        }))
-        return
-      }
-
-      // Register job handler for background processing
-      const config: DocumentCloneJobConfig = {
-        title: t('document.tree.copy-paste.cloning-folder'),
-        progress: 0,
-        parentFolderId: targetId,
-        parentFolderType: elementTypes.document
-      }
-
-      const handler = new StepBasedProgressJobHandler({ 
-        jobRunId, 
-        config,
-        jobType: 'document-clone-background',
-        additionalTopics: [topics['cloning-finished']],
-        onJobCompletion: async (data: any) => {
-          store.dispatch(refreshNodeChildren({
-            elementType: elementTypes.document,
-            nodeId: targetId.toString()
-          }))
-        }
-      })
-      messageRegistry.registerHandler(handler)
-    } catch (error: any) {
-      trackError(new GeneralError(error.message as string))
-    } finally {
-      dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: false }))
-    }
+    // Execute the job using the execution engine
+    await executionEngine.runJob(job)
   }
 
   const replaceDocumentContent = async (

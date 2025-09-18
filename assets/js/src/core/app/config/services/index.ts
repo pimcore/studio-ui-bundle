@@ -20,6 +20,7 @@ import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-m
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
@@ -493,6 +494,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()

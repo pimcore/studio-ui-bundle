@@ -294,6 +294,9 @@ export const serviceIds = {
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
 
+  // Execution Engine
+  executionEngine: 'ExecutionEngine',
+
   // Component registry
   'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
 

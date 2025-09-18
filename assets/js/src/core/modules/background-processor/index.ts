@@ -14,7 +14,6 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { DocumentCloneJobHandler } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/message-handler'
 import { topics } from '../execution-engine/topics'
 
 // Export the global message system
@@ -23,9 +22,6 @@ export { GlobalMessageBusProcess } from './process/global-message-bus-process'
 
 // Export hooks
 export { useGlobalMessageBus } from '../global-message-bus/hooks/use-global-message-bus'
-
-// Export example concrete handlers
-export { DocumentCloneJobHandler } from '../execution-engine/jobs/document-clone-background/message-handler'
 
 moduleSystem.registerModule({
   onInit: () => {
