@@ -13,7 +13,7 @@ interface StackedWidgetListProps {
 
 export const StackedWidgetList = ({ values = [] }: StackedWidgetListProps): React.JSX.Element => {
   const [parsedValues, setParsedValues] = useState<StackListItemProps[]>([])
-  const { onChange, widgetConfigs, onRemove } = useWidgetConfiguratorContext()
+  const { onReorder, widgetConfigs, onRemove } = useWidgetConfiguratorContext()
 
   const RightToolbar = ({ widget }: { widget: WidgetConfig }): React.JSX.Element => {
     return (
@@ -22,7 +22,7 @@ export const StackedWidgetList = ({ values = [] }: StackedWidgetListProps): Reac
         items={[
           <IconButton
             theme="secondary"
-            icon={{ value: 'eye' }}
+            icon={{ value: 'eye-off' }}
           />,
 
           <IconButton
@@ -52,7 +52,7 @@ export const StackedWidgetList = ({ values = [] }: StackedWidgetListProps): Reac
     <StackList
       items={parsedValues}
       sortable={true}
-      onItemsChange={onChange}
+      onItemsChange={onReorder}
     />
   )
 }

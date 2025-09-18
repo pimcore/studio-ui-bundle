@@ -1,3 +1,4 @@
+import { StackListItemProps } from "@Pimcore/components/stack-list/stack-list-item"
 import { WidgetConfig } from "@sdk/api/perspectives"
 import React, { createContext, useMemo, useState } from "react"
 
@@ -10,7 +11,8 @@ interface WidgetConfiguratorProviderProps {
 export interface WidgetConfiguratorContextProps {
   widgetConfigs: WidgetConfig[]
   onRemove: (widgetId: string) => void
-  onAdd: (widget: any) => void
+  onAdd: (widget: WidgetConfig) => void
+  onReorder: (newOrder: StackListItemProps[]) => void
 }
 
 export const WidgetConfiguratorContext = createContext<WidgetConfiguratorContextProps | undefined>(undefined)
@@ -18,7 +20,7 @@ export const WidgetConfiguratorContext = createContext<WidgetConfiguratorContext
 export const WidgetConfiguratorProvider = ({ children, formChange, value }: WidgetConfiguratorProviderProps): React.JSX.Element => {
   const [widgetConfigs, setWidgetConfigs] = useState<WidgetConfig[]>(value)
 
-  const onAdd = (widget: any): void => {
+  const onAdd = (widget: WidgetConfig): void => {
     console.log('onAdd', widget)
     setWidgetConfigs((prevConfigs) => [...prevConfigs, widget])
 
@@ -38,11 +40,20 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
     formChange?.(widgetConfigs.filter(widget => widget.id !== widgetId))
   }
 
+  const onReorder = (newOrder: StackListItemProps[]): void => {
+    const newWidgetOrder = newOrder.map(item => {
+      return widgetConfigs.find(widget => widget.id === item.id)
+    }).filter((widget): widget is WidgetConfig => !!widget)
+
+    setWidgetConfigs(newWidgetOrder)
+    formChange?.(newWidgetOrder)
+  }
 
   const contextValue: WidgetConfiguratorContextProps = useMemo(() => ({
     widgetConfigs,
     onAdd,
-    onRemove
+    onRemove,
+    onReorder
   }), [widgetConfigs])
 
   return (

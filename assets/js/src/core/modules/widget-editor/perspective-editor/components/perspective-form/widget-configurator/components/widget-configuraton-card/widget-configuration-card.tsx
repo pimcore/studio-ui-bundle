@@ -24,12 +24,6 @@ export const WidgetConfigurationCard = ({ label, value = [], onChange }: WidgetC
             <AddWidgetDropdown />
           </Flex>
         }
-        extra={
-          <IconButton
-            icon={{ value: 'eye' }}
-            type="default"
-          />
-        }
         className="w-full"
       >
         <StackedWidgetList
