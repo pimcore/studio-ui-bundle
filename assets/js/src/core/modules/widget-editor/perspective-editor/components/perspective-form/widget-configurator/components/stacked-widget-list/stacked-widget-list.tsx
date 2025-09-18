@@ -7,22 +7,22 @@ import { WidgetConfigurationCardItem } from "../widget-configuration-card-item/w
 import { useWidgetConfiguratorContext } from "../../context/hooks/use-widget-configurator-context"
 import { WidgetConfig } from "@sdk/api/perspectives"
 
-interface StackedWidgetListProps {
-  values?: Array<any>  //TODO: remove
-}
-
-export const StackedWidgetList = ({ values = [] }: StackedWidgetListProps): React.JSX.Element => {
+export const StackedWidgetList = (): React.JSX.Element => {
   const [parsedValues, setParsedValues] = useState<StackListItemProps[]>([])
   const { onReorder, widgetConfigs, onRemove } = useWidgetConfiguratorContext()
 
   const RightToolbar = ({ widget }: { widget: WidgetConfig }): React.JSX.Element => {
+    const { expandedWidget, setExpanded } = useWidgetConfiguratorContext()
+    const isExpanded = expandedWidget === widget.id
+
     return (
       <ButtonGroup
         noSpacing
         items={[
           <IconButton
             theme="secondary"
-            icon={{ value: 'eye-off' }}
+            icon={{ value: isExpanded ? 'eye' : 'eye-off' }}
+            onClick={() => setExpanded(widget.id)}
           />,
 
           <IconButton

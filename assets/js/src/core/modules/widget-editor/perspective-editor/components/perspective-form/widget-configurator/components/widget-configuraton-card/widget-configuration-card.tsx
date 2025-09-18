@@ -1,17 +1,17 @@
 import { Card } from "@Pimcore/components/card/card"
 import { Flex, IconButton } from "@sdk/components"
 import React from "react"
-import { WidgetConfiguratorProvider } from "../../context/widget-configurator-provider"
+import { ExpandedWidgetConfig, WidgetConfiguratorProvider } from "../../context/widget-configurator-provider"
 import { AddWidgetDropdown } from "../add-widget-dropdown/add-widget-dropdown"
 import { StackedWidgetList } from "../stacked-widget-list/stacked-widget-list"
 
 interface WidgetConfigurationCardProps {
   label: string
-  value?: any
+  value?: ExpandedWidgetConfig
   onChange?: (value: any) => void
 }
 
-export const WidgetConfigurationCard = ({ label, value = [], onChange }: WidgetConfigurationCardProps): React.JSX.Element => {
+export const WidgetConfigurationCard = ({ label, value, onChange }: WidgetConfigurationCardProps): React.JSX.Element => {
   return (
     <WidgetConfiguratorProvider
       formChange={onChange}
@@ -26,9 +26,7 @@ export const WidgetConfigurationCard = ({ label, value = [], onChange }: WidgetC
         }
         className="w-full"
       >
-        <StackedWidgetList
-          values={value}
-        />
+        <StackedWidgetList />
       </Card>
     </WidgetConfiguratorProvider>
   )

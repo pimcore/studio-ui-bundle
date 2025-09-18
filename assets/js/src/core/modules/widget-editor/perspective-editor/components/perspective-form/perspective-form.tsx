@@ -24,7 +24,18 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
   const { isLoading, setIsLoading, setPerspectives } = usePerspectiveEditorContext()
   const [form] = Form.useForm<PerspectiveForm>()
   const initialValues = {
-    ...perspective
+    ...perspective,
+    widgetsLeft: {
+      widgets: perspective.widgetsLeft,
+      expanded: perspective.expandedLeft
+    },
+    widgetsRight: {
+      widgets: perspective.widgetsRight,
+      expanded: perspective.expandedRight
+    },
+    widgetsBottom: {
+      widgets: perspective.widgetsBottom
+    }
   }
 
   return (

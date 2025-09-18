@@ -2,30 +2,45 @@ import { StackListItemProps } from "@Pimcore/components/stack-list/stack-list-it
 import { WidgetConfig } from "@sdk/api/perspectives"
 import React, { createContext, useMemo, useState } from "react"
 
+export interface ExpandedWidgetConfig {
+  expanded: string | null
+  widgets: WidgetConfig[]
+}
+
 interface WidgetConfiguratorProviderProps {
   children?: React.ReactNode
-  value: WidgetConfig[]
-  formChange?: (values: Array<any>) => void
+  value?: ExpandedWidgetConfig
+  formChange?: (values: ExpandedWidgetConfig) => void
 }
 
 export interface WidgetConfiguratorContextProps {
   widgetConfigs: WidgetConfig[]
+  expandedWidget: string | null
   onRemove: (widgetId: string) => void
   onAdd: (widget: WidgetConfig) => void
   onReorder: (newOrder: StackListItemProps[]) => void
+  setExpanded: (widgetId: string) => void
 }
 
 export const WidgetConfiguratorContext = createContext<WidgetConfiguratorContextProps | undefined>(undefined)
 
 export const WidgetConfiguratorProvider = ({ children, formChange, value }: WidgetConfiguratorProviderProps): React.JSX.Element => {
-  const [widgetConfigs, setWidgetConfigs] = useState<WidgetConfig[]>(value)
+  const [widgetConfigs, setWidgetConfigs] = useState<WidgetConfig[]>(value?.widgets ?? [])
+  const [expandedWidget, setExpandedWidget] = useState<string | null>(value?.expanded ?? null)
+
+  const triggerFormUpdate = (widgets: WidgetConfig[], expanded: string | null): void => {
+    formChange?.({
+      widgets,
+      expanded
+    })
+  }
 
   const onAdd = (widget: WidgetConfig): void => {
-    console.log('onAdd', widget)
     setWidgetConfigs((prevConfigs) => [...prevConfigs, widget])
 
 
-    formChange?.([...widgetConfigs, widget])
+    triggerFormUpdate(widgetConfigs, expandedWidget)
+    //formChange?.([...widgetConfigs, widget])
 
     //TODO: trigger formChange -> add new widget to existing ones
 
@@ -34,10 +49,12 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }
 
   const onRemove = (widgetId: string): void => {
-    console.log('onRemove', widgetId)
-    setWidgetConfigs((prevConfigs) => prevConfigs.filter(widget => widget.id !== widgetId))
+    const newWidgets = widgetConfigs.filter(widget => widget.id !== widgetId)
+    const expandedWidgetId = expandedWidget === widgetId ? null : expandedWidget
 
-    formChange?.(widgetConfigs.filter(widget => widget.id !== widgetId))
+    setWidgetConfigs(newWidgets)
+    setExpandedWidget(expandedWidgetId)
+    triggerFormUpdate(newWidgets, expandedWidgetId)
   }
 
   const onReorder = (newOrder: StackListItemProps[]): void => {
@@ -46,15 +63,24 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
     }).filter((widget): widget is WidgetConfig => !!widget)
 
     setWidgetConfigs(newWidgetOrder)
-    formChange?.(newWidgetOrder)
+    triggerFormUpdate(newWidgetOrder, expandedWidget)
+  }
+
+  const setExpanded = (widgetId: string): void => {
+    const expandedWidgetId = expandedWidget === widgetId ? null : widgetId
+
+    setExpandedWidget(expandedWidgetId)
+    triggerFormUpdate(widgetConfigs, expandedWidgetId)
   }
 
   const contextValue: WidgetConfiguratorContextProps = useMemo(() => ({
     widgetConfigs,
+    expandedWidget,
     onAdd,
     onRemove,
-    onReorder
-  }), [widgetConfigs])
+    onReorder,
+    setExpanded
+  }), [widgetConfigs, expandedWidget])
 
   return (
     <WidgetConfiguratorContext.Provider value={contextValue}>
