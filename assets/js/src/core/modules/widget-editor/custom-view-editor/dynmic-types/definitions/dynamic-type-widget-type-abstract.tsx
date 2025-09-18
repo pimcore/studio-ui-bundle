@@ -1,6 +1,6 @@
 import { DynamicTypeAbstract } from "@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract";
 import { WidgetConfig } from "@sdk/api/perspectives";
-import { ItemType } from "@sdk/components";
+import { Icon, ItemType } from "@sdk/components";
 import { injectable } from "inversify";
 import React from "react";
 
@@ -13,12 +13,13 @@ export abstract class DynamicTypeWidgetTypeAbstract implements DynamicTypeAbstra
 
   abstract form(): React.JSX.Element
 
-  getSubMenuItems(configs: WidgetConfig[]): ItemType[] {
+  getSubMenuItems(configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     return configs.map((config) => {
       return {
         label: config.name,
         key: config.id,
-        icon: config.icon.value,
+        icon: <Icon value={config.icon.value} />,
+        onClick: onWidgetClick ? () => onWidgetClick(config) : undefined
       }
     })
   }

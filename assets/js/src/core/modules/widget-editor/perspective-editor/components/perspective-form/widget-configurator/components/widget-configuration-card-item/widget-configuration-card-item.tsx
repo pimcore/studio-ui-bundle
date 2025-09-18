@@ -1,12 +1,22 @@
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Icon } from "@Pimcore/components/icon/icon"
+import { WidgetConfig } from "@Pimcore/modules/perspectives/perspectives-slice.enhanced"
+import { isNil } from "lodash"
 import React from "react"
 
-export const WidgetConfigurationCardItem = (): React.JSX.Element => {
+interface WidgetConfigurationCardItemProps {
+  widget?: WidgetConfig
+}
+
+export const WidgetConfigurationCardItem = ({ widget }: WidgetConfigurationCardItemProps): React.JSX.Element => {
+  if (isNil(widget)) {
+    return <></>
+  }
+
   return (
     <Flex gap={8} align="center">
-      <Icon value="data-object" />
-      <span>Data Objects</span>
+      <Icon {...widget.icon} />
+      <span>{widget.name}</span>
     </Flex>
   )
 }

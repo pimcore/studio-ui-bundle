@@ -17,7 +17,7 @@ import React from 'react'
 
 @injectable()
 export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<DynamicTypeWidgetTypeAbstract> {
-  getMenuItems(configs: any[]): ItemType[] {
+  getMenuItems(configs: any[], onWidgetClick?: (config: any) => void): ItemType[] {
     const widgetTypes: Record<string, DynamicTypeWidgetTypeAbstract[]> = {}
 
     this.getDynamicTypes().map((dynamicType) => {
@@ -35,7 +35,8 @@ export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<D
           key: dynamicType.id,
           icon: <Icon value={dynamicType.icon} />,
           children: dynamicType.getSubMenuItems(
-            configs.filter((config) => config.widgetType === dynamicType.id)
+            configs.filter((config) => config.widgetType === dynamicType.id),
+            onWidgetClick
           )
         }))
       }

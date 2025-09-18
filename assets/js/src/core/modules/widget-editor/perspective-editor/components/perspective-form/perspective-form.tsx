@@ -33,11 +33,14 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
         form,
         initialValues,
         onFinish: async (values: any) => {
-          setIsLoading(true)
+          //setIsLoading(true)
 
-          await updatePerspective(perspective.id, values, () => {
+          console.table(values)
+          console.log(values)
+
+          /*await updatePerspective(perspective.id, values, () => {
             setIsLoading(false)
-          })
+          })*/
         }
       }}
     >
@@ -71,12 +74,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
               <IconSelector />
             </Form.Item>
 
-            <Form.Item
-              label="Icon"
-              name="icon"
-            >
-              <WidgetConfigurator />
-            </Form.Item>
+            <WidgetConfigurator />
           </FormKit.Panel>
         </Content>
 

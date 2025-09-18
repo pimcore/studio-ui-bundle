@@ -14,15 +14,13 @@ export class DynamicTypeWidgetTypeElementTree extends DynamicTypeWidgetTypeAbstr
     return <ElementTreeWidgetTypeForm />
   }
 
-  getSubMenuItems(configs: ElementTreeWidget[]): ItemType[] {
+  /*getSubMenuItems(configs: ElementTreeWidget[]): ItemType[] {
     const widgetTypes: Record<string, ElementTreeWidget[]> = {};
 
     configs.forEach((config) => {
       widgetTypes[config.elementType] = widgetTypes[config.elementType] ?? [];
       widgetTypes[config.elementType].push(config);
     })
-
-    console.log('types', Object.entries(widgetTypes))
 
     return Object.entries(widgetTypes).map(([type, typeConfigs]) => {
       return {
@@ -31,5 +29,5 @@ export class DynamicTypeWidgetTypeElementTree extends DynamicTypeWidgetTypeAbstr
         children: super.getSubMenuItems(typeConfigs),
       }
     })
-  }
+  }*/
 }

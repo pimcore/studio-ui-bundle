@@ -1,67 +1,48 @@
-import { ButtonGroup } from "@Pimcore/components/button-group/button-group"
 import { Card } from "@Pimcore/components/card/card"
-import { StackListItemProps } from "@Pimcore/components/stack-list/stack-list-item"
-import { Flex, IconButton, StackList } from "@sdk/components"
-import React, { useEffect } from "react"
-import { AddWidgetDropdown } from "../../../../add-widget-dropdown/add-widget-dropdown"
-import { WidgetConfigurationCardItem } from "../widget-configuration-card-item/widget-configuration-card-item"
+import { Flex, IconButton } from "@sdk/components"
+import React from "react"
+import { WidgetConfiguratorProvider } from "../../context/widget-configurator-provider"
+import { AddWidgetDropdown } from "../add-widget-dropdown/add-widget-dropdown"
+import { StackedWidgetList } from "../stacked-widget-list/stacked-widget-list"
 
 interface WidgetConfigurationCardProps {
   label: string
+  value?: any
+  onChange?: (value: any) => void
 }
 
-export const WidgetConfigurationCard = ({ label }: WidgetConfigurationCardProps): React.JSX.Element => {
-  const [items, setItems] = React.useState<StackListItemProps[]>([])
-
-  const RightToolbar = (): React.JSX.Element => {
-    return (
-      <ButtonGroup
-        noSpacing
-        items={[
-          <IconButton theme="secondary" icon={{ value: 'eye' }} />,
-          <IconButton theme="secondary" icon={{ value: 'trash' }} />
-        ]}
-      />
-    )
-  }
-
-  useEffect(() => {
-    setItems([
-      {
-        id: 1,
-        sortable: true,
-        renderRightToolbar: <RightToolbar />,
-        children: <WidgetConfigurationCardItem />,
-      },
-      {
-        id: 2,
-        sortable: true,
-        renderRightToolbar: <RightToolbar />,
-        children: <WidgetConfigurationCardItem />,
-      }
-    ])
-  }, [])
-
+export const WidgetConfigurationCard = ({ label, value = [], onChange }: WidgetConfigurationCardProps): React.JSX.Element => {
   return (
-    <Card
-      title={
-        <Flex gap={8} align="center">
-          <span>{label}</span>
-          <AddWidgetDropdown />
-        </Flex>
-      }
-      extra={
-        <IconButton
-          icon={{ value: 'eye' }}
-          type="default"
-        />
-      }
-      className="w-full"
+    <WidgetConfiguratorProvider
+      formChange={onChange}
+      value={value}
     >
-      <StackList
-        items={items}
-        sortable={true}
-      />
-    </Card>
+      <Card
+        title={
+          <Flex gap={8} align="center">
+            <span>{label}</span>
+            <AddWidgetDropdown />
+          </Flex>
+        }
+        extra={
+          <IconButton
+            icon={{ value: 'eye' }}
+            type="default"
+          />
+        }
+        className="w-full"
+      >
+        <StackedWidgetList
+          values={value}
+        />
+      </Card>
+    </WidgetConfiguratorProvider>
   )
 }
+
+/*
+TODO: 
+  -> wrap stacked list in custom component to handle the format (value) (include onChange)
+  -> create provider in WidgetConfigurationCard -> handle onChange on highest lvl
+  -> implement provider into RightToolbar
+*/
