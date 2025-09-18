@@ -8,14 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractJobHandler } from './abstract-job-handler'
-import { type BaseJobConfig } from "./abstract-job-handler"
+import { DefaultJobHandler, type BaseJobConfig } from './abstract-job-handler'
 
 /**
  * Progress job handler that converts step-based progress (currentStep/totalSteps) to percentage
  * Falls back to direct progress value if step data is not available
  */
-export abstract class StepBasedProgressJobHandler<TConfig extends BaseJobConfig> extends AbstractJobHandler<TConfig> {
+export class StepBasedProgressJobHandler<TConfig extends BaseJobConfig> extends DefaultJobHandler<TConfig> {
   protected calculateProgress (data: any): number | null {
     // Try step-based progress first
     if (data?.currentStep !== undefined && data?.totalSteps !== undefined) {

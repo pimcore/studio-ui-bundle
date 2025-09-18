@@ -20,10 +20,10 @@ import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { defaultTopics } from '@Pimcore/modules/execution-engine/topics'
 
 /**
- * Abstract base class for job handlers that need to track progress and handle status updates
- * Provides common functionality for job management, Redux integration, status mapping, and progress handling
+ * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
+ * Can be used directly or extended by specific job handlers
  */
-export abstract class AbstractJobHandler<TConfig extends BaseJobConfig> extends AbstractMessageHandler {
+export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMessageHandler {
   protected readonly jobRunId: string | number
   protected job: AbstractJob | null = null
   protected readonly config: TConfig
@@ -31,39 +31,19 @@ export abstract class AbstractJobHandler<TConfig extends BaseJobConfig> extends 
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: any) => void | Promise<void>
 
-  constructor (jobRunId: string | number, config: TConfig) {
+  constructor (options: DefaultJobHandlerOptions<TConfig>) {
     super()
-    this.jobRunId = jobRunId
-    this.config = config
+    this.jobRunId = options.jobRunId
+    this.config = options.config
     
-    // Get configuration from abstract methods
-    this.jobType = this.getJobType()
-    this.onJobCompletion = this.getJobCompletion()
+    // Use constructor parameters or defaults
+    this.jobType = options.jobType ?? 'default'
+    this.onJobCompletion = options.onJobCompletion
     
-    // Merge default topics with custom topics, ensuring uniqueness
-    const customTopics = this.getCustomTopics()
-    const allTopics = [...new Set([...defaultTopics, ...customTopics])]
+    // Merge default topics with additional topics, ensuring uniqueness
+    const additionalTopics = options.additionalTopics ?? []
+    const allTopics = [...new Set([...defaultTopics, ...additionalTopics])]
     this.topics = allTopics as NonEmptyArray<string>
-  }
-
-  /**
-   * Get the job type string for this handler
-   * Must be implemented by subclasses
-   */
-  protected abstract getJobType (): string
-
-  /**
-   * Get custom topics for this handler
-   * Must be implemented by subclasses
-   */
-  protected abstract getCustomTopics (): NonEmptyArray<string>
-
-  /**
-   * Get the job completion handler
-   * Override in subclasses if needed
-   */
-  protected getJobCompletion (): ((data: any) => void | Promise<void>) | undefined {
-    return undefined
   }
 
   /**
@@ -115,7 +95,7 @@ export abstract class AbstractJobHandler<TConfig extends BaseJobConfig> extends 
     return {
       id: getUniqueId(),
       action: async () => 0, // Placeholder action
-      type: this.getJobType(),
+      type: this.jobType,
       title: this.config.title,
       status: JobStatus.QUEUED,
       topics: this.topics,
@@ -237,5 +217,16 @@ export abstract class AbstractJobHandler<TConfig extends BaseJobConfig> extends 
 export interface BaseJobConfig {
   title: string
   progress?: number
+}
+
+/**
+ * Constructor options for DefaultJobHandler
+ */
+export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
+  jobRunId: string | number
+  config: TConfig
+  jobType?: string
+  onJobCompletion?: (data: any) => void | Promise<void>
+  additionalTopics?: string[]
 }
 

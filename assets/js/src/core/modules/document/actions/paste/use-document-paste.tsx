@@ -1,15 +1,7 @@
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
- * Full copyright and       // Register job handler for background processing
-      const config: DocumentCloneJobConfig = {
-        title: t('document.tree.copy-paste.cloning-folder'),
-        progress: 0,
-        parentFolderId: targetId,
-        parentFolderType: elementTypes.document
-      }
-
-      const handler = new DocumentCloneJobHandler(jobRunId, config)on is available in
+ * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
@@ -37,8 +29,9 @@ import { type DocumentCloneParameters, api, type DocumentCloneApiArg } from '@Pi
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useGlobalMessageBus } from '@Pimcore/modules/background-processor'
-import { DocumentCloneJobHandler } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/message-handler'
+import { StepBasedProgressJobHandler } from '@Pimcore/modules/execution-engine/message-handlers/step-based-progress-job-handler'
 import { type DocumentCloneJobConfig } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/types'
+import { topics } from '@Pimcore/modules/execution-engine/topics'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface UseDocumentPasteHookReturn {
@@ -131,7 +124,18 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
         parentFolderType: elementTypes.document
       }
 
-      const handler = new DocumentCloneJobHandler(jobRunId, config)
+      const handler = new StepBasedProgressJobHandler({ 
+        jobRunId, 
+        config,
+        jobType: 'document-clone-background',
+        additionalTopics: [topics['cloning-finished']],
+        onJobCompletion: async (data: any) => {
+          store.dispatch(refreshNodeChildren({
+            elementType: elementTypes.document,
+            nodeId: targetId.toString()
+          }))
+        }
+      })
       messageRegistry.registerHandler(handler)
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
