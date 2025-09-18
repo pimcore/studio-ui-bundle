@@ -31,7 +31,6 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
         justify-content: center;
         text-transform: uppercase;
-        width: 40px;
         gap: 4px;
       }
     `
