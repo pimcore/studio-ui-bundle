@@ -7,7 +7,11 @@ import { WidgetConfigurationCardItem } from "../widget-configuration-card-item/w
 import { useWidgetConfiguratorContext } from "../../context/hooks/use-widget-configurator-context"
 import { WidgetConfig } from "@sdk/api/perspectives"
 
-export const StackedWidgetList = (): React.JSX.Element => {
+interface StackedWidgetListProps {
+  allowExpandControl?: boolean
+}
+
+export const StackedWidgetList = ({ allowExpandControl = true }: StackedWidgetListProps): React.JSX.Element => {
   const [parsedValues, setParsedValues] = useState<StackListItemProps[]>([])
   const { onReorder, widgetConfigs, onRemove } = useWidgetConfiguratorContext()
 
@@ -15,22 +19,29 @@ export const StackedWidgetList = (): React.JSX.Element => {
     const { expandedWidget, setExpanded } = useWidgetConfiguratorContext()
     const isExpanded = expandedWidget === widget.id
 
+    let items = [
+      <IconButton
+        theme="secondary"
+        icon={{ value: 'trash' }}
+        onClick={() => onRemove(widget.id)}
+      />
+    ]
+
+    if (allowExpandControl) {
+      items = [
+        <IconButton
+          theme="secondary"
+          icon={{ value: isExpanded ? 'eye' : 'eye-off' }}
+          onClick={() => setExpanded(widget.id)}
+        />,
+        ...items
+      ]
+    }
+
     return (
       <ButtonGroup
         noSpacing
-        items={[
-          <IconButton
-            theme="secondary"
-            icon={{ value: isExpanded ? 'eye' : 'eye-off' }}
-            onClick={() => setExpanded(widget.id)}
-          />,
-
-          <IconButton
-            theme="secondary"
-            icon={{ value: 'trash' }}
-            onClick={() => onRemove(widget.id)}
-          />
-        ]}
+        items={items}
       />
     )
   }

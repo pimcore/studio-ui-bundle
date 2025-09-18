@@ -7,15 +7,24 @@ import { IconButton } from "@Pimcore/components/icon-button/icon-button"
 import { IconSelector } from "@Pimcore/components/icon-selector/icon-selector"
 import { Input } from "@Pimcore/components/input/input"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import { PerspectiveConfigDetail } from "@sdk/api/perspectives"
+import { CreatePerspectiveConfig, PerspectiveConfigDetail } from "@sdk/api/perspectives"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { usePerspectiveEditorContext } from "../../context/hooks/use-perspective-editor-context"
 import { usePerspectiveEditor } from "../../hooks/use-perspective-editor"
-import { WidgetConfigurator } from "./widget-configurator/widget-configurator"
+import { ExtendedWidgetConfig } from "./components/widget-configurator/context/widget-configurator-provider"
+import { WidgetConfigurator } from "./components/widget-configurator/widget-configurator"
+import { SpecificPanel } from "./components/specific-panel/specific-panel"
+import { AllowedMenuEntriesPanel } from "./components/allowed-menu-entries-panel/allowed-menu-entries-panel"
 
 interface PerspectiveForm {
   perspective: PerspectiveConfigDetail
+}
+
+interface OptimizedPerspectiveConfigDetail extends Omit<PerspectiveConfigDetail, 'widgetsLeft' | 'widgetsRight' | 'widgetsBottom'> {
+  widgetsLeft: ExtendedWidgetConfig
+  widgetsRight: ExtendedWidgetConfig
+  widgetsBottom: ExtendedWidgetConfig
 }
 
 export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Element => {
@@ -43,15 +52,26 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
       formProps={{
         form,
         initialValues,
-        onFinish: async (values: any) => {
+        onFinish: async (values: OptimizedPerspectiveConfigDetail) => {
           //setIsLoading(true)
+
+          const { widgetsLeft, widgetsRight, widgetsBottom, ...rest } = values
+
+          const formattedValues: CreatePerspectiveConfig = {
+            ...rest,
+            widgetsLeft: Object.fromEntries(widgetsLeft.widgets.map(w => [w.id, w.widgetType])),
+            expandedLeft: widgetsLeft.expanded,
+            widgetsRight: Object.fromEntries(widgetsRight.widgets.map(w => [w.id, w.widgetType])),
+            expandedRight: widgetsRight.expanded,
+            widgetsBottom: Object.fromEntries(widgetsBottom.widgets.map(w => [w.id, w.widgetType])),
+          }
 
           console.table(values)
           console.log(values)
 
-          /*await updatePerspective(perspective.id, values, () => {
+          await updatePerspective(perspective.id, formattedValues, () => {
             setIsLoading(false)
-          })*/
+          })
         }
       }}
     >
@@ -67,7 +87,11 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
             y: 'none'
           }}
         >
-          <FormKit.Panel>
+          <FormKit.Panel
+            collapsed={false}
+            collapsible
+            title={t('perspective-editor.form.general.title')}
+          >
             <Form.Item
               label="Name"
               name="name"
@@ -84,9 +108,10 @@ export const PerspectiveForm = ({ perspective }: PerspectiveForm): React.JSX.Ele
             >
               <IconSelector />
             </Form.Item>
-
-            <WidgetConfigurator />
           </FormKit.Panel>
+
+          <SpecificPanel />
+          <AllowedMenuEntriesPanel />
         </Content>
 
         <Toolbar justify="space-between">

@@ -24,6 +24,7 @@ export const WidgetConfigurator = (): React.JSX.Element => {
       >
         <WidgetConfigurationCard
           label={t('perspective-editor.system-widgets.bottom')}
+          allowExpandControl={false}
         />
       </Form.Item>
 

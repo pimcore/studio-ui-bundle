@@ -1,16 +1,16 @@
 import { StackListItemProps } from "@Pimcore/components/stack-list/stack-list-item"
-import { WidgetConfig } from "@sdk/api/perspectives"
+import { ElementTreeWidget, WidgetConfig } from "@sdk/api/perspectives"
 import React, { createContext, useMemo, useState } from "react"
 
-export interface ExpandedWidgetConfig {
+export interface ExtendedWidgetConfig {
   expanded: string | null
-  widgets: WidgetConfig[]
+  widgets: ElementTreeWidget[]
 }
 
 interface WidgetConfiguratorProviderProps {
   children?: React.ReactNode
-  value?: ExpandedWidgetConfig
-  formChange?: (values: ExpandedWidgetConfig) => void
+  value?: ExtendedWidgetConfig
+  formChange?: (values: ExtendedWidgetConfig) => void
 }
 
 export interface WidgetConfiguratorContextProps {
@@ -36,16 +36,14 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }
 
   const onAdd = (widget: WidgetConfig): void => {
-    setWidgetConfigs((prevConfigs) => [...prevConfigs, widget])
+    if (widgetConfigs.findIndex((w) => w.id === widget.id) !== -1) {
+      return
+    }
 
+    const newWidgets = [...widgetConfigs, widget]
 
-    triggerFormUpdate(widgetConfigs, expandedWidget)
-    //formChange?.([...widgetConfigs, widget])
-
-    //TODO: trigger formChange -> add new widget to existing ones
-
-    // This should be implemented to add the widget to the form
-    // Similar to how field-filters-container adds filters
+    setWidgetConfigs(newWidgets)
+    triggerFormUpdate(newWidgets, expandedWidget)
   }
 
   const onRemove = (widgetId: string): void => {

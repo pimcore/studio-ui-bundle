@@ -13,11 +13,11 @@ import { Input } from '@sdk/components'
 import { type FormInstance, type InputRef } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { WidgetTypes, WidgetTypeSelect } from '../widget-type-select/widget-type-select'
+import { WidgetTypeSelect } from '../widget-type-select/widget-type-select'
 
 export interface WidgetForm {
   name: string
-  widgetType: WidgetTypes
+  widgetType: string //TODO: specify
 }
 
 interface CreateWidgetFormProps {
@@ -26,30 +26,34 @@ interface CreateWidgetFormProps {
   initialValues?: Partial<WidgetForm>
 }
 
+enum WidgetTypes {
+  ElementTree = 'element-tree'
+}
+
 export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
     <Form
-      form={ form }
-      initialValues={ {
+      form={form}
+      initialValues={{
         widgetType: WidgetTypes.ElementTree,
         ...initialValues
-      } }
+      }}
       layout="vertical"
     >
       <Form.Item
-        label={ t('widget-editor.create-form.name') }
+        label={t('widget-editor.create-form.name')}
         name="name"
-        rules={ [
+        rules={[
           { required: true, message: t('widget-editor.create-form.name.required') }
-        ] }
+        ]}
       >
-        <Input ref={ inputRef } />
+        <Input ref={inputRef} />
       </Form.Item>
 
       <Form.Item
-        label={ t('widget-editor.create-form.widgetType') }
+        label={t('widget-editor.create-form.widgetType')}
         name="widgetType"
       >
         <WidgetTypeSelect />
