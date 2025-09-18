@@ -35,8 +35,5 @@ moduleSystem.registerModule({
     // Register the global message process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     backgroundProcessor.registerProcess(globalProcess)
-
-    // Start the subscription
-    messageRegistry.startGlobalSubscription()
   }
 })

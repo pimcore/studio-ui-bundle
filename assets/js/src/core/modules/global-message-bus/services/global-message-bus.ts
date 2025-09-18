@@ -41,8 +41,13 @@ export class GlobalMessageBus {
 
   /**
    * Register topics that handlers can use
+   * @throws Error if global subscription has already started
    */
   public registerTopics (topics: string[]): void {
+    if (!isNil(this.globalSubscriptionId)) {
+      throw new Error('Cannot register new topics after global subscription has started. Topics must be registered in your module\'s onInit() method before the app starts.')
+    }
+
     topics.forEach(topic => this.registeredTopics.add(topic))
   }
 
