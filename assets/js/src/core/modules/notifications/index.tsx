@@ -41,11 +41,11 @@ moduleSystem.registerModule({
       component: NotificationsContainer
     })
 
-    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+    /* const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
     componentRegistry.registerToSlot('global.feedback', {
       name: 'notifications',
       component: NotificationUpdates
-    })
+    })*/
 
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())
