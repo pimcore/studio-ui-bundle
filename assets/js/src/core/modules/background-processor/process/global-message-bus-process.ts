@@ -30,16 +30,13 @@ export class GlobalMessageBusProcess extends AbstractMercureProcess {
 
   public start (): void {
     super.start()
-    console.log('🚀 GlobalMessageBusProcess started')
   }
 
   public cancel (): void {
     super.cancel()
-    console.log('🛑 GlobalMessageBusProcess cancelled')
   }
 
   protected sendMessage (message: AbstractMercureMessage): void {
-    // Route complete Mercure message to registry
     this.messageRegistry.routeMessage(message)
   }
 }

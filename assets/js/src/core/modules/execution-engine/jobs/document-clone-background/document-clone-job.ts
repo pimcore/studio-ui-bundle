@@ -24,9 +24,7 @@ export interface DocumentCloneJobOptions {
   targetId: number
   parameters: DocumentCloneParameters
   title: string
-  /** Tree ID for UI state management */
   treeId?: string
-  /** Node ID for UI state management */
   nodeId?: string
 }
 
@@ -54,22 +52,17 @@ export class DocumentCloneJob implements JobInterface {
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
 
-    // Set loading state if node management is enabled
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: true }))
     }
 
     try {
-      // Execute the API call
       const jobRunId = await this.executeCloneRequest()
 
-      // If no jobRunId, operation completed immediately
       if (isNil(jobRunId)) {
         await this.handleImmediateCompletion()
         return
       }
-
-      // Register job handler for background processing
       const handler = new StepBasedProgressJobHandler({
         jobRunId,
         config: this.getJobConfig(),
@@ -84,13 +77,11 @@ export class DocumentCloneJob implements JobInterface {
         }
       })
 
-      // Register the handler with the message bus
       messageBus.registerHandler(handler)
     } catch (error: any) {
       await this.handleJobFailure(error)
       trackError(new GeneralError(error.message as string))
     } finally {
-      // Clear loading state if node management is enabled
       if (isString(this.treeId) && isString(this.nodeId)) {
         store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
       }
@@ -136,7 +127,6 @@ export class DocumentCloneJob implements JobInterface {
   }
 
   private async handleJobFailure (error: any): Promise<void> {
-    // Default implementation - can be extended for specific error handling
     console.error('Document clone job failed:', error)
   }
 }
