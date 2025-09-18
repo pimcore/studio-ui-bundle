@@ -22,6 +22,12 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
+export enum WorkspaceType {
+  DOCUMENT = 'document',
+  ASSET = 'asset',
+  OBJECT = 'object'
+}
+
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useUserManagementContext()
@@ -80,7 +86,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ 'document' }
+          type={ WorkspaceType.DOCUMENT }
         />
       )
     }
@@ -123,7 +129,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ 'asset' }
+          type={ WorkspaceType.ASSET }
         />
       )
     }
@@ -166,7 +172,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ 'object' }
+          type={ WorkspaceType.OBJECT }
         />
       )
     }
@@ -206,12 +212,16 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       />
 
       <DuplicatePropertyModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeDuplicatePropertyModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
+        footer={ (
+          <ModalFooter>
+            <Button
+              onClick={ closeDuplicatePropertyModal }
+              type='primary'
+            >
+              {t('button.ok')}
+            </Button>
+          </ModalFooter>
+        ) }
         title={ t('properties.property-already-exist.title') }
       >
         {t('properties.property-already-exist.error')}
