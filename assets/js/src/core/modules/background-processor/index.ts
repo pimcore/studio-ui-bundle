@@ -14,7 +14,8 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { DocumentCloneJobHandler } from '@Pimcore/modules/global-message-bus/handlers/document-clone-job-handler'
+import { DocumentCloneJobHandler } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/message-handler'
+import { topics } from '../execution-engine/topics'
 
 // Export the global message system
 export { GlobalMessageBus } from '../global-message-bus/services/global-message-bus'
@@ -24,7 +25,7 @@ export { GlobalMessageBusProcess } from './process/global-message-bus-process'
 export { useGlobalMessageBus } from '../global-message-bus/hooks/use-global-message-bus'
 
 // Export example concrete handlers
-export { DocumentCloneJobHandler } from '../global-message-bus/handlers/document-clone-job-handler'
+export { DocumentCloneJobHandler } from '../execution-engine/jobs/document-clone-background/message-handler'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -33,7 +34,7 @@ moduleSystem.registerModule({
     const globalProcess = container.get<GlobalMessageBusProcess>(serviceIds.globalMessageBusProcess)
 
     // Register topics with the registry first
-    messageRegistry.registerTopics(DocumentCloneJobHandler.TOPICS)
+    messageRegistry.registerTopics(Object.values(topics))
 
     // Register the global message process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)

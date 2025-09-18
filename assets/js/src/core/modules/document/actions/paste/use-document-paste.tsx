@@ -1,7 +1,15 @@
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
- * Full copyright and license information is available in
+ * Full copyright and       // Register job handler for background processing
+      const config: DocumentCloneJobConfig = {
+        title: t('document.tree.copy-paste.cloning-folder'),
+        progress: 0,
+        parentFolderId: targetId,
+        parentFolderType: elementTypes.document
+      }
+
+      const handler = new DocumentCloneJobHandler(jobRunId, config)on is available in
  * LICENSE.md which is distributed with this source code.
  *
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
@@ -14,22 +22,23 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { Element } from '@Pimcore/modules/element/element-helper'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@sdk/app'
+import { store } from '@Pimcore/app/store'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
-import { useDocumentCloneMutation, useDocumentReplaceContentMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
 import { Modal, Select, Form } from 'antd'
-import { type DocumentCloneParameters } from '@Pimcore/modules/document/document-api-slice.gen'
+import { type DocumentCloneParameters, api, type DocumentCloneApiArg } from '@Pimcore/modules/document/document-api-slice.gen'
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { startDocumentCloneJob } from '../../background-processes/start-document-clone-job'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { useGlobalMessageBus } from '@Pimcore/modules/background-processor'
+import { DocumentCloneJobHandler } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/message-handler'
+import { type DocumentCloneJobConfig } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/types'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface UseDocumentPasteHookReturn {
@@ -58,12 +67,10 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
   const dispatch = useAppDispatch()
   const { paste } = useCopyPaste('document')
   const { treeId } = useTreeId(true)
-  const [documentCloneMutation] = useDocumentCloneMutation()
-  const [documentReplaceContentMutation] = useDocumentReplaceContentMutation()
   const { getStoredNode } = useTreeCopyPasteContext('document')
   const { isPasteHidden } = usePasteVisibility('document')
   const settings = useSettings()
-  const { addJob, updateJob } = useJobs()
+  const messageRegistry = useGlobalMessageBus()
 
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
   const [languageForm] = Form.useForm()
@@ -94,23 +101,38 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
     dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: true }))
 
     try {
-      // Use the new job-based approach
-      await startDocumentCloneJob(
-        {
-          sourceId,
-          targetId,
-          parentFolder: targetId,
-          elementType: elementTypes.document,
-          title: t('document.tree.copy-paste.cloning-folder'),
-          parameters,
-          isReplace: false
-        },
-        documentCloneMutation,
-        documentReplaceContentMutation,
-        addJob,
-        updateJob,
-        dispatch
-      )
+      const cloneParams: DocumentCloneApiArg = {
+        id: sourceId,
+        parentId: targetId,
+        documentCloneParameters: parameters ?? {}
+      }
+      
+      const result = await dispatch(
+        api.endpoints.documentClone.initiate(cloneParams)
+      ).unwrap()
+
+      const jobRunId = result?.jobRunId
+
+      // If no jobRunId, operation completed immediately
+      if (isNil(jobRunId)) {
+        // Refresh the tree
+        dispatch(refreshNodeChildren({
+          nodeId: targetId.toString(),
+          elementType: elementTypes.document
+        }))
+        return
+      }
+
+      // Register job handler for background processing
+      const config: DocumentCloneJobConfig = {
+        title: t('document.tree.copy-paste.cloning-folder'),
+        progress: 0,
+        parentFolderId: targetId,
+        parentFolderType: elementTypes.document
+      }
+
+      const handler = new DocumentCloneJobHandler(jobRunId, config)
+      messageRegistry.registerHandler(handler)
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
     } finally {
@@ -132,22 +154,13 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
     dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: true }))
 
     try {
-      // Use the new job-based approach for content replacement
-      await startDocumentCloneJob(
-        {
+      // Replace content operations don't trigger background jobs - execute directly
+      await dispatch(
+        api.endpoints.documentReplaceContent.initiate({
           sourceId,
-          targetId,
-          parentFolder: targetId,
-          elementType: elementTypes.document,
-          title: t('document.tree.copy-paste.replacing-content'),
-          isReplace: true
-        },
-        documentCloneMutation,
-        documentReplaceContentMutation,
-        addJob,
-        updateJob,
-        dispatch
-      )
+          targetId
+        })
+      ).unwrap()
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
     } finally {

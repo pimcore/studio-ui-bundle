@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractJobRunIdHandler } from '@Pimcore/modules/global-message-bus/handlers/abstract/abstract-job-run-id-handler'
+import { AbstractJobHandler } from '@Pimcore/modules/global-message-bus/handlers/abstract/abstract-job-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
@@ -16,8 +16,8 @@ import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tr
 import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
-import { createDocumentCloneBackgroundJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/factory'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
+import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
 import { isNil } from 'lodash'
 
 export interface DocumentCloneJobConfig {
@@ -33,11 +33,24 @@ export interface DocumentCloneJobConfig {
   onCleanup?: () => void
 }
 
+export interface DocumentCloneBackgroundJob extends AbstractJob {
+  type: 'document-clone-background'
+  config: {
+    parentFolder: string
+    elementType: ElementType
+    sourceId: number
+    targetId: number
+    parameters?: any
+    isReplace?: boolean
+    progress: number
+  }
+}
+
 /**
  * Concrete implementation of a job handler for document clone operations
  * Handles all Redux updates and tree refreshing internally
  */
-export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
+export class DocumentCloneJobHandler extends AbstractJobHandler {
   /**
    * Topics that document clone jobs need to listen to
    */
@@ -49,7 +62,7 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
   ]
 
   private readonly config: DocumentCloneJobConfig
-  private readonly job: AbstractJob
+  private readonly job: DocumentCloneBackgroundJob
 
   constructor (
     jobRunId: string | number,
@@ -59,17 +72,23 @@ export class DocumentCloneJobHandler extends AbstractJobRunIdHandler {
     this.config = config
 
     // Create the Redux job internally
-    this.job = createDocumentCloneBackgroundJob({
-      title: config.title,
-      parentFolder: config.parentFolder,
-      elementType: config.elementType,
-      sourceId: config.sourceId,
-      targetId: config.targetId,
-      parameters: config.parameters,
-      isReplace: config.isReplace,
+    this.job = {
+      id: getUniqueId(),
       action: async () => 0, // Placeholder action
-      topics: ['document-clone']
-    })
+      type: 'document-clone-background',
+      title: config.title,
+      status: JobStatus.QUEUED,
+      topics: ['document-clone'], //
+      config: {
+        parentFolder: config.parentFolder,
+        elementType: config.elementType,
+        sourceId: config.sourceId,
+        targetId: config.targetId,
+        parameters: config.parameters,
+        isReplace: config.isReplace,
+        progress: 0
+      }
+    } as DocumentCloneBackgroundJob
   }
 
   public onRegister (): void {

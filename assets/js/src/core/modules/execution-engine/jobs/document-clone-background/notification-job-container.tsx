@@ -13,10 +13,10 @@ import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-
 import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
-import { type DocumentCloneBackgroundJob } from './factory'
+import { type DocumentCloneJobConfig } from './types'
 
 export interface DocumentCloneBackgroundJobProps extends JobProps {
-  config: DocumentCloneBackgroundJob['config']
+  config: DocumentCloneJobConfig
 }
 
 export const NotificationJobContainer = (props: DocumentCloneBackgroundJobProps): React.JSX.Element => {
@@ -51,7 +51,7 @@ export const NotificationJobContainer = (props: DocumentCloneBackgroundJobProps)
       ] }
 
       { ...props }
-      progress={ props.config.progress }
+      progress={ props.config.progress ?? 0 }
     />
   )
 }

@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AbstractMercureMessage } from '../../background-processor/process/abstract-mercure-process'
+import { AbstractMercureMessage } from "@Pimcore/modules/background-processor/process/abstract-mercure-process";
+
 
 export abstract class AbstractMessageHandler {
   /**
@@ -36,11 +37,6 @@ export abstract class AbstractMessageHandler {
    * Optional lifecycle method called when handler is unregistered
    */
   onUnregister? (): void
-
-  /**
-   * Optional cleanup method for handlers that need to clean up resources
-   */
-  cleanup? (): void
 
   /**
    * Unique identifier for this handler
