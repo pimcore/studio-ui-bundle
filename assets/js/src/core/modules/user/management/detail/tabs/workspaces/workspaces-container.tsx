@@ -55,30 +55,28 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       id: 'documents',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: (
-        <>
-          <IconTextButton
-            icon={ { value: 'add-find' } }
-            onClick={ () => {
-              setDocumentWorkspaces([...user.documentWorkspaces, {
-                cid: new Date().getTime(), // after path update is set to document id
-                cpath: '',
-                list: false,
-                view: false,
-                save: false,
-                publish: false,
-                unpublish: false,
-                delete: false,
-                rename: false,
-                create: false,
-                settings: false,
-                versions: false,
-                properties: false
-              }])
-            } }
-          >
-            { t('user-management.workspaces.add') }
-          </IconTextButton>
-        </>
+        <IconTextButton
+          icon={ { value: 'add-find' } }
+          onClick={ () => {
+            setDocumentWorkspaces([...user.documentWorkspaces, {
+              cid: new Date().getTime(), // after path update is set to document id
+              cpath: '',
+              list: false,
+              view: false,
+              save: false,
+              publish: false,
+              unpublish: false,
+              delete: false,
+              rename: false,
+              create: false,
+              settings: false,
+              versions: false,
+              properties: false
+            }])
+          } }
+        >
+          { t('user-management.workspaces.add') }
+        </IconTextButton>
       ),
       children: (
         <Table
@@ -100,28 +98,26 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       id: 'assets',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: (
-        <>
-          <IconTextButton
-            icon={ { value: 'add-find' } }
-            onClick={ () => {
-              setAssetWorkspaces([...user.assetWorkspaces, {
-                cid: new Date().getTime(), // after path update is set to document id
-                cpath: '',
-                list: false,
-                view: false,
-                publish: false,
-                delete: false,
-                rename: false,
-                create: false,
-                settings: false,
-                versions: false,
-                properties: false
-              }])
-            } }
-          >
-            { t('user-management.workspaces.add') }
-          </IconTextButton>
-        </>
+        <IconTextButton
+          icon={ { value: 'add-find' } }
+          onClick={ () => {
+            setAssetWorkspaces([...user.assetWorkspaces, {
+              cid: new Date().getTime(), // after path update is set to document id
+              cpath: '',
+              list: false,
+              view: false,
+              publish: false,
+              delete: false,
+              rename: false,
+              create: false,
+              settings: false,
+              versions: false,
+              properties: false
+            }])
+          } }
+        >
+          { t('user-management.workspaces.add') }
+        </IconTextButton>
       ),
       children: (
         <Table
@@ -143,30 +139,28 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       id: 'objects',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: (
-        <>
-          <IconTextButton
-            icon={ { value: 'add-find' } }
-            onClick={ () => {
-              setObjectWorkspaces([...user.dataObjectWorkspaces, {
-                cid: new Date().getTime(), // after path update is set to document id
-                cpath: '',
-                list: false,
-                view: false,
-                save: false,
-                publish: false,
-                unpublish: false,
-                delete: false,
-                rename: false,
-                create: false,
-                settings: false,
-                versions: false,
-                properties: false
-              }])
-            } }
-          >
-            { t('user-management.workspaces.add') }
-          </IconTextButton>
-        </>
+        <IconTextButton
+          icon={ { value: 'add-find' } }
+          onClick={ () => {
+            setObjectWorkspaces([...user.dataObjectWorkspaces, {
+              cid: new Date().getTime(), // after path update is set to document id
+              cpath: '',
+              list: false,
+              view: false,
+              save: false,
+              publish: false,
+              unpublish: false,
+              delete: false,
+              rename: false,
+              create: false,
+              settings: false,
+              versions: false,
+              properties: false
+            }])
+          } }
+        >
+          { t('user-management.workspaces.add') }
+        </IconTextButton>
       ),
       children: (
         <Table
