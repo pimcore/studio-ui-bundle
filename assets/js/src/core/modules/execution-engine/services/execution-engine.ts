@@ -10,7 +10,7 @@
 
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type GlobalMessageBus } from '@Pimcore/modules/execution-engine/message-bus/global-message-bus'
+import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus'
 import { type JobInterface } from '../jobs/job-interface'
 
 /**

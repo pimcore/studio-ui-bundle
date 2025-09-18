@@ -8,11 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
+import { isNil, isString } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
 import { api, type DocumentCloneApiArg, type DocumentCloneParameters } from '@Pimcore/modules/document/document-api-slice.gen'
 import { topics } from '../../topics'
@@ -54,9 +53,9 @@ export class DocumentCloneJob implements JobInterface {
 
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
-    
+
     // Set loading state if node management is enabled
-    if (this.treeId && this.nodeId) {
+    if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: true }))
     }
 
@@ -87,13 +86,12 @@ export class DocumentCloneJob implements JobInterface {
 
       // Register the handler with the message bus
       messageBus.registerHandler(handler)
-
     } catch (error: any) {
       await this.handleJobFailure(error)
       trackError(new GeneralError(error.message as string))
     } finally {
       // Clear loading state if node management is enabled
-      if (this.treeId && this.nodeId) {
+      if (isString(this.treeId) && isString(this.nodeId)) {
         store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
       }
     }

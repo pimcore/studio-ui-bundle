@@ -35,11 +35,11 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     super()
     this.jobRunId = options.jobRunId
     this.config = options.config
-    
+
     // Use constructor parameters or defaults
     this.jobType = options.jobType ?? 'default'
     this.onJobCompletion = options.onJobCompletion
-    
+
     // Merge default topics with additional topics, ensuring uniqueness
     const additionalTopics = options.additionalTopics ?? []
     const allTopics = [...new Set([...defaultTopics, ...additionalTopics])]
@@ -229,4 +229,3 @@ export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
   onJobCompletion?: (data: any) => void | Promise<void>
   additionalTopics?: string[]
 }
-

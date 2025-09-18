@@ -26,5 +26,5 @@ export interface JobInterface {
    * Run the complete job execution workflow
    * This is the main entry point for job execution
    */
-  run (options: JobRunOptions): Promise<void>
+  run: (options: JobRunOptions) => Promise<void>
 }

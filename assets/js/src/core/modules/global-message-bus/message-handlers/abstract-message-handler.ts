@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractMercureMessage } from "@Pimcore/modules/background-processor/process/abstract-mercure-process";
-
+import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 
 export abstract class AbstractMessageHandler {
   /**

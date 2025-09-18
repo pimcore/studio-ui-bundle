@@ -11,9 +11,9 @@
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { type AbstractMessageHandler } from '../message-handlers/abstract/abstract-message-handler'
+import { type AbstractMessageHandler } from '../message-handlers/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
-import { debounce, isNil } from 'lodash'
+import { debounce, isNil, isString, isNumber } from 'lodash'
 
 // Message buffer entry with timestamp for TTL
 interface BufferedMessage {
@@ -62,7 +62,12 @@ export class GlobalMessageBus {
     // Validate that the handler's topics are registered in the process
     this.validateHandlerTopics(handler)
 
-    this.activeHandlers.set(handler.getId(), handler)
+    const handlerId = handler.getId()
+    if (isString(handlerId) || isNumber(handlerId)) {
+      this.activeHandlers.set(handlerId, handler)
+    } else {
+      throw new Error('Handler ID must be a string or number')
+    }
 
     // Call lifecycle method if defined
     if (!isNil(handler.onRegister)) {
@@ -140,7 +145,8 @@ export class GlobalMessageBus {
     const matchingHandlers: AbstractMessageHandler[] = []
 
     for (const handler of this.activeHandlers.values()) {
-      if (handler.shouldHandle(mercureMessage)) {
+      const shouldHandle = handler.shouldHandle(mercureMessage)
+      if (shouldHandle === true) {
         matchingHandlers.push(handler)
       }
     }
@@ -189,7 +195,8 @@ export class GlobalMessageBus {
 
     // Find all buffered messages this handler should process
     for (const bufferedMsg of this.messageBuffer) {
-      if (handler.shouldHandle(bufferedMsg.mercureMessage)) {
+      const shouldHandle = handler.shouldHandle(bufferedMsg.mercureMessage)
+      if (shouldHandle === true) {
         matchingMessages.push(bufferedMsg)
       }
     }
