@@ -9,7 +9,7 @@
  */
 
 import { injectable } from 'inversify'
-import { StepBasedProgressJobHandler } from '@Pimcore/modules/execution-engine/jobs/handlers/step-based-progress-job-handler'
+import { StepBasedProgressJobHandler } from '@Pimcore/modules/execution-engine/message-handlers/step-based-progress-job-handler'
 import { store } from '@Pimcore/app/store'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DocumentCloneJobConfig } from './types'

@@ -10,8 +10,6 @@
 
 // Handlers
 export { AbstractMessageHandler } from './handlers/abstract/abstract-message-handler'
-export { AbstractJobHandler } from './handlers/abstract/abstract-job-handler'
-export { DocumentCloneJobHandler } from '../execution-engine/jobs/document-clone-background/message-handler'
 
 // Services
 export { GlobalMessageBus } from './services/global-message-bus'

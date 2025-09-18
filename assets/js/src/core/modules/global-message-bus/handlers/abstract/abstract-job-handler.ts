@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/handlers/abstract/abstract-message-handler'
-import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
+import { AbstractMessageHandler } from './abstract-message-handler'
+import { type AbstractMercureMessage } from '../../../background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
-import { type BaseJobConfig } from './base-job-config'
+import { type BaseJobConfig } from '@Pimcore/modules/execution-engine/handlers/base-job-config'
 import { isNil } from 'lodash'
 import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { defaultTopics } from '@Pimcore/modules/execution-engine/topics'
@@ -32,7 +32,10 @@ export abstract class AbstractJobHandler<TConfig extends BaseJobConfig> extends 
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: any) => void | Promise<void>
 
-  constructor (jobRunId: string | number, config: TConfig) {
+  constructor (
+    jobRunId: string | number,
+    config: TConfig
+  ) {
     super()
     this.jobRunId = jobRunId
     this.config = config

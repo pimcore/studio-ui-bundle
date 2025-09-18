@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type BaseJobConfig } from '@Pimcore/modules/global-message-bus/handlers/abstract/base-job-config'
+import { type BaseJobConfig } from "../../message-handlers/abstract-job-handler"
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface DocumentCloneJobConfig extends BaseJobConfig {

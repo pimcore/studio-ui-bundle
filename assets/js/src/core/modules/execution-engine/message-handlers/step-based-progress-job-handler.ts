@@ -9,7 +9,7 @@
  */
 
 import { AbstractJobHandler } from './abstract-job-handler'
-import { type BaseJobConfig } from './base-job-config'
+import { type BaseJobConfig } from "./abstract-job-handler"
 
 /**
  * Progress job handler that converts step-based progress (currentStep/totalSteps) to percentage
