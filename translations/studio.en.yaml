@@ -784,6 +784,7 @@ user-management.add-folder.label: Enter the name of the new folder
 user-management.add-user: Add new User
 user-management.add-user.label: Enter the name of the new user
 user-management.last-login: Last Login
+user-management.search.id: ID
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -801,6 +802,7 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce

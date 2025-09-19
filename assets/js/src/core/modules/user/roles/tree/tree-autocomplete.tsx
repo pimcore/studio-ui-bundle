@@ -9,10 +9,8 @@
  */
 
 import React, { useState } from 'react'
-// import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
-import { AutoComplete, Input } from 'antd'
+import { AutoComplete, Input, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
-// import { UserOutlined } from '@ant-design/icons'
 import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -26,38 +24,25 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
   const { t } = useTranslation()
   const { openRole, searchRoleByText } = useRoleHelper()
 
-  // const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
-  const [searchOptions] = useState<Array<{ value: string }>>([])
+  const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
-  // const { Text } = Typography
+  const { Text } = Typography
   const { styles } = useStyles()
 
   const onSearch = (value: string): void => {
     setSearchValue(value)
 
     searchRoleByText(searchValue).then(response => {
-      console.log('todo search response', response)
-      // setSearchOptions(response.items.map((item) => ({
-      //   value: item.id.toString(),
-      //   label: (
-      //     <Row
-      //       gutter={ 8 }
-      //       wrap={ false }
-      //     >
-      //       <Col flex="none">
-      //         <Avatar
-      //           icon={ <UserOutlined /> }
-      //           size={ 26 }
-      //         />
-      //       </Col>
-      //       <Col flex="auto">
-      //         <div>{item.username}</div>
-      //         <Text strong>{t('roles.search.id')}: </Text> {item.id}
-      //       </Col>
-      //     </Row>
-      //   )
-      // })))
-    }).catch(e => { trackError(new GeneralError('An error occured while searching for a user')) })
+      setSearchOptions(response.items.map((item) => ({
+        value: item.id.toString(),
+        label: (
+          <>
+            <div>{item.name}</div>
+            <Text strong>{t('roles.search.id')}: </Text> {item.id}
+          </>
+        )
+      })))
+    }).catch(e => { trackError(new GeneralError('An error occured while searching for a role')) })
   }
 
   return (
