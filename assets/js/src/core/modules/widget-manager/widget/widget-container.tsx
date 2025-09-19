@@ -8,10 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, type ComponentType, useState, useMemo } from 'react'
+import React, { createContext, type ComponentType, useState, useMemo, useEffect } from 'react'
 import { BorderNode, type TabNode } from 'flexlayout-react'
 import { WidgetView } from '@Pimcore/modules/widget-manager/widget/widget-view'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
+import { useAppSelector } from '@sdk/app'
+import { selectMainWidgetContext } from '../widget-manager-slice'
+import { useGlobalDefaultContextActions } from '@Pimcore/modules/element/hooks/use-global-default-context'
 
 interface WidgetContainerProps {
   node: TabNode
@@ -30,6 +33,23 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const isBorderNode = node.getParent() instanceof BorderNode
   const config = node.getConfig()
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
+  const mainWidgetContext = useAppSelector(selectMainWidgetContext)
+  const isWidgetActive = mainWidgetContext?.nodeId === nodeId
+  const componentName = node.getComponent()
+  const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
+
+  useEffect(() => {    
+    const isElementEditor = componentName === 'asset-editor' || 
+                           componentName === 'data-object-editor' || 
+                           componentName === 'document-editor'
+
+    if (isWidgetActive && !isElementEditor && componentName) {
+      setGlobalDefaultContext({
+        type: 'default',
+        widgetId: nodeId,
+      })
+    }
+  }, [isWidgetActive, componentName, nodeId, config, mainWidgetContext])
 
   return useMemo(() => (
     <ErrorBoundary>

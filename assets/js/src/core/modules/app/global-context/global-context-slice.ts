@@ -16,29 +16,42 @@ export interface GlobalContext {
   config: Record<string, unknown>
 }
 
-const initialState: GlobalContext[] = []
+export interface GlobalDefaultContext {
+  type: 'default'
+  widgetId: string
+}
+
+export type GlobalContextUnion = GlobalContext | GlobalDefaultContext
+
+type GlobalContextState = GlobalContextUnion | null
+
+const initialState: GlobalContextState = null
 
 const globalContextSlice = createSlice({
   name: 'global-context',
-  initialState,
+  initialState: initialState as GlobalContextState,
   reducers: {
     addGlobalContext: (state, action: PayloadAction<GlobalContext>) => {
-      return [action.payload]
+      return action.payload
     },
 
     removeGlobalContext: (state, action: PayloadAction<string>) => {
-      return state.filter((context) => context.type !== action.payload)
+      return null
+    },
+
+    setGlobalDefaultContext: (state, action: PayloadAction<GlobalDefaultContext>) => {
+      return action.payload
     }
   },
 
   selectors: {
-    selectContextByType: (state, type: string) => {
-      return state.find((context) => context.type === type)
+    selectContextByType: (state: GlobalContextState, type: string) => {
+      return state?.type === type ? state : null
     }
   }
 })
 
 injectSliceWithState(globalContextSlice)
 
-export const { addGlobalContext, removeGlobalContext } = globalContextSlice.actions
+export const { addGlobalContext, removeGlobalContext, setGlobalDefaultContext } = globalContextSlice.actions
 export const { selectContextByType } = globalContextSlice.getSelectors((state: RootState) => state['global-context'])
