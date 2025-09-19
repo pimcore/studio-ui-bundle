@@ -36,7 +36,6 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
   const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const isWidgetActive = mainWidgetContext?.nodeId === nodeId
-  const componentName = node.getComponent()
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
 
   useEffect(() => {    
