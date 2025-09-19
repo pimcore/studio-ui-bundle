@@ -21,7 +21,6 @@ export interface PermissionBasedLanguageSelectionControlProps {
 
 export const PermissionBasedLanguageSelectionControl = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
   const context = useOptionalElementContext()
-  console.log({ context })
 
   if (context === null) {
     return <WithoutElementContext { ...props } />

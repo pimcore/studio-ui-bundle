@@ -26,7 +26,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
     const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
     let currentAvailableLanguages = (user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? []
 
-    if (viewableLanguages.length === 1 && viewableLanguages[0] === 'default') {
+    if ((viewableLanguages.length === 1 && viewableLanguages[0] === 'default') || (viewableLanguages.length === 0)) {
       currentAvailableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
     }
 
