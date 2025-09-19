@@ -9,19 +9,10 @@
  */
 
 import React from 'react'
-import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useTranslation } from 'react-i18next'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { isEmpty } from 'lodash'
-import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import {
-  convertType
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/utils/link-value-converter'
 import { useStyles } from './link.styles'
 import { LinkPreview } from './components/link-preview/link-preview'
-import { useLinkModal } from './hooks/use-link-modal'
+import { useLinkDataType } from './hooks/use-link-data-type'
 
 export interface LinkValue {
   text: string
@@ -52,100 +43,30 @@ export interface LinkProps {
   className?: string
   textPrefix?: string
   textSuffix?: string
+  PreviewComponent?: React.ComponentType<{
+    className?: string
+    inherited?: boolean
+    textPrefix?: string
+    textSuffix?: string
+    value: LinkValue | null
+  }>
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const { styles } = useStyles()
-  const { openElement } = useElementHelper()
-
-  const value = props.value ?? null
-
-  const { openModal } = useLinkModal({
-    disabled: props.disabled,
-    allowedTypes: props.allowedTypes,
-    allowedTargets: props.allowedTargets,
-    disabledFields: props.disabledFields,
-    onSave: props.onChange
+  const { renderPreview, renderActions } = useLinkDataType({
+    ...props,
+    PreviewComponent: props.PreviewComponent ?? LinkPreview
   })
-
-  const openLink = (): void => {
-    if (value === null) {
-      return
-    }
-    if (value.linktype === 'direct' && value.direct !== null && !isEmpty(value.direct)) {
-      window.open(value.direct, '_blank')
-    }
-
-    const internalType = convertType(value.internalType ?? null)
-    const internal = value.internal ?? null
-
-    if (value.linktype === 'internal' && internalType !== null && internal !== null) {
-      openElement({
-        type: internalType,
-        id: internal
-      }).catch((error) => {
-        console.error('Error while opening element:', error)
-      })
-    }
-  }
-
-  const showModal = (): void => {
-    openModal(value)
-  }
 
   return (
     <Flex
       align="center"
-      className={ cn(styles.link, props.className) }
+      className={ styles.link }
       gap="extra-small"
     >
-      <LinkPreview
-        className="studio-inherited-overlay"
-        inherited={ props.inherited }
-        textPrefix={ props.textPrefix }
-        textSuffix={ props.textSuffix }
-        value={ value }
-      />
-
-      <Tooltip
-        key="open"
-        title={ t('open') }
-      >
-        <IconButton
-          disabled={ value === null || isEmpty(value.fullPath) }
-          icon={ { value: 'open-folder' } }
-          onClick={ openLink }
-          type="default"
-        />
-      </Tooltip>
-
-      { props.disabled !== true
-        ? (
-          <Tooltip
-            key="edit"
-            title={ t('edit') }
-          >
-            <IconButton
-              icon={ { value: 'edit' } }
-              onClick={ showModal }
-              type="default"
-            />
-          </Tooltip>
-          )
-        : (
-          <Tooltip
-            key="details"
-            title={ t('details') }
-          >
-            <IconButton
-              icon={ { value: 'info-circle' } }
-              onClick={ showModal }
-              type="default"
-            />
-          </Tooltip>
-          ) }
-
+      {renderPreview()}
+      {renderActions()}
     </Flex>
   )
 }

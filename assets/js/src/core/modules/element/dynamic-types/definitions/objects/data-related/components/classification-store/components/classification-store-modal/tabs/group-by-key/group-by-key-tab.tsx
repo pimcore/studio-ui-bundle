@@ -21,7 +21,8 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 
 interface GroupByKeyTabProps {
   storeId: ClassificationStoreGetKeyGroupRelationsApiArg['storeId']
-  objectId: ClassificationStoreGetKeyGroupRelationsApiArg['objectId']
+  classId: ClassificationStoreGetKeyGroupRelationsApiArg['classId']
+  objectId?: number
   fieldName: ClassificationStoreGetKeyGroupRelationsApiArg['fieldName']
 }
 
@@ -47,6 +48,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
       columns={ columns }
       queryArgs={ {
         storeId: props.storeId,
+        classId: props.classId,
         objectId: props.objectId,
         fieldName: props.fieldName
       } }

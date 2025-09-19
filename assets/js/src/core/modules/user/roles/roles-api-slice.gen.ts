@@ -46,11 +46,29 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/roles` }),
                 providesTags: ["Role Management"],
             }),
+            roleListWithPermission: build.query<RoleListWithPermissionApiResponse, RoleListWithPermissionApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/roles/with-permission`,
+                    params: {
+                        permission: queryArg.permission,
+                    },
+                }),
+                providesTags: ["Role Management"],
+            }),
             roleGetTree: build.query<RoleGetTreeApiResponse, RoleGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/roles/tree`,
                     params: {
                         parentId: queryArg.parentId,
+                    },
+                }),
+                providesTags: ["Role Management"],
+            }),
+            roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/role/search`,
+                    params: {
+                        searchQuery: queryArg.searchQuery,
                     },
                 }),
                 providesTags: ["Role Management"],
@@ -107,6 +125,14 @@ export type RoleGetCollectionApiResponse = /** status 200 List of available role
     items: SimpleUserRole[];
 };
 export type RoleGetCollectionApiArg = void;
+export type RoleListWithPermissionApiResponse = /** status 200 List of roles with the given permission */ {
+    totalItems: number;
+    items: SimpleUserRole[];
+};
+export type RoleListWithPermissionApiArg = {
+    /** List roles with this permission */
+    permission: string;
+};
 export type RoleGetTreeApiResponse = /** status 200 Collection of roles including folders for the given parent id. */ {
     totalItems: number;
     items: TreeNode[];
@@ -114,6 +140,14 @@ export type RoleGetTreeApiResponse = /** status 200 Collection of roles includin
 export type RoleGetTreeApiArg = {
     /** Filter roles by parent id. */
     parentId: number;
+};
+export type RoleSearchApiResponse = /** status 200 List of roles */ {
+    totalItems: number;
+    items: SimpleUserRole[];
+};
+export type RoleSearchApiArg = {
+    /** Query to search for a role. This can be a part of role name or ID. */
+    searchQuery?: string;
 };
 export type TreeNode = {
     /** AdditionalAttributes */
@@ -252,5 +286,7 @@ export const {
     useRoleUpdateByIdMutation,
     useRoleDeleteByIdMutation,
     useRoleGetCollectionQuery,
+    useRoleListWithPermissionQuery,
     useRoleGetTreeQuery,
+    useRoleSearchQuery,
 } = injectedRtkApi;

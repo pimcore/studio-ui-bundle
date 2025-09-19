@@ -38,6 +38,8 @@ interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
 }
 
+export const VERSIONS_CONTENT_VIEW_ID = 'versions_content_view'
+
 export const VersionsView = ({
   versions,
   SingleViewComponent,
@@ -194,6 +196,7 @@ export const VersionsView = ({
           children: (
             <Content
               centered={ isEmptyDetailedVersionsList }
+              id={ VERSIONS_CONTENT_VIEW_ID }
               padded
             >
               <Flex align="center">

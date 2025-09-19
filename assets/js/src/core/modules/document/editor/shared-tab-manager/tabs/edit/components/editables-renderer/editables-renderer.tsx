@@ -9,23 +9,16 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { useRef, useEffect, createRef } from 'react'
+import React, { useRef, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull, isUndefined } from 'lodash'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useDocumentEditor } from '../../hooks/use-document-editor'
 
 export interface EditablesRendererProps {
   editableDefinitions: AbstractDocumentEditableDefinition[]
 }
 
 export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProps): React.JSX.Element => {
-  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
-  const apiInitialized = useRef(false)
-  const { initializeData, notifyReady } = useDocumentEditor()
   const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
 
   // Create refs for each editable if they don't exist
@@ -34,31 +27,6 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
       editableContainerRefs.current[editable.id] = createRef<HTMLDivElement>()
     }
   })
-
-  const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
-    const initialData: Record<string, any> = {}
-    editableDefinitions.forEach((editable) => {
-      const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
-
-      initialData[editable.name] = {
-        type: editable.type,
-        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data, editable)
-      }
-    })
-    return initialData
-  }
-
-  if (!apiInitialized.current) {
-    initializeData(getInitialData(editableDefinitions))
-    apiInitialized.current = true
-  }
-
-  // Notify parent that the iframe is ready after initialization
-  useEffect(() => {
-    if (apiInitialized.current) {
-      notifyReady()
-    }
-  }, [notifyReady])
 
   return (
     <>
@@ -74,6 +42,7 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
             <RenderEditable
               containerRef={ editableContainerRefs.current[editable.id] }
               editableDefinition={ editable }
+              key={ editable.id }
             />,
             targetElement
           )

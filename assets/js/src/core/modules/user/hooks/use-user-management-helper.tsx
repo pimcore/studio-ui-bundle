@@ -27,9 +27,8 @@ import {
   type UserGetTreeApiArg,
   type UserDeleteByIdApiArg,
   type UserFolderDeleteByIdApiArg,
-  type User2,
   type User,
-  type UserGetImageApiResponse,
+  type User2,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import {
@@ -37,18 +36,21 @@ import {
   userClosed,
   userUpdated,
   changeUser,
-  userImageLoaded,
   userAvailablePermissionsFetched,
   type UserDraft
 } from '@Pimcore/modules/user/user-management-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
   parentId: number
   name: string
+}
+
+interface IUser extends User {
+  password?: string
 }
 
 interface UseUserReturn extends
@@ -60,14 +62,13 @@ interface UseUserReturn extends
   removeUser: (props: UserDeleteByIdApiArg) => Promise<{ data: UserDeleteByIdApiResponse, error: any }>
   removeFolder: (props: UserFolderDeleteByIdApiArg) => Promise<{ data: UserFolderDeleteByIdApiResponse, error: any }>
   cloneUser: (props: { id: number, name: string }) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
-  updateUserById: (props: { id: number, user: User2 | User }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
+  updateUserById: (props: { id: number, user: IUser }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   moveUserById: (props: { id: number, parentId: number }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   addNewFolder: (props: AddItemArgs) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
   uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
-  fetchUserImageById: (props: { id: number }) => Promise<{ data: UserGetImageApiResponse | undefined, error?: any }>
   activeId: number
   getAllIds: number[]
   getAvailablePermissions: () => any[]
@@ -171,37 +172,22 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return data
   }
 
-  async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
+  async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
+
+    const updateUser: User2 = {
+      ...user,
+      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false,
+      parentId: user.parentId ?? 0
+    }
+
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
-      updateUser: {
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        active: user.active,
-        admin: user.admin,
-        classes: user.classes,
-        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
-        language: user.language,
-        welcomeScreen: user.welcomeScreen,
-        memorizeTabs: user.memorizeTabs,
-        allowDirtyClose: user.allowDirtyClose,
-        closeWarning: user.closeWarning,
-        permissions: user.permissions,
-        parentId: user.parentId ?? 0,
-        roles: user.roles,
-        contentLanguages: user.contentLanguages,
-        websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
-        websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
-        keyBindings: user.keyBindings,
-        assetWorkspaces: user.assetWorkspaces,
-        dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives
-      }
+      updateUser
     }))
+
     handleNotification(t('user-management.save-user.success'), error)
+
     const userDraft: UserDraft = {
       ...data,
       modified: false,
@@ -216,7 +202,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }
@@ -225,23 +211,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
     handleNotification(t('user-management.upload-image.success'), error)
     return data
-  }
-
-  async function fetchUserImageById (props): Promise<{ data: UserGetImageApiResponse | undefined, error?: Error }> {
-    const { id } = props
-    let data
-    await fetch(`/pimcore-studio/api/user/image/${id}`)
-      .then(async (response) => await response.blob())
-      .then((imageBlob) => {
-        data = URL.createObjectURL(imageBlob)
-        dispatch(userImageLoaded({ id, image: data }))
-      }).catch((error) => {
-        const apiError = error instanceof Error
-          ? new ApiError(error)
-          : new GeneralError('An error occurred while loading the image')
-        trackError(apiError)
-      })
-    return { data }
   }
 
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
@@ -289,7 +258,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
-    fetchUserImageById,
     getAvailablePermissions,
     activeId,
     getAllIds

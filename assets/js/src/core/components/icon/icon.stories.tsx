@@ -19,7 +19,7 @@ const config: Meta = {
   },
 
   argTypes: {
-    name: {
+    value: {
       options: ['asset', 'folder'],
       control: { type: 'radio' }
     }
@@ -32,7 +32,7 @@ export default config
 
 export const _default = {
   args: {
-    name: 'asset',
+    value: 'asset',
     options: { width: 16, height: 16 }
   }
 }

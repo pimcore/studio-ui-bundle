@@ -12,4 +12,4 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
-export * from '@Pimcore/modules/document/sites-slice.gen'
+export * from '@Pimcore/modules/document/document-api-slice-enhanced'

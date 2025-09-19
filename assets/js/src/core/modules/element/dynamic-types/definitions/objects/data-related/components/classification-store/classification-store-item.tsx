@@ -19,7 +19,7 @@ import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-obje
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface ClassificationStoreItemProps {

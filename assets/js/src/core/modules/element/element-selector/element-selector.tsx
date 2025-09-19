@@ -16,6 +16,7 @@ import { GlobalRowSelectionProvider } from './provider/global-row-selection/glob
 import { AreaControlProvider } from './provider/area-control/area-control-provider'
 
 export const ElementSelector = (): React.JSX.Element => {
+  'use memo'
   const helper = useElementSelectorHelper()
 
   return (

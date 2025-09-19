@@ -13,17 +13,26 @@ import { Input as AntInput } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './input-password.styles'
 import { type PasswordProps } from 'antd/es/input'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface IInputPasswordProps extends PasswordProps {
   inherited?: boolean
 }
 
-export const InputPassword = ({ inherited, className, ...restProps }: IInputPasswordProps): JSX.Element => {
+export const InputPassword = ({ inherited, className, style, ...restProps }: IInputPasswordProps): JSX.Element => {
   const { styles } = useStyles()
+  const fieldWidths = useFieldWidthOptional()
+
+  // Apply medium width as default for password inputs
+  const computedStyle = {
+    maxWidth: fieldWidths?.medium,
+    ...style
+  }
 
   return (
     <AntInput.Password
       className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
+      style={ computedStyle }
       { ...restProps }
     />
   )

@@ -41,6 +41,7 @@ export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
+  docked?: boolean
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>
   isLoading?: boolean
@@ -61,6 +62,7 @@ export interface GridProps {
   contextMenu?: ListGridContextMenuComponents
   disabled?: boolean
   className?: string
+  dataTestId?: string
   onRowDoubleClick?: (row: any) => void
   enableRowDrag?: boolean
   handleDragEnd?: (event: DragEndEvent) => void

@@ -26,7 +26,7 @@ const SwitchComponent = (args: any): React.JSX.Element => {
 }
 
 const config: Meta = {
-  title: 'Components/Controls/Switch',
+  title: 'Components/Data Entry/Switch',
   component: Switch,
   parameters: {
     layout: 'fullscreen'

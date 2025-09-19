@@ -18,7 +18,7 @@ const SAMPLE_SELECT_OPTIONS = [
 ]
 
 const config: Meta = {
-  title: 'Components/Controls/Select',
+  title: 'Components/Data Entry/Select',
   args: {
     options: SAMPLE_SELECT_OPTIONS,
     width: 250

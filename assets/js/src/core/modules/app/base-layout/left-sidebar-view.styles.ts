@@ -25,7 +25,8 @@ export const useStyles = createStyles(({
 
       .left-sidebar__avatar {
         margin: 8px 15px 0 15px;
-        pointer-events: all;
+        pointer-events: auto;
+        cursor: pointer;
       }
 
       .ant-avatar {

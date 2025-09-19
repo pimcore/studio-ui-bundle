@@ -22,27 +22,31 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Asset',
+      path: 'QuickAccess/Open Asset',
       label: 'navigation.open-asset',
+      order: 100,
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
       button: () => React.createElement(OpenElement, { elementType: 'asset' })
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Document',
-      label: 'navigation.open-document',
-      permission: UserPermission.Documents,
-      perspectivePermission: NavPermission.OpenDocument,
-      button: () => React.createElement(OpenElement, { elementType: 'document' })
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Data Object',
+      path: 'QuickAccess/Open Data Object',
       label: 'navigation.open-data-object',
+      order: 200,
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
       button: () => React.createElement(OpenElement, { elementType: 'data-object' })
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'QuickAccess/Open Document',
+      label: 'navigation.open-document',
+      dividerBottom: true,
+      order: 300,
+      permission: UserPermission.Documents,
+      perspectivePermission: NavPermission.OpenDocument,
+      button: () => React.createElement(OpenElement, { elementType: 'document' })
     })
   }
 })

@@ -51,7 +51,8 @@ export const AssetSearchListing = (): React.JSX.Element => {
     <DynamicTypeRegistryProvider serviceIds={ [
       'DynamicTypes/GridCellRegistry',
       'DynamicTypes/MetadataRegistry',
-      'DynamicTypes/ListingRegistry'
+      'DynamicTypes/ListingRegistry',
+      'DynamicTypes/FieldFilterRegistry'
     ] }
     >
       <ListingContainer

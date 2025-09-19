@@ -18,6 +18,8 @@ export interface IMainNavItem {
   id?: string
   icon?: string
   label?: string
+  group?: string
+  dividerBottom?: boolean
   children?: IMainNavItem[]
   permission?: string
   perspectivePermission?: string

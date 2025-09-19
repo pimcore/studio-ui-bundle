@@ -143,6 +143,7 @@ export const useStyles = createStyles(({ token, css }) => {
         .flexlayout__border_inner_tab_container {
           width: calc(100svh - 12px);
           justify-content: flex-end;
+          gap: 2px;
         }
   
         .flexlayout__border_inner_tab_container_left, .flexlayout__border_inner_tab_container_right {
@@ -158,12 +159,18 @@ export const useStyles = createStyles(({ token, css }) => {
         }
   
         .flexlayout__tab {
+          position: relative;
           overflow: visible;
           background: ${token.colorBgContainer};
           box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
           border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-radius: 0 8px 8px 8px;
+          z-index: 1;
+        }
+
+        .flexlayout__tab[style*='visibility: hidden'] {
+          z-index: -1;
         }
 
         .flexlayout__tab:not(.widget-manager-inner-container) {
@@ -204,12 +211,12 @@ export const useStyles = createStyles(({ token, css }) => {
           background: transparent;
           width: 40px;
           justify-content: center;
-          border-radius: ${token.borderRadiusSM}px;
-          transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
+          border-radius: ${token.borderRadius}px;
+          transition: all ${token.motionDurationSlow} ${token.motionEaseInOut}, border-top-width 0.1s ease;
   
           &--selected {
             color: ${tabToken.itemActiveColor};
-            border-top: 1.5px solid ${token.colorBorderActive};
+            border-top: 2px solid ${token.colorBorderActive};
             background: ${token.controlItemBgHover};
           }
         }

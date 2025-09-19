@@ -8,13 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
@@ -23,15 +24,27 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
+  const { currentLanguage } = useLanguageSelection()
 
-  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
-    key: column.key,
-    type: column.type,
-    locale: column.locale,
-    config: column.config
-  }))
+  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
-  const systemColumns = availableColumns.filter(column => column.group === 'system')
+  selectedColumns.forEach(column => {
+    let advancedColumnConfig: AdvancedColumnConfig | undefined
+
+    if (column.type === 'dataobject.advanced') {
+      advancedColumnConfig = column.originalApiDefinition?.__meta?.advancedColumnConfig as unknown as AdvancedColumnConfig
+    }
+
+    columnsArg.push({
+      key: column.key,
+      type: column.type,
+      locale: column.localizable ? column.locale ?? currentLanguage : undefined,
+      // group: column.group,
+      config: advancedColumnConfig ?? column.config
+    })
+  })
+
+  const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
 
   systemColumns.forEach(column => {
     const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)

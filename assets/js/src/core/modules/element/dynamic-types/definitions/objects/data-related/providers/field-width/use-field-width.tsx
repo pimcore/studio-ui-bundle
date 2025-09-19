@@ -21,3 +21,13 @@ export const useFieldWidth = (): IFieldWidthContext => {
 
   return context
 }
+
+export const useFieldWidthOptional = (): IFieldWidthContext | undefined => {
+  const context = useContext(FieldWidthContext)
+
+  if (isNil(context)) {
+    return undefined
+  }
+
+  return context
+}

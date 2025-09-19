@@ -9,20 +9,24 @@
  */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { Box } from '@Pimcore/components/box/box'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { Divider } from '@Pimcore/components/divider/divider'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
-import React, { useState } from 'react'
+import { CreatableSelect } from '@sdk/components'
+import { isNil } from 'lodash'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationLogger } from './application-logger'
 import { useBundleApplicationLoggerGetCollectionQuery } from './application-logger-api-slice.gen'
 import { useFilter } from './components/sidebar/tabs/filter/provider/filter-provider/use-filter'
-import { Box } from '@Pimcore/components/box/box'
 
 export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,9 +34,10 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { columnFilters } = useFilter()
+  const [refreshInterval, setRefreshInterval] = useState<string | undefined>(undefined)
+  const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
 
-  const { data, isLoading: isRTKLoading } = useBundleApplicationLoggerGetCollectionQuery({
+  const { data, isFetching: isRTKFetching } = useBundleApplicationLoggerGetCollectionQuery({
     body: {
       filters: {
         page: currentPage,
@@ -48,6 +53,37 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
+  const refreshData = useCallback((): void => {
+    dispatch(
+      api.util.invalidateTags(
+        invalidatingTags.APPLICATION_LOGGER()
+      )
+    )
+  }, [dispatch])
+
+  const handleRefreshIntervalChange = (value: string): void => {
+    setRefreshInterval(value)
+  }
+
+  useEffect(() => {
+    if (isNil(refreshInterval)) {
+      return
+    }
+
+    const intervalMs = parseInt(refreshInterval) * 1000
+    const intervalId = setInterval(() => {
+      refreshData()
+    }, intervalMs)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [refreshInterval, refreshData])
+
+  useEffect(() => {
+    setFilterLoading(isRTKFetching)
+  }, [isRTKFetching])
+
   return (
     <ContentLayout
       renderToolbar={
@@ -55,27 +91,66 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
           justify='space-between'
           theme='secondary'
         >
-          <IconButton
-            disabled={ isLoading || isRTKLoading }
-            icon={ { value: 'refresh' } }
-            onClick={ () => {
-              setIsLoading(true)
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.APPLICATION_LOGGER()
-                )
-              )
-              setIsLoading(false)
-            } }
-          />
-          <Pagination
-            current={ currentPage }
-            defaultPageSize={ pageSize }
-            onChange={ onPagerChange }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ total }
-          />
+          <Flex
+            align="center"
+            gap={ 8 }
+          >
+            {!isNil(refreshInterval) && (
+              <span>{t('application-logger.refresh-interval')}</span>
+            )}
+            <CreatableSelect
+              allowClear
+              inputType='number'
+              minWidth={ 200 }
+              numberInputProps={ {
+                min: 1
+              } }
+              onChange={ handleRefreshIntervalChange }
+              onCreateOption={ (value) => {
+                return {
+                  value,
+                  label: t('application-logger.refresh-interval.seconds', { seconds: value })
+                }
+              } }
+              options={ [
+                { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: 3 }) },
+                { value: '5', label: t('application-logger.refresh-interval.seconds', { seconds: 5 }) },
+                { value: '10', label: t('application-logger.refresh-interval.seconds', { seconds: 10 }) },
+                { value: '30', label: t('application-logger.refresh-interval.seconds', { seconds: 30 }) },
+                { value: '60', label: t('application-logger.refresh-interval.seconds', { seconds: 60 }) }
+              ] }
+              placeholder={ t('application-logger.refresh-interval.select') }
+              validate={ (value) => !isNaN(parseInt(value)) && parseInt(value) > 0 }
+              value={ refreshInterval }
+            />
+          </Flex>
+          <Flex>
+            <IconButton
+              disabled={ isLoading || isRTKFetching }
+              icon={ { value: 'refresh' } }
+              onClick={ () => {
+                setIsLoading(true)
+                refreshData()
+                setIsLoading(false)
+              } }
+            />
+            {total > 0 && (
+              <>
+                <Divider
+                  size="small"
+                  type="vertical"
+                />
+                <Pagination
+                  current={ currentPage }
+                  defaultPageSize={ pageSize }
+                  onChange={ onPagerChange }
+                  showSizeChanger
+                  showTotal={ (total) => t('pagination.show-total', { total }) }
+                  total={ total }
+                />
+              </>
+            )}
+          </Flex>
         </Toolbar>
       }
       renderTopBar={
@@ -96,6 +171,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
         loading={ isLoading }
       >
         <Box
+          className='h-full'
           margin={ {
             x: 'extra-small',
             y: 'none'

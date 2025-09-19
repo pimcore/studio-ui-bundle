@@ -21,6 +21,9 @@ import {
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 import { formatDate } from '@Pimcore/utils/date-time'
 import { isNumber } from 'lodash'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type DateObjectDataDefinition = AbstractDateObjectDataDefinition & {
   columnType: 'date' | 'bigint(20)'
@@ -29,6 +32,8 @@ export type DateObjectDataDefinition = AbstractDateObjectDataDefinition & {
 export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate {
   id: string = 'date'
   gridCellEditMode: EditMode = 'edit-modal'
+
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Date'])
 
   getObjectDataComponent (props: DateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({

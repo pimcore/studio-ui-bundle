@@ -8,23 +8,36 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Column } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
+import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
+import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
+import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyles } from './bar-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
+const CHART_HEIGHT = 250
 
 export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
+  const chartRef = useRef<HTMLDivElement>(null)
+  const { width: chartWidth } = useElementResize(chartRef)
+
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
+
   const xAxis = reportData?.xAxis ?? ''
+  const yAxis = reportData?.yAxis
+
   const formattedChartData = chartData.flatMap((item: object) => {
     return Object.entries(item)
-      .filter(([key]) => key !== xAxis)
+      .filter(([key]) => key !== xAxis && yAxis?.includes(key))
       .map(([key, value]) => ({
         [xAxis]: item?.[xAxis],
         [CHART_FIELD_NAME_KEY]: key,
@@ -32,25 +45,56 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
       }))
   })
 
-  const config = {
-    data: formattedChartData,
+  const seriesKeys = [...new Set(formattedChartData.map(item => item.name))]
+  const { isExpanded, visibleItems, toggle, initialVisibleCount } = useShowMore(seriesKeys)
+
+  const [activeSeries, setActiveSeries] = useState<string[]>(seriesKeys)
+
+  const handleLegendItemClick = (key: string): void => {
+    setActiveSeries(prev =>
+      prev.includes(key)
+        ? prev.filter(k => k !== key)
+        : [...prev, key]
+    )
+  }
+
+  const colorMap: Record<string, string> = {
+    ...Object.fromEntries(
+      seriesKeys.map((key, index) => [key, colorList[index]])
+    )
+  }
+
+  const filteredData = useMemo(() => {
+    return formattedChartData.filter((item) =>
+      activeSeries.includes(item.name)
+    )
+  }, [formattedChartData, activeSeries])
+
+  const config = useMemo(() => ({
+    data: filteredData,
     xField: xAxis,
     yField: CHART_FIELD_VALUE_KEY,
     seriesField: CHART_FIELD_NAME_KEY,
     colorField: CHART_FIELD_NAME_KEY,
-    height: 380,
+    scale: {
+      color: {
+        range: colorList
+      }
+    },
+    height: CHART_HEIGHT,
     point: {
       shapeField: 'circle',
       sizeField: 4
     },
-    legend: {
-      color: {
-        position: 'bottom',
-        labelFormatter: (text: any) => chartLabelMap[text] ?? text
-      }
-    },
+    legend: false,
     interaction: {
       tooltip: {
+        bounding: {
+          x: 20,
+          y: 20,
+          height: CHART_HEIGHT,
+          width: chartWidth
+        },
         render: (event, { title, items }) => (
           <Flex
             gap="mini"
@@ -82,11 +126,45 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
         )
       }
     }
-  }
+  }), [chartWidth])
 
   return (
-    <div>
-      <Column { ...config } />
+    <div className="m-t-mini">
+      <div
+        ref={ chartRef }
+        style={ { overflowX: 'hidden' } }
+      >
+        <Column { ...config } />
+      </div>
+
+      <Flex
+        gap="mini"
+        justify="center"
+        wrap="wrap"
+      >
+        {visibleItems.map((key, index) => {
+          const isActive = activeSeries.includes(key)
+
+          return (
+            <LegendItem
+              disabled={ !isActive }
+              handleClick={ () => {
+                handleLegendItemClick(key)
+              } }
+              key={ `${index}-${key}` }
+              label={ chartLabelMap[key] ?? key }
+              markerColor={ colorMap[key] }
+            />
+          )
+        })}
+      </Flex>
+
+      {seriesKeys?.length > initialVisibleCount && (
+        <ShowMoreBtn
+          isExpanded={ isExpanded }
+          toggle={ toggle }
+        />
+      )}
     </div>
   )
 }

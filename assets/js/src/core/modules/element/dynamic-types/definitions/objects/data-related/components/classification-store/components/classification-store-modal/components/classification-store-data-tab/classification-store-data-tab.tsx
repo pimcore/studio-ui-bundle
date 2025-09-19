@@ -24,7 +24,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
-import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import {
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByGroupQuery

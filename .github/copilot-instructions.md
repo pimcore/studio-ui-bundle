@@ -128,6 +128,7 @@ documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEd
   - Handles API integration, state management, and business rules
   - Can import and compose multiple components to create complex features
   - Examples: asset editor, document editor, user management, settings
+  - **Module-specific UI components** should be placed in `components/` subdirectories within the module (e.g., `/core/modules/element/dynamic-types/definitions/document/editable/components/`) and do **NOT** require Storybook stories
 
 ### Dynamic Types Component Extraction
 For complex dynamic types (document editables, object data types), extract UI components into separate files:
@@ -141,10 +142,12 @@ For complex dynamic types (document editables, object data types), extract UI co
 - Prefer explicit function declarations with return type annotations: `export const ComponentName = (props: Props): React.JSX.Element => {}`
 - Use `useMemo` and `useCallback` for performance optimization, but only when there's a real benefit (expensive calculations, preventing unnecessary re-renders of child components)
 - Implement proper TypeScript interfaces for all props
+- **Separate styling into dedicated `.styles.ts` files** using `antd-style` with `createStyles()` - never include styles directly in component files
 
 ### UI Component Usage
 - Primary UI library is Ant Design - use antd components first
 - Use `antd-style` for component styling with CSS-in-JS
+- **Always create separate `.styles.ts` files** for component styling using `createStyles()` hook pattern
 - For complex layouts, consider `flexlayout-react`
 - Grid components should use `@tanstack/react-table`
 
@@ -233,6 +236,12 @@ describe('ComponentName', () => {
   - `isArray(value)` instead of `Array.isArray(value)`
   - `isString(value)`, `isNumber(value)`, `isBoolean(value)` for type checking
 - **Use nullish coalescing operator (`??`) instead of logical OR (`||`)** - Prefer `value ?? defaultValue` over `value || defaultValue` for null/undefined checks to avoid unexpected behavior with falsy values like `0`, `false`, or empty strings
+
+### Code Comments
+- **Avoid redundant comments** - Only add comments when they provide real benefit and clarify non-obvious business logic, complex algorithms, or important context
+- Do not add comments that simply restate what the code does (e.g., `// Set the value` above `setValue(newValue)`)
+- Focus on explaining "why" rather than "what" when comments are necessary
+- Prefer self-documenting code with clear variable and function names over explanatory comments
 
 ### ESLint Configuration
 - Extends `standard-with-typescript`

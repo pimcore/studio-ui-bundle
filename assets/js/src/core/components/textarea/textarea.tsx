@@ -13,17 +13,26 @@ import { type TextAreaProps } from 'antd/es/input/TextArea'
 import { Input } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './textarea.styles'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface ITextAreaProps extends TextAreaProps {
   inherited?: boolean
 }
 
-export const TextArea = ({ inherited, className, ...restProps }: ITextAreaProps): JSX.Element => {
+export const TextArea = ({ inherited, className, style, ...restProps }: ITextAreaProps): JSX.Element => {
   const { styles } = useStyles()
+  const fieldWidths = useFieldWidthOptional()
+
+  // Apply large width as default for textareas
+  const computedStyle = {
+    maxWidth: fieldWidths?.large,
+    ...style
+  }
 
   return (
     <Input.TextArea
       className={ cn(styles.textarea, className, { [styles.inherited]: inherited }) }
+      style={ computedStyle }
       { ...restProps }
     />
   )

@@ -12,7 +12,7 @@ import type { Meta } from '@storybook/react'
 import { SearchInput } from './search-input'
 
 const config: Meta = {
-  title: 'Components/Controls/SearchInput',
+  title: 'Components/Data Entry/SearchInput',
   component: SearchInput,
   tags: ['autodocs']
 }

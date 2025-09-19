@@ -10,7 +10,18 @@
 
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import { type DynamicTypeDocumentEditableAbstract } from './dynamic-type-document-editable-abstract'
+import { type DynamicTypeDocumentEditableAbstract, type AbstractDocumentEditableDefinition } from './dynamic-type-document-editable-abstract'
 
 @injectable()
-export class DynamicTypeDocumentEditableRegistry extends DynamicTypeRegistryAbstract<DynamicTypeDocumentEditableAbstract> {}
+export class DynamicTypeDocumentEditableRegistry extends DynamicTypeRegistryAbstract<DynamicTypeDocumentEditableAbstract> {
+  /**
+   * Calls onDocumentReady for all registered dynamic types
+   * @param documentId The ID of the document
+   * @param editableDefinitions All editable definitions in the document
+   */
+  notifyDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
+    this.getDynamicTypes().forEach(dynamicType => {
+      dynamicType.onDocumentReady(documentId, editableDefinitions)
+    })
+  }
+}

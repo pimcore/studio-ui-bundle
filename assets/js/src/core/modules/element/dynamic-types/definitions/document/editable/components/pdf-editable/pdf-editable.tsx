@@ -1,0 +1,240 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { isNil, isBoolean } from 'lodash'
+import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
+import { PdfEditablePreview } from './pdf-editable-preview'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-preview/image-dimensions'
+import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
+import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
+import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+
+export interface PdfEditableValue {
+  id?: number
+}
+
+export interface PdfEditableConfig {
+  width?: number
+  height?: number
+  uploadPath?: string
+  thumbnail?: string | object
+}
+
+export interface PdfEditableProps {
+  value?: PdfEditableValue
+  config?: PdfEditableConfig
+  onChange?: (value: PdfEditableValue) => void
+  disabled?: boolean
+  inherited?: boolean
+  containerRef?: React.RefObject<HTMLDivElement>
+}
+
+export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  const pdfValue = props.value
+  const width = props.config?.width
+  const height = props.config?.height
+  const isInherited = isBoolean(props.inherited) && props.inherited
+  const disabled = props.disabled === true || isInherited
+  const hasPdf = !isNil(pdfValue?.id)
+
+  const handleOverwrite = (): void => {
+    props.onChange?.(props.value ?? {})
+  }
+
+  const { getSmartDimensions, handlePreviewResize: handlePdfResize, handleAssetTargetResize } = useAssetDimensions()
+  const smartDimensions = getSmartDimensions(pdfValue?.id)
+
+  const needsContainerWidth = isNil(width) && isNil(height)
+  const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+
+  const { triggerUpload } = useUploadModal({})
+  const { openElement } = useElementHelper()
+
+  const { open: openElementSelector } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: {
+      asset: true,
+      object: false,
+      document: false
+    },
+    config: {
+      assets: {
+        allowedTypes: ['document']
+      }
+    },
+    onFinish: (event) => {
+      if (event.items.length > 0) {
+        handleReplacePdf(event.items[0].data.id)
+      }
+    }
+  })
+
+  const handleReplacePdf = (assetId: number): void => {
+    const newValue: PdfEditableValue = { id: assetId }
+    props.onChange?.(newValue)
+  }
+
+  const handleEmptyValue = (): void => {
+    props.onChange?.({})
+  }
+
+  const handleLocateInTree = (): void => {
+    locateElementInTree('asset', pdfValue?.id)
+  }
+
+  const handleUpload = useCallback(() => {
+    triggerUpload({
+      targetFolderPath: props.config?.uploadPath,
+      accept: 'application/pdf',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets) => {
+        if (assets.length > 0) {
+          handleReplacePdf(Number(assets[0].id))
+        }
+      }
+    })
+  }, [props.config?.uploadPath, triggerUpload, handleReplacePdf])
+
+  const handleFileSystemUpload = async (asset: any): Promise<void> => {
+    handleReplacePdf(Number(asset.id))
+  }
+
+  const dropdownItems: DropdownProps['menu']['items'] = []
+
+  if (!isNil(pdfValue?.id)) {
+    dropdownItems.push(
+      {
+        key: 'open',
+        icon: <Icon value="open-folder" />,
+        label: t('open'),
+        disabled: props.disabled,
+        onClick: () => {
+          if (!isNil(pdfValue?.id)) {
+            void openElement({
+              id: pdfValue.id,
+              type: 'asset'
+            })
+          }
+        }
+      },
+      {
+        key: 'empty',
+        icon: <Icon value="trash" />,
+        label: t('empty'),
+        disabled,
+        onClick: handleEmptyValue
+      }
+    )
+  }
+
+  dropdownItems.push(
+    {
+      key: 'locate-in-tree',
+      icon: <Icon value="target" />,
+      label: t('element.locate-in-tree'),
+      disabled: disabled || isNil(pdfValue?.id),
+      onClick: handleLocateInTree
+    },
+    {
+      key: 'search',
+      icon: <Icon value="search" />,
+      label: t('search'),
+      disabled,
+      onClick: openElementSelector
+    },
+    {
+      key: 'upload',
+      icon: <Icon value="upload-cloud" />,
+      label: t('upload'),
+      disabled,
+      onClick: handleUpload
+    }
+  )
+
+  const renderDroppableContent = useCallback((children: React.ReactNode) => {
+    // Determine the shape based on whether a PDF is selected
+    const droppableShape = !isNil(pdfValue?.id) ? 'angular' : 'round'
+
+    return (
+      <InlineUpload
+        assetType="document"
+        disabled={ disabled }
+        fullWidth={ isNil(smartDimensions?.width ?? width) }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.config?.uploadPath }
+      >
+        <Droppable
+          isValidContext={ () => !disabled }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'document' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleReplacePdf(info.data.id as number)
+          } }
+          shape={ droppableShape }
+          variant="outline"
+        >
+          {children}
+        </Droppable>
+      </InlineUpload>
+    )
+  }, [props.config?.uploadPath, disabled, handleFileSystemUpload, handleReplacePdf, pdfValue?.id])
+
+  return (
+    <InheritanceOverlay
+      display={ !isNil(smartDimensions?.width ?? width) || hasPdf ? 'inline-block' : 'block' }
+      hideButtons
+      isInherited={ isInherited }
+      onOverwrite={ handleOverwrite }
+      style={ { minWidth: MIN_WIDTH } }
+    >
+      {renderDroppableContent(
+        hasPdf
+          ? (
+            <PdfEditablePreview
+              assetId={ pdfValue.id }
+              containerWidth={ Math.max(containerWidth, MIN_WIDTH) }
+              dropdownItems={ dropdownItems }
+              height={ smartDimensions?.height ?? height }
+              key={ pdfValue.id }
+              lastImageDimensions={ smartDimensions }
+              onResize={ handlePdfResize }
+              thumbnailConfig={ props.config?.thumbnail }
+              width={ smartDimensions?.width ?? width }
+            />
+            )
+          : (
+            <AssetTarget
+              dndIcon
+              height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
+              onResize={ handleAssetTargetResize }
+              onSearch={ openElementSelector }
+              onUpload={ handleUpload }
+              title={ t('pdf-editable.dnd-target') }
+              width={ smartDimensions?.width ?? width ?? '100%' }
+            />
+            )
+      )}
+    </InheritanceOverlay>
+  )
+}

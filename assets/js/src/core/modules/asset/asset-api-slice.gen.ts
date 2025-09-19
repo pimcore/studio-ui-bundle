@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            assetBatchDelete: build.mutation<AssetBatchDeleteApiResponse, AssetBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
             assetClone: build.mutation<AssetCloneApiResponse, AssetCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -24,11 +32,93 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            assetDocumentDownloadCustom: build.query<
+                AssetDocumentDownloadCustomApiResponse,
+                AssetDocumentDownloadCustomApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/download/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        page: queryArg.page,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamCustom: build.query<
+                AssetDocumentStreamCustomApiResponse,
+                AssetDocumentStreamCustomApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        page: queryArg.page,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamDynamic: build.query<
+                AssetDocumentStreamDynamicApiResponse,
+                AssetDocumentStreamDynamicApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/dynamic`,
+                    params: {
+                        config: queryArg.config,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
                 AssetDocumentStreamPreviewApiArg
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentDownloadByThumbnail: build.query<
+                AssetDocumentDownloadByThumbnailApiResponse,
+                AssetDocumentDownloadByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/download/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        page: queryArg.page,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamByThumbnail: build.query<
+                AssetDocumentStreamByThumbnailApiResponse,
+                AssetDocumentStreamByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        page: queryArg.page,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                    },
+                }),
                 providesTags: ["Assets"],
             }),
             assetDownloadZip: build.query<AssetDownloadZipApiResponse, AssetDownloadZipApiArg>({
@@ -183,6 +273,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamDynamic: build.query<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/dynamic`,
+                    params: {
+                        config: queryArg.config,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
                 AssetImageDownloadByFormatApiArg
@@ -206,6 +305,23 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetImageStreamByThumbnail: build.query<
+                AssetImageStreamByThumbnailApiResponse,
+                AssetImageStreamByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                        mimeType: queryArg.mimeType,
+                    },
                 }),
                 providesTags: ["Assets"],
             }),
@@ -323,6 +439,16 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type AssetBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
+};
 export type AssetCloneApiResponse =
     /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
@@ -349,10 +475,92 @@ export type AssetGetTextDataByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
+export type AssetDocumentDownloadCustomApiResponse = /** status 200 Custom document image binary file */ Blob;
+export type AssetDocumentDownloadCustomApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Page of the document */
+    page?: number;
+    /** Resize mode of downloaded image. */
+    resizeMode?: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+};
+export type AssetDocumentStreamCustomApiResponse = /** status 200 Custom document image stream */ Blob;
+export type AssetDocumentStreamCustomApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Page of the document */
+    page?: number;
+    /** Resize mode of downloaded image. */
+    resizeMode?: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetDocumentStreamDynamicApiResponse =
+    /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
+export type AssetDocumentStreamDynamicApiArg = {
+    /** Id of the document */
+    id: number;
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
+};
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
+};
+export type AssetDocumentDownloadByThumbnailApiResponse = /** status 200 Document image binary file */ Blob;
+export type AssetDocumentDownloadByThumbnailApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Page of the document */
+    page?: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
+export type AssetDocumentStreamByThumbnailApiResponse = /** status 200 Stream of document image */ Blob;
+export type AssetDocumentStreamByThumbnailApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Page of the document */
+    page?: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -555,14 +763,22 @@ export type AssetImageStreamCustomApiArg = {
     /** Force resize */
     forceResize?: boolean;
     cropPercent?: boolean;
-    /** CropWidth of downloaded image */
-    cropWidth?: number;
-    /** CropHeight of downloaded image */
-    cropHeight?: number;
-    /** CropTop of downloaded image */
-    cropTop?: number;
-    /** CropLeft of downloaded image */
-    cropLeft?: number;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetImageStreamDynamicApiResponse =
+    /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
+export type AssetImageStreamDynamicApiArg = {
+    /** Id of the asset */
+    id: number;
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -588,6 +804,25 @@ export type AssetImageDownloadByThumbnailApiArg = {
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+};
+export type AssetImageStreamByThumbnailApiResponse =
+    /** status 200 Stream of image asset based on thumbnail name */ Blob;
+export type AssetImageStreamByThumbnailApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+    /** Mime type of steamed image. */
+    mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
 export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
@@ -662,6 +897,8 @@ export type AssetAddApiArg = {
     body: {
         /** File to upload */
         file: Blob;
+        /** Type of the asset to create */
+        assetType?: string | null;
     };
 };
 export type AssetUploadInfoApiResponse =
@@ -935,8 +1172,8 @@ export type Column = {
     key: string;
     /** Locale of the Column */
     locale: string | null;
-    /** Group of the Column */
-    group: string;
+    /** Define the group structure */
+    group: object;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -1021,8 +1258,8 @@ export type GridColumnConfiguration = {
     };
     /** Key */
     key: string;
-    /** Group */
-    group: string;
+    /** Define the group structure */
+    group: object;
     /** Sortable */
     sortable: boolean;
     /** Editable */
@@ -1065,6 +1302,8 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
     /** inheritance */
     inheritance?: object | null;
 };
@@ -1093,10 +1332,16 @@ export type CustomMetadata = {
     data: any | null;
 };
 export const {
+    useAssetBatchDeleteMutation,
     useAssetCloneMutation,
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
+    useAssetDocumentDownloadCustomQuery,
+    useAssetDocumentStreamCustomQuery,
+    useAssetDocumentStreamDynamicQuery,
     useAssetDocumentStreamPreviewQuery,
+    useAssetDocumentDownloadByThumbnailQuery,
+    useAssetDocumentStreamByThumbnailQuery,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,
@@ -1114,10 +1359,12 @@ export const {
     useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
+    useAssetImageStreamDynamicQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,
     useAssetImageDownloadByThumbnailQuery,
+    useAssetImageStreamByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
     useAssetClearThumbnailMutation,

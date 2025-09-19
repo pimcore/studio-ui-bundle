@@ -15,6 +15,7 @@ import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
 import { useTranslation } from 'react-i18next'
 import { isString } from 'lodash'
+import { createTabTitleTestId, createBorderTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface TabTitleContainerProps {
   node: TabNode
@@ -42,17 +43,27 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
     closeWidget(node.getId())
   }
 
+  // Type-safe config extraction
+  const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
+  const elementType = typeof config.elementType === 'string' ? config.elementType as string : undefined
+  const rawNodeName = node.getName()
+  const nodeName = typeof rawNodeName === 'string' ? rawNodeName : undefined
+
   if (isBorderNode) {
+    const dataTestId = createBorderTestId(nodeId, nodeName, elementType)
+
     return (
       <BorderTitleView
+        dataTestId={ dataTestId }
         icon={ icon }
-        title={ t(`${node.getName()}`) }
+        title={ t(`${nodeName}`) }
       />
     )
   }
 
   return (
     <TabTitleView
+      dataTestId={ createTabTitleTestId(getTitle(), nodeId, elementType) }
       icon={ icon }
       onClose={ isCloseable ? onClose : undefined }
       onConfirm={ modified === true ? onConfirm : undefined }

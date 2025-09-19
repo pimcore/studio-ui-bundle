@@ -1,5 +1,6 @@
 import { defineConfig, rspack } from '@rsbuild/core'
 import { pluginReact } from '@rsbuild/plugin-react'
+import { pluginBabel } from '@rsbuild/plugin-babel'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -79,6 +80,18 @@ export default defineConfig({
   plugins: [
     pluginGenerateEntrypoints(),
     pluginReact(),
+    pluginBabel({
+      include: /\.(?:jsx|tsx)$/,
+      babelLoaderOptions(opts) {
+        opts.plugins?.unshift([
+          'babel-plugin-react-compiler',
+          {
+            compilationMode: 'annotation',
+            target: '18'
+          },
+        ]);
+      },
+    }),
     pluginSvgr({
       svgrOptions: {
         icon: true,
@@ -94,8 +107,9 @@ export default defineConfig({
       './_internal_/mf-bootstrap-document-editor-iframe': './js/src/sdk/_internal_/mf-bootstrap-document-editor-iframe.ts',
       './components': './js/src/sdk/components/index.ts',
       './app': './js/src/sdk/app/index.ts',
-      './api/asset': './js/src/sdk/api/asset/index.ts',
       './api': './js/src/sdk/api/index.ts',
+      './api/asset': './js/src/sdk/api/asset/index.ts',
+      './api/class-definition': './js/src/sdk/api/class-definition/index.ts',
       './api/custom-metadata': './js/src/sdk/api/custom-metadata/index.ts',
       './api/data-object': './js/src/sdk/api/data-object/index.ts',
       './api/dependencies': './js/src/sdk/api/dependencies/index.ts',
@@ -118,6 +132,7 @@ export default defineConfig({
       './modules/asset': './js/src/sdk/modules/asset/index.ts',
       './modules/class-definitions': './js/src/sdk/modules/class-definitions/index.ts',
       './modules/data-object': './js/src/sdk/modules/data-object/index.ts',
+      './modules/document': './js/src/sdk/modules/document/index.ts',
       './modules/element': './js/src/sdk/modules/element/index.ts',
       './modules/icon-library': './js/src/sdk/modules/icon-library/index.ts',
       './modules/user': './js/src/sdk/modules/user/index.ts',
@@ -151,6 +166,11 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        '@ant-design/colors': {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies['@ant-design/colors']
         },
         'reflect-metadata': {
           singleton: true,

@@ -14,12 +14,13 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
-import { isDndSourceAllowed, isDndTargetAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 import { isUndefined } from 'lodash'
+import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('document')
+    const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
 
     if (props.metaData?.document === undefined) {
       return (
@@ -29,7 +30,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const targetDocument: Document = props.metaData.document
 
-    if (!isDndSourceAllowed(targetDocument)) {
+    if (!isTargetAllowed(targetDocument)) {
       return (
         <Component { ...props } />
       )
@@ -38,7 +39,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const sourceDocument: Document = info.data
 
-      if (!isDndSourceAllowed(sourceDocument) || !isDndTargetAllowed(targetDocument)) {
+      if (!isSourceAllowed(sourceDocument) || !isTargetAllowed(targetDocument)) {
         return
       }
 
@@ -56,7 +57,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceDocument: Document = info.data
-      return info.type === 'document' && isDndSourceAllowed(sourceDocument) && isDndTargetAllowed(targetDocument)
+      return info.type === 'document' && isSourceAllowed(sourceDocument) && isTargetAllowed(targetDocument)
     }
 
     return (

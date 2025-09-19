@@ -11,6 +11,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import type { DefaultOptionType } from 'antd/es/select'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
@@ -24,22 +25,17 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
-import type { DefaultOptionType } from 'antd/es/select'
 
 interface IReportViewContentProps {
   currentReport: string | null
   setCurrentReport: (report: string) => void
-  page: number
-  setPage: (page: number) => void
-  pageSize: number
-  setPageSize: (pageSize: number) => void
   reportsTreeOptions: DefaultOptionType[] | undefined
 }
 
-export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTreeOptions, page, setPage, pageSize, setPageSize }: IReportViewContentProps): React.JSX.Element => {
+export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTreeOptions }: IReportViewContentProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { isLoading, isFetching, reportDetailData, chartDetailData, refetchAll } = useReportDataContext()
+  const { isLoading, isFetching, reportDetailData, chartDetailData, refetchAll, page, setPage, pageSize, setPageSize } = useReportDataContext()
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const isLoadingReportsData = isLoading || isFetching
@@ -47,6 +43,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   const renderMainContent = (): React.JSX.Element => (
     <Content
       centered={ !isCurrentReportSelected }
+      className="h-full"
       padded
       padding={ { top: 'none', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >

@@ -14,12 +14,13 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { isDndSourceAllowed, isDndTargetAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 import { isUndefined } from 'lodash'
+import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('data-object')
+    const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
 
     if (props.metaData?.dataObject === undefined) {
       return (
@@ -29,7 +30,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const targetObject: DataObject = props.metaData.dataObject
 
-    if (!isDndSourceAllowed(targetObject)) {
+    if (!isTargetAllowed(targetObject)) {
       return (
         <Component { ...props } />
       )
@@ -38,7 +39,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const sourceObject: DataObject = info.data
 
-      if (!isDndSourceAllowed(sourceObject) || !isDndTargetAllowed(targetObject)) {
+      if (!isSourceAllowed(sourceObject) || !isTargetAllowed(targetObject)) {
         return
       }
 
@@ -56,7 +57,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceObject: DataObject = info.data
-      return info.type === 'data-object' && isDndSourceAllowed(sourceObject) && isDndTargetAllowed(targetObject)
+      return info.type === 'data-object' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
     }
 
     return (

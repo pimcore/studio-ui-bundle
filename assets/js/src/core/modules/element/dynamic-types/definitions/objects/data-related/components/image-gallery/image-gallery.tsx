@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import { find, findIndex, isEmpty, isEqual, isUndefined } from 'lodash'
@@ -22,7 +22,6 @@ import { Card } from '@Pimcore/components/card/card'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ImageGallerySortableItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
 import { type Hotspot, type Marker } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import { HotspotMarkersModalContainer, type HotspotMarkersModalContainerRef } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { uuid } from '@Pimcore/utils/uuid'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -99,8 +98,6 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
 
   const sensors = useSensors(mouseSensor, touchSensor)
 
-  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
-
   return (
     <Card
       className={ cn(styles.imageGallery, props.className) }
@@ -156,7 +153,6 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               <ImageGallerySortableItem
                 disabled={ props.disabled }
                 height={ height! }
-                hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
                 id={ String(item.key) }
                 index={ index }
                 item={ item }
@@ -180,9 +176,6 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
           />
         ) }
       </Flex>
-      <HotspotMarkersModalContainer
-        ref={ hotspotMarkersModalContainerRef }
-      />
     </Card>
   )
 }

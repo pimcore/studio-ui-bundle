@@ -158,3 +158,38 @@ export const Checkable = {
     }
   }
 }
+
+export const NoRoot = {
+  args: {
+    treeData: [
+      {
+        title: 'Accessory',
+        key: '0',
+        icon: <Icon value={ 'accessory' } />
+      },
+      {
+        title: 'Asset',
+        key: '1',
+        icon: <Icon value={ 'asset' } />
+      },
+      {
+        title: 'Bookmark',
+        key: '2',
+        icon: <Icon value={ 'bookmark' } />
+      },
+      {
+        title: 'Calendar',
+        key: '3',
+        icon: <Icon value={ 'calendar' } />
+      }
+    ],
+    hasRoot: false,
+    Checkable: false,
+    onSelected: (key) => {
+      console.log('selected:', key)
+    },
+    onDragAndDrop: ({ node, dragNode, dropPosition }) => {
+      console.log('drag:', dragNode, 'drop to:', node, 'at position', dropPosition)
+    }
+  }
+}

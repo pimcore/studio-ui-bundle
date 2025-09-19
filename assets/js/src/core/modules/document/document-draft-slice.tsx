@@ -26,9 +26,10 @@ import { type DocumentDetailData } from '@Pimcore/modules/document/document-api-
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
 import { type DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
+import { type SettingsDataDraft, useSettingsDataReducers } from './draft/hooks/use-settings-data'
 import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
-export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft {
+export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData' | 'settingsData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft, SettingsDataDraft {
 }
 
 export const documentsAdapter: EntityAdapter<DocumentDraft, number> = createEntityAdapter<DocumentDraft>({})
@@ -41,6 +42,7 @@ export const slice = createSlice({
     schedule: [],
     changes: {},
     modifiedCells: {},
+    settingsData: {},
     ...initialTabsStateValue
   }),
   reducers: {
@@ -69,7 +71,8 @@ export const slice = createSlice({
     ...useTabsReducers(documentsAdapter),
     ...useModifiedDocumentEditablesReducers(documentsAdapter),
     ...useDraftDataReducers(documentsAdapter),
-    ...usePublishedReducers(documentsAdapter)
+    ...usePublishedReducers(documentsAdapter),
+    ...useSettingsDataReducers(documentsAdapter)
   }
 })
 
@@ -100,7 +103,10 @@ export const {
   setDraftData,
 
   publishDraft,
-  unpublishDraft
+  unpublishDraft,
+
+  setSettingsData: setSettingsDataForDocument,
+  updateSettingsData: updateSettingsDataForDocument
 
 } = slice.actions
 export const { selectById: selectDocumentById } = documentsAdapter.getSelectors((state: RootState) => state['document-draft'])

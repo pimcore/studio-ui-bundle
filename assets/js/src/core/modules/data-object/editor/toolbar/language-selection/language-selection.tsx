@@ -8,24 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import React from 'react'
-import { useLanguageSelection } from './provider/use-language-selection'
+import React, { useContext } from 'react'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { PermissionBasedLanguageSelection } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection'
+import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 
 export const LanguageSelection = (): React.JSX.Element => {
-  const settings = useSettings()
-  const { currentLanguage, setCurrentLanguage, hasLocalizedFields } = useLanguageSelection()
+  const { hasLocalizedFields } = useLanguageSelection()
+  const { id } = useContext(DataObjectContext)
+  const { editorType } = useDataObjectDraft(id)
 
-  if (!hasLocalizedFields) {
-    return <></>
+  if (hasLocalizedFields || editorType?.name === 'folder') {
+    return <PermissionBasedLanguageSelection />
   }
 
-  return (
-    <BaseLanguageSelection
-      languages={ [...settings.requiredLanguages] }
-      onSelectLanguage={ setCurrentLanguage }
-      selectedLanguage={ currentLanguage }
-    />
-  )
+  return <></>
 }

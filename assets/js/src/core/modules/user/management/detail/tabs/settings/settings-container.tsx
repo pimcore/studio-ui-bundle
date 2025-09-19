@@ -19,6 +19,7 @@ import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-man
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -42,6 +43,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
+  const [passwordType, setPasswordType] = React.useState<'text' | 'password'>('password')
+
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
@@ -49,7 +52,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         admin: openedUser?.admin,
         classes: openedUser?.classes,
         name: openedUser?.name,
-        twoFactorAuthenticationEnabled: openedUser?.twoFactorAuthenticationEnabled,
+        twoFactorAuthentication: openedUser?.twoFactorAuthentication,
         firstname: openedUser?.firstname,
         lastname: openedUser?.lastname,
         email: openedUser?.email,
@@ -77,11 +80,18 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     }, 300),
     [changeUserInState]
   )
+
+  const formatLastLogin = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000)
+    return date.toLocaleString()
+  }
+
   if (isLoading) {
     return <Content loading></Content>
   }
   return (
     <Form
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'settings' }) }
       form={ form }
       layout="vertical"
       onValuesChange={ onValuesChange }
@@ -113,7 +123,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
 
                     { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { openedUser.lastLogin }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
                         )
                       : null}
                   </Flex>
@@ -130,17 +140,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     name={ 'password' }
                     rules={ [{ min: 10 }] }
                   >
-                    <Input suffix={ <IconButton
-                      icon={ { value: 'lightning-01' } }
-                      onClick={ () => {
-                        const newPassword = generatePassword()
-                        form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
-                      } }
-                      title={ t('user-management.generate-password') }
-                                    /> }
+                    <Input
+                      autoComplete="new-password"
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
+                          const newPassword = generatePassword()
+                          form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+                          setPasswordType('text')
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
+                      type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
+                  <Form.Item name={ 'twoFactorAuthentication' }>
                     <Switch labelRight={ t('user-management.two-factor-authentication') } />
                   </Form.Item>
                 </>
