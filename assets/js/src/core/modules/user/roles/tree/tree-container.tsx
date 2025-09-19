@@ -127,8 +127,8 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
                 modal.confirm({
                   title: t('roles.remove-role'),
                   content: t('roles.remove-role.text', { name: getRoleNameByKey(treeData, key) }),
-                    okText: t('button.confirm'),
-                    cancelText: t('button.cancel'),
+                  okText: t('button.confirm'),
+                  cancelText: t('button.cancel'),
                   onOk: async () => {
                     await removeRole({ id: Number(key) })
                     onReloadTree([findParentByKey(treeData, key)?.key])
@@ -140,8 +140,8 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
                 modal.confirm({
                   title: t('roles.remove-folder'),
                   content: t('roles.remove-folder.text'),
-                    okText: t('button.confirm'),
-                    cancelText: t('button.cancel'),
+                  okText: t('button.confirm'),
+                  cancelText: t('button.cancel'),
                   onOk: async () => {
                     await removeFolder({ id: Number(key) })
                     onReloadTree([findParentByKey(treeData, key)?.key])
