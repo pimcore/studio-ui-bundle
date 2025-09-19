@@ -18,7 +18,7 @@ export class DynamicTypeCustomReportDefinitionSqlAdapter extends DynamicTypeCust
   id = 'sql'
   label = 'Sql'
 
-  getElement (props: any): ReactElement {
+  getCustomReportData (props: any): ReactElement {
     return <SqlAdapter { ...props } />
   }
 }

@@ -18,5 +18,5 @@ export abstract class DynamicTypeCustomReportDefinitionAbstract implements Dynam
   abstract readonly id: string
   abstract readonly label: string
 
-  abstract getElement ({ currentData, updateFormData }: IReportConfigurationSectionProps): ReactElement
+  abstract getCustomReportData ({ currentData, updateFormData }: IReportConfigurationSectionProps): ReactElement
 }

@@ -70,6 +70,9 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
     )
   }
 
+  console.log('------- currentData: ', currentData)
+  console.log('------- currentAdapter: ', currentAdapter)
+
   return (
     <FormKit.Panel
       extra={ isEmptySourceDefinitionConfig && renderAddButton() }
@@ -96,7 +99,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
               options={ sourceDefinitionOptions }
             />
           </Form.Item>
-          {currentAdapter?.getElement({ currentData, updateFormData })}
+          {currentAdapter?.getCustomReportData({ currentData, updateFormData })}
         </Form.Group>
       </Flex>
       )}
