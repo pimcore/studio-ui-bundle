@@ -74,8 +74,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }), [nameFilter, page, pageSize])
 
-  console.log('queryArgs', queryArgs)
-
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error } = useWebsiteSettingsGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
   })
