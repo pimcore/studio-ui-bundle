@@ -19,6 +19,7 @@ import { useGlobalDefaultContextActions } from '@Pimcore/modules/element/hooks/u
 interface WidgetContainerProps {
   node: TabNode
   component: ComponentType
+  defaultGlobalContext: boolean
 }
 
 interface IWidgetContext {
@@ -28,7 +29,7 @@ interface IWidgetContext {
 export const WidgetContext = createContext<IWidgetContext>({ nodeId: null })
 
 const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
-  const { node, component: Component } = props
+  const { node, component: Component, defaultGlobalContext } = props
   const [nodeId] = useState(node.getId())
   const isBorderNode = node.getParent() instanceof BorderNode
   const config = node.getConfig()
@@ -39,17 +40,13 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
 
   useEffect(() => {    
-    const isElementEditor = componentName === 'asset-editor' || 
-                           componentName === 'data-object-editor' || 
-                           componentName === 'document-editor'
-
-    if (isWidgetActive && !isElementEditor && componentName) {
+    if (isWidgetActive && defaultGlobalContext && componentName) {
       setGlobalDefaultContext({
         type: 'default',
         widgetId: nodeId,
       })
     }
-  }, [isWidgetActive, componentName, nodeId, config, mainWidgetContext])
+  }, [isWidgetActive, componentName, nodeId, config, mainWidgetContext, defaultGlobalContext])
 
   return useMemo(() => (
     <ErrorBoundary>
