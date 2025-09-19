@@ -15,7 +15,7 @@ import type { Element } from '@Pimcore/modules/element/element-helper'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@sdk/app'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
@@ -72,7 +72,6 @@ export const usePaste = (): UsePasteHookReturn => {
 
   const [languageForm] = Form.useForm()
 
-  // Get available languages from settings with proper display names
   const availableLanguages: LanguageOption[] = (settings.validLanguages ?? []).map((locale: string) => ({
     value: locale,
     label: `${getDisplayName(locale)} [${locale}]`
@@ -92,7 +91,6 @@ export const usePaste = (): UsePasteHookReturn => {
 
     console.log('Creating DocumentCloneJob with:', { sourceId, targetId, parameters })
 
-    // Create the job
     const job = new DocumentCloneJob({
       sourceId,
       targetId,
@@ -103,7 +101,6 @@ export const usePaste = (): UsePasteHookReturn => {
     })
 
     console.log('Running job via execution engine')
-    // Execute the job using the execution engine
     await executionEngine.runJob(job)
     console.log('Job execution completed successfully')
   }
@@ -122,7 +119,6 @@ export const usePaste = (): UsePasteHookReturn => {
     dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: true }))
 
     try {
-      // Replace content operations don't trigger background jobs - execute directly
       await dispatch(
         api.endpoints.documentReplaceContent.initiate({
           sourceId,
@@ -145,25 +141,24 @@ export const usePaste = (): UsePasteHookReturn => {
   }
 
   const showLanguageModalDialog = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): void => {
-    // Reset form to ensure clean state
     languageForm.resetFields()
-    modal.confirm({
+    void modal.confirm({
       title: t('document.paste-as-new-language-variant'),
       icon: null,
       content: (
         <Form
-          form={languageForm}
+          form={ languageForm }
           layout="vertical"
-          style={{ marginTop: 16 }}
+          style={ { marginTop: 16 } }
         >
           <Form.Item
-            label={t('language')}
+            label={ t('language') }
             name="language"
-            rules={[{ required: true, message: t('document.language-required') }]}
+            rules={ [{ required: true, message: t('document.language-required') }] }
           >
             <Select
-              options={availableLanguages}
-              placeholder={t('document.select-language-for-new-document')}
+              options={ availableLanguages }
+              placeholder={ t('document.select-language-for-new-document') }
             />
           </Form.Item>
         </Form>
@@ -177,7 +172,7 @@ export const usePaste = (): UsePasteHookReturn => {
                 resolve(undefined)
               } catch (error) {
                 console.error('Language modal operation failed:', error)
-                resolve(undefined) // Still close modal even if operation fails
+                resolve(undefined)
               }
             })
             .catch(() => {
@@ -194,11 +189,9 @@ export const usePaste = (): UsePasteHookReturn => {
   }
 
   const handleLanguageModalOk = async (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): Promise<void> => {
-    // Get form values (validation has already passed at this point)
     const formValues = await languageForm.validateFields()
     const { language } = formValues
 
-    // Execute the clone operation in the background
     try {
       let parameters: DocumentCloneParameters
       switch (type) {
@@ -231,11 +224,9 @@ export const usePaste = (): UsePasteHookReturn => {
       }
 
       await cloneDocument(getStoredNode(), node, parameters)
-      // Only reset form after successful operation
       languageForm.resetFields()
     } catch (error) {
       console.error('Clone operation failed:', error)
-      // Could show a toast notification here instead of reopening modal
     }
   }
 
@@ -263,7 +254,6 @@ export const usePaste = (): UsePasteHookReturn => {
     return isPasteOptionHidden(node)
   }
 
-  // Standard paste options
   const pasteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste'),
@@ -334,13 +324,11 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOnlyContentsHidden(node),
       onClick: async () => {
-        // Use the replace content operation to replace only the content
         await replaceDocumentContent(getStoredNode(), node)
       }
     }
   }
 
-  // Inheritance paste options
   const pasteInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste'),
@@ -409,7 +397,6 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
-  // Language variant inheritance paste options
   const pasteAsNewLanguageVariantInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('document.paste-as-new-language-variant'),
@@ -446,7 +433,6 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
-  // Language variant paste options
   const pasteAsNewLanguageVariantTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('document.paste-as-new-language-variant'),

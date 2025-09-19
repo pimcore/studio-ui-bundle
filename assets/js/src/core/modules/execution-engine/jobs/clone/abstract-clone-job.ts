@@ -96,7 +96,6 @@ export abstract class AbstractCloneJob implements JobInterface {
     }
   }
 
-
   protected async handleCompletion (): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
@@ -107,7 +106,6 @@ export abstract class AbstractCloneJob implements JobInterface {
       nodeId: this.targetId.toString()
     }))
   }
-
 
   protected async handleJobFailure (error: any): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
