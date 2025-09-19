@@ -22,7 +22,7 @@ export const RightToolbar = ({ widget, allowExpandControl }: RightToolbarProps):
     />
   ]
 
-  if (allowExpandControl) {
+  if (allowExpandControl === true) {
     items = [
       <IconButton
         icon={{ value: isExpanded ? 'eye' : 'eye-off' }}
