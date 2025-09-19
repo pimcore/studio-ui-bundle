@@ -1,8 +1,18 @@
-import { IconButton } from "@Pimcore/components/icon-button/icon-button"
-import { useWidgetConfiguratorContext } from "../../../../context/hooks/use-widget-configurator-context"
-import { WidgetConfig } from "@Pimcore/modules/perspectives/perspectives-slice.enhanced"
-import React from "react"
-import { ButtonGroup } from "@Pimcore/components/button-group/button-group"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useWidgetConfiguratorContext } from '../../../../context/hooks/use-widget-configurator-context'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import React from 'react'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 interface RightToolbarProps {
   widget: WidgetConfig
@@ -15,9 +25,9 @@ export const RightToolbar = ({ widget, allowExpandControl }: RightToolbarProps):
 
   let items = [
     <IconButton
-      icon={{ value: 'trash' }}
-      key={'remove'}
-      onClick={() => { onRemove(widget.id) }}
+      icon={ { value: 'trash' } }
+      key={ 'remove' }
+      onClick={ () => { onRemove(widget.id) } }
       theme="secondary"
     />
   ]
@@ -25,9 +35,9 @@ export const RightToolbar = ({ widget, allowExpandControl }: RightToolbarProps):
   if (allowExpandControl === true) {
     items = [
       <IconButton
-        icon={{ value: isExpanded ? 'eye' : 'eye-off' }}
-        key={'expand'}
-        onClick={() => { setExpanded(widget.id) }}
+        icon={ { value: isExpanded ? 'eye' : 'eye-off' } }
+        key={ 'expand' }
+        onClick={ () => { setExpanded(widget.id) } }
         theme="secondary"
       />,
       ...items
@@ -36,7 +46,7 @@ export const RightToolbar = ({ widget, allowExpandControl }: RightToolbarProps):
 
   return (
     <ButtonGroup
-      items={items}
+      items={ items }
       noSpacing
     />
   )

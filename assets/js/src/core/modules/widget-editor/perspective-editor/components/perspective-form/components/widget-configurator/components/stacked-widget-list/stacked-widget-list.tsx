@@ -28,18 +28,21 @@ export const StackedWidgetList = ({ allowExpandControl = true }: StackedWidgetLi
       return {
         id: value.id,
         sortable: true,
-        renderRightToolbar: <RightToolbar widget={value} allowExpandControl={allowExpandControl} />,
+        renderRightToolbar: <RightToolbar
+          allowExpandControl={ allowExpandControl }
+          widget={ value }
+                            />,
         children: <WidgetConfigurationCardItem
-          widget={value}
-        />
+          widget={ value }
+                  />
       }
     }))
   }, [widgetConfigs])
 
   return (
     <StackList
-      items={parsedValues}
-      onItemsChange={onReorder}
+      items={ parsedValues }
+      onItemsChange={ onReorder }
       sortable
     />
   )
