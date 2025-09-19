@@ -15,7 +15,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 import { AbstractCloneJob, type AbstractCloneJobOptions } from './abstract-clone-job'
 
-export interface DocumentCloneJobOptions extends AbstractCloneJobOptions {
+export interface DocumentCloneJobOptions extends Omit<AbstractCloneJobOptions, 'elementType'> {
   parameters: DocumentCloneParameters
 }
 

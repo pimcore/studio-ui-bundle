@@ -28,6 +28,7 @@ import { type DocumentCloneParameters, api } from '@Pimcore/modules/document/doc
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/document-clone-job'
 
 export interface UsePasteHookReturn {
@@ -60,6 +61,7 @@ export const usePaste = (): UsePasteHookReturn => {
   const { isPasteHidden } = usePasteVisibility('document')
   const settings = useSettings()
   const executionEngine = useExecutionEngine()
+  const { getDisplayName } = useLanguageLookup()
 
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
   const [languageForm] = Form.useForm()
@@ -69,10 +71,10 @@ export const usePaste = (): UsePasteHookReturn => {
     enableInheritance?: boolean
   } | null>(null)
 
-  // Get available languages from settings
+  // Get available languages from settings with proper display names
   const availableLanguages = (settings.validLanguages ?? []).map((locale: string) => ({
     value: locale,
-    label: `${locale.toUpperCase()} [${locale}]`
+    label: `${getDisplayName(locale)} [${locale}]`
   }))
 
   const cloneDocument = async (
@@ -81,11 +83,13 @@ export const usePaste = (): UsePasteHookReturn => {
     parameters: DocumentCloneParameters
   ): Promise<void> => {
     if (isNil(sourceNode)) {
-      return
+      throw new Error('Source node is null')
     }
 
     const sourceId = typeof sourceNode.id === 'string' ? parseInt(sourceNode.id) : sourceNode.id
     const targetId = typeof targetNode.id === 'string' ? parseInt(targetNode.id) : targetNode.id
+
+    console.log('Creating DocumentCloneJob with:', { sourceId, targetId, parameters })
 
     // Create the job
     const job = new DocumentCloneJob({
@@ -97,8 +101,10 @@ export const usePaste = (): UsePasteHookReturn => {
       nodeId: String(targetId)
     })
 
+    console.log('Running job via execution engine')
     // Execute the job using the execution engine
     await executionEngine.runJob(job)
+    console.log('Job execution completed successfully')
   }
 
   const replaceDocumentContent = async (
@@ -144,11 +150,17 @@ export const usePaste = (): UsePasteHookReturn => {
       return
     }
 
-    try {
-      const values = await languageForm.validateFields()
-      const { language } = values
-      const { node, type, enableInheritance = false } = currentLanguageAction
+    const formValues = await languageForm.validateFields()
+    const { language } = formValues
+    const { node, type, enableInheritance = false } = currentLanguageAction
 
+    // Reset modal state first
+    setIsLanguageModalVisible(false)
+    languageForm.resetFields()
+    setCurrentLanguageAction(null)
+
+    // Then execute the clone operation in the background
+    try {
       let parameters: DocumentCloneParameters
       switch (type) {
         case 'child':
@@ -180,12 +192,9 @@ export const usePaste = (): UsePasteHookReturn => {
       }
 
       await cloneDocument(getStoredNode(), node, parameters)
-
-      setIsLanguageModalVisible(false)
-      languageForm.resetFields()
-      setCurrentLanguageAction(null)
     } catch (error) {
-      // Form validation failed
+      console.error('Clone operation failed:', error)
+      // Could show a toast notification here instead of reopening modal
     }
   }
 
