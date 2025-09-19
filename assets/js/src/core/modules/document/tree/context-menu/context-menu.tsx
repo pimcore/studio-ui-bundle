@@ -24,7 +24,7 @@ import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
-import { useDocumentPaste } from '@Pimcore/modules/document/actions/paste/use-document-paste'
+import { usePaste } from '@Pimcore/modules/document/actions/paste/use-paste'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DocumentTreeContextMenuProps {
@@ -62,7 +62,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     isPasteMenuHidden,
     isPasteInheritanceMenuHidden,
     LanguageModal
-  } = useDocumentPaste()
+  } = usePaste()
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),

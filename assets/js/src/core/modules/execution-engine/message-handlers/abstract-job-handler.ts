@@ -13,11 +13,13 @@ import { type AbstractMercureMessage } from '@Pimcore/modules/background-process
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
 import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
-import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
-import { isNil } from 'lodash'
+import { isNil, throttle } from 'lodash'
 import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { defaultTopics } from '@Pimcore/modules/execution-engine/topics'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 
 /**
  * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
@@ -30,6 +32,16 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   protected readonly topics: NonEmptyArray<string>
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: any) => void | Promise<void>
+
+  // Progress throttling properties - track last progress to avoid micro-updates
+  private lastProgressValue: number = -1
+
+  // Throttled progress update function - max 1 update per 250ms, with leading and trailing execution
+  private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
+    console.log(`[JobHandler] Triggering throttled progress update: ${progress}% (job: ${this.jobRunId})`)
+    this.performProgressUpdate(progress, data)
+    this.lastProgressValue = progress
+  }, 1000, { leading: true, trailing: true })
 
   constructor (options: DefaultJobHandlerOptions<TConfig>) {
     super()
@@ -166,8 +178,9 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
       }))
 
       // Unregister handler from registry
-      const messageRegistry = useGlobalMessageBus()
-      messageRegistry.unregisterHandler(String(this.jobRunId))
+      console.log(`[JobHandler] Job completed, unregistering handler (job: ${this.jobRunId})`)
+      const messageRegistry = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
+      messageRegistry.unregisterHandler(this.jobRunId) // Use same type as getId()
     } else if (data.status === 'running') {
       store.dispatch(jobUpdated({
         id: this.getJob().id,
@@ -177,29 +190,49 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   }
 
   private handleProgressUpdate (progress: number, data: any): void {
+    // Skip micro-updates - only update if progress changed by at least 2%
+    if (Math.abs(progress - this.lastProgressValue) < 2 && progress !== 100) {
+      return
+    }
+
+    // All significant updates go through throttling - first one executes immediately due to leading: true
+    this.throttledProgressUpdate(progress, data)
+  }
+
+  private performProgressUpdate (progress: number, data: any): void {
+    console.time(`[JobHandler] Redux dispatch progress ${this.jobRunId}`)
+
     // If we get progress but haven't set status to running yet, set it now
     if (isNil(data?.status)) {
+      console.time(`[JobHandler] Redux dispatch status ${this.jobRunId}`)
+      console.log('[JobHandler] Dispatching status update:', { jobId: this.getJob().id, status: JobStatus.RUNNING })
       store.dispatch(jobUpdated({
         id: this.getJob().id,
         changes: { status: JobStatus.RUNNING }
       }))
+      console.timeEnd(`[JobHandler] Redux dispatch status ${this.jobRunId}`)
     }
 
     const job = this.getJob()
-    store.dispatch(jobUpdated({
+    const action = jobUpdated({
       id: job.id,
       changes: {
         config: {
           ...(job.config ?? {}),
-          progress,
-          lastUpdated: Date.now()
+          progress
         }
       }
-    }))
+    })
+    console.log('[JobHandler] Dispatching progress update:', action)
+    store.dispatch(action)
+
+    console.timeEnd(`[JobHandler] Redux dispatch progress ${this.jobRunId}`)
   }
 
   public onUnregister (): void {
-    // Override in subclasses if needed
+    // Cancel any pending throttled updates to prevent memory leaks
+    console.log(`[JobHandler] Cancelling throttled updates (job: ${this.jobRunId})`)
+    this.throttledProgressUpdate.cancel()
   }
 }
 /**

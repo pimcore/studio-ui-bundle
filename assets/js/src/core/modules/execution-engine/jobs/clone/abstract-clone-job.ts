@@ -13,38 +13,38 @@ import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
-import { api, type DocumentCloneApiArg, type DocumentCloneParameters } from '@Pimcore/modules/document/document-api-slice.gen'
 import { topics } from '../../topics'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { type DocumentCloneJobConfig } from './types'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type BaseJobConfig } from '../../message-handlers/abstract-job-handler'
 
-export interface DocumentCloneJobOptions {
+export interface AbstractCloneJobConfig extends BaseJobConfig {
+  parentFolderId: number
+  parentFolderType: ElementType
+}
+
+export interface AbstractCloneJobOptions {
   sourceId: number
   targetId: number
-  parameters: DocumentCloneParameters
   title: string
+  elementType: ElementType
   treeId?: string
   nodeId?: string
 }
 
-/**
- * Job for cloning documents in the background
- * Handles the complete workflow including API calls, progress tracking, and UI updates
- */
-export class DocumentCloneJob implements JobInterface {
-  private readonly sourceId: number
-  private readonly targetId: number
-  private readonly parameters: DocumentCloneParameters
-  private readonly title: string
-  private readonly treeId?: string
-  private readonly nodeId?: string
+export abstract class AbstractCloneJob implements JobInterface {
+  protected readonly sourceId: number
+  protected readonly targetId: number
+  protected readonly title: string
+  protected readonly elementType: ElementType
+  protected readonly treeId?: string
+  protected readonly nodeId?: string
 
-  constructor (options: DocumentCloneJobOptions) {
+  constructor (options: AbstractCloneJobOptions) {
     this.sourceId = options.sourceId
     this.targetId = options.targetId
-    this.parameters = options.parameters
     this.title = options.title
+    this.elementType = options.elementType
     this.treeId = options.treeId
     this.nodeId = options.nodeId
   }
@@ -60,17 +60,18 @@ export class DocumentCloneJob implements JobInterface {
       const jobRunId = await this.executeCloneRequest()
 
       if (isNil(jobRunId)) {
-        await this.handleImmediateCompletion()
+        await this.handleCompletion()
         return
       }
+
       const handler = new StepBasedProgressJobHandler({
         jobRunId,
         config: this.getJobConfig(),
-        jobType: 'document-clone-background',
+        jobType: 'clone',
         additionalTopics: [topics['cloning-finished']],
         onJobCompletion: async (data: any) => {
           try {
-            await this.handleJobCompletion(data)
+            await this.handleCompletion()
           } catch (error) {
             await this.handleJobFailure(error)
           }
@@ -81,52 +82,38 @@ export class DocumentCloneJob implements JobInterface {
     } catch (error: any) {
       await this.handleJobFailure(error)
       trackError(new GeneralError(error.message as string))
-    } finally {
-      if (isString(this.treeId) && isString(this.nodeId)) {
-        store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
-      }
     }
   }
 
-  private async executeCloneRequest (): Promise<string | number | null> {
-    const cloneParams: DocumentCloneApiArg = {
-      id: this.sourceId,
-      parentId: this.targetId,
-      documentCloneParameters: this.parameters ?? {}
-    }
+  protected abstract executeCloneRequest (): Promise<string | number | null>
 
-    const result = await store.dispatch(
-      api.endpoints.documentClone.initiate(cloneParams)
-    ).unwrap()
-
-    return result?.jobRunId ?? null
-  }
-
-  private getJobConfig (): DocumentCloneJobConfig {
+  protected getJobConfig (): AbstractCloneJobConfig {
     return {
       title: this.title,
       progress: 0,
       parentFolderId: this.targetId,
-      parentFolderType: elementTypes.document
+      parentFolderType: this.elementType
     }
   }
 
-  private async handleJobCompletion (data: any): Promise<void> {
+
+  protected async handleCompletion (): Promise<void> {
+    if (isString(this.treeId) && isString(this.nodeId)) {
+      store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
+    }
+
     store.dispatch(refreshNodeChildren({
-      elementType: elementTypes.document,
+      elementType: this.elementType,
       nodeId: this.targetId.toString()
     }))
   }
 
-  private async handleImmediateCompletion (): Promise<void> {
-    // If operation completed immediately, refresh the tree
-    store.dispatch(refreshNodeChildren({
-      nodeId: this.targetId.toString(),
-      elementType: elementTypes.document
-    }))
-  }
 
-  private async handleJobFailure (error: any): Promise<void> {
-    console.error('Document clone job failed:', error)
+  protected async handleJobFailure (error: any): Promise<void> {
+    if (isString(this.treeId) && isString(this.nodeId)) {
+      store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
+    }
+
+    console.error('Clone job failed:', error)
   }
 }

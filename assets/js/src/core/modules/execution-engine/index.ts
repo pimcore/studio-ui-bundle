@@ -20,7 +20,6 @@ import { NotificationJobContainer as BatchDeleteJobContainer } from './jobs/batc
 import { NotificationJobContainer as DeleteJobContainer } from './jobs/delete/notification-job-container'
 import { NotificationJobContainer as CloneJobContainer } from './jobs/clone/notification-job-container'
 import { NotificationJobContainer as TagAssignJobContainer } from './jobs/tag-assign/notification-job-container'
-import { NotificationJobContainer as DocumentCloneBackgroundJobContainer } from './jobs/document-clone-background/notification-job-container'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
@@ -34,7 +33,6 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('delete', DeleteJobContainer)
     jobComponentRegistry.registerComponent('clone', CloneJobContainer)
     jobComponentRegistry.registerComponent('tag-assign', TagAssignJobContainer)
-    jobComponentRegistry.registerComponent('document-clone-background', DocumentCloneBackgroundJobContainer)
   }
 }
 

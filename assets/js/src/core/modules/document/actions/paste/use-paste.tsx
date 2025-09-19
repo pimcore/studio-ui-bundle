@@ -28,9 +28,9 @@ import { type DocumentCloneParameters, api } from '@Pimcore/modules/document/doc
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
-import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/document-clone-background/document-clone-job'
+import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/document-clone-job'
 
-export interface UseDocumentPasteHookReturn {
+export interface UsePasteHookReturn {
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteAsChildRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -51,7 +51,7 @@ export interface UseDocumentPasteHookReturn {
   LanguageModal: React.ComponentType<Record<string, unknown>>
 }
 
-export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
+export const usePaste = (): UsePasteHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { paste } = useCopyPaste('document')
@@ -92,7 +92,7 @@ export const useDocumentPaste = (): UseDocumentPasteHookReturn => {
       sourceId,
       targetId,
       parameters,
-      title: t('document.tree.copy-paste.cloning-folder'),
+      title: t('jobs.document-clone-job.title'),
       treeId,
       nodeId: String(targetId)
     })
