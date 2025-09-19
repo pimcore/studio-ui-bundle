@@ -41,14 +41,11 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const { user, setModifiedCells } = useUserDraft()
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
 
-    const validLocalesOptions = [{
-        value: '',
-        label: '(system)'
-    }, ...Object.entries(validLocales).map(([key, value]) => ({
-        value: key,
-        label: value
-    }))
-    ]
+    const validLocalesOptions = [{ value: '', label: '(system)' },
+        ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+            value: key,
+            label: value
+        }))]
 
   useEffect(() => {
     if (user?.modified === false) {
@@ -57,7 +54,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         lastname: user?.lastname,
         email: user?.email,
         language: user?.language,
-          dateTimeLocale: user?.dateTimeLocale,
+        dateTimeLocale: user?.dateTimeLocale,
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,

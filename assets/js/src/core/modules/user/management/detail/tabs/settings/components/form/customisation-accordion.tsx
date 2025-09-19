@@ -20,171 +20,168 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
 interface ICustomisationAccordion {
-    isAdmin?: boolean
+  isAdmin?: boolean
 }
 const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
-    const { t } = useTranslation()
-    const { availableAdminLanguages, validLocales } = useSettings()
-    const { getDisplayName } = useLanguageLookup()
-    const [roleOptions, setRoleOptions] = useState<any[]>([])
-    const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
+  const { t } = useTranslation()
+  const { availableAdminLanguages, validLocales } = useSettings()
+  const { getDisplayName } = useLanguageLookup()
+  const [roleOptions, setRoleOptions] = useState<any[]>([])
+  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
 
-    const { getRoleCollection } = useRoleHelper()
-    const { getPerspectiveConfigCollection } = usePerspectives()
+  const { getRoleCollection } = useRoleHelper()
+  const { getPerspectiveConfigCollection } = usePerspectives()
 
-    useEffect(() => {
-        if (perspectiveOptions.length === 0) {
-            getPerspectiveConfigCollection().then((data) => {
-                if (data === undefined) {
-                    return
-                }
-
-                setPerspectiveOptions(
-                    data.items.map((item) => ({
-                        value: item.id,
-                        label: item.name
-                    }))
-                )
-            }).catch((error) => {
-                console.error('Error fetching perspective config collection:', error)
-            })
+  useEffect(() => {
+    if (perspectiveOptions.length === 0) {
+      getPerspectiveConfigCollection().then((data) => {
+        if (data === undefined) {
+          return
         }
 
-        if (roleOptions.length === 0) {
-            getRoleCollection().then((data) => {
-                if (data === undefined) {
-                    return
-                }
-                setRoleOptions(data.items.map((item) => ({
-                    value: item.id,
-                    label: item.name
-                })))
-            }).catch((error) => {
-                console.error('Error fetching role collection:', error)
-            })
+        setPerspectiveOptions(
+          data.items.map((item) => ({
+            value: item.id,
+            label: item.name
+          }))
+        )
+      }).catch((error) => {
+        console.error('Error fetching perspective config collection:', error)
+      })
+    }
+
+    if (roleOptions.length === 0) {
+      getRoleCollection().then((data) => {
+        if (data === undefined) {
+          return
         }
-    }, [])
+        setRoleOptions(data.items.map((item) => ({
+          value: item.id,
+          label: item.name
+        })))
+      }).catch((error) => {
+        console.error('Error fetching role collection:', error)
+      })
+    }
+  }, [])
 
-    const validLocalesOptions = [{
-        value: '',
-        label: '(system)'
-    }, ...Object.entries(validLocales).map(([key, value]) => ({
-        value: key,
-        label: value
-    }))
-    ]
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
-    const content = [
-        {
-            key: '1',
-            title: <>{ t('user-management.customisation') }</>,
-            children: <>
-                <Form.Item
-                    label={ t('user-management.firstname') }
-                    name="firstname"
-                >
-                    <Input />
-                </Form.Item>
+  const content = [
+    {
+      key: '1',
+      title: <>{ t('user-management.customisation') }</>,
+      children: <>
+        <Form.Item
+          label={ t('user-management.firstname') }
+          name="firstname"
+        >
+          <Input />
+        </Form.Item>
 
-                <Form.Item
-                    label={ t('user-management.lastname') }
-                    name="lastname"
-                >
-                    <Input />
-                </Form.Item>
+        <Form.Item
+          label={ t('user-management.lastname') }
+          name="lastname"
+        >
+          <Input />
+        </Form.Item>
 
-                <Form.Item
-                    label={ t('user-management.email') }
-                    name="email"
-                >
-                    <Input type={ 'email' } />
-                </Form.Item>
+        <Form.Item
+          label={ t('user-management.email') }
+          name="email"
+        >
+          <Input type={ 'email' } />
+        </Form.Item>
 
-                <Form.Item
-                    label={ t('user-management.language') }
-                    name="language"
-                >
-                    <Select
-                        options={ availableAdminLanguages.map((language: string) => ({
-                            value: language,
-                            label: getDisplayName(language)
-                        })) }
-                        placeholder={ t('user-management.language') }
-                    />
-                </Form.Item>
+        <Form.Item
+          label={ t('user-management.language') }
+          name="language"
+        >
+          <Select
+            options={ availableAdminLanguages.map((language: string) => ({
+              value: language,
+              label: getDisplayName(language)
+            })) }
+            placeholder={ t('user-management.language') }
+          />
+        </Form.Item>
 
-                {isAdmin === false
-                    ? (
-                        <>
-                            <Form.Item
-                                label={ t('user-management.roles') }
-                                name="roles"
-                            >
-                                <Select
-                                    mode="multiple"
-                                    options={ roleOptions }
-                                    placeholder={ t('user-management.roles') }
-                                ></Select>
-                            </Form.Item>
+        {isAdmin === false
+          ? (
+            <>
+              <Form.Item
+                label={ t('user-management.roles') }
+                name="roles"
+              >
+                <Select
+                  mode="multiple"
+                  options={ roleOptions }
+                  placeholder={ t('user-management.roles') }
+                ></Select>
+              </Form.Item>
 
-                            <Form.Item
-                                label={ t('user-management.perspectives') }
-                                name="perspectives"
-                            >
-                                <Select
-                                    mode="multiple"
-                                    options={ perspectiveOptions }
-                                    placeholder={ t('user-management.perspectives') }
-                                ></Select>
-                            </Form.Item>
-                        </>
-                    )
-                    : null }
-
-                <Form.Item
-                    label={ t('user-management.dateTime') }
-                    name="datetimeLocale"
-                >
-                    <Select
-                        options={ validLocalesOptions }
-                        placeholder={ t('user-management.dateTime') }
-                    />
-                </Form.Item>
-
-                <Form.Item
-                    name="welcomeScreen"
-                >
-                    <Switch labelRight={ t('user-management.welcomeScreen') } />
-                </Form.Item>
-
-                <Form.Item
-                    name="memorizeTabs"
-                >
-                    <Switch labelRight={ t('user-management.memorizeTabs') } />
-                </Form.Item>
-
-                <Form.Item
-                    name="allowDirtyClose"
-                >
-                    <Switch labelRight={ t('user-management.allowDirtyClose') } />
-                </Form.Item>
-
-                <Form.Item
-                    name="closeWarning"
-                >
-                    <Switch labelRight={ t('user-management.closeWarning') } />
-                </Form.Item>
+              <Form.Item
+                label={ t('user-management.perspectives') }
+                name="perspectives"
+              >
+                <Select
+                  mode="multiple"
+                  options={ perspectiveOptions }
+                  placeholder={ t('user-management.perspectives') }
+                ></Select>
+              </Form.Item>
             </>
-        }
-    ]
+            )
+          : null }
 
-    return (
-        <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ content }
-            size={ 'small' }
-        />
-    )
+        <Form.Item
+          label={ t('user-management.dateTime') }
+          name="datetimeLocale"
+        >
+          <Select
+            options={ validLocalesOptions }
+            placeholder={ t('user-management.dateTime') }
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="welcomeScreen"
+        >
+          <Switch labelRight={ t('user-management.welcomeScreen') } />
+        </Form.Item>
+
+        <Form.Item
+          name="memorizeTabs"
+        >
+          <Switch labelRight={ t('user-management.memorizeTabs') } />
+        </Form.Item>
+
+        <Form.Item
+          name="allowDirtyClose"
+        >
+          <Switch labelRight={ t('user-management.allowDirtyClose') } />
+        </Form.Item>
+
+        <Form.Item
+          name="closeWarning"
+        >
+          <Switch labelRight={ t('user-management.closeWarning') } />
+        </Form.Item>
+      </>
+    }
+  ]
+
+  return (
+    <Accordion
+      activeKey={ '1' }
+      bordered
+      items={ content }
+      size={ 'small' }
+    />
+  )
 }
 export { CustomisationAccordion }
