@@ -28,9 +28,10 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
       <Input
         autoComplete="off"
         className={ props.className }
-        disabled={ props.noteditable === true }
+        disabled={ props.disabled === true }
         inherited={ props.inherited }
         maxLength={ props.columnLength ?? undefined }
+        noteditable={ props.noteditable === true }
         showCount={ props.showCharCount }
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.large) } }
         value={ props.value }

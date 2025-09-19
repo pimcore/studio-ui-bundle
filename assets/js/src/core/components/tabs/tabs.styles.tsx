@@ -22,6 +22,24 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn {
+        display: flex;
+        align-items: center;
+
+        & > * {
+          display: flex;
+          height: 100%;
+        }
+      }
+
+      .ant-tabs-nav .ant-tabs-tab button {
+        color: ${token.itemColor};
+      }
+
+      .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn button {
+        color: ${token.itemActiveColor} !important;
+      }
+
       &.ant-tabs-card.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab {
         padding-left: ${token.paddingXXS}px;
         padding-right: ${token.paddingXXS}px;
@@ -78,23 +96,8 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
-      .ant-tabs-tab-btn {
-        display: flex;
-        align-items: center;
-
-        & > * {
-          display: flex;
-          height: 100%;
-        }
-      }
-
       &.ant-tabs .ant-tabs-tab-btn .ant-tabs-tab-icon:not(:last-child) {
         margin-inline-end: ${token.marginXS}px;
-      }
-
-      .ant-tabs-tab-active .ant-tabs-tab-btn {
-        font-weight: 600;
-        text-shadow: none !important;
       }
 
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-remove {

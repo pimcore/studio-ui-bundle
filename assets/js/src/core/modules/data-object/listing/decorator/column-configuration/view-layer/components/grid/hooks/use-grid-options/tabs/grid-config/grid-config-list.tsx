@@ -21,6 +21,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -54,7 +55,11 @@ export const GridConfigList = (): React.JSX.Element => {
       meta: column,
 
       type: isAdvancedColumn ? 'collapse' : 'default',
-      children: isAdvancedColumn ? <Tag color='purple'>{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
+      children: (
+        () => isAdvancedColumn
+          ? <Tag color='purple'>{advancedColumnName}</Tag>
+          : <Tooltip title={ Array.isArray(column.group) ? column.group.join('/') : undefined }><Tag>{t(`${translationKey}`)}</Tag></Tooltip>
+      )(),
 
       ...(column.key === 'advanced'
         ? {

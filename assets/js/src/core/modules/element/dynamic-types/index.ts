@@ -18,8 +18,10 @@ import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modul
 import { type DynamicTypeFieldFilterString } from './definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { type DynamicTypeFieldFilterFulltext } from './definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
+import { type DynamicTypeFieldFilterInput } from './definitions/field-filters/types/input/dynamic-type-field-filter-input'
+import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
-import { type DynamicTypeFieldFilterSelect } from './definitions/field-filters/types/select/dynamic-type-field-filter-select'
+import { type DynamicTypeFieldFilterMultiselect } from './definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
 import { type DynamicTypeFieldFilterDate } from './definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DynamicTypeGridCellText } from './definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './definitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -181,6 +183,7 @@ import { type DynamicTypeDocumentEditableTable } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { type DynamicTypeDocumentEditableRenderlet } from './definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
+import { type DynamicTypeDocumentEditableScheduledblock } from './definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
 import { type DynamicTypeDocumentEditableAreablock } from './definitions/document/editable/types/dynamic-type-document-editable-areablock'
@@ -188,6 +191,14 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { type DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
+import { type DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
+import { type DynamicTypeDocumentFolder } from './definitions/document/types/dynamic-type-document-folder'
+import { type DynamicTypeDocumentHardlink } from './definitions/document/types/dynamic-type-document-hardlink'
+import { type DynamicTypeDocumentLink } from './definitions/document/types/dynamic-type-document-link'
+import { type DynamicTypeDocumentNewsletter } from './definitions/document/types/dynamic-type-document-newsletter'
+import { type DynamicTypeDocumentSnippet } from './definitions/document/types/dynamic-type-document-snippet'
+import { type DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
 
 moduleSystem.registerModule({
   onInit () {
@@ -197,9 +208,11 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterString>(serviceIds['DynamicTypes/FieldFilter/String']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFulltext>(serviceIds['DynamicTypes/FieldFilter/Fulltext']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterInput>(serviceIds['DynamicTypes/FieldFilter/Input']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterMultiselect>(serviceIds['DynamicTypes/FieldFilter/Multiselect']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
@@ -344,6 +357,7 @@ moduleSystem.registerModule({
     const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
 
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableBlock>(serviceIds['DynamicTypes/DocumentEditable/Block']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableScheduledblock>(serviceIds['DynamicTypes/DocumentEditable/ScheduledBlock']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))
@@ -380,6 +394,16 @@ moduleSystem.registerModule({
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const documentRegistry = container.get<DynamicTypeDocumentRegistry>(serviceIds['DynamicTypes/DocumentRegistry'])
+
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentEmail>(serviceIds['DynamicTypes/Document/Email']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentFolder>(serviceIds['DynamicTypes/Document/Folder']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentHardlink>(serviceIds['DynamicTypes/Document/Hardlink']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentLink>(serviceIds['DynamicTypes/Document/Link']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentNewsletter>(serviceIds['DynamicTypes/Document/Newsletter']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentSnippet>(serviceIds['DynamicTypes/Document/Snippet']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentPage>(serviceIds['DynamicTypes/Document/Page']))
 
     const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
 

@@ -8,18 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type WidgetConfig } from '@sdk/api/perspectives'
-import { Content } from '@sdk/components'
+import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/custom-view-editor/context/hooks/use-widget-editor-context'
 import React from 'react'
+import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
+import { WidgetForm } from '../../../widget-type-form/widget-form'
+import { type WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
+import { container } from '@sdk/app'
 
 interface WidgetDetailTabProps {
-  widget: WidgetConfig
+  id: string
 }
 
-export const WidgetDetailTab = ({ widget }: WidgetDetailTabProps): React.JSX.Element => {
+export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element => {
+  const { widgets } = useWidgetEditorContext()
+  const widget = widgets.find(w => w.id === id)
+
+  if (widget === undefined) {
+    return <></>
+  }
+
+  const widgetType = container.get<WidgetTypeRegistry>('WidgetEditor/WidgetTypeRegistry').getWidgetType(widget.widgetType)
+  const { form: Form } = widgetType!
+
   return (
-    <Content padded>
-      <p>{`You opened the widget with id ${widget.id}`}</p>
-    </Content>
+    <WidgetFormProvider widget={ widget }>
+      <WidgetForm form={ Form } />
+    </WidgetFormProvider>
   )
 }

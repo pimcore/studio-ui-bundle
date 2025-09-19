@@ -16,6 +16,7 @@ import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.ge
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -27,11 +28,15 @@ interface ITableProps {
 
 export const Table = ({
   showDuplicatePropertyModal,
-  data, type,
-  isLoading, onUpdateData
+  data,
+  type,
+  isLoading,
+  onUpdateData
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
+
+  const isAsset = type === WorkspaceType.ASSET
 
   useEffect(() => {
     setGridData(data)
@@ -70,17 +75,19 @@ export const Table = ({
         }
       }
     }),
-    columnHelper.accessor('save', {
-      header: t('user-management.workspaces.columns.save'),
-      size: 72,
-      meta: {
-        type: 'checkbox',
-        editable: true,
-        config: {
-          align: 'center'
+    !isAsset
+      ? columnHelper.accessor('save', {
+        header: t('user-management.workspaces.columns.save'),
+        size: 72,
+        meta: {
+          type: 'checkbox',
+          editable: true,
+          config: {
+            align: 'center'
+          }
         }
-      }
-    }),
+      })
+      : null,
     columnHelper.accessor('publish', {
       header: t('user-management.workspaces.columns.publish'),
       size: 72,
@@ -92,17 +99,19 @@ export const Table = ({
         }
       }
     }),
-    columnHelper.accessor('unpublish', {
-      header: t('user-management.workspaces.columns.unpublish'),
-      size: 72,
-      meta: {
-        type: 'checkbox',
-        editable: true,
-        config: {
-          align: 'center'
+    !isAsset
+      ? columnHelper.accessor('unpublish', {
+        header: t('user-management.workspaces.columns.unpublish'),
+        size: 72,
+        meta: {
+          type: 'checkbox',
+          editable: true,
+          config: {
+            align: 'center'
+          }
         }
-      }
-    }),
+      })
+      : null,
     columnHelper.accessor('delete', {
       header: t('user-management.workspaces.columns.delete'),
       size: 72,
@@ -190,7 +199,8 @@ export const Table = ({
         )
       }
     })
-  ]
+  ].filter(Boolean)
+
   const ownTableColumns = [
     ...createColumns()
   ]

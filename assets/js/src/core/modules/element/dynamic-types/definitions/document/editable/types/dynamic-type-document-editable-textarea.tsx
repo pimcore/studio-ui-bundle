@@ -31,6 +31,7 @@ export class DynamicTypeDocumentEditableTextarea extends DynamicTypeDocumentEdit
         allowMultiLine
         className={ props.config?.class }
         height={ props.config?.height }
+        inherited={ props.inherited }
         placeholder={ props.config?.placeholder }
         required={ props.config?.required }
         width={ props.config?.width }

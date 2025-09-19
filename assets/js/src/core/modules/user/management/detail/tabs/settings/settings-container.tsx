@@ -52,7 +52,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         admin: openedUser?.admin,
         classes: openedUser?.classes,
         name: openedUser?.name,
-        twoFactorAuthenticationEnabled: openedUser?.twoFactorAuthenticationEnabled,
+        twoFactorAuthentication: openedUser?.twoFactorAuthentication,
         firstname: openedUser?.firstname,
         lastname: openedUser?.lastname,
         email: openedUser?.email,
@@ -124,7 +124,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
 
                     { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin as number) }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
                         )
                       : null}
                   </Flex>
@@ -157,7 +157,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     />
                   </Form.Item>
                   <Form.Item
-                    name={ 'twoFactorAuthenticationEnabled' }
+                    name={ 'twoFactorAuthentication' }
                     style={ { marginBottom: '0' } }
                   >
                     <Switch

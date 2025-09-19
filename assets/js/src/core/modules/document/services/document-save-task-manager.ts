@@ -168,12 +168,17 @@ export class DocumentSaveTaskManager {
 
   /**
    * Gets editable data from the iframe API for this document
+   * Only includes non-inherited values for saving
    */
   private getEditableData (): Record<string, any> {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       const iframeApi = documentApi.getIframeApi(this.documentId)
-      return iframeApi.documentEditable.getValues(true)
+      const allValues = iframeApi.documentEditable.getValues(true)
+
+      return Object.fromEntries(
+        Object.entries(allValues).filter(([key]) => !iframeApi.documentEditable.getInheritanceState(key))
+      )
     } catch (error) {
       console.warn(`Could not get editable data for document ${this.documentId}:`, error)
       return {}
@@ -209,6 +214,10 @@ export class DocumentSaveTaskManager {
       })
 
       updatedData.properties = propertyUpdate?.filter((property) => !property.inherited)
+    }
+
+    if (!isNil(document.changes?.settingsData) && !isNil(document.settingsData)) {
+      updatedData.settingsData = document.settingsData
     }
 
     const editableData = this.getEditableData()

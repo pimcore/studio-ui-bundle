@@ -13,14 +13,18 @@ import { isNil, isString, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
-import { usePerspectiveWidgetGetConfigCollectionQuery, type WidgetConfig } from '@sdk/api/perspectives'
+import { usePerspectiveWidgetGetConfigCollectionQuery } from '@sdk/api/perspectives'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api, type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openWidget } = useWidgetEditorContext()
-  const { data: widgets } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const { openWidget, createWidget, setIsLoading, isLoading } = useWidgetEditorContext()
+  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const dispatch = useAppDispatch()
 
   const generateTreeStructure = (widgets: WidgetConfig[]): TreeDataItem[] => {
     const tmpTreeData: TreeDataItem[] = []
@@ -82,18 +86,35 @@ export const TreeContainer = (): React.JSX.Element => {
         <Toolbar justify="space-between">
           <IconButton
             icon={ { value: 'refresh' } }
+            loading={ isLoading || isFetching }
+            onClick={ () => {
+              setIsLoading(true)
+
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.WIDGETS()
+                )
+              )
+
+              setIsLoading(false)
+            } }
             title={ t('refresh') }
           />
 
           <IconTextButton
             icon={ { value: 'new' } }
+            loading={ isLoading || isFetching }
+            onClick={ createWidget }
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
       ) }
     >
-      <Content padded>
+      <Content
+        loading={ isLoading || isFetching }
+        padded
+      >
         <SearchInput
           onChange={ (e) => { setSearchTerm(e.target.value) } }
           onClear={ clearSearch }

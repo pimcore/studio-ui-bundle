@@ -29,6 +29,8 @@ export interface UseAreablockControlsParams {
   onMoveArea: (fromIndex: number, toIndex: number) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export interface UseAreablockControlsReturn {
@@ -45,7 +47,9 @@ export const useAreablockControls = ({
   onMoveAreaDown,
   onMoveArea,
   onOpenDialog,
-  onToggleHidden
+  onToggleHidden,
+  isInherited = false,
+  onOverwrite
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const {
     activeId,
@@ -61,6 +65,8 @@ export const useAreablockControls = ({
     areaTypes,
     onMoveArea,
     onDropAreablock: async (areaType: string, index: number) => {
+      if (isInherited) return
+
       const elements = areablockManager.queryElements()
 
       if (index === 0) {
@@ -96,13 +102,15 @@ export const useAreablockControls = ({
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
         config={ config }
+        isInherited={ isInherited }
         onClick={ async (areaType) => {
           await handleAddArea(null, areaType)
         } }
+        onOverwrite={ onOverwrite }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
-  }, [areaTypes, config, handleAddArea])
+  }, [areaTypes, config, handleAddArea, isInherited, onOverwrite])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
@@ -116,7 +124,7 @@ export const useAreablockControls = ({
         const portal = createEmptyStatePortal(container)
         portals.push(portal)
       }
-    } else {
+    } else if (!isInherited) {
       portals.push(...dropzonePortals)
     }
 
@@ -138,11 +146,13 @@ export const useAreablockControls = ({
               config={ config }
               element={ areaEntry }
               id={ areaKey }
+              isInherited={ isInherited }
               limitReached={ limitReached }
               onAddArea={ handleAddArea }
               onMoveAreaDown={ onMoveAreaDown }
               onMoveAreaUp={ onMoveAreaUp }
               onOpenDialog={ onOpenDialog }
+              onOverwrite={ onOverwrite }
               onRemoveArea={ handleRemoveArea }
               onToggleHidden={ onToggleHidden }
             />
@@ -165,7 +175,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderAreablockToolbar

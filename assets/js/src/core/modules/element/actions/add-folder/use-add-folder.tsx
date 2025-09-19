@@ -58,11 +58,15 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   }
 
   const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    const canHaveChildren = elementType === 'asset'
+      ? node.type === 'folder'
+      : true
+
     return {
       label: t('element.new-folder'),
       key: ContextMenuActionName.addFolder,
       icon: <Icon value={ 'add-folder' } />,
-      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
+      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || !canHaveChildren || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(

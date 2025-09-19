@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { isArray } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useBlockEditableStyles } from './block-editable.styles'
@@ -36,6 +36,7 @@ export interface BlockEditableProps {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
+  isInherited?: boolean
 }
 
 export const BlockEditable = ({
@@ -45,12 +46,17 @@ export const BlockEditable = ({
   className,
   editableName,
   containerRef,
-  disabled = false
+  disabled = false,
+  isInherited = false
 }: BlockEditableProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
   const blockManager = useMemo(() => new BlockManager(editableName, containerRef), [editableName, containerRef])
+
+  const handleOverwrite = useCallback(() => {
+    onChange?.(blockManager.getBlockValue())
+  }, [blockManager, onChange])
 
   const {
     dynamicEditables,
@@ -74,7 +80,9 @@ export const BlockEditable = ({
     onRemoveBlock: removeBlock,
     onMoveBlockUp: moveBlockUp,
     onMoveBlockDown: moveBlockDown,
-    onMoveBlock: moveBlock
+    onMoveBlock: moveBlock,
+    isInherited,
+    onOverwrite: handleOverwrite
   })
 
   return (

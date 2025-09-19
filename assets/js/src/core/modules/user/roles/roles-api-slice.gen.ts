@@ -64,6 +64,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Role Management"],
             }),
+            roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/role/search`,
+                    params: {
+                        searchQuery: queryArg.searchQuery,
+                    },
+                }),
+                providesTags: ["Role Management"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -131,6 +140,14 @@ export type RoleGetTreeApiResponse = /** status 200 Collection of roles includin
 export type RoleGetTreeApiArg = {
     /** Filter roles by parent id. */
     parentId: number;
+};
+export type RoleSearchApiResponse = /** status 200 List of roles */ {
+    totalItems: number;
+    items: SimpleUserRole[];
+};
+export type RoleSearchApiArg = {
+    /** Query to search for a role. This can be a part of role name or ID. */
+    searchQuery?: string;
 };
 export type TreeNode = {
     /** AdditionalAttributes */
@@ -271,4 +288,5 @@ export const {
     useRoleGetCollectionQuery,
     useRoleListWithPermissionQuery,
     useRoleGetTreeQuery,
+    useRoleSearchQuery,
 } = injectedRtkApi;

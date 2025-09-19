@@ -11,7 +11,7 @@
 import React, { type Key, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty, Space } from 'antd'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined, reject, uniq } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -23,6 +23,7 @@ import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field
 import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 
 const EQUAL_OPERATOR = 'eq'
 
@@ -31,8 +32,9 @@ export const FieldFilters = (): React.JSX.Element => {
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
-  const { reportDetailData, chartDetailData } = useReportDataContext()
+  const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
+  const { data: fullChartDetailData } = useFullChartData({ name: reportDetailData?.name ?? '' })
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
     (!isEmptyValue(column.label) ? column.label : column.name)
@@ -45,7 +47,10 @@ export const FieldFilters = (): React.JSX.Element => {
 
     const id = getLabelValue(column)
     const fieldName = column.name
-    const fieldOptions = chartDetailData?.items.map(item => item.data[fieldName])
+    const fieldOptions = reject(
+      fullChartDetailData?.items.map(item => item.data[fieldName]),
+      value => isNull(value)
+    )
 
     setFieldFilters([
       ...fieldFilters,
@@ -56,7 +61,8 @@ export const FieldFilters = (): React.JSX.Element => {
         type,
         frontendType,
         config: {
-          options: fieldOptions
+          options: uniq(fieldOptions),
+          showSearch: frontendType === 'select'
         }
       }
     ])
@@ -83,6 +89,8 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
+    if (isEmpty(fullChartDetailData)) return
+
     const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
 
     const newAddColumnMenu = columnConfigurationsList
@@ -94,7 +102,7 @@ export const FieldFilters = (): React.JSX.Element => {
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportDetailData, fieldFilters])
+  }, [fullChartDetailData, reportDetailData, fieldFilters])
 
   return (
     <>
