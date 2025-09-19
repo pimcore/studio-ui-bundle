@@ -21,6 +21,7 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 interface CollectionTabProps {
   storeId: ClassificationStoreGetCollectionsApiArg['storeId']
   classId: ClassificationStoreGetCollectionsApiArg['classId']
+  objectId?: number
   fieldName: ClassificationStoreGetCollectionsApiArg['fieldName']
 }
 
@@ -40,7 +41,8 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
       queryArgs={ {
         storeId: props.storeId,
         classId: props.classId,
-        fieldName: props.fieldName
+        fieldName: props.fieldName,
+        objectId: props.objectId
       } }
       queryHook={ useClassificationStoreGetCollectionsQuery }
       tabId={ TabId.Collection }
