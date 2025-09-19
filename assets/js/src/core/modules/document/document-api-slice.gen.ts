@@ -80,6 +80,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentPageCheckPrettyUrl: build.mutation<
+                DocumentPageCheckPrettyUrlApiResponse,
+                DocumentPageCheckPrettyUrlApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page/check-pretty-url`,
+                    method: "POST",
+                    body: queryArg.checkPrettyUrl,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentPageStreamPreview: build.query<
                 DocumentPageStreamPreviewApiResponse,
                 DocumentPageStreamPreviewApiArg
@@ -100,6 +111,17 @@ const injectedRtkApi = api
             >({
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
                 providesTags: ["Documents"],
+            }),
+            documentPageSnippetChangeMainDocument: build.mutation<
+                DocumentPageSnippetChangeMainDocumentApiResponse,
+                DocumentPageSnippetChangeMainDocumentApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page-snippet/change-main-document`,
+                    method: "PUT",
+                    body: queryArg.changeMainDocument,
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentPageSnippetAreaBlockRender: build.query<
                 DocumentPageSnippetAreaBlockRenderApiResponse,
@@ -286,6 +308,12 @@ export type DocumentUpdateByIdApiArg = {
         };
     };
 };
+export type DocumentPageCheckPrettyUrlApiResponse = unknown;
+export type DocumentPageCheckPrettyUrlApiArg = {
+    /** Id of the document */
+    id: number;
+    checkPrettyUrl: CheckPrettyUrl;
+};
 export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
 export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
@@ -301,6 +329,12 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
+export type DocumentPageSnippetChangeMainDocumentApiResponse = unknown;
+export type DocumentPageSnippetChangeMainDocumentApiArg = {
+    /** Id of the document */
+    id: number;
+    changeMainDocument: ChangeMainDocument;
+};
 export type DocumentPageSnippetAreaBlockRenderApiResponse =
     /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
 export type DocumentPageSnippetAreaBlockRenderApiArg = {
@@ -638,6 +672,10 @@ export type UpdateDataProperty = {
     /** inheritable */
     inheritable: boolean;
 };
+export type CheckPrettyUrl = {
+    /** Pretty URL to check */
+    prettyUrl: string;
+};
 export type DocumentController = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -653,6 +691,10 @@ export type DocumentTemplate = {
     };
     /** Path */
     path: string;
+};
+export type ChangeMainDocument = {
+    /** Main document path */
+    mainDocumentPath: string | null;
 };
 export type AreaBlockRenderDataForEditmode = {
     /** AdditionalAttributes */
@@ -729,9 +771,11 @@ export const {
     useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
     useDocumentUpdateByIdMutation,
+    useDocumentPageCheckPrettyUrlMutation,
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
+    useDocumentPageSnippetChangeMainDocumentMutation,
     useDocumentPageSnippetAreaBlockRenderQuery,
     useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
