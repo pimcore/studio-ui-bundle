@@ -11,8 +11,8 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@sdk/app'
-import { DynamicTypeWidgetTypeElementTree } from './dynmic-types/definitions/dynamic-type-widget-type-element-tree'
-import { DynamicTypeWidgetTypeRegistry } from './dynmic-types/registry/dynamic-type-widget-type-registry'
+import { type DynamicTypeWidgetTypeElementTree } from './dynmic-types/definitions/dynamic-type-widget-type-element-tree'
+import { type DynamicTypeWidgetTypeRegistry } from './dynmic-types/registry/dynamic-type-widget-type-registry'
 
 moduleSystem.registerModule({
   onInit: () => {

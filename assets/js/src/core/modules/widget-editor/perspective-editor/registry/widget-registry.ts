@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ItemType, MenuItemGroupType } from '@Pimcore/components/dropdown/dropdown'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { injectable } from 'inversify'
 
@@ -30,7 +30,7 @@ export interface WidgetRegistryInterface {
 export class WidgetRegistry implements WidgetRegistryInterface {
   protected readonly widgets = new Map<string, WidgetDefinition>()
 
-  registerWidget(widget: WidgetDefinition): void {
+  registerWidget (widget: WidgetDefinition): void {
     if (this.widgets.has(widget.id)) {
       trackError(new GeneralError(`Widget with id "${widget.id}" already registered`))
       return
@@ -39,7 +39,7 @@ export class WidgetRegistry implements WidgetRegistryInterface {
     this.widgets.set(widget.id, widget)
   }
 
-  getWidget(id: string, throwException: boolean = true): WidgetDefinition | undefined {
+  getWidget (id: string, throwException: boolean = true): WidgetDefinition | undefined {
     const widget = this.widgets.get(id)
 
     if (widget === undefined && throwException) {
@@ -49,26 +49,23 @@ export class WidgetRegistry implements WidgetRegistryInterface {
     return widget
   }
 
-  hasWidget(id: string): boolean {
+  hasWidget (id: string): boolean {
     return this.widgets.has(id)
   }
 
-  getAllWidgets(): WidgetDefinition[] {
+  getAllWidgets (): WidgetDefinition[] {
     return Array.from(this.widgets.values())
   }
 
-  getGroupedWidgets(): Record<string, WidgetDefinition[]> {
-    return Array.from(this.widgets.values()).reduce((groups, widget) => {
-      if (!groups[widget.group]) {
-        groups[widget.group] = []
-      }
-
+  getGroupedWidgets (): Record<string, WidgetDefinition[]> {
+    return Array.from(this.widgets.values()).reduce<Record<string, WidgetDefinition[]>>((groups, widget) => {
+      groups[widget.group] = groups[widget.group] ?? []
       groups[widget.group].push(widget)
       return groups
-    }, {} as Record<string, WidgetDefinition[]>)
+    }, {})
   }
 
-  overrideWidget(widget: WidgetDefinition): void {
+  overrideWidget (widget: WidgetDefinition): void {
     if (!this.widgets.has(widget.id)) {
       trackError(new GeneralError(`Widget with id "${widget.id}" not found`))
       return

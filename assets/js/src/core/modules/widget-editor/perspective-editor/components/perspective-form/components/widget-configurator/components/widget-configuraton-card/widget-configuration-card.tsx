@@ -1,9 +1,19 @@
-import { Card } from "@Pimcore/components/card/card"
-import { Flex } from "@sdk/components"
-import React from "react"
-import { ExtendedWidgetConfig, WidgetConfiguratorProvider } from "../../context/widget-configurator-provider"
-import { AddWidgetDropdown } from "../add-widget-dropdown/add-widget-dropdown"
-import { StackedWidgetList } from "../stacked-widget-list/stacked-widget-list"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Card } from '@Pimcore/components/card/card'
+import { Flex } from '@sdk/components'
+import React from 'react'
+import { type ExtendedWidgetConfig, WidgetConfiguratorProvider } from '../../context/widget-configurator-provider'
+import { AddWidgetDropdown } from '../add-widget-dropdown/add-widget-dropdown'
+import { StackedWidgetList } from '../stacked-widget-list/stacked-widget-list'
 
 interface WidgetConfigurationCardProps {
   label: string
@@ -15,20 +25,23 @@ interface WidgetConfigurationCardProps {
 export const WidgetConfigurationCard = ({ label, value, onChange, allowExpandControl = true }: WidgetConfigurationCardProps): React.JSX.Element => {
   return (
     <WidgetConfiguratorProvider
-      formChange={onChange}
-      value={value}
+      formChange={ onChange }
+      value={ value }
     >
       <Card
+        className="w-full"
         title={
-          <Flex gap={8} align="center">
+          <Flex
+            align="center"
+            gap={ 8 }
+          >
             <span>{label}</span>
             <AddWidgetDropdown />
           </Flex>
         }
-        className="w-full"
       >
         <StackedWidgetList
-          allowExpandControl={allowExpandControl}
+          allowExpandControl={ allowExpandControl }
         />
       </Card>
     </WidgetConfiguratorProvider>

@@ -1,16 +1,22 @@
-import { usePerspectiveGetConfigByIdQuery } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
-import { useMemo } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
-interface MenuEntriesSection {
-  [key: string]: boolean
-}
+import { usePerspectiveGetConfigByIdQuery } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { useMemo } from 'react'
 
-interface MenuEntries {
-  [category: string]: MenuEntriesSection
-}
+type MenuEntriesSection = Record<string, boolean>
+
+type MenuEntries = Record<string, MenuEntriesSection>
 
 interface UsePerspectiveFormReturn {
-  menuEntries: MenuEntries,
+  menuEntries: MenuEntries
   isLoading: boolean
 }
 

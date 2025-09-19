@@ -1,6 +1,16 @@
-import { StackListItemProps } from "@Pimcore/components/stack-list/stack-list-item"
-import { ElementTreeWidget, WidgetConfig } from "@sdk/api/perspectives"
-import React, { createContext, useMemo, useState } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
+import { type ElementTreeWidget, type WidgetConfig } from '@sdk/api/perspectives'
+import React, { createContext, useMemo, useState } from 'react'
 
 export interface ExtendedWidgetConfig {
   expanded: string | null
@@ -58,7 +68,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   const onReorder = (newOrder: StackListItemProps[]): void => {
     const newWidgetOrder = newOrder.map(item => {
       return widgetConfigs.find(widget => widget.id === item.id)
-    }).filter((widget): widget is WidgetConfig => !!widget)
+    }).filter((widget): widget is WidgetConfig => widget !== undefined)
 
     setWidgetConfigs(newWidgetOrder)
     triggerFormUpdate(newWidgetOrder, expandedWidget)
@@ -81,7 +91,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }), [widgetConfigs, expandedWidget])
 
   return (
-    <WidgetConfiguratorContext.Provider value={contextValue}>
+    <WidgetConfiguratorContext.Provider value={ contextValue }>
       {children}
     </WidgetConfiguratorContext.Provider>
   )

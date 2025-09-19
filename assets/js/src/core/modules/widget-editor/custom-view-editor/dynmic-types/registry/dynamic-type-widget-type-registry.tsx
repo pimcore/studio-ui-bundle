@@ -8,21 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { injectable } from 'inversify'
-import { DynamicTypeWidgetTypeAbstract } from '../definitions/dynamic-type-widget-type-abstract'
+import { type DynamicTypeWidgetTypeAbstract } from '../definitions/dynamic-type-widget-type-abstract'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { type WidgetConfig } from '@sdk/api/perspectives'
 
 @injectable()
 export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<DynamicTypeWidgetTypeAbstract> {
-  getMenuItems(configs: any[], onWidgetClick?: (config: any) => void): ItemType[] {
+  getMenuItems (configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     const widgetTypes: Record<string, DynamicTypeWidgetTypeAbstract[]> = {}
 
-    this.getDynamicTypes().map((dynamicType) => {
+    this.getDynamicTypes().forEach((dynamicType) => {
       widgetTypes[dynamicType.group] = widgetTypes[dynamicType.group] ?? []
-      widgetTypes[dynamicType.group].push(dynamicType);
+      widgetTypes[dynamicType.group].push(dynamicType)
     })
 
     return Object.entries(widgetTypes).map(([groupName, dynamicTypes]) => {
@@ -33,7 +34,7 @@ export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<D
         children: dynamicTypes.map((dynamicType) => ({
           label: dynamicType.name,
           key: dynamicType.id,
-          icon: <Icon value={dynamicType.icon} />,
+          icon: <Icon value={ dynamicType.icon } />,
           children: dynamicType.getSubMenuItems(
             configs.filter((config) => config.widgetType === dynamicType.id),
             onWidgetClick

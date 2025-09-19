@@ -1,12 +1,22 @@
-import { serviceIds } from "@Pimcore/app/config/services/service-ids"
-import { container } from "@Pimcore/app/depency-injection"
-import { Button } from "@Pimcore/components/button/button"
-import { Dropdown, DropdownProps, ItemType } from "@Pimcore/components/dropdown/dropdown"
-import { usePerspectiveWidgetGetConfigCollectionQuery } from "@Pimcore/modules/perspectives/perspectives-slice.enhanced"
-import { DynamicTypeWidgetTypeRegistry } from "@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { useWidgetConfiguratorContext } from "../../context/hooks/use-widget-configurator-context"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import { Button } from '@Pimcore/components/button/button'
+import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { usePerspectiveWidgetGetConfigCollectionQuery, type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useWidgetConfiguratorContext } from '../../context/hooks/use-widget-configurator-context'
 
 export const AddWidgetDropdown = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -14,7 +24,7 @@ export const AddWidgetDropdown = (): React.JSX.Element => {
   const dynamicType = container.get<DynamicTypeWidgetTypeRegistry>(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry'])
   const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery()
 
-  const handleWidgetClick = (widget: any): void => {
+  const handleWidgetClick = (widget: WidgetConfig): void => {
     onAdd?.(widget)
   }
 
@@ -24,13 +34,13 @@ export const AddWidgetDropdown = (): React.JSX.Element => {
 
   return (
     <Dropdown
-      menu={{
+      menu={ {
         items: menu
-      }}
+      } }
     >
       <Button
+        loading={ isFetching }
         type="default"
-        loading={isFetching}
       >
         {t('add')}
       </Button>
