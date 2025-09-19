@@ -15,7 +15,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
-  'DynamicTypes/ReportDefinitionRegistry': 'DynamicTypes/ReportDefinitionRegistry',
+  'DynamicTypes/CustomReportDefinitionRegistry': 'DynamicTypes/CustomReportDefinitionRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
@@ -162,7 +162,7 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
 
-  'DynamicTypes/ReportDefinition/Sql': 'DynamicTypes/ReportDefinition/Sql',
+  'DynamicTypes/CustomReportDefinition/Sql': 'DynamicTypes/CustomReportDefinition/Sql',
 
   // Object layout
   'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',

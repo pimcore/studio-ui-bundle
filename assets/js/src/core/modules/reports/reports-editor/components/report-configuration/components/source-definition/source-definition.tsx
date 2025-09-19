@@ -36,7 +36,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
 
   const isEmptySourceDefinitionConfig = isUndefined(currentSourceDefinition)
 
-  const sourceDefinitionService = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
+  const sourceDefinitionService = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/CustomReportDefinitionRegistry'])
   const adapters = sourceDefinitionService.getDynamicTypes()
   const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
 

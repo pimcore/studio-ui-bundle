@@ -33,9 +33,9 @@ const REPORTS_SECTION_NAME = 'Reporting'
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
-    const sourceDefinitionRegistry = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
+    const sourceDefinitionRegistry = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/CustomReportDefinitionRegistry'])
 
-    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeCustomReportDefinitionSqlAdapter>(serviceIds['DynamicTypes/ReportDefinition/Sql']))
+    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeCustomReportDefinitionSqlAdapter>(serviceIds['DynamicTypes/CustomReportDefinition/Sql']))
 
     mainNavRegistryService.registerMainNavItem({
       path: `${REPORTS_SECTION_NAME}/Reports`,

@@ -360,8 +360,8 @@ container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDat
 container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
 
 // Report registry
-container.bind(serviceIds['DynamicTypes/ReportDefinitionRegistry']).to(DynamicTypeCustomReportDefinitionRegistry).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/ReportDefinition/Sql']).to(DynamicTypeCustomReportDefinitionSqlAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/CustomReportDefinitionRegistry']).to(DynamicTypeCustomReportDefinitionRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/CustomReportDefinition/Sql']).to(DynamicTypeCustomReportDefinitionSqlAdapter).inSingletonScope()
 
 // Object layout
 container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()
