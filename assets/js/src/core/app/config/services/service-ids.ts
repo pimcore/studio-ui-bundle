@@ -28,7 +28,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
   'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
   'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
-  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji'
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
 }
 
 export const serviceIds = {
@@ -290,12 +291,12 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
 
+  // Widget Editor types
+  'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
+
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
 
   // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
-
-  // Perspective & Widget Editor
-  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry'
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
 }

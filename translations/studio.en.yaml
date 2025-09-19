@@ -1230,8 +1230,84 @@ perspective-editor.add-modal.title: Add a new Perspective
 perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.form.general.title: General
+perspective-editor.form.specific.title: Specific
+perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
+perspective-editor.form.allowed-context-menu.category.extras: Extras
+perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
+perspective-editor.form.allowed-context-menu.extras.emails: Sent Emails
+perspective-editor.form.allowed-context-menu.extras.gdpr_data_extractor: GDPR Data Extractor
+perspective-editor.form.allowed-context-menu.extras.glossary: Glossary
+perspective-editor.form.allowed-context-menu.extras.hidden: Extra Hidden -> move
+perspective-editor.form.allowed-context-menu.extras.maintenance: Maintenance
+perspective-editor.form.allowed-context-menu.extras.notesEvents: Notes & Events
+perspective-editor.form.allowed-context-menu.extras.recycle_bin: Recycle Bin
+perspective-editor.form.allowed-context-menu.extras.redirects: Redirects
+perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: System Tools (hidden) -> move
+perspective-editor.form.allowed-context-menu.extras.systemTools_requirements: Sytem-Requirements Check
+perspective-editor.form.allowed-context-menu.extras.translations: Translations
+perspective-editor.form.allowed-context-menu.category.file: File
+perspective-editor.form.allowed-context-menu.file.about: About
+perspective-editor.form.allowed-context-menu.file.close_all: Close All
+perspective-editor.form.allowed-context-menu.file.dashboards: Dashboards
+perspective-editor.form.allowed-context-menu.file.help: Help
+perspective-editor.form.allowed-context-menu.file.hidden: File Hidden -> move
+perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
+perspective-editor.form.allowed-context-menu.file.open_document: Open Document
+perspective-editor.form.allowed-context-menu.file.open_object: Open Object
+perspective-editor.form.allowed-context-menu.file.perspectives: Perspectives
+perspective-editor.form.allowed-context-menu.file.schedule: Schedule -> WTF
+perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
+perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
+perspective-editor.form.allowed-context-menu.category.marketing: Marketing
+perspective-editor.form.allowed-context-menu.marketing.hidden: Marketing Hidden -> move
+perspective-editor.form.allowed-context-menu.marketing.reports: Reports
+perspective-editor.form.allowed-context-menu.category.search: Search
+perspective-editor.form.allowed-context-menu.search.assets: Assets
+perspective-editor.form.allowed-context-menu.search.documents: Documents
+perspective-editor.form.allowed-context-menu.search.hidden: Search Hidden -> move
+perspective-editor.form.allowed-context-menu.search.objects: Data Objects
+perspective-editor.form.allowed-context-menu.search.quickSearch: Quick Search
+perspective-editor.form.allowed-context-menu.category.settings: Settings
+perspective-editor.form.allowed-context-menu.settings.adminTranslations: Admin Translations
+perspective-editor.form.allowed-context-menu.settings.appearance: Appearance
+perspective-editor.form.allowed-context-menu.settings.cache_clearAll: All Caches (Symfony + Data)
+perspective-editor.form.allowed-context-menu.settings.cache_clearData: Data Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Clear Full Page Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Symfony Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Clear Temporary Files
+perspective-editor.form.allowed-context-menu.settings.cache_hidden: Cache Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.customReports: Custom Reports
+perspective-editor.form.allowed-context-menu.settings.documentTypes: Document Types
+perspective-editor.form.allowed-context-menu.settings.hidden: Settings Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Bulk Export
+perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Bulk Import
+perspective-editor.form.allowed-context-menu.settings.object_classes: Classes
+perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Classification Store
+perspective-editor.form.allowed-context-menu.settings.object_field_collections: Field Collections
+perspective-editor.form.allowed-context-menu.settings.object_hidden: Data Object Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Object Bricks
+perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Quantity Value
+perspective-editor.form.allowed-context-menu.settings.predefinedMetadata: Predefined Metadata
+perspective-editor.form.allowed-context-menu.settings.predefinedProperties: Predefined Properties
+perspective-editor.form.allowed-context-menu.settings.system: System
+perspective-editor.form.allowed-context-menu.settings.tagConfiguration: Tag Configuration
+perspective-editor.form.allowed-context-menu.settings.thumbnails: Thumbnails
+perspective-editor.form.allowed-context-menu.settings.users_hidden: User Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.users_roles: Roles
+perspective-editor.form.allowed-context-menu.settings.users_users: Users
+perspective-editor.form.allowed-context-menu.settings.website: Website Settings
 perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
+perspective-editor.system-widgets: System Widgets
+perspective-editor.system-widgets.trees: Trees
+perspective-editor.system-widgets.documents: Documents
+perspective-editor.system-widgets.assets: Assets
+perspective-editor.system-widgets.data-objects: Data Objects
+perspective-editor.system-widgets.left: Left widgets
+perspective-editor.system-widgets.bottom: Bottom widgets
+perspective-editor.system-widgets.right: Right widgets
+perspective-editor.update.success: Perspective updated successfully
 widget-editor.create-modal.create: Create Widget
 widget-editor.create-form.name: Name
 widget-editor.create-form.name.required: Please enter a valid name
