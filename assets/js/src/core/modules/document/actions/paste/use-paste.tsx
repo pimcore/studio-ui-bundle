@@ -40,7 +40,6 @@ export interface LanguageOption {
 
 export interface UsePasteHookReturn {
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteAsChildRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteRecursiveUpdatingReferencesTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteAsChildTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -325,23 +324,6 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
-  const pasteInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
-      label: t('element.tree.paste'),
-      key: `${ContextMenuActionName.paste}-inheritance`,
-      icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOptionHidden(node),
-      onClick: async () => {
-        await cloneDocument(getStoredNode(), node, {
-          language: null,
-          enableInheritance: true,
-          recursive: true,
-          updateReferences: true
-        })
-      }
-    }
-  }
-
   const pasteAsChildRecursiveInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-as-child-recursive'),
@@ -467,7 +449,6 @@ export const usePaste = (): UsePasteHookReturn => {
 
   return {
     pasteTreeContextMenuItem,
-    pasteInheritanceTreeContextMenuItem,
     pasteAsChildRecursiveTreeContextMenuItem,
     pasteRecursiveUpdatingReferencesTreeContextMenuItem,
     pasteAsChildTreeContextMenuItem,

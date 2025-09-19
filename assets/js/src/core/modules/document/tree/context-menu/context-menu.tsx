@@ -52,7 +52,6 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     pasteAsNewLanguageVariantRecursiveTreeContextMenuItem,
     pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem,
     pasteOnlyContentsTreeContextMenuItem,
-    pasteInheritanceTreeContextMenuItem,
     pasteAsChildRecursiveInheritanceTreeContextMenuItem,
     pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
     pasteAsChildInheritanceTreeContextMenuItem,
@@ -93,8 +92,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
         pasteAsChildInheritanceTreeContextMenuItem(node),
         pasteAsNewLanguageVariantInheritanceTreeContextMenuItem(node),
         pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem(node),
-        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
-        pasteInheritanceTreeContextMenuItem(node)
+        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node)
       ]
     },
     cutTreeContextMenuItem(node),
