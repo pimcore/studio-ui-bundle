@@ -35,8 +35,8 @@ export interface AddNoteModalProps {
 export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
-  const [createNote] = useNoteElementCreateMutation()
-  const [saveInProgress, setSaveInProgress] = React.useState(false)
+
+  const [createNote, { isLoading }] = useNoteElementCreateMutation()
 
   async function addNote (title: string, type: string = '', description: string = ''): Promise<void> {
     await createNote({
@@ -47,24 +47,23 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
         title,
         description
       }
-    })
+    }).unwrap()
   }
 
   async function onFinish (values: AddNoteFormValues): Promise<void> {
-    setSaveInProgress(true)
     await addNote(values.title, values.type, values.description)
-    props.setOpen(false)
+
     form.resetFields()
-    setSaveInProgress(false)
+    props.setOpen(false)
   }
 
   return (
     <Modal
-      okButtonProps={ { loading: saveInProgress } }
+      okButtonProps={ { loading: isLoading } }
       okText={ t('save') }
       onCancel={ () => {
-        props.setOpen(false)
         form.resetFields()
+        props.setOpen(false)
       } }
       onOk={ () => { form.submit() } }
       open={ props.open }
