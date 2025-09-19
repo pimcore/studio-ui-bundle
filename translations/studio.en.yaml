@@ -524,6 +524,7 @@ current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 ok: OK
 apply: Apply
+cancel: Cancel
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
