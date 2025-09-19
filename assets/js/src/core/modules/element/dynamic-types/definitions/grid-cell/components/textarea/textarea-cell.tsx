@@ -61,7 +61,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
         trackError(new GeneralError('Edit callback failed'))
       }
     } else {
-      console.log('No edit callback available')
+      trackError(new GeneralError('No edit callback available'))
     }
   }
 
