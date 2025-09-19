@@ -10,11 +10,11 @@
 
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
-import { DynamicTypeDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-abstract'
-import { SqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/components/sql-adapter/sql-adapter'
+import { DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
+import { SqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/components/sql-adapter/sql-adapter'
 
 @injectable()
-export class DynamicTypeDefinitionSqlAdapter extends DynamicTypeDefinitionAbstract {
+export class DynamicTypeCustomReportDefinitionSqlAdapter extends DynamicTypeCustomReportDefinitionAbstract {
   id = 'sql'
   label = 'Sql'
 

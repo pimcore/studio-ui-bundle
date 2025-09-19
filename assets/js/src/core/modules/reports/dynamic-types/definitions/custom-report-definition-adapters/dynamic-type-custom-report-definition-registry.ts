@@ -11,8 +11,8 @@
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import {
-  type DynamicTypeDefinitionAbstract
-} from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-abstract'
+  type DynamicTypeCustomReportDefinitionAbstract
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
 
 @injectable()
-export class DynamicTypeDefinitionRegistry extends DynamicTypeRegistryAbstract<DynamicTypeDefinitionAbstract> {}
+export class DynamicTypeCustomReportDefinitionRegistry extends DynamicTypeRegistryAbstract<DynamicTypeCustomReportDefinitionAbstract> {}

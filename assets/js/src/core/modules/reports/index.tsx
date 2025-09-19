@@ -22,20 +22,20 @@ import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { api } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import {
-  type DynamicTypeDefinitionRegistry
-} from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
+  type DynamicTypeCustomReportDefinitionRegistry
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 import {
-  type DynamicTypeDefinitionSqlAdapter
-} from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/types/dynamic-type-definition-sql-adapter'
+  type DynamicTypeCustomReportDefinitionSqlAdapter
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/types/dynamic-type-custom-report-definition-sql-adapter'
 
 const REPORTS_SECTION_NAME = 'Reporting'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
-    const sourceDefinitionRegistry = container.get<DynamicTypeDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
+    const sourceDefinitionRegistry = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
 
-    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeDefinitionSqlAdapter>(serviceIds['DynamicTypes/ReportDefinition/Sql']))
+    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeCustomReportDefinitionSqlAdapter>(serviceIds['DynamicTypes/ReportDefinition/Sql']))
 
     mainNavRegistryService.registerMainNavItem({
       path: `${REPORTS_SECTION_NAME}/Reports`,

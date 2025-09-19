@@ -14,7 +14,7 @@ import { type DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
 @injectable()
-export abstract class DynamicTypeDefinitionAbstract implements DynamicTypeAbstract {
+export abstract class DynamicTypeCustomReportDefinitionAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   abstract readonly label: string
 

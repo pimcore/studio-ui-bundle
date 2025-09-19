@@ -95,8 +95,8 @@ import { DynamicTypeMetaDataInput } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-object'
 import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-select'
 import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-textarea'
-import { DynamicTypeDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
-import { DynamicTypeDefinitionSqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/types/dynamic-type-definition-sql-adapter'
+import { DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
+import { DynamicTypeCustomReportDefinitionSqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/types/dynamic-type-custom-report-definition-sql-adapter'
 import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { DynamicTypeObjectDataAdvancedManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { DynamicTypeObjectDataAdvancedManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-relation'
@@ -360,8 +360,8 @@ container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDat
 container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
 
 // Report registry
-container.bind(serviceIds['DynamicTypes/ReportDefinitionRegistry']).to(DynamicTypeDefinitionRegistry).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/ReportDefinition/Sql']).to(DynamicTypeDefinitionSqlAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ReportDefinitionRegistry']).to(DynamicTypeCustomReportDefinitionRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ReportDefinition/Sql']).to(DynamicTypeCustomReportDefinitionSqlAdapter).inSingletonScope()
 
 // Object layout
 container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()

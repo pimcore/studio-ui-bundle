@@ -21,7 +21,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type DynamicTypeDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/definition-adapters/dynamic-type-definition-registry'
+import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
 export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
@@ -36,7 +36,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
 
   const isEmptySourceDefinitionConfig = isUndefined(currentSourceDefinition)
 
-  const sourceDefinitionService = container.get<DynamicTypeDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
+  const sourceDefinitionService = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/ReportDefinitionRegistry'])
   const adapters = sourceDefinitionService.getDynamicTypes()
   const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
 
