@@ -20,16 +20,24 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import { SIDEBAR_CONTENT_SETTINGS } from '../../shared-tab-manager/sidebar-definitions'
+import { TAB_HARDLINK_EDIT } from './tab-manager/tabs/edit'
 
 moduleSystem.registerModule({
   onInit: () => {
     const hardlinkEditorTabManager = container.get<HardlinkTabManager>(serviceIds['Document/Editor/HardlinkTabManager'])
 
+    hardlinkEditorTabManager.register(TAB_HARDLINK_EDIT)
     hardlinkEditorTabManager.register(TAB_PROPERTIES)
     hardlinkEditorTabManager.register(TAB_DEPENDENCIES)
     hardlinkEditorTabManager.register(TAB_SCHEDULE)
     hardlinkEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     hardlinkEditorTabManager.register(TAB_TAGS)
     hardlinkEditorTabManager.register(TAB_WORKFLOW)
+
+    const hardlinkSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/HardlinkSidebarManager'])
+
+    hardlinkSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
   }
 })

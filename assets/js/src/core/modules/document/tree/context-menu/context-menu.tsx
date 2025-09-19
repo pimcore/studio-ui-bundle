@@ -23,6 +23,7 @@ import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unp
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
+import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DocumentTreeContextMenuProps {
@@ -41,6 +42,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { unpublishTreeContextMenuItem } = useUnpublish('document')
   const { publishTreeContextMenuItem } = usePublish('document')
   const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
+  const { convertTreeContextMenuItem, canConvert } = useConvert()
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
@@ -56,8 +58,20 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon value={ 'more' } />,
-      hidden: isLockMenuHidden(node),
       children: [
+        {
+          label: t('convert-to'),
+          key: 'convert-to',
+          icon: <Icon value={ 'flip-forward' } />,
+          hidden: !canConvert(node),
+          children: [
+            convertTreeContextMenuItem(node, 'page'),
+            convertTreeContextMenuItem(node, 'snippet'),
+            convertTreeContextMenuItem(node, 'email'),
+            convertTreeContextMenuItem(node, 'link'),
+            convertTreeContextMenuItem(node, 'hardlink')
+          ]
+        },
         {
           label: t('element.lock'),
           key: 'advanced-lock',

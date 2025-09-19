@@ -197,6 +197,6 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
     case 'data-object':
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
-      return { type: tagNames.DATA_OBJECT_DETAIL, id }
+      return { type: tagNames.DOCUMENT_DETAIL, id }
   }
 }

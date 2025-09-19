@@ -29,6 +29,15 @@ export const useStyles = createStyles(({ css, token }) => {
       color: ${token.colorTextTreeElement};
     `,
 
+    tabsContainer: css`
+      height: 100%;
+        
+      .ant-tabs-content,
+      .ant-tabs-tabpane {
+        height: 100%;
+      }
+    `,
+
     tabs: css`
       .ant-tabs-tab {
         padding: ${token.paddingSM}px ${token.paddingXXS}px !important;
