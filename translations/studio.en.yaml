@@ -1020,6 +1020,14 @@ reports.editor.general-settings.report-class-label: Report Class
 reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
 reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
+reports.editor.source-definition.select-source-definition: Select a source definition
+reports.editor.source-definition.sql-select-field: SELECT (eg. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (eg. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (eg. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (eg. b, c )
+reports.editor.source-definition.sql-initial-field-order: Initial Order by Field (eg. b, c )
+reports.editor.source-definition.sql-initial-direction-order: Initial Order by Direction
 reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
 reports.editor.manage-column-configuration.name: Name
 reports.editor.manage-column-configuration.display: Display
@@ -1055,6 +1063,8 @@ reports.editor.chart-settings.chart-type.pie-chart: Pie Chart
 reports.editor.chart-settings.chart-type.line-chart: Line Chart
 reports.editor.chart-settings.chart-type.bar-chart: Bar Chart
 reports.editor.chart-settings.settings: Settings
+reports.editor.chart-settings.pie-label: Label Column
+reports.editor.chart-settings.pie-data: Data Column
 reports.editor.chart-settings.x-axis: X-Axis
 reports.editor.chart-settings.y-axis: Y-Axis
 reports.editor.permissions.title: Permissions

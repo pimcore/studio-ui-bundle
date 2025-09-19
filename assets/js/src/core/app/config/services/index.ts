@@ -95,6 +95,8 @@ import { DynamicTypeMetaDataInput } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-object'
 import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-select'
 import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/types/dynamic-type-meta-data-textarea'
+import { DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
+import { DynamicTypeCustomReportDefinitionSqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/types/dynamic-type-custom-report-definition-sql-adapter'
 import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { DynamicTypeObjectDataAdvancedManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { DynamicTypeObjectDataAdvancedManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-relation'
@@ -356,6 +358,10 @@ container.bind(serviceIds['DynamicTypes/Metadata/Input']).to(DynamicTypeMetaData
 container.bind(serviceIds['DynamicTypes/Metadata/Object']).to(DynamicTypeMetaDataObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDataSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
+
+// Report registry
+container.bind(serviceIds['DynamicTypes/CustomReportDefinitionRegistry']).to(DynamicTypeCustomReportDefinitionRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/CustomReportDefinition/Sql']).to(DynamicTypeCustomReportDefinitionSqlAdapter).inSingletonScope()
 
 // Object layout
 container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()
