@@ -40,7 +40,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
 
   const triggerFormUpdate = (widgets: WidgetConfig[], expanded: string | null): void => {
     formChange?.({
-      widgets: widgets as ElementTreeWidget[],
+      widgets,
       expanded
     })
   }
