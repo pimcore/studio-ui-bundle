@@ -13,17 +13,21 @@ import { Input } from '@sdk/components'
 import { type FormInstance, type InputRef } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { WidgetTypes, WidgetTypeSelect } from '../widget-type-select/widget-type-select'
+import { WidgetTypeSelect } from '../widget-type-select/widget-type-select'
 
 export interface WidgetForm {
   name: string
-  widgetType: WidgetTypes
+  widgetType: string
 }
 
 interface CreateWidgetFormProps {
   form: FormInstance<WidgetForm>
   inputRef?: React.RefObject<InputRef>
   initialValues?: Partial<WidgetForm>
+}
+
+enum WidgetTypes {
+  ElementTree = 'element-tree'
 }
 
 export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidgetFormProps): React.JSX.Element => {
