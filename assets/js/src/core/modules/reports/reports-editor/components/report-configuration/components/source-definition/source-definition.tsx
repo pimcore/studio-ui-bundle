@@ -70,9 +70,6 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
     )
   }
 
-  console.log('------- currentData: ', currentData)
-  console.log('------- currentAdapter: ', currentAdapter)
-
   return (
     <FormKit.Panel
       extra={ isEmptySourceDefinitionConfig && renderAddButton() }
