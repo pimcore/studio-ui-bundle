@@ -42,8 +42,8 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
   return (
     <WidgetContainer
       component={ component }
-      node={ node }
       defaultGlobalContext={ widget.defaultGlobalContext ?? true }
+      node={ node }
     />
   )
 }

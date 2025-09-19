@@ -38,11 +38,11 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const isWidgetActive = mainWidgetContext?.nodeId === nodeId
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
 
-  useEffect(() => {    
+  useEffect(() => {
     if (isWidgetActive && defaultGlobalContext) {
       setGlobalDefaultContext({
         type: 'default',
-        widgetId: nodeId,
+        widgetId: nodeId
       })
     }
   }, [isWidgetActive, defaultGlobalContext, nodeId])

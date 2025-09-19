@@ -9,7 +9,7 @@
  */
 
 import { useAppDispatch } from '@sdk/app'
-import { 
+import {
   setGlobalDefaultContext as setDefaultContextAction,
   type GlobalDefaultContext
 } from '@Pimcore/modules/app/global-context/global-context-slice'
@@ -18,7 +18,7 @@ export const useGlobalDefaultContextActions = (): {
   setGlobalDefaultContext: (context: GlobalDefaultContext) => void
 } => {
   const dispatch = useAppDispatch()
-  
+
   return {
     setGlobalDefaultContext: (context: GlobalDefaultContext) => {
       dispatch(setDefaultContextAction(context))
