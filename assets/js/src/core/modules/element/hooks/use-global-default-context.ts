@@ -8,17 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@sdk/app'
+import { useAppDispatch } from '@sdk/app'
 import { 
-  setGlobalDefaultContext as setDefaultContextAction, 
-  selectContextByType,
+  setGlobalDefaultContext as setDefaultContextAction,
   type GlobalDefaultContext
 } from '@Pimcore/modules/app/global-context/global-context-slice'
-
-export const useGlobalDefaultContext = (): { context: GlobalDefaultContext | null } => {
-  const context = useAppSelector((state) => selectContextByType(state, 'default')) as GlobalDefaultContext | null
-  return { context }
-}
 
 export const useGlobalDefaultContextActions = (): {
   setGlobalDefaultContext: (context: GlobalDefaultContext) => void
