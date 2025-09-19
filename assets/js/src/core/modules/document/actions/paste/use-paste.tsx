@@ -38,6 +38,8 @@ export interface LanguageOption {
   label: string
 }
 
+export type LanguageModalType = 'child' | 'recursive' | 'recursive-update-references'
+
 export interface UsePasteHookReturn {
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteAsChildRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -127,63 +129,36 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
-  const showLanguageModal = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references'): void => {
+  const showLanguageModal = (node: TreeNodeProps, type: LanguageModalType): void => {
     showLanguageModalDialog(node, type, false)
   }
 
-  const showLanguageModalWithInheritance = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references'): void => {
-    showLanguageModalDialog(node, type, true)
+  const showLanguageModalWithInheritance = async (node: TreeNodeProps, type: LanguageModalType): Promise<void> => {
+    await showLanguageModalDialog(node, type, true)
   }
 
-  const showLanguageModalDialog = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): void => {
-    languageForm.resetFields()
-    void modal.confirm({
-      title: t('document.paste-as-new-language-variant'),
-      icon: null,
+  const showLanguageModalDialog = async (node: TreeNodeProps, type: LanguageModalType, enableInheritance: boolean): Promise<void> => {
+    modal.confirm({
+      title: t('websitemanager.tree.paste.task.choose_language.title'),
       content: (
-        <Form
-          form={ languageForm }
-          layout="vertical"
-          style={ { marginTop: 16 } }
-        >
+        <Form form={languageForm} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
           <Form.Item
-            label={ t('language') }
             name="language"
-            rules={ [{ required: true, message: t('document.language-required') }] }
+            label={t('language')}
+            rules={[{ required: true, message: t('websitemanager.tree.paste.task.choose_language.error.message') }]}
           >
-            <Select
-              options={ availableLanguages }
-              placeholder={ t('document.select-language-for-new-document') }
-            />
+            <Select options={availableLanguages} />
           </Form.Item>
         </Form>
       ),
-      onOk: async () => {
-        return await new Promise((resolve, reject) => {
-          languageForm.validateFields()
-            .then(async () => {
-              try {
-                await handleLanguageModalOk(node, type, enableInheritance)
-                resolve(undefined)
-              } catch (error) {
-                console.error('Language modal operation failed:', error)
-                resolve(undefined)
-              }
-            })
-            .catch(() => {
-              reject(new Error('Invalid form'))
-            })
-        })
-      },
-      onCancel: () => {
-        handleLanguageModalCancel()
-      },
-      okText: t('apply'),
+      onOk: async () => await handleLanguageModalOk(node, type, enableInheritance),
+      onCancel: handleLanguageModalCancel,
+      okText: t('paste'),
       cancelText: t('cancel')
     })
   }
 
-  const handleLanguageModalOk = async (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): Promise<void> => {
+  const handleLanguageModalOk = async (node: TreeNodeProps, type: LanguageModalType, enableInheritance: boolean): Promise<void> => {
     const formValues = await languageForm.validateFields()
     const { language } = formValues
 
