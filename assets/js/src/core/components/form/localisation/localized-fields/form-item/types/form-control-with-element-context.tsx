@@ -45,7 +45,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
   if ('permissions' in elementDraft) {
     const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
     let editableLanguages: string[] = permissions?.localizedEdit?.split(',') ?? []
-    if (editableLanguages.length === 1 && editableLanguages[0] === 'default') {
+    if ((editableLanguages.length === 1 && editableLanguages[0] === 'default') || (editableLanguages.length === 0)) {
       editableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
     }
 

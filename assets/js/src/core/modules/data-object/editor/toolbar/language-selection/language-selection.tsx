@@ -19,9 +19,9 @@ export const LanguageSelection = (): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
   const { editorType } = useDataObjectDraft(id)
 
-  if (!hasLocalizedFields && editorType?.name !== 'folder') {
-    return <></>
+  if (hasLocalizedFields || editorType?.name === 'folder') {
+    return <PermissionBasedLanguageSelection />
   }
 
-  return <PermissionBasedLanguageSelection />
+  return <></>
 }
