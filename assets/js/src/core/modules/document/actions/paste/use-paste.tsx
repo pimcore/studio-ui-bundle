@@ -89,8 +89,6 @@ export const usePaste = (): UsePasteHookReturn => {
     const sourceId = typeof sourceNode.id === 'string' ? parseInt(sourceNode.id) : sourceNode.id
     const targetId = typeof targetNode.id === 'string' ? parseInt(targetNode.id) : targetNode.id
 
-    console.log('Creating DocumentCloneJob with:', { sourceId, targetId, parameters })
-
     const job = new DocumentCloneJob({
       sourceId,
       targetId,
@@ -100,9 +98,7 @@ export const usePaste = (): UsePasteHookReturn => {
       nodeId: String(targetId)
     })
 
-    console.log('Running job via execution engine')
     await executionEngine.runJob(job)
-    console.log('Job execution completed successfully')
   }
 
   const replaceDocumentContent = async (
