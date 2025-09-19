@@ -40,13 +40,13 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
 
   useEffect(() => {    
-    if (isWidgetActive && defaultGlobalContext && componentName) {
+    if (isWidgetActive && defaultGlobalContext) {
       setGlobalDefaultContext({
         type: 'default',
         widgetId: nodeId,
       })
     }
-  }, [isWidgetActive, componentName, nodeId, config, mainWidgetContext, defaultGlobalContext])
+  }, [isWidgetActive, defaultGlobalContext, nodeId])
 
   return useMemo(() => (
     <ErrorBoundary>
