@@ -9,12 +9,12 @@
  */
 
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
-import { type ElementTreeWidget, type WidgetConfig } from '@sdk/api/perspectives'
+import { type WidgetConfig } from '@sdk/api/perspectives'
 import React, { createContext, useMemo, useState } from 'react'
 
 export interface ExtendedWidgetConfig {
   expanded: string | null
-  widgets: ElementTreeWidget[]
+  widgets: WidgetConfig[]
 }
 
 interface WidgetConfiguratorProviderProps {
