@@ -41,11 +41,11 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const { user, setModifiedCells } = useUserDraft()
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
 
-    const validLocalesOptions = [{ value: '', label: '(system)' },
-        ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
-            value: key,
-            label: value
-        }))]
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
   useEffect(() => {
     if (user?.modified === false) {
