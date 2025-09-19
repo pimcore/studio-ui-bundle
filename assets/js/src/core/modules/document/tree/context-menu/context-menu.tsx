@@ -60,8 +60,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
     pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
     isPasteMenuHidden,
-    isPasteInheritanceMenuHidden,
-    LanguageModal
+    isPasteInheritanceMenuHidden
   } = usePaste()
 
   const items: IMenuProps['items'] = [
@@ -140,12 +139,9 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   ]
 
   return (
-    <>
-      <Menu
-        dataTestId={ createContextMenuContainerTestId('document', node.id) }
-        items={ items }
-      />
-      <LanguageModal />
-    </>
+    <Menu
+      dataTestId={ createContextMenuContainerTestId('document', node.id) }
+      items={ items }
+    />
   )
 }

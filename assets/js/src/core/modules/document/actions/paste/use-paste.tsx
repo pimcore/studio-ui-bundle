@@ -23,13 +23,20 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
-import { Modal, Select, Form } from 'antd'
+import { App } from 'antd'
+import { Select } from '@Pimcore/components/select/select'
+import { Form } from '@Pimcore/components/form/form'
 import { type DocumentCloneParameters, api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { isNil } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/document-clone-job'
+
+export interface LanguageOption {
+  value: string
+  label: string
+}
 
 export interface UsePasteHookReturn {
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -49,7 +56,6 @@ export interface UsePasteHookReturn {
   pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   isPasteMenuHidden: (node: Element | TreeNodeProps) => boolean
   isPasteInheritanceMenuHidden: (node: Element | TreeNodeProps) => boolean
-  LanguageModal: React.ComponentType<Record<string, unknown>>
 }
 
 export const usePaste = (): UsePasteHookReturn => {
@@ -62,17 +68,12 @@ export const usePaste = (): UsePasteHookReturn => {
   const settings = useSettings()
   const executionEngine = useExecutionEngine()
   const { getDisplayName } = useLanguageLookup()
+  const { modal } = App.useApp()
 
-  const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
   const [languageForm] = Form.useForm()
-  const [currentLanguageAction, setCurrentLanguageAction] = useState<{
-    node: TreeNodeProps
-    type: 'child' | 'recursive' | 'recursive-update-references'
-    enableInheritance?: boolean
-  } | null>(null)
 
   // Get available languages from settings with proper display names
-  const availableLanguages = (settings.validLanguages ?? []).map((locale: string) => ({
+  const availableLanguages: LanguageOption[] = (settings.validLanguages ?? []).map((locale: string) => ({
     value: locale,
     label: `${getDisplayName(locale)} [${locale}]`
   }))
@@ -136,30 +137,68 @@ export const usePaste = (): UsePasteHookReturn => {
   }
 
   const showLanguageModal = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references'): void => {
-    setCurrentLanguageAction({ node, type, enableInheritance: false })
-    setIsLanguageModalVisible(true)
+    showLanguageModalDialog(node, type, false)
   }
 
   const showLanguageModalWithInheritance = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references'): void => {
-    setCurrentLanguageAction({ node, type, enableInheritance: true })
-    setIsLanguageModalVisible(true)
+    showLanguageModalDialog(node, type, true)
   }
 
-  const handleLanguageModalOk = async (): Promise<void> => {
-    if (isNil(currentLanguageAction)) {
-      return
-    }
+  const showLanguageModalDialog = (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): void => {
+    // Reset form to ensure clean state
+    languageForm.resetFields()
+    modal.confirm({
+      title: t('document.paste-as-new-language-variant'),
+      icon: null,
+      content: (
+        <Form
+          form={languageForm}
+          layout="vertical"
+          style={{ marginTop: 16 }}
+        >
+          <Form.Item
+            label={t('language')}
+            name="language"
+            rules={[{ required: true, message: t('document.language-required') }]}
+          >
+            <Select
+              options={availableLanguages}
+              placeholder={t('document.select-language-for-new-document')}
+            />
+          </Form.Item>
+        </Form>
+      ),
+      onOk: async () => {
+        return await new Promise((resolve, reject) => {
+          languageForm.validateFields()
+            .then(async () => {
+              try {
+                await handleLanguageModalOk(node, type, enableInheritance)
+                resolve(undefined)
+              } catch (error) {
+                console.error('Language modal operation failed:', error)
+                resolve(undefined) // Still close modal even if operation fails
+              }
+            })
+            .catch(() => {
+              reject(new Error('Invalid form'))
+            })
+        })
+      },
+      onCancel: () => {
+        handleLanguageModalCancel()
+      },
+      okText: t('apply'),
+      cancelText: t('cancel')
+    })
+  }
 
+  const handleLanguageModalOk = async (node: TreeNodeProps, type: 'child' | 'recursive' | 'recursive-update-references', enableInheritance: boolean): Promise<void> => {
+    // Get form values (validation has already passed at this point)
     const formValues = await languageForm.validateFields()
     const { language } = formValues
-    const { node, type, enableInheritance = false } = currentLanguageAction
 
-    // Reset modal state first
-    setIsLanguageModalVisible(false)
-    languageForm.resetFields()
-    setCurrentLanguageAction(null)
-
-    // Then execute the clone operation in the background
+    // Execute the clone operation in the background
     try {
       let parameters: DocumentCloneParameters
       switch (type) {
@@ -192,6 +231,8 @@ export const usePaste = (): UsePasteHookReturn => {
       }
 
       await cloneDocument(getStoredNode(), node, parameters)
+      // Only reset form after successful operation
+      languageForm.resetFields()
     } catch (error) {
       console.error('Clone operation failed:', error)
       // Could show a toast notification here instead of reopening modal
@@ -199,9 +240,7 @@ export const usePaste = (): UsePasteHookReturn => {
   }
 
   const handleLanguageModalCancel = (): void => {
-    setIsLanguageModalVisible(false)
     languageForm.resetFields()
-    setCurrentLanguageAction(null)
   }
 
   const isPasteOptionHidden = (node: Element | TreeNodeProps): boolean => {
@@ -444,33 +483,6 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
-  const LanguageModal: React.ComponentType<Record<string, unknown>> = () => (
-    <Modal
-      cancelText={ t('cancel') }
-      okText={ t('apply') }
-      onCancel={ handleLanguageModalCancel }
-      onOk={ handleLanguageModalOk }
-      open={ isLanguageModalVisible }
-      title={ t('document.paste-as-new-language-variant') }
-    >
-      <Form
-        form={ languageForm }
-        layout="vertical"
-      >
-        <Form.Item
-          label={ t('language') }
-          name="language"
-          rules={ [{ required: true, message: t('document.language-required') }] }
-        >
-          <Select
-            options={ availableLanguages }
-            placeholder={ t('document.select-language-for-new-document') }
-          />
-        </Form.Item>
-      </Form>
-    </Modal>
-  )
-
   return {
     pasteTreeContextMenuItem,
     pasteInheritanceTreeContextMenuItem,
@@ -488,7 +500,6 @@ export const usePaste = (): UsePasteHookReturn => {
     pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
     pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
     isPasteMenuHidden,
-    isPasteInheritanceMenuHidden,
-    LanguageModal
+    isPasteInheritanceMenuHidden
   }
 }
