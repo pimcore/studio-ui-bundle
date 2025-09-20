@@ -56,7 +56,7 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
     return baseTab
   })
 
-  if (element !== null) {
+  if (element && !isNull(element)) {
     useHandleKeyBindings(() => { rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
     useHandleKeyBindings(() => { publishNode(element as unknown as Element) }, 'publish')
     if (!isNull(elementType) && elementType !== 'asset') {
