@@ -56,12 +56,11 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
     return baseTab
   })
 
-    const canHandle = element && !isNull(element)
-    useHandleKeyBindings(() => { if (canHandle) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
-    useHandleKeyBindings(() => { if (canHandle) publishNode(element as unknown as Element) }, 'publish')
-    useHandleKeyBindings(() => { if (canHandle && !isNull(elementType) && elementType !== 'asset') unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
-    useHandleKeyBindings(() => { if (canHandle) refreshElement(element.id) }, 'refresh')
-    useHandleKeyBindings(() => { if (canHandle) locateInTree(element.id) }, 'openInTree')
+  useHandleKeyBindings(() => { if (element != null) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
+  useHandleKeyBindings(() => { if (element != null) publishNode(element as unknown as Element) }, 'publish')
+  useHandleKeyBindings(() => { if (element != null && !isNull(elementType) && elementType !== 'asset') unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
+  useHandleKeyBindings(() => { if (element != null) refreshElement(element.id) }, 'refresh')
+  useHandleKeyBindings(() => { if (element != null) locateInTree(element.id) }, 'openInTree')
 
   return (
     <TabManagerProvider tabManager={ tabManager }>
