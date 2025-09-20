@@ -201,9 +201,9 @@ export const MainNav = (): React.JSX.Element => {
     })
   }
 
-  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject')
-  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument')
-  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset')
+  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true)
+  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true)
+  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true)
 
   return (
     <div ref={ elRef }>

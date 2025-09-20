@@ -27,8 +27,8 @@ type Element = DataObject | Document
 
 interface UseUnpublishHookReturn {
   unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType,
-  unpublishById: (nodeId: number) => void
+  unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  unpublishTreeNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
 }
 
 export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn => {
@@ -76,13 +76,9 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
     }
   }
 
-  const unpublishById = (nodeId: number): void => {
-    executeElementTask(elementType, nodeId, SaveTaskType.Unpublish)
-  }
-
   return {
     unpublishTreeContextMenuItem,
     unpublishContextMenuItem,
-    unpublishById
+    unpublishTreeNode
   }
 }

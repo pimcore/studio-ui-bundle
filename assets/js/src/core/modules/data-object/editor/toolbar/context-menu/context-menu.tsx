@@ -24,13 +24,12 @@ import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unp
 import { type MenuProps } from 'antd'
 import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {useHandleKeyBindings} from "@Pimcore/modules/app/hook/use-handle-keybindings";
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
-  const { unpublishContextMenuItem, unpublishById } = useUnpublish('data-object')
+  const { unpublishContextMenuItem } = useUnpublish('data-object')
   const { renameContextMenuItem } = useRename('data-object')
   const { deleteContextMenuItem } = useDelete('data-object')
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
@@ -50,9 +49,6 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       setIsOpen(true)
     }
   }
-
-  useHandleKeyBindings(() => { unpublishById(id) }, 'unpublish')
-  // useHandleKeyBindings(() => { rename(null, ) }, 'rename')
 
   const buttonGroupItems: ReactElement[] = []
 

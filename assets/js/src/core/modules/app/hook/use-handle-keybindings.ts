@@ -11,10 +11,13 @@
 import { useCallback, useEffect } from 'react'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 // import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
-export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, enabled = true): void => {
+export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, alwaysActive = false): void => {
+  const isWidgetActive = useIsAcitveMainWidget()
   const { user } = useUserDraft()
+
   // const { getOpenedMainWidget } = useWidgetManager()
 
   const getConfigByactionName = (actionName: string): KeyBindingForAUser | undefined => {
@@ -41,11 +44,12 @@ export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, act
   }, [callback, actionName])
 
   useEffect(() => {
-    if (!enabled) return
-    document.addEventListener('keydown', eventHandler)
-
-    return () => {
-      document.removeEventListener('keydown', eventHandler)
+    document.removeEventListener('keydown', eventHandler)
+    if (alwaysActive || isWidgetActive) {
+      document.addEventListener('keydown', eventHandler)
+      return () => {
+        document.removeEventListener('keydown', eventHandler)
+      }
     }
-  }, [enabled, eventHandler])
+  }, [alwaysActive, isWidgetActive, eventHandler])
 }

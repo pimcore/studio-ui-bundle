@@ -18,7 +18,6 @@ import { Popconfirm } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 
 interface IToolbarProps {
   id: number
@@ -28,7 +27,6 @@ export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { user, isLoading, removeTrackedChanges } = useUserDraft()
   const { updateUserProfile } = useUserHelper()
-  const isWidgetActive = useIsAcitveMainWidget()
 
   const hasChanges = user?.modified === true
 
@@ -55,7 +53,7 @@ export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
     removeTrackedChanges()
   }
 
-  useHandleKeyBindings(async () => { await updateUserProfile(user) }, 'save', isWidgetActive)
+  useHandleKeyBindings(async () => { await updateUserProfile(user) }, 'save')
 
   return (
     <ToolbarView>
