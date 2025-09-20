@@ -79,7 +79,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
   }
 
   const getDefaultSystemColumnSize = (column: SelectedColumn): number | undefined => {
-    if (column.group === 'system') {
+    if (Array.isArray(column.group) && column.group.includes('system')) {
       if (
         column.key === 'id' ||
         column.key === 'index' ||

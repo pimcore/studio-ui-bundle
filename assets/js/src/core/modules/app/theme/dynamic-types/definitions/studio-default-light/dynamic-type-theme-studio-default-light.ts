@@ -101,6 +101,7 @@ export const studioDefaultLightThemeConfig = {
       borderRadiusSM: '4px'
     },
     Button: {
+      primaryColor: '#ffffff',
       defaultBorderColor: '#d3adf7',
       defaultColor: '#722ed1',
       defaultGhostBorderColor: '#d9d9d9',

@@ -44,7 +44,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Bundle Custom Reports"],
             }),
-            customReportsColumnConfigList: build.mutation<
+            customReportsColumnConfigList: build.query<
                 CustomReportsColumnConfigListApiResponse,
                 CustomReportsColumnConfigListApiArg
             >({
@@ -53,7 +53,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.bundleCustomReportsDataSourceConfig,
                 }),
-                invalidatesTags: ["Bundle Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigUpdate: build.mutation<
                 CustomReportsConfigUpdateApiResponse,
@@ -388,7 +388,7 @@ export type BundleCustomReportUpdate = {
     /** Whether the report is shared globally */
     sharedGlobally: boolean;
     /** Configuration for data source. Content of array depends on selected adapter/data source */
-    dataSourceConfig: object;
+    dataSourceConfig: object[];
     /** Data column for pie chart */
     pieColumn: string | null;
     /** Label of data column for pie chart */
@@ -437,7 +437,7 @@ export const {
     useCustomReportsChartQuery,
     useCustomReportsConfigAddMutation,
     useCustomReportsConfigCloneMutation,
-    useCustomReportsColumnConfigListMutation,
+    useCustomReportsColumnConfigListQuery,
     useCustomReportsConfigUpdateMutation,
     useCustomReportsConfigDeleteMutation,
     useCustomReportsReportQuery,

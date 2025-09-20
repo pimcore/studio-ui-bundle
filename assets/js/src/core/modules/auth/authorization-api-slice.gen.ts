@@ -14,6 +14,14 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/logout`, method: "POST" }),
                 invalidatesTags: ["Authorization"],
             }),
+            loginToken: build.mutation<LoginTokenApiResponse, LoginTokenApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/login/token`,
+                    method: "POST",
+                    body: queryArg.authenticationToken,
+                }),
+                invalidatesTags: ["Authorization"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -24,6 +32,10 @@ export type LoginApiArg = {
 };
 export type LogoutApiResponse = unknown;
 export type LogoutApiArg = void;
+export type LoginTokenApiResponse = /** status 200 Login successful. */ UserInformation;
+export type LoginTokenApiArg = {
+    authenticationToken: AuthenticationToken;
+};
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
     key: number;
@@ -97,18 +109,20 @@ export type UserInformation = {
     welcomeScreen: boolean;
     /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Allow Dirty Close */
+    allowDirtyClose: boolean;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
     /** List of valid website Languages to edit. */
-    allowedLanguagesForEditingWebsiteTranslations: object;
+    allowedLanguagesForEditingWebsiteTranslations: string[];
     /** List of valid website Languages to view. */
-    allowedLanguagesForViewingWebsiteTranslations: object;
+    allowedLanguagesForViewingWebsiteTranslations: string[];
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
-    twoFactorAuthentication?: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Active studio perspective ID */
     activePerspective: string | null;
     /** Allowed studio perspectives */
@@ -134,4 +148,8 @@ export type Credentials = {
     /** Password */
     password: string;
 };
-export const { useLoginMutation, useLogoutMutation } = injectedRtkApi;
+export type AuthenticationToken = {
+    /** Token */
+    token: string;
+};
+export const { useLoginMutation, useLogoutMutation, useLoginTokenMutation } = injectedRtkApi;

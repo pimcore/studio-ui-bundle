@@ -9,10 +9,11 @@
  */
 
 import { createStyles } from 'antd-style'
+import { DROPZONE_CONFIG } from '../../constants/dropzone-constants'
 
 export const useEditableDropzoneStyles = createStyles(({ token }) => ({
   dropzone: {
-    height: '16px',
+    height: DROPZONE_CONFIG.HEIGHT,
     borderRadius: token.borderRadius,
     backgroundColor: token.colorPrimary,
     opacity: 0,

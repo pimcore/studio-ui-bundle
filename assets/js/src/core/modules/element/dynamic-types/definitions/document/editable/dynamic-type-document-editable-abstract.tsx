@@ -49,10 +49,6 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
-  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
-    return undefined
-  }
-
   /**
    * Helper method to check if the editable has reload config enabled
    */

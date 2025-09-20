@@ -28,6 +28,7 @@ import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decora
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
+import { useDataObjectColumnMapper } from './column-mapper/use-column-mapper'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -40,7 +41,8 @@ const defaultProps = {
   ViewComponent: DefaultView,
   useDataQuery: useDataObjectGetGridQuery,
   useDataQueryHelper,
-  useElementId
+  useElementId,
+  useColumnMapper: useDataObjectColumnMapper
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */

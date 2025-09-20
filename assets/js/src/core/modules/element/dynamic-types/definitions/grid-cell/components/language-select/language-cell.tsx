@@ -11,30 +11,23 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
-import { GeneralError, trackError } from '@sdk/modules/app'
-import { isUndefined } from 'lodash'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
 export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
   const settings = useSettings()
+  const { getDisplayName } = useLanguageLookup()
 
-  const availableLanguages = settings.availableAdminLanguages
   const validLanguages: string[] = settings.validLanguages
-  const languageSelectionOptions = validLanguages.map(validLang => {
-    const match = availableLanguages.find(lang => lang.language === validLang)
-    if (isUndefined(match)) {
-      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
-    }
-    return ({
-      value: match.language,
-      label: `${match.display} [${match.language}]`,
-      displayValue: match.language
-    })
-  })
+  const languageSelectionOptions = validLanguages.map(locale => ({
+    value: locale,
+    label: `${getDisplayName(locale)} [${locale}]`,
+    displayValue: locale
+  }))
 
   const columnConfig: SelectCellConfig = {
-    options: languageSelectionOptions ?? []
+    options: languageSelectionOptions
   }
 
   return (

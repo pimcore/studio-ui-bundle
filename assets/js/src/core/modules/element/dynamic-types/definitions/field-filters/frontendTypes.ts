@@ -15,5 +15,9 @@
 export enum FieldFilterFrontendType {
 
   String = 'system.string',
-  Fulltext = 'system.fulltext'
+  Fulltext = 'system.fulltext',
+  Boolean = 'system.boolean',
+  Number = 'system.number',
+  DateTime = 'system.datetime',
+  Select = 'metadata.select',
 }

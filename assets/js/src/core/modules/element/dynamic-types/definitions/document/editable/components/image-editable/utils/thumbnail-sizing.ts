@@ -8,70 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
-import { getAssetPreviewUrl } from '@Pimcore/components/image-preview/utils/get-asset-preview-url'
-import { calculateThumbnailDimensions } from '../../../helpers/calculate-thumbnail-dimensions'
-
-interface ThumbnailSizeConfig {
-  width?: number | string
-  height?: number | string
-  containerWidth: number
-  thumbnailSettings?: ImageThumbnailSettings
-}
-
-interface ThumbnailUrlConfig extends ThumbnailSizeConfig {
-  assetId: number
-  assetType?: 'image' | 'video'
-  fallbackSrc?: string
-}
+import { generateThumbnailUrlForAssetType, type ThumbnailUrlConfig } from '../../../utils/asset-thumbnail-sizing'
 
 /**
- * Generate thumbnail URL for asset with proper dimensions and settings
+ * Generate thumbnail URL for image assets
+ * Priority: named thumbnails (string) -> dynamic config (object) -> custom thumbnails (fallback)
  */
-export const generateThumbnailUrl = ({
-  assetId,
-  assetType,
-  width,
-  height,
-  containerWidth,
-  thumbnailSettings,
-  fallbackSrc
-}: ThumbnailUrlConfig): string | undefined => {
-  const { thumbnailWidth, thumbnailHeight, resizeMode } = calculateThumbnailDimensions({
-    width,
-    height,
-    containerWidth
-  })
-
-  if (thumbnailWidth === undefined && thumbnailHeight === undefined) {
-    return fallbackSrc
-  }
-
-  const defaultThumbnailSettings: ImageThumbnailSettings = {
-    frame: false,
-    resizeMode,
-    ...thumbnailSettings
-  }
-
-  if (thumbnailWidth !== undefined) {
-    return getAssetPreviewUrl({
-      assetId,
-      assetType,
-      width: thumbnailWidth,
-      height: thumbnailHeight,
-      thumbnailSettings: defaultThumbnailSettings
-    })
-  }
-
-  if (thumbnailHeight !== undefined) {
-    return getAssetPreviewUrl({
-      assetId,
-      assetType,
-      width: 0,
-      height: thumbnailHeight,
-      thumbnailSettings: defaultThumbnailSettings
-    })
-  }
-
-  return fallbackSrc
+export const generateThumbnailUrl = (config: ThumbnailUrlConfig): string | undefined => {
+  return generateThumbnailUrlForAssetType(config, 'image', 'PNG')
 }

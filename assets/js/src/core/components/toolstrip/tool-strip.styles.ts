@@ -51,6 +51,14 @@ export const useStyles = createStyles(({ css, token }) => {
           }
         }
       }
+
+      &.tool-strip--disabled {
+        background: ${token.colorBorder} !important;
+        
+        &.tool-strip--theme-inverse {
+          background: ${token.colorBorder} !important;
+        }
+      }
     `,
 
     dragger: css`

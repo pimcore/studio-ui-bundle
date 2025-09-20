@@ -8,14 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useCallback } from 'react'
-import { isArray, isNil } from 'lodash'
+import React, { useMemo, useCallback } from 'react'
+import { isArray } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useBlockEditableStyles } from './block-editable.styles'
 import { useBlockEditable } from './hooks/use-block-editable'
 import { useBlockControls } from './hooks/use-block-controls'
 import { BlockManager } from './utils/block-manager'
-import { configUtils } from './utils/block-utils'
 
 export interface BlockEditableConfig {
   limit?: number
@@ -37,6 +36,7 @@ export interface BlockEditableProps {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
+  isInherited?: boolean
 }
 
 export const BlockEditable = ({
@@ -46,12 +46,17 @@ export const BlockEditable = ({
   className,
   editableName,
   containerRef,
-  disabled = false
+  disabled = false,
+  isInherited = false
 }: BlockEditableProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
   const blockManager = useMemo(() => new BlockManager(editableName, containerRef), [editableName, containerRef])
+
+  const handleOverwrite = useCallback(() => {
+    onChange?.(blockManager.getBlockValue())
+  }, [blockManager, onChange])
 
   const {
     dynamicEditables,
@@ -65,43 +70,20 @@ export const BlockEditable = ({
     value: currentValue,
     onChange,
     config,
-    disabled,
-    onOperationComplete: (limitReached) => {
-      const elements = blockManager.queryElements()
-      elements.forEach(element => { updateControls(element, limitReached) })
-    }
+    disabled
   })
 
-  const { initializeControls, updateControls, clearEmptyState, renderBlockToolbar } = useBlockControls({
+  const { renderBlockToolbar } = useBlockControls({
     blockManager,
+    config,
     onAddBlock: addBlock,
     onRemoveBlock: removeBlock,
     onMoveBlockUp: moveBlockUp,
     onMoveBlockDown: moveBlockDown,
-    onMoveBlock: moveBlock
+    onMoveBlock: moveBlock,
+    isInherited,
+    onOverwrite: handleOverwrite
   })
-
-  const refreshControls = useCallback(() => {
-    const elements = blockManager.ensureAllElementKeys()
-    const container = blockManager.getContainer()
-    if (isNil(container)) return
-
-    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-
-    if (elements.length < 1) {
-      initializeControls()
-    } else {
-      clearEmptyState()
-      container.classList.remove('pimcore_block_buttons')
-      elements.forEach(element => {
-        updateControls(element, limitReached)
-      })
-    }
-  }, [blockManager, config?.limit, initializeControls, updateControls, clearEmptyState])
-
-  useEffect(() => {
-    refreshControls()
-  }, [currentValue, refreshControls])
 
   return (
     <div className={ `${styles.blockContainer} ${className ?? ''}` }>

@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { isNull } from 'lodash'
+import React, { useCallback } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
@@ -17,6 +16,7 @@ import { SortableAreablockToolbar } from '../components/sortable-areablock-toolb
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
 import { useAreablockDropzones } from './use-areablock-dropzones'
 import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
+import { configUtils } from '../utils/areablock-utils'
 
 export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
@@ -28,12 +28,12 @@ export interface UseAreablockControlsParams {
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
   onOpenDialog?: (areaKey: string) => void
+  onToggleHidden?: (element: HTMLElement) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export interface UseAreablockControlsReturn {
-  updateControls: (element: HTMLElement, limitReached: boolean) => void
-  initializeControls: () => void
-  clearEmptyState: () => void
   renderAreablockToolbar: () => React.JSX.Element
 }
 
@@ -46,15 +46,11 @@ export const useAreablockControls = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onMoveArea,
-  onOpenDialog
+  onOpenDialog,
+  onToggleHidden,
+  isInherited = false,
+  onOverwrite
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
-  const limitReachedRef = useRef<boolean>(false)
-  const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
-
-  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await onAddArea(element, areaType)
-  }, [onAddArea])
-
   const {
     activeId,
     handleDragStart,
@@ -62,12 +58,15 @@ export const useAreablockControls = ({
     handleDragEnd,
     dropzonePortals,
     dragOverlayTitle,
-    refreshDropzones
+    refreshDropzones,
+    removeFirstDropzone
   } = useAreablockDropzones({
     areablockManager,
     areaTypes,
     onMoveArea,
     onDropAreablock: async (areaType: string, index: number) => {
+      if (isInherited) return
+
       const elements = areablockManager.queryElements()
 
       if (index === 0) {
@@ -79,80 +78,53 @@ export const useAreablockControls = ({
         const targetElement = elements[index - 1]
         await handleAddArea(targetElement, areaType)
       }
-
-      refreshDropzones()
     }
   })
 
-  const handleAddAreaWithRefresh = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await handleAddArea(element, areaType)
+  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+    await onAddArea(element, areaType)
     refreshDropzones()
-  }, [handleAddArea, refreshDropzones])
+  }, [onAddArea, refreshDropzones])
 
   const handleRemoveArea = useCallback((element: HTMLElement) => {
+    const currentAreaEntries = areablockManager.queryElements()
+    const isLastItem = currentAreaEntries.length === 1
+
     onRemoveArea(element)
-    refreshDropzones()
-  }, [onRemoveArea, refreshDropzones])
 
-  const handleMoveAreaUp = useCallback((element: HTMLElement) => {
-    onMoveAreaUp(element)
-    refreshDropzones()
-  }, [onMoveAreaUp, refreshDropzones])
-
-  const handleMoveAreaDown = useCallback((element: HTMLElement) => {
-    onMoveAreaDown(element)
-    refreshDropzones()
-  }, [onMoveAreaDown, refreshDropzones])
-
-  const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
-    const buttonsContainer = element.querySelector('.pimcore_area_buttons')
-
-    if (isNull(buttonsContainer)) {
-      return
+    if (isLastItem) {
+      removeFirstDropzone()
     }
+  }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-    limitReachedRef.current = limitReached
-
-    const buttonElements = buttonsContainer.querySelectorAll('.pimcore_area_plus, .pimcore_area_minus, .pimcore_area_up, .pimcore_area_down, .pimcore_area_type')
-    buttonElements.forEach(button => {
-      (button as HTMLElement).style.display = 'none'
-    })
-  }, [])
-
-  const initializeControls = useCallback((): void => {
-    const container = areablockManager.getContainer()
-    if (isNull(container)) return
-
-    if (emptyStatePortal !== null) return
-
+  const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
         config={ config }
+        isInherited={ isInherited }
         onClick={ async (areaType) => {
-          setEmptyStatePortal(null)
-          await handleAddAreaWithRefresh(null, areaType)
+          await handleAddArea(null, areaType)
         } }
+        onOverwrite={ onOverwrite }
       />
     )
-
-    const portal = ReactDOM.createPortal(emptyStateToolbar, container)
-    setEmptyStatePortal(portal)
-  }, [areablockManager, areaTypes, handleAddAreaWithRefresh, emptyStatePortal])
-
-  const clearEmptyState = useCallback((): void => {
-    setEmptyStatePortal(null)
-  }, [])
+    return ReactDOM.createPortal(emptyStateToolbar, container)
+  }, [areaTypes, config, handleAddArea, isInherited, onOverwrite])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
 
     const currentAreaEntries = areablockManager.queryElements()
+    const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
 
-    if (currentAreaEntries.length === 0 && emptyStatePortal !== null) {
-      portals.push(emptyStatePortal)
-    } else {
-      // Add stable dropzone portals
+    if (currentAreaEntries.length === 0) {
+      const container = areablockManager.getContainer()
+      if (container !== null) {
+        const portal = createEmptyStatePortal(container)
+        portals.push(portal)
+      }
+    } else if (!isInherited) {
       portals.push(...dropzonePortals)
     }
 
@@ -174,12 +146,15 @@ export const useAreablockControls = ({
               config={ config }
               element={ areaEntry }
               id={ areaKey }
-              limitReached={ limitReachedRef.current }
-              onAddArea={ handleAddAreaWithRefresh }
-              onMoveAreaDown={ handleMoveAreaDown }
-              onMoveAreaUp={ handleMoveAreaUp }
+              isInherited={ isInherited }
+              limitReached={ limitReached }
+              onAddArea={ handleAddArea }
+              onMoveAreaDown={ onMoveAreaDown }
+              onMoveAreaUp={ onMoveAreaUp }
               onOpenDialog={ onOpenDialog }
+              onOverwrite={ onOverwrite }
               onRemoveArea={ handleRemoveArea }
+              onToggleHidden={ onToggleHidden }
             />
           )
           const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
@@ -200,22 +175,9 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
-
-  const cleanupControls = useCallback(() => {
-    setEmptyStatePortal(null)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      cleanupControls()
-    }
-  }, [cleanupControls])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
-    updateControls,
-    initializeControls,
-    clearEmptyState,
     renderAreablockToolbar
   }
 }

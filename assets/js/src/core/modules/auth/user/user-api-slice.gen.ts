@@ -49,6 +49,14 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
             }),
+            userGetImage: build.query<UserGetImageApiResponse, UserGetImageApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}` }),
+                providesTags: ["User Management"],
+            }),
+            userImageDeleteById: build.mutation<UserImageDeleteByIdApiResponse, UserImageDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
             userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
                 providesTags: ["User Management"],
@@ -128,10 +136,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
-            userGetImage: build.query<UserGetImageApiResponse, UserGetImageApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}` }),
-                providesTags: ["User Management"],
-            }),
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/users/tree`,
@@ -190,6 +194,16 @@ export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
 };
+export type UserGetImageApiResponse = /** status 200 User profile image */ Blob;
+export type UserGetImageApiArg = {
+    /** Id of the User */
+    id: number;
+};
+export type UserImageDeleteByIdApiResponse = unknown;
+export type UserImageDeleteByIdApiArg = {
+    /** Id of the user */
+    id: number;
+};
 export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
     totalItems: number;
     items: KeyBindingForAUser[];
@@ -219,12 +233,12 @@ export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users */ {
     totalItems: number;
     items: SimpleUser[];
 };
 export type PimcoreStudioApiUserSearchApiArg = {
-    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
+    /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
 };
 export type UserUpdateActivePerspectiveApiResponse = unknown;
@@ -254,11 +268,6 @@ export type UserUploadImageApiArg = {
         /** User image to upload */
         userImage: Blob;
     };
-};
-export type UserGetImageApiResponse = /** status 200 User profile image */ Blob;
-export type UserGetImageApiArg = {
-    /** Id of the User */
-    id: number;
 };
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
@@ -365,18 +374,20 @@ export type UserInformation = {
     welcomeScreen: boolean;
     /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Allow Dirty Close */
+    allowDirtyClose: boolean;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
     /** List of valid website Languages to edit. */
-    allowedLanguagesForEditingWebsiteTranslations: object;
+    allowedLanguagesForEditingWebsiteTranslations: string[];
     /** List of valid website Languages to view. */
-    allowedLanguagesForViewingWebsiteTranslations: object;
+    allowedLanguagesForViewingWebsiteTranslations: string[];
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
-    twoFactorAuthentication?: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Active studio perspective ID */
     activePerspective: string | null;
     /** Allowed studio perspectives */
@@ -405,6 +416,24 @@ export type UserWorkspace = {
     versions: boolean;
     /** Properties Permission */
     properties: boolean;
+};
+export type UserDocumentWorkspace = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+    /** Localized Edit */
+    localizedEdit?: string | null;
+    /** Localized View */
+    localizedView?: string | null;
+    /** Layouts */
+    layouts?: string | null;
+};
+export type UserDocumentWorkspace2 = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
 };
 export type DependencyToAnObject = {
     /** ID of the object */
@@ -463,8 +492,8 @@ export type User = {
     permissions: object;
     /** ID List of roles the user is assigned */
     roles: object;
-    /** Two Factor Authentication Enabled */
-    twoFactorAuthenticationEnabled: boolean;
+    /** Two Factor Authentication */
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
@@ -474,9 +503,9 @@ export type User = {
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
     /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
+    dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
+    documentWorkspaces: UserDocumentWorkspace2[];
     /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
@@ -514,7 +543,7 @@ export type User2 = {
     /** ID List of roles the user is assigned */
     roles: object;
     /** Two Factor Authentication Enabled */
-    twoFactorAuthenticationEnabled: boolean;
+    twoFactorAuthenticationRequired: boolean;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
@@ -537,7 +566,7 @@ export type UserPermission = {
     };
     /** Key of the Permission */
     key: string;
-    /** Category og the Permission */
+    /** Category of the Permission */
     category: string;
 };
 export type SimpleUser = {
@@ -553,6 +582,8 @@ export type SimpleUser = {
 export type ResetPassword = {
     /** Username */
     username: string;
+    /** Reset password URL */
+    resetPasswordUrl: string;
 };
 export type UserProfile = {
     /** Firstname of the User */
@@ -583,6 +614,8 @@ export const {
     useUserUpdateByIdMutation,
     useUserDeleteByIdMutation,
     useUserFolderDeleteByIdMutation,
+    useUserGetImageQuery,
+    useUserImageDeleteByIdMutation,
     useUserDefaultKeyBindingsQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
@@ -593,6 +626,5 @@ export const {
     useUserUpdatePasswordByIdMutation,
     useUserUpdateProfileMutation,
     useUserUploadImageMutation,
-    useUserGetImageQuery,
     useUserGetTreeQuery,
 } = injectedRtkApi;

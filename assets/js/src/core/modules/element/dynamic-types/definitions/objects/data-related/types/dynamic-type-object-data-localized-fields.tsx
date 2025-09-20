@@ -10,10 +10,9 @@
 
 import React from 'react'
 import { get, isEmpty } from 'lodash'
-import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
+import { DynamicTypeObjectDataAbstract, type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import { ObjectLocalizedFields } from '../../../../defintinitions/objects/data-related/components/localized-fields/object-localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
-import { VersionLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-localized-fields'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
@@ -23,13 +22,14 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
   id: string = DynamicTypesList.LOCALIZED_FIELDS
   isCollectionType: boolean = true
 
-  getObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
-    return <LocalizedFields { ...props } />
+  getObjectDataComponent (props: AbstractObjectDataDefinition & { children?: any[] }): React.ReactElement<AbstractObjectDataDefinition> {
+    return <ObjectLocalizedFields { ...props } />
   }
 
-  getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
+  getVersionObjectDataComponent (props: AbstractObjectDataDefinition & { children?: any[] }): React.ReactElement<AbstractObjectDataDefinition> {
+    // For version view, we use ObjectLocalizedFields with noteditable=true
     return (
-      <VersionLocalizedFields
+      <ObjectLocalizedFields
         { ...props }
         noteditable
       />

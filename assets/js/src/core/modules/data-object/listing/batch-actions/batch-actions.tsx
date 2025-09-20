@@ -10,6 +10,7 @@
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useState } from 'react'
+import { isUndefined } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -18,12 +19,25 @@ import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
 import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-modal/csv-modal'
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
+import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { useDataObjectBatchDeleteMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
+  const { id, elementType } = useElementContext()
+  const { refreshGrid } = useRefreshGrid(elementType)
+
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
+
+  const [batchDelete] = useDataObjectBatchDeleteMutation()
+  const { addJob } = useJobs()
 
   const { t } = useTranslation()
 
@@ -32,7 +46,32 @@ export const BatchActions = (): React.JSX.Element => {
   }
 
   const { selectedRows } = rowSelection
+
+  const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
+
+  const handleBatchDelete = (): void => {
+    addJob(createJob({
+      title: t('batch-delete.job-title'),
+      topics: [topics['deletion-finished'], ...defaultTopics],
+      action: async () => {
+        const response = await batchDelete({
+          body: {
+            ids: numberedSelectedRows
+          }
+        })
+
+        if (isUndefined(response.data?.jobRunId)) {
+          trackError(new GeneralError('JobRunId is undefined'))
+          throw new Error('JobRunId is undefined')
+        }
+
+        return response.data?.jobRunId
+      },
+      refreshGrid,
+      assetContextId: id
+    }))
+  }
 
   const menu: DropdownMenuProps = {
     items: [
@@ -66,6 +105,12 @@ export const BatchActions = (): React.JSX.Element => {
             }
           }
         ]
+      },
+      {
+        key: '3',
+        label: t('listing.actions.delete'),
+        icon: <Icon value={ 'trash' } />,
+        onClick: handleBatchDelete
       }
     ]
   }

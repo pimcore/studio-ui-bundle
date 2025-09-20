@@ -22,6 +22,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
+            classAllLayoutCollection: build.query<ClassAllLayoutCollectionApiResponse, ClassAllLayoutCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/class/all-layouts` }),
+                providesTags: ["Class Definition"],
+            }),
             pimcoreStudioApiClassCustomLayoutCreate: build.mutation<
                 PimcoreStudioApiClassCustomLayoutCreateApiResponse,
                 PimcoreStudioApiClassCustomLayoutCreateApiArg
@@ -138,6 +142,11 @@ export type ClassCustomLayoutCollectionApiArg = {
     /** Data object class */
     dataObjectClass: string;
 };
+export type ClassAllLayoutCollectionApiResponse = /** status 200 List of all available class layouts */ {
+    totalItems: number;
+    items: ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces[];
+};
+export type ClassAllLayoutCollectionApiArg = void;
 export type PimcoreStudioApiClassCustomLayoutCreateApiResponse = /** status 200 Custom layout created */ CustomLayouts;
 export type PimcoreStudioApiClassCustomLayoutCreateApiArg = {
     /** Id of custom layout */
@@ -255,6 +264,18 @@ export type CustomLayoutsInCompactFormatToBeUsedForEGListings = {
     name: string;
     /** Whether it is the default layout */
     default: boolean;
+};
+export type ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Id of layout */
+    id: string;
+    /** Name */
+    name: string;
+    /** Whether it is the default layout */
+    type: string;
 };
 export type Layout = {
     /** AdditionalAttributes */
@@ -467,6 +488,7 @@ export type ObjectBrickLayoutDefinition = {
 export const {
     useClassDefinitionCollectionQuery,
     useClassCustomLayoutCollectionQuery,
+    useClassAllLayoutCollectionQuery,
     usePimcoreStudioApiClassCustomLayoutCreateMutation,
     usePimcoreStudioApiClassCustomLayoutGetQuery,
     usePimcoreStudioApiClassCustomLayoutUpdateMutation,

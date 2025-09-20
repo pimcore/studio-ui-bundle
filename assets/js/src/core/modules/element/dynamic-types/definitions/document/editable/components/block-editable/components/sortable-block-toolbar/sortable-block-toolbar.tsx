@@ -18,6 +18,7 @@ import { useBlockEditableStyles } from '../../block-editable.styles'
 import { type BlockManager } from '../../utils/block-manager'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
+import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableBlockToolbarProps {
   id: string
@@ -29,6 +30,8 @@ export interface SortableBlockToolbarProps {
   onRemoveBlock: (element: HTMLElement) => void
   onMoveBlockUp: (element: HTMLElement) => void
   onMoveBlockDown: (element: HTMLElement) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export const SortableBlockToolbar = ({
@@ -40,7 +43,9 @@ export const SortableBlockToolbar = ({
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
-  onMoveBlockDown
+  onMoveBlockDown,
+  isInherited = false,
+  onOverwrite
 }: SortableBlockToolbarProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const { t } = useTranslation()
@@ -106,24 +111,31 @@ export const SortableBlockToolbar = ({
   }
 
   return (
-    <ToolStrip
-      activateOnHover
-      className={ styles.blockToolstrip }
-      dragger={ { listeners } }
-      key={ `toolbar-${element.getAttribute('key')}` }
-      theme="inverse"
-      title={ t('block') }
+    <InheritanceWrapper
+      isInherited={ isInherited }
+      onOverwrite={ onOverwrite }
     >
-      <Split
-        dividerSize="small"
-        size="mini"
-        theme="secondary"
+      <ToolStrip
+        activateOnHover
+        additionalIcon={ isInherited ? 'inheritance-active' : undefined }
+        className={ styles.blockToolstrip }
+        disabled={ isInherited }
+        dragger={ { listeners } }
+        key={ `toolbar-${element.getAttribute('key')}` }
+        theme="inverse"
+        title={ t('block') }
       >
-        <Space size="small">
-          {buttons}
-        </Space>
-        {deleteButton}
-      </Split>
-    </ToolStrip>
+        <Split
+          dividerSize="small"
+          size="mini"
+          theme="secondary"
+        >
+          <Space size="small">
+            {buttons}
+          </Space>
+          {deleteButton}
+        </Split>
+      </ToolStrip>
+    </InheritanceWrapper>
   )
 }

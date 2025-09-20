@@ -8,21 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNull } from 'lodash'
+import { isNull, isNil } from 'lodash'
 import {
   DROPZONE_CLASSES,
   DROPZONE_SELECTORS,
   DROPZONE_ATTRIBUTES,
-  DROPZONE_STATES
+  DROPZONE_STATES,
+  DROPZONE_CONFIG
 } from '../constants/dropzone-constants'
 
 /**
  * Creates a dropzone container element with proper attributes
  */
-export const createDropzoneContainer = (editableName: string | null): HTMLDivElement => {
+export const createDropzoneContainer = (editableName: string | null, isFirst?: boolean): HTMLDivElement => {
   const dropzoneContainer = document.createElement('div')
   dropzoneContainer.className = DROPZONE_CLASSES.DROPZONE_CONTAINER
   dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE, editableName ?? '')
+  if (isFirst === true) {
+    dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE, 'true')
+  }
+  dropzoneContainer.style.height = DROPZONE_CONFIG.HEIGHT
   return dropzoneContainer
 }
 
@@ -79,10 +84,7 @@ export const updateDropzoneDragStates = (
   })
 }
 
-/**
- * Removes existing dropzones for a specific editable
- */
-export const removeExistingDropzones = (
+export const removeDropzoneContainers = (
   container: HTMLElement | null,
   editableName: string | null
 ): void => {
@@ -94,38 +96,61 @@ export const removeExistingDropzones = (
   })
 }
 
+const hasDropzoneBefore = (element: HTMLElement, editableName: string | null): boolean => {
+  const previousSibling = element.previousElementSibling as HTMLElement | null
+  return previousSibling?.getAttribute(DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE) === editableName
+}
+
+const hasDropzoneAfter = (element: HTMLElement, editableName: string | null): boolean => {
+  const existingDropzone = element.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
+  return existingDropzone !== null
+}
+
 /**
- * Shows previously hidden elements when dropzones are added
+ * Updates dropzone containers before and after elements, skipping if they already exist
  */
-export const showElementsWithDropzones = (
-  elements: HTMLElement[]
+export const updateDropzoneContainers = (
+  elements: HTMLElement[],
+  editableName: string | null
 ): void => {
-  elements.forEach(element => {
-    if (element.getAttribute('data-pending-dropzone') === 'true') {
-      element.style.display = ''
-      element.removeAttribute('data-pending-dropzone')
+  if (elements.length === 0) {
+    // For empty containers, still inject a dropzone at the container level
+    const container = document.querySelector(`[data-name="${editableName}"]`)
+    if (!isNil(container) && isNil(container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`))) {
+      const dropzone = createDropzoneContainer(editableName)
+      container.appendChild(dropzone)
+    }
+    return
+  }
+
+  const firstItem = elements[0]
+
+  if (!hasDropzoneBefore(firstItem, editableName)) {
+    const firstDropzone = createDropzoneContainer(editableName, true) // Mark as first dropzone
+    firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
+  }
+
+  elements.forEach((itemEntry) => {
+    if (!hasDropzoneAfter(itemEntry, editableName)) {
+      const dropzoneContainer = createDropzoneContainer(editableName)
+      itemEntry.appendChild(dropzoneContainer)
     }
   })
 }
 
 /**
- * Injects dropzone containers before and after elements
+ * Removes the first dropzone container from the DOM
  */
-export const injectDropzoneContainers = (
-  elements: HTMLElement[],
+export const removeFirstDropzoneContainer = (
+  container: HTMLElement | null,
   editableName: string | null
 ): void => {
-  if (elements.length === 0) return
+  if (isNull(container) || isNull(editableName)) {
+    return
+  }
 
-  const firstItem = elements[0]
-  const firstDropzone = createDropzoneContainer(editableName)
-  firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
-
-  elements.forEach((itemEntry) => {
-    const dropzoneContainer = createDropzoneContainer(editableName)
-    itemEntry.appendChild(dropzoneContainer)
-  })
-
-  // Show elements that were hidden while waiting for dropzones
-  showElementsWithDropzones(elements)
+  const firstDropzone = container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"][${DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE}="true"]`)
+  if (firstDropzone !== null) {
+    firstDropzone.remove()
+  }
 }

@@ -16,9 +16,12 @@ import { type BlockEditableConfig, type BlockValue } from '../block-editable'
 import { type BlockManager } from '../utils/block-manager'
 import {
   blockValueUtils,
-  configUtils,
-  operationUtils
+  configUtils
 } from '../utils/block-utils'
+import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
+import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
+import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager
@@ -26,7 +29,6 @@ export interface UseBlockEditableParams {
   onChange?: (value: BlockValue) => void
   config?: BlockEditableConfig
   disabled?: boolean
-  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseBlockEditableReturn {
@@ -43,12 +45,16 @@ export const useBlockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false,
-  onOperationComplete
+  disabled = false
 }: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(blockManager.queryElements())
+
+  const { hideElementUntilRendered } = usePendingElementsReveal({
+    dynamicEditables,
+    getContainer: () => blockManager.getContainer()
+  })
 
   const getBlockEditableNames = (element: HTMLElement): string[] => {
     const elementKey = blockManager.getElementKey(element)
@@ -67,15 +73,10 @@ export const useBlockEditable = ({
   }, [onChange, config, blockManager])
 
   const handlePostOperation = useCallback(() => {
-    const elements = blockManager.ensureAllElementKeys()
+    blockManager.ensureAllElementKeys()
     const newValue = blockManager.getBlockValue()
     onChange?.(newValue)
-
-    if (!isNil(onOperationComplete)) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(limitReached)
-    }
-  }, [onChange, onOperationComplete, config?.limit, blockManager])
+  }, [onChange, blockManager])
 
   const addBlock = useCallback((element: HTMLElement | null, amount = 1) => {
     if (disabled) return
@@ -99,17 +100,44 @@ export const useBlockEditable = ({
     }
 
     const container = blockManager.getContainer()
-    if (isNil(container) || isNil(config)) return
+    if (isNil(container) || isNil(config?.template?.html) || isNil(config?.template?.editables)) return
 
-    const newBlockEntry = operationUtils.processNonReloadBlockAddition({
-      blockManager,
-      index,
-      config,
-      initializeData,
-      setDynamicEditables
-    })
+    const { html: processedHtml, editableDefinitions } = processBlockTemplate(
+      { templateHtml: config.template.html, blockManager, nextKey },
+      config.template.editables
+    )
 
-    if (!isNil(newBlockEntry)) {
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = processedHtml
+    const newElement = tempDiv.firstElementChild
+
+    if (!isNil(newElement)) {
+      const newBlockEntry = newElement as HTMLElement
+
+      hideElementUntilRendered(newBlockEntry)
+
+      const existingElements = blockManager.queryElements()
+
+      if (existingElements.length === 0) {
+        container.appendChild(newBlockEntry)
+        const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName(), true)
+        newBlockEntry.parentNode?.insertBefore(initialDropzoneContainer, newBlockEntry)
+      } else if (!isNil(existingElements[index - 1])) {
+        existingElements[index - 1].insertAdjacentElement('afterend', newBlockEntry)
+      } else if (!isNil(existingElements[index])) {
+        existingElements[index].insertAdjacentElement('beforebegin', newBlockEntry)
+      }
+
+      const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
+      newBlockEntry.appendChild(dropzoneContainer)
+
+      blockManager.setElementKey(newBlockEntry, nextKey.toString())
+      ensurePortalTargets(newBlockEntry, editableDefinitions)
+
+      const editableData = createEditableDataFromDefinitions(editableDefinitions)
+      initializeData(editableData)
+      setDynamicEditables(prev => [...prev, ...editableDefinitions])
+
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, initializeData, handlePostOperation, blockManager])
