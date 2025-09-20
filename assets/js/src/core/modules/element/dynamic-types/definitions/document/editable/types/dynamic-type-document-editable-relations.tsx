@@ -10,10 +10,9 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ManyToManyRelation } from '@sdk/modules/element'
 import { isArray, isEmpty, isNil } from 'lodash'
 import { type ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
-import { ManyToManyRelationLabel } from '../../../objects/data-related/helpers/relations/components/label/label'
+import { RelationsEditable } from '../components/relations-editable/relations-editable'
 
 export type RelationsEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -47,7 +46,7 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
 
   getEditableDataComponent (props: RelationsEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToManyRelation
+      <RelationsEditable
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
         allowedClasses={ props.config?.classes }
@@ -60,8 +59,11 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
         disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         height={ props.config?.height ?? null }
+        inherited={ props.inherited }
         maxItems={ null }
+        name={ props.name }
         pathFormatterClass={ null }
+        title={ props.config?.title }
         width={ props.config?.width ?? null }
       />
     )
@@ -85,18 +87,5 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
     })
 
     return result
-  }
-
-  getLabel (props: RelationsEditableDefinition): React.ReactElement | undefined {
-    if (isNil(props.config?.title) || isEmpty(props.config?.title)) {
-      return undefined
-    }
-
-    return (
-      <ManyToManyRelationLabel
-        label={ props.config?.title }
-        name={ props.name }
-      />
-    )
   }
 }

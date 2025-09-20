@@ -47,6 +47,7 @@ export const tagNames = {
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   DOMAIN_TRANSLATIONS: 'DOMAIN_TRANSLATIONS',
+  LOCALES: 'LOCALES',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
   CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
   EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
@@ -56,7 +57,11 @@ export const tagNames = {
   EMAIL_LOG: 'EMAIL_LOG',
   EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
   RECYCLE_BIN: 'RECYCLE_BIN',
-  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL'
+  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL',
+  PERSPECTIVES: 'PERSPECTIVES',
+  PERSPECTIVE_DETAIL: 'PERSPECTIVE_DETAIL',
+  WIDGETS: 'WIDGETS',
+  WIDGET_DETAIL: 'WIDGET_DETAIL'
 }
 
 export const providingTags = {
@@ -88,6 +93,7 @@ export const providingTags = {
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
   DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
+  LOCALES: () => [tagNames.LOCALES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -117,7 +123,11 @@ export const providingTags = {
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
-  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
+  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
+  PERSPECTIVES: () => [tagNames.PERSPECTIVES],
+  PERSPECTIVE_DETAIL: (id: string) => [{ type: tagNames.PERSPECTIVE_DETAIL, id }],
+  WIDGETS: () => [tagNames.WIDGETS],
+  WIDGET_DETAIL: (id: string) => [{ type: tagNames.WIDGET_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -142,6 +152,7 @@ export const invalidatingTags = {
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
   DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
+  LOCALES: () => [tagNames.LOCALES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [{ type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -170,7 +181,9 @@ export const invalidatingTags = {
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
-  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN]
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  PERSPECTIVES: () => [tagNames.PERSPECTIVES],
+  WIDGETS: () => [tagNames.WIDGETS]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
@@ -184,6 +197,6 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
     case 'data-object':
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
-      return { type: tagNames.DATA_OBJECT_DETAIL, id }
+      return { type: tagNames.DOCUMENT_DETAIL, id }
   }
 }

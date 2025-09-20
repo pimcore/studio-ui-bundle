@@ -13,12 +13,13 @@ import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from 'antd'
-import { useAreablockEditableStyles } from '../../areablock-editable.styles'
+import { useStyles } from '../../areablock-editable.styles'
 import { type AreablockManager } from '../../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableAreablockToolbarProps {
   id: string
@@ -33,6 +34,9 @@ export interface SortableAreablockToolbarProps {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onOpenDialog?: (areaKey: string) => void
+  onToggleHidden?: (element: HTMLElement) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export const SortableAreablockToolbar = ({
@@ -47,9 +51,12 @@ export const SortableAreablockToolbar = ({
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
-  onOpenDialog
+  onOpenDialog,
+  onToggleHidden,
+  isInherited = false,
+  onOverwrite
 }: SortableAreablockToolbarProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
+  const { styles } = useStyles()
   const { t } = useTranslation()
   const { listeners } = useSortableElement({ id, element })
 
@@ -62,6 +69,7 @@ export const SortableAreablockToolbar = ({
   const elementIndex = areablockManager.findElementIndex(element)
   const isFirst = elementIndex === 0
   const isLast = elementIndex === elements.length - 1
+  const isHidden = areablockManager.isElementHidden(element)
 
   const elementType = areablockManager.getElementType(element)
   const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
@@ -119,7 +127,6 @@ export const SortableAreablockToolbar = ({
     />
   )
 
-  // Add dialog button if area type has dialog box configuration
   if (areaTypeConfig?.hasDialogBoxConfiguration === true) {
     buttons.push(
       <IconButton
@@ -131,6 +138,16 @@ export const SortableAreablockToolbar = ({
     )
   }
 
+  buttons.push(
+    <IconButton
+      icon={ { value: isHidden ? 'eye-off' : 'eye' } }
+      key="visibility"
+      onClick={ () => { onToggleHidden?.(element) } }
+      size="small"
+      title={ t(isHidden ? 'areablock.show' : 'areablock.hide') }
+    />
+  )
+
   deleteButton = (
     <IconButton
       icon={ { value: 'trash' } }
@@ -140,11 +157,13 @@ export const SortableAreablockToolbar = ({
     />
   )
 
-  return (
+  const toolStripContent = (
     <ToolStrip
-      activateOnHover
+      activateOnHover={ !isInherited }
+      additionalIcon={ isInherited ? 'inheritance-active' : undefined }
       className={ styles.areablockToolstrip }
-      dragger={ { listeners } }
+      disabled={ isInherited }
+      dragger={ isInherited ? true : { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
       title={ toolbarTitle }
@@ -160,5 +179,14 @@ export const SortableAreablockToolbar = ({
         {deleteButton}
       </Split>
     </ToolStrip>
+  )
+
+  return (
+    <InheritanceWrapper
+      isInherited={ isInherited }
+      onOverwrite={ onOverwrite }
+    >
+      {toolStripContent}
+    </InheritanceWrapper>
   )
 }

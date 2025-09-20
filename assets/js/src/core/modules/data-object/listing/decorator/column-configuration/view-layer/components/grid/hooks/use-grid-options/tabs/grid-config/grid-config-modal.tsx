@@ -19,8 +19,6 @@ import { Space } from '@Pimcore/components/space/space'
 import { Content } from '@Pimcore/components/content/content'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { GridConfigList } from './grid-config-list'
 import { isEmpty } from 'lodash'
 import { PipelineLayoutProvider } from './forms/advanced-column-form/pipeline-layout-provider'
@@ -38,14 +36,11 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
     onCancelClick,
     onApplyClick: baseOnApplyClick,
     addColumnMenu,
-    currentLanguage,
-    setCurrentLanguage,
     open = false,
     onOpenChange
   } = props
 
   const { t } = useTranslation()
-  const settings = useSettings()
 
   const onApplyClick = (): void => {
     baseOnApplyClick()
@@ -76,14 +71,6 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   theme="secondary"
                 >
                   <PreviewItemSelection />
-
-                  <LanguageSelection
-                    languages={ settings.requiredLanguages.map((value: string) => {
-                      return value
-                    }) }
-                    onSelectLanguage={ setCurrentLanguage }
-                    selectedLanguage={ currentLanguage }
-                  />
                 </Toolbar>
 
                 <Content style={ { height: 'calc(80vh - 200px)' } }>

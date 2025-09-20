@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { DatePicker } from '@sdk/components'
+import { DateEditable } from '../components/date-editable/date-editable'
 import { isNull } from 'lodash'
 import dayjs from 'dayjs'
 
@@ -25,10 +25,10 @@ export class DynamicTypeDocumentEditableDate extends DynamicTypeDocumentEditable
 
   getEditableDataComponent (props: DateEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <DatePicker
-        allowClear
-        className={ props.config?.class }
-        outputType="dateString"
+      <DateEditable
+        config={ props.config }
+        inherited={ props.inherited }
+        value={ props.value }
       />
     )
   }

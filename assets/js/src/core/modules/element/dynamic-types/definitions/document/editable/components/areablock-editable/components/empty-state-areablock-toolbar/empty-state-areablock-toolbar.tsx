@@ -12,12 +12,14 @@ import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Dropdown } from 'antd'
-import { useAreablockEditableStyles } from '../../areablock-editable.styles'
+import { useStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
 import { configUtils } from '../../utils/areablock-utils'
 import { isString } from 'lodash'
+import { EditableDropzoneContent } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/dropzone-content'
+import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 interface DropInfo {
   type: string
@@ -30,14 +32,18 @@ export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
   onClick: (areaType?: string) => Promise<void>
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export const EmptyStateAreablockToolbar = ({
   areaTypes,
   config,
-  onClick
+  onClick,
+  isInherited = false,
+  onOverwrite
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
+  const { styles } = useStyles()
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -45,12 +51,14 @@ export const EmptyStateAreablockToolbar = ({
   })
 
   const handleDropzoneItem = async (info: DropInfo, index: number): Promise<void> => {
+    if (isInherited) return
     if (info.type === 'areablock-type' && isString(info.data?.areablockType)) {
       await onClick(info.data.areablockType)
     }
   }
 
   const isValidDrop = (info: DropInfo): boolean => {
+    if (isInherited) return false
     if (info.type !== 'areablock-type' || !isString(info.data?.areablockType)) {
       return false
     }
@@ -64,7 +72,7 @@ export const EmptyStateAreablockToolbar = ({
       return (
         <IconButton
           icon={ { value: 'new' } }
-          onClick={ () => { void onClick(areaTypes[0].type) } }
+          onClick={ isInherited ? undefined : () => { void onClick(areaTypes[0].type) } }
           size="small"
         />
       )
@@ -74,7 +82,7 @@ export const EmptyStateAreablockToolbar = ({
       <Dropdown
         menu={ { items: menuItems } }
         placement="bottomLeft"
-        trigger={ ['click'] }
+        trigger={ isInherited ? [] : ['click'] }
       >
         <IconButton
           icon={ { value: 'new' } }
@@ -86,18 +94,28 @@ export const EmptyStateAreablockToolbar = ({
 
   return (
     <>
-      <ToolStrip
-        className={ styles.areablockToolstrip }
-        theme="inverse"
+      <EditableDropzoneContent />
+      <InheritanceWrapper
+        isInherited={ isInherited }
+        onOverwrite={ onOverwrite }
       >
-        {renderAddButton()}
-      </ToolStrip>
-      <EditableDropzone
-        id="empty-areablock-toolbar-dropzone"
-        index={ 0 }
-        isValidDrop={ isValidDrop }
-        onDropItem={ handleDropzoneItem }
-      />
+        <ToolStrip
+          additionalIcon={ isInherited ? 'inheritance-active' : undefined }
+          className={ styles.areablockToolstrip }
+          disabled={ isInherited }
+          theme="inverse"
+        >
+          {renderAddButton()}
+        </ToolStrip>
+      </InheritanceWrapper>
+      {!isInherited && (
+        <EditableDropzone
+          id="empty-areablock-toolbar-dropzone"
+          index={ 0 }
+          isValidDrop={ isValidDrop }
+          onDropItem={ handleDropzoneItem }
+        />
+      )}
     </>
   )
 }

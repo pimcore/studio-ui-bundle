@@ -34,6 +34,7 @@ import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/fac
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -173,27 +174,17 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
-  const getFilteredTypes = (column: any): object[] => {
-    return column?.children?.filter((child: any) => {
-      const isEditable: boolean = child.editable === true
-      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
-      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
-
-      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
-    })
-  }
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
     if (isUndefined(availableDropdownList)) return []
 
-    return availableDropdownList.map((column: any) => {
-      return {
-        ...column,
-        children: getFilteredTypes(column)
-      }
-    })
-  }, [availableDropdownList])
-  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
+    return filterDropdownItems(
+      availableDropdownList as Array<ItemType<MenuItemType>>,
+      batchEdits,
+      hasType
+    )
+  }, [availableDropdownList, batchEdits, hasType])
+
+  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
 
   return (
     <WindowModal

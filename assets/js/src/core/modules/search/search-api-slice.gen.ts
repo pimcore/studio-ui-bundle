@@ -44,6 +44,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Search"],
             }),
+            documentGetSearch: build.query<DocumentGetSearchApiResponse, DocumentGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/documents`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Search"],
+            }),
             simpleSearchPreviewGet: build.query<SimpleSearchPreviewGetApiResponse, SimpleSearchPreviewGetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/preview/${queryArg.elementType}/${queryArg.id}`,
@@ -106,6 +114,21 @@ export type DataObjectGetSearchApiArg = {
         filters?: GridFilter;
     };
 };
+export type DocumentGetSearchApiResponse = /** status 200 dcocument_get_search_success_response */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type DocumentGetSearchApiArg = {
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
 export type SimpleSearchPreviewGetApiResponse = /** status 200 Simple search results preview for elements */
     | SimpleSearchAssetDetail
     | SimpleSearchDataObjectDetail
@@ -133,8 +156,8 @@ export type Column = {
     key: string;
     /** Locale of the Column */
     locale: string | null;
-    /** Group of the Column */
-    group: string;
+    /** Define the group structure */
+    group: object;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -245,6 +268,8 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
     /** inheritance */
     inheritance?: object | null;
 };
@@ -361,6 +386,7 @@ export const {
     useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSearchQuery,
+    useDocumentGetSearchQuery,
     useSimpleSearchPreviewGetQuery,
     useSimpleSearchGetQuery,
 } = injectedRtkApi;

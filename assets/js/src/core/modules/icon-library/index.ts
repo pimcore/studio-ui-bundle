@@ -24,6 +24,7 @@ import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
+import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
@@ -32,6 +33,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
+import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -79,6 +81,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentConfigurations from '@Pimcore/assets/icons/document-configurations.inline.svg?react'
 import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
@@ -134,6 +137,7 @@ import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
@@ -154,6 +158,7 @@ import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
 import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg?react'
+import navigation from '@Pimcore/assets/icons/navigation.inline.svg?react'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg?react'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg?react'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg?react'
@@ -176,6 +181,7 @@ import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
+import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
@@ -281,6 +287,10 @@ moduleSystem.registerModule({
       component: applicationLogger
     })
     iconLibrary.register({
+      name: 'area-brick',
+      component: areaBrick
+    })
+    iconLibrary.register({
       name: 'arrow-narrow-right',
       component: arrowNarrowRight
     })
@@ -311,6 +321,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'body-style',
       component: bodyStyle
+    })
+    iconLibrary.register({
+      name: 'book-open-01',
+      component: bookOpen01
     })
     iconLibrary.register({
       name: 'bookmark',
@@ -499,6 +513,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-configurations',
+      component: documentConfigurations
     })
     iconLibrary.register({
       name: 'document-link',
@@ -721,6 +739,10 @@ moduleSystem.registerModule({
       component: languageSelect
     })
     iconLibrary.register({
+      name: 'layout-grid-02',
+      component: layoutGrid02
+    })
+    iconLibrary.register({
       name: 'layout',
       component: layout
     })
@@ -799,6 +821,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'multi-select',
       component: multiSelect
+    })
+    iconLibrary.register({
+      name: 'navigation',
+      component: navigation
     })
     iconLibrary.register({
       name: 'new-circle',
@@ -887,6 +913,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'pined',
       component: pined
+    })
+    iconLibrary.register({
+      name: 'plus-circle',
+      component: plusCircle
     })
     iconLibrary.register({
       name: 'plus-square',

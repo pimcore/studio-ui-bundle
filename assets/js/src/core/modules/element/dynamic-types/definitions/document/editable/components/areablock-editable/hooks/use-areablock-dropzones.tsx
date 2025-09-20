@@ -14,10 +14,9 @@ import { isNil, isUndefined } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType } from '../areablock-editable'
 import {
-  useEditableDropzones,
-  type UseEditableDropzonesReturn,
-  type EditableManager
-} from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzones'
+  useBlockManagerDropzones,
+  type UseBlockManagerDropzonesReturn
+} from '../../../helpers/editable-dropzone-sorting/hooks/use-block-manager-dropzones'
 import { type DragAndDropInfo } from '@sdk/components'
 
 export interface UseAreablockDropzonesProps {
@@ -27,7 +26,7 @@ export interface UseAreablockDropzonesProps {
   onDropAreablock?: (areaType: string, index: number) => Promise<void>
 }
 
-export interface UseAreablockDropzonesReturn extends UseEditableDropzonesReturn {
+export interface UseAreablockDropzonesReturn extends UseBlockManagerDropzonesReturn {
   dragOverlayTitle: string | undefined
 }
 
@@ -55,18 +54,18 @@ export const useAreablockDropzones = ({
     }
   }
 
-  const sortingResult = useEditableDropzones({
-    editableManager: areablockManager as EditableManager,
+  const dropzoneActions = useBlockManagerDropzones({
+    blockManager: areablockManager,
     onMoveItem: onMoveArea,
     onDropItem: handleAreablockDrop,
     isValidDrop: isValidAreablockDrop
   })
 
   const dragOverlayTitle = useMemo(() => {
-    if (sortingResult.activeId === null) return undefined
+    if (dropzoneActions.activeId === null) return undefined
 
     const currentItemEntries = areablockManager.queryElements()
-    const activeElement = currentItemEntries.find(el => areablockManager.getElementKey(el) === sortingResult.activeId)
+    const activeElement = currentItemEntries.find(el => areablockManager.getElementKey(el) === dropzoneActions.activeId)
     if (isUndefined(activeElement)) return undefined
 
     if (!isUndefined(areablockManager.getElementType) && areaTypes.length > 0) {
@@ -76,10 +75,10 @@ export const useAreablockDropzones = ({
     }
 
     return undefined
-  }, [sortingResult.activeId, areablockManager, areaTypes, t])
+  }, [dropzoneActions.activeId, areablockManager, areaTypes])
 
   return {
-    ...sortingResult,
+    ...dropzoneActions,
     dragOverlayTitle
   }
 }

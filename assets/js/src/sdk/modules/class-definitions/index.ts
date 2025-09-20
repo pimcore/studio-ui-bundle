@@ -12,4 +12,5 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+// @todo mark as deprecated
 export * from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'

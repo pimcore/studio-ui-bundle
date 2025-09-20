@@ -12,13 +12,29 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
 
+export type TextareaEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
+  config?: {
+    placeholder?: string
+    width?: number
+    height?: number
+    class?: string
+    required?: boolean
+  }
+}
+
 export class DynamicTypeDocumentEditableTextarea extends DynamicTypeDocumentEditableAbstract {
   id: string = 'textarea'
 
-  getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+  getEditableDataComponent (props: TextareaEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <ContentEditable
         allowMultiLine
+        className={ props.config?.class }
+        height={ props.config?.height }
+        inherited={ props.inherited }
+        placeholder={ props.config?.placeholder }
+        required={ props.config?.required }
+        width={ props.config?.width }
       />
     )
   }

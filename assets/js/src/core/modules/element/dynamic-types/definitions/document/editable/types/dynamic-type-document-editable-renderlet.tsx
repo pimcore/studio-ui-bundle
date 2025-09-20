@@ -25,6 +25,8 @@ export class DynamicTypeDocumentEditableRenderlet extends DynamicTypeDocumentEdi
       <RenderletEditable
         className={ props.config?.class }
         config={ props.config }
+        disabled={ props.inherited }
+        inherited={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }
       />

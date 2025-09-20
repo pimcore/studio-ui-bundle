@@ -8,90 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { getThumbnailUrl } from '@Pimcore/modules/asset/utils/get-thumbnail-url'
+import { type CustomThumbnailDefinition } from '@Pimcore/modules/asset/services/thumbnail-service'
 
-export interface ImageThumbnailSettings {
-  mimeType?: 'JPEG' | 'PNG'
-  resizeMode?: 'scaleByHeight' | 'scaleByWidth' | 'resize' | 'none'
-  width?: number
-  height?: number
-  quality?: number
-  dpi?: number
-  contain?: boolean
-  frame?: boolean
-  cover?: boolean
-  forceResize?: boolean
-  cropWidth?: number
-  cropHeight?: number
-  cropTop?: number
-  cropLeft?: number
-  cropPercent?: boolean
-}
+export type ImageThumbnailSettings = Omit<CustomThumbnailDefinition, 'assetId' | 'assetType'>
 
 export const createImageThumbnailUrl = (assetId: number, settings: ImageThumbnailSettings): string => {
-  const {
-    mimeType,
-    resizeMode = 'none',
-    width,
-    height,
-    quality,
-    dpi,
-    contain = false,
-    frame = false,
-    cover = false,
-    forceResize = false,
-    cropWidth,
-    cropHeight,
-    cropTop,
-    cropLeft,
-    cropPercent = false
-  } = settings
-
-  const params = new URLSearchParams()
-
-  if (mimeType !== undefined) {
-    params.append('mimeType', mimeType)
-  }
-  params.append('resizeMode', resizeMode)
-  if (width !== undefined) {
-    params.append('width', width.toString())
-  }
-  if (height !== undefined) {
-    params.append('height', height.toString())
-  }
-  if (quality !== undefined) {
-    params.append('quality', quality.toString())
-  }
-  if (dpi !== undefined) {
-    params.append('dpi', dpi.toString())
-  }
-  if (contain) {
-    params.append('contain', contain.toString())
-  }
-  if (frame) {
-    params.append('frame', frame.toString())
-  }
-  if (cover) {
-    params.append('cover', cover.toString())
-  }
-  if (forceResize) {
-    params.append('forceResize', forceResize.toString())
-  }
-  if (cropPercent) {
-    params.append('cropPercent', cropPercent.toString())
-  }
-  if (cropWidth !== undefined) {
-    params.append('cropWidth', Math.round(cropWidth).toString())
-  }
-  if (cropHeight !== undefined) {
-    params.append('cropHeight', Math.round(cropHeight).toString())
-  }
-  if (cropTop !== undefined) {
-    params.append('cropTop', Math.round(cropTop).toString())
-  }
-  if (cropLeft !== undefined) {
-    params.append('cropLeft', Math.round(cropLeft).toString())
-  }
-
-  return `${getPrefix()}/assets/${assetId}/image/stream/custom?${params.toString()}`
+  return getThumbnailUrl({
+    assetId,
+    assetType: 'image',
+    resizeMode: settings.resizeMode ?? 'none',
+    ...settings
+  }) ?? ''
 }

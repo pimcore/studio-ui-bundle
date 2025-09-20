@@ -31,6 +31,7 @@ interface ITreeElementProps extends TreeProps {
   onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
+  hasRoot?: boolean
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -48,10 +49,11 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onLoadData,
     onExpand,
     withCustomSwitcherIcon,
-    isHideRootChecker = true
+    isHideRootChecker = true,
+    hasRoot = true
   } = props
 
-  const { styles } = useStyles({ isHideRootChecker })
+  const { styles } = useStyles({ isHideRootChecker, hasRoot })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [0])

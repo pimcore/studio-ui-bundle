@@ -25,8 +25,6 @@ import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { GridConfigModal } from '../grid-config-modal'
 
@@ -43,8 +41,6 @@ export interface EditViewProps {
   columns: any[]
   gridConfig: GridConfigData['gridConfig']
   currentUserId?: number
-  currentLanguage: string
-  setCurrentLanguage: (language: string) => void
 }
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
@@ -60,12 +56,8 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     savedGridConfigurations,
     isUpdating,
     isLoading,
-    currentUserId,
-    currentLanguage,
-    setCurrentLanguage
+    currentUserId
   } = props
-
-  const settings = useSettings()
 
   const { t } = useTranslation()
 
@@ -139,14 +131,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
               </Dropdown>
 
               <Flex gap={ 'mini' }>
-                <LanguageSelection
-                  languages={ settings.requiredLanguages.map((value: string) => {
-                    return value
-                  }) }
-                  onSelectLanguage={ setCurrentLanguage }
-                  selectedLanguage={ currentLanguage }
-                />
-
                 <IconButton
                   icon={ { value: 'show-details' } }
                   onClick={ () => { setOpen(true) } }

@@ -20,9 +20,15 @@ export const useStyle = createStyles(({ token, css }) => {
       .user-menu__item-extra {
         margin-left: auto;
       }
-      
-      .ant-dropdown-menu-item .ant-flex {
+
+      .ant-dropdown-menu-title-content.ant-dropdown-menu-title-content {
+        gap: ${token.marginXXS}px;
         width: 100%;
+      }
+      
+      .user-menu__item-icon {
+        width: 20px;
+        line-height: 1;
       }
     
       .ant-badge .ant-badge-count {
@@ -30,6 +36,11 @@ export const useStyle = createStyles(({ token, css }) => {
         width: 20px;
         height: 20px;
         border-radius: 100%;
+        font-size: 8px;
+        font-weight: ${token.fontWeightStrong};
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     `
   }

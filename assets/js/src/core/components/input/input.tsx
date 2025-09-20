@@ -16,10 +16,11 @@ import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/de
 
 export interface IInputProps extends InputProps {
   inherited?: boolean
+  noteditable?: boolean
 }
 
 export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
-  { inherited, className, style, ...restProps }: IInputProps,
+  { inherited, disabled, noteditable, className, style, ...restProps }: IInputProps,
   ref
 ): JSX.Element {
   const { styles } = useStyles()
@@ -37,6 +38,7 @@ export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
       ref={ ref }
       style={ computedStyle }
       { ...restProps }
+      disabled={ disabled === true || noteditable }
     />
   )
 })

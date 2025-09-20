@@ -20,12 +20,19 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
-import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_EDIT, TAB_VERSIONS } from '../../shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import {
+  SIDEBAR_AREABLOCK_TYPES,
+  SIDEBAR_CONTENT_SETTINGS,
+  SIDEBAR_DOCUMENT_CONFIGURATION
+} from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
     const snippetEditorTabManager = container.get<SnippetTabManager>(serviceIds['Document/Editor/SnippetTabManager'])
 
+    snippetEditorTabManager.register(TAB_EDIT)
     snippetEditorTabManager.register(TAB_PROPERTIES)
     snippetEditorTabManager.register(TAB_VERSIONS)
     snippetEditorTabManager.register(TAB_SCHEDULE)
@@ -33,5 +40,11 @@ moduleSystem.registerModule({
     snippetEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     snippetEditorTabManager.register(TAB_TAGS)
     snippetEditorTabManager.register(TAB_WORKFLOW)
+
+    const snippetSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/SnippetSidebarManager'])
+
+    snippetSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
+    snippetSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    snippetSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
   }
 })

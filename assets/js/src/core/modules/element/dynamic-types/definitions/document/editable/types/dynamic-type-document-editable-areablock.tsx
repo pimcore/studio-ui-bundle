@@ -37,6 +37,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
+        isInherited={ props.inherited }
       />
     )
   }
