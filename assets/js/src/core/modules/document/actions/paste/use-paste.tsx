@@ -139,13 +139,13 @@ export const usePaste = (): UsePasteHookReturn => {
 
   const showLanguageModalDialog = async (node: TreeNodeProps, type: LanguageModalType, enableInheritance: boolean): Promise<void> => {
     modal.confirm({
-      title: t('websitemanager.tree.paste.task.choose_language.title'),
+      title: t('document.language-required'),
       content: (
-        <Form form={languageForm} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+        <Form form={languageForm}>
           <Form.Item
             name="language"
             label={t('language')}
-            rules={[{ required: true, message: t('websitemanager.tree.paste.task.choose_language.error.message') }]}
+            rules={[{ required: true, message: t('form.validation.required') }]}
           >
             <Select options={availableLanguages} />
           </Form.Item>

@@ -12,12 +12,6 @@ import { type AbstractMercureMessage } from '@Pimcore/modules/background-process
 
 export abstract class AbstractMessageHandler {
   /**
-   * Static topics that this handler type needs to listen to
-   * Override in concrete implementations
-   */
-  static readonly TOPICS: string[] = []
-
-  /**
    * Determines if this handler should process the given message
    */
   abstract shouldHandle (message: AbstractMercureMessage): boolean
@@ -25,7 +19,7 @@ export abstract class AbstractMessageHandler {
   /**
    * Processes the message
    */
-  abstract handleMessage (message: AbstractMercureMessage): void
+  abstract handleMessage (message: AbstractMercureMessage): Promise<void>
 
   /**
    * Optional lifecycle method called when handler is registered

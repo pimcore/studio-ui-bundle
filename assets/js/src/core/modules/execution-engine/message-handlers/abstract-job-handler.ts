@@ -15,8 +15,6 @@ import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execu
 import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
 import { isNil, throttle } from 'lodash'
-import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
-import { defaultTopics } from '@Pimcore/modules/execution-engine/topics'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
@@ -29,11 +27,9 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   protected readonly jobRunId: string | number
   protected job: AbstractJob | null = null
   protected readonly config: TConfig
-  protected readonly topics: NonEmptyArray<string>
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: any) => void | Promise<void>
 
-  // Progress throttling properties
   private lastProgressValue: number = -1
 
   private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
@@ -48,10 +44,6 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
 
     this.jobType = options.jobType ?? 'default'
     this.onJobCompletion = options.onJobCompletion
-
-    const additionalTopics = options.additionalTopics ?? []
-    const allTopics = [...new Set([...defaultTopics, ...additionalTopics])]
-    this.topics = allTopics as NonEmptyArray<string>
   }
 
   /**
@@ -67,10 +59,6 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     return null
   }
 
-  /**
-   * Handle completion of the job (refresh UI, etc.)
-   * Uses the configurable completion handler if provided
-   */
   protected async handleJobCompletion (data: any): Promise<void> {
     if (this.onJobCompletion !== undefined) {
       await this.onJobCompletion(data)
@@ -86,17 +74,11 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     return this.jobRunId
   }
 
-  /**
-   * Get the job, creating it if necessary
-   */
   protected getJob (): AbstractJob {
     this.job = this.job ?? this.createJob()
     return this.job
   }
 
-  /**
-   * Create the job object for this handler
-   */
   protected createJob (): AbstractJob {
     return {
       id: getUniqueId(),
@@ -104,7 +86,6 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
       type: this.jobType,
       title: this.config.title,
       status: JobStatus.QUEUED,
-      topics: this.topics,
       config: {
         ...this.config,
         progress: this.config.progress ?? 0
@@ -166,8 +147,8 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
         changes: { status: jobStatus }
       }))
 
-      const messageRegistry = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
-      messageRegistry.unregisterHandler(this.jobRunId)
+      const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
+      messageBus.unregisterHandler(this.jobRunId)
     } else if (data.status === 'running') {
       store.dispatch(jobUpdated({
         id: this.getJob().id,
@@ -220,5 +201,4 @@ export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
   config: TConfig
   jobType?: string
   onJobCompletion?: (data: any) => void | Promise<void>
-  additionalTopics?: string[]
 }

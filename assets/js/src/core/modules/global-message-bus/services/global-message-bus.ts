@@ -56,8 +56,6 @@ export class GlobalMessageBus {
   }
 
   public registerHandler (handler: AbstractMessageHandler): void {
-    this.validateHandlerTopics(handler)
-
     const handlerId = handler.getId()
     this.activeHandlers.set(handlerId, handler)
 
@@ -66,27 +64,6 @@ export class GlobalMessageBus {
     }
 
     this.replayBufferedMessages(handler)
-  }
-
-  private validateHandlerTopics (handler: AbstractMessageHandler): void {
-    const handlerClass = handler.constructor as any
-    const handlerTopics: string[] = handlerClass.TOPICS ?? []
-
-    // Validate that all handler topics are registered
-    for (const topic of handlerTopics) {
-      if (!this.registeredTopics.has(topic)) {
-        const errorMessage = [
-          `GlobalMessageBus: Handler "${String(handler.getId())}" uses unregistered topic "${topic}".`,
-          'To register this topic, add it to your module\'s initialization:',
-          '   const registry = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)',
-          `   registry.registerTopics(['${topic}'])`,
-          `Available topics: [${this.getRegisteredTopics().join(', ')}]`
-        ].join('\n')
-
-        console.error(errorMessage)
-        throw new Error(errorMessage)
-      }
-    }
   }
 
   public unregisterHandler (handlerId: string | number): void {

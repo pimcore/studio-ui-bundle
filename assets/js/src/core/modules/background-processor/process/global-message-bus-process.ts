@@ -19,13 +19,13 @@ export class GlobalMessageBusProcess extends AbstractMercureProcess {
   protected description: string = 'Global process for message bus handling operations'
 
   constructor (
-    @inject(serviceIds.globalMessageBus) private readonly messageRegistry: GlobalMessageBus
+    @inject(serviceIds.globalMessageBus) private readonly messageBus: GlobalMessageBus
   ) {
     super()
   }
 
   protected getTopics (): string[] {
-    return this.messageRegistry.getRegisteredTopics()
+    return this.messageBus.getRegisteredTopics()
   }
 
   public start (): void {
@@ -37,6 +37,6 @@ export class GlobalMessageBusProcess extends AbstractMercureProcess {
   }
 
   protected sendMessage (message: AbstractMercureMessage): void {
-    this.messageRegistry.routeMessage(message)
+    this.messageBus.routeMessage(message)
   }
 }
