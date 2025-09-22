@@ -16,9 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useSelectedRowsContext } from '../../context/selected-items-context'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
 import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
-import { mapToElementType } from '@sdk/modules/element'
 
 interface BatchActionsProps {
   items: RecycleBin[]
@@ -26,9 +23,8 @@ interface BatchActionsProps {
 
 export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const { selectedRows } = useSelectedRowsContext()
-  const { removeItems, restoreItems, refreshRecycleBin } = useRecycleBin()
+  const { removeItems, restoreItems } = useRecycleBin()
 
   const getItemToSelectedRowsId = (): RecycleBin[] => {
     return Object.keys(selectedRows)
@@ -47,15 +43,7 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         onClick: () => {
           const itemsToDelete = getItemToSelectedRowsId()
 
-          void removeItems(
-            itemsToDelete,
-            () => {
-              refreshRecycleBin()
-              dispatch(refreshTreeByElementType({
-                elementTypes: itemsToDelete.map(item => mapToElementType(item.type)!)
-              }))
-            }
-          )
+          void removeItems(itemsToDelete)
         }
       },
       {
@@ -63,17 +51,9 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
-          const itemsToDelete = getItemToSelectedRowsId()
+          const itemsToRestore = getItemToSelectedRowsId()
 
-          void restoreItems(
-            itemsToDelete,
-            () => {
-              refreshRecycleBin()
-              dispatch(refreshTreeByElementType({
-                elementTypes: itemsToDelete.map(item => mapToElementType(item.type)!)
-              }))
-            }
-          )
+          void restoreItems(itemsToRestore)
         }
       }
     ]

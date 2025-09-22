@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, isString } from 'lodash'
+import { isNil, isString, isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren, markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -17,7 +17,6 @@ import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { isUndefined } from 'lodash'
 
 export interface DeleteJobConfig extends BaseJobConfig {
   elementType: ElementType
@@ -58,10 +57,10 @@ export class DeleteJob implements JobInterface {
     }
 
     // Mark node as deleting in the tree
-    store.dispatch(markNodeDeleting({ 
-      nodeId: String(this.elementId), 
-      elementType: this.elementType, 
-      isDeleting: true 
+    store.dispatch(markNodeDeleting({
+      nodeId: String(this.elementId),
+      elementType: this.elementType,
+      isDeleting: true
     }))
 
     try {
@@ -121,10 +120,10 @@ export class DeleteJob implements JobInterface {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
 
-    store.dispatch(markNodeDeleting({ 
-      nodeId: String(this.elementId), 
-      elementType: this.elementType, 
-      isDeleting: false 
+    store.dispatch(markNodeDeleting({
+      nodeId: String(this.elementId),
+      elementType: this.elementType,
+      isDeleting: false
     }))
 
     if (!isNil(this.parentFolderId)) {
@@ -140,10 +139,10 @@ export class DeleteJob implements JobInterface {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
 
-    store.dispatch(markNodeDeleting({ 
-      nodeId: String(this.elementId), 
-      elementType: this.elementType, 
-      isDeleting: false 
+    store.dispatch(markNodeDeleting({
+      nodeId: String(this.elementId),
+      elementType: this.elementType,
+      isDeleting: false
     }))
 
     console.error('Delete job failed:', error)

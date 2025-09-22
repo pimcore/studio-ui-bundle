@@ -8,9 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@sdk/app'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -30,7 +28,6 @@ import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '..'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 
@@ -47,11 +44,9 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const executionEngine = useExecutionEngine()
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
-  const { refreshTree } = useRefreshTree(elementType)
   const { refreshRecycleBin } = useRecycleBin()
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const { isTreeActionAllowed } = useTreePermission()
-  const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
 
