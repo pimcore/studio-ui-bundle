@@ -25,6 +25,7 @@ import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
 import { usePaste } from '@Pimcore/modules/document/actions/paste/use-paste'
+import { useSiteActions } from '@Pimcore/modules/document/actions/site/use-site-actions'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DocumentTreeContextMenuProps {
@@ -44,6 +45,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { publishTreeContextMenuItem } = usePublish('document')
   const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
   const { convertTreeContextMenuItem, canConvert } = useConvert()
+  const { removeSiteTreeContextMenuItem } = useSiteActions()
   const {
     pasteAsChildRecursiveTreeContextMenuItem,
     pasteRecursiveUpdatingReferencesTreeContextMenuItem,
@@ -130,7 +132,8 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
             unlockTreeContextMenuItem(node),
             unlockAndPropagateTreeContextMenuItem(node)
           ]
-        }
+        },
+        removeSiteTreeContextMenuItem(node)
       ]
     },
     refreshTreeContextMenuItem(node)
