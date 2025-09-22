@@ -81,6 +81,9 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.site.remove-site: Remove Site
+document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+remove: Remove
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?
