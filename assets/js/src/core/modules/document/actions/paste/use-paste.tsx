@@ -133,25 +133,25 @@ export const usePaste = (): UsePasteHookReturn => {
     showLanguageModalDialog(node, type, false)
   }
 
-  const showLanguageModalWithInheritance = async (node: TreeNodeProps, type: LanguageModalType): Promise<void> => {
-    await showLanguageModalDialog(node, type, true)
+  const showLanguageModalWithInheritance = (node: TreeNodeProps, type: LanguageModalType): void => {
+    showLanguageModalDialog(node, type, true)
   }
 
-  const showLanguageModalDialog = async (node: TreeNodeProps, type: LanguageModalType, enableInheritance: boolean): Promise<void> => {
-    modal.confirm({
+  const showLanguageModalDialog = (node: TreeNodeProps, type: LanguageModalType, enableInheritance: boolean): void => {
+    void modal.confirm({
       title: t('document.language-required'),
       content: (
-        <Form form={languageForm}>
+        <Form form={ languageForm }>
           <Form.Item
+            label={ t('language') }
             name="language"
-            label={t('language')}
-            rules={[{ required: true, message: t('form.validation.required') }]}
+            rules={ [{ required: true, message: t('form.validation.required') }] }
           >
-            <Select options={availableLanguages} />
+            <Select options={ availableLanguages } />
           </Form.Item>
         </Form>
       ),
-      onOk: async () => await handleLanguageModalOk(node, type, enableInheritance),
+      onOk: async () => { await handleLanguageModalOk(node, type, enableInheritance) },
       onCancel: handleLanguageModalCancel,
       okText: t('paste'),
       cancelText: t('cancel')

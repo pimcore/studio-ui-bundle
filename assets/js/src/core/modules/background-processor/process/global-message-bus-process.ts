@@ -37,6 +37,6 @@ export class GlobalMessageBusProcess extends AbstractMercureProcess {
   }
 
   protected sendMessage (message: AbstractMercureMessage): void {
-    this.messageBus.routeMessage(message)
+    void this.messageBus.routeMessage(message)
   }
 }

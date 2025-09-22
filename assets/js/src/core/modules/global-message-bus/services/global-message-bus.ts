@@ -63,7 +63,7 @@ export class GlobalMessageBus {
       handler.onRegister()
     }
 
-    this.replayBufferedMessages(handler)
+    void this.replayBufferedMessages(handler)
   }
 
   public unregisterHandler (handlerId: string | number): void {
@@ -83,7 +83,7 @@ export class GlobalMessageBus {
       this.globalSubscriptionId = this.backgroundProcessor.subscribeToProcessMessages({
         processName: 'global-message-bus-process',
         callback: (message: any) => {
-          this.routeMessage(message as AbstractMercureMessage)
+          void this.routeMessage(message as AbstractMercureMessage)
         }
       })
     } catch (error) {
@@ -91,7 +91,7 @@ export class GlobalMessageBus {
     }
   }
 
-  public routeMessage (mercureMessage: AbstractMercureMessage): void {
+  public async routeMessage (mercureMessage: AbstractMercureMessage): Promise<void> {
     const eventData = JSON.parse(mercureMessage.event.data as string)
     const eventTopic = eventData.topic ?? eventData['@topic']
 
@@ -115,7 +115,7 @@ export class GlobalMessageBus {
 
     for (const handler of matchingHandlers) {
       try {
-        handler.handleMessage(mercureMessage)
+        await handler.handleMessage(mercureMessage)
       } catch (error) {
         console.error('GlobalMessageBus: Error processing message with handler', handler.getId(), error)
       }
@@ -136,10 +136,9 @@ export class GlobalMessageBus {
     this.debouncedCleanup()
   }
 
-  private replayBufferedMessages (handler: AbstractMessageHandler): void {
+  private async replayBufferedMessages (handler: AbstractMessageHandler): Promise<void> {
     const matchingMessages: BufferedMessage[] = []
 
-    // Find all buffered messages this handler should process
     for (const bufferedMsg of this.messageBuffer) {
       const shouldHandle = handler.shouldHandle(bufferedMsg.mercureMessage)
       if (shouldHandle) {
@@ -153,7 +152,7 @@ export class GlobalMessageBus {
 
       for (const bufferedMsg of matchingMessages) {
         try {
-          handler.handleMessage(bufferedMsg.mercureMessage)
+          await handler.handleMessage(bufferedMsg.mercureMessage)
         } catch (error) {
           console.error('GlobalMessageBus: Error replaying message for handler', handler.getId(), error)
         }
