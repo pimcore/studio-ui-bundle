@@ -89,6 +89,14 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
 
   function changeUserInState (changes: any): void {
     if (user === undefined) return
+
+    if (typeof changes.twoFactorAuthenticationRequired === 'boolean') {
+      changes.twoFactorAuthentication = {
+        ...user.twoFactorAuthentication,
+        required: changes.twoFactorAuthenticationRequired
+      }
+    }
+
     dispatch(changeUser({ id: user.id, changes }))
   }
 

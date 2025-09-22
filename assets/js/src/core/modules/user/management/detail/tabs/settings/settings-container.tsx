@@ -52,7 +52,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         admin: openedUser?.admin,
         classes: openedUser?.classes,
         name: openedUser?.name,
-        twoFactorAuthentication: openedUser?.twoFactorAuthentication,
+        twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
         firstname: openedUser?.firstname,
         lastname: openedUser?.lastname,
         email: openedUser?.email,
@@ -155,7 +155,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthentication' }>
+                  <Form.Item name={ 'twoFactorAuthenticationRequired' }>
                     <Switch labelRight={ t('user-management.two-factor-authentication') } />
                   </Form.Item>
                 </>
