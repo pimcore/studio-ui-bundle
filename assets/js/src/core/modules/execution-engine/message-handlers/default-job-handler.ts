@@ -86,6 +86,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
       type: this.jobType,
       title: this.config.title,
       status: JobStatus.QUEUED,
+      topics: [''], // Placeholder, topics are not used in this implementation
       config: {
         ...this.config,
         progress: this.config.progress ?? 0

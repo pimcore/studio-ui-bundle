@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DefaultJobHandler, type BaseJobConfig } from './abstract-job-handler'
+import { DefaultJobHandler, type BaseJobConfig } from './default-job-handler'
 
 /**
  * Progress job handler that converts step-based progress (currentStep/totalSteps) to percentage

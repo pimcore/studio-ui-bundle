@@ -13,10 +13,9 @@ import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
-import { topics } from '../../topics'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type BaseJobConfig } from '../../message-handlers/abstract-job-handler'
+import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
 
 export interface AbstractCloneJobConfig extends BaseJobConfig {
   parentFolderId: number
@@ -68,7 +67,6 @@ export abstract class AbstractCloneJob implements JobInterface {
         jobRunId,
         config: this.getJobConfig(),
         jobType: 'clone',
-        additionalTopics: [topics['cloning-finished']],
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()
