@@ -10,42 +10,44 @@
 
 import { isNil, isString } from 'lodash'
 import { store } from '@Pimcore/app/store'
-import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { setNodeFetching, refreshNodeChildren, markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { isUndefined } from 'lodash'
 
-export interface AbstractCloneJobConfig extends BaseJobConfig {
-  parentFolderId: number
-  parentFolderType: ElementType
+export interface DeleteJobConfig extends BaseJobConfig {
+  elementType: ElementType
+  parentFolderId?: number
 }
 
-export interface AbstractCloneJobOptions {
-  sourceId: number
-  targetId: number
-  title: string
+export interface DeleteJobOptions {
+  elementId: number
   elementType: ElementType
+  title: string
   treeId?: string
   nodeId?: string
+  parentFolderId?: number
 }
 
-export abstract class AbstractCloneJob implements JobInterface {
-  protected readonly sourceId: number
-  protected readonly targetId: number
-  protected readonly title: string
+export class DeleteJob implements JobInterface {
+  protected readonly elementId: number
   protected readonly elementType: ElementType
+  protected readonly title: string
   protected readonly treeId?: string
   protected readonly nodeId?: string
+  protected readonly parentFolderId?: number
 
-  constructor (options: AbstractCloneJobOptions) {
-    this.sourceId = options.sourceId
-    this.targetId = options.targetId
-    this.title = options.title
+  constructor (options: DeleteJobOptions) {
+    this.elementId = options.elementId
     this.elementType = options.elementType
+    this.title = options.title
     this.treeId = options.treeId
     this.nodeId = options.nodeId
+    this.parentFolderId = options.parentFolderId
   }
 
   async run (options: JobRunOptions): Promise<void> {
@@ -55,8 +57,15 @@ export abstract class AbstractCloneJob implements JobInterface {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: true }))
     }
 
+    // Mark node as deleting in the tree
+    store.dispatch(markNodeDeleting({ 
+      nodeId: String(this.elementId), 
+      elementType: this.elementType, 
+      isDeleting: true 
+    }))
+
     try {
-      const jobRunId = await this.executeCloneRequest()
+      const jobRunId = await this.executeDeleteRequest()
 
       if (isNil(jobRunId)) {
         await this.handleCompletion()
@@ -82,14 +91,28 @@ export abstract class AbstractCloneJob implements JobInterface {
     }
   }
 
-  protected abstract executeCloneRequest (): Promise<string | number | null>
+  protected async executeDeleteRequest (): Promise<string | number | null> {
+    const response = await store.dispatch(
+      elementApi.endpoints.elementDelete.initiate({
+        id: this.elementId,
+        elementType: this.elementType
+      })
+    )
 
-  protected getJobConfig (): AbstractCloneJobConfig {
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return null
+    }
+
+    return response.data?.jobRunId ?? null
+  }
+
+  protected getJobConfig (): DeleteJobConfig {
     return {
       title: this.title,
       progress: 0,
-      parentFolderId: this.targetId,
-      parentFolderType: this.elementType
+      elementType: this.elementType,
+      parentFolderId: this.parentFolderId
     }
   }
 
@@ -98,10 +121,18 @@ export abstract class AbstractCloneJob implements JobInterface {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
 
-    store.dispatch(refreshNodeChildren({
-      elementType: this.elementType,
-      nodeId: this.targetId.toString()
+    store.dispatch(markNodeDeleting({ 
+      nodeId: String(this.elementId), 
+      elementType: this.elementType, 
+      isDeleting: false 
     }))
+
+    if (!isNil(this.parentFolderId)) {
+      store.dispatch(refreshNodeChildren({
+        elementType: this.elementType,
+        nodeId: this.parentFolderId.toString()
+      }))
+    }
   }
 
   protected async handleJobFailure (error: any): Promise<void> {
@@ -109,6 +140,12 @@ export abstract class AbstractCloneJob implements JobInterface {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
 
-    console.error('Clone job failed:', error)
+    store.dispatch(markNodeDeleting({ 
+      nodeId: String(this.elementId), 
+      elementType: this.elementType, 
+      isDeleting: false 
+    }))
+
+    console.error('Delete job failed:', error)
   }
 }
