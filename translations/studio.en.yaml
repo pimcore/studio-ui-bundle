@@ -74,6 +74,13 @@ document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
 document.hardlink.children-from-source: Use children from source document
+document.paste-as-new-language-variant: Paste as new language variant
+document.paste-as-new-language-variant-recursive: Paste as new language variant (recursive)
+document.paste-language-recursive-updating-references: Paste language (recursive), updating references
+document.select-language-for-new-document: Select language for New Document
+document.language-required: Please select a language
+document.paste-inheritance: Paste (inheritance)
+document.tree.copy-paste.replacing-content: Replacing Content
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?
@@ -523,6 +530,7 @@ current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 ok: OK
 apply: Apply
+cancel: Cancel
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
@@ -582,6 +590,9 @@ set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
 clone: Clone
+jobs.asset-clone-job.title: Cloning assets
+jobs.document-clone-job.title: Cloning documents
+jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
 search-address: Search address

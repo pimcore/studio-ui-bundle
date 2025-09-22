@@ -9,11 +9,16 @@
  */
 
 import { appConfig } from '@Pimcore/app/config/app-config'
-import { AbstractBackgroundProcess } from './abstract-background-process'
+import { AbstractBackgroundProcess, type AbstractMessage } from './abstract-background-process'
+
+export interface AbstractMercureMessage extends AbstractMessage {
+  event: MessageEvent
+}
 
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
-  protected abstract readonly topics: string[]
   protected eventSource?: EventSource
+
+  protected abstract getTopics (): string[]
 
   public start (): void {
     if (this.eventSource !== undefined) {
@@ -22,7 +27,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
 
     const url = new URL(appConfig.mercureUrl)
 
-    this.topics.forEach(topic => {
+    this.getTopics().forEach(topic => {
       url.searchParams.append('topic', topic)
     })
 
@@ -32,14 +37,16 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       const data = JSON.parse(event.data as unknown as string)
       this.sendMessage({
         type: 'update',
-        payload: data
+        payload: data,
+        event
       })
     }
 
     this.eventSource.onerror = (error: Event) => {
       this.sendMessage({
         type: 'error',
-        payload: error
+        payload: error,
+        event: new MessageEvent('error', { data: error })
       })
       this.cancel()
     }
@@ -53,7 +60,12 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
 
     this.sendMessage({
       type: 'cancel',
-      payload: null
+      payload: null,
+      event: new MessageEvent('cancel')
     })
   };
+
+  protected sendMessage (message: AbstractMercureMessage): void {
+    super.sendMessage(message)
+  }
 }

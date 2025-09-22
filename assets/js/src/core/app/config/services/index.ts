@@ -20,6 +20,8 @@ import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab
 import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/image-tab-manager'
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
+import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
@@ -202,6 +204,8 @@ import { DynamicTypeDocumentEditableRenderlet } from '@Pimcore/modules/element/d
 import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
 import { DynamicTypeDocumentEditableScheduledblock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { GlobalMessageBusProcess } from '@Pimcore/modules/background-processor/process/global-message-bus-process'
+import { GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
 import { DynamicTypeThemeStudioDefaultDark } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-dark/dynamic-type-theme-studio-default-dark'
@@ -226,7 +230,6 @@ import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selec
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
-import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
@@ -500,9 +503,14 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()
+
+// Global message system
+container.bind(serviceIds.globalMessageBus).to(GlobalMessageBus).inSingletonScope()
+container.bind(serviceIds.globalMessageBusProcess).to(GlobalMessageBusProcess).inSingletonScope()
 
 // Asset services
 container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSingletonScope()

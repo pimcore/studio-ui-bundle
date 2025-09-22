@@ -9,7 +9,6 @@
  */
 
 /* eslint-disable max-lines */
-
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
@@ -43,6 +42,10 @@ export const serviceIds = {
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
+
+  // Global message system
+  globalMessageBusProcess: 'GlobalMessageBusProcess',
+  globalMessageBus: 'GlobalMessageBus',
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
@@ -298,6 +301,9 @@ export const serviceIds = {
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+
+  // Execution Engine
+  executionEngine: 'ExecutionEngine',
 
   // Component registry
   'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
