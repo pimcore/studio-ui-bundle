@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
+import { usePerspectiveEditorContext } from '@Pimcore/modules/perspective-editor/context/hooks/use-perspective-editor-context'
 import React from 'react'
 import { PerspectiveForm } from '../../../perspective-form/perspective-form'
 
@@ -25,6 +25,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   }
 
   return (
-    <PerspectiveForm perspective={ perspective } />
+    <PerspectiveForm perspective={perspective} />
   )
 }

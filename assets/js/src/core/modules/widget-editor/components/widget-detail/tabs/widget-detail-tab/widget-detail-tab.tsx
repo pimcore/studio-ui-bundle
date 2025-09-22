@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/custom-view-editor/context/hooks/use-widget-editor-context'
-import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/context/hooks/use-widget-editor-context'
+import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { container } from '@sdk/app'
 import React from 'react'
 import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
@@ -31,8 +31,8 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
   const { form: Form } = widgetType
 
   return (
-    <WidgetFormProvider widget={ widget }>
-      <WidgetForm form={ Form } />
+    <WidgetFormProvider widget={widget}>
+      <WidgetForm form={Form} />
     </WidgetFormProvider>
   )
 }

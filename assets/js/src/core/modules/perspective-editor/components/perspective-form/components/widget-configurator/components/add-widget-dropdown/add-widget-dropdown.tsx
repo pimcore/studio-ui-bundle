@@ -13,7 +13,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { usePerspectiveWidgetGetConfigCollectionQuery, type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
-import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetConfiguratorContext } from '../../context/hooks/use-widget-configurator-context'
@@ -34,12 +34,12 @@ export const AddWidgetDropdown = (): React.JSX.Element => {
 
   return (
     <Dropdown
-      menu={ {
+      menu={{
         items: menu
-      } }
+      }}
     >
       <Button
-        loading={ isFetching }
+        loading={isFetching}
         type="default"
       >
         {t('add')}
