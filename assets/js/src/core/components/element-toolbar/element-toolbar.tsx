@@ -20,6 +20,7 @@ import { Button, Space } from 'antd'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '../icon-button/icon-button'
+import { useSystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/hooks/use-system-info-modal'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,6 +31,8 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
   const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
   const { locateInTree } = useLocateInTree(elementType)
+
+  const { openModal } = useSystemInfoModal()
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
@@ -66,6 +69,11 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       onClick: () => {
         void navigator.clipboard.writeText(deeplinkUrl)
       }
+    },
+    {
+      key: '4',
+      label: 'Show all info',
+      onClick: () => { openModal() }
     }
   ]
 
