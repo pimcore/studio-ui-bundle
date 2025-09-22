@@ -1190,9 +1190,9 @@ recycle-bin.columns.date: Date
 recycle-bin.columns.actions: Actions
 recycle-bin.actions.cleanup: Clean up
 recycle-bin.actions.delete: Delete
-recycle-bin.actions.delete.title: Deleting Items
+recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
-recycle-bin.actions.restore.title: Restoring Items
+recycle-bin.actions.restore.title: Restoring Recycle Bin Items
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video

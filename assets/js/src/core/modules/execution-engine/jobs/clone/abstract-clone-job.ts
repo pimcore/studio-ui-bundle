@@ -66,7 +66,6 @@ export abstract class AbstractCloneJob implements JobInterface {
       const handler = new StepBasedProgressJobHandler({
         jobRunId,
         config: this.getJobConfig(),
-        jobType: 'clone',
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()

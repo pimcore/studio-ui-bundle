@@ -42,7 +42,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     this.jobRunId = options.jobRunId
     this.config = options.config
 
-    this.jobType = options.jobType ?? 'default'
+    this.jobType = options.jobType ?? 'default-message-bus'
     this.onJobCompletion = options.onJobCompletion
   }
 
