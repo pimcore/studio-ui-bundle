@@ -62,8 +62,8 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
           theme="fieldset"
           title={ t('reports.editor.chart-settings.settings') }
         >
-          {renderSelectItem({ label: t('reports.editor.chart-settings.x-axis'), name: 'xAxis' })}
-          {renderSelectItem({ label: t('reports.editor.chart-settings.y-axis'), name: 'yAxis' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.pie-label'), name: 'pieLabelColumn' })}
+          {renderSelectItem({ label: t('reports.editor.chart-settings.pie-data'), name: 'pieColumn' })}
         </FormKit.Panel>
       </Conditional>
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_LINE }>

@@ -16,9 +16,10 @@ import { isUndefined } from 'lodash'
 
 interface IconPreviewProps {
   icon?: ElementIcon
+  onLoadError?: (hasError: boolean) => void
 }
 
-export const IconPreview = ({ icon }: IconPreviewProps): React.JSX.Element => {
+export const IconPreview = ({ icon, onLoadError }: IconPreviewProps): React.JSX.Element => {
   return !isUndefined(icon)
     ? (
       <Tooltip
@@ -26,6 +27,7 @@ export const IconPreview = ({ icon }: IconPreviewProps): React.JSX.Element => {
         title={ icon.value }
       >
         <Icon
+          onLoadError={ onLoadError }
           options={ { height: 16, width: 16 } }
           type={ icon.type }
           value={ icon.value }

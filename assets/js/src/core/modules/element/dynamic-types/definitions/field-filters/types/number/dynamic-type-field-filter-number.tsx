@@ -16,15 +16,23 @@ import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract {
-  id = 'id'
+  id = 'number'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.Id
+    return FieldFilterFrontendType.Number
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
     return (
       <DynamicTypeFieldFilterNumberComponent { ...props } />
     )
+  }
+
+  shouldApply (value: any): boolean {
+    if (value == null || typeof value !== 'object') {
+      return false
+    }
+
+    return value.is != null || value.from != null || value.to != null
   }
 }

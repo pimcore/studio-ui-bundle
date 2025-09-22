@@ -10,30 +10,33 @@
 
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
+import {
+  COLUMN_KEYS
+} from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 
 export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
   const columnHelper = createColumnHelper()
   const { t } = useTranslation()
 
   return [
-    columnHelper.accessor('rowDragCol', { header: '', size: 40 }),
-    columnHelper.accessor('name', {
+    columnHelper.accessor(COLUMN_KEYS.ROW_DRAG, { header: '', size: 40 }),
+    columnHelper.accessor(COLUMN_KEYS.NAME, {
       header: t('reports.editor.manage-column-configuration.name'),
       meta: { type: 'text-cell' }
     }),
-    columnHelper.accessor('display', {
+    columnHelper.accessor(COLUMN_KEYS.DISPLAY, {
       header: t('reports.editor.manage-column-configuration.display'),
       meta: { type: 'checkbox', editable: true }
     }),
-    columnHelper.accessor('export', {
+    columnHelper.accessor(COLUMN_KEYS.EXPORT, {
       header: t('reports.editor.manage-column-configuration.export'),
       meta: { type: 'checkbox', editable: true }
     }),
-    columnHelper.accessor('order', {
+    columnHelper.accessor(COLUMN_KEYS.ORDER, {
       header: t('reports.editor.manage-column-configuration.order'),
       meta: { type: 'checkbox', editable: true }
     }),
-    columnHelper.accessor('filterType', {
+    columnHelper.accessor(COLUMN_KEYS.FILTER_TYPE, {
       header: t('reports.editor.manage-column-configuration.filter-type'),
       meta: {
         type: 'select',
@@ -49,7 +52,7 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
         }
       }
     }),
-    columnHelper.accessor('displayType', {
+    columnHelper.accessor(COLUMN_KEYS.DISPLAY_TYPE, {
       header: t('reports.editor.manage-column-configuration.display-type'),
       meta: {
         type: 'select',
@@ -64,7 +67,7 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
         }
       }
     }),
-    columnHelper.accessor('filterDrilldown', {
+    columnHelper.accessor(COLUMN_KEYS.FILTER_DRILLDOWN, {
       header: t('reports.editor.manage-column-configuration.filter-drilldown'),
       meta: {
         type: 'select',
@@ -78,15 +81,15 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
         }
       }
     }),
-    columnHelper.accessor('width', {
+    columnHelper.accessor(COLUMN_KEYS.WIDTH, {
       header: t('reports.editor.manage-column-configuration.width'),
       meta: { type: 'number-cell', editable: true }
     }),
-    columnHelper.accessor('label', {
+    columnHelper.accessor(COLUMN_KEYS.LABEL, {
       header: t('reports.editor.manage-column-configuration.label'),
       meta: { type: 'text-cell', editable: true }
     }),
-    columnHelper.accessor('action', {
+    columnHelper.accessor(COLUMN_KEYS.ACTION, {
       header: t('reports.editor.manage-column-configuration.action'),
       meta: {
         type: 'select',

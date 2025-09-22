@@ -15,6 +15,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
@@ -23,6 +24,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
+  const { currentLanguage } = useLanguageSelection()
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
@@ -36,7 +38,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     columnsArg.push({
       key: column.key,
       type: column.type,
-      locale: column.locale,
+      locale: column.localizable ? column.locale ?? currentLanguage : undefined,
       // group: column.group,
       config: advancedColumnConfig ?? column.config
     })

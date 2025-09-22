@@ -23,16 +23,20 @@ export const normalizeDataSourceConfig = (data: ReportFormData): {
 }
 
 interface INormalizeChartDataReturn {
+  pieColumn: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['pieColumn']
+  pieLabelColumn: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['pieLabelColumn']
   xAxis: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['xAxis']
   yAxis: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['yAxis']
 }
 
 export const normalizeChartData = (data: ReportFormData): INormalizeChartDataReturn => {
   if (data.chartType === '') {
-    return { xAxis: '', yAxis: [] }
+    return { xAxis: '', yAxis: [], pieColumn: '', pieLabelColumn: '' }
   }
 
   return {
+    pieColumn: data.pieColumn,
+    pieLabelColumn: data.pieLabelColumn,
     xAxis: data.xAxis,
     yAxis: isNull(data.yAxis) ? [] : castArray(data.yAxis)
   }

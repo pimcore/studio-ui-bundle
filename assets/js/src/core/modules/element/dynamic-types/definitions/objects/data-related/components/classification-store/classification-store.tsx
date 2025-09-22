@@ -128,6 +128,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
         <ClassificationStoreModal
           classId={ classId }
           fieldName={ fieldName }
+          objectId={ dataObject.id }
           { ...props }
         />
       </Form.KeyedList>
