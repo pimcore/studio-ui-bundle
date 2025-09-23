@@ -26,7 +26,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       url.searchParams.append('topic', topic)
     })
 
-    this.eventSource = new EventSource(url.toString())
+    this.eventSource = new EventSource(url.toString(), { withCredentials: true })
 
     this.eventSource.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data as unknown as string)
