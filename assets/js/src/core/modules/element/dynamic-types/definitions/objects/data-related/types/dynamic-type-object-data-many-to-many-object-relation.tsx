@@ -30,6 +30,9 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 import { type ManyToManyRelationValue } from '../components/many-to-many-relation/hooks/use-value'
 import { RelationList } from '../../grid-cell-preview/relation-list/relation-list'
+import {
+  DynamicTypeRegistryProvider
+} from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export type ManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 
@@ -43,13 +46,16 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
   }
 
   getObjectDataComponent (props: ManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    console.log('ManyToManyObjectRelation getObjectDataComponent props', props)
     return (
-      <ManyToManyObjectRelation
-        { ...props }
-        { ...convertAllowedTypes(props) }
-        className={ props.className }
-        disabled={ props.noteditable === true }
-      />
+      <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
+        <ManyToManyObjectRelation
+          { ...props }
+          { ...convertAllowedTypes(props) }
+          className={ props.className }
+          disabled={ props.noteditable === true }
+        />
+      </DynamicTypeRegistryProvider>
     )
   }
 

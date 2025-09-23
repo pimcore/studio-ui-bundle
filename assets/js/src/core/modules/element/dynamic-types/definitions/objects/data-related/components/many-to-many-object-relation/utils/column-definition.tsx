@@ -9,15 +9,13 @@
  */
 
 import React from 'react'
-import { isEmpty } from 'lodash'
 import { type VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
-import { type ColumnDef, type ColumnMeta, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper, type IdentifiedColumnDef } from '@tanstack/react-table'
 import type { ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import { getElementCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
-import { isEmptyValue, isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type GridColumnData } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 interface IVisibleFieldsToColumnDefinitionsProps {
@@ -25,9 +23,10 @@ interface IVisibleFieldsToColumnDefinitionsProps {
   disabled: boolean
   pathFormatterClass: string
   translate: (key: string) => string
+  transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
 }
 
-export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, translate }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, translate, transformGridColumn }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
@@ -43,50 +42,12 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
     )
   }
 
-  const getMetaData = (column: VisibleFieldDefinition, isAdvancedDataObjectColumn: boolean): ColumnMeta<unknown, never> | undefined => {
-    const key = column.key
-
-    return key === 'fullpath'
-      ? {
-          type: 'element',
-          autoWidth: true,
-          editable: false,
-          config: getElementCellConfig(disabled)
-        }
-      : {
-          columnKey: key,
-          type: isAdvancedDataObjectColumn ? column.type : column.frontendType,
-          editable: false,
-          ...(!isEmpty(column.config) && {
-            config: isAdvancedDataObjectColumn
-              ? {
-                  dataObjectType: column.frontendType,
-                  dataObjectConfig: column.config
-                }
-              : getElementCellConfig(disabled)
-          })
-        }
-  }
-
   for (const column of visibleFieldDefinitions ?? []) {
-    const key = column.key
-    const type = column.type
-
-    const getDataObjectHeader = (value?: string): string => {
-      return isEmptyValue(value) ? translate(key) : value!
-    }
-
-    const isAdvancedDataObjectColumn = type === 'dataobject.adapter' || type === 'dataobject.objectbrick'
-    const fieldDefinition = 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
-
-    const advancedDataObjectHeader = getDataObjectHeader(fieldDefinition?.title as string | undefined)
-    const defaultDataObjectHeader = getDataObjectHeader(column.title)
+    const baseColumn = transformGridColumn(column, disabled)
 
     columnDefinition.push(
-      columnHelper.accessor(key, {
-        header: isAdvancedDataObjectColumn ? advancedDataObjectHeader : defaultDataObjectHeader,
-        meta: getMetaData(column, isAdvancedDataObjectColumn),
-        size: getColumnWidth(key),
+      columnHelper.accessor(column.key, {
+        ...baseColumn,
         ...(isNonEmptyString(pathFormatterClass) ? { cell: renderFullPathCell } : {})
       })
     )
@@ -115,15 +76,4 @@ export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] 
     ...row,
     ...additionalColumns
   }
-}
-
-const getColumnWidth = (column: string): number => {
-  if (column === 'id') {
-    return 80
-  }
-  if (column === 'fullpath') {
-    return 200
-  }
-
-  return 150
 }

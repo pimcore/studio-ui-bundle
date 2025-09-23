@@ -26,6 +26,10 @@ import {
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
+import {
+  useGridOptions
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
+import { useDataObjectGetByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -53,7 +57,7 @@ export interface VisibleFieldDefinition {
 }
 
 export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyObjectRelationClassDefinitionProps {
-  id?: string
+  combinedFieldName?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
@@ -72,8 +76,10 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const { dataObject } = useDataObjectDraft(id)
   const { getByName } = useClassDefinitions()
 
+  const { transformGridColumn } = useGridOptions()
+
   const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
-  const relationField = props?.id
+  const relationField = props?.combinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
   const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
@@ -94,6 +100,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     }
   ]
 
+  const { data: currentObjectData } = useDataObjectGetByIdQuery({ id })
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
     relationField
@@ -137,7 +144,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
-    dataValue: props.value
+    dataValue: currentObjectData?.objectData?.[relationField ?? '']
   })
   const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading === true || q.isFetching)
   const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
@@ -146,7 +153,8 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
     pathFormatterClass: props.pathFormatterClass ?? '',
-    translate: t
+    translate: t,
+    transformGridColumn
   })
 
   const handleEnrichRowData = useCallback(
@@ -165,6 +173,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+      value={ currentObjectData?.objectData?.[relationField ?? ''] ?? [] }
     />
   )
 }

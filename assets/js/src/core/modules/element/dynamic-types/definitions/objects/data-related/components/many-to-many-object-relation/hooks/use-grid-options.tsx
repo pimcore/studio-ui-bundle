@@ -10,25 +10,28 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type IdentifiedColumnDef } from '@tanstack/react-table'
+import { type ColumnMeta, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
-import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
+import type { VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { getElementCellConfig } from '@Pimcore/components/many-to-many-relation'
+import { isEmpty } from 'lodash'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'manualSorting'>
 
 export interface UseGridOptionsReturn {
-  transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
+  transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
 }
 
 export const useGridOptions = (): UseGridOptionsReturn => {
   const { t } = useTranslation()
   const { hasType } = useDynamicTypeResolver()
 
-  const getDefaultSystemColumnSize = (column: SelectedColumn): number | undefined => {
+  const getDefaultSystemColumnSize = (column: VisibleFieldDefinition): number | undefined => {
     if (Array.isArray(column.group) && column.group.includes('system')) {
       if (
         column.key === 'id' ||
@@ -57,18 +60,48 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     return 150
   }
 
-  const transformGridColumn = (column: SelectedColumn): IdentifiedColumnDef<unknown, never> => {
+  const transformGridColumn = (column: VisibleFieldDefinition, disabled: boolean): IdentifiedColumnDef<unknown, never> => {
     const isMainTypeIncluded = hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.type] })
-    const isSecondaryTypeIncluded = hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.frontendType!] })
+    const isSecondaryTypeIncluded = hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.frontendType] })
     const isTypeIncluded = isMainTypeIncluded || isSecondaryTypeIncluded
 
+    const getDataObjectHeader = (value?: string): string => {
+      return isEmptyValue(value) ? t(column.key) : value!
+    }
+
+    const getMetaData = (): ColumnMeta<unknown, never> | undefined => {
+      return column.key === 'fullpath'
+        ? {
+            type: 'element',
+            autoWidth: true,
+            config: getElementCellConfig(disabled)
+          }
+        : {
+            type: isMainTypeIncluded ? column.type : column.frontendType,
+            ...(!isEmpty(column.config) && {
+              config: isMainTypeIncluded
+                ? {
+                    dataObjectType: column.frontendType,
+                    dataObjectConfig: column.config
+                  }
+                : getElementCellConfig(disabled)
+            })
+          }
+    }
+
+    const fieldDefinition = 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
+
+    const advancedDataObjectHeader = getDataObjectHeader(fieldDefinition?.title as string | undefined)
+    const defaultDataObjectHeader = getDataObjectHeader(column.title)
+
     const columnDefinition: IdentifiedColumnDef<unknown, never> = {
-      header: t(column?.key ?? '') + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
+      header: isMainTypeIncluded ? advancedDataObjectHeader : defaultDataObjectHeader,
       meta: {
-        type: isMainTypeIncluded ? column.type : column.frontendType,
-        columnKey: column.key
+        columnKey: column.key,
+        editable: false,
+        ...getMetaData()
       },
-      size: getDefaultSystemColumnSize(column) // change if it's a system colum
+      size: getDefaultSystemColumnSize(column)
     }
 
     if (!isTypeIncluded) {
