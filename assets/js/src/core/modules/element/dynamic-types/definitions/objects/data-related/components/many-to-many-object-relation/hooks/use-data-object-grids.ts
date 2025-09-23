@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { map, filter, isUndefined, isNil } from 'lodash'
+import { useRef } from 'react'
+import { map, filter, isUndefined, isEmpty } from 'lodash'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import {
   type DataObjectGetGridApiArg,
@@ -27,8 +28,17 @@ interface IUseDataObjectGridsProps {
 }
 
 export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): Array<TypedUseQueryHookResult<DataObjectGetGridApiResponse, DataObjectGetGridApiArg, any, any>> => {
-  return (classIds ?? []).map((classId: string) =>
-    useDataObjectGetGridQuery(
+  const loadedIdsRef = useRef<Set<number>>(new Set())
+
+  return (classIds ?? []).map((classId: string) => {
+    const currentIds = map(filter(dataValue, { subtype: classId }), 'id')
+    const newIds = currentIds.filter((id) => !loadedIdsRef.current.has(id))
+
+    if (newIds.length > 0) {
+      newIds.forEach((id) => loadedIdsRef.current.add(id))
+    }
+
+    return useDataObjectGetGridQuery(
       {
         classId: convertClassName(classId)?.id ?? '',
         body: {
@@ -50,7 +60,8 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
           }
         }
       },
-      { skip: isUndefined(classIds) && isNil(dataValue) }
+      { skip: isUndefined(classIds) && isEmpty(newIds) }
     )
+  }
   )
 }
