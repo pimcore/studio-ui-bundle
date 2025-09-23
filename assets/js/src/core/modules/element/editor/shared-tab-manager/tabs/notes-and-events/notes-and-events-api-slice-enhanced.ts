@@ -38,13 +38,6 @@ export const api = baseApi.enhanceEndpoints({
 
         return [...tags, ...providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)]
       }
-    },
-    noteElementCreate: {
-      invalidatesTags: (result, error, args) => {
-        const tags = invalidatingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
-
-        return tags.filter((tag) => tag !== undefined)
-      }
     }
   }
 })

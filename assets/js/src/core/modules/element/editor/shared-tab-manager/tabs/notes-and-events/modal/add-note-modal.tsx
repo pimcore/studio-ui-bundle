@@ -30,6 +30,7 @@ export interface AddNoteModalProps {
   setOpen: (open: boolean) => void
   elementType: ElementType
   elementId: number
+  refetchNotes: () => void
 }
 
 export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element => {
@@ -47,14 +48,16 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
         title,
         description
       }
-    }).unwrap()
+    })
   }
 
   async function onFinish (values: AddNoteFormValues): Promise<void> {
     await addNote(values.title, values.type, values.description)
 
-    form.resetFields()
+    props.refetchNotes()
     props.setOpen(false)
+
+    form.resetFields()
   }
 
   return (
@@ -62,8 +65,8 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
       okButtonProps={ { loading: isLoading } }
       okText={ t('save') }
       onCancel={ () => {
-        form.resetFields()
         props.setOpen(false)
+        form.resetFields()
       } }
       onOk={ () => { form.submit() } }
       open={ props.open }

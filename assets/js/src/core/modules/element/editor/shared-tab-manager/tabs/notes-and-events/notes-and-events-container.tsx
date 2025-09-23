@@ -31,7 +31,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
   const [deleteNote, { error: deleteError, isLoading: deleteLoading }] = useNoteDeleteByIdMutation()
 
-  const { isLoading, data, error } = useNoteElementGetCollectionQuery({
+  const { isLoading, data, error, refetch: refetchNotes } = useNoteElementGetCollectionQuery({
     id,
     elementType,
     page,
@@ -73,6 +73,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
           total={ data!.totalItems }
         />
       }
+      refetchNotes={ refetchNotes }
     />
   )
 }
