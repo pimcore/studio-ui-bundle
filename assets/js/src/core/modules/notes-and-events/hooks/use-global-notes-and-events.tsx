@@ -12,7 +12,7 @@ import { useMemo, useState } from 'react'
 import {
   type Note,
   useNoteGetCollectionQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 
 export type DataNote = Note & {
   rowId: string
