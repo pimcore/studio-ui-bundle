@@ -25,6 +25,7 @@ import { usePerspectiveEditor } from '../../hooks/use-perspective-editor'
 import { AllowedMenuEntriesPanel } from './components/allowed-menu-entries-panel/allowed-menu-entries-panel'
 import { SpecificPanel } from './components/specific-panel/specific-panel'
 import { type ExtendedWidgetConfig } from './components/widget-configurator/context/widget-configurator-provider'
+import { GeneralPanel } from './components/general-panel/general-panel'
 
 interface PerspectiveFormProps {
   perspective: PerspectiveConfigDetail
@@ -58,7 +59,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
 
   return (
     <FormKit
-      formProps={ {
+      formProps={{
         form,
         initialValues,
         onFinish: async (values: OptimizedPerspectiveConfigDetail) => {
@@ -75,14 +76,11 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
             widgetsBottom: Object.fromEntries(widgetsBottom.widgets.map(w => [w.id, w.widgetType]))
           }
 
-          console.table(values)
-          console.log(values)
-
           await updatePerspective(perspective.id, formattedValues, () => {
             setIsLoading(false)
           })
         }
-      } }
+      }}
     >
       <Flex
         className='makeTabsGreatAgain'
@@ -91,34 +89,12 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       >
         <Content
           padded
-          padding={ {
+          padding={{
             x: 'small',
             y: 'none'
-          } }
+          }}
         >
-          <FormKit.Panel
-            collapsed={ false }
-            collapsible
-            title={ t('perspective-editor.form.general.title') }
-          >
-            <Form.Item
-              label="Name"
-              name="name"
-              required
-            >
-              <Input
-                placeholder={ t('perspective-editor.form.name.placeholder') }
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Icon"
-              name="icon"
-            >
-              <IconSelector />
-            </Form.Item>
-          </FormKit.Panel>
-
+          <GeneralPanel />
           <SpecificPanel />
           <AllowedMenuEntriesPanel />
         </Content>
@@ -126,30 +102,30 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
+              disabled={isLoading}
+              icon={{ value: 'refresh' }}
+              onClick={() => {
                 form.resetFields()
                 form.setFieldsValue(initialValues)
-              } }
-              title={ t('refresh') }
+              }}
+              title={t('refresh')}
             />
 
             <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
+              disabled={isLoading}
+              icon={{ value: 'trash' }}
+              onClick={() => {
                 removeWithConfirmation(perspective.id, () => {
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
                 })
-              } }
-              title={ t('delete') }
+              }}
+              title={t('delete')}
             />
           </div>
 
           <Button
             htmlType='submit'
-            loading={ isLoading }
+            loading={isLoading}
             type='primary'
           >
             {t('save')}

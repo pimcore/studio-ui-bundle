@@ -18,24 +18,7 @@ export class DynamicTypeWidgetTypeElementTree extends DynamicTypeWidgetTypeAbstr
   group = 'perspective-editor.system-widgets'
   icon = 'tree'
 
-  form (): React.JSX.Element {
+  form(): React.JSX.Element {
     return <ElementTreeWidgetTypeForm />
   }
-
-  /* getSubMenuItems(configs: ElementTreeWidget[]): ItemType[] {
-    const widgetTypes: Record<string, ElementTreeWidget[]> = {};
-
-    configs.forEach((config) => {
-      widgetTypes[config.elementType] = widgetTypes[config.elementType] ?? [];
-      widgetTypes[config.elementType].push(config);
-    })
-
-    return Object.entries(widgetTypes).map(([type, typeConfigs]) => {
-      return {
-        name: type,
-        key: type,
-        children: super.getSubMenuItems(typeConfigs),
-      }
-    })
-  } */
 }

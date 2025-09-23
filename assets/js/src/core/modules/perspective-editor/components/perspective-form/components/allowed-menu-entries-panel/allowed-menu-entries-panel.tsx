@@ -8,28 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { useTranslation } from 'react-i18next'
-import { Switch } from '@Pimcore/components/switch/switch'
-import { usePerspectiveForm } from '../../hooks/use-perspective-form'
-import { useStyles } from './allowed-menu-entries-panel.styles'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { Switch } from '@Pimcore/components/switch/switch'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { usePerspectiveForm } from '../../hooks/use-perspective-form'
 
 export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { menuEntries, isLoading } = usePerspectiveForm()
-  const { styles } = useStyles()
-
-  console.log('menuEntries', menuEntries)
 
   if (isLoading) {
     return (
       <FormKit.Panel
-        collapsed={ false }
+        theme='fieldset'
+        collapsed={false}
         collapsible
-        title={ t('widget-editor.widget-form.allowed-context-menu.title') }
+        title={t('widget-editor.widget-form.allowed-context-menu.title')}
       >
         <Spin />
       </FormKit.Panel>
@@ -37,29 +35,34 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
   }
 
   return (
-    <FormKit.Panel
-      collapsed={ false }
-      collapsible
-      title={ t('perspective-editor.form.allowed-context-menu.title') }
+    <Flex
+      gap={4}
+      vertical
     >
-      {Object.entries(menuEntries).map(([categoryName, permissions]) => (
-        <>
-          <h4>{t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}</h4>
+      <p>{t('perspective-editor.form.allowed-context-menu.title')}</p>
 
-          <div className={ styles.allowedMenuEntriesPanel }>
+      {Object.entries(menuEntries).map(([categoryName, permissions], index) => (
+        <FormKit.Panel
+          theme='fieldset'
+          collapsed={false}
+          collapsible
+          title={t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}
+        >
+          <Flex vertical gap={4}>
             {Object.entries(permissions).map(([permissionKey, permissionValue]) => (
               <Form.Item
-                key={ `${categoryName}.${permissionKey}` }
-                name={ ['contextPermissions', categoryName, permissionKey] }
+                key={`${categoryName}.${permissionKey}`}
+                name={['contextPermissions', categoryName, permissionKey]}
               >
                 <Switch
-                  labelRight={ t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`) }
+                  size='small'
+                  labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
                 />
               </Form.Item>
             ))}
-          </div>
-        </>
+          </Flex>
+        </FormKit.Panel>
       ))}
-    </FormKit.Panel>
+    </Flex>
   )
 }
