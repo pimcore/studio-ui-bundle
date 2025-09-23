@@ -55,19 +55,19 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
   }
 
   const markFormAsChanged = (): void => {
-    setCurrentModal(prev => !isNull(prev) ? { ...prev, hasUnsavedChanges: true } : null)
+    setCurrentModal(prev => isNull(prev) ? null : { ...prev, hasUnsavedChanges: true })
   }
 
   const markFormAsClean = (): void => {
-    setCurrentModal(prev => !isNull(prev) ? { ...prev, hasUnsavedChanges: false } : null)
+    setCurrentModal(prev => isNull(prev) ? null : { ...prev, hasUnsavedChanges: false })
   }
 
   const openModal = (config: SiteModalConfig): string => {
     const modalId = `site-modal-${config.documentId}`
 
-    if (currentModal !== null) {
+    if (!isNull(currentModal)) {
       if (currentModal.config.documentId === config.documentId) {
-        setCurrentModal(prev => prev !== null ? { ...prev, config } : null)
+        setCurrentModal(prev => isNull(prev) ? null : { ...prev, config })
         return modalId
       }
 
@@ -116,7 +116,9 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
   }
 
   const closeModal = (): void => {
-    if (!isNull(currentModal) && hasUnsavedChanges(currentModal)) {
+    if (isNull(currentModal) || !hasUnsavedChanges(currentModal)) {
+      setCurrentModal(null)
+    } else {
       void modal.confirm({
         title: t('unsaved-changes.title'),
         content: t('unsaved-changes.close-message'),
@@ -126,13 +128,11 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
           setCurrentModal(null)
         }
       })
-    } else {
-      setCurrentModal(null)
     }
   }
 
   const updateModalLoading = (isLoading: boolean): void => {
-    setCurrentModal(prev => !isNull(prev) ? { ...prev, isLoading } : null)
+    setCurrentModal(prev => isNull(prev) ? null : { ...prev, isLoading })
   }
 
   const handleModalSubmit = async (values: SiteFormValues): Promise<void> => {
@@ -160,7 +160,7 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
 
   return (
     <SiteModalContext.Provider value={ contextValue }>
-      {!isNull(currentModal) && (
+      {isNull(currentModal) ? null : (
         <SiteModal
           modal={ currentModal }
           onClose={ closeModal }

@@ -86,7 +86,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
 
   const submitSiteData = async (id: number, values: SiteFormValues): Promise<void> => {
     const domains = isNonEmptyString(values.domains)
-      ? values.domains.split(/\r?\n/).map(d => d.trim()).filter(d => d)
+      ? values.domains.split(/\r?\n/).map(d => d.trim()).filter(Boolean)
       : []
 
     const localizedErrorDocuments: Record<string, string> = {}
@@ -117,7 +117,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
     dispatch(setDocumentNodeSiteStatus({ nodeId: String(id), isSite: true }))
   }
 
-  const useAsSite = async (id: number, documentPath?: string): Promise<void> => {
+  const createSite = async (id: number, documentPath?: string): Promise<void> => {
     const initialValues: SiteFormValues = {
       mainDomain: '',
       domains: '',
@@ -159,7 +159,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
         }
 
         openModal({
-          title: !isNil(siteData.id) ? `${t('document.site.edit-site')} - ID: ${siteData.id}` : t('document.site.edit-site'),
+          title: isNil(siteData.id) ? t('document.site.edit-site') : `${t('document.site.edit-site')} - ID: ${siteData.id}`,
           documentId: id,
           documentPath,
           initialValues,
@@ -188,7 +188,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
   }
 
   const showUseAsSiteForm = (node: TreeNodeProps): void => {
-    void useAsSite(getNodeId(node), node.fullPath)
+    void createSite(getNodeId(node), node.fullPath)
   }
 
   const showEditSiteForm = (node: TreeNodeProps): void => {
