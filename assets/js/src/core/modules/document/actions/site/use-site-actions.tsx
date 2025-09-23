@@ -131,7 +131,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
       documentId: id,
       documentPath,
       initialValues,
-      onSubmit: async (values: SiteFormValues) => await submitSiteData(id, values)
+      onSubmit: async (values: SiteFormValues) => { await submitSiteData(id, values) }
     })
   }
 
@@ -163,7 +163,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
           documentId: id,
           documentPath,
           initialValues,
-          onSubmit: async (values: SiteFormValues) => await submitSiteData(id, values)
+          onSubmit: async (values: SiteFormValues) => { await submitSiteData(id, values) }
         })
 
         setTimeout(() => {

@@ -101,7 +101,6 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
   }
 
   const openNewModal = (config: SiteModalConfig): void => {
-
     form.resetFields()
     form.setFieldsValue(config.initialValues)
 
