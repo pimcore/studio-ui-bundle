@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './notes-and-events-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
@@ -24,9 +24,6 @@ export const api = baseApi.enhanceEndpoints({
 
         return tags
       }
-    },
-    noteDeleteById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_DETAIL(args.id)
     },
     noteElementGetCollection: {
       providesTags: (result, error, args) => {

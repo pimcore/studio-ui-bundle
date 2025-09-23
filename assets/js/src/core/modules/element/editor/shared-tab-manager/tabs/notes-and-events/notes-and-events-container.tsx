@@ -48,6 +48,8 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({ id })
+
+    await refetchNotes()
   }
 
   if (isLoading) {
