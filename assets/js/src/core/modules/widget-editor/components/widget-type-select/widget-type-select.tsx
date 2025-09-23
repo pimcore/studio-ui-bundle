@@ -20,11 +20,11 @@ export const WidgetTypeSelect = (props: SelectProps): React.JSX.Element => {
 
   return (
     <Select
-      { ...props }
-      options={ widgetTypes.map(widgetType => ({
+      {...props}
+      options={widgetTypes.map(widgetType => ({
         label: t(`widget-editor.create-form.widgetType.${widgetType.name}`),
         value: widgetType.id
-      })) }
+      }))}
     />
   )
 }

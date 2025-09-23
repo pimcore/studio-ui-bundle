@@ -1242,7 +1242,9 @@ perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
 perspective-editor.form.general.title: General
-perspective-editor.form.specific.title: Specific
+perspective-editor.form.general.name: Name
+perspective-editor.form.general.icon: Icon
+perspective-editor.form.general.widget-congfiguration: Widget areas
 perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
 perspective-editor.form.allowed-context-menu.category.extras: Extras
 perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
@@ -1310,11 +1312,7 @@ perspective-editor.form.allowed-context-menu.settings.users_users: Users
 perspective-editor.form.allowed-context-menu.settings.website: Website Settings
 perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
-perspective-editor.system-widgets: System Widgets
 perspective-editor.system-widgets.trees: Trees
-perspective-editor.system-widgets.documents: Documents
-perspective-editor.system-widgets.assets: Assets
-perspective-editor.system-widgets.data-objects: Data Objects
 perspective-editor.system-widgets.left: Left widgets
 perspective-editor.system-widgets.bottom: Bottom widgets
 perspective-editor.system-widgets.right: Right widgets
@@ -1324,6 +1322,7 @@ widget-editor.create-form.name: Name
 widget-editor.create-form.name.required: Please enter a valid name
 widget-editor.create-form.widgetType: Widget Type
 widget-editor.create-form.widgetType.element_tree: Element Tree
+widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully

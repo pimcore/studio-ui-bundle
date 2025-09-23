@@ -27,7 +27,7 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
         theme='fieldset'
         collapsed={false}
         collapsible
-        title={t('widget-editor.widget-form.allowed-context-menu.title')}
+        title={t('perspective-editor.form.allowed-context-menu.title')}
       >
         <Spin />
       </FormKit.Panel>
@@ -41,28 +41,33 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
     >
       <p>{t('perspective-editor.form.allowed-context-menu.title')}</p>
 
-      {Object.entries(menuEntries).map(([categoryName, permissions], index) => (
-        <FormKit.Panel
-          theme='fieldset'
-          collapsed={false}
-          collapsible
-          title={t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}
-        >
-          <Flex vertical gap={4}>
-            {Object.entries(permissions).map(([permissionKey, permissionValue]) => (
-              <Form.Item
-                key={`${categoryName}.${permissionKey}`}
-                name={['contextPermissions', categoryName, permissionKey]}
-              >
-                <Switch
-                  size='small'
-                  labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
-                />
-              </Form.Item>
-            ))}
-          </Flex>
-        </FormKit.Panel>
-      ))}
+      <Flex
+        vertical
+        gap={8}
+      >
+        {Object.entries(menuEntries).map(([categoryName, permissions], index) => (
+          <FormKit.Panel
+            theme='fieldset'
+            collapsed={false}
+            collapsible
+            title={t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}
+          >
+            <Flex vertical gap={4}>
+              {Object.entries(permissions).map(([permissionKey, permissionValue]) => (
+                <Form.Item
+                  key={`${categoryName}.${permissionKey}`}
+                  name={['contextPermissions', categoryName, permissionKey]}
+                >
+                  <Switch
+                    size='small'
+                    labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
+                  />
+                </Form.Item>
+              ))}
+            </Flex>
+          </FormKit.Panel>
+        ))}
+      </Flex>
     </Flex>
   )
 }

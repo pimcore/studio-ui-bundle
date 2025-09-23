@@ -15,7 +15,7 @@ import { DynamicTypeWidgetTypeAbstract } from './dynamic-type-widget-type-abstra
 export class DynamicTypeWidgetTypeElementTree extends DynamicTypeWidgetTypeAbstract {
   readonly id = 'element_tree'
   name = 'element_tree'
-  group = 'perspective-editor.system-widgets'
+  group = 'system-widgets'
   icon = 'tree'
 
   form(): React.JSX.Element {

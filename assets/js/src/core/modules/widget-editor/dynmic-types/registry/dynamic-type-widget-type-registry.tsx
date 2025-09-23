@@ -15,10 +15,11 @@ import { type DynamicTypeWidgetTypeAbstract } from '../definitions/dynamic-type-
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { type WidgetConfig } from '@sdk/api/perspectives'
+import { Trans } from 'react-i18next'
 
 @injectable()
 export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<DynamicTypeWidgetTypeAbstract> {
-  getMenuItems (configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
+  getMenuItems(configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     const widgetTypes: Record<string, DynamicTypeWidgetTypeAbstract[]> = {}
 
     this.getDynamicTypes().forEach((dynamicType) => {
@@ -29,12 +30,12 @@ export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<D
     return Object.entries(widgetTypes).map(([groupName, dynamicTypes]) => {
       return {
         key: groupName,
-        label: groupName,
+        label: <Trans>{`widget-editor.create-form.widgetTypeGroup.${groupName}`}</Trans>,
         type: 'group',
         children: dynamicTypes.map((dynamicType) => ({
-          label: dynamicType.name,
+          label: <Trans>{`widget-editor.create-form.widgetType.${dynamicType.name}`}</Trans>,
           key: dynamicType.id,
-          icon: <Icon value={ dynamicType.icon } />,
+          icon: <Icon value={dynamicType.icon} />,
           children: dynamicType.getSubMenuItems(
             configs.filter((config) => config.widgetType === dynamicType.id),
             onWidgetClick
