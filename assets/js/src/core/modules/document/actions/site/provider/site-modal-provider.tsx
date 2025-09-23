@@ -21,7 +21,7 @@ interface SiteModalProviderProps {
 }
 
 export interface SiteModalContextProps {
-  openModal: (config: SiteModalConfig) => string
+  openModal: (config: SiteModalConfig) => void
   closeModal: () => void
   isOpen: boolean
   currentDocumentId: number | null
@@ -62,13 +62,11 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
     setCurrentModal(prev => isNull(prev) ? null : { ...prev, hasUnsavedChanges: false })
   }
 
-  const openModal = (config: SiteModalConfig): string => {
-    const modalId = `site-modal-${config.documentId}`
-
+  const openModal = (config: SiteModalConfig): void => {
     if (!isNull(currentModal)) {
       if (currentModal.config.documentId === config.documentId) {
         setCurrentModal(prev => isNull(prev) ? null : { ...prev, config })
-        return modalId
+        return
       }
 
       if (hasUnsavedChanges(currentModal)) {
@@ -92,12 +90,11 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
             openNewModal(config)
           }
         })
-        return modalId
+        return
       }
     }
 
     openNewModal(config)
-    return modalId
   }
 
   const openNewModal = (config: SiteModalConfig): void => {
