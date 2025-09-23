@@ -25,9 +25,10 @@ export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   published?: boolean
   disabled?: boolean
   onClose?: () => void
+  inline?: boolean
 }
 
-export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, ...props }) => {
+export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, ...props }) => {
   const { openElement } = useElementHelper()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
@@ -50,7 +51,7 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
     <Tooltip title={ isOverflow ? path : '' }>
       <Tag
         bordered={ false }
-        className={ cn(styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
+        className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
         closeIcon={ !isUndefined(onClose) }
         color={ isUnpublished ? 'gold' : 'geekblue' }
         iconName={ isUnpublished ? 'eye-off' : undefined }
