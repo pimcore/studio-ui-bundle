@@ -18,7 +18,6 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { isEqual, isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 export interface TreeNode {
   id: string
@@ -558,7 +557,7 @@ const slice = createSlice({
               ? {
                   ...node.treeNodeProps,
                   isSite: payload.isSite,
-                  icon: payload.isSite 
+                  icon: payload.isSite
                     ? { type: 'name' as const, value: 'home-root-folder' }
                     : { type: 'name' as const, value: 'document' }
                 }
