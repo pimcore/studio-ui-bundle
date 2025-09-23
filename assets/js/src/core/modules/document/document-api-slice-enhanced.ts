@@ -114,7 +114,11 @@ export const {
   useDocumentPageSnippetAreaBlockRenderQuery,
   useLazyDocumentPageSnippetAreaBlockRenderQuery,
   useDocumentRenderletRenderQuery,
-  useDocumentsListAvailableSitesQuery
+  useDocumentsListAvailableSitesQuery,
+  useDocumentGetSiteQuery,
+  useLazyDocumentGetSiteQuery,
+  useDocumentUpdateSiteMutation,
+  useDocumentDeleteSiteMutation
 } = api
 
 export { api }
