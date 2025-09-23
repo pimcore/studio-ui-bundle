@@ -159,14 +159,16 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
 
   return (
     <SiteModalContext.Provider value={ contextValue }>
-      {isNull(currentModal) ? null : (
-        <SiteModal
-          modal={ currentModal }
-          onClose={ closeModal }
-          onFormChange={ markFormAsChanged }
-          onSubmit={ handleModalSubmit }
-        />
-      )}
+      {isNull(currentModal)
+        ? null
+        : (
+          <SiteModal
+            modal={ currentModal }
+            onClose={ closeModal }
+            onFormChange={ markFormAsChanged }
+            onSubmit={ handleModalSubmit }
+          />
+          )}
 
       {children}
     </SiteModalContext.Provider>
