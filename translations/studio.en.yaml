@@ -81,6 +81,23 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.site.remove-site: Remove Site
+document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+document.site.use-as-site: Use as Site
+document.site.edit-site: Edit Site
+document.site.form.main-domain: Main Domain
+document.site.form.additional-domains: Additional Domains
+document.site.form.additional-domains-tooltip: Enter additional domains, one per line. Wildcards are supported (*example.com)
+document.site.form.redirect-to-main-domain: Redirect additional domains to main domain
+document.site.form.error-documents: Error Documents
+document.site.form.default-error-document: Default Error Document
+document.site.form.error-document-language: Error Document ({{language}})
+save-and-continue: Save and Continue
+discard-and-continue: Discard and Continue
+discard-changes: Discard Changes
+unsaved-changes.title: Unsaved Changes
+unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?

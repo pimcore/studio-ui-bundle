@@ -15,6 +15,7 @@ import { CropModalProvider } from '../element/components/crop-modal/provider/cro
 import { HotspotMarkersModalProvider } from '../element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
 import { VideoModalProvider } from '../element/components/video-modal/provider/video-modal-provider'
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
+import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
 
 export interface ModalsProviderProps {
   children: React.ReactNode
@@ -32,7 +33,9 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
           <HotspotMarkersModalProvider>
             <VideoModalProvider>
               <SendTestEmailProvider>
-                {children}
+                <SiteModalProvider>
+                  {children}
+                </SiteModalProvider>
               </SendTestEmailProvider>
             </VideoModalProvider>
           </HotspotMarkersModalProvider>

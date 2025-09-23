@@ -39,7 +39,7 @@ const defaultProps = {
 export const DocumentSelectorListing = (): React.JSX.Element => {
   const { config } = useElementSelectorHelper()
 
-  const allowedTypes: string[] = config.config?.assets?.allowedTypes ?? []
+  const allowedTypes: string[] = config.config?.documents?.allowedTypes ?? []
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
