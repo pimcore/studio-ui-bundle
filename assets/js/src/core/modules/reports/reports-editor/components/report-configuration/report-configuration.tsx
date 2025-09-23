@@ -104,7 +104,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
   return (
     <Content
-      loading={ isLoading || isFetching }
+      loading={ isLoading }
       padded
       padding={ { top: 'none', right: 'extra-small', bottom: 'none', left: 'extra-small' } }
     >
@@ -115,7 +115,10 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
       } }
       >
         <GeneralSettings />
-        <SourceDefinition currentData={ currentData } />
+        <SourceDefinition
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
         <ColumnConfiguration
           currentData={ currentData }
           updateFormData={ updateFormData }

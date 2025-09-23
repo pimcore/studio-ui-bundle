@@ -19,13 +19,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { type ColumnFilter } from '@tanstack/react-table'
-
-const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-  return columnFilters.map(({ filterType, type, ...rest }) => ({
-    ...rest,
-    ...((filterType !== undefined) ? { type: filterType } : { type })
-  }))
-}
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 const shouldApplyFieldFilter = (
   filter: any,
@@ -73,6 +67,15 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
     const { hasType, getType } = useDynamicTypeResolver()
+    const { currentLanguage } = useLanguageSelection()
+
+    const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
+      return columnFilters.map(({ filterType, type, ...rest }) => ({
+        ...rest,
+        ...((filterType !== undefined) ? { type: filterType } : { type }),
+        locale: rest.locale ?? currentLanguage
+      }))
+    }
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()

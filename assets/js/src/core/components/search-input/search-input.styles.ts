@@ -21,9 +21,26 @@ export const useStyles = createStyles(({ css, token }) => {
  &.ant-input-search
   > .ant-input-group 
   > .ant-input-group-addon:last-child 
-  .ant-input-search-button:not(.ant-btn-primary):not(:hover):not(:active) {
+   .ant-input-search-button {
+   width: 30px;
+  background: ${token.colorBgContainer};
+   }
+  
+  .ant-input-search-button:not(:hover):not(:active) {
       border-color: ${token.Button.defaultGhostBorderColor}; 
       color: ${token.colorPrimary};
+      }
+      
+  .ant-input-search-button:hover {
+      border-color: ${token.colorPrimary}; 
+      color: ${token.colorPrimary} !important;
+      background: ${token.colorBgTextHover};
+      }
+      
+  .ant-input-search-button:active {
+      border-color: ${token.colorPrimary}; 
+      color: ${token.colorPrimary};
+      background: ${token.colorBgTextActive};
       }
       
      .ant-input-clear-icon {

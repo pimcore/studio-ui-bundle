@@ -10,18 +10,17 @@
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
 import trackError from '@Pimcore/modules/app/error-handler/error-handler'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob as createRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { isNil } from 'lodash'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
+import { RecycleBinDeleteJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-delete-job'
+import { RecycleBinRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-restore-job'
 import { useTranslation } from 'react-i18next'
-import { api, type RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
-import { useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
+import { api, type RecycleBin, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
 
 interface UseRecycleBinHookReturn {
   restoreItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
@@ -32,51 +31,19 @@ interface UseRecycleBinHookReturn {
 
 export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const dispatch = useAppDispatch()
-  const { addJob } = useJobs()
   const { t } = useTranslation()
-  const [recycleBinRestoreMutation] = useRecycleBinRestoreItemsMutation()
-  const [recycleBindDelteMutation] = useRecycleBinDeleteItemsMutation()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
 
   const restoreItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
-    const restoreTask = recycleBinRestoreMutation({
-      body: {
-        items: items.map(item => item.id)
-      }
-    })
-
     try {
-      const response = await restoreTask
+      const job = new RecycleBinRestoreJob({
+        itemIds: items.map(item => item.id),
+        elementTypes: items.map(item => mapToElementType(item.type)!),
+        title: t('recycle-bin.actions.restore.title')
+      })
 
-      if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
-        return
-      }
-
-      let jobRunId: any = null
-      if (!isNil(response.data)) {
-        const data = response.data
-        jobRunId = data.jobRunId ?? null
-      }
-
-      if (jobRunId !== null) {
-        addJob(createRestoreJob({
-          title: t('recycle-bin.actions.restore.title'),
-          topics: [topics['recycle-bin-restore-finished'], ...defaultTopics],
-          action: async () => {
-            return jobRunId
-          },
-          elementTypes: items.map(item => mapToElementType(item.type)!)
-        }))
-      }
-
-      if (jobRunId === null) {
-        dispatch(refreshTreeByElementType({
-          elementTypes: [mapToElementType(items[0].type)!]
-        }))
-        refreshRecycleBin()
-      }
-
+      await executionEngine.runJob(job)
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to restore item(s) from recycle bin'))
@@ -84,44 +51,14 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
   }
 
   const removeItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
-    const deleteTask = recycleBindDelteMutation({
-      body: {
-        items: items.map(item => item.id)
-      }
-    })
-
     try {
-      const response = await deleteTask
+      const job = new RecycleBinDeleteJob({
+        itemIds: items.map(item => item.id),
+        elementTypes: items.map(item => mapToElementType(item.type)!),
+        title: t('recycle-bin.actions.delete.title')
+      })
 
-      if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
-        return
-      }
-
-      let jobRunId: any = null
-      if (!isNil(response.data)) {
-        const data = response.data
-        jobRunId = data.jobRunId ?? null
-      }
-
-      if (jobRunId !== null) {
-        addJob(createRestoreJob({
-          title: t('recycle-bin.actions.delete.title'),
-          topics: [topics['recycle-bin-delete-finished'], ...defaultTopics],
-          action: async () => {
-            return jobRunId
-          },
-          elementTypes: items.map(item => mapToElementType(item.type)!)
-        }))
-      }
-
-      if (jobRunId === null) {
-        dispatch(refreshTreeByElementType({
-          elementTypes: [mapToElementType(items[0].type)!]
-        }))
-        refreshRecycleBin()
-      }
-
+      await executionEngine.runJob(job)
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to remove item(s) from recycle bin'))

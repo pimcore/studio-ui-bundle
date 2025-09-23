@@ -9,11 +9,11 @@
  */
 
 import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/custom-view-editor/context/hooks/use-widget-editor-context'
+import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import { container } from '@sdk/app'
 import React from 'react'
 import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
 import { WidgetForm } from '../../../widget-type-form/widget-form'
-import { type WidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/registry/widget-type-registry'
-import { container } from '@sdk/app'
 
 interface WidgetDetailTabProps {
   id: string
@@ -27,8 +27,8 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
     return <></>
   }
 
-  const widgetType = container.get<WidgetTypeRegistry>('WidgetEditor/WidgetTypeRegistry').getWidgetType(widget.widgetType)
-  const { form: Form } = widgetType!
+  const widgetType = container.get<DynamicTypeWidgetTypeRegistry>('DynamicTypes/WidgetEditor/WidgetTypeRegistry').getDynamicType(widget.widgetType)
+  const { form: Form } = widgetType
 
   return (
     <WidgetFormProvider widget={ widget }>

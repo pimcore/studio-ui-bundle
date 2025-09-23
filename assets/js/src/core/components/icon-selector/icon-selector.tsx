@@ -15,6 +15,7 @@ import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Flex } from '@Pimcore/components/flex/flex'
+import cn from 'classnames'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -42,6 +43,7 @@ export const IconSelector = ({
   const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [previewSelectedIcon, setPreviewSelectedIcon] = useState<ElementIcon | undefined>(value)
+  const [hasSubmissionError, setHasSubmissionError] = useState<boolean>(false)
 
   useEffect(() => {
     setPreviewSelectedIcon(value)
@@ -57,6 +59,7 @@ export const IconSelector = ({
     setPageSize(40)
     setActiveTab('all')
     setPreviewSelectedIcon(value)
+    setHasSubmissionError(false)
   }
 
   const closeModal = (): void => {
@@ -72,7 +75,7 @@ export const IconSelector = ({
     },
     ...iconSetRegistry.getDynamicTypes().map((iconSet) => ({
       key: iconSet.id,
-      label: iconSet.name,
+      label: t(`icon-selector.${iconSet.name}`),
       children: null
     })),
     {
@@ -111,6 +114,7 @@ export const IconSelector = ({
 
   const handleIconClick = (icon: ElementIcon): void => {
     setPreviewSelectedIcon(icon)
+    setHasSubmissionError(false)
   }
 
   const handleSave = (): void => {
@@ -124,14 +128,25 @@ export const IconSelector = ({
 
   const handleClearSelection = (): void => {
     setPreviewSelectedIcon(undefined)
+    setHasSubmissionError(false)
+    onChange?.(undefined)
   }
 
   const handleCustomIconChange = (icon: ElementIcon | undefined): void => {
     setPreviewSelectedIcon(icon)
+    if (isUndefined(icon)) {
+      setHasSubmissionError(false)
+    }
   }
 
   const handleSearch = (value: string): void => {
     setSearchValue(value)
+    setCurrentPage(1)
+  }
+
+  const handleTabChange = (tabKey: string): void => {
+    setActiveTab(tabKey)
+    setSearchValue('')
     setCurrentPage(1)
   }
 
@@ -145,13 +160,14 @@ export const IconSelector = ({
   return (
     <>
       <Flex gap={ 'extra-small' }>
-
         <Flex
           align='center'
           className={ styles.selectionPreview }
           justify='center'
         >
-          <IconPreview icon={ previewSelectedIcon } />
+          <IconPreview
+            icon={ value }
+          />
         </Flex>
         <IconButton
           icon={ { value: 'folder-search' } }
@@ -170,7 +186,7 @@ export const IconSelector = ({
         className={ styles.iconSelectorModal }
         footer={ <ModalFooter divider>
           <Button
-            disabled={ isUndefined(previewSelectedIcon) }
+            disabled={ isUndefined(previewSelectedIcon) || hasSubmissionError }
             onClick={ handleSave }
             type="primary"
           >
@@ -188,16 +204,14 @@ export const IconSelector = ({
           <Tabs
             activeKey={ activeTab }
             items={ tabItems }
-            onChange={ setActiveTab }
+            onChange={ handleTabChange }
           />
 
           {activeTab !== 'custom' && (
           <SearchInput
             maxWidth={ '1000px' }
-            onChange={ (e) => { setSearchValue(e.target.value) } }
             onSearch={ handleSearch }
             placeholder={ t('icon-selector.search-placeholder') }
-            value={ searchValue }
             withPrefix={ false }
             withoutAddon={ false }
           />
@@ -232,12 +246,17 @@ export const IconSelector = ({
               <span className={ styles.selectionLabel }>{t('icon-selector.current-selection')}</span>
               <Flex
                 align='center'
-                className={ styles.selectionPreview }
+                className={ cn(styles.selectionPreview, {
+                  [styles.selectionPreviewError]: hasSubmissionError
+                }) }
                 justify='center'
               >
-                <IconPreview icon={ previewSelectedIcon } />
+                <IconPreview
+                  icon={ previewSelectedIcon }
+                  onLoadError={ setHasSubmissionError }
+                />
               </Flex>
-              {!isUndefined(previewSelectedIcon) && (
+              {!isUndefined(previewSelectedIcon) && !hasSubmissionError && (
               <IconButton
                 icon={ { value: 'trash' } }
                 onClick={ handleClearSelection }

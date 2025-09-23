@@ -21,9 +21,10 @@ export interface ISearchInputProps extends AntSearchProps {
   withPrefix?: boolean
   withClear?: boolean
   maxWidth?: CSSProperties['maxWidth']
+  searchButtonIcon?: string
 }
 
-export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, searchButtonIcon = 'search', ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(
@@ -45,6 +46,11 @@ export const SearchInput = ({ className, withoutAddon = false, withPrefix = fals
         )
       } }
       className={ searchClassNames }
+      enterButton={ !withoutAddon && (
+        <Icon
+          value={ searchButtonIcon }
+        />
+      ) }
       prefix={ (withPrefix) && (
         <Icon
           className={ styles.searchIcon }

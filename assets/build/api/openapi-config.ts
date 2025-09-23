@@ -86,6 +86,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'customReportsColumnConfigList',
+      type: 'query'
+    },
+    {
       pattern: 'translationGetList',
       type: 'query'
     },

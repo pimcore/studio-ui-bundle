@@ -233,12 +233,12 @@ export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users */ {
     totalItems: number;
     items: SimpleUser[];
 };
 export type PimcoreStudioApiUserSearchApiArg = {
-    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
+    /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
 };
 export type UserUpdateActivePerspectiveApiResponse = unknown;
@@ -417,6 +417,24 @@ export type UserWorkspace = {
     /** Properties Permission */
     properties: boolean;
 };
+export type UserDocumentWorkspace = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+    /** Localized Edit */
+    localizedEdit?: string | null;
+    /** Localized View */
+    localizedView?: string | null;
+    /** Layouts */
+    layouts?: string | null;
+};
+export type UserDocumentWorkspace2 = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+};
 export type DependencyToAnObject = {
     /** ID of the object */
     id: number;
@@ -485,9 +503,9 @@ export type User = {
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
     /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
+    dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
+    documentWorkspaces: UserDocumentWorkspace2[];
     /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */

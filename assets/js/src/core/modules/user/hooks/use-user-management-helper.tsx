@@ -177,7 +177,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
     const updateUser: User2 = {
       ...user,
-      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false,
+      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
       parentId: user.parentId ?? 0
     }
 
@@ -202,7 +202,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.enabled ?? false } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }
