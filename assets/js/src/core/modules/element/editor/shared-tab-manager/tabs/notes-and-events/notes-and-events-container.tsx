@@ -31,7 +31,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
   const [deleteNote, { error: deleteError, isLoading: deleteLoading }] = useNoteDeleteByIdMutation()
 
-  const { isLoading, data, error } = useNoteElementGetCollectionQuery({
+  const { isLoading, data, error, refetch: refetchNotes } = useNoteElementGetCollectionQuery({
     id,
     elementType,
     page,
@@ -48,6 +48,8 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({ id })
+
+    await refetchNotes()
   }
 
   if (isLoading) {
@@ -73,6 +75,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
           total={ data!.totalItems }
         />
       }
+      refetchNotes={ refetchNotes }
     />
   )
 }
