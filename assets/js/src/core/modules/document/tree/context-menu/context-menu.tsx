@@ -45,7 +45,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { publishTreeContextMenuItem } = usePublish('document')
   const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
   const { convertTreeContextMenuItem, canConvert } = useConvert()
-  const { removeSiteTreeContextMenuItem } = useSiteActions()
+  const { removeSiteTreeContextMenuItem, useAsSiteTreeContextMenuItem, editSiteTreeContextMenuItem } = useSiteActions()
   const {
     pasteAsChildRecursiveTreeContextMenuItem,
     pasteRecursiveUpdatingReferencesTreeContextMenuItem,
@@ -133,6 +133,8 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
             unlockAndPropagateTreeContextMenuItem(node)
           ]
         },
+        useAsSiteTreeContextMenuItem(node),
+        editSiteTreeContextMenuItem(node),
         removeSiteTreeContextMenuItem(node)
       ]
     },
