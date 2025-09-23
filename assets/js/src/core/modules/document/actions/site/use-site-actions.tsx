@@ -142,7 +142,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
         return
       }
 
-      const { data: siteData, error } = await fetchSiteData({ documentId: id }, true)
+      const { data: siteData, error } = await fetchSiteData({ documentId: id }, false)
 
       if (!isUndefined(error)) {
         clearNodeLoading(id)
