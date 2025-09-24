@@ -53,17 +53,23 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
             title={t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}
           >
             <Flex vertical gap={4}>
-              {Object.entries(permissions).map(([permissionKey, permissionValue]) => (
-                <Form.Item
-                  key={`${categoryName}.${permissionKey}`}
-                  name={['contextPermissions', categoryName, permissionKey]}
-                >
-                  <Switch
-                    size='small'
-                    labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
-                  />
-                </Form.Item>
-              ))}
+              {Object.entries(permissions)
+                .sort(([keyA], [keyB]) => {
+                  if (keyA === 'hidden') return -1
+                  if (keyB === 'hidden') return 1
+                  return 0
+                })
+                .map(([permissionKey, permissionValue]) => (
+                  <Form.Item
+                    key={`${categoryName}.${permissionKey}`}
+                    name={['contextPermissions', categoryName, permissionKey]}
+                  >
+                    <Switch
+                      size='small'
+                      labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
+                    />
+                  </Form.Item>
+                ))}
             </Flex>
           </FormKit.Panel>
         ))}
