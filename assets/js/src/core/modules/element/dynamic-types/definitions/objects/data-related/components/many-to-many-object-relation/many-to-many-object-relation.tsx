@@ -72,6 +72,8 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
 export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  console.log('----->>>>> props: ', props)
+
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const { getByName } = useClassDefinitions()

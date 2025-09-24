@@ -28,15 +28,18 @@ interface IUseDataObjectGridsProps {
 }
 
 export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): Array<TypedUseQueryHookResult<DataObjectGetGridApiResponse, DataObjectGetGridApiArg, any, any>> => {
-  const loadedIdsRef = useRef<Set<number>>(new Set())
+  const loadedIdsRef = useRef<Map<string, Set<number>>>(new Map())
 
   return (classIds ?? []).map((classId: string) => {
     const currentIds = map(filter(dataValue, { subtype: classId }), 'id')
-    const newIds = currentIds.filter((id) => !loadedIdsRef.current.has(id))
+    console.log('----->>>> 000 currentIds: ', currentIds)
 
-    if (newIds.length > 0) {
-      newIds.forEach((id) => loadedIdsRef.current.add(id))
+    if (!loadedIdsRef.current.has(classId)) {
+      loadedIdsRef.current.set(classId, new Set())
     }
+
+    const loadedIds = loadedIdsRef.current.get(classId)
+    const newIds = currentIds.filter((id) => loadedIds?.has(id) === false)
 
     return useDataObjectGetGridQuery(
       {

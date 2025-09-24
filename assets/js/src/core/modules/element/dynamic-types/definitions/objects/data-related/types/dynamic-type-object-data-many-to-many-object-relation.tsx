@@ -46,7 +46,6 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
   }
 
   getObjectDataComponent (props: ManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    console.log('ManyToManyObjectRelation getObjectDataComponent props', props)
     return (
       <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
         <ManyToManyObjectRelation
