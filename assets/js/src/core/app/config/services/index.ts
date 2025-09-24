@@ -231,8 +231,8 @@ import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dyn
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
-import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
-import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/custom-view-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
+import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
+import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
 // Component registry
