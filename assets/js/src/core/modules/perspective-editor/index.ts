@@ -14,6 +14,8 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { PerspectiveEditorContainer } from './perspective-editor-container'
+import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../auth/enums/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -30,8 +32,8 @@ moduleSystem.registerModule({
       order: 400,
       dividerBottom: true,
       className: 'item-style-modifier',
-      // permission: UserPermission.FOO,
-      // perspectivePermission: NavPermission.BAR,
+      permission: UserPermission.PerspectiveEditor,
+      perspectivePermission: NavPermission.Perspectives,
       widgetConfig: {
         name: 'perspectiveEditor',
         id: 'perspective-editor',

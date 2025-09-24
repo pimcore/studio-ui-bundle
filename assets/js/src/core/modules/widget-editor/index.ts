@@ -16,6 +16,8 @@ import { type DynamicTypeWidgetTypeRegistry } from './dynmic-types/registry/dyna
 import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { WidgetEditorContainer } from './widget-editor-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -31,8 +33,8 @@ moduleSystem.registerModule({
       label: 'navigation.widget-editor.widget-editor',
       order: 300,
       className: 'item-style-modifier',
-      // permission: UserPermission.FOO,
-      // perspectivePermission: NavPermission.BAR,
+      permission: UserPermission.WidgetEditor,
+      perspectivePermission: NavPermission.Perspectives,
       widgetConfig: {
         name: 'widgetEditor',
         id: 'widget-editor',

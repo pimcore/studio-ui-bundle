@@ -1268,7 +1268,7 @@ perspective-editor.form.allowed-context-menu.file.hidden: Hide File Menu
 perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
 perspective-editor.form.allowed-context-menu.file.open_document: Open Document
 perspective-editor.form.allowed-context-menu.file.open_object: Open Object
-perspective-editor.form.allowed-context-menu.file.perspectives: Perspectives
+perspective-editor.form.allowed-context-menu.file.perspectives: Perspective & Widget Editor
 perspective-editor.form.allowed-context-menu.file.schedule: Schedule
 perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
 perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
