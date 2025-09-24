@@ -73,7 +73,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       return columnFilters.map(({ filterType, type, ...rest }) => {
         const column = availableColumns.find(col => col.key === rest.key)
         const locale = column?.localizable === true ? (rest.locale ?? currentLanguage) : null
-        
+
         return {
           ...rest,
           ...((filterType !== undefined) ? { type: filterType } : { type }),
