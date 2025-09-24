@@ -40,11 +40,8 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const user = useUser()
   const { getUserImageById } = useUserHelper()
 
-  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(undefined)
   useEffect(() => {
-    getUserImageById(user.id).then((imageUrl) => {
-      setUserImageUrl(imageUrl)
-    }).catch((error: Error) => {
+    getUserImageById(user.id, true).catch((error: Error) => {
       console.error('Error fetching user image:', error)
     })
   }, [])
@@ -121,7 +118,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
           data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
-          src={ userImageUrl }
+          src={ user?.image ?? undefined }
         ></Avatar>
       </Dropdown>
 

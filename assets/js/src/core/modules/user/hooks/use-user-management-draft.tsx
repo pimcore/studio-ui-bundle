@@ -13,7 +13,8 @@ import {
   selectUserById,
   userFetched,
   userRemoved,
-  changeUser
+  changeUser,
+  updateUserImage
 } from '@Pimcore/modules/user/user-management-slice'
 import {
   api,
@@ -29,6 +30,7 @@ interface UseUserReturnDraft {
 
   removeUserFromState: () => void
   changeUserInState: (changedValues: any) => void
+  updateUserImageInState: (image: string) => void
   updateUserKeyBinding: (name: string, code: object) => void
   reloadUser: () => void
 }
@@ -92,6 +94,11 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     dispatch(changeUser({ id: user.id, changes }))
   }
 
+  function updateUserImageInState (image: string): void {
+    if (user === undefined) return
+    dispatch(updateUserImage({ id: user.id, image }))
+  }
+
   function updateUserKeyBinding (name: string, code: { key: number, ctrl: boolean, alt: boolean, shift: boolean }): void {
     const updatedKeyBindings = [...user.keyBindings]
     const existingKeyBindingIndex = updatedKeyBindings.findIndex((keyBinding: any) => keyBinding.action === name)
@@ -112,6 +119,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     removeUserFromState,
     changeUserInState,
     reloadUser,
-    updateUserKeyBinding
+    updateUserKeyBinding,
+    updateUserImageInState
   }
 }

@@ -62,7 +62,7 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
-    userImageLoaded: (state, action: PayloadAction<{ id: any, image: any }>): void => {
+    updateUserImage: (state, action: PayloadAction<{ id: any, image: any }>): void => {
       const update: Update<any, any> = {
         id: action.payload.id,
         changes: { image: action.payload.image }
@@ -88,7 +88,7 @@ export const {
   userFetched,
   userAvailablePermissionsFetched,
   changeUser,
-  userImageLoaded,
+  updateUserImage,
   userUpdated
 } = slice.actions
 

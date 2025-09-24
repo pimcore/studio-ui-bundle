@@ -39,7 +39,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { Text } = Typography
   const { id } = useUserManagementContext()
   const user = useUser()
-  const { user: openedUser, isLoading, changeUserInState } = useUserManagementDraft(id)
+  const { user: openedUser, isLoading, changeUserInState, updateUserImageInState } = useUserManagementDraft(id)
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
@@ -166,7 +166,10 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar user={ openedUser } />
+          <UserAvatar
+            onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
+            user={ openedUser }
+          />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />

@@ -15,12 +15,12 @@ import {
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
+import { userProfileUpdated, userProfileImageUpdated } from '@Pimcore/modules/auth/user/user-slice'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
-  getUserImageById: (id: number) => Promise<string | undefined>
+  getUserImageById: (id: number, isLoggedInUser?: boolean) => Promise<string | undefined>
 }
 
 interface IBlobResponse {
@@ -95,10 +95,14 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getUserImageById (id: number): Promise<string | undefined> {
+  async function getUserImageById (id: number, isLoggedInUser?: boolean): Promise<string | undefined> {
     const result = await dispatch(api.endpoints.userGetImage.initiate({ id }))
 
     const blobResponse = result.data as IBlobResponse | undefined
+
+    if (isLoggedInUser === true) {
+      dispatch(userProfileImageUpdated(blobResponse))
+    }
 
     return blobResponse?.data
   }

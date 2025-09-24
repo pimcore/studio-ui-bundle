@@ -174,7 +174,10 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
           />
         </Col>
         <Col span={ 6 }>
-          <UserAvatar user={ user } />
+          <UserAvatar
+            isLoggedInUser
+            user={ user }
+          />
         </Col>
         <Col span={ 14 }>
           <Accordion
