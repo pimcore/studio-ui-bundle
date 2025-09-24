@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 interface UsePerspectiveEditorReturn {
   createPerspective: (onFinish?: (newName: string) => void) => void
   getPerspectiveById: (id: string) => Promise<PerspectiveConfigDetail | undefined>
-  updatePerspective: (id: string, config: CreatePerspectiveConfig, onFinish?: (updated: PerspectiveConfigDetail) => void) => Promise<void>
+  updatePerspective: (id: string, config: CreatePerspectiveConfig, onFinish?: () => void) => Promise<void>
   removeWithConfirmation: (id: string, onFinish?: () => void) => void
 }
 
@@ -96,7 +96,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
     }
   }
 
-  const updatePerspective = async (id: string, config: CreatePerspectiveConfig, onFinish?: (updated: PerspectiveConfigDetail) => void): Promise<void> => {
+  const updatePerspective = async (id: string, config: CreatePerspectiveConfig, onFinish?: () => void): Promise<void> => {
     const perspectiveUpdateTask = perspectiveUpdateMutation({
       perspectiveId: id,
       savePerspectiveConfig: config
@@ -106,15 +106,16 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       const response = (await perspectiveUpdateTask) as any
 
       if (response.error !== undefined) {
+        onFinish?.()
         trackError(new ApiError(response.error as ApiErrorData))
         return
       }
 
-      // TODO: clear perspective list cache tag
-      onFinish?.(config as PerspectiveConfigDetail)
+      onFinish?.()
       void success(t('perspective-editor.update.success'))
     } catch {
-      trackError(new GeneralError('Failed to create new perspective.'))
+      onFinish?.()
+      trackError(new GeneralError('Failed to update perspective.'))
     }
   }
 
