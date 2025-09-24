@@ -62,7 +62,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'title',
       label: (
-        <div className={ 'user-menu__title' }>{t('user-menu.title')} <span className={'user-menu__title-username'}>({user.username})</span></div>
+        <div className={ 'user-menu__title' }>{t('user-menu.title')} <span className={ 'user-menu__title-username' }>({user.username})</span></div>
       ),
       type: 'group'
     },
