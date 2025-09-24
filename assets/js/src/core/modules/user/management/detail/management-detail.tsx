@@ -25,6 +25,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { Popconfirm } from 'antd'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 
 interface IManagementDetailProps {
   onRemoveItem: (id: any, parentId: any) => void
@@ -36,9 +37,10 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
   const { styles } = useStyle()
   const classNames = ['detail-tabs', styles.detailTabs]
   const modal = useFormModal()
+  const { user } = useUserDraft()
 
   const { openUser, closeUser, removeUser, cloneUser, getAllIds, activeId } = useUserManagementHelper()
-  const { user } = useUserManagementDraft(activeId)
+  const { user: openedUser } = useUserManagementDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
   const triggerConfirm = (): void => {
@@ -48,7 +50,11 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
 
   const onHandleClose = (key: string): void => {
     if (selectUserById(store.getState(), parseInt(key))?.modified && popConfirmOpen === null) {
-      setPopConfirmOpen(parseInt(key))
+      if (user?.allowDirtyClose) {
+        triggerConfirm()
+      } else {
+        setPopConfirmOpen(parseInt(key))
+      }
 
       return
     }
@@ -70,7 +76,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
       label: t('user-management.clone-user.label'),
       onOk: async (value: string) => {
         const data = await cloneUser({ id: activeId, name: value })
-        onCloneUser(data, user?.parentId)
+        onCloneUser(data, openedUser?.parentId)
       }
     })
   }
@@ -83,7 +89,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
         triggerConfirm()
         await removeUser({ id: activeId })
 
-        onRemoveItem(activeId, user?.parentId)
+        onRemoveItem(activeId, openedUser?.parentId)
       }
     })
   }
