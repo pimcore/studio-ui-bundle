@@ -134,7 +134,11 @@ export const {
   useDocumentGetSiteQuery,
   useLazyDocumentGetSiteQuery,
   useDocumentUpdateSiteMutation,
-  useDocumentDeleteSiteMutation
+  useDocumentDeleteSiteMutation,
+  useDocumentGetTranslationsQuery,
+  useDocumentAddTranslationMutation,
+  useDocumentDeleteTranslationMutation,
+  useDocumentGetTranslationParentByLanguageQuery
 } = api
 
 export { api }
