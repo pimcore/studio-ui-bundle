@@ -92,7 +92,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (hasLinkedTranslations) {
       const openTranslationItems: ItemType[] = []
 
-      otherTranslations.forEach((translation) => {
+      for (const translation of otherTranslations) {
         openTranslationItems.push({
           label: `${getDisplayName(translation.language)} [${translation.language}]`,
           key: `translation-${translation.language}`,
@@ -109,7 +109,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
             }
           }
         })
-      })
+      }
 
       translationItems.push({
         label: t('document.translation.open-translation'),
@@ -122,7 +122,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (hasLinkedTranslations) {
       const unlinkTranslationItems: ItemType[] = []
 
-      otherTranslations.forEach((translation) => {
+      for (const translation of otherTranslations) {
         unlinkTranslationItems.push({
           label: `${getDisplayName(translation.language)} [${translation.language}]`,
           key: `unlink-translation-${translation.language}`,
@@ -136,7 +136,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
             onFinish?.()
           }
         })
-      })
+      }
 
       translationItems.push({
         label: t('document.translation.unlink-existing-document'),
