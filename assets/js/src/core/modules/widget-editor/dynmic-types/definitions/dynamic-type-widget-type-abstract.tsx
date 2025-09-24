@@ -21,14 +21,14 @@ export abstract class DynamicTypeWidgetTypeAbstract implements DynamicTypeAbstra
   group: string
   icon: string
 
-  abstract form(): React.JSX.Element
+  abstract form (): React.JSX.Element
 
-  getSubMenuItems(configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
+  getSubMenuItems (configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     return configs.map((config) => {
       return {
         label: config.name,
         key: config.id,
-        icon: <Icon value={config.icon.value} />,
+        icon: <Icon value={ config.icon.value } />,
         onClick: onWidgetClick === undefined ? undefined : () => { onWidgetClick(config) }
       }
     })

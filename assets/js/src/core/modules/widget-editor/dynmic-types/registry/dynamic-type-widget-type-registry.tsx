@@ -19,7 +19,7 @@ import { Trans } from 'react-i18next'
 
 @injectable()
 export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<DynamicTypeWidgetTypeAbstract> {
-  getMenuItems(configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
+  getMenuItems (configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     const widgetTypes: Record<string, DynamicTypeWidgetTypeAbstract[]> = {}
 
     for (const dynamicType of this.getDynamicTypes()) {
@@ -35,7 +35,7 @@ export class DynamicTypeWidgetTypeRegistry extends DynamicTypeRegistryAbstract<D
         children: dynamicTypes.map((dynamicType) => ({
           label: <Trans>{`widget-editor.create-form.widgetType.${dynamicType.name}`}</Trans>,
           key: dynamicType.id,
-          icon: <Icon value={dynamicType.icon} />,
+          icon: <Icon value={ dynamicType.icon } />,
           children: dynamicType.getSubMenuItems(
             configs.filter((config) => config.widgetType === dynamicType.id),
             onWidgetClick

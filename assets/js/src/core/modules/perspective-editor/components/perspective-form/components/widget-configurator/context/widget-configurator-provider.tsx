@@ -91,7 +91,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }), [widgetConfigs, expandedWidget])
 
   return (
-    <WidgetConfiguratorContext.Provider value={contextValue}>
+    <WidgetConfiguratorContext.Provider value={ contextValue }>
       {children}
     </WidgetConfiguratorContext.Provider>
   )
