@@ -168,6 +168,16 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     }
   }, [gridFullData, isGridFullDataLoading])
 
+  useEffect(() => {
+    // Remove IDs from loadedIds and cachedGridFullData if they no longer exist in the new props.value
+    if (!isEmpty(props.value)) {
+      const currentIds = new Set((props?.value ?? []).map(item => item.id))
+
+      setLoadedIds(prev => prev.filter(id => currentIds.has(id)))
+      setCachedGridFullData(prev => prev.filter(item => currentIds.has(item.id!)))
+    }
+  }, [props?.value])
+
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
