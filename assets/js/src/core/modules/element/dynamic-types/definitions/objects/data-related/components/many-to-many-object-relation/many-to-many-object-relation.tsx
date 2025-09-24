@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
@@ -79,6 +79,9 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const relationField = props?.combinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
+  const [loadedIds, setLoadedIds] = useState<number[]>([])
+  console.log('---->>>>> loadedIds: ', loadedIds)
+
   const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
     {
       key: 'id',
@@ -140,7 +143,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
-    dataValue: props?.value
+    dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
   })
   const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading === true || q.isFetching)
   const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
@@ -161,6 +164,9 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     },
     [gridFullData, visibleFieldDefinitions]
   )
+
+  console.log('----->>>>> gridFullData: ', gridFullData)
+  console.log('----->>>>> props?.value: ', props?.value)
 
   return (
     <ManyToManyRelation
