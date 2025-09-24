@@ -75,7 +75,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
         const column = availableColumns.find(col => col.key === key)
         const frontendType = column?.frontendType
         const transformedKey = frontendType === 'consent' ? `${key}.consent` : key
-        
+
         return {
           ...rest,
           key: transformedKey,
