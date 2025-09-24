@@ -33,7 +33,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { renameContextMenuItem } = useRename('document')
   const { deleteContextMenuItem } = useDelete('document')
   const { openInNewWindowContextMenuItem, openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
-  const { translationContextMenuItem } = useTranslations()
+  const { translationContextMenuItem } = useTranslations(document as Document)
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
   const items: DropdownMenuProps['items'] = [
@@ -42,7 +42,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     }),
     deleteContextMenuItem(document as Document),
     renameContextMenuItem(document as Document),
-    translationContextMenuItem(document as Document, () => {
+    translationContextMenuItem(() => {
       setIsOpen(undefined)
     }),
     openInNewWindowContextMenuItem(document as Document),

@@ -26,10 +26,10 @@ import { LinkTranslationModal } from './components/link-translation-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseTranslationsHookReturn {
-  translationContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
+  translationContextMenuItem: (onFinish?: () => void) => ItemType
 }
 
-export const useTranslations = (): UseTranslationsHookReturn => {
+export const useTranslations = (document: Element): UseTranslationsHookReturn => {
   const { t } = useTranslation()
   const { openDocument } = useDocumentHelper()
   const { getDisplayName } = useLanguageLookup()
@@ -43,6 +43,12 @@ export const useTranslations = (): UseTranslationsHookReturn => {
 
   const MODAL_ID = useMemo(() => `translation-modal-${uuid()}`, [])
 
+  const { data: translations, error: translationsError } = useDocumentGetTranslationsQuery({
+    id: document.id
+  }, {
+    skip: isNil(document.id)
+  })
+
   useEffect(() => {
     if (!isUndefined(deleteError)) {
       trackError(new ApiError(deleteError))
@@ -55,19 +61,13 @@ export const useTranslations = (): UseTranslationsHookReturn => {
     }
   }, [addError])
 
-  const translationContextMenuItem = (document: Element, onFinish?: () => void): ItemType => {
-    const { data: translations, error: translationsError } = useDocumentGetTranslationsQuery({
-      id: document.id
-    }, {
-      skip: isNil(document.id)
-    })
+  useEffect(() => {
+    if (!isUndefined(translationsError)) {
+      trackError(new ApiError(translationsError))
+    }
+  }, [translationsError])
 
-    useEffect(() => {
-      if (!isUndefined(translationsError)) {
-        trackError(new ApiError(translationsError))
-      }
-    }, [translationsError])
-
+  const translationContextMenuItem = (onFinish?: () => void): ItemType => {
     const translationLinks = translations?.translationLinks ?? []
 
     const otherTranslations = translationLinks.filter(
