@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -44,6 +44,7 @@ export const LinkTranslationModal = ({
 }: LinkTranslationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { getDisplayName } = useLanguageLookup()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { data: selectedDocumentProperties, isLoading: isLoadingDocumentProperties, error: propertiesError } = usePropertyGetCollectionForElementByTypeAndIdQuery(
     {
@@ -65,7 +66,12 @@ export const LinkTranslationModal = ({
   const selectedDocumentLanguage = isString(languageProperty?.data) ? languageProperty.data : ''
 
   const handleSubmit = async (): Promise<void> => {
-    await onSubmit()
+    setIsSubmitting(true)
+    try {
+      await onSubmit()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const renderLanguageInfo = (): React.ReactNode => {
@@ -107,6 +113,7 @@ export const LinkTranslationModal = ({
           </Button>
           <Button
             disabled={ isNull(selectedDocument) }
+            loading={ isSubmitting }
             onClick={ handleSubmit }
             type="primary"
           >
