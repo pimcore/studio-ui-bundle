@@ -1209,6 +1209,11 @@ embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
 document.open-preview-in-new-window: Open Preview in new window
+document.translation.title: Translation
+document.translation.open-translation: Open Translation
+document.translation.link-existing-document: Link existing Document
+document.translation.unlink-existing-document: Unlink existing Document
+document.translation.all-translations: All Translations
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
