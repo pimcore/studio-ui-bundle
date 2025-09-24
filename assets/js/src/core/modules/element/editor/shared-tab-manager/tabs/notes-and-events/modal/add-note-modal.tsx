@@ -14,10 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { AddNoteForm } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
 import { useForm } from 'antd/es/form/Form'
-import {
-  useNoteElementCreateMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from '../../../../../../../types/enums/element/element-type'
+import { useNoteElementCreateMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface AddNoteFormValues {
   type: string
@@ -30,13 +28,14 @@ export interface AddNoteModalProps {
   setOpen: (open: boolean) => void
   elementType: ElementType
   elementId: number
+  refetchNotes: () => void
 }
 
 export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
-  const [createNote] = useNoteElementCreateMutation()
-  const [saveInProgress, setSaveInProgress] = React.useState(false)
+
+  const [createNote, { isLoading }] = useNoteElementCreateMutation()
 
   async function addNote (title: string, type: string = '', description: string = ''): Promise<void> {
     await createNote({
@@ -51,16 +50,17 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
   }
 
   async function onFinish (values: AddNoteFormValues): Promise<void> {
-    setSaveInProgress(true)
     await addNote(values.title, values.type, values.description)
+
+    props.refetchNotes()
     props.setOpen(false)
+
     form.resetFields()
-    setSaveInProgress(false)
   }
 
   return (
     <Modal
-      okButtonProps={ { loading: saveInProgress } }
+      okButtonProps={ { loading: isLoading } }
       okText={ t('save') }
       onCancel={ () => {
         props.setOpen(false)

@@ -21,6 +21,7 @@ import { Model } from 'flexlayout-react'
 import { dataObjectReceived } from '../data-object-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface DataObjectConfig {
   id: number
@@ -73,7 +74,11 @@ export class DataObjectOpeningService {
     }
 
     store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
-    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+
+    if (isError) {
+      trackError(new ApiError(error))
+    }
 
     if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
@@ -90,6 +95,7 @@ export class DataObjectOpeningService {
       component: 'data-object-editor',
       config: {
         id,
+        elementType: 'data-object',
         icon: {
           type: icon.type,
           value: icon.value

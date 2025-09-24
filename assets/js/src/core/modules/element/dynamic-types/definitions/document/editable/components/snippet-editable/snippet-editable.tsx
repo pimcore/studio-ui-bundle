@@ -13,6 +13,8 @@ import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@sdk/components'
 import { SnippetContent } from './snippet-content'
 import { isNil } from 'lodash'
+import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
+import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 
 export interface SnippetValue {
   id?: number
@@ -25,7 +27,6 @@ export interface SnippetEditableConfig {
   height?: number
   defaultHeight?: number
   class?: string
-  documentTypes?: string[]
 }
 
 export interface SnippetEditableProps {
@@ -33,43 +34,56 @@ export interface SnippetEditableProps {
   config?: SnippetEditableConfig
   onChange: (value: SnippetValue | null) => void
   className?: string
+  inherited?: boolean
+  disabled?: boolean
 }
 
 export const SnippetEditable = ({
   value,
   config,
   onChange,
-  className
+  className,
+  inherited = false,
+  disabled = false
 }: SnippetEditableProps): React.JSX.Element => {
+  const isValidSnippetDocument = (info: DragAndDropInfo): boolean => {
+    return info.type === 'document' && !isNil(info.data?.type) && String(info.data.type) === 'snippet'
+  }
+
   const handleDrop = (info: DragAndDropInfo): void => {
-    if (info.type === 'document' && !isNil(info.data?.type)) {
-      const allowedTypes = config?.documentTypes ?? ['snippet']
-      if (allowedTypes.includes(String(info.data.type))) {
-        const newValue: SnippetValue = {
-          id: info.data.id,
-          path: !isNil(info.data.fullPath) ? info.data.fullPath : info.data.path
-        }
-        onChange(newValue)
+    if (isValidSnippetDocument(info)) {
+      const newValue: SnippetValue = {
+        id: info.data.id,
+        path: !isNil(info.data.fullPath) ? info.data.fullPath : info.data.path
       }
+      onChange(newValue)
     }
   }
 
+  const handleOverwrite = (): void => {
+    onChange(value ?? null)
+  }
+
   return (
-    <Droppable
-      disableDndActiveIndicator
-      isValidContext={ (info: DragAndDropInfo) => info.type === 'document' }
-      isValidData={ (info: DragAndDropInfo) => {
-        const allowedTypes = config?.documentTypes ?? ['snippet']
-        return !isNil(info.data?.type) && allowedTypes.includes(String(info.data.type))
-      } }
-      onDrop={ handleDrop }
+    <InheritanceOverlay
+      display={ isNil(config?.width) ? 'block' : undefined }
+      isInherited={ inherited }
+      noPadding
+      onOverwrite={ handleOverwrite }
     >
-      <SnippetContent
-        className={ className }
-        config={ config }
-        onChange={ onChange }
-        value={ value }
-      />
-    </Droppable>
+      <Droppable
+        disableDndActiveIndicator
+        isValidContext={ (info: DragAndDropInfo) => disabled ? false : allElementTypes.includes(info.type) }
+        isValidData={ isValidSnippetDocument }
+        onDrop={ handleDrop }
+      >
+        <SnippetContent
+          className={ className }
+          config={ config }
+          onChange={ onChange }
+          value={ value }
+        />
+      </Droppable>
+    </InheritanceOverlay>
   )
 }

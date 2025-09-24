@@ -9,8 +9,11 @@
  */
 
 import React, { useRef, useEffect } from 'react'
-import { isNil, isNull } from 'lodash'
+import { isNil, isNull, isString } from 'lodash'
 import { escapeHtml, pasteHtmlAtCaret, stripTags } from '@Pimcore/utils/html'
+import { useStyles } from './content-editable.styles'
+import { InheritanceOverlay, type InheritanceOverlayProps } from '../inheritance-overlay/inheritance-overlay'
+import cn from 'classnames'
 
 export interface ContentEditableProps {
   value?: string | null
@@ -21,6 +24,9 @@ export interface ContentEditableProps {
   height?: number
   nowrap?: boolean
   allowMultiLine?: boolean
+  className?: string
+  disabled?: boolean
+  inherited?: boolean
 }
 
 const ContentEditable = ({
@@ -31,32 +37,65 @@ const ContentEditable = ({
   width,
   height,
   nowrap,
-  allowMultiLine = false
+  allowMultiLine = false,
+  className,
+  disabled = false,
+  inherited = false
 }: ContentEditableProps): JSX.Element => {
+  const { styles } = useStyles()
   const contentRef = useRef<HTMLDivElement>(null)
-  const valueRef = useRef<string | null>(value ?? null)
+  const currentValueRef = useRef<string | null | undefined>(value ?? null)
+
+  const valueToHtml = (val: string | null | undefined): string => {
+    if (isNil(val) || val === '') {
+      return ''
+    }
+
+    if (allowMultiLine) {
+      return val.replace(/\r\n|\n/g, '<br>')
+    }
+
+    return val
+  }
+
+  const htmlToValue = (html: string): string => {
+    if (html === '') {
+      return ''
+    }
+
+    let cleanValue = stripTags(html, ['br'])
+
+    if (allowMultiLine) {
+      cleanValue = cleanValue.replace(/<br\s*\/?>/gi, '\n')
+    } else {
+      cleanValue = cleanValue.replace(/<br\s*\/?>/gi, ' ')
+    }
+
+    return cleanValue.trim()
+  }
 
   useEffect(() => {
+    if (!isNull(contentRef.current)) {
+      const htmlContent = valueToHtml(value)
+      if (contentRef.current.innerHTML !== htmlContent) {
+        contentRef.current.innerHTML = htmlContent
+      }
+      currentValueRef.current = value
+    }
+  }, [value, allowMultiLine, inherited])
+
+  const handleContentChange = (): void => {
     if (isNull(contentRef.current)) {
       return
     }
-    const html = allowMultiLine
-      ? (valueRef.current ?? '').replace(/\r\n|\n/g, '<br>')
-      : (valueRef.current ?? '') + '<br>'
 
-    if (contentRef.current.innerHTML !== html) {
-      contentRef.current.innerHTML = html
-    }
-  }, [allowMultiLine])
+    const html = contentRef.current.innerHTML
+    const newValue = htmlToValue(html)
 
-  const getValue = (): string => {
-    if (isNull(contentRef.current)) {
-      return ''
+    if (newValue !== currentValueRef.current) {
+      currentValueRef.current = newValue
+      onChange?.(isString(newValue) ? newValue : '')
     }
-    let newValue = contentRef.current.innerHTML ?? ''
-    newValue = stripTags(newValue, ['br'])
-    newValue = newValue.replace(/<br>/g, '\n').trim()
-    return newValue
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>): void => {
@@ -82,49 +121,102 @@ const ContentEditable = ({
     }
 
     pasteHtmlAtCaret(text, currentWindow)
-
-    const newValue = getValue()
-    valueRef.current = newValue
-    onChange?.(newValue)
+    setTimeout(handleContentChange, 0)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (!allowMultiLine && e.key === 'Enter') {
-      e.preventDefault()
+    if (e.key === 'Enter') {
+      if (!allowMultiLine) {
+        e.preventDefault()
+      } else {
+        e.preventDefault()
+
+        if (!isNil(window.getSelection)) {
+          const selection = window.getSelection()
+          if (!isNull(selection) && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            const br = document.createElement('br')
+            const textNode = document.createTextNode('\u00a0')
+
+            range.deleteContents()
+            range.insertNode(br)
+            range.collapse(false)
+            range.insertNode(textNode)
+            range.selectNodeContents(textNode)
+
+            selection.removeAllRanges()
+            selection.addRange(range)
+          }
+        }
+
+        setTimeout(handleContentChange, 0)
+      }
     }
   }
 
-  const handleInput = (): void => {
-    const newValue = getValue()
-    valueRef.current = newValue
+  const isEmpty = isNil(currentValueRef.current) || currentValueRef.current === ''
 
-    if (required === true && newValue.length < 1) {
-      contentRef.current?.classList.add('empty')
+  const getStyles = (): React.CSSProperties => {
+    const styles: React.CSSProperties = {}
+
+    if (allowMultiLine) {
+      if (!isNil(width) || !isNil(height)) {
+        styles.display = 'inline-block'
+        styles.overflow = 'auto'
+      }
+      if (!isNil(width)) {
+        styles.width = `${width}px`
+      }
+      if (!isNil(height)) {
+        styles.height = `${height}px`
+      }
     } else {
-      contentRef.current?.classList.remove('empty')
+      if (!isNil(width)) {
+        styles.display = 'inline-block'
+        styles.width = `${width}px`
+        styles.overflow = 'auto hidden'
+        styles.whiteSpace = 'nowrap'
+      }
     }
 
-    onChange?.(newValue)
+    if (!isNil(nowrap) && nowrap) {
+      styles.whiteSpace = 'nowrap'
+      styles.overflow = 'auto hidden'
+    }
+
+    return styles
+  }
+
+  const computedStyles = getStyles()
+
+  const getDisplayType = (): InheritanceOverlayProps['display'] => {
+    return computedStyles.display as InheritanceOverlayProps['display'] ?? 'block'
+  }
+
+  const handleOverwrite = (): void => {
+    onChange?.(value ?? '')
   }
 
   return (
-    <div
-      className="pimcorestudio_content-editable"
-      contentEditable
-      data-placeholder={ placeholder }
-      onInput={ handleInput }
-      onKeyDown={ handleKeyDown }
-      onPaste={ handlePaste }
-      ref={ contentRef }
-      role="none"
-      style={ {
-        display: !isNil(width) || !isNil(height) ? 'inline-block' : undefined,
-        width: !isNil(width) ? `${width}px` : undefined,
-        height: !isNil(height) ? `${height}px` : undefined,
-        overflow: (!isNil(nowrap) && nowrap) || !isNil(width) || !isNil(height) ? 'auto' : undefined,
-        whiteSpace: !isNil(nowrap) && nowrap ? 'nowrap' : undefined
-      } }
-    />
+    <InheritanceOverlay
+      display={ getDisplayType() }
+      isInherited={ inherited }
+      onOverwrite={ handleOverwrite }
+    >
+      <div
+        className={ cn(styles.contentEditable, className) }
+        contentEditable={ !disabled }
+        data-empty={ isEmpty }
+        data-placeholder={ placeholder }
+        data-required={ required }
+        onInput={ disabled ? undefined : handleContentChange }
+        onKeyDown={ disabled ? undefined : handleKeyDown }
+        onPaste={ disabled ? undefined : handlePaste }
+        ref={ contentRef }
+        role="none"
+        style={ computedStyles }
+      />
+    </InheritanceOverlay>
   )
 }
 

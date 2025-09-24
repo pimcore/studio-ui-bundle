@@ -17,4 +17,8 @@ export abstract class DynamicTypePipelineAbstract implements DynamicTypeAbstract
   abstract readonly id: string
 
   abstract getComponent (): ReactElement
+
+  isAvailableForSelection (config: Record<string, any>): boolean {
+    return true
+  }
 }

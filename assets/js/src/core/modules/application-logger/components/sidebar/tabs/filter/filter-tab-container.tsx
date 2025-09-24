@@ -32,7 +32,8 @@ export const FilterTabContainer = (): React.JSX.Element => {
     pid,
     setPid,
     resetFilters,
-    updateFilters
+    updateFilters,
+    isLoading
   } = useFilter()
 
   const handleResetFilters = (): void => {
@@ -45,6 +46,7 @@ export const FilterTabContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
+            disabled={ isLoading }
             icon={ { value: 'close' } }
             onClick={ handleResetFilters }
             type='link'
@@ -53,6 +55,8 @@ export const FilterTabContainer = (): React.JSX.Element => {
           </IconTextButton>
 
           <Button
+            disabled={ isLoading }
+            loading={ isLoading }
             onClick={ updateFilters }
             type='primary'
           >

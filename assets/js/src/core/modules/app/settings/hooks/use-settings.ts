@@ -11,10 +11,33 @@
 import { type SystemSettingsGetApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useSelector } from 'react-redux'
 import { getSettings } from '@Pimcore/modules/app/settings/settings-slice'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { isInIframe } from '@Pimcore/utils/iframe'
 
+/**
+ * Hook to get system settings that works in both main app and iframe contexts
+ */
 export const useSettings = (): SystemSettingsGetApiResponse => {
-  const settings = useSelector(getSettings)
+  const localSettings = useSelector(getSettings)
+  const [isIframe] = useState(() => isInIframe())
 
-  return useMemo(() => (settings), [settings])
+  const result = useMemo(() => {
+    if (isIframe && isPimcoreStudioApiAvailable()) {
+      try {
+        const { settings } = getPimcoreStudioApi()
+        const parentSettings = settings.getSettings()
+
+        if (parentSettings != null && Object.keys(parentSettings).length > 0) {
+          return parentSettings
+        }
+      } catch (error) {
+        console.warn('[useSettings] Failed to get parent settings:', error)
+      }
+    }
+
+    return localSettings
+  }, [isIframe, localSettings])
+
+  return result
 }

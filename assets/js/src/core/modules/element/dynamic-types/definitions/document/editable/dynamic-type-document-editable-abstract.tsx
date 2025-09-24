@@ -11,7 +11,6 @@
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
-import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
 import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
@@ -28,8 +27,6 @@ export interface AbstractDocumentEditableDefinition {
   defaultFieldWidth: IFieldWidthContext
   containerRef?: React.RefObject<HTMLDivElement>
 }
-
-export type GridCellColumnMeta = ColumnMetaType & { type: string }
 
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
@@ -52,10 +49,6 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
-  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
-    return undefined
-  }
-
   /**
    * Helper method to check if the editable has reload config enabled
    */
@@ -68,7 +61,19 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    * @param props The editable props
    * @returns true if should reload on change, false for normal debounced auto-save
    */
-  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
+  }
+
+  /**
+   * Called when the document is ready and initialized.
+   * Each dynamic type can implement this to perform type-specific initialization,
+   * such as notifying the parent about special data structures.
+   * @param documentId The ID of the document
+   * @param editableDefinitions All editable definitions in the document
+   */
+  onDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
+    // Default implementation does nothing
+    // Specific dynamic types can override this to perform type-specific actions
   }
 }

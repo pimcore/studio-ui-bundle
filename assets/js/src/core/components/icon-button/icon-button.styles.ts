@@ -19,11 +19,17 @@ export const useStyles = createStyles(({ token, css }) => {
       line-height: 0;
 
       &.icon-button--theme-secondary {
-        color: ${token.colorText};
+        color: ${token.colorIcon};
       }
       
       &.icon-button--hide-shadow {
         box-shadow: none;
+      }
+
+      &.icon-button--size-small {
+        padding: 4px;
+        height: 24px;
+        width: 24px;
       }
 
       &.icon-button--variant-minimal {

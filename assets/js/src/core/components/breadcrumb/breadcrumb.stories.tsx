@@ -15,7 +15,7 @@ import React from 'react'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 const config: Meta = {
-  title: 'Components/Controls/Breadcrumb',
+  title: 'Components/Data Display/Breadcrumb',
   component: Breadcrumb,
   parameters: {
     layout: 'centered'

@@ -23,8 +23,13 @@ export type * from './custom-reports-api-slice.gen'
 export const {
   useCustomReportsListDrillDownOptionsQuery,
   useCustomReportsChartQuery,
+  useCustomReportsConfigAddMutation,
+  useCustomReportsConfigCloneMutation,
+  useCustomReportsColumnConfigListQuery,
+  useCustomReportsConfigUpdateMutation,
+  useCustomReportsConfigDeleteMutation,
+  useCustomReportsReportQuery,
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,
-  useCustomReportsReportQuery,
   useCustomReportsGetTreeQuery
 } = api

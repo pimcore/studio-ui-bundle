@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Divider } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
@@ -21,6 +20,13 @@ import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
+import { modalTexts } from '@Pimcore/modules/open-element/open-element'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { Divider } from '@sdk/components'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -28,6 +34,8 @@ export const MainNav = (): React.JSX.Element => {
   const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
+  const { input } = useFormModal()
+  const { openElementByPathOrId } = openElementHelper()
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
@@ -40,6 +48,14 @@ export const MainNav = (): React.JSX.Element => {
     if (!key.includes('-')) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
     }
+  }
+
+  const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
+    const hasChildren = item.children !== undefined && item.children.length > 0
+    const isOpen = openKeys.includes(index)
+    const isNestedItem = index.includes('-')
+
+    return hasChildren && (isOpen || isNestedItem)
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
@@ -55,17 +71,25 @@ export const MainNav = (): React.JSX.Element => {
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
+        data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
         key={ item.path }
       >
         {!isUndefined(item.button)
           ? (
             <div>
               {item.button()}
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
             </div>
             )
           : (
-            <button
+            <><button
               className={ 'main-nav__list-btn' }
+              data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
               onClick={ () => {
                 if (item.children !== undefined && item.children.length > 0) {
                   handleOpenState(index)
@@ -77,29 +101,55 @@ export const MainNav = (): React.JSX.Element => {
                   setIsOpen(false)
                 }
               } }
-            >
-              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              >
+              {item.icon !== undefined && (
+                openKeys.includes(index)
+                  ? (
+                    <Icon
+                      options={ { width: 16, height: 16 } }
+                      sphere
+                      value={ item.icon }
+                    />
+                    )
+                  : (
+                    <Icon
+                      className={ 'plain-icon' }
+                      value={ item.icon }
+                    />
+                    )
+              )}
               {t(`${item.label}`)}
 
-              {item.children !== undefined && item.children.length > 0
-                ? (
-                  <Icon
-                    className={ 'main-nav__list-btn-icon' }
-                    value={ 'chevron-right' }
-                  />
-                  )
-                : null}
+              {shouldShowChevron(item, index) && (
+                <Icon
+                  className={ 'main-nav__list-chevron-btn-icon' }
+                  options={ { height: 18, width: 18 } }
+                  value={ 'chevron-right' }
+                />
+              )}
             </button>
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
+            </>
             )}
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <div className={ 'main-nav__list-detail' }>
+            <div
+              className={ 'main-nav__list-detail' }
+              data-testid={ `nav-submenu-${createSafeTestIdString(item.path)}` }
+            >
               <div className={ 'main-nav__list-detail-scroll-container' }>
                 <div className={ 'main-nav__list-detail-scroll' }>
                   <ul
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
+                    data-testid={ `nav-list-level-${level + 1}` }
                   >
+                    {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>
@@ -135,9 +185,30 @@ export const MainNav = (): React.JSX.Element => {
     }
   }, [isOpen])
 
+  const handleOpen = (type: ElementType): void => {
+    input({
+      title: t(`${modalTexts[type].title}`),
+      label: t(`${modalTexts[type].label}`),
+      rule: {
+        required: true,
+        message: t(`${modalTexts[type].requiredMessage}`)
+      },
+      okText: t(`${modalTexts[type].okText}`),
+      cancelText: t(`${modalTexts[type].cancelText}`),
+      onOk: async (value: string) => {
+        await openElementByPathOrId(value, type)
+      }
+    })
+  }
+
+  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true)
+  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true)
+  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true)
+
   return (
     <div ref={ elRef }>
       <IconButton
+        data-testid="main-nav-trigger"
         icon={ { value: 'menu' } }
         onClick={ () => {
           setIsOpen(!isOpen)
@@ -156,10 +227,12 @@ export const MainNav = (): React.JSX.Element => {
             ? (
               <div
                 className={ ['main-nav', styles.mainNav].join(' ') }
+                data-testid="main-nav-menu"
               >
 
                 <ul
                   className={ 'main-nav__list main-nav__list--level-0' }
+                  data-testid="nav-list-main"
                   ref={ navRef }
                 >
                   {navItems.map((item, index) => (

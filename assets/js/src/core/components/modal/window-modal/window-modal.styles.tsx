@@ -10,10 +10,11 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyle = createStyles(({ token, css }, { zIndex }: { zIndex?: number } = {}) => {
   return {
     wrapper: css`
       pointer-events: none;
+      ${zIndex !== undefined ? `z-index: ${zIndex} !important;` : ''}
     `,
     modal: css`
       .ant-modal-content {

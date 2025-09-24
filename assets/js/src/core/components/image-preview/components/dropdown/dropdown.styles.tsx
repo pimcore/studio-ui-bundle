@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     dotsButton: css`
-      position: absolute;
+      position: absolute !important;
       top: ${token.paddingXXS}px;
       right: ${token.paddingXXS}px;
       

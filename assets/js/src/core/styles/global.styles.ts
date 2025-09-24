@@ -644,4 +644,9 @@ export const GlobalStyles = createGlobalStyle`
   .overflow-x-auto {
     overflow-x: auto;
   }
+
+  .makeTabsGreatAgain {
+    position: absolute;
+    inset: 0;
+  }
 `

@@ -69,6 +69,11 @@ const modifySvgAttributes = (filePath: string): void => {
 
     if (!hasStroke) {
         svgContent = svgContent.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+    } else {
+        svgContent = svgContent.replace(
+            /fill=(["'])(?!none|white|transparent)(#[0-9a-fA-F]{3,6}|rgb\([^)]+\)|[a-zA-Z]+)\1/g,
+            'fill="currentColor"'
+        );
     }
 
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');

@@ -59,7 +59,7 @@ export interface ColumnMetaType {
   columnKey?: string
   config?: any
   callback?: boolean
-  editCallback?: (row: any, columnId: string) => Promise<string>
+  editCallback?: (row: any, columnId: string, currentValue: string) => Promise<string>
 }
 
 declare module '@tanstack/react-table' {
@@ -96,6 +96,7 @@ export const Grid = ({
   enableSorting = false,
   hideColumnHeaders = false,
   highlightActiveCell = false,
+  docked = false,
   onActiveCellChange,
   enableRowSelection = false,
   selectedRows = {},
@@ -289,12 +290,21 @@ export const Grid = ({
   }
 
   return useMemo(() => (
-    <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
+    <div className={ cn(
+      'ant-table-wrapper',
+      hashId,
+      styles.grid,
+      props.className,
+      { [styles.disabledGrid]: disabled },
+      docked ? 'grid--docked' : ''
+    ) }
+    >
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
             <table
               className={ cn({ withoutHeader: hideColumnHeaders }) }
+              data-testid={ props.dataTestId }
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >

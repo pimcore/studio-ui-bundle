@@ -171,6 +171,7 @@ export const Pagination = ({
                 handleChange={ changePageSize }
                 label={ i18n.t('pagination.page') }
                 sizeOptions={ pageSizeOptions }
+                width={ 120 }
               />
             </li>
           )

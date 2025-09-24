@@ -61,9 +61,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useDataObjectUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
 
-  // @todo prefill current language with language of the current configuration
-  const [currentLanguage, setCurrentLanguage] = useState<string>('en')
-
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = useForm()
 
@@ -135,11 +132,12 @@ export const GridConfigInner = (): React.JSX.Element => {
     })
   }
 
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: string, type: string }> {
+  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, type: string }> {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
-      group: column.group,
+      // @todo Currently the type in backend is not matching anymore
+      // group: column.group,
       type: column.type,
       config: column.__meta?.advancedColumnConfig ?? column.config
     }))
@@ -217,7 +215,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     setSelectedColumns(columns.map(column => {
       return {
         key: column.key,
-        locale: column.locale === null && column.localizable ? currentLanguage : column.locale,
+        locale: column.locale === null && column.localizable ? undefined : column.locale,
         type: column.type,
         config: column.config,
         sortable: column.sortable,
@@ -241,7 +239,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         <EditView
           addColumnMenu={ availableColumnsDropdown.menu.items }
           columns={ columns }
-          currentLanguage={ currentLanguage }
           currentUserId={ userData?.id }
           gridConfig={ gridConfig }
           isLoading={ isLoading || isFetching }
@@ -254,7 +251,6 @@ export const GridConfigInner = (): React.JSX.Element => {
           onSaveConfigurationClick={ () => { setView(ViewState.Save) } }
           onUpdateConfigurationClick={ onUpdatedConfigurationClick }
           savedGridConfigurations={ savedGridConfigurations }
-          setCurrentLanguage={ setCurrentLanguage }
         />
       ) }
 

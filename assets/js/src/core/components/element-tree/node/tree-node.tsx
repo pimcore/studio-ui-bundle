@@ -20,6 +20,7 @@ import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
@@ -34,6 +35,7 @@ export interface TreeNodeProps {
   isLocked: boolean
   elementType?: ElementType
   hasChildren?: boolean
+  fullPath?: string
   metaData?: any
   type?: string
   parentId?: string
@@ -42,6 +44,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  isSite?: boolean
   wrapNode?: TreeNodeWrapper
 }
 
@@ -244,6 +247,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   return (
     <div
       className={ getClasses() }
+      data-testid={ createNodeTestId(parseInt(id, 10), props.elementType) }
       ref={ forwardRef }
     >
       <div className="tree-node__content">

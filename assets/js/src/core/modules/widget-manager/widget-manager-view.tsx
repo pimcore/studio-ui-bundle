@@ -10,10 +10,12 @@
 
 import React from 'react'
 import cn from 'classnames'
-import { Layout, type ILayoutProps } from 'flexlayout-react'
+import { Layout, type ILayoutProps, type TabNode } from 'flexlayout-react'
 import { useStyles } from './widget-manager-view.styles'
 import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 export interface WidgetManagerProps extends ILayoutProps {
   className?: string
@@ -23,6 +25,13 @@ export interface WidgetManagerProps extends ILayoutProps {
 export const WidgetManagerView = ({ className, createContextMenuItems, ...props }: WidgetManagerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
+  const { closeWidget } = useWidgetManager()
+
+  useHandleKeyBindings(() => {
+    props.model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
+      closeWidget(tabNode.getId())
+    })
+  }, 'closeAllTabs', true)
 
   return (
     <div className={ cn('widget-manager', className, styles.widgetManager) }>

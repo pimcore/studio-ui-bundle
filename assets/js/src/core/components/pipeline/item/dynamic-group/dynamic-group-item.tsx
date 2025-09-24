@@ -10,16 +10,17 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { DynamicGroupItemContent } from './dynamic-group-item-content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { Box } from '@Pimcore/components/box/box'
 import { useStyles } from './dynamic-group-item.styles'
+import { useTranslation } from 'react-i18next'
 
 export interface DynamicGroupItemProps {
   id: number
@@ -30,15 +31,20 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
   const { operations, getValueByKey } = useNumberedList()
   const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id: id + 1 })
+  const { t } = useTranslation()
 
-  const style = {
+  const style = useMemo(() => ({
     transform: CSS.Transform.toString(transform),
     transition: transition ?? undefined
-  }
+  }), [transform, transition])
 
-  const onDelete = (): void => {
+  const onDelete = React.useCallback((): void => {
     operations.remove(id)
-  }
+  }, [operations, id])
+
+  const keyValue = useMemo(() => {
+    return getValueByKey(id.toString()).key
+  }, [getValueByKey, id])
 
   return (
     <div
@@ -65,7 +71,7 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
               variant="minimal"
               { ...listeners }
             />
-            <Text strong>{getValueByKey(id.toString()).key}</Text>
+            <Text strong>{t(`grid.advanced-column.advancedColumns.${keyValue}`)}</Text>
           </Flex>
 
           <IconButton

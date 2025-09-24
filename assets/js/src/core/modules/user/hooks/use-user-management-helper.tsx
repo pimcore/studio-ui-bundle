@@ -27,8 +27,8 @@ import {
   type UserGetTreeApiArg,
   type UserDeleteByIdApiArg,
   type UserFolderDeleteByIdApiArg,
-  type User2,
   type User,
+  type User2,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import {
@@ -49,6 +49,10 @@ interface AddItemArgs {
   name: string
 }
 
+interface IUser extends User {
+  password?: string
+}
+
 interface UseUserReturn extends
   UseTrackableChangesDraftReturn {
   openUser: (id: number) => void
@@ -58,7 +62,7 @@ interface UseUserReturn extends
   removeUser: (props: UserDeleteByIdApiArg) => Promise<{ data: UserDeleteByIdApiResponse, error: any }>
   removeFolder: (props: UserFolderDeleteByIdApiArg) => Promise<{ data: UserFolderDeleteByIdApiResponse, error: any }>
   cloneUser: (props: { id: number, name: string }) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
-  updateUserById: (props: { id: number, user: User2 | User }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
+  updateUserById: (props: { id: number, user: IUser }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   moveUserById: (props: { id: number, parentId: number }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   addNewFolder: (props: AddItemArgs) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
@@ -168,37 +172,22 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return data
   }
 
-  async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
+  async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
+
+    const updateUser: User2 = {
+      ...user,
+      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
+      parentId: user.parentId ?? 0
+    }
+
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
-      updateUser: {
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        active: user.active,
-        admin: user.admin,
-        classes: user.classes,
-        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
-        language: user.language,
-        welcomeScreen: user.welcomeScreen,
-        memorizeTabs: user.memorizeTabs,
-        allowDirtyClose: user.allowDirtyClose,
-        closeWarning: user.closeWarning,
-        permissions: user.permissions,
-        parentId: user.parentId ?? 0,
-        roles: user.roles,
-        contentLanguages: user.contentLanguages,
-        websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
-        websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
-        keyBindings: user.keyBindings,
-        assetWorkspaces: user.assetWorkspaces,
-        dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives
-      }
+      updateUser
     }))
+
     handleNotification(t('user-management.save-user.success'), error)
+
     const userDraft: UserDraft = {
       ...data,
       modified: false,
@@ -213,7 +202,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }

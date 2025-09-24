@@ -16,19 +16,21 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
 import { FieldFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/field-filters'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
-import {
-  useColumnsFiltersContext
-} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { PAGE_INITIAL, useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 export const ColumnsFilters = (): React.JSX.Element => {
   const { filters, setFilters } = useGridFilterContext()
   const { columnsFilters, setColumnsFilters, setFieldFilters } = useColumnsFiltersContext()
+  const { setPage } = useReportDataContext()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
 
   const handleApplyFilters = (): void => {
+    setPage(PAGE_INITIAL)
+
     setFilters({
       ...filters,
       columnFilters: columnsFilters

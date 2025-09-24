@@ -18,6 +18,8 @@ export const useStyle = createStyles(({ token, css }) => {
       background: ${token.controlItemBgHover};
       padding: ${token.paddingSM}px;
       max-width: 100%;
+      min-width: 150px;
+      min-height: 100px;
       position: relative;
       
       .image-target-title {

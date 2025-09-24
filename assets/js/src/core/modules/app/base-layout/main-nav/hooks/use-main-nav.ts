@@ -11,13 +11,13 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import { isNil, isUndefined } from 'lodash'
 import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { isNil } from 'lodash'
 
 interface IUseMainNavReturn {
   navItems: IMainNavItem[]
@@ -35,35 +35,46 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
     let existingItem = currentLevel.find(i => i.id === level)
     const isCurrentItem = index === levels.length - 1
 
-    if (existingItem === undefined) {
+    if (isUndefined(existingItem)) {
+      let levelLabel = level
+
+      if (!isCurrentItem && !isUndefined(item.group) && level === item.group) {
+        levelLabel = item.group
+      } else if (isCurrentItem) {
+        levelLabel = item.label ?? level
+      }
+
       existingItem = {
-        order: isCurrentItem ? item.order : 100,
+        order: isCurrentItem ? item.order : 1000,
         id: level,
-        label: item.label ?? level,
+        label: levelLabel,
         path: levels.slice(0, index + 1).join('/'),
         children: [],
-        icon: isCurrentItem ? item.icon : undefined,
-        widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
-        onClick: isCurrentItem ? item.onClick : undefined,
-        button: isCurrentItem ? item.button : undefined,
-        className: isCurrentItem ? item.className : undefined,
-        perspectivePermission: isCurrentItem ? item.perspectivePermission : undefined,
-        perspectivePermissionHide: isCurrentItem ? item.perspectivePermissionHide : undefined
+        ...(isCurrentItem && {
+          dividerBottom: item.dividerBottom,
+          icon: item.icon,
+          widgetConfig: item.widgetConfig,
+          onClick: item.onClick,
+          button: item.button,
+          className: item.className,
+          perspectivePermission: item.perspectivePermission,
+          perspectivePermissionHide: item.perspectivePermissionHide
+        })
       }
       currentLevel.push(existingItem)
     } else if (index === levels.length - 1) {
       Object.assign(existingItem, {
         icon: item.icon,
-        order: item.order ?? 100,
+        order: item.order ?? 1000,
         className: item.className
       })
     }
 
+    currentLevel.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
     currentLevel = existingItem.children ?? []
-    currentLevel.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
   })
 
-  items.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+  items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
 }
 
 export const useMainNav = (): IUseMainNavReturn => {

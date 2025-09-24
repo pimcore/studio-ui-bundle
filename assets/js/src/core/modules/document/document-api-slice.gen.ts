@@ -80,6 +80,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentPageCheckPrettyUrl: build.mutation<
+                DocumentPageCheckPrettyUrlApiResponse,
+                DocumentPageCheckPrettyUrlApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page/check-pretty-url`,
+                    method: "POST",
+                    body: queryArg.checkPrettyUrl,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentPageStreamPreview: build.query<
                 DocumentPageStreamPreviewApiResponse,
                 DocumentPageStreamPreviewApiArg
@@ -99,6 +110,41 @@ const injectedRtkApi = api
                 DocumentAvailableTemplatesListApiArg
             >({
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
+                providesTags: ["Documents"],
+            }),
+            documentPageSnippetChangeMainDocument: build.mutation<
+                DocumentPageSnippetChangeMainDocumentApiResponse,
+                DocumentPageSnippetChangeMainDocumentApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page-snippet/change-main-document`,
+                    method: "PUT",
+                    body: queryArg.changeMainDocument,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentPageSnippetAreaBlockRender: build.query<
+                DocumentPageSnippetAreaBlockRenderApiResponse,
+                DocumentPageSnippetAreaBlockRenderApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/page-snippet/${queryArg.id}/area-block/render`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Documents"],
+            }),
+            documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/renderlet/render`,
+                    params: {
+                        id: queryArg.id,
+                        type: queryArg["type"],
+                        controller: queryArg.controller,
+                        parentDocumentId: queryArg.parentDocumentId,
+                        template: queryArg.template,
+                    },
+                }),
                 providesTags: ["Documents"],
             }),
             documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
@@ -131,6 +177,10 @@ const injectedRtkApi = api
             documentDeleteSite: build.mutation<DocumentDeleteSiteApiResponse, DocumentDeleteSiteApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Documents"],
+            }),
+            documentGetSite: build.query<DocumentGetSiteApiResponse, DocumentGetSiteApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.documentId}` }),
+                providesTags: ["Documents"],
             }),
             documentAddTranslation: build.mutation<DocumentAddTranslationApiResponse, DocumentAddTranslationApiArg>({
                 query: (queryArg) => ({
@@ -262,6 +312,12 @@ export type DocumentUpdateByIdApiArg = {
         };
     };
 };
+export type DocumentPageCheckPrettyUrlApiResponse = unknown;
+export type DocumentPageCheckPrettyUrlApiArg = {
+    /** Id of the document */
+    id: number;
+    checkPrettyUrl: CheckPrettyUrl;
+};
 export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
 export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
@@ -277,6 +333,39 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
+export type DocumentPageSnippetChangeMainDocumentApiResponse = unknown;
+export type DocumentPageSnippetChangeMainDocumentApiArg = {
+    /** Id of the document */
+    id: number;
+    changeMainDocument: ChangeMainDocument;
+};
+export type DocumentPageSnippetAreaBlockRenderApiResponse =
+    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
+export type DocumentPageSnippetAreaBlockRenderApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        name: string | null;
+        realName: string | null;
+        index: number | null;
+        blockStateStack: object | null;
+        areaBlockConfig?: object | null;
+        areaBlockData?: object | null;
+    };
+};
+export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
+export type DocumentRenderletRenderApiArg = {
+    /** ElementId of the renderlet element */
+    id: number;
+    /** Type of the renderlet element. */
+    type: string;
+    /** Renderlet controller action */
+    controller: string;
+    /** Parent document id of the renderlet */
+    parentDocumentId?: number;
+    /** Renderlet template */
+    template?: string;
+};
 export type DocumentReplaceContentApiResponse = unknown;
 export type DocumentReplaceContentApiArg = {
     /** SourceId of the document */
@@ -301,6 +390,11 @@ export type DocumentDeleteSiteApiResponse = unknown;
 export type DocumentDeleteSiteApiArg = {
     /** Id of the document */
     id: number;
+};
+export type DocumentGetSiteApiResponse = /** status 200 Site detail data */ SiteDetailData;
+export type DocumentGetSiteApiArg = {
+    /** DocumentId of the document */
+    documentId: number;
 };
 export type DocumentAddTranslationApiResponse = unknown;
 export type DocumentAddTranslationApiArg = {
@@ -587,6 +681,10 @@ export type UpdateDataProperty = {
     /** inheritable */
     inheritable: boolean;
 };
+export type CheckPrettyUrl = {
+    /** Pretty URL to check */
+    prettyUrl: string;
+};
 export type DocumentController = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -602,6 +700,20 @@ export type DocumentTemplate = {
     };
     /** Path */
     path: string;
+};
+export type ChangeMainDocument = {
+    /** Main document path */
+    mainDocumentPath: string | null;
+};
+export type AreaBlockRenderDataForEditmode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Dynamic array of editable definitions */
+    editableDefinitions: object[];
+    /** HTML code of the snippet */
+    htmlCode: string;
 };
 export type Site = {
     /** AdditionalAttributes */
@@ -628,6 +740,42 @@ export type UpdateSite = {
     errorDocument: string;
     /** Localized error documents */
     localizedErrorDocuments: object;
+    /** Redirect to main domain */
+    redirectToMainDomain: boolean;
+};
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+};
+export type SiteDetailData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Creation Date */
+    creationDate: number | null;
+    /** Modification Date */
+    modificationDate: number | null;
+    /** Main domain */
+    mainDomain: string;
+    /** Domains */
+    domains: string[];
+    /** Data of error document */
+    errorDocument: RelatedElementData | null;
+    /** Localized error documents mapped by locale */
+    localizedErrorDocuments: {
+        [key: string]: RelatedElementData;
+    };
     /** Redirect to main domain */
     redirectToMainDomain: boolean;
 };
@@ -668,13 +816,18 @@ export const {
     useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
     useDocumentUpdateByIdMutation,
+    useDocumentPageCheckPrettyUrlMutation,
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
+    useDocumentPageSnippetChangeMainDocumentMutation,
+    useDocumentPageSnippetAreaBlockRenderQuery,
+    useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,
     useDocumentUpdateSiteMutation,
     useDocumentDeleteSiteMutation,
+    useDocumentGetSiteQuery,
     useDocumentAddTranslationMutation,
     useDocumentDeleteTranslationMutation,
     useDocumentGetTranslationsQuery,

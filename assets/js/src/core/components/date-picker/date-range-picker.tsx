@@ -21,6 +21,7 @@ import {
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -33,7 +34,7 @@ export type DateRangePickerProps = OriginalRangePickerProps & {
   inherited?: boolean
 }
 
-const valueToDayJs = (value?: DateRangeTargetValue | unknown): DateRange | null => {
+const valueToDayJs = (value?: DateRangeTargetValue | null): DateRange | null => {
   if (Array.isArray(value)) {
     return [
       toDayJs(value[0]),
@@ -57,8 +58,15 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const value = valueToDayJs(props.value)
+  const fieldWidths = useFieldWidthOptional()
 
   const { styles } = useStyles()
+
+  // Apply large width as default for date range pickers
+  const computedStyle = {
+    maxWidth: fieldWidths?.medium,
+    ...props.style
+  }
 
   const handleChange = (dates: DateRange | null): void => {
     props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
@@ -71,6 +79,7 @@ export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element 
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       separator={ <Icon value="arrow-narrow-right" /> }
+      style={ computedStyle }
       value={ value }
     />
   )

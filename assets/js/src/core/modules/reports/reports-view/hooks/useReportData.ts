@@ -16,12 +16,14 @@ import {
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
+import { type ISorting } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 
 interface IUseReportDataProps {
   name: string
   filters?: IGridFilter
   page: number
   pageSize: number
+  sorting?: ISorting
 }
 
 export type IReportDetailData = BundleCustomReportsDetails | undefined
@@ -35,7 +37,7 @@ export interface IUseReportDataReturn {
   refetchAll: () => void
 }
 
-export const useReportData = ({ name, filters, page, pageSize }: IUseReportDataProps): IUseReportDataReturn => {
+export const useReportData = ({ name, filters, page, pageSize, sorting }: IUseReportDataProps): IUseReportDataReturn => {
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
@@ -48,7 +50,7 @@ export const useReportData = ({ name, filters, page, pageSize }: IUseReportDataP
     data: chartDetailData,
     refetch: chartDetailRefetch,
     isFetching: isChartDetailFetching
-  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize } }, { skip: isEmptyValue(name) })
+  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize, sortBy: sorting?.sortBy, sortOrder: sorting?.sortOrder } }, { skip: isEmptyValue(name) })
 
   const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
   const isFetching: boolean = isReportDetailFetching || isChartDetailFetching

@@ -8,19 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
+  'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
+  'DynamicTypes/CustomReportDefinitionRegistry': 'DynamicTypes/CustomReportDefinitionRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
+  'DynamicTypes/EditableDialogLayoutRegistry': 'DynamicTypes/EditableDialogLayoutRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
+  'DynamicTypes/DocumentRegistry': 'DynamicTypes/DocumentRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
-  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry'
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
+  'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
+  'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
 }
 
 export const serviceIds = {
@@ -33,6 +43,14 @@ export const serviceIds = {
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
 
+  // Global message system
+  globalMessageBusProcess: 'GlobalMessageBusProcess',
+  globalMessageBus: 'GlobalMessageBus',
+
+  // Dynamic Type Theme instances
+  'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
+  'DynamicTypes/Theme/StudioDefaultDark': 'DynamicTypes/Theme/StudioDefaultDark',
+
   // Assets
   'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
   'Asset/Editor/TypeComponentRegistry': 'Asset/Editor/TypeComponentRegistry',
@@ -44,6 +62,7 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
+  'Asset/ThumbnailService': 'Asset/ThumbnailService',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
@@ -59,6 +78,14 @@ export const serviceIds = {
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
 
+  // Document Sidebar Managers
+  'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
+  'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
+  'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',
+  'Document/Editor/Sidebar/LinkSidebarManager': 'Document/Editor/Sidebar/LinkSidebarManager',
+  'Document/Editor/Sidebar/HardlinkSidebarManager': 'Document/Editor/Sidebar/HardlinkSidebarManager',
+  'Document/Editor/Sidebar/FolderSidebarManager': 'Document/Editor/Sidebar/FolderSidebarManager',
+
   // icon library
   iconLibrary: 'IconLibrary',
 
@@ -70,12 +97,16 @@ export const serviceIds = {
 
   'DynamicTypes/FieldFilter/DataObjectAdapter': 'DynamicTypes/FieldFilter/DataObjectAdapter',
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
-  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
-  'DynamicTypes/FieldFilter/Textarea': 'DynamicTypes/FieldFilter/Textarea',
+  'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
+  'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
+  'DynamicTypes/FieldFilter/Input': 'DynamicTypes/FieldFilter/Input',
+  'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
+  'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
-  'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
-  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
-  'DynamicTypes/FieldFilter/Checkbox': 'DynamicTypes/FieldFilter/Checkbox',
+  'DynamicTypes/FieldFilter/Multiselect': 'DynamicTypes/FieldFilter/Multiselect',
+  'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
+  'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
+  'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -87,6 +118,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
+  'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -134,6 +166,8 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
+
+  'DynamicTypes/CustomReportDefinition/Sql': 'DynamicTypes/CustomReportDefinition/Sql',
 
   // Object layout
   'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
@@ -203,6 +237,8 @@ export const serviceIds = {
 
   // Document editables
   'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Areablock': 'DynamicTypes/DocumentEditable/Areablock',
+  'DynamicTypes/DocumentEditable/Block': 'DynamicTypes/DocumentEditable/Block',
   'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
   'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',
   'DynamicTypes/DocumentEditable/Embed': 'DynamicTypes/DocumentEditable/Embed',
@@ -215,12 +251,26 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
   'DynamicTypes/DocumentEditable/Relations': 'DynamicTypes/DocumentEditable/Relations',
   'DynamicTypes/DocumentEditable/Renderlet': 'DynamicTypes/DocumentEditable/Renderlet',
+  'DynamicTypes/DocumentEditable/ScheduledBlock': 'DynamicTypes/DocumentEditable/ScheduledBlock',
   'DynamicTypes/DocumentEditable/Select': 'DynamicTypes/DocumentEditable/Select',
   'DynamicTypes/DocumentEditable/Snippet': 'DynamicTypes/DocumentEditable/Snippet',
   'DynamicTypes/DocumentEditable/Table': 'DynamicTypes/DocumentEditable/Table',
   'DynamicTypes/DocumentEditable/Textarea': 'DynamicTypes/DocumentEditable/Textarea',
   'DynamicTypes/DocumentEditable/Video': 'DynamicTypes/DocumentEditable/Video',
   'DynamicTypes/DocumentEditable/Wysiwyg': 'DynamicTypes/DocumentEditable/Wysiwyg',
+
+  // Document editable dialog layout
+  'DynamicTypes/EditableDialogLayout/Tabpanel': 'DynamicTypes/EditableDialogLayout/Tabpanel',
+  'DynamicTypes/EditableDialogLayout/Panel': 'DynamicTypes/EditableDialogLayout/Panel',
+
+  // Document types
+  'DynamicTypes/Document/Page': 'DynamicTypes/Document/Page',
+  'DynamicTypes/Document/Newsletter': 'DynamicTypes/Document/Newsletter',
+  'DynamicTypes/Document/Snippet': 'DynamicTypes/Document/Snippet',
+  'DynamicTypes/Document/Link': 'DynamicTypes/Document/Link',
+  'DynamicTypes/Document/Hardlink': 'DynamicTypes/Document/Hardlink',
+  'DynamicTypes/Document/Email': 'DynamicTypes/Document/Email',
+  'DynamicTypes/Document/Folder': 'DynamicTypes/Document/Folder',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',
@@ -246,8 +296,14 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
 
+  // Widget Editor types
+  'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
+
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+
+  // Execution Engine
+  executionEngine: 'ExecutionEngine',
 
   // Component registry
   'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'

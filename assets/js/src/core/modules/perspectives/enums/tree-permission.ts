@@ -35,4 +35,19 @@ export enum TreePermission {
 
   // Data object specific
   ChangeChildrenSortBy = 'changeChildrenSortBy',
+
+  // Document specific
+  AddEmail = 'addEmail',
+  AddHardlink = 'addHardlink',
+  AddHeadlessDocument = 'addHeadlessDocument',
+  AddLink = 'addLink',
+  AddNewsletter = 'addNewsletter',
+  AddPrintPage = 'addPrintPage',
+  AddSnippet = 'addSnippet',
+  Convert = 'convert',
+  EditSite = 'editSite',
+  Open = 'open',
+  PasteCut = 'pasteCut',
+  RemoveSite = 'removeSite',
+  UseAsSite = 'useAsSite',
 }

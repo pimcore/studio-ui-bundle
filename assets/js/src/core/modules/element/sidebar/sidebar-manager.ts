@@ -10,11 +10,12 @@
 
 import type React from 'react'
 
-export interface ISidebarEntry {
+export interface ISidebarEntry<T = any> {
   key: string
   icon: React.JSX.Element
   component: React.JSX.Element
   tooltip?: string
+  isVisible?: (context?: T) => boolean
 }
 
 export interface ISidebarButton {
@@ -23,19 +24,35 @@ export interface ISidebarButton {
   component: React.JSX.Element
 }
 
-export abstract class SidebarManager {
-  entries: ISidebarEntry[] = []
+export abstract class SidebarManager<T = any> {
+  entries: Array<ISidebarEntry<T>> = []
   buttons: ISidebarButton[] = []
 
-  getEntries (): ISidebarEntry[] {
+  getEntries (): Array<ISidebarEntry<T>> {
     return this.entries
   }
 
-  getEntry (key: string): ISidebarEntry | undefined {
+  getVisibleEntries (context?: T): Array<ISidebarEntry<T>> {
+    return this.entries.filter(entry => {
+      // If no isVisible function is provided, the entry is always visible
+      if (entry.isVisible === undefined) {
+        return true
+      }
+
+      try {
+        return entry.isVisible(context)
+      } catch (error) {
+        console.warn(`Error checking visibility for sidebar entry "${entry.key}":`, error)
+        return false
+      }
+    })
+  }
+
+  getEntry (key: string): ISidebarEntry<T> | undefined {
     return this.entries.find((entry) => entry.key === key)
   }
 
-  registerEntry (entry: ISidebarEntry): void {
+  registerEntry (entry: ISidebarEntry<T>): void {
     if (this.getEntry(entry.key) !== undefined) {
       this.entries.splice(this.entries.findIndex((e) => e.key === entry.key), 1, entry)
       return

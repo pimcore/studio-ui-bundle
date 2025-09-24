@@ -18,7 +18,7 @@ const SAMPLE_SELECT_OPTIONS = [
 ]
 
 const config: Meta = {
-  title: 'Components/Controls/CreatableSelect',
+  title: 'Components/Data Entry/CreatableSelect',
   component: CreatableSelect,
   parameters: {
     docs: {
@@ -115,6 +115,14 @@ export const WithError = {
     placeholder: 'Select or create an option...',
     creatable: true,
     status: 'error'
+  }
+}
+
+export const NumberInput = {
+  args: {
+    placeholder: 'Select or create an option...',
+    creatable: true,
+    inputType: 'number'
   }
 }
 

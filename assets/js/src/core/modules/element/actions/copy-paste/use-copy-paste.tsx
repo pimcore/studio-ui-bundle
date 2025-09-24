@@ -12,12 +12,9 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type CloneParameters, useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
@@ -25,20 +22,23 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import {
   markNodeDeleting,
   refreshSourceNode,
-  refreshTargetNode,
-  setNodeFetching
+  refreshTargetNode
 } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@sdk/app'
-import { isUndefined } from 'lodash'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 import { ContextMenuActionName } from '..'
+import { useTreeCopyPasteContext } from './tree-copy-paste-context'
+import { useCloseContextMenu } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
+import { usePasteVisibility } from './use-paste-visibility'
+import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
+import { ElementCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/element-clone-job'
 
 type ElementPartial = Pick<Element, 'id' | 'parentId'>
 type StoreNode = TreeNodeProps | Element | undefined
 
 export interface UseCopyPasteHookReturn {
-  storedNode: StoreNode
-  nodeTask: 'copy' | 'cut' | undefined
+  getStoredNode: () => StoreNode
+  getNodeTask: () => 'copy' | 'cut' | undefined
   copy: (node: TreeNodeProps) => void
   cut: (node: TreeNodeProps) => void
   paste: (parentId: number, cloneParameters?: CloneParameters, node?: StoreNode) => Promise<void>
@@ -49,7 +49,7 @@ export interface UseCopyPasteHookReturn {
   cutTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   cutContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteCutContextMenuItem: (parentId: number) => ItemType
+  pasteCutContextMenuItem: (targetNode: TreeNodeProps) => ItemType
 }
 
 export interface MoveProps {
@@ -58,23 +58,22 @@ export interface MoveProps {
 }
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
-  const [storedNode, setStoredNode] = useState<StoreNode>()
-  const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
+  const { getStoredNode, getNodeTask, copyNode, cutNode, clearCopyPaste } = useTreeCopyPasteContext(elementType)
   const { elementPatch, elementClone } = useElementApi(elementType)
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
-  const { addJob } = useJobs()
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId(true)
+  const closeContextMenu = useCloseContextMenu()
+  const { isPasteHidden: isPasteHiddenHook } = usePasteVisibility(elementType)
+  const executionEngine = useExecutionEngine()
 
   const copy = (node: TreeNodeProps | Element): void => {
-    setStoredNode(node)
-    setNodeTask('copy')
+    copyNode(node, elementType)
   }
 
   const cut = (node: TreeNodeProps | Element): void => {
-    setStoredNode(node)
-    setNodeTask('cut')
+    cutNode(node, elementType)
   }
 
   const move = async (props: MoveProps): Promise<void> => {
@@ -109,7 +108,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const paste = async (
     parentId: number,
     cloneParameters: CloneParameters = { recursive: true, updateReferences: true },
-    node: StoreNode = storedNode
+    node: StoreNode = getStoredNode()
   ): Promise<void> => {
     if (node === undefined) {
       return
@@ -119,30 +118,22 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       ? node.id
       : parseInt(node.id)
 
-    const cloneResponse = await elementClone({
-      id,
-      parentId,
-      cloneParameters
+    const job = new ElementCloneJob({
+      sourceId: id,
+      targetId: parentId,
+      parameters: cloneParameters,
+      title: t(`jobs.${elementType}-clone-job.title`),
+      elementType,
+      elementClone,
+      treeId,
+      nodeId: String(parentId)
     })
 
-    if (cloneResponse.success) {
-      if (!isUndefined(cloneResponse.jobRunId)) {
-        addJob(createCloneJob({
-          title: 'Cloning Folder',
-          topics: [topics['cloning-finished'], ...defaultTopics],
-          action: async () => {
-            return cloneResponse.jobRunId!
-          },
-          parentFolder: String(parentId),
-          elementType
-        }))
-      } else if (parentId !== undefined) {
-        dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
-      }
-    }
+    await executionEngine.runJob(job)
   }
 
   const pasteCut = async (parentId: number): Promise<void> => {
+    const storedNode = getStoredNode()
     if (storedNode === undefined) {
       return
     }
@@ -166,8 +157,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       if (success) {
         dispatch(refreshSourceNode({ nodeId: String(storedNode.parentId), elementType }))
         dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
-        setStoredNode(undefined)
-        setNodeTask(undefined)
+        clearCopyPaste()
       } else {
         dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
       }
@@ -183,6 +173,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'copy' } />,
       hidden: !isTreeActionAllowed(TreePermission.Copy) || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
+        closeContextMenu?.()
         copy(node)
       }
     }
@@ -195,8 +186,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'copy' } />,
       hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
-        copy(node)
         onFinish?.()
+        copy(node)
       }
     }
   }
@@ -208,6 +199,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'cut' } />,
       hidden: !isTreeActionAllowed(TreePermission.Cut) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
+        closeContextMenu?.()
         cut(node)
       }
     }
@@ -220,8 +212,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'cut' } />,
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
-        cut(node)
         onFinish?.()
+        cut(node)
       }
     }
   }
@@ -231,29 +223,28 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste'),
       key: ContextMenuActionName.paste,
       icon: <Icon value={ 'paste' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Paste) || (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
+      hidden: isPasteHiddenHook(node, 'copy'),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id))
       }
     }
   }
 
-  const pasteCutContextMenuItem = (parentId: number): ItemType => {
+  const pasteCutContextMenuItem = (targetNode: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-cut'),
       key: ContextMenuActionName.pasteCut,
       icon: <Icon value={ 'paste' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Paste) || (storedNode === undefined || nodeTask !== 'cut'),
+      hidden: isPasteHiddenHook(targetNode, 'cut'),
       onClick: async () => {
-        await pasteCut(parentId)
+        await pasteCut(parseInt(targetNode.id))
       }
     }
   }
 
   return {
-    storedNode,
-    nodeTask,
+    getStoredNode,
+    getNodeTask,
     copy,
     cut,
     paste,

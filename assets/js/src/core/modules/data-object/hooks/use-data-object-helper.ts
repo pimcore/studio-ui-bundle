@@ -16,6 +16,7 @@ import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { type Error } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps

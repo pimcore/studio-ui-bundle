@@ -9,20 +9,21 @@
  */
 
 /* eslint-disable max-lines */
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { isEqual, isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
-import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 
 export interface TreeNode {
   id: string
   elementType?: ElementType
   parentId?: string
+  fullPath?: string
   icon: ElementIcon
   label: string
   type?: string
@@ -31,6 +32,7 @@ export interface TreeNode {
   locked: string | null
   isLocked: boolean
   isPublished?: boolean
+  isSite?: boolean
   hasChildren?: boolean
   metaData?: any
 
@@ -430,6 +432,25 @@ const slice = createSlice({
         }
       })
     },
+    updateNodeType: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, newType: string, newIcon: ElementIcon }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  type: payload.newType,
+                  icon: payload.newIcon
+                }
+              : undefined
+          }))
+        }
+      })
+    },
 
     refreshTargetNode: (
       state,
@@ -463,6 +484,22 @@ const slice = createSlice({
             ...node,
             isFetchTriggered: false
           }))
+        }
+      })
+    },
+    refreshTreeByElementType: (
+      state,
+      { payload }: PayloadAction<{ elementTypes: ElementType[] }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (Object.keys(state[treeId].nodes).length > 0) {
+          const firstNode = Object.values(state[treeId].nodes)[0]
+          if (
+            firstNode.treeNodeProps?.elementType !== undefined &&
+            payload.elementTypes.includes(firstNode.treeNodeProps.elementType)
+          ) {
+            state[treeId].nodes = {}
+          }
         }
       })
     },
@@ -507,6 +544,27 @@ const slice = createSlice({
         isExpanded: true,
         isRoot: true
       }))
+    },
+    setDocumentNodeSiteStatus: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, isSite: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === 'document') {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  isSite: payload.isSite,
+                  icon: payload.isSite
+                    ? { type: 'name' as const, value: 'home-root-folder' }
+                    : { type: 'name' as const, value: 'document' }
+                }
+              : undefined
+          }))
+        }
+      })
     },
     setNodeLocked: (
       state,
@@ -614,7 +672,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

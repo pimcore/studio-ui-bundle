@@ -76,6 +76,19 @@ export const useUserHelper = (): UseUserReturn => {
       }
     }))
 
+    if (user?.modifiedCells?.password !== undefined || user?.modifiedCells?.passwordConfirmation !== undefined || user?.modifiedCells?.oldPassword !== undefined) {
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id: user.id,
+        body: {
+          password: user.modifiedCells?.password,
+          passwordConfirmation: user.modifiedCells?.passwordConfirmation,
+          oldPassword: user.modifiedCells?.oldPassword
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
+
     handleNotification(t('user-management.save-user.success'), error)
 
     dispatch(userProfileUpdated(data))

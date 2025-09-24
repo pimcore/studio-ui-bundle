@@ -22,6 +22,29 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn {
+        display: flex;
+        align-items: center;
+
+        & > * {
+          display: flex;
+          height: 100%;
+        }
+      }
+
+      .ant-tabs-nav .ant-tabs-tab button {
+        color: ${token.itemColor};
+      }
+
+      .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn button {
+        color: ${token.itemActiveColor} !important;
+      }
+
+      &.ant-tabs-card.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab {
+        padding-left: ${token.paddingXXS}px;
+        padding-right: ${token.paddingXXS}px;
+      }
+
       &.tabs--has-sticky-header > .ant-tabs-nav {
         position: sticky;
         top: 0;
@@ -73,17 +96,36 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
-      .ant-tabs-tab-active .ant-tabs-tab-btn {
-        font-weight: 600;
-        text-shadow: none !important;
+      &.ant-tabs .ant-tabs-tab-btn .ant-tabs-tab-icon:not(:last-child) {
+        margin-inline-end: ${token.marginXS}px;
+      }
+
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-remove {
+        transition: all ${token.motionDurationSlow};
+        width: 0;
+        opacity: 0;
+      }
+
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-remove {
+        transition-delay: ${token.motionDurationSlow};
       }
       
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-remove,
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-remove {
         opacity: 1;
+        width: 16px;
       }
       
       &.ant-tabs-line > .ant-tabs-nav .ant-tabs-ink-bar {
         visibility: visible;
+      }
+
+      &.tabs--full-height {
+        height: 100%;
+          
+        .ant-tabs-content {
+          height: 100%;
+        }
       }
     `
   }

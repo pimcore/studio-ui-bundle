@@ -17,17 +17,44 @@ import React from 'react'
 import type {
   AbstractObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
-import { t } from 'i18next'
 import {
   BooleanSelect
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/boolean-select/boolean-select'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
 
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
+
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
+    if (options === null) {
+      return undefined
+    }
+
+    return options.map((option) => {
+      let booleanValue: boolean | null
+
+      if (option.value === -1) {
+        booleanValue = false
+      } else if (option.value === 1) {
+        booleanValue = true
+      } else {
+        booleanValue = null
+      }
+
+      return {
+        label: option.key,
+        value: booleanValue
+      }
+    }) as any
+  }
+
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
-    const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
+    const options = this.convertOptions(props.options)
     return (
       <BooleanSelect
         className={ props.className }
@@ -35,7 +62,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
         inherited={ props.inherited }
         maxWidth={ toCssDimension(props.width, props.defaultFieldWidth.medium) }
         optionFilterProp="label"
-        options={ options }
+        options={ options as any }
         value={ props.value }
       />
     )
@@ -44,7 +71,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
   getObjectDataFormItemProps (props: SelectProps): FormItemProps {
     return super.getObjectDataFormItemProps({
       ...props,
-      defaultValue: 0
+      defaultValue: null
     })
   }
 

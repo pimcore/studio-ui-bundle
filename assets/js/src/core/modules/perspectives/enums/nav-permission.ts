@@ -12,12 +12,15 @@ export enum NavPermission {
   ToolsHidden = 'extras.hidden',
   NotesAndEvents = 'extras.notesEvents',
   Mails = 'extras.emails',
+  RecycleBin = 'extras.recycle_bin',
   ApplicationLogger = 'extras.applicationlog',
+  Redirects = 'extras.redirects',
 
   FileHidden = 'file.hidden',
   OpenDocument = 'file.open_document',
   OpenObject = 'file.open_object',
   OpenAsset = 'file.open_asset',
+  Perspectives = 'file.perspectives',
 
   SettingsHidden = 'settings.hidden',
   TagConfiguration = 'settings.tagConfiguration',

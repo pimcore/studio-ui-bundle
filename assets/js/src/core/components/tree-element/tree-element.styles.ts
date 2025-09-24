@@ -12,12 +12,19 @@ import { createStyles } from 'antd-style'
 
 interface IStylesProps {
   isHideRootChecker?: boolean
+  hasRoot?: boolean
 }
 
 export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
   return {
     treeContainer: css`
       .ant-tree-list-holder-inner {
+        & > .ant-tree-treenode {
+          .ant-tree-switcher {
+            width: ${props.hasRoot === true ? '24px' : '0'};
+          }
+        }
+
         .ant-tree-treenode-leaf-last {
           &:first-child {
             .ant-tree-checkbox {
@@ -29,6 +36,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         .ant-tree-treenode {
           padding: 0 ${token.paddingXS}px;
           position: relative;
+          margin-bottom: 0;
           
           @media (hover: hover) {
             &:hover {
@@ -57,14 +65,21 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         }
       }
       
-      .ant-tree-switcher {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        &:hover {
-          background-color: transparent !important;
+      .ant-tree-treenode.ant-tree-treenode-draggable {
+        .ant-tree-switcher {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 0px;
+          
+          &:hover {
+            background-color: transparent !important;
+          }
         }
+
+        .ant-tree-switcher:not(.ant-tree-switcher-noop):hover:before {
+        background-color: transparent !important;
+      }
       }
 
       .ant-tree-switcher-noop {
@@ -107,6 +122,24 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           left: 0;
           right: 0;
           bottom: 0;
+        }
+      }
+      
+      .ant-tree-icon__customize {
+        position: relative;
+        top: 1px;
+      }
+    `,
+    noRoot: css`
+      .ant-tree {
+        background-color: red;
+
+        .ant-tree-list-holder-inner > .ant-tree-treenode {
+          background-color: red;
+
+          .ant-tree-switcher {
+            width: 0
+          }
         }
       }
     `

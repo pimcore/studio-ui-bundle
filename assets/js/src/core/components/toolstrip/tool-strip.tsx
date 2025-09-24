@@ -12,26 +12,252 @@ import React from 'react'
 import { useStyles } from './tool-strip.styles'
 import cn from 'classnames'
 import { Box } from '../box/box'
+import { ThemeProvider } from 'antd-style'
+import { Icon } from '../icon/icon'
+import { Split } from '../split/split'
+import { Text } from '../text/text'
+import { Flex } from '@sdk/components'
+
+export interface DragHandleProps {
+  listeners?: Record<string, any>
+}
 
 export interface ToolStripProps {
   className?: string
-  children: React.ReactNode
+  children?: React.ReactNode
+  theme?: 'default' | 'inverse'
+  dragger?: boolean | DragHandleProps
+  title?: string
+  activateOnHover?: boolean
+  rounded?: boolean
+  disabled?: boolean
+  additionalIcon?: string
 }
 
-export const ToolStrip = ({ children, className }: ToolStripProps): React.JSX.Element => {
-  const { styles } = useStyles()
+export const ToolStrip = ({
+  children,
+  className,
+  theme: toolStripTheme = 'default',
+  dragger = false,
+  title,
+  activateOnHover = false,
+  rounded = false,
+  disabled = false,
+  additionalIcon
+}: ToolStripProps): React.JSX.Element => {
+  const { styles, theme: token } = useStyles()
+  const [isHovered, setIsHovered] = React.useState(false)
+
+  const isActivated = (() => {
+    if (disabled) return false
+    if (activateOnHover) return isHovered
+    return true
+  })()
+
   const classNames = cn(
     'tool-strip',
     styles['tool-strip'],
+    `tool-strip--theme-${toolStripTheme}`,
+    {
+      'tool-strip--activate-on-hover': activateOnHover && !disabled,
+      'tool-strip--activated': isActivated,
+      'tool-strip--rounded': rounded,
+      'tool-strip--disabled': disabled
+    },
     className
   )
 
+  const themeConfig = React.useMemo(() => {
+    const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined): {
+      Button: {
+        colorLink: string | undefined
+        colorLinkHover: string | undefined
+        colorLinkActive: string | undefined
+      }
+      Typography: {
+        colorText: string | undefined
+      }
+    } => ({
+      Button: {
+        colorLink: buttonColor,
+        colorLinkHover: buttonColor,
+        colorLinkActive: buttonColor
+      },
+      Typography: {
+        colorText: textColor
+      }
+    })
+
+    if (toolStripTheme === 'inverse') {
+      if (disabled) {
+        // When disabled, use normal text color instead of inverse colors
+        const buttonColor = token.colorText
+        const textColor = token.colorText
+
+        return {
+          components: {
+            ...createColorMapping(buttonColor, textColor),
+            Button: {
+              ...createColorMapping(buttonColor, textColor).Button,
+              colorTextDisabled: token.colorText
+            },
+            Split: {
+              colorFillSecondary: token.colorBorder
+            }
+          }
+        }
+      } else {
+        const buttonColor = isActivated ? token.colorButtonInverse : token.colorInactiveInverse
+        const textColor = isActivated ? token.colorTextInverse : token.colorInactiveInverse
+
+        return {
+          components: {
+            ...createColorMapping(buttonColor, textColor),
+            Button: {
+              ...createColorMapping(buttonColor, textColor).Button,
+              colorTextDisabled: token.colorInactiveInverse
+            },
+            Split: {
+              colorFillSecondary: token.colorDividerInverse
+            }
+          }
+        }
+      }
+    } else {
+      const disabledColor = isActivated ? undefined : token.colorTextDisabled
+
+      return {
+        components: createColorMapping(disabledColor, disabledColor)
+      }
+    }
+  }, [toolStripTheme, isActivated, token, disabled])
+
+  const dragHandleProps = React.useMemo(() => {
+    if (typeof dragger === 'object') {
+      return dragger
+    }
+    return {}
+  }, [dragger])
+
+  const renderDragger = (): React.ReactNode => {
+    if (dragger === false) return null
+
+    let draggerColor: string
+
+    if (disabled) {
+      draggerColor = token.Button?.primaryColor
+    } else {
+      const isInverseTheme = toolStripTheme === 'inverse'
+      const activeColor = isInverseTheme ? token.colorButtonInverse : token.colorText
+      const inactiveColor = isInverseTheme ? token.colorInactiveInverse : token.colorTextDisabled
+      draggerColor = isActivated ? activeColor : inactiveColor
+    }
+
+    return (
+      <div
+        className={ styles.dragger }
+        style={ { color: draggerColor } }
+      >
+        <Icon
+          options={ { width: 16, height: 17 } }
+          value="drag-option"
+        />
+      </div>
+    )
+  }
+
+  const renderAdditionalIcon = (): React.ReactNode => {
+    if (additionalIcon === undefined) return null
+
+    return (
+      <Box margin={ { left: 'mini', right: 'small' } }>
+        <Icon
+          options={ { width: 16, height: 16, color: token.Button?.defaultColor } }
+          value={ additionalIcon }
+        />
+      </Box>
+    )
+  }
+
+  const renderContent = (): React.ReactNode => {
+    if (activateOnHover) {
+      return (
+        <Flex
+          align="center"
+          className={ dragger !== false && !disabled ? styles['draggable-area'] : undefined }
+          style={ { height: '100%' } }
+          { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
+        >
+          {renderDragger()}
+          {title !== undefined && (
+            <Box margin={ { right: 'mini' } }>
+              <Text>{title}</Text>
+            </Box>
+          )}
+          {renderAdditionalIcon()}
+          {children !== undefined && !disabled && (
+            <div className="tool-strip__children-container">
+              <Split
+                dividerSize="small"
+                size="mini"
+                theme="secondary"
+              >
+                <div></div>
+                {children}
+              </Split>
+            </div>
+          )}
+        </Flex>
+      )
+    }
+
+    if (dragger === false && title === undefined && children !== undefined) {
+      return children
+    }
+
+    const leftContent = (
+      <Flex
+        align="center"
+        className={ dragger !== false && !disabled ? styles['draggable-area'] : undefined }
+        style={ { height: '100%' } }
+        { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
+      >
+        {renderDragger()}
+        {title !== undefined && (
+          <Box margin={ { right: 'mini' } }>
+            <Text>{title}</Text>
+          </Box>
+        )}
+        {renderAdditionalIcon()}
+      </Flex>
+    )
+
+    if (children === undefined || disabled) {
+      return leftContent
+    }
+
+    return (
+      <Split
+        dividerSize="small"
+        size="mini"
+        theme="secondary"
+      >
+        {leftContent}
+        {children}
+      </Split>
+    )
+  }
+
   return (
-    <Box
-      className={ classNames }
-      padding={ { x: 'mini', y: 'mini', left: 'extra-small' } }
-    >
-      {children}
-    </Box>
+    <ThemeProvider theme={ themeConfig }>
+      <Box
+        className={ classNames }
+        onMouseEnter={ activateOnHover && !disabled ? () => { setIsHovered(true) } : undefined }
+        onMouseLeave={ activateOnHover && !disabled ? () => { setIsHovered(false) } : undefined }
+        padding={ title !== undefined && dragger === false ? { x: 'mini', y: 'mini', left: 'extra-small' } : 'mini' }
+      >
+        {renderContent()}
+      </Box>
+    </ThemeProvider>
   )
 }
