@@ -18,6 +18,8 @@ import {
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { useEffect, useRef } from 'react'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IUseDataObjectGridsProps {
   classIds?: string[]
@@ -26,10 +28,12 @@ interface IUseDataObjectGridsProps {
   dataValue?: ManyToManyRelationValue | null
 }
 
-export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): Array<TypedUseQueryHookResult<DataObjectGetGridApiResponse, DataObjectGetGridApiArg, any, any>> => {
-  return (classIds ?? []).map((classId: string) => {
-    const filterValue = map(filter(dataValue, { subtype: classId }), 'id')
-    console.log('---->>>>>> filterValue', filterValue, classId)
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): { isLoading: boolean, data: any } => {
+  const queries = (classIds ?? []).map((classId: string) => {
+    const filterValue = map(
+      filter(dataValue, { subtype: classId }),
+      'id'
+    )
 
     return useDataObjectGetGridQuery(
       {
@@ -50,7 +54,12 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
           }
         }
       },
-      { skip: isEmpty(columns) || isEmpty(filterValue) }
+      { skip: isEmpty(columns) || isEmptyValue(filterValue) }
     )
   })
+
+  const isLoading = queries.some(q => q.isLoading || q.isFetching)
+  const data = queries.flatMap(q => q.data?.items ?? [])
+
+  return { isLoading, data }
 }

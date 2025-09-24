@@ -27,6 +27,7 @@ import {
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -80,7 +81,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const dataRelationClasses = props?.allowedClasses
 
   const [loadedIds, setLoadedIds] = useState<number[]>([])
-  console.log('---->>>>> loadedIds: ', loadedIds)
+  const [cachedGridFullData, setCachedGridFullData] = useState<any[]>([])
 
   const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
     {
@@ -139,14 +140,31 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     group: col?.group?.[0]
   }))
 
-  const gridDataQueries = useDataObjectGrids({
+  const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
     dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
   })
-  const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading === true || q.isFetching)
-  const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
+
+  useEffect(() => {
+    if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
+      setLoadedIds(prev => {
+        const next = [...new Set([...prev, ...gridFullData.map(item => item.id)])]
+
+        return next.length === prev.length ? prev : next
+      })
+
+      setCachedGridFullData(prev => {
+        const existingIds = new Set(prev.map(item => item.id))
+        const next = gridFullData.filter(item => !existingIds.has(item.id))
+
+        if (next.length === 0) return prev
+
+        return [...prev, ...next]
+      })
+    }
+  }, [gridFullData, isGridFullDataLoading])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
@@ -156,17 +174,20 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     transformGridColumn
   })
 
+  const mergedGridFullData = useMemo(() => {
+    const existingIds = new Set(cachedGridFullData.map(item => item.id))
+    const fresh = gridFullData.filter(item => !existingIds.has(item.id))
+    return [...cachedGridFullData, ...fresh]
+  }, [cachedGridFullData, gridFullData])
+
   const handleEnrichRowData = useCallback(
     (row: ManyToManyRelationValueItem) => {
-      const rowData: GridColumnData[] = gridFullData?.find(item => item.id === row.id)?.columns ?? []
+      const rowData: GridColumnData[] = mergedGridFullData?.find(item => item.id === row.id)?.columns ?? []
 
       return enrichRowData(visibleFieldDefinitions, row, rowData)
     },
-    [gridFullData, visibleFieldDefinitions]
+    [mergedGridFullData, visibleFieldDefinitions]
   )
-
-  console.log('----->>>>> gridFullData: ', gridFullData)
-  console.log('----->>>>> props?.value: ', props?.value)
 
   return (
     <ManyToManyRelation
@@ -175,7 +196,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
-      value={ props?.value }
+      value={ props.value }
     />
   )
 }
