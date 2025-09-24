@@ -46,7 +46,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }
 
   const onAdd = (widget: WidgetConfig): void => {
-    if (widgetConfigs.findIndex((w) => w.id === widget.id) !== -1) {
+    if (widgetConfigs.some((w) => w.id === widget.id)) {
       return
     }
 
@@ -91,7 +91,7 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
   }), [widgetConfigs, expandedWidget])
 
   return (
-    <WidgetConfiguratorContext.Provider value={ contextValue }>
+    <WidgetConfiguratorContext.Provider value={contextValue}>
       {children}
     </WidgetConfiguratorContext.Provider>
   )

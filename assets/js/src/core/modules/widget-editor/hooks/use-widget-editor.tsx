@@ -102,7 +102,6 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
         return
       }
 
-      // TODO: clear perspective list cache tag
       onFinish?.(config)
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))

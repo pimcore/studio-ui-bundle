@@ -27,19 +27,11 @@ export const TreeContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const generateTreeStructure = (widgets: WidgetConfig[]): TreeDataItem[] => {
-    const tmpTreeData: TreeDataItem[] = []
-
-    if (widgets.length > 0) {
-      widgets.forEach((item: WidgetConfig) => {
-        tmpTreeData.push({
-          title: item.name,
-          key: item.id,
-          icon: <Icon value={ item.icon.value } />
-        })
-      })
-    }
-
-    return tmpTreeData
+    return widgets.map((item: WidgetConfig) => ({
+      title: item.name,
+      key: item.id,
+      icon: <Icon value={item.icon.value} />
+    }))
   }
 
   useEffect(() => {
@@ -82,12 +74,12 @@ export const TreeContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ (
+      renderToolbar={(
         <Toolbar justify="space-between">
           <IconButton
-            icon={ { value: 'refresh' } }
-            loading={ isLoading || isFetching }
-            onClick={ () => {
+            icon={{ value: 'refresh' }}
+            loading={isLoading || isFetching}
+            onClick={() => {
               setIsLoading(true)
 
               dispatch(
@@ -97,41 +89,41 @@ export const TreeContainer = (): React.JSX.Element => {
               )
 
               setIsLoading(false)
-            } }
-            title={ t('refresh') }
+            }}
+            title={t('refresh')}
           />
 
           <IconTextButton
-            icon={ { value: 'new' } }
-            loading={ isLoading || isFetching }
-            onClick={ createWidget }
+            icon={{ value: 'new' }}
+            loading={isLoading || isFetching}
+            onClick={createWidget}
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
-      ) }
+      )}
     >
       <Content
-        loading={ isLoading || isFetching }
+        loading={isLoading || isFetching}
         padded
       >
         <SearchInput
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
-          onClear={ clearSearch }
-          onSearch={ handleSearch }
-          value={ searchTerm }
+          onChange={(e) => { setSearchTerm(e.target.value) }}
+          onClear={clearSearch}
+          onSearch={handleSearch}
+          value={searchTerm}
           withoutAddon
         />
         <TreeElement
-          hasRoot={ false }
-          onSelected={ (key) => {
+          hasRoot={false}
+          onSelected={(key) => {
             const widget = widgets!.items.find((w) => isString(w.id) && isString(key) && w.id === key)
 
             if (widget !== undefined) {
               void openWidget(widget.id, widget.widgetType)
             }
-          } }
-          treeData={ treeDataFiltered }
+          }}
+          treeData={treeDataFiltered}
         />
       </Content>
     </ContentLayout>
