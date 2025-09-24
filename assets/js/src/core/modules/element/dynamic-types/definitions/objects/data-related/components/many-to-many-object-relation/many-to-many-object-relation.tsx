@@ -25,7 +25,10 @@ import {
   type GridColumnData,
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
+import {
+  type IUseDataObjectGridsReturn,
+  useDataObjectGrids
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
@@ -81,7 +84,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   const dataRelationClasses = props?.allowedClasses
 
   const [loadedIds, setLoadedIds] = useState<number[]>([])
-  const [cachedGridFullData, setCachedGridFullData] = useState<any[]>([])
+  const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
 
   const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
     {
@@ -150,7 +153,8 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   useEffect(() => {
     if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
       setLoadedIds(prev => {
-        const next = [...new Set([...prev, ...gridFullData.map(item => item.id)])]
+        const ids = gridFullData.map(item => item.id).filter(id => !isUndefined(id))
+        const next = [...new Set([...prev, ...ids])]
 
         return next.length === prev.length ? prev : next
       })
@@ -176,8 +180,9 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
 
   const mergedGridFullData = useMemo(() => {
     const existingIds = new Set(cachedGridFullData.map(item => item.id))
-    const fresh = gridFullData.filter(item => !existingIds.has(item.id))
-    return [...cachedGridFullData, ...fresh]
+
+    const newData = gridFullData.filter(item => !existingIds.has(item.id))
+    return [...cachedGridFullData, ...newData]
   }, [cachedGridFullData, gridFullData])
 
   const handleEnrichRowData = useCallback(

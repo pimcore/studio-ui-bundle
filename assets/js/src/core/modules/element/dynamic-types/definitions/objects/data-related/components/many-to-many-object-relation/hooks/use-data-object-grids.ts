@@ -9,16 +9,13 @@
  */
 
 import { map, filter, isEmpty } from 'lodash'
-import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import {
-  type DataObjectGetGridApiArg,
   type DataObjectGetGridApiResponse,
   type GridColumnRequest,
   useDataObjectGetGridQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
-import { useEffect, useRef } from 'react'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IUseDataObjectGridsProps {
@@ -28,7 +25,12 @@ interface IUseDataObjectGridsProps {
   dataValue?: ManyToManyRelationValue | null
 }
 
-export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): { isLoading: boolean, data: any } => {
+export interface IUseDataObjectGridsReturn {
+  isLoading: boolean
+  data: DataObjectGetGridApiResponse['items']
+}
+
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
   const queries = (classIds ?? []).map((classId: string) => {
     const filterValue = map(
       filter(dataValue, { subtype: classId }),
