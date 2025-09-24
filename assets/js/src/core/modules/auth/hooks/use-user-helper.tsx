@@ -15,12 +15,13 @@ import {
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
+import { userProfileUpdated, userProfileImageUpdated } from '@Pimcore/modules/auth/user/user-slice'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
   getUserImageById: (id: number) => Promise<string | undefined>
+  updateUserImageInState: (image: string, hasImage: boolean) => void
 }
 
 interface IBlobResponse {
@@ -103,7 +104,11 @@ export const useUserHelper = (): UseUserReturn => {
     return blobResponse?.data
   }
 
+  function updateUserImageInState (image: string, hasImage: boolean): void {
+    dispatch(userProfileImageUpdated({ data: { image, hasImage } }))
+  }
+
   return {
-    updateUserProfile, getUserImageById
+    updateUserProfile, getUserImageById, updateUserImageInState
   }
 }
