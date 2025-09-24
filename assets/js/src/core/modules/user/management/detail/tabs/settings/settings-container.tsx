@@ -157,8 +157,14 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     />
                   </Form.Item>
 
-                  <Form.Item name={ 'twoFactorAuthenticationRequired' } style={ { marginBottom: '0' } }>
-                    <Switch labelRight={ t('user-management.two-factor-authentication') } size={ 'small' } />
+                  <Form.Item
+                    name={ 'twoFactorAuthenticationRequired' }
+                    style={ { marginBottom: '0' } }
+                  >
+                    <Switch
+                      labelRight={ t('user-management.two-factor-authentication') }
+                      size={ 'small' }
+                    />
                   </Form.Item>
                 </>
               }
