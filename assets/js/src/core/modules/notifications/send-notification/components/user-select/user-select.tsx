@@ -24,9 +24,9 @@ export const UserSelect = ({ ...selectProps }: UserSelectProps): React.JSX.Eleme
 
   return (
     <Select
-      loading={isLoading}
-      options={options}
-      {...selectProps}
+      loading={ isLoading }
+      options={ options }
+      { ...selectProps }
     />
   )
 }

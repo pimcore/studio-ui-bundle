@@ -55,32 +55,32 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
 
   return (
     <WindowModal
-      footer={(<ModalFooter>
+      footer={ (<ModalFooter>
         <Button
-          onClick={onClose}
+          onClick={ onClose }
           type='default'
         >
           {t('user-menu.notification.cancel')}
         </Button>
         <Button
-          loading={isLoading}
-          onClick={handleSend}
+          loading={ isLoading }
+          onClick={ handleSend }
           type='primary'
         >
           {t('user-menu.notification.send')}
         </Button>
-      </ModalFooter>)}
-      onCancel={onClose}
-      open={open}
+      </ModalFooter>) }
+      onCancel={ onClose }
+      open={ open }
       size="M"
-      title={<Flex
+      title={ <Flex
         align='center'
-        gap={'extra-small'}
-      ><Icon value={'notes-events'} /><>{t('user-menu.notification.modal.send-a-notification')}</></Flex>}
-      zIndex={1000}
+        gap={ 'extra-small' }
+              ><Icon value={ 'notes-events' } /><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
+      zIndex={ 1000 }
     >
       <FieldWidthProvider>
-        <NotificationForm form={form} />
+        <NotificationForm form={ form } />
       </FieldWidthProvider>
     </WindowModal>
   )
