@@ -105,6 +105,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       }
     })
 
+    const filters = getArgs()?.body?.filters ?? {}
+    delete filters.page
+    delete filters.pageSize
+
     if (selectedRowsCount === 0) {
       addJob(createJob({
         title: t('batch-edit.job-title'),
@@ -118,7 +122,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   metadata: patches
                 }
               ],
-              filters: getArgs()?.body?.filters
+              filters: {
+                ...filters
+              },
             }
           })
 
