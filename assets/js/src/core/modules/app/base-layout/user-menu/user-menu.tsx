@@ -26,7 +26,6 @@ import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Avatar } from 'antd'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
-import { isNil } from 'lodash'
 
 interface IUserMenuProps {
   className?: string
@@ -59,19 +58,11 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     })
   }
 
-  const getUserName = (): string => {
-    if (!isNil(user.firstname) && !isNil(user.lastname)) {
-      return `${user.firstname} ${user.lastname}`
-    }
-
-    return t('user-menu.my-profile')
-  }
-
   const items: DropdownMenuProps['items'] = [
     {
       key: 'title',
       label: (
-        <div className={ 'user-menu__title' }>{t('user-menu.title')}</div>
+        <div className={ 'user-menu__title' }>{t('user-menu.title')} <span className={'user-menu__title-username'}>({user.username})</span></div>
       ),
       type: 'group'
     },
@@ -96,7 +87,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     },
     {
       key: 'myprofile',
-      label: getUserName(),
+      label: t('user-menu.my-profile'),
       icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
