@@ -23,7 +23,7 @@ import {
   type RoleUpdateByIdApiResponse,
   type DetailedUserRole,
   type RoleFolderDeleteByIdApiResponse,
-  type RoleGetByIdApiResponse
+  type RoleGetByIdApiResponse, type RoleSearchApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 
 interface IAddRoleArgs {
@@ -43,6 +43,7 @@ interface IUseRoleReturn {
   updateRoleById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   moveRoleById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   getRoleCollection: () => Promise<RoleGetCollectionApiResponse>
+  searchRoleByText: (query: string) => Promise<RoleSearchApiResponse>
   activeId: number
   getAllIds: number[]
 }
@@ -84,6 +85,11 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.roleGetTree.initiate({ parentId }))
 
+    return data
+  }
+
+  async function searchRoleByText (query: string): Promise<RoleSearchApiResponse> {
+    const { data }: any = await dispatch(api.endpoints.roleSearch.initiate({ searchQuery: query }))
     return data
   }
 
@@ -187,6 +193,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     updateRoleById,
     moveRoleById,
     getRoleCollection,
+    searchRoleByText,
     activeId,
     getAllIds
   }

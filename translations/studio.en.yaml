@@ -418,6 +418,7 @@ translations.add-translation-mandatory-field-missing.error: Key is a mandatory f
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.confirm: Confirm
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
 button.cancel-edits: Cancel edits
@@ -662,6 +663,7 @@ tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
 tree.actions.add-user: Add User
+tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
 tree.actions.remove-role: Remove Role
@@ -687,7 +689,7 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
-user-management.tree.all: All Users
+user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
@@ -745,8 +747,8 @@ user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
-user-management.firstname: Firstname
-user-management.lastname: Lastname
+user-management.firstname: First name
+user-management.lastname: Last name
 user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
@@ -792,9 +794,13 @@ user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
 user-management.add-folder.success: Folder added successfully
 user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user: Clone user
+user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
 user-management.add-user.success: User added successfully
+user-management.remove-user: Delete user
+user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
 user-management.remove-user.success: User removed successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
@@ -806,9 +812,14 @@ user-management.add-folder.label: Enter the name of the new folder
 user-management.add-user: Add new User
 user-management.add-user.label: Enter the name of the new user
 user-management.last-login: Last Login
+user-management.search.id: ID
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
+roles.clone-role: Clone role
+roles.clone-role.text: Enter the name of the new role
+roles.remove-role: Delete role
+roles.remove-role.text: 'Are you sure you want to permanently delete role "{{name}}"? This action cannot be undone.'
 roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
@@ -819,6 +830,7 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce

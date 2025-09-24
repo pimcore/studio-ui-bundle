@@ -35,7 +35,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-role', icon: 'add-user' }
+      { key: 'add-role', icon: 'shield-plus' }
     ]
   }
   const [treeData, setTreeData] = useState<TreeDataItem[]>([treeParentItem])
@@ -47,7 +47,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       selectable: item.type === 'role',
       allowDrop: item.type !== 'role',
       allowDrag: item.type === 'role',
-      icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
+      icon: item.type === 'role' ? <Icon value={ 'shield' } /> : <Icon value={ 'folder' } />,
       'data-testid': createTreeNodeTestId(item.id as string | number, item.type as string),
       actions: item.type === 'role'
         ? [
@@ -56,7 +56,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-role', icon: 'add-user' },
+            { key: 'add-role', icon: 'shield-plus' },
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
