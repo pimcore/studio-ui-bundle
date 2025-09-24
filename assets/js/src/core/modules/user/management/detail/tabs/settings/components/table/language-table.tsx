@@ -33,6 +33,7 @@ export const LanguageTable = ({
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
   const { getDisplayName } = useLanguageLookup()
 
   const columnsData = data.map((name: string) => (
