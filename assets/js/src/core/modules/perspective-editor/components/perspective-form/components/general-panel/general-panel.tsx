@@ -20,14 +20,14 @@ export const GeneralPanel = (): React.JSX.Element => {
   return (
     <>
       <Form.Item
-        label={t('perspective-editor.form.general.name')}
+        label={ t('perspective-editor.form.general.name') }
         name="name"
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label={t('perspective-editor.form.general.icon')}
+        label={ t('perspective-editor.form.general.icon') }
         name="icon"
       >
         <IconSelector />

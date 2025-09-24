@@ -13,9 +13,9 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@sdk/app'
 import { type DynamicTypeWidgetTypeElementTree } from './dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { type DynamicTypeWidgetTypeRegistry } from './dynmic-types/registry/dynamic-type-widget-type-registry'
-import { WidgetRegistry } from '../widget-manager/services/widget-registry'
+import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { WidgetEditorContainer } from './widget-editor-container'
-import { MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 
 moduleSystem.registerModule({
   onInit: () => {

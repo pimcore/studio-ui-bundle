@@ -14,8 +14,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
-import { Input } from '@Pimcore/components/input/input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type CreatePerspectiveConfig, type PerspectiveConfigDetail } from '@sdk/api/perspectives'
 import React from 'react'
@@ -23,9 +21,9 @@ import { useTranslation } from 'react-i18next'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '../../hooks/use-perspective-editor'
 import { AllowedMenuEntriesPanel } from './components/allowed-menu-entries-panel/allowed-menu-entries-panel'
+import { GeneralPanel } from './components/general-panel/general-panel'
 import { SpecificPanel } from './components/specific-panel/specific-panel'
 import { type ExtendedWidgetConfig } from './components/widget-configurator/context/widget-configurator-provider'
-import { GeneralPanel } from './components/general-panel/general-panel'
 
 interface PerspectiveFormProps {
   perspective: PerspectiveConfigDetail
@@ -59,7 +57,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
 
   return (
     <FormKit
-      formProps={{
+      formProps={ {
         form,
         initialValues,
         onFinish: async (values: OptimizedPerspectiveConfigDetail) => {
@@ -80,7 +78,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
             setIsLoading(false)
           })
         }
-      }}
+      } }
     >
       <Flex
         className='makeTabsGreatAgain'
@@ -89,10 +87,10 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       >
         <Content
           padded
-          padding={{
+          padding={ {
             x: 'small',
             y: 'none'
-          }}
+          } }
         >
           <GeneralPanel />
           <SpecificPanel />
@@ -102,30 +100,30 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              disabled={isLoading}
-              icon={{ value: 'refresh' }}
-              onClick={() => {
+              disabled={ isLoading }
+              icon={ { value: 'refresh' } }
+              onClick={ () => {
                 form.resetFields()
                 form.setFieldsValue(initialValues)
-              }}
-              title={t('refresh')}
+              } }
+              title={ t('refresh') }
             />
 
             <IconButton
-              disabled={isLoading}
-              icon={{ value: 'trash' }}
-              onClick={() => {
+              disabled={ isLoading }
+              icon={ { value: 'trash' } }
+              onClick={ () => {
                 removeWithConfirmation(perspective.id, () => {
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
                 })
-              }}
-              title={t('delete')}
+              } }
+              title={ t('delete') }
             />
           </div>
 
           <Button
             htmlType='submit'
-            loading={isLoading}
+            loading={ isLoading }
             type='primary'
           >
             {t('save')}

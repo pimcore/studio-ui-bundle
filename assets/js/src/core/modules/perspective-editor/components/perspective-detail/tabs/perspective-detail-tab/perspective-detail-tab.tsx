@@ -25,6 +25,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   }
 
   return (
-    <PerspectiveForm perspective={perspective} />
+    <PerspectiveForm perspective={ perspective } />
   )
 }

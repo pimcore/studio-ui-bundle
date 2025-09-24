@@ -18,7 +18,7 @@ export class DynamicTypeWidgetTypeElementTree extends DynamicTypeWidgetTypeAbstr
   group = 'system-widgets'
   icon = 'tree'
 
-  form(): React.JSX.Element {
+  form (): React.JSX.Element {
     return <ElementTreeWidgetTypeForm />
   }
 }

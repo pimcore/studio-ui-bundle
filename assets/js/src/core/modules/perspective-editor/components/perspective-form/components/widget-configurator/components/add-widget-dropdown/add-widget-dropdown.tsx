@@ -34,12 +34,12 @@ export const AddWidgetDropdown = (): React.JSX.Element => {
 
   return (
     <Dropdown
-      menu={{
+      menu={ {
         items: menu
-      }}
+      } }
     >
       <Button
-        loading={isFetching}
+        loading={ isFetching }
         type="default"
       >
         {t('add')}

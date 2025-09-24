@@ -18,7 +18,7 @@ export const SpecificPanel = (): React.JSX.Element => {
 
   return (
     <Flex
-      gap={4}
+      gap={ 4 }
       vertical
     >
       <p>{t('perspective-editor.form.general.widget-congfiguration')}</p>

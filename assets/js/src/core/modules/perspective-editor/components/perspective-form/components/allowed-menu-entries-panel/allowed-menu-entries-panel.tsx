@@ -24,10 +24,10 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
   if (isLoading) {
     return (
       <FormKit.Panel
-        theme='fieldset'
-        collapsed={false}
+        collapsed={ false }
         collapsible
-        title={t('perspective-editor.form.allowed-context-menu.title')}
+        theme='fieldset'
+        title={ t('perspective-editor.form.allowed-context-menu.title') }
       >
         <Spin />
       </FormKit.Panel>
@@ -36,23 +36,27 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
 
   return (
     <Flex
-      gap={4}
+      gap={ 4 }
       vertical
     >
       <p>{t('perspective-editor.form.allowed-context-menu.title')}</p>
 
       <Flex
+        gap={ 8 }
         vertical
-        gap={8}
       >
         {Object.entries(menuEntries).map(([categoryName, permissions], index) => (
           <FormKit.Panel
-            theme='fieldset'
-            collapsed={false}
+            collapsed={ false }
             collapsible
-            title={t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`)}
+            key={ index }
+            theme='fieldset'
+            title={ t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`) }
           >
-            <Flex vertical gap={4}>
+            <Flex
+              gap={ 4 }
+              vertical
+            >
               {Object.entries(permissions)
                 .sort(([keyA], [keyB]) => {
                   if (keyA === 'hidden') return -1
@@ -61,12 +65,12 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
                 })
                 .map(([permissionKey, permissionValue]) => (
                   <Form.Item
-                    key={`${categoryName}.${permissionKey}`}
-                    name={['contextPermissions', categoryName, permissionKey]}
+                    key={ `${categoryName}.${permissionKey}` }
+                    name={ ['contextPermissions', categoryName, permissionKey] }
                   >
                     <Switch
+                      labelRight={ t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`) }
                       size='small'
-                      labelRight={t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`)}
                     />
                   </Form.Item>
                 ))}
