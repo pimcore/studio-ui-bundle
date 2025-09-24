@@ -36,6 +36,20 @@ import {
 
 export type ManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 
+/* Wrapper to pass form props (value, onChange) to ManyToManyObjectRelation */
+const ManyToManyObjectRelationWrapper = (props: ManyToManyObjectRelationObjectDataDefinition): React.JSX.Element => {
+  return (
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
+      <ManyToManyObjectRelation
+        { ...props }
+        { ...convertAllowedTypes(props) }
+        className={ props.className }
+        disabled={ props.noteditable === true }
+      />
+    </DynamicTypeRegistryProvider>
+  )
+}
+
 export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyObjectRelation'
   supportsBatchAppendModes: boolean = true
@@ -46,16 +60,7 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
   }
 
   getObjectDataComponent (props: ManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return (
-      <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
-        <ManyToManyObjectRelation
-          { ...props }
-          { ...convertAllowedTypes(props) }
-          className={ props.className }
-          disabled={ props.noteditable === true }
-        />
-      </DynamicTypeRegistryProvider>
-    )
+    return <ManyToManyObjectRelationWrapper { ...props } />
   }
 
   getObjectDataFormItemProps (props: ManyToManyObjectRelationObjectDataDefinition): FormItemProps {

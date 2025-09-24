@@ -26,10 +26,7 @@ import {
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
-import {
-  useGridOptions
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
-import { useDataObjectGetByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -72,8 +69,6 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
 export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  console.log('----->>>>> props: ', props)
-
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const { getByName } = useClassDefinitions()
@@ -102,7 +97,6 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     }
   ]
 
-  const { data: currentObjectData } = useDataObjectGetByIdQuery({ id })
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
     relationField
@@ -146,7 +140,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
-    dataValue: currentObjectData?.objectData?.[relationField ?? '']
+    dataValue: props?.value
   })
   const isGridFullDataLoading = gridDataQueries?.some(q => q.isLoading === true || q.isFetching)
   const gridFullData = gridDataQueries?.flatMap(q => q.data?.items ?? [])
@@ -175,7 +169,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
-      value={ currentObjectData?.objectData?.[relationField ?? ''] ?? [] }
+      value={ props?.value }
     />
   )
 }

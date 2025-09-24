@@ -32,7 +32,6 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
 
   return (classIds ?? []).map((classId: string) => {
     const currentIds = map(filter(dataValue, { subtype: classId }), 'id')
-    console.log('----->>>> 000 currentIds: ', currentIds)
 
     if (!loadedIdsRef.current.has(classId)) {
       loadedIdsRef.current.set(classId, new Set())
