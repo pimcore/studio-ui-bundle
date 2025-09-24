@@ -68,6 +68,18 @@ const api = baseApi.enhanceEndpoints({
 
     documentsListAvailableSites: {
       providesTags: () => providingTags.DOCUMENT_SITE()
+    },
+
+    documentGetTranslations: {
+      providesTags: (result, error, args) => providingTags.DOCUMENT_DETAIL_ID(args.id)
+    },
+
+    documentAddTranslation: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+    },
+
+    documentDeleteTranslation: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
     }
   }
 }).injectEndpoints({
@@ -136,6 +148,7 @@ export const {
   useDocumentUpdateSiteMutation,
   useDocumentDeleteSiteMutation,
   useDocumentGetTranslationsQuery,
+  useLazyDocumentGetTranslationsQuery,
   useDocumentAddTranslationMutation,
   useDocumentDeleteTranslationMutation,
   useDocumentGetTranslationParentByLanguageQuery
