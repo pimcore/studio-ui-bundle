@@ -25,12 +25,10 @@ import {
   type GridColumnData,
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import {
-  type IUseDataObjectGridsReturn,
-  useDataObjectGrids
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
+import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -70,7 +68,7 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   className?: string
 }
 
-export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
+const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { id } = useElementContext()
@@ -174,7 +172,6 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
     pathFormatterClass: props.pathFormatterClass ?? '',
-    translate: t,
     transformGridColumn
   })
 
@@ -203,5 +200,18 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
       value={ props.value }
     />
+  )
+}
+
+export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
+  return (
+    <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
+      'DynamicTypes/MetadataRegistry',
+      'DynamicTypes/ListingRegistry'
+    ] }
+    >
+      <ManyToManyObjectRelationInner { ...props } />
+    </DynamicTypeRegistryProvider>
   )
 }

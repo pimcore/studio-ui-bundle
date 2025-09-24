@@ -22,11 +22,10 @@ interface IVisibleFieldsToColumnDefinitionsProps {
   visibleFieldDefinitions?: VisibleFieldDefinition[]
   disabled: boolean
   pathFormatterClass: string
-  translate: (key: string) => string
   transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
 }
 
-export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, translate, transformGridColumn }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, transformGridColumn }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
