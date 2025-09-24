@@ -74,6 +74,30 @@ document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
 document.hardlink.children-from-source: Use children from source document
+document.paste-as-new-language-variant: Paste as new language variant
+document.paste-as-new-language-variant-recursive: Paste as new language variant (recursive)
+document.paste-language-recursive-updating-references: Paste language (recursive), updating references
+document.select-language-for-new-document: Select language for New Document
+document.language-required: Please select a language
+document.paste-inheritance: Paste (inheritance)
+document.tree.copy-paste.replacing-content: Replacing Content
+document.site.remove-site: Remove Site
+document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+document.site.use-as-site: Use as Site
+document.site.edit-site: Edit Site
+document.site.form.main-domain: Main Domain
+document.site.form.additional-domains: Additional Domains
+document.site.form.additional-domains-tooltip: Enter additional domains, one per line. Wildcards are supported (*example.com)
+document.site.form.redirect-to-main-domain: Redirect additional domains to main domain
+document.site.form.error-documents: Error Documents
+document.site.form.default-error-document: Default Error Document
+document.site.form.error-document-language: Error Document ({{language}})
+save-and-continue: Save and Continue
+discard-and-continue: Discard and Continue
+discard-changes: Discard Changes
+unsaved-changes.title: Unsaved Changes
+unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?
@@ -524,6 +548,7 @@ current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 ok: OK
 apply: Apply
+cancel: Cancel
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
@@ -583,6 +608,9 @@ set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
 clone: Clone
+jobs.asset-clone-job.title: Cloning assets
+jobs.document-clone-job.title: Cloning documents
+jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -1032,6 +1060,14 @@ reports.editor.general-settings.report-class-label: Report Class
 reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
 reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
+reports.editor.source-definition.select-source-definition: Select a source definition
+reports.editor.source-definition.sql-select-field: SELECT (eg. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (eg. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (eg. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (eg. b, c )
+reports.editor.source-definition.sql-initial-field-order: Initial Order by Field (eg. b, c )
+reports.editor.source-definition.sql-initial-direction-order: Initial Order by Direction
 reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
 reports.editor.manage-column-configuration.name: Name
 reports.editor.manage-column-configuration.display: Display
@@ -1067,6 +1103,8 @@ reports.editor.chart-settings.chart-type.pie-chart: Pie Chart
 reports.editor.chart-settings.chart-type.line-chart: Line Chart
 reports.editor.chart-settings.chart-type.bar-chart: Bar Chart
 reports.editor.chart-settings.settings: Settings
+reports.editor.chart-settings.pie-label: Label Column
+reports.editor.chart-settings.pie-data: Data Column
 reports.editor.chart-settings.x-axis: X-Axis
 reports.editor.chart-settings.y-axis: Y-Axis
 reports.editor.permissions.title: Permissions
@@ -1181,9 +1219,9 @@ recycle-bin.columns.date: Date
 recycle-bin.columns.actions: Actions
 recycle-bin.actions.cleanup: Clean up
 recycle-bin.actions.delete: Delete
-recycle-bin.actions.delete.title: Deleting Items
+recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
-recycle-bin.actions.restore.title: Restoring Items
+recycle-bin.actions.restore.title: Restoring Recycle Bin Items
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video
@@ -1232,8 +1270,84 @@ perspective-editor.add-modal.title: Add a new Perspective
 perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.form.general.title: General
+perspective-editor.form.specific.title: Specific
+perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
+perspective-editor.form.allowed-context-menu.category.extras: Extras
+perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
+perspective-editor.form.allowed-context-menu.extras.emails: Sent Emails
+perspective-editor.form.allowed-context-menu.extras.gdpr_data_extractor: GDPR Data Extractor
+perspective-editor.form.allowed-context-menu.extras.glossary: Glossary
+perspective-editor.form.allowed-context-menu.extras.hidden: Extra Hidden -> move
+perspective-editor.form.allowed-context-menu.extras.maintenance: Maintenance
+perspective-editor.form.allowed-context-menu.extras.notesEvents: Notes & Events
+perspective-editor.form.allowed-context-menu.extras.recycle_bin: Recycle Bin
+perspective-editor.form.allowed-context-menu.extras.redirects: Redirects
+perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: System Tools (hidden) -> move
+perspective-editor.form.allowed-context-menu.extras.systemTools_requirements: Sytem-Requirements Check
+perspective-editor.form.allowed-context-menu.extras.translations: Translations
+perspective-editor.form.allowed-context-menu.category.file: File
+perspective-editor.form.allowed-context-menu.file.about: About
+perspective-editor.form.allowed-context-menu.file.close_all: Close All
+perspective-editor.form.allowed-context-menu.file.dashboards: Dashboards
+perspective-editor.form.allowed-context-menu.file.help: Help
+perspective-editor.form.allowed-context-menu.file.hidden: File Hidden -> move
+perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
+perspective-editor.form.allowed-context-menu.file.open_document: Open Document
+perspective-editor.form.allowed-context-menu.file.open_object: Open Object
+perspective-editor.form.allowed-context-menu.file.perspectives: Perspectives
+perspective-editor.form.allowed-context-menu.file.schedule: Schedule -> WTF
+perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
+perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
+perspective-editor.form.allowed-context-menu.category.marketing: Marketing
+perspective-editor.form.allowed-context-menu.marketing.hidden: Marketing Hidden -> move
+perspective-editor.form.allowed-context-menu.marketing.reports: Reports
+perspective-editor.form.allowed-context-menu.category.search: Search
+perspective-editor.form.allowed-context-menu.search.assets: Assets
+perspective-editor.form.allowed-context-menu.search.documents: Documents
+perspective-editor.form.allowed-context-menu.search.hidden: Search Hidden -> move
+perspective-editor.form.allowed-context-menu.search.objects: Data Objects
+perspective-editor.form.allowed-context-menu.search.quickSearch: Quick Search
+perspective-editor.form.allowed-context-menu.category.settings: Settings
+perspective-editor.form.allowed-context-menu.settings.adminTranslations: Admin Translations
+perspective-editor.form.allowed-context-menu.settings.appearance: Appearance
+perspective-editor.form.allowed-context-menu.settings.cache_clearAll: All Caches (Symfony + Data)
+perspective-editor.form.allowed-context-menu.settings.cache_clearData: Data Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Clear Full Page Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Symfony Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Clear Temporary Files
+perspective-editor.form.allowed-context-menu.settings.cache_hidden: Cache Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.customReports: Custom Reports
+perspective-editor.form.allowed-context-menu.settings.documentTypes: Document Types
+perspective-editor.form.allowed-context-menu.settings.hidden: Settings Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Bulk Export
+perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Bulk Import
+perspective-editor.form.allowed-context-menu.settings.object_classes: Classes
+perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Classification Store
+perspective-editor.form.allowed-context-menu.settings.object_field_collections: Field Collections
+perspective-editor.form.allowed-context-menu.settings.object_hidden: Data Object Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Object Bricks
+perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Quantity Value
+perspective-editor.form.allowed-context-menu.settings.predefinedMetadata: Predefined Metadata
+perspective-editor.form.allowed-context-menu.settings.predefinedProperties: Predefined Properties
+perspective-editor.form.allowed-context-menu.settings.system: System
+perspective-editor.form.allowed-context-menu.settings.tagConfiguration: Tag Configuration
+perspective-editor.form.allowed-context-menu.settings.thumbnails: Thumbnails
+perspective-editor.form.allowed-context-menu.settings.users_hidden: User Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.users_roles: Roles
+perspective-editor.form.allowed-context-menu.settings.users_users: Users
+perspective-editor.form.allowed-context-menu.settings.website: Website Settings
 perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
+perspective-editor.system-widgets: System Widgets
+perspective-editor.system-widgets.trees: Trees
+perspective-editor.system-widgets.documents: Documents
+perspective-editor.system-widgets.assets: Assets
+perspective-editor.system-widgets.data-objects: Data Objects
+perspective-editor.system-widgets.left: Left widgets
+perspective-editor.system-widgets.bottom: Bottom widgets
+perspective-editor.system-widgets.right: Right widgets
+perspective-editor.update.success: Perspective updated successfully
 widget-editor.create-modal.create: Create Widget
 widget-editor.create-form.name: Name
 widget-editor.create-form.name.required: Please enter a valid name
@@ -1309,4 +1423,26 @@ icon-selector.custom-icon-path: Custom path
 icon-selector.custom-icon-path-placeholder: Add a custom path and submit
 icon-selector.Twemoji: Twemoji Library
 icon-selector.Pimcore: Pimcore Library
-
+language: Language
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overrides path from tree-structure)
+content-main-document: Content-Main Document
+never: never
+document-configuration.sidebar-title: Document Configuration
+document-configuration.predefined-document-type: Predefined Document Type
+document-configuration.controller: Controller
+document-configuration.template: Template
+document-configuration.static-page-generator: Static Page Generator
+document-configuration.enable-server-side-static-rendering: Enable server side static rendering
+document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
+document-configuration.last-generated: "Last generated: {{timestamp}}"
+email-settings.sidebar-title: Email Settings
+email-settings.subject: Subject
+email-settings.from: From
+email-settings.reply-to: Reply To
+email-settings.recipients: Recipients
+email-settings.to: To
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"

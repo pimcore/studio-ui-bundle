@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
@@ -15,6 +16,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
+  'DynamicTypes/CustomReportDefinitionRegistry': 'DynamicTypes/CustomReportDefinitionRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
@@ -27,7 +29,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
   'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
   'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
-  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji'
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
 }
 
 export const serviceIds = {
@@ -39,6 +42,10 @@ export const serviceIds = {
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
+
+  // Global message system
+  globalMessageBusProcess: 'GlobalMessageBusProcess',
+  globalMessageBus: 'GlobalMessageBus',
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
@@ -159,6 +166,8 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
+
+  'DynamicTypes/CustomReportDefinition/Sql': 'DynamicTypes/CustomReportDefinition/Sql',
 
   // Object layout
   'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
@@ -287,12 +296,15 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
 
+  // Widget Editor types
+  'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
+
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
 
-  // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
+  // Execution Engine
+  executionEngine: 'ExecutionEngine',
 
-  // Perspective & Widget Editor
-  'WidgetEditor/WidgetTypeRegistry': 'WidgetEditor/WidgetTypeRegistry'
+  // Component registry
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
 }

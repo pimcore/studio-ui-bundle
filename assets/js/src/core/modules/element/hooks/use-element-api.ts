@@ -68,7 +68,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const [dataObjectClone] = useDataObjectCloneMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
-  const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DATA_OBJECT_TREE'])
+  const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DOCUMENT_TREE'])
 
   const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
     try {

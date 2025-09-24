@@ -42,6 +42,10 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-tabs-tab {
         padding: ${token.paddingSM}px ${token.paddingXXS}px !important;
       }
+    `,
+
+    dropdownButton: css`
+      padding: 0 ${token.paddingXS}px;
     `
   }
 })

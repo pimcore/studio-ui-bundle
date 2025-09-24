@@ -181,6 +181,7 @@ import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
+import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
@@ -913,6 +914,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'pined',
       component: pined
+    })
+    iconLibrary.register({
+      name: 'plus-circle',
+      component: plusCircle
     })
     iconLibrary.register({
       name: 'plus-square',

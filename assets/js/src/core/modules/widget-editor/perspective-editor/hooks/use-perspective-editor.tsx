@@ -112,6 +112,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
 
       // TODO: clear perspective list cache tag
       onFinish?.(config as PerspectiveConfigDetail)
+      void success(t('perspective-editor.update.success'))
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
     }
