@@ -95,7 +95,6 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
   }
 
   function updateUserImageInState (image: string): void {
-    if (user === undefined) return
     dispatch(updateUserImage({ id: user.id, image }))
   }
 

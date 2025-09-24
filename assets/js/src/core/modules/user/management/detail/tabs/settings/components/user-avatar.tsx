@@ -17,18 +17,18 @@ import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface IUserAvatar {
   user: any
-  isLoggedInUser?: boolean
-  onUserImageChanged?: (imageUrl: string) => void
+  onUserImageChanged?: (image: string | undefined, hasImage: boolean) => void
 }
-const UserAvatar = ({ user, isLoggedInUser, onUserImageChanged, ...props }: IUserAvatar): React.JSX.Element => {
+const UserAvatar = ({ user, onUserImageChanged, ...props }: IUserAvatar): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  const { uploadUserAvatar } = useUserManagementHelper()
+  const { uploadUserAvatar, deleteUserAvatar } = useUserManagementHelper()
   const { getUserImageById } = useUserHelper()
 
   const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && user?.image === undefined)
@@ -36,9 +36,9 @@ const UserAvatar = ({ user, isLoggedInUser, onUserImageChanged, ...props }: IUse
   const getUserImage = (): void => {
     setUserImageLoading(true)
 
-    getUserImageById(user.id as number, isLoggedInUser).then((imageUrl) => {
-      if (imageUrl !== undefined) {
-        onUserImageChanged?.(imageUrl)
+    getUserImageById(user.id as number).then((image) => {
+      if (image !== undefined) {
+        onUserImageChanged?.(image, true)
       }
       setUserImageLoading(false)
     }).catch((error: Error) => {
@@ -46,8 +46,19 @@ const UserAvatar = ({ user, isLoggedInUser, onUserImageChanged, ...props }: IUse
     })
   }
 
+  const handleDeleteImage = async (): Promise<void> => {
+    try {
+      await deleteUserAvatar(user?.id as number)
+      onUserImageChanged?.(undefined, false)
+    } catch (error) {
+      console.error('Error deleting user image:', error)
+    }
+  }
+
   useEffect(() => {
-    getUserImage()
+    if (user?.hasImage === true) {
+      getUserImage()
+    }
   }, [])
 
   return (
@@ -68,11 +79,11 @@ const UserAvatar = ({ user, isLoggedInUser, onUserImageChanged, ...props }: IUse
               className={ classNames.join(' ') }
               icon={ <UserOutlined /> }
               size={ 64 }
-              src={ user?.image ?? undefined }
+              src={ user?.hasImage === true && user?.image != null ? user.image : undefined }
             />
             )}
 
-        <div>
+        <Flex gap={ 'small' }>
           <Upload
             customRequest={ async ({ file }) => {
               await uploadUserAvatar({ id: user?.id, file: file as File })
@@ -86,7 +97,17 @@ const UserAvatar = ({ user, isLoggedInUser, onUserImageChanged, ...props }: IUse
           >
             <Button type={ 'default' }>{t('user-management.settings.upload-avatar')}</Button>
           </Upload>
-        </div>
+
+          {user?.hasImage === true
+            ? (
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ handleDeleteImage }
+                type={ 'default' }
+              />
+              )
+            : null}
+        </Flex>
       </Flex>
     </Card>
   )

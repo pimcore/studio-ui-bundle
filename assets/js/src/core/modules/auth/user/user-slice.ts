@@ -15,7 +15,7 @@ import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-
 import { useTrackableChangesReducers } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 
 interface IUserInformationExtended extends UserInformation {
-  image?: string | undefined
+  image: string | undefined
 }
 
 // The logic dependency is in the rtkQueryErrorLogger middleware
@@ -78,7 +78,8 @@ const slice = createSlice({
     userProfileImageUpdated: (state, { payload }) => {
       return {
         ...state,
-        image: payload.data
+        image: payload.data.image,
+        hasImage: payload.data.hasImage
       }
     },
 

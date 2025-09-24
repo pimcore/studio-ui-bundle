@@ -20,7 +20,8 @@ import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-sli
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
-  getUserImageById: (id: number, isLoggedInUser?: boolean) => Promise<string | undefined>
+  getUserImageById: (id: number) => Promise<string | undefined>
+  updateUserImageInState: (image: string, hasImage: boolean) => void
 }
 
 interface IBlobResponse {
@@ -95,19 +96,19 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getUserImageById (id: number, isLoggedInUser?: boolean): Promise<string | undefined> {
+  async function getUserImageById (id: number): Promise<string | undefined> {
     const result = await dispatch(api.endpoints.userGetImage.initiate({ id }))
 
     const blobResponse = result.data as IBlobResponse | undefined
 
-    if (isLoggedInUser === true) {
-      dispatch(userProfileImageUpdated(blobResponse))
-    }
-
     return blobResponse?.data
   }
 
+  function updateUserImageInState (image: string, hasImage: boolean): void {
+    dispatch(userProfileImageUpdated({ data: { image, hasImage } }))
+  }
+
   return {
-    updateUserProfile, getUserImageById
+    updateUserProfile, getUserImageById, updateUserImageInState
   }
 }

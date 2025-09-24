@@ -28,6 +28,7 @@ import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 
 interface IProfileDetail {
   id: number
@@ -40,6 +41,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const { getDisplayName } = useLanguageLookup()
   const { user, setModifiedCells } = useUserDraft()
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
+  const { updateUserImageInState } = useUserHelper()
 
   useEffect(() => {
     if (user?.modified === false) {
@@ -175,7 +177,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         </Col>
         <Col span={ 6 }>
           <UserAvatar
-            isLoggedInUser
+            onUserImageChanged={ updateUserImageInState }
             user={ user }
           />
         </Col>

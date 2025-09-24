@@ -69,6 +69,7 @@ interface UseUserReturn extends
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
   uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
+  deleteUserAvatar: (id: number) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
   getAvailablePermissions: () => any[]
@@ -213,6 +214,13 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return data
   }
 
+  async function deleteUserAvatar (id: number): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
+    const { data, error }: any = await dispatch(api.endpoints.userImageDeleteById.initiate({ id }))
+    handleNotification(t('user-management.upload-image.success'), error)
+
+    return data
+  }
+
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
     const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
     if (data !== undefined) {
@@ -258,6 +266,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
+    deleteUserAvatar,
     getAvailablePermissions,
     activeId,
     getAllIds

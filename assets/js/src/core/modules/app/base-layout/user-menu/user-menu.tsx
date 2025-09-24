@@ -38,12 +38,18 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
   const user = useUser()
-  const { getUserImageById } = useUserHelper()
+  const { getUserImageById, updateUserImageInState } = useUserHelper()
 
   useEffect(() => {
-    getUserImageById(user.id, true).catch((error: Error) => {
-      console.error('Error fetching user image:', error)
-    })
+    if (user.hasImage) {
+      getUserImageById(user.id).then((data) => {
+        if (data !== undefined) {
+          updateUserImageInState(data, true)
+        }
+      }).catch((error: Error) => {
+        console.error('Error fetching user image:', error)
+      })
+    }
   }, [])
 
   const handleLogout = (): void => {
@@ -118,7 +124,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
           data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
-          src={ user?.image ?? undefined }
+          src={ user?.hasImage && user?.image != null ? user?.image : undefined }
         ></Avatar>
       </Dropdown>
 

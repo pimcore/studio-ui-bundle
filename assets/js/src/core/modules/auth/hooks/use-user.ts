@@ -16,7 +16,7 @@ import { type UserInformation } from '../user/user-api-slice.gen'
 interface IExtendsUserInformation extends UserInformation {
   modified?: boolean
   modifiedCells?: Record<string, boolean>
-  image?: string | undefined
+  image?: string
 }
 
 export const useUser = (): IExtendsUserInformation => {

@@ -65,7 +65,7 @@ export const slice = createSlice({
     updateUserImage: (state, action: PayloadAction<{ id: any, image: any }>): void => {
       const update: Update<any, any> = {
         id: action.payload.id,
-        changes: { image: action.payload.image }
+        changes: { image: action.payload.image, ...action.payload.image !== undefined ? { hasImage: true } : { hasImage: false } }
       }
       userAdapter.updateOne(state, update)
     },
