@@ -70,11 +70,19 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { currentLanguage } = useLanguageSelection()
 
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-      return columnFilters.map(({ filterType, type, ...rest }) => ({
-        ...rest,
-        ...((filterType !== undefined) ? { type: filterType } : { type }),
-        locale: rest.locale ?? currentLanguage
-      }))
+      return columnFilters.map(({ filterType, type, key, ...rest }) => {
+        const finalType = filterType !== undefined ? filterType : type
+        const column = availableColumns.find(col => col.key === key)
+        const frontendType = column?.frontendType
+        const transformedKey = frontendType === 'consent' ? `${key}.consent` : key
+        
+        return {
+          ...rest,
+          key: transformedKey,
+          type: finalType,
+          locale: rest.locale ?? currentLanguage
+        }
+      })
     }
 
     const getArgs: typeof baseGetArgs = () => {
