@@ -158,7 +158,6 @@ export const LanguageTable = ({
   }
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
-    console.log('onUpdateCellData', { rowIndex, columnId, value, rowData })
     const updatedGridData = gridData.map((item, index) => {
       if (index === rowIndex) {
         if (columnId === 'edit') {
