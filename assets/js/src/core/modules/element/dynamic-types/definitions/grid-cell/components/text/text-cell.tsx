@@ -9,10 +9,11 @@
  */
 
 import React, { useEffect, useRef } from 'react'
-import { Input, type InputRef } from 'antd'
 import { useStyle } from './text-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { Input } from '@sdk/components'
+import { type InputRef } from 'antd'
 
 export interface TextCellProps extends DefaultCellProps {}
 

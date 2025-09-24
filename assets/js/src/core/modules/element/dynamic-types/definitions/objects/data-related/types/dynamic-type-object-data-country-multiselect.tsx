@@ -8,10 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
 import {
   DynamicTypeObjectDataAbstractMultiSelect
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-multiselect'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 
 export class DynamicTypeObjectDataCountryMultiSelect extends DynamicTypeObjectDataAbstractMultiSelect {
   id: string = 'countrymultiselect'
+
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
 }

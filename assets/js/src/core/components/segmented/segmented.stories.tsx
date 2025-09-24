@@ -12,7 +12,7 @@ import type { Meta } from '@storybook/react'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 
 const config: Meta = {
-  title: 'Components/Controls/Segmented',
+  title: 'Components/Data Entry/Segmented',
   component: Segmented,
   parameters: {
     layout: 'centered'

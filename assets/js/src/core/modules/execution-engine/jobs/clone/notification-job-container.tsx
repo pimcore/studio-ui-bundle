@@ -8,54 +8,35 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, useState } from 'react'
-import { JobStatus } from '../../jobs/abstact-job'
-import { useServerSideEvent } from '@Pimcore/utils/hooks/use-server-side-event'
-import { useJobs } from '../../hooks/useJobs'
-import { JobView } from '../../notification/job/job-view'
-import { type JobProps } from '../../notification/job/job'
+import React from 'react'
+import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-view'
+import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch } from '@sdk/app'
-import { type CloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
-import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
+import { type AbstractCloneJobConfig } from './abstract-clone-job'
 
 export interface CloneJobProps extends JobProps {
-  config: CloneJob['config']
+  config: AbstractCloneJobConfig
 }
 
 export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Element => {
-  const { id, topics, status, action } = props
-  const { open: openSSEvent, close: closeSSEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
-  const [progress, setProgress] = useState<number>(0)
-  const { updateJob, removeJob } = useJobs()
-  const jobId = useRef<number>()
+  const { removeJob } = useJobs()
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (JobStatus.QUEUED === status) {
-      updateJob(id, {
-        status: JobStatus.RUNNING
-      })
-
-      openSSEvent()
-    }
-  }, [props.status])
 
   return (
     <JobView
       failureButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(id) }
+          handler: () => { removeJob(props.id) }
         }
       ] }
 
       finishedWithErrorsButtonActions={ [
         {
-          label: t('jobs.job.button-ignore-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            removeJob(id)
+            removeJob(props.id)
           }
         }
       ] }
@@ -64,61 +45,13 @@ export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Elemen
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
-            removeJob(id)
+            removeJob(props.id)
           }
         }
       ] }
 
       { ...props }
-      progress={ progress }
+      progress={ props.config.progress ?? 0 }
     />
   )
-
-  function openHandler (): void {
-    action().then(actionJobId => {
-      jobId.current = actionJobId
-    }).catch(console.error)
-  }
-
-  function messageHandler (event: MessageEvent): void {
-    const data: any = JSON.parse(event.data as string)
-
-    if (data.jobRunId !== jobId.current) {
-      return
-    }
-
-    if (data.progress !== undefined) {
-      setProgress(data.progress as number)
-    }
-
-    if (data.status !== undefined) {
-      if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
-        dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
-      }
-
-      if (data.status === 'finished') {
-        updateJob(id, {
-          status: JobStatus.SUCCESS
-        })
-
-        closeSSEvent()
-      }
-
-      if (data.status === 'finished_with_errors') {
-        updateJob(id, {
-          status: JobStatus.FINISHED_WITH_ERRORS
-        })
-
-        closeSSEvent()
-      }
-
-      if (data.status === 'failed') {
-        updateJob(id, {
-          status: JobStatus.FAILED
-        })
-
-        closeSSEvent()
-      }
-    }
-  }
 }

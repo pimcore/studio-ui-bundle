@@ -18,12 +18,14 @@ import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
-import { Avatar } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { Avatar } from 'antd'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 
 interface IUserMenuProps {
   className?: string
@@ -34,6 +36,17 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [sendModal, setSendModal] = useState<boolean>(false)
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
+  const user = useUser()
+  const { getUserImageById } = useUserHelper()
+
+  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(undefined)
+  useEffect(() => {
+    getUserImageById(user.id).then((imageUrl) => {
+      setUserImageUrl(imageUrl)
+    }).catch((error: Error) => {
+      console.error('Error fetching user image:', error)
+    })
+  }, [])
 
   const handleLogout = (): void => {
     const logoutTask = logout()
@@ -49,14 +62,14 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'title',
       label: (
-        <div className={ 'user-menu__title' }>{t('user-menu.title')}</div>
+        <div className={ 'user-menu__title' }>{t('user-menu.title')} <span className={ 'user-menu__title-username' }>({user.username})</span></div>
       ),
       type: 'group'
     },
     {
       key: 'notifications',
       label: t('user-menu.notifications'),
-      icon: <Badge count={ 5 } />,
+      icon: <div className={ 'user-menu__item-icon' }><Badge count={ 5 } /></div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
       extra: isAllowed(UserPermission.SendNotifications)
@@ -75,13 +88,13 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
-      icon: <Icon value={ 'user' } />,
+      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
     {
       key: 'logout',
       label: t('user-menu.log-out'),
-      icon: <Icon value={ 'log-out' } />,
+      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'log-out' } /></div>,
       onClick: handleLogout
     }
   ]
@@ -93,11 +106,14 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         menu={ { items } }
         overlayClassName={ [styles.userMenu].join(' ') }
         overlayStyle={ { minWidth: 275 } }
+        trigger={ ['click'] }
       >
         <Avatar
+          data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
-        />
+          src={ userImageUrl }
+        ></Avatar>
       </Dropdown>
 
       <SendNotificationModal

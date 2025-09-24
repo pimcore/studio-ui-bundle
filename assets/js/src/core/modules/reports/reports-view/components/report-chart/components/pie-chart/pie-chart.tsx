@@ -11,9 +11,12 @@
 import React, { useEffect, useState } from 'react'
 import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
-import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
+import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
-import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
+import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
+import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
 
 export interface IChartPieDataItem extends IChartDataItem {
   color: string
@@ -27,21 +30,29 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
-  const [colorList] = useState<string[]>(generateRandomColors(chartData?.length))
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
+
   const reportChartData: IChartPieDataItem[] = chartData.map(((item, index) => ({
     [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
     [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
     [CHART_FIELD_COLOR_KEY]: colorList[index]
   })))
+  const { isExpanded, visibleItems, toggle, initialVisibleCount } = useShowMore(reportChartData)
 
   const [disabledItems, setDisabledItems] = useState<string[]>([])
   const [chartRef, setChartRef] = useState<any>(null)
   const [totalCount, setTotalCount] = useState<number>(0)
 
   useEffect(() => {
-    const totalCountValue: number = chartData?.reduce((sum, item) => sum + item?.[pieColumn], 0)
+    if (chartRef !== null) {
+      chartRef.chart.changeData(reportChartData)
 
-    setTotalCount(totalCountValue ?? 0)
+      const totalValue =
+          reportChartData
+            .filter(item => !disabledItems.includes(item[CHART_FIELD_TYPE_KEY]))
+            .reduce((sum, item) => sum + item[CHART_FIELD_VALUE_KEY], 0)
+      setTotalCount(totalValue)
+    }
   }, [chartData])
 
   const handleLegendItemClick = (itemKey: string): void => {
@@ -68,7 +79,7 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
     colorField: CHART_FIELD_COLOR_KEY,
     angleField: CHART_FIELD_VALUE_KEY,
     autoFit: true,
-    height: 250,
+    height: 230,
     scale: {
       color: {
         type: 'identity'
@@ -106,11 +117,33 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   return (
     <div>
       <Pie { ...config } />
-      <ChartLegend
-        data={ reportChartData }
-        disabledItems={ disabledItems }
-        handleLegendItemClick={ handleLegendItemClick }
-      />
+      <Flex
+        gap="mini"
+        justify="center"
+        wrap="wrap"
+      >
+        {visibleItems?.map((item, index) => {
+          const isDisabled = disabledItems.includes(item.type)
+
+          return (
+            <LegendItem
+              disabled={ isDisabled }
+              handleClick={ () => { handleLegendItemClick(item.type) } }
+              key={ `${index}-${item.type}` }
+              label={ item.type }
+              markerColor={ item.color }
+              value={ item.value }
+            />
+          )
+        })}
+      </Flex>
+
+      {reportChartData?.length > initialVisibleCount && (
+        <ShowMoreBtn
+          isExpanded={ isExpanded }
+          toggle={ toggle }
+        />
+      )}
     </div>
   )
 }

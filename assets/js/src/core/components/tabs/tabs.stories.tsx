@@ -11,9 +11,10 @@
 import { type StoryObj, type Meta } from '@storybook/react'
 import { type ITabsProps, Tabs } from './tabs'
 import React from 'react'
+import { Icon } from '../icon/icon'
 
 const config: Meta = {
-  title: 'Components/Data Display/Tabs',
+  title: 'Components/Layout/Tabs',
   component: Tabs,
   tags: ['autodocs']
 }
@@ -26,7 +27,8 @@ export const _default: StoryObj<ITabsProps> = {
       {
         key: 'tab-1',
         label: 'Tab 1',
-        children: <>Tab 1 content</>
+        children: <>Tab 1 content</>,
+        closable: false
       },
       {
         key: 'tab-2',
@@ -59,5 +61,58 @@ export const Closeable: StoryObj<ITabsProps> = {
   args: {
     ..._default.args,
     onClose: (key) => { console.log('click close button', key) }
+  }
+}
+
+export const CustomCloseIcon: StoryObj<ITabsProps> = {
+  args: {
+    ..._default.args,
+    onClose: (key) => { console.log('click close button', key) },
+    removeIcon: <Icon value='trash' />
+  }
+}
+
+export const TabbarLeft: StoryObj<ITabsProps> = {
+  args: {
+    ..._default.args,
+    tabPosition: 'left',
+    onClose: (key) => { console.log('click close button', key) }
+  }
+}
+
+export const MiddleClickClose: StoryObj<ITabsProps> = {
+  args: {
+    items: [
+      {
+        key: 'tab-1',
+        label: 'Tab 1 (not closable)',
+        children: <>Tab 1 content - This tab cannot be closed</>,
+        closable: false
+      },
+      {
+        key: 'tab-2',
+        label: 'Tab 2 (closable)',
+        children: <>Tab 2 content - This tab can be closed with middle-click or close button</>
+      },
+      {
+        key: 'tab-3',
+        label: 'Tab 3 (closable)',
+        children: <>Tab 3 content - This tab can be closed with middle-click or close button</>
+      },
+      {
+        key: 'tab-4',
+        label: 'Tab 4 (not closable)',
+        children: <>Tab 4 content - This tab cannot be closed</>,
+        closable: false
+      }
+    ],
+    onClose: (key) => { console.log('middle-click or close button clicked for tab', key) }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Tabs can be closed by middle-clicking (mouse wheel click) on them when onClose is provided and the individual tab has closable !== false. Try middle-clicking on the different tabs - only closable ones will respond.'
+      }
+    }
   }
 }

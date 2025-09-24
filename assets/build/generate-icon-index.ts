@@ -1,14 +1,11 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - Pimcore Open Core License (POCL)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ *  * This source file is available under the terms of the
+ *  * Pimcore Open Core License (POCL)
+ *  * Full copyright and license information is available in
+ *  * LICENSE.md which is distributed with this source code.
+ *  *
+ *  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  *  @license    Pimcore Open Core License (POCL)
  *
  * HOW TO USE:
  * 1. Place all the SVG files in the folder `./js/src/core/assets/icons`
@@ -65,10 +62,18 @@ const generateIconEntry = (fileName: string): string => {
 
 const modifySvgAttributes = (filePath: string): void => {
     let svgContent: string = fs.readFileSync(filePath, 'utf-8');
+
+    svgContent = svgContent.replace(/\s+id=(["'])((?=[\w-]{1,100})[\w-]+)\1/g, '');
+
     const hasStroke = /stroke="[^"]*"/.test(svgContent);
 
     if (!hasStroke) {
         svgContent = svgContent.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+    } else {
+        svgContent = svgContent.replace(
+            /fill=(["'])(?!none|white|transparent)(#[0-9a-fA-F]{3,6}|rgb\([^)]+\)|[a-zA-Z]+)\1/g,
+            'fill="currentColor"'
+        );
     }
 
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
@@ -100,16 +105,13 @@ files.forEach(file => {
 
 let content = `
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - Pimcore Open Core License (POCL)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH
- *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 /* eslint-disable max-lines */
@@ -137,7 +139,7 @@ content += `
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);`;
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)`;
 
 files.forEach(file => {
     content += generateIconEntry(file);

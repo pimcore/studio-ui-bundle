@@ -17,6 +17,10 @@ export interface IDynamicFilter {
   frontendType?: string
   filterType?: string
   config?: any
+  localizable?: boolean
+  locale?: string | null
+  name?: string
+  nameTooltip?: string
 }
 
 export interface DynamicFilterData extends IDynamicFilter {

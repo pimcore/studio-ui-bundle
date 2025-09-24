@@ -20,6 +20,11 @@ import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-sli
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
+  getUserImageById: (id: number) => Promise<string | undefined>
+}
+
+interface IBlobResponse {
+  data: string
 }
 
 export const useUserHelper = (): UseUserReturn => {
@@ -71,13 +76,34 @@ export const useUserHelper = (): UseUserReturn => {
       }
     }))
 
+    if (user?.modifiedCells?.password !== undefined || user?.modifiedCells?.passwordConfirmation !== undefined || user?.modifiedCells?.oldPassword !== undefined) {
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id: user.id,
+        body: {
+          password: user.modifiedCells?.password,
+          passwordConfirmation: user.modifiedCells?.passwordConfirmation,
+          oldPassword: user.modifiedCells?.oldPassword
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
+
     handleNotification(t('user-management.save-user.success'), error)
 
     dispatch(userProfileUpdated(data))
     return data
   }
 
+  async function getUserImageById (id: number): Promise<string | undefined> {
+    const result = await dispatch(api.endpoints.userGetImage.initiate({ id }))
+
+    const blobResponse = result.data as IBlobResponse | undefined
+
+    return blobResponse?.data
+  }
+
   return {
-    updateUserProfile
+    updateUserProfile, getUserImageById
   }
 }

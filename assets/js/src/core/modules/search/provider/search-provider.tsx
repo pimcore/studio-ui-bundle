@@ -11,6 +11,8 @@
 import React, { createContext, useMemo, useState } from 'react'
 
 export interface SearchContextData {
+  activeKey: string
+  setActiveKey: (key: string) => void
   open: boolean
   setOpen: (open: boolean) => void
 }
@@ -25,9 +27,10 @@ export interface SearchProviderProps {
 
 export const SearchProvider = (props: SearchProviderProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
+  const [activeKey, setActiveKey] = useState('all')
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey } }>
       { props.children }
     </SearchContext.Provider>
   ), [open])

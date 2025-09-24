@@ -17,7 +17,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+} from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-data-provider'
 import { type FormInstance } from 'antd'
 interface UseHotspotDataHookReturn {
   fields: ExpandedHotspotMarkerData[]

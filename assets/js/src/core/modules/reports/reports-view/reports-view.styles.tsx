@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     selectReportLabel: css`
-      color: ${token.Tabs.itemActiveColor};
+      color: ${token.itemActiveColor};
       font-weight: ${token.fontWeightStrong};
     `,
 
@@ -32,6 +32,23 @@ export const useStyles = createStyles(({ css, token }) => {
         height: 1px;
         background-color: ${token.colorSplit};
       }
+    `,
+
+    drillDownSelectLabel: css`
+      color: ${token.colorPrimary};
+    `,
+
+    dropdownLabel: css`
+      color: ${token.colorPrimary};
+    `,
+
+    btnLink: css`
+      padding: 0;
+    `,
+
+    gridTable: css`
+      min-height: 300px;
+      overflow: auto;
     `
   }
 })

@@ -15,6 +15,7 @@ import { type GridContextProviderProps, GridContextProvider } from '../grid-cont
 import {
   DynamicTypeRegistryProvider
 } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { createTableCellTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface GridCellProps {
   cell: Cell<any, unknown>
@@ -22,13 +23,17 @@ export interface GridCellProps {
   isModified?: boolean
   onFocusCell?: (cell: GridCellReference) => void
   tableElement: GridContextProviderProps['table']
+  rowIndex?: number
 }
 
-export const GridCell = ({ cell, isModified, isActive, onFocusCell, tableElement }: GridCellProps): React.JSX.Element => {
+export const GridCell = ({ cell, isModified, isActive, onFocusCell, tableElement, rowIndex }: GridCellProps): React.JSX.Element => {
   return (
     <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
       <GridContextProvider table={ tableElement }>
-        <div className='grid__cell-content'>
+        <div
+          className='grid__cell-content'
+          data-testid={ rowIndex !== undefined ? createTableCellTestId(rowIndex, cell.column.id) : undefined }
+        >
           {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
         </div>
       </GridContextProvider>

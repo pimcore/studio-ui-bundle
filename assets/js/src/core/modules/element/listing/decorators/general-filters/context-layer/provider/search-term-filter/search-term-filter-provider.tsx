@@ -9,9 +9,10 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
+import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/frontendTypes'
 
 export interface SearchTermFilter {
-  type: 'system.fulltext'
+  type: typeof FieldFilterFrontendType.Fulltext
   filterValue: string
 }
 
@@ -21,7 +22,7 @@ export interface SearchTermFilterData {
   getDataQueryFilterArg: () => SearchTermFilter | undefined
 }
 
-export const searchTermFilterType = 'system.fulltext'
+export const searchTermFilterType = FieldFilterFrontendType.Fulltext
 
 export type SearchTermFilterContextProps = SearchTermFilterData | undefined
 

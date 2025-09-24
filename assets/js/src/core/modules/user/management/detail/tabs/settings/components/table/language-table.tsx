@@ -14,7 +14,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { isEqual, isNil } from 'lodash'
+import { arrayMove } from '@dnd-kit/sortable'
 
 interface ITableProps {
   data: any[]
@@ -28,18 +31,14 @@ export const LanguageTable = ({
   data, viewData, editData,
   onChangeOrder, onChange
 }: ITableProps): React.JSX.Element => {
-  const { availableAdminLanguages } = useSettings()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const getDisplyNameByAbbreviation = (abbreviation: string): string => {
-    const language = availableAdminLanguages.find((lang) => lang.language === abbreviation)
-    return language.display
-  }
+  const { getDisplayName } = useLanguageLookup()
 
   const columnsData = data.map((name: string) => (
     {
-      name: getDisplyNameByAbbreviation(name),
+      name: getDisplayName(name),
       abbreviation: name,
       ...(viewData != null ? { view: viewData.includes(name) || false } : {}),
       ...(editData != null ? { edit: editData.includes(name) || false } : {})
@@ -63,8 +62,35 @@ export const LanguageTable = ({
     }
   }
 
+  const handleDragEnd = (event: DragEndEvent): void => {
+    const { active, over } = event
+
+    if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
+      setGridData(prev => {
+        const oldIndex = prev.findIndex(row => row.abbreviation === active.id)
+        const newIndex = prev.findIndex(row => row.abbreviation === over.id)
+
+        if (oldIndex === -1 || newIndex === -1) return prev
+
+        const reorderedData = arrayMove(prev, oldIndex, newIndex)
+
+        if (onChangeOrder !== null && onChangeOrder !== undefined) {
+          onChangeOrder(reorderedData.map((item) => item.abbreviation))
+        }
+
+        return reorderedData
+      })
+    }
+  }
+
   const columnHelper = createColumnHelper()
   const tableColumns = [
+    ...onChangeOrder !== null && onChangeOrder !== undefined
+      ? [columnHelper.accessor('order', {
+          header: '',
+          size: 40
+        })]
+      : [],
     columnHelper.accessor('name', {
       header: t('user-management.settings.language.name'),
       meta: {
@@ -160,12 +186,14 @@ export const LanguageTable = ({
               autoWidth
               columns={ tableColumns }
               data={ gridData }
+              enableRowDrag={ onChangeOrder !== null && onChangeOrder !== undefined }
+              handleDragEnd={ handleDragEnd }
               onUpdateCellData={ onUpdateCellData }
-              setRowId={ (row) => row.cid }
+              setRowId={ (row) => row.abbreviation }
             />
-          )}
+              )}
         </>
-      )}
+        )}
     </div>
   )
 }

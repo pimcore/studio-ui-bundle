@@ -10,12 +10,14 @@
 
 import React from 'react'
 import { fromPairs, isUndefined, map } from 'lodash'
-import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { Empty } from 'antd'
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
 import { BarChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/modules/reports/constants'
 
 interface IReportsChartProps {
   chartData?: object[]
@@ -41,12 +43,18 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
     chartLabelMap
   }
 
+  if (isEmptyValue(chartData)) {
+    return (
+      <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+    )
+  }
+
   switch (chartType) {
-    case 'pie':
+    case CHART_TYPE_PIE:
       return <PieChart { ...commonProps } />
-    case 'line':
+    case CHART_TYPE_LINE:
       return <LineChart { ...commonProps } />
-    case 'bar':
+    case CHART_TYPE_BAR:
       return <BarChart { ...commonProps } />
     default:
       return <PieChart { ...commonProps } />

@@ -12,9 +12,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
 import { StackListItem, type StackListItemProps } from './stack-list-item'
 import { useStyles } from './stack-list.styles'
-import { useSortableContext } from '../drag-and-drop/hooks/use-sortable-context'
-import { type DragEndEvent } from '@dnd-kit/core'
-import { arrayMove } from '@dnd-kit/sortable'
+import { DndContext, type DragEndEvent } from '@dnd-kit/core'
+import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 
 export interface StackListProps {
   items: StackListItemProps[]
@@ -24,10 +23,6 @@ export interface StackListProps {
 
 export const StackList = ({ items, onItemsChange, sortable }: StackListProps): React.JSX.Element => {
   const [itemsState, setItems] = useState<StackListProps['items']>(items)
-  const { ContextHolder } = useSortableContext({
-    items: itemsState,
-    onDragEnd
-  })
   const { styles } = useStyles()
 
   useEffect(() => {
@@ -37,16 +32,18 @@ export const StackList = ({ items, onItemsChange, sortable }: StackListProps): R
   return useMemo(() => (
     <div className={ cn('stack-list', styles.stackList) }>
       {sortable === true && (
-        <ContextHolder>
-          {itemsState.map((item) => (
-            <div
-              className="stack-list__item"
-              key={ item.id }
-            >
-              <StackListItem { ...item } />
-            </div>
-          ))}
-        </ContextHolder>
+        <DndContext onDragEnd={ onDragEnd }>
+          <SortableContext items={ itemsState.map((item) => item.id) }>
+            {itemsState.map((item) => (
+              <div
+                className="stack-list__item"
+                key={ item.id }
+              >
+                <StackListItem { ...item } />
+              </div>
+            ))}
+          </SortableContext>
+        </DndContext>
       )}
 
       {sortable !== true && (

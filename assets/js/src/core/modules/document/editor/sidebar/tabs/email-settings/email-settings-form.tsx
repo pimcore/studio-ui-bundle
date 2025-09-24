@@ -1,0 +1,119 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { FormKit } from '@Pimcore/components/form/form-kit'
+import { Form } from '@Pimcore/components/form/form'
+import { Input } from '@Pimcore/components/input/input'
+import { Text } from '@Pimcore/components/text/text'
+import { SidebarHeadline } from '@Pimcore/components/sidebar-headline/sidebar-headline'
+import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
+
+interface EmailSettingsFormProps {
+  documentId: number
+  initialValues: {
+    subject: string
+    from: string
+    replyTo: string
+    to: string
+    cc: string
+    bcc: string
+  }
+}
+
+interface SettingsData {
+  subject?: string
+  from?: string
+  replyTo?: string
+  to?: string
+  cc?: string
+  bcc?: string
+}
+
+export const EmailSettingsForm = ({
+  documentId,
+  initialValues
+}: EmailSettingsFormProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { updateSettingsData } = useDocumentDraft(documentId)
+  const { debouncedAutoSave } = useSave()
+  const [form] = Form.useForm()
+
+  const handleFormChange = useCallback((changedValues: Partial<SettingsData>) => {
+    updateSettingsData(changedValues)
+    debouncedAutoSave()
+  }, [updateSettingsData, debouncedAutoSave])
+
+  return (
+    <FormKit
+      formProps={ {
+        form,
+        initialValues,
+        onValuesChange: handleFormChange
+      } }
+    >
+      <Form.Item
+        label={ t('email-settings.subject') }
+        name="subject"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        extra={ t('email-settings.from-syntax-hint') }
+        label={ t('email-settings.from') }
+        name="from"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('email-settings.reply-to') }
+        name="replyTo"
+      >
+        <Input />
+      </Form.Item>
+
+      <SidebarHeadline
+        marginBottom="none"
+        withBorder
+      >
+        {t('email-settings.recipients')}
+      </SidebarHeadline>
+
+      <Form.Item
+        label={ t('email-settings.to') }
+        name="to"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('email-settings.cc') }
+        name="cc"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('email-settings.bcc') }
+        name="bcc"
+      >
+        <Input />
+      </Form.Item>
+
+      <Text type="secondary">
+        {t('email-settings.multiple-recipients-hint')}
+      </Text>
+    </FormKit>
+  )
+}

@@ -16,6 +16,7 @@ import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { type DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
 import { type DocumentController, type DocumentTemplate, type DocTypeType } from '../../document/document-api-slice.gen'
+import { Checkbox, Flex } from '@sdk/components'
 
 export type DocumentTypeWithActions = DocumentTypeRow & { actions: React.ReactNode }
 
@@ -71,7 +72,26 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
     columnHelper.accessor('staticGeneratorEnabled', {
       header: t('document-types.columns.static'),
       size: 70,
-      meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
+      cell: (info) => (
+        <Flex
+          align='center'
+          justify='center'
+        >
+          {info.row.original.type === 'page' && (
+            <Checkbox
+              checked={ Boolean(info.getValue()) }
+              onChange={ (e) => {
+                info.table.options.meta?.onUpdateCellData?.({
+                  rowIndex: info.row.index,
+                  columnId: info.column.id,
+                  value: e.target.checked,
+                  rowData: info.row.original
+                })
+              } }
+            />
+          )}
+        </Flex>
+      )
     }),
     columnHelper.accessor('priority', {
       header: t('document-types.columns.priority'),

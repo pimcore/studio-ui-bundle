@@ -13,103 +13,84 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
-        &.ant-card {
-            height: 103px;
-            cursor: pointer;
+      &.ant-card {
+        text-align: center;
+        height: 103px;
+        overflow: hidden;
+        cursor: pointer;
+
+        &.ant-card-bordered .ant-card-cover {
+          margin: 0 auto;
+          height: 70%;
+          display: flex;
+          align-items: center;
         }
 
-      &.card-medium {
+        .ant-card-body {
+          padding: ${token.paddingXXS}px ${token.paddingXS}px;
+          width: 166px;
+          height: 30%;
+        }
+     }
+    `,
+
+    cardMedium: css`
+      &.ant-card {
         height: 150px;
       }
+    `,
+
+    imgContainer: css`
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
       
-      &.ant-card .ant-card-body {
-            padding: ${token.paddingXXS}px ${token.paddingXS}px;
-            margin-top: 7px;
-            margin-bottom: 7px;
-            width: 166px;
-        }
-        
-        &.ant-card .ant-card-meta-title {
-              font-weight: normal;
-        }
+      .ant-image {
+        max-width: 100%;
+        max-height: 100%;
+        text-align: center;
+      }
 
-        .checkbox, .checkbox-medium {
-            position: absolute;
-            top: ${token.paddingXXS}px;
-            left: ${token.paddingXXS}px;
-        }
+      .pimcore-icon {
+        color: ${token.Colors.Neutral.Icon.colorIcon};
 
-        .checkbox-medium {
-            left: ${token.paddingXS}px;
+        svg * {
+          vector-effect: non-scaling-stroke;
         }
+      }
+    `,
 
-        .dots-button, .dots-button-medium {
-            position: absolute;
-            top: ${token.paddingXXS}px;
-            right: ${token.paddingXXS}px;
-        }
+    imgContainerMedium: css`
+      height: 109px;
+      width: 236px !important;
+    `,
 
-        .dots-button-medium {
-            right: ${token.paddingXS}px;
-        }
+    img: css`
+      max-height: 72px;
+      max-width: 168px;
+    `,
+
+    imgMedium: css`
+      max-height: 118px !important;
+      max-width: 234px;
+    `,
+
+    dropdownButton: css`
+      position: absolute !important;
+      top: ${token.paddingXXS}px;
+      right: ${token.paddingXXS}px;
+      width: 24px;
+    `,
+
+    metaBlock: css`
+      position: absolute;
+      left: ${token.paddingXS}px;
+      right: ${token.paddingXS}px;
+      bottom: ${token.paddingXS}px;
       
-        .dropdown-menu__icon {
-            vertical-align: text-bottom;
-        }
-
-        .dots-button-open-dropdown:not(:disabled):not(.ant-btn-disabled):hover {
-            background-color: ${token.Button.defaultColor};
-            color: white;
-        }
-
-        .ant-card-cover .img-container, .ant-card-cover .img-container-medium {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-      
-        .ant-card-cover .img-container {
-            height: 64px;
-            width: 170px;
-            
-            .pimcore-icon {
-                color: ${token.Colors.Neutral.Icon.colorIcon};
-
-                svg * {
-                    vector-effect: non-scaling-stroke;
-                }
-            }
-        }
-
-        .ant-image .ant-image-img.img, .ant-image .ant-image-img.img-medium {
-            border-radius: unset;
-            margin-top: 3px;
-        }
-        
-        .ant-image .ant-image-img.img {
-            max-height: 61px;
-            max-width: 168px;
-        }
-
-        .ant-card-cover .img-container-medium {
-            height: 109px;
-            width: 236px;
-        }
-
-        .ant-image .ant-image-img.img-medium {
-            max-height: 106px;
-            max-width: 234px;
-        }
-
-        .menu-icon {
-            margin-right: ${token.marginXS}px;
-        }
-
-        .flexbox-start-end {
-            display: flex;
-            justify-content: space-between;
-        }
-    }
+      .ant-card-meta-title {
+        font-weight: normal !important;
+      }
     `
   }
 }, { hashPriority: 'low' })

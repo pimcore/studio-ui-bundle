@@ -16,7 +16,6 @@ import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engin
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
-import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -117,27 +116,43 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
+    const argColumns = getArgs().body.columns ?? []
+    const extractedColumnsFromColumnArg = selectedColumns.map(column => {
+      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
+
+      if (currentColumn.type === 'dataobject.advanced') {
+        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
+      }
+
+      currentColumn = currentColumn ?? column
+
+      return {
+        key: currentColumn.key,
+        type: currentColumn.type,
+        locale: currentColumn.locale,
+        config: currentColumn.config
+      }
+    })
+
     if (numberedSelectedRows.length === 0) {
+      const filters = getArgs()?.body?.filters ?? {}
+
+      if (filters !== undefined) {
+        delete filters.page
+        delete filters.pageSize
+      }
+
       const promise = fetchCreateFolderCsv({
         body: {
           folders: [id],
           elementType,
-          columns: selectedColumns.map((column) => {
-            return {
-              key: column.key,
-              type: column.type,
-              group: column.group,
-              config: [] // @todo add config after schema update
-            }
-          }),
+          columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
             header
           },
           filters: {
-            ...getArgs().body.filters ?? {},
-            page: 1,
-            pageSize: appConfig.maxPageSize,
+            ...filters,
             includeDescendants: true
           }
         }
@@ -151,14 +166,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         body: {
           elements: numberedSelectedRows,
           elementType,
-          columns: selectedColumns.map((column) => {
-            return {
-              key: column.key,
-              type: column.type,
-              group: column.group,
-              config: [] // @todo add config after schema update
-            }
-          }),
+          columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
             header

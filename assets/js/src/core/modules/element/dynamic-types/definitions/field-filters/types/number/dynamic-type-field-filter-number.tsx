@@ -12,18 +12,27 @@ import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
 import { injectable } from 'inversify'
+import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract {
-  id = 'id'
+  id = 'number'
 
   getFieldFilterType (): string {
-    return 'system.id'
+    return FieldFilterFrontendType.Number
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
     return (
       <DynamicTypeFieldFilterNumberComponent { ...props } />
     )
+  }
+
+  shouldApply (value: any): boolean {
+    if (value == null || typeof value !== 'object') {
+      return false
+    }
+
+    return value.is != null || value.from != null || value.to != null
   }
 }

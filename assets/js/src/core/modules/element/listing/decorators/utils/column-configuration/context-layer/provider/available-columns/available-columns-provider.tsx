@@ -10,11 +10,19 @@
 
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import React, { createContext, useMemo, useState } from 'react'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration as AssetGridColumnConfig } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration as ObjectGridColumnConfig } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
+import { isEmpty, isNil } from 'lodash'
 
 // @todo: Create a union type for all the different element types
-export type AvailableColumn = GridColumnConfiguration
+export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
+  __meta?: {
+    uniqueId?: string
+    advancedColumnConfig?: Record<string, any>
+    [key: string]: any
+  }
+}
 
 export interface OnMenuItemClickEvent {
   column: AvailableColumn
@@ -22,6 +30,14 @@ export interface OnMenuItemClickEvent {
 
 export type OnMenuItemClick = (column: AvailableColumn) => void
 
+/**
+ * Data structure for the available columns context.
+ * Supports nested menu structure based on group property:
+ * - Single group: group: "assets" creates a single-level menu
+ * - Nested group: group: "assets.metadata" creates "assets" > "metadata" submenu
+ * - Array group: group: ["Attributes", "attributes", "Bodywork"] creates "Attributes" > "attributes" > "Bodywork" submenu
+ * - Multiple groups: group: [["Attributes", "Engine"], "system"] creates items in both "Attributes" > "Engine" and "system"
+ */
 export interface AvailableColumnsData {
   availableColumns: AvailableColumn[]
   setAvailableColumns: (availableColumns: AvailableColumn[]) => void
@@ -42,26 +58,90 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
   const getAvailableColumnsDropdown: AvailableColumnsData['getAvailableColumnsDropdown'] = useMemo(() => {
     return (onMenuItemClick: OnMenuItemClick): DropdownProps => {
-      let index = 0
-      const columnsMappedByGroup: Record<string, AvailableColumn[]> = {}
+      // Helper function to create nested menu structure from group paths
+      const createNestedStructure = (columns: AvailableColumn[]): any[] => {
+        const groupTree: Record<string, any> = {}
+        let menuIndex = 0
 
-      availableColumns.forEach((column) => {
-        if (columnsMappedByGroup[column.group] === undefined) {
-          columnsMappedByGroup[column.group] = []
-        }
+        // Build the tree structure by processing each column's group(s)
+        columns.forEach((column) => {
+          // Normalize groups to handle different input formats:
+          // - Single string: "assets.metadata"
+          // - Array of strings/arrays: ["system", ["Attributes", "Engine"]]
+          // - Simple array: ["Attributes", "attributes", "Bodywork"]
+          let normalizedGroups: Array<string | string[]> = []
 
-        columnsMappedByGroup[column.group].push(column)
-      })
+          if (Array.isArray(column.group)) {
+            // Check if this is a nested array structure like [["Attributes", "Engine"], "system"]
+            // or a simple array like ["Attributes", "attributes", "Bodywork"]
+            const hasNestedArrays = column.group.some(item => Array.isArray(item))
 
-      return {
-        menu: {
-          items: Object.entries(columnsMappedByGroup).map(([key, value]) => ({
-            key: index++,
-            label: t(key),
-            children: value.map((column) => {
+            if (hasNestedArrays) {
+              // Handle nested array structure - each item becomes a separate group path
+              normalizedGroups = column.group
+            } else {
+              // Handle simple array - treat as single group path
+              normalizedGroups = [column.group]
+            }
+          }
+
+          normalizedGroups.forEach((groupPath) => {
+            let groupParts: string[] = []
+
+            // Handle different group path formats:
+            // 1. String: "assets.metadata" -> ["assets", "metadata"]
+            // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
+            if (typeof groupPath === 'string') {
+              groupParts = groupPath.split('.')
+            } else if (Array.isArray(groupPath)) {
+              // Convert all elements to strings
+              groupParts = groupPath.map(part => String(part))
+            } else {
+              // Fallback for any other type
+              groupParts = [String(groupPath)]
+            }
+
+            let currentLevel = groupTree
+
+            // Navigate/create the nested tree structure
+            groupParts.forEach((part, index) => {
+              if (isNil(currentLevel[part])) {
+                currentLevel[part] = {
+                  items: [], // Columns that belong directly to this group level
+                  subGroups: {} // Nested sub-groups
+                }
+              }
+
+              // If this is the final part of the group path, add the column to this level
+              if (index === groupParts.length - 1) {
+                currentLevel[part].items.push(column)
+              } else {
+                // Move deeper into the tree structure
+                currentLevel = currentLevel[part].subGroups
+              }
+            })
+          })
+        })
+
+        // Convert the tree structure into Ant Design menu format
+        const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
+          return Object.entries(tree).map(([groupName, groupData]) => {
+            const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
+            const menuItem: any = {
+              key: `group-${menuIndex++}`,
+              label: t(groupName)
+            }
+
+            // Process sub-groups recursively
+            const subGroupItems = !isEmpty(Object.keys(groupData.subGroups as Record<string, any>))
+              ? convertTreeToMenuItems(groupData.subGroups as Record<string, any>, currentPath)
+              : []
+
+            // Create menu items for columns at this level
+            const columnItems = groupData.items.map((column: AvailableColumn) => {
               let translationKey = `${column.key}`
 
-              if ('fieldDefinition' in column.config) {
+              if ('fieldDefinition' in column.config && !isNil(column.config)) {
                 const fieldDefinition = column.config.fieldDefinition as Record<string, any>
                 translationKey = fieldDefinition?.title ?? column.key
               }
@@ -70,6 +150,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 key: column.key,
                 label: t(translationKey),
                 group: column.group,
+                mainType: column.type,
                 frontendType: column.frontendType,
                 editable: column.editable,
                 onClick: () => {
@@ -77,11 +158,27 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 }
               }
             })
-          }))
+
+            // Combine sub-groups and column items as children
+            const allChildren = [...subGroupItems, ...columnItems]
+            if (allChildren.length > 0) {
+              menuItem.children = allChildren
+            }
+
+            return menuItem
+          })
+        }
+
+        return convertTreeToMenuItems(groupTree)
+      }
+
+      return {
+        menu: {
+          items: createNestedStructure(availableColumns)
         }
       }
     }
-  }, [availableColumns])
+  }, [availableColumns, t])
 
   return useMemo(() => (
     <AvailableColumnsContext.Provider value={ { availableColumns, setAvailableColumns, getAvailableColumnsDropdown } }>

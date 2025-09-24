@@ -10,15 +10,14 @@
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
-import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import {
-  ContentLayout
-} from '@Pimcore/components/content-layout/content-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from './pagination/pagination'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { PreviewCardContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/card/preview-card-container'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -63,7 +62,17 @@ const PreviewContainer = (): React.JSX.Element => {
         padded
       >
         {data?.items !== undefined && data.items.length > 0 && (
-          <FlexContainer assets={ data } />
+          <Flex
+            gap={ 'extra-small' }
+            wrap
+          >
+            {data.items.map((asset, index) => (
+              <PreviewCardContainer
+                asset={ asset }
+                key={ `${asset.id}-${index}` }
+              />
+            ))}
+          </Flex>
         )}
       </Content>
     </ContentLayout >

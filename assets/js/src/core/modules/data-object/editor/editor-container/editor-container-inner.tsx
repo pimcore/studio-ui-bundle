@@ -17,7 +17,7 @@ import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/u
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { LanguageSelectionProvider } from '../toolbar/language-selection/provider/language-selection-provider'
+import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 import {
   EditFormProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
@@ -28,6 +28,7 @@ import {
   SaveProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
+import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -83,6 +84,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
           <InheritanceStateProvider>
             <LanguageSelectionProvider>
               <TabsToolbarView
+                dataTestId={ `data-object-editor-${createSafeTestIdString(id.toString())}` }
                 renderTabbar={
                   <TabsContainer
                     elementEditorType={ editorType }

@@ -43,6 +43,7 @@ interface NotesAndEventsTabViewProps {
   elementType: ElementType
   elementId: number
   deleteLoading: boolean
+  refetchNotes: () => void
 }
 
 export const NotesAndEventsTabView = ({
@@ -51,7 +52,8 @@ export const NotesAndEventsTabView = ({
   onClickTrash,
   elementId,
   elementType,
-  deleteLoading
+  deleteLoading,
+  refetchNotes
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
@@ -156,6 +158,7 @@ export const NotesAndEventsTabView = ({
             elementId={ elementId }
             elementType={ elementType }
             open={ addNoteModalOpen }
+            refetchNotes={ refetchNotes }
             setOpen={ setAddNoteModalOpen }
           />
         </Header>

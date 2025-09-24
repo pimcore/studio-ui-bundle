@@ -67,14 +67,14 @@ export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.
   const items = [
     {
       key: '1',
-      label: t('tree.actions.clone-item'),
-      icon: <Icon value='copy-03'></Icon>,
+      label: t('tree.actions.clone-role'),
+      icon: <Icon value='copy'></Icon>,
       onClick: onCloneRole
     },
     {
       key: '2',
-      label: t('tree.actions.remove-item'),
-      icon: <Icon value='delete-outlined'></Icon>,
+      label: t('tree.actions.remove-role'),
+      icon: <Icon value='trash'></Icon>,
       onClick: onRemoveRole
     }
   ]

@@ -40,10 +40,6 @@ export const StaticLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.
     const availableColumns: AvailableColumn[] = staticAvailableColumns
 
     for (const column of initialConfigurationData.columns) {
-      if (column.key === 'advanced' || column.key === 'filename') {
-        continue
-      }
-
       const availableColumn = availableColumns.find(availableColumn => availableColumn.key === column.key)
 
       if (availableColumn !== undefined) {

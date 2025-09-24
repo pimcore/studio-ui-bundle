@@ -16,10 +16,15 @@ import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/e
 export interface DocumentEditorContextProps {
   updateValue: (key: string, value: ValueType) => void
   updateValueWithReload: (key: string, value: ValueType) => void
+  triggerSaveAndReload: () => void
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
+  removeValues: (keysToRemove: string[]) => void
   notifyReady: () => void
+  getInheritanceState: (key: string) => boolean
+  setInheritanceState: (key: string, inherited: boolean) => void
+  initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
 }
 
 export const useDocumentEditor = (): DocumentEditorContextProps => {
@@ -35,9 +40,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   }, [])
 
   const updateValue = useCallback((key: string, value: ValueType): void => {
-    const api = getDocumentEditableApi()
-
-    api.updateValue(key, value)
+    getDocumentEditableApi().updateValue(key, value)
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -45,12 +48,10 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     } catch (error) {
       console.warn('Could not notify parent window of value change:', error)
     }
-  }, [getDocumentEditableApi, id])
+  }, [id])
 
   const updateValueWithReload = useCallback((key: string, value: ValueType): void => {
-    const api = getDocumentEditableApi()
-
-    api.updateValue(key, value)
+    getDocumentEditableApi().updateValue(key, value)
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -58,22 +59,44 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     } catch (error) {
       console.warn('Could not trigger reload for value change:', error)
     }
-  }, [getDocumentEditableApi, id])
+  }, [id])
 
-  const getValues = useCallback((): Record<string, ValueType> => {
-    const api = getDocumentEditableApi()
-    return api.getValues()
-  }, [getDocumentEditableApi])
+  const getValues = (): Record<string, ValueType> => {
+    return getDocumentEditableApi().getValues()
+  }
 
-  const getValue = useCallback((key: string): ValueType => {
-    const api = getDocumentEditableApi()
-    return api.getValue(key)
-  }, [getDocumentEditableApi])
+  const getValue = (key: string): ValueType => {
+    return getDocumentEditableApi().getValue(key)
+  }
 
-  const initializeData = useCallback((data: Record<string, ValueType>): void => {
-    const api = getDocumentEditableApi()
-    api.initializeValues(data)
-  }, [getDocumentEditableApi])
+  const initializeData = (data: Record<string, ValueType>): void => {
+    getDocumentEditableApi().initializeValues(data)
+  }
+
+  const removeValues = (keysToRemove: string[]): void => {
+    getDocumentEditableApi().removeValues(keysToRemove)
+  }
+
+  const getInheritanceState = (key: string): boolean => {
+    return getDocumentEditableApi().getInheritanceState(key)
+  }
+
+  const setInheritanceState = (key: string, inherited: boolean): void => {
+    getDocumentEditableApi().setInheritanceState(key, inherited)
+  }
+
+  const initializeInheritanceState = (inheritanceState: Record<string, boolean>): void => {
+    getDocumentEditableApi().initializeInheritanceState(inheritanceState)
+  }
+
+  const triggerSaveAndReload = useCallback((): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.triggerSaveAndReload(id)
+    } catch (error) {
+      console.warn('Could not trigger save and reload:', error)
+    }
+  }, [id])
 
   const notifyReady = useCallback((): void => {
     if (!readyNotified.current) {
@@ -90,9 +113,14 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   return {
     updateValue,
     updateValueWithReload,
+    triggerSaveAndReload,
     getValues,
     getValue,
     initializeData,
-    notifyReady
+    removeValues,
+    notifyReady,
+    getInheritanceState,
+    setInheritanceState,
+    initializeInheritanceState
   }
 }

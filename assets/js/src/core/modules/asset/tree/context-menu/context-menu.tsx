@@ -28,6 +28,7 @@ import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-p
 import { useTranslation } from 'react-i18next'
 import { useUpload } from '../../actions/upload/use-upload'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement => {
   const { t } = useTranslation()
@@ -65,7 +66,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement 
     copyTreeContextMenuItem(node),
     pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
+    pasteCutContextMenuItem(node),
     deleteTreeContextMenuItem(node),
     createZipDownloadTreeContextMenuItem(node),
     uploadNewVersionTreeContextMenuItem(node),
@@ -95,6 +96,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement 
 
   return (
     <Menu
+      dataTestId={ createContextMenuContainerTestId('asset', node.id) }
       items={ items }
     />
   )

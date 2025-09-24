@@ -15,12 +15,20 @@ import { type TextAreaRef } from 'antd/es/input/TextArea'
 import { Input } from 'antd'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { IconButton } from '@sdk/components'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isHtmlContent } from '@Pimcore/utils/html'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { isString } from 'lodash'
 
 export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyle()
   const [textAreaValue, setTextAreaValue] = useState(String(props.getValue() ?? ''))
   const element = React.createRef<TextAreaRef>()
+  const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
+  const editCallback = props.column.columnDef.meta?.editCallback
+  const htmlDetection = Boolean((props.column.columnDef.meta as any)?.htmlDetection ?? false)
 
   useEffect(() => {
     if (isInEditMode) {
@@ -41,8 +49,34 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
     setTextAreaValue(e.target.value)
   }
 
+  const openEditMode = async (): Promise<void> => {
+    if (editCallback !== undefined && typeof editCallback === 'function') {
+      try {
+        const currentTextareaValue = textAreaValue
+        const newValue = await editCallback(props.row.original, props.column.id, currentTextareaValue)
+
+        setTextAreaValue(newValue)
+        fireOnUpdateCellDataEvent(newValue)
+      } catch {
+        trackError(new GeneralError('Edit callback failed'))
+      }
+    } else {
+      trackError(new GeneralError('No edit callback available'))
+    }
+  }
+
   function getCellContent (): React.JSX.Element {
+    const cellValue = props.getValue()
+    const cellValueString = isString(cellValue) ? cellValue : String(cellValue ?? '')
+    const shouldRenderHtml = htmlDetection && isHtmlContent(cellValueString)
+
     if (!isInEditMode) {
+      if (shouldRenderHtml) {
+        return (
+          <SanitizeHtml html={ cellValueString } />
+        )
+      }
+
       return (
         <>
           { respectLineBreak(String(props.getValue() ?? ''), false) }
@@ -51,13 +85,26 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     return (
-      <Input.TextArea
-        autoSize={ { minRows: 2 } }
-        onBlur={ onBlur }
-        onChange={ onChange }
-        ref={ element }
-        value={ textAreaValue }
-      />
+      <div style={ { position: 'relative', width: '100%' } }>
+        <Input.TextArea
+          autoSize={ { minRows: 1 } }
+          onBlur={ onBlur }
+          onChange={ onChange }
+          ref={ element }
+          style={ callback ? { paddingRight: '36px' } : undefined }
+          value={ textAreaValue }
+        />
+        { callback && (
+          <div style={ { position: 'absolute', top: '5px', right: '8px', zIndex: 1 } }>
+            <IconButton
+              icon={ { value: 'edit' } }
+              onClick={ async () => { await openEditMode() } }
+              onMouseDown={ (e) => { e.preventDefault() } }
+              size="small"
+            />
+          </div>
+        ) }
+      </div>
     )
   }
 

@@ -22,6 +22,11 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
+import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
+import { usePaste } from '@Pimcore/modules/document/actions/paste/use-paste'
+import { useSiteActions } from '@Pimcore/modules/document/actions/site/use-site-actions'
+import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DocumentTreeContextMenuProps {
   node: TreeNodeProps
@@ -38,22 +43,84 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('document')
   const { unpublishTreeContextMenuItem } = useUnpublish('document')
   const { publishTreeContextMenuItem } = usePublish('document')
+  const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
+  const { convertTreeContextMenuItem, canConvert } = useConvert()
+  const { removeSiteTreeContextMenuItem, useAsSiteTreeContextMenuItem, editSiteTreeContextMenuItem } = useSiteActions()
+  const {
+    pasteAsChildRecursiveTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteAsChildTreeContextMenuItem,
+    pasteAsNewLanguageVariantTreeContextMenuItem,
+    pasteAsNewLanguageVariantRecursiveTreeContextMenuItem,
+    pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteOnlyContentsTreeContextMenuItem,
+    pasteAsChildRecursiveInheritanceTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
+    pasteAsChildInheritanceTreeContextMenuItem,
+    pasteAsNewLanguageVariantInheritanceTreeContextMenuItem,
+    pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
+    pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
+    isPasteMenuHidden,
+    isPasteInheritanceMenuHidden
+  } = usePaste()
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
+    {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    },
+    {
+      label: t('document.paste-inheritance'),
+      key: 'paste-inheritance',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteInheritanceMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveInheritanceTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
+        pasteAsChildInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node)
+      ]
+    },
     cutTreeContextMenuItem(node),
+    pasteCutContextMenuItem(node),
     publishTreeContextMenuItem(node),
     unpublishTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
+    openInNewWindowTreeContextMenuItem(node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon value={ 'more' } />,
-      hidden: isLockMenuHidden(node),
       children: [
+        {
+          label: t('convert-to'),
+          key: 'convert-to',
+          icon: <Icon value={ 'flip-forward' } />,
+          hidden: !canConvert(node),
+          children: [
+            convertTreeContextMenuItem(node, 'page'),
+            convertTreeContextMenuItem(node, 'snippet'),
+            convertTreeContextMenuItem(node, 'email'),
+            convertTreeContextMenuItem(node, 'link'),
+            convertTreeContextMenuItem(node, 'hardlink')
+          ]
+        },
         {
           label: t('element.lock'),
           key: 'advanced-lock',
@@ -65,7 +132,10 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
             unlockTreeContextMenuItem(node),
             unlockAndPropagateTreeContextMenuItem(node)
           ]
-        }
+        },
+        useAsSiteTreeContextMenuItem(node),
+        editSiteTreeContextMenuItem(node),
+        removeSiteTreeContextMenuItem(node)
       ]
     },
     refreshTreeContextMenuItem(node)
@@ -73,6 +143,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
 
   return (
     <Menu
+      dataTestId={ createContextMenuContainerTestId('document', node.id) }
       items={ items }
     />
   )

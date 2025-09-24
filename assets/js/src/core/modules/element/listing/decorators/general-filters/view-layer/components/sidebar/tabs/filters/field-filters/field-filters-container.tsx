@@ -12,36 +12,36 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import type { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { isEmpty, isNil } from 'lodash'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useFilter } from '../provider/filter-provider/use-filter'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableColumns } = useAvailableColumns()
-  const { hasType } = useDynamicTypeResolver()
+  const { getType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useFilter()
-
-  const objectDataRegistry = useInjection<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
 
     return {
-      id: filter.key,
+      id: `${filter.key}`,
       data: filter.filterValue,
       type: filter.type,
       filterType: filter?.filterType,
       frontendType: currentColumn?.frontendType,
-      config: currentColumn?.config
+      localizable: currentColumn?.localizable,
+      locale: filter?.locale,
+      config: currentColumn?.config,
+      nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
     }
   }), [fieldFilters, availableColumns])
 
@@ -53,7 +53,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       key: filter.id,
       filterType: filter?.filterType,
       filterValue: filter.data,
-      type: filter.type
+      type: filter.type,
+      locale: filter.locale
     })))
   }
 
@@ -62,15 +63,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }, [initialFilters])
 
   const handleColumnClick = (column: AvailableColumn): void => {
-    const objectDataByFrontendType = objectDataRegistry.getDynamicType(column.frontendType!)
+    const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
 
-    const isObjectHasDataByColumnType = objectDataRegistry.hasDynamicType(column.type)
-    let shouldOverrideFilterType = false
+    let inferredFilterType: DynamicTypeFieldFilterAbstract | null = null
 
-    if (isObjectHasDataByColumnType) {
-      const objectDataByColumnType = objectDataRegistry.getDynamicType(column.type)
-
-      shouldOverrideFilterType = objectDataByColumnType.shouldOverrideFilterType()
+    if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
+      inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
     }
 
     setFilters((prevFilters) => [
@@ -80,49 +78,115 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         id: column.key,
         type: column.type,
         frontendType: column.frontendType,
+        localizable: column.localizable,
+        locale: column.locale,
         config: column.config,
-        ...(shouldOverrideFilterType && { filterType: objectDataByFrontendType.getFieldFilterType() })
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     ])
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
+    const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
+
+    let isNoneType = false
+
+    if (dynamicType !== null && 'dynamicTypeFieldFilterType' in dynamicType) {
+      const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      isNoneType = fieldFilterType.id === 'none'
+    }
+
+    const hasDynamicType = dynamicType !== null
     const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
 
-    return hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key)
+    return hasDynamicType && !isIgnoredField && !isNoneType && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
-  const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
-    const groupedItems: DropdownProps['menu']['items'] = []
+  const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {
+    // Helper function to create nested menu structure from group paths
+    const createNestedStructure = (columns: typeof availableFilterColumns): any[] => {
+      const groupTree: Record<string, any> = {}
+      let menuIndex = 0
 
-    availableFilterColumns.forEach((column) => {
-      const group = column.group
+      // Build the tree structure by processing each column's group
+      columns.forEach((column) => {
+        // Handle the group - it's always a one-dimensional array representing a single group path
+        let groupParts: string[] = []
 
-      if (groupedItems[group] === undefined) {
-        groupedItems[group] = []
-      }
+        if (Array.isArray(column.group)) {
+          // Convert array elements to strings
+          groupParts = column.group.map(part => String(part))
+        } else {
+          return
+        }
 
-      let translationKey = `${column.key}`
+        let currentLevel = groupTree
 
-      if ('fieldDefinition' in column.config) {
-        const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-        translationKey = fieldDefinition?.title ?? column.key
-      }
+        // Navigate/create the nested tree structure
+        groupParts.forEach((part, index) => {
+          if (isNil(currentLevel[part])) {
+            currentLevel[part] = {
+              items: [], // Columns that belong directly to this group level
+              subGroups: {} // Nested sub-groups
+            }
+          }
 
-      groupedItems[group].push({
-        key: column.key,
-        label: t(translationKey),
-        onClick: () => { handleColumnClick(column) }
+          // If this is the final part of the group path, add the column to this level
+          if (index === groupParts.length - 1) {
+            currentLevel[part].items.push(column)
+          } else {
+            // Move deeper into the tree structure
+            currentLevel = currentLevel[part].subGroups
+          }
+        })
       })
-    })
 
-    return Object.keys(groupedItems).map((group) => ({
-      key: group,
-      label: t(group),
-      children: groupedItems[group]
-    }))
-  }, [availableFilterColumns])
+      // Convert the tree structure into Ant Design menu format
+      const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
+        return Object.entries(tree).map(([groupName, groupData]) => {
+          const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
+          const menuItem: any = {
+            key: `group-${menuIndex++}`,
+            label: t(groupName)
+          }
+
+          // Process sub-groups recursively
+          const subGroupItems = !isEmpty(Object.keys(groupData.subGroups as Record<string, any>))
+            ? convertTreeToMenuItems(groupData.subGroups as Record<string, any>, currentPath)
+            : []
+
+          // Create menu items for columns at this level
+          const columnItems = groupData.items.map((column: AvailableColumn) => {
+            let translationKey = `${column.key}`
+
+            if ('fieldDefinition' in column.config && !isNil(column.config)) {
+              const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+              translationKey = fieldDefinition?.title ?? column.key
+            }
+
+            return {
+              key: column.key,
+              label: t(translationKey),
+              onClick: () => { handleColumnClick(column) }
+            }
+          })
+
+          // Combine sub-groups and column items as children
+          const allChildren = [...subGroupItems, ...columnItems]
+          if (allChildren.length > 0) {
+            menuItem.children = allChildren
+          }
+
+          return menuItem
+        })
+      }
+
+      return convertTreeToMenuItems(groupTree)
+    }
+
+    return createNestedStructure(availableFilterColumns)
+  }, [availableFilterColumns, t])
 
   return (
     <Space
@@ -134,7 +198,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         onChange={ onFilterChange }
       />
 
-      <Dropdown menu={ { items: getFilteredDropDownMenuItems() } }>
+      <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
         <IconTextButton
           icon={ { value: 'new' } }
           type='link'

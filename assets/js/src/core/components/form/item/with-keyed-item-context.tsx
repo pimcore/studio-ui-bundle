@@ -10,8 +10,8 @@
 
 import { type FormItemProps, type Form } from 'antd'
 import React from 'react'
-import { useKeyedListOptional } from '../keyed-list/provider/keyed-list/use-keyed-list-optional'
-import { KeyedFormItem } from '../keyed-list/form-item/keyed-form-item'
+import { useKeyedListOptional } from '../controls/keyed-list/provider/keyed-list/use-keyed-list-optional'
+import { KeyedFormItem } from '../controls/keyed-list/form-item/keyed-form-item'
 
 export const withKeyedItemContext = (Component: typeof Form.Item): typeof Form.Item => {
   const FormItemWithKeyedListContext = (props: FormItemProps): React.JSX.Element => {

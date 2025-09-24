@@ -2,6 +2,10 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+widget.missing-context.title: "Missing Context"
+widget.missing-context.description: "No related element found"
+widget.missing-tab-context.description: "This feature is not supported for the related element"
+block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
@@ -15,6 +19,9 @@ sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
+sidebar.clear-all-filters: Clear all filters
+add-areas: Add areas
+content-settings: Content Settings
 site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
@@ -56,9 +63,48 @@ asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
+upload.error.upload-failed: 'Upload failed'
+upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
+document.editable.inheritance.overwrite: Overwrite
+document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+document.link.target: Link Target
+document.hardlink.source: Source Document
+document.hardlink.properties-from-source: Use properties from source document
+document.hardlink.children-from-source: Use children from source document
+document.paste-as-new-language-variant: Paste as new language variant
+document.paste-as-new-language-variant-recursive: Paste as new language variant (recursive)
+document.paste-language-recursive-updating-references: Paste language (recursive), updating references
+document.select-language-for-new-document: Select language for New Document
+document.language-required: Please select a language
+document.paste-inheritance: Paste (inheritance)
+document.tree.copy-paste.replacing-content: Replacing Content
+document.site.remove-site: Remove Site
+document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+document.site.use-as-site: Use as Site
+document.site.edit-site: Edit Site
+document.site.form.main-domain: Main Domain
+document.site.form.additional-domains: Additional Domains
+document.site.form.additional-domains-tooltip: Enter additional domains, one per line. Wildcards are supported (*example.com)
+document.site.form.redirect-to-main-domain: Redirect additional domains to main domain
+document.site.form.error-documents: Error Documents
+document.site.form.default-error-document: Default Error Document
+document.site.form.error-document-language: Error Document ({{language}})
+save-and-continue: Save and Continue
+discard-and-continue: Discard and Continue
+discard-changes: Discard Changes
+unsaved-changes.title: Unsaved Changes
+unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
+convert-to: Convert to
+convert-document: Convert Document
+convert-document-warning: All content will be lost. Are you sure you want to convert this document?
+page: Page
+email: Email
+link: Link
+hardlink: Hardlink
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -110,6 +156,12 @@ grid.filter.datetime.before: Before
 grid.filter.datetime.after: After
 grid.filter.datetime.between: Between
 grid.filter.datetime.on: On
+grid.filter.number.from: From
+grid.filter.number.to: To
+grid.filter.number.is: Is
+grid.filter.number.less: Less than
+grid.filter.number.more: More than
+grid.filter.number.between: Between
 grid.copy-notice: Copied to clipboard
 grid.configuration.no-saved-templates: No saved templates available
 grid.configuration.template: Template
@@ -123,6 +175,19 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.advancedColumns: Source field
+grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.transformers: Transformers
+grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.preview: Preview
+grid.advanced-column.no-preview: No preview item available
+grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.advancedColumns.simpleField: Simple Field
+grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.staticText: Static text
+grid.advanced-column.advancedColumns.caseChange: Case Change
+grid.advanced-column.advancedColumns.combine: Combine
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -191,6 +256,7 @@ aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
+none: None
 yes: Yes
 no: No
 by: By
@@ -242,6 +308,7 @@ listing.add-column: Add a column
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
+listing.actions.delete: Delete
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
 listing.actions.xlsx-export: Excel Export
@@ -308,6 +375,23 @@ properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
 properties.new-custom-property: New custom property
+translations.columns.type: Type
+translations.columns.key: Key
+translations.columns.actions: Actions
+translations.select-languages: Select languages
+translations.select-domain: Select domain
+translations.show-all-languages: Show all
+translations.show-minimal-languages: Show minimal
+translations.show-hide-locale: Show/ Hide Locale
+translations.new-translation: New Translation
+translations.new: Add
+translations.type-options.custom: ICU Format
+translations.type-options.simple: Simple Text
+translations.edit-modal.tab.plain-text: Plain Text
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Save
+translations.edit-modal.title: Edit translation
+translations.edit-modal.restore: Restore plain text
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -320,21 +404,29 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
+translations.add-translation.key: Key
 properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+properties.property-key-disallowed.title: Property key not allowed
+properties.property-key-disallowed.error: This property key is reserved and cannot be used. Please choose a different key name.
+translations.add-translation-mandatory-field-missing.title: Mandatory field missing
+translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.confirm: Confirm
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
 button.cancel-edits: Cancel edits
+toggle.advanced-mode: Advanced Mode
 actions.open: Open
 open: Open
 edit: Edit
+modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
@@ -426,6 +518,7 @@ batch-edit.modal-footer.add-a-column: Add a column
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
+batch-delete.job-title: Delete
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -441,6 +534,7 @@ export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
@@ -454,6 +548,7 @@ current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 ok: OK
 apply: Apply
+cancel: Cancel
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
@@ -468,12 +563,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
+element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
+element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -497,6 +594,8 @@ element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
+element.sidebar.filter.only-direct-children: only direct children
+element.sidebar.field-filters: Field Filters
 male: Male
 female: Female
 other: Other
@@ -509,6 +608,9 @@ set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
 clone: Clone
+jobs.asset-clone-job.title: Cloning assets
+jobs.document-clone-job.title: Cloning documents
+jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -561,6 +663,7 @@ tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
 tree.actions.add-user: Add User
+tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
 tree.actions.remove-role: Remove Role
@@ -586,7 +689,7 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
-user-management.tree.all: All Users
+user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
@@ -644,8 +747,8 @@ user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
-user-management.firstname: Firstname
-user-management.lastname: Lastname
+user-management.firstname: First name
+user-management.lastname: Last name
 user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
@@ -691,49 +794,125 @@ user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
 user-management.add-folder.success: Folder added successfully
 user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user: Clone user
+user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
 user-management.add-user.success: User added successfully
+user-management.remove-user: Delete user
+user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
 user-management.remove-user.success: User removed successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
 user-management.role: Role
 user-management.users: Users
 user-management.user: User
+user-management.add-folder: Add new Folder
+user-management.add-folder.label: Enter the name of the new folder
+user-management.add-user: Add new User
+user-management.add-user.label: Enter the name of the new user
+user-management.last-login: Last Login
+user-management.search.id: ID
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
+roles.clone-role: Clone role
+roles.clone-role.text: Enter the name of the new role
+roles.remove-role: Delete role
+roles.remove-role.text: 'Are you sure you want to permanently delete role "{{name}}"? This action cannot be undone.'
 roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+roles.settings.title: Settings
+roles.workspaces.title: Workspaces
+roles.add-folder: Add new Folder
+roles.add-folder.label: Enter the name of the new folder
+roles.add-role: Add new Role
+roles.add-role.label: Enter the name of the new role
+roles.search.id: ID
+navigation.quick-access: Quick Access
+navigation.data-management: Data Management
+navigation.experience-ecommerce: Experience & E-commerce
+navigation.asset-management: Asset Management
+navigation.automation-integration: Automation & Integration
+navigation.translations: Translations
+navigation.reporting: Reporting
+navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.marketing: Marketing
-navigation.reports: Reports
-navigation.custom-reports: Custom Reports
+navigation.reports: All Reports
+navigation.custom-reports: Custom Reports Configuration
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
+navigation.power-shortcuts: Power Shortcuts
 navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
-navigation.file: File
-navigation.settings: Settings
-navigation.tools: Tools
+navigation.sidebar-title: Navigation
+navigation.name: Name
+navigation.exclude: Exclude from Navigation
+navigation.advanced-settings: Advanced Settings
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
+redirects.beginner: Beginner
+redirects.expert: Expert Mode
+redirects.type: Type
+redirects.search: Search
+redirects.source-site: Source Site
+redirects.source: Source
+redirects.target-site: Target Site
+redirects.target: Target
+redirects.status: Status
+redirects.priority: Priority
+redirects.regex: RegEx
+redirects.pass-through: Pass Through
+redirects.active: Active
+redirects.actions: Actions
+redirects.expiry: Expiry
+redirects.csv-import: Import CSV
+redirects.csv-import-modal.redirects-import: Redirects CSV Import
+redirects.csv-export: CSV Export
+redirects.clean-up: Clean up expired redirects
+redirects.import-drag-drop: Browse your files or drop a CSV directly here
+redirects.browse-files: Browse Files
+redirects.upload: Upload
+redirects.beginner-modal.title: New Beginner Redirect
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Path
+redirects.beginner-modal.target: Target
+redirects.beginner-modal.type.required: Please add a type
+redirects.beginner-modal.path.required: Please add a path
+redirects.beginner-modal.target.required: Please add a target
+redirects.beginner-modal.create: Create
+redirects.beginner-modal.cancel: Cancel
+redirects.csv-import-results.title: Redirects CSV Import Results
+redirects.csv-import-results.total: Total
+redirects.csv-import-results.created: Created
+redirects.csv-import-results.updated: Updated
+redirects.csv-import-results.errored: Errored
+redirects.csv-import-results.close: Close
+redirects.csv-import-results.errors-details: Error Details
+redirects.csv-import-results.line: Line {{line}}
+path: Path
+entire_uri: Entire URI
+path_query: Path and Query
+auto_create: Auto Create
+widget.redirects: Redirects
+navigation.redirects: Redirects
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
+widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
@@ -759,6 +938,7 @@ video.settings: Video Settings
 video.poster: Poster-Image
 video.path: Path
 video.dnd-target: Drop a video here
+pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
 reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
@@ -837,7 +1017,7 @@ edit-modal.apply-changes: Apply changes
 edit-modal.discard: Discard
 preview-not-available: Preview not available
 user-menu.notifications: Notifications
-user-menu.my-profile: My Profile
+user-menu.my-profile: My profile
 user-menu.log-out: Log out
 user-menu.title: Profile
 user-menu.notification.send: Send
@@ -854,9 +1034,80 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
-reports.report-name: Name of the report
+reports.reports-title: Reports
 reports.select-report-name: Select the name of the report
 reports.select-report: Select report
+reports.export: Export
+reports.csv-export: CSV Export
+reports.csv-export-with-headers: CSV Export with headers
+reports.show-all-labels: Show all labels
+reports.show-fewer-labels: Show fewer labels
+reports.grid-config.title-columns: Columns
+reports.grid-config.restore-to-default: Restore to default
+reports.grid-config.add-column: Add a column
+reports.field-filters: Field Filters
+reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
+reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
+reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.content.validation.message: The customer report name is invalid
+reports.editor.general-settings.title: General Settings
+reports.editor.general-settings.name-label: Name
+reports.editor.general-settings.display-name-label: Display Name
+reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.group-label: Name an existing group or create new group
+reports.editor.general-settings.group-tooltip: You have to use the exact same name as the existing menu label. If the name is different or new - a new group will be created.
+reports.editor.general-settings.report-class-label: Report Class
+reports.editor.general-settings.group-icon-class-label: Group Icon Class
+reports.editor.general-settings.shortcut-menu-label: Create Shortcut in Menu
+reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
+reports.editor.source-definition.select-source-definition: Select a source definition
+reports.editor.source-definition.sql-select-field: SELECT (eg. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (eg. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (eg. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (eg. b, c )
+reports.editor.source-definition.sql-initial-field-order: Initial Order by Field (eg. b, c )
+reports.editor.source-definition.sql-initial-direction-order: Initial Order by Direction
+reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
+reports.editor.manage-column-configuration.name: Name
+reports.editor.manage-column-configuration.display: Display
+reports.editor.manage-column-configuration.export: Export
+reports.editor.manage-column-configuration.order: Order
+reports.editor.manage-column-configuration.filter-type: Filter Type
+reports.editor.manage-column-configuration.filter-type.empty: Empty
+reports.editor.manage-column-configuration.filter-type.text: Text
+reports.editor.manage-column-configuration.filter-type.number: Number
+reports.editor.manage-column-configuration.filter-type.date: Date
+reports.editor.manage-column-configuration.filter-type.bool: Bool
+reports.editor.manage-column-configuration.display-type: Display Type
+reports.editor.manage-column-configuration.display-type.none: None
+reports.editor.manage-column-configuration.display-type.text: Text
+reports.editor.manage-column-configuration.display-type.date: Date
+reports.editor.manage-column-configuration.display-type.hide: Hide
+reports.editor.manage-column-configuration.filter-drilldown: Filter Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Empty
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Only Filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filter and Show
+reports.editor.manage-column-configuration.width: Width
+reports.editor.manage-column-configuration.label: Label
+reports.editor.manage-column-configuration.action: Action
+reports.editor.manage-column-configuration.action.none: None
+reports.editor.manage-column-configuration.action.open-document: Open Document
+reports.editor.manage-column-configuration.action.open-asset: Open Asset
+reports.editor.manage-column-configuration.action.open-object: Open Object
+reports.editor.manage-column-configuration.action.open-url: Open URL
+reports.editor.chart-settings.title: Chart Settings
+reports.editor.chart-settings.chart-type: Chart Type
+reports.editor.chart-settings.chart-type.none: None
+reports.editor.chart-settings.chart-type.pie-chart: Pie Chart
+reports.editor.chart-settings.chart-type.line-chart: Line Chart
+reports.editor.chart-settings.chart-type.bar-chart: Bar Chart
+reports.editor.chart-settings.settings: Settings
+reports.editor.chart-settings.pie-label: Label Column
+reports.editor.chart-settings.pie-data: Data Column
+reports.editor.chart-settings.x-axis: X-Axis
+reports.editor.chart-settings.y-axis: Y-Axis
+reports.editor.permissions.title: Permissions
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
@@ -880,6 +1131,9 @@ widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Value
 email-log.subject: Subject
+email-log.tooltip.resend: Resend Email
+email-log.tooltip.forward: Forward Email
+email-log.tooltip.delete: Delete Email
 email-log.resend.email.success: Email has been resent successfully
 email-log.resend.confirmation.title: Resend Email
 email-log.resend.confirmation.text: Please confirm that you want to send the email again to all recipients.
@@ -900,6 +1154,48 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+creatable-select.invalid-option: Invalid option
+drag-snippet-here: Drag a snippet here
+drop-snippet-here: Drop a snippet here
+drop-document-here: Drop a document here
+drop-document-asset-here: Drop a document asset here
+drop-asset-here: Drop an asset here
+drop-object-here: Drop an object here
+drop-element-here: Drop an element here
+error-loading-renderlet: Error loading renderlet
+snippet: Snippet
+navigation.application-logger: Application Logger
+widget.application-logger: Application Logger
+application-logger.label: Application Logger
+application-logger.columns.timestamp: Timestamp
+application-logger.columns.pid: PID
+application-logger.columns.message: Message
+application-logger.columns.file-object: File Object
+application-logger.columns.related-object: Related Object
+application-logger.columns.component: Component
+application-logger.columns.source: Source
+application-logger.columns.details: Details
+application-logger.columns.type: Type
+application-logger.sidebar.search-parameter: Search Parameter
+application-logger.detail-modal.title: Detail information
+application-logger.filter.date-from: From
+application-logger.filter.date-to: To
+application-logger.filter.priority: Type
+application-logger.filter.component: Component
+application-logger.filter.related-object-id: Related Object ID
+application-logger.filter.message: Message
+application-logger.filter.pid: Pid
+application-logger.refresh-interval: Refresh interval
+application-logger.refresh-interval.select: Select the refresh frequency
+application-logger.refresh-interval.seconds: "{{seconds}} seconds"
+application-logger.filter.priority-level.1: Emergency
+application-logger.filter.priority-level.2: Alert
+application-logger.filter.priority-level.3: Critical
+application-logger.filter.priority-level.4: Error
+application-logger.filter.priority-level.5: Warning
+application-logger.filter.priority-level.6: Notice
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Edit Embed URL
 embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Please enter a valid URL
@@ -911,3 +1207,241 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+document.open-in-new-window: Open in new window
+document.open-preview-in-new-window: Open Preview in new window
+navigation.recycle-bin: Recycle Bin
+widget.recycle-bin: Recycle Bin
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Path
+recycle-bin.columns.amount: Amount
+recycle-bin.columns.deleted-by: Deleted By
+recycle-bin.columns.date: Date
+recycle-bin.columns.actions: Actions
+recycle-bin.actions.cleanup: Clean up
+recycle-bin.actions.delete: Delete
+recycle-bin.actions.delete.title: Deleting Recycle Bin Items
+recycle-bin.actions.restore: Restore
+recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+component.search.pleaceholder: Search
+focal-point.set: Set Focal Point
+video.placeholder: No video selected - Click to add a video
+video.add-video: Add Video
+image.alt-text-placeholder: Enter alt text
+area-settings: Area Settings
+unsupported_feature: Unsupported feature - please check system requirements!
+document.version.comparison.error.title: Version Comparison Error
+document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
+navigation.test-email: Send Test-Email
+test-email.form.from: From
+test-email.form.to: To
+test-email.form.subject: Subject
+test-email.form.contentType: Type
+test-email.form.title: Title
+test-email.form.message: Message
+test-email.form.document: Document
+test-email.form.parameters: Parameters
+test-email.form.parameters.add-parameter: Add Parameter
+test-email-modal-title: Send a Test-Email
+test-email-modal-send: Send
+test-email.contentType.document: Document
+test-email.contentType.html: HTML
+test-email.contentType.text: Text
+test-email.parameters.columns.key: Key
+test-email.parameters.columns.value: Value
+test-email.parameters.add: Add Parameter
+test-email.send.error: An error occurred while sending the test email
+test-email.success.modal.title: Sent Test-Email
+test-email.success.modal.text: Your test-email has been sent. Would you like to keep this window open to send the email again?
+test-email.validation.documentPath.required: Please provide a document path
+test-email.validation.documentParameters.required: Please provide at least one parameter
+test-email.validation.content.required: Please provide a message
+test-email.validation.from.required: Please provide a sender email address
+test-email.validation.from.email.type: Please provide a valid sender email address
+test-email.validation.to.required: Please provide a recipient email address
+test-email.validation.to.email.type: Please provide a valid recipient email address
+test-email.validation.subject.required: Please provide a subject
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspectives Editor
+navigation.widget-editor.perspective-editor: Perspectives Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
+refresh: Refresh
+perspective-editor.add-modal.title: Add a new Perspective
+perspective-editor.add-modal.name.label: Enter the name of the new perspective
+perspective-editor.add-modal.name.validation: Please enter a valid perspective name
+perspective-editor.form.name.placeholder: Enter perspective name
+perspective-editor.form.general.title: General
+perspective-editor.form.general.name: Name
+perspective-editor.form.general.icon: Icon
+perspective-editor.form.general.widget-congfiguration: Widget areas
+perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
+perspective-editor.form.allowed-context-menu.category.extras: Extras
+perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
+perspective-editor.form.allowed-context-menu.extras.emails: E-Mails
+perspective-editor.form.allowed-context-menu.extras.gdpr_data_extractor: GDPR Data Extractor
+perspective-editor.form.allowed-context-menu.extras.glossary: Glossary
+perspective-editor.form.allowed-context-menu.extras.hidden: Hide Extras Menu
+perspective-editor.form.allowed-context-menu.extras.maintenance: Maintenance
+perspective-editor.form.allowed-context-menu.extras.notesEvents: Notes & Events
+perspective-editor.form.allowed-context-menu.extras.recycle_bin: Recycle Bin
+perspective-editor.form.allowed-context-menu.extras.redirects: Redirects
+perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: Hide Systemtools Menu
+perspective-editor.form.allowed-context-menu.extras.systemTools_requirements: Sytem-Requirements Check
+perspective-editor.form.allowed-context-menu.extras.translations: Translations
+perspective-editor.form.allowed-context-menu.category.file: File
+perspective-editor.form.allowed-context-menu.file.about: About
+perspective-editor.form.allowed-context-menu.file.close_all: Close All
+perspective-editor.form.allowed-context-menu.file.dashboards: Dashboards
+perspective-editor.form.allowed-context-menu.file.help: Help
+perspective-editor.form.allowed-context-menu.file.hidden: Hide File Menu
+perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
+perspective-editor.form.allowed-context-menu.file.open_document: Open Document
+perspective-editor.form.allowed-context-menu.file.open_object: Open Object
+perspective-editor.form.allowed-context-menu.file.perspectives: Perspective & Widget Editor
+perspective-editor.form.allowed-context-menu.file.schedule: Schedule
+perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
+perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
+perspective-editor.form.allowed-context-menu.category.marketing: Marketing
+perspective-editor.form.allowed-context-menu.marketing.hidden: Hide Markeing Menu
+perspective-editor.form.allowed-context-menu.marketing.reports: Reports
+perspective-editor.form.allowed-context-menu.category.search: Search
+perspective-editor.form.allowed-context-menu.search.assets: Assets
+perspective-editor.form.allowed-context-menu.search.documents: Documents
+perspective-editor.form.allowed-context-menu.search.hidden: Hide Search Menu
+perspective-editor.form.allowed-context-menu.search.objects: Data Objects
+perspective-editor.form.allowed-context-menu.search.quickSearch: Quick Search
+perspective-editor.form.allowed-context-menu.category.settings: Settings
+perspective-editor.form.allowed-context-menu.settings.adminTranslations: Admin Translations
+perspective-editor.form.allowed-context-menu.settings.appearance: Appearance
+perspective-editor.form.allowed-context-menu.settings.cache_clearAll: Cache > Clear All
+perspective-editor.form.allowed-context-menu.settings.cache_clearData: Cache > Data Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Cache > Clear Full Page Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Cache > Clean Symfony Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Cache > Clear temporary files
+perspective-editor.form.allowed-context-menu.settings.cache_hidden: Hide Cache Menu
+perspective-editor.form.allowed-context-menu.settings.customReports: Custom Reports
+perspective-editor.form.allowed-context-menu.settings.documentTypes: Document Types
+perspective-editor.form.allowed-context-menu.settings.hidden: Hide Settings Menu
+perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Data Objects > Bulk Export
+perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Data Objects > Bulk Import
+perspective-editor.form.allowed-context-menu.settings.object_classes: Data Objects > Classes
+perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Data Objects > Classification Store
+perspective-editor.form.allowed-context-menu.settings.object_field_collections: Data Objects > Field Collections
+perspective-editor.form.allowed-context-menu.settings.object_hidden: Hide Data Objects Menu
+perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Data Objects > Object Bricks
+perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Data Objects > Quantity Value
+perspective-editor.form.allowed-context-menu.settings.predefinedMetadata: Predefined Metadata
+perspective-editor.form.allowed-context-menu.settings.predefinedProperties: Predefined Properties
+perspective-editor.form.allowed-context-menu.settings.system: System
+perspective-editor.form.allowed-context-menu.settings.tagConfiguration: Tag Configuration
+perspective-editor.form.allowed-context-menu.settings.thumbnails: Thumbnails
+perspective-editor.form.allowed-context-menu.settings.users_hidden: Hide Users/Roles Menu
+perspective-editor.form.allowed-context-menu.settings.users_roles: Roles
+perspective-editor.form.allowed-context-menu.settings.users_users: Users
+perspective-editor.form.allowed-context-menu.settings.website: Website Settings
+perspective-editor.create.success: Perspective created successfully
+perspective-editor.delete.success: Perspective deleted successfully
+perspective-editor.system-widgets.trees: Trees
+perspective-editor.system-widgets.left: Left widgets
+perspective-editor.system-widgets.bottom: Bottom widgets
+perspective-editor.system-widgets.right: Right widgets
+perspective-editor.update.success: Perspective updated successfully
+widget-editor.create-modal.create: Create Widget
+widget-editor.create-form.name: Name
+widget-editor.create-form.name.required: Please enter a valid name
+widget-editor.create-form.widgetType: Widget Type
+widget-editor.create-form.widgetType.element_tree: Element Tree
+widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
+widget-editor.form.name.placeholder: Enter widget name
+widget-editor.create.success: Widget created successfully
+widget-editor.delete.success: Widget deleted successfully
+widget-editor.widget-form.general.title: General
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.general.icon: Icon
+widget-editor.widget-form.general.icon.select: Select Icon
+widget-editor.widget-form.specific.title: Specific
+widget-editor.widget-form.specific.element-type: Element Type
+widget-editor.widget-form.specific.root-folder: Root Folder
+widget-editor.widget-form.specific.show-root: Show Root
+widget-editor.widget-form.specific.page-size: Page Size
+widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default everything is allowed)
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL Statement
+widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
+widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.copy: Copy
+widget-editor.widget-form.allowed-context-menu.lock: Lock
+widget-editor.widget-form.allowed-context-menu.publish: Publish
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
+widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
+widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.cut: Cut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.refresh: Refresh
+widget-editor.widget-form.allowed-context-menu.unlock: Unlock
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Change Children Sort By
+widget-editor.widget-form.allowed-context-menu.delete: Delete
+widget-editor.widget-form.allowed-context-menu.paste: Paste
+widget-editor.widget-form.allowed-context-menu.rename: Rename
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Upload Zip
+widget-editor.widget-form.allowed-context-menu.hideAdd: Hide Add
+widget-editor.widget-form.allowed-context-menu.addUpload: Upload Files
+widget-editor.widget-form.allowed-context-menu.download: Download
+widget-editor.widget-form.allowed-context-menu.pasteCut: Cut
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
+widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
+widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
+widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
+widget-editor.widget-form.allowed-context-menu.convert: Convert
+widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
+widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
+widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
+widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
+widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
+widget-editor.widget-form.allowed-context-menu.open: Open
+widget-editor.widget-form.allowed-context-menu.addLink: Add Link
+widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
+widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
+edit.label: Edit
+scheduled-block.delete-all-in-past: Delete all past timestamps
+scheduled-block.delete-all: Delete all timestamps
+scheduled-block.delete-all-in-past-confirmation: Are you sure you want to delete all past timestamps?
+scheduled-block.delete-all-confirmation: Are you sure you want to delete all timestamps?
+scheduled-block.delete-confirmation: Are you sure you want to delete this entry?
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search
+icon-selector.current-selection: Current selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save
+icon-selector.custom-icon: Custom icon
+icon-selector.custom-icon-path: Custom path
+icon-selector.custom-icon-path-placeholder: Add a custom path and submit
+icon-selector.Twemoji: Twemoji Library
+icon-selector.Pimcore: Pimcore Library
+language: Language
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overrides path from tree-structure)
+content-main-document: Content-Main Document
+never: never
+document-configuration.sidebar-title: Document Configuration
+document-configuration.predefined-document-type: Predefined Document Type
+document-configuration.controller: Controller
+document-configuration.template: Template
+document-configuration.static-page-generator: Static Page Generator
+document-configuration.enable-server-side-static-rendering: Enable server side static rendering
+document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
+document-configuration.last-generated: "Last generated: {{timestamp}}"
+email-settings.sidebar-title: Email Settings
+email-settings.subject: Subject
+email-settings.from: From
+email-settings.reply-to: Reply To
+email-settings.recipients: Recipients
+email-settings.to: To
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
