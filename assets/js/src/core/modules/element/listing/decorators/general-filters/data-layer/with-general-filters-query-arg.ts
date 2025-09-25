@@ -69,17 +69,21 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { hasType, getType } = useDynamicTypeResolver()
     const { currentLanguage } = useLanguageSelection()
 
+    const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
+      const column = availableColumns.find(col => col.key === columnKey)
+      return column?.localizable === true ? (providedLocale ?? currentLanguage) : null
+    }
+
+    const getFilterType = (filterType?: string, type?: string): string | undefined => {
+      return filterType ?? type
+    }
+
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-      return columnFilters.map(({ filterType, type, ...rest }) => {
-        const column = availableColumns.find(col => col.key === rest.key)
-        const locale = column?.localizable === true ? (rest.locale ?? currentLanguage) : null
-        
-        return {
-          ...rest,
-          ...((filterType !== undefined) ? { type: filterType } : { type }),
-          locale
-        }
-      })
+      return columnFilters.map(({ filterType, type, ...rest }) => ({
+        ...rest,
+        type: getFilterType(filterType, type),
+        locale: getColumnLocale(rest.key, rest.locale)
+      }))
     }
 
     const getArgs: typeof baseGetArgs = () => {
