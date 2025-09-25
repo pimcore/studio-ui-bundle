@@ -74,7 +74,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         return (
           <Flex
             align='center'
-            className={styles.icons}
+            className={ styles.icons }
             justify='center'
           >
             {getElementTypeIcon()}
@@ -121,28 +121,28 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             justify='center'
           >
             <IconButton
-              data-testid={buildTestId(['button', 'restore'])}
-              icon={{ value: 'restore' }}
-              loading={restoreLoading.includes(row.original.id)}
-              onClick={() => {
+              data-testid={ buildTestId(['button', 'restore']) }
+              icon={ { value: 'restore' } }
+              loading={ restoreLoading.includes(row.original.id) }
+              onClick={ () => {
                 setRestoreLoading((prev) => [...prev, row.original.id])
                 void restoreItems([row.original], () => {
                   setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
-              }}
+              } }
               type="link"
             />
 
             <IconButton
-              data-testid={buildTestId(['button', 'delete'])}
-              icon={{ value: 'trash' }}
-              loading={removeLoading.includes(row.original.id)}
-              onClick={() => {
+              data-testid={ buildTestId(['button', 'delete']) }
+              icon={ { value: 'trash' } }
+              loading={ removeLoading.includes(row.original.id) }
+              onClick={ () => {
                 setRemoveLoading(prev => [...prev, row.original.id])
                 void removeItems([row.original], () => {
                   setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
-              }}
+              } }
               type="link"
             />
           </Flex>
@@ -155,14 +155,14 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={tableItems}
+      columns={ columns }
+      data={ tableItems }
       enableMultipleRowSelection
-      modifiedCells={[]}
-      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedRows(row) }}
+      modifiedCells={ [] }
+      onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row) } }
       resizable
-      selectedRows={selectedRows}
-      setRowId={(row) => String(row.id)}
+      selectedRows={ selectedRows }
+      setRowId={ (row) => String(row.id) }
     />
   )
 }
