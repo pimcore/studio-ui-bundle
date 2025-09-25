@@ -81,8 +81,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
       return columnFilters.map(({ filterType, type, ...rest }) => ({
         ...rest,
-        type: getFilterType(filterType, type),
-        locale: getColumnLocale(rest.key, rest.locale)
+        type: getFilterType(filterType as string | undefined, type as string | undefined),
+        locale: getColumnLocale(rest.key as string, rest.locale as string | undefined)
       }))
     }
 
