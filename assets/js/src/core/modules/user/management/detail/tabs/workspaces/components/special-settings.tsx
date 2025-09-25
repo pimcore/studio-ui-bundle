@@ -102,21 +102,19 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
             {
               key: 'customLayouts',
               title: <>{ t('user-management.workspaces.custom-layouts') }</>,
-              children: <>
-                <Form.Item
+              children: <Form.Item
                   label={ t('user-management.workspaces.custom-layouts.select') }
                   name="layouts"
-                >
+              >
                   <Select
-                    mode="multiple"
-                    options={ data?.items.map((layout) => ({
-                      value: layout.id,
-                      label: layout.name
-                    })) }
-                    placeholder={ t('user-management.workspaces.custom-layouts.select') }
+                      mode="multiple"
+                      options={ data?.items.map((layout) => ({
+                          value: layout.id,
+                          label: layout.name
+                      })) }
+                      placeholder={ t('user-management.workspaces.custom-layouts.select') }
                   ></Select>
-                </Form.Item>
-              </>
+              </Form.Item>
             }
           ]
                     }

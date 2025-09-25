@@ -176,21 +176,19 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         </IconTextButton>
       ),
       children: (
-        <>
           <Table
-            data={ objectWorkspaces }
-            isLoading={ isLoading }
-            onShowSpecialSettings={ (data) => {
-              setSpecialModalContext(data)
-              showSpecialSettingsModal()
-            } }
-            onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
-            showDuplicatePropertyModal={ () => {
-              showDuplicatePropertyModal()
-            } }
-            type={ WorkspaceType.OBJECT }
+              data={ objectWorkspaces }
+              isLoading={ isLoading }
+              onShowSpecialSettings={ (data) => {
+                  setSpecialModalContext(data)
+                  showSpecialSettingsModal()
+              } }
+              onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
+              showDuplicatePropertyModal={ () => {
+                  showDuplicatePropertyModal()
+              } }
+              type={ WorkspaceType.OBJECT }
           />
-        </>
       )
     }
   ]

@@ -186,13 +186,11 @@ export const Table = ({
           size: 40,
           cell: (context) => {
             return (
-              <>
                 <IconButton
-                  icon={ { value: 'settings' } }
-                  onClick={ () => onShowSpecialSettings?.(context.row.original as UserDocumentWorkspace) }
-                  type="link"
+                    icon={ { value: 'settings' } }
+                    onClick={ () => onShowSpecialSettings?.(context.row.original as UserDocumentWorkspace) }
+                    type="link"
                 />
-              </>
             )
           }
         })]
