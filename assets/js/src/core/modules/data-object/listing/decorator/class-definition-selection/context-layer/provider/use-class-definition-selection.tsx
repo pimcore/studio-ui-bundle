@@ -11,9 +11,9 @@
 import { useContext } from 'react'
 import { ClassDefinitionSelectionContext, type ClassDefinitionSelectionData } from './class-definition-selection-provider'
 
-export function useClassDefinitionSelection(): ClassDefinitionSelectionData
-export function useClassDefinitionSelection(silent: true): ClassDefinitionSelectionData | undefined
-export function useClassDefinitionSelection(silent?: true): ClassDefinitionSelectionData | undefined {
+export function useClassDefinitionSelection (): ClassDefinitionSelectionData
+export function useClassDefinitionSelection (silent: true): ClassDefinitionSelectionData | undefined
+export function useClassDefinitionSelection (silent?: true): ClassDefinitionSelectionData | undefined {
   const context = useContext(ClassDefinitionSelectionContext)
 
   if (context === undefined && !silent) {

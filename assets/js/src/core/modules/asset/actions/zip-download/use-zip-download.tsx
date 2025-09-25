@@ -25,6 +25,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { isUndefined } from 'lodash'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -81,9 +82,9 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
 
         const response = (await promise) as any
 
-        if(!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-          throw new ApiError(response.error)
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error as ApiErrorData))
+          throw new ApiError(response.error as ApiErrorData)
         }
 
         const data = response.data as AssetExportZipAssetApiResponse | AssetExportZipFolderApiResponse

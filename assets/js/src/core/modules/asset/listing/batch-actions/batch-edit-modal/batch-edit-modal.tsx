@@ -124,7 +124,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
               ],
               filters: {
                 ...filters
-              },
+              }
             }
           })
 
