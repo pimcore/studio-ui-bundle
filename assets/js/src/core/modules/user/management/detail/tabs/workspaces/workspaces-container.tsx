@@ -38,6 +38,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const [documentWorkspaces, setDocumentWorkspaces] = useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = useState<UserDocumentWorkspace[]>(user?.dataObjectWorkspaces ?? [])
 
+  const [specialModalContext, setSpecialModalContext] = useState<UserDocumentWorkspace | null>(null)
+
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,
@@ -136,7 +138,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
   ]
 
-  const [specialModalContext, setSpecialModalContext] = useState<UserDocumentWorkspace | null>(null)
   let currentSpecialModalData = specialModalContext
 
   const getSpecialModalValues = (values: string | string[]): string[] => {
@@ -176,19 +177,19 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         </IconTextButton>
       ),
       children: (
-          <Table
-              data={ objectWorkspaces }
-              isLoading={ isLoading }
-              onShowSpecialSettings={ (data) => {
-                  setSpecialModalContext(data)
-                  showSpecialSettingsModal()
-              } }
-              onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
-              showDuplicatePropertyModal={ () => {
-                  showDuplicatePropertyModal()
-              } }
-              type={ WorkspaceType.OBJECT }
-          />
+        <Table
+          data={ objectWorkspaces }
+          isLoading={ isLoading }
+          onShowSpecialSettings={ (data) => {
+            setSpecialModalContext(data)
+            showSpecialSettingsModal()
+          } }
+          onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
+          showDuplicatePropertyModal={ () => {
+            showDuplicatePropertyModal()
+          } }
+          type={ WorkspaceType.OBJECT }
+        />
       )
     }
   ]
