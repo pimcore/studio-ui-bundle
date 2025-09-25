@@ -229,13 +229,8 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   const createDocument = (docType: DocType | null, parentId: number): void => {
-    // Reset form with appropriate initial values based on form type
-    // const initialValues = formType === AddDocumentFormType.FULL
-    //   ? { title: '', navigationName: '', key: '' }
-    //   : { key: '' }
+    form.resetFields() // Always reset before opening
 
-    form.resetFields()
-    // form.setFieldsValue(initialValues)
     const submitForm = async (): Promise<void> => {
       await form.validateFields()
         .then(async () => {
@@ -310,7 +305,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
   const addDocumentTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
-      label: t(`document.action.add-${type}`),
+      label: t(`document.tree.context-menu.add-${type}`),
       key: contextMenuKey,
       icon: <Icon value={ iconValue } />,
       hidden: isAddDocumentHidden(node),

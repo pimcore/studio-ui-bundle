@@ -81,6 +81,10 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.tree.context-menu.add-page: Add Page
+document.tree.context-menu.add-snippet: Add Snippet
+document.tree.context-menu.add-email: Add Email
+document.tree.context-menu.add-newsletter: Add Newsletter
 document.site.remove-site: Remove Site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
 document.site.use-as-site: Use as Site
@@ -1448,3 +1452,4 @@ email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@examp
 add-document-form.label.title: Title
 add-document-form.label.navigation: Navigation
 add-document-form.label.key: Key
+document.tree.context-menu.add-
