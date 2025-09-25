@@ -17,6 +17,9 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
 import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import {ModalFooter} from "@Pimcore/components/modal/footer/modal-footer";
+import {Button} from "@Pimcore/components/button/button";
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -37,12 +40,40 @@ export const Table = ({
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 
   const isAsset = type === WorkspaceType.ASSET
+  const isObject = type === WorkspaceType.OBJECT
 
   useEffect(() => {
     setGridData(data)
   }, [data])
 
-  const columnHelper = createColumnHelper()
+    const { renderModal: RenderModal, showModal, handleCancel, handleOk } = useModal({ type: 'default' })
+
+    const renderModal = (): React.JSX.Element => (
+        <RenderModal
+            footer={
+                <ModalFooter>
+                    <Button
+                        type={ 'default' }
+                        onClick={handleCancel}
+                    >
+                        {t('button.cancel')}
+                    </Button>
+                    <Button
+                        type={ 'primary' }
+                        onClick={() => console.log('todo')}
+                    >
+                        {t('button.apply')}
+                    </Button>
+                </ModalFooter>
+            }
+            title={ t('version.clear-unpublished-versions') }
+        >
+            TODO
+        </RenderModal>
+    )
+
+
+    const columnHelper = createColumnHelper()
   const createColumns = (): any => [
     columnHelper.accessor('cpath', {
       header: t('user-management.workspaces.columns.cpath'),
@@ -178,9 +209,23 @@ export const Table = ({
         }
       }
     }),
+    ...isObject
+      ? [columnHelper.accessor('specialSettings', {
+          header: '',
+          size: 40,
+          cell: (context) => {
+            return (
+              <>
+                  <IconButton icon={ { value: 'settings' } } onClick={ showModal } type="link" />
+                  {renderModal()}
+              </>
+            )
+          }
+        })]
+      : [],
     columnHelper.accessor('actions', {
-      header: t('user-management.workspaces.columns.delete'),
-      size: 60,
+      header: '',
+      size: 40,
       cell: (context) => {
         return (
           <Flex
