@@ -1445,3 +1445,6 @@ email-settings.cc: Cc
 email-settings.bcc: Bcc
 email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
 email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
+add-document-form.label.title: Title
+add-document-form.label.navigation: Navigation
+add-document-form.label.key: Key

@@ -20,7 +20,7 @@ import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permiss
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
+import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
@@ -29,11 +29,25 @@ import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 
+export enum AddDocumentFormType {
+  FULL = 'full', // title, navigationName, key
+  KEY_ONLY = 'key-only' // only key
+}
+
+export interface AddDocumentConfig {
+  type: string
+  iconValue: string
+  contextMenuKey: ContextMenuActionName | string
+  formType: AddDocumentFormType
+  modalTitle: string
+}
+
 interface UseAddDocumentHookReturn {
   addDocumentTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
-export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
+export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookReturn => {
+  const { type, iconValue, contextMenuKey, formType, modalTitle } = config
   const { t } = useTranslation()
   const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({ })
   const { openDocument } = useDocumentHelper()
@@ -54,7 +68,7 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
         component: (<Spin type="classic" />)
       }]
     } else if (!isUndefined(error) || isNil(documentTypes) || isEmpty(documentTypes.items)) {
-      return documentHierarchy // Return empty if loading or error occurs
+      return documentHierarchy // Return empty if empty or error occurs
     }
 
     const structuredDocumentTypes = [...(documentTypes.items)]
@@ -94,7 +108,7 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
       icon: <Icon
         subIconName='new'
         subIconVariant='green'
-        value='snippet'
+        value={ iconValue }
             />,
       onClick: () => {
         const parentId = parseInt(node.id)
@@ -106,14 +120,13 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
   }
 
   const getDocumentEntry = (docType: DocType, node: TreeNodeProps): ItemType => {
-  // todo change icon value based on docType icon when available
     return {
       label: t(docType.name),
       key: docType.id,
       icon: <Icon
         subIconName='new'
         subIconVariant={ 'green' }
-        value={ 'snippet' } // document, mail-02, snippet+, newsletter+
+        value={ iconValue }
             />,
       onClick: () => {
         const parentId = parseInt(node.id)
@@ -122,8 +135,8 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
     }
   }
 
-  // Modal form content component for document creation
-  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+  // Full form component (3 inputs: title, navigationName, key)
+  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
     useEffect(() => {
       if (firstInputRef.current !== null) {
         firstInputRef.current.focus()
@@ -137,7 +150,7 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
         layout="vertical"
       >
         <Form.Item
-          label={ t('title') }
+          label={ t('add-document-form.label.title') }
           name="title"
         >
           <Input
@@ -149,34 +162,90 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
                 key: value
               })
             } }
-            placeholder={ t('title') }
             ref={ firstInputRef }
           />
         </Form.Item>
         <Form.Item
-          label={ t('navigation') }
+          label={ t('add-document-form.label.navigation) }
           name="navigationName"
         >
-          <Input placeholder={ t('navigation') } />
+          <Input />
         </Form.Item>
         <Form.Item
-          label={ t('key') }
+          label={ t('add-document-form.label.key') }
           name="key"
           rules={ [{ required: true, message: t('form.validation.required') }] }
         >
-          <Input placeholder={ t('key') } />
+          <Input />
         </Form.Item>
       </Form>
     )
   }
 
+  // Key-only form component (1 input: key)
+  const KeyOnlyFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+    useEffect(() => {
+      if (firstInputRef.current !== null) {
+        firstInputRef.current.focus()
+      }
+    }, [firstInputRef])
+
+    return (
+      <Form
+        form={ form }
+        initialValues={ { key: '' } }
+        layout="vertical"
+      >
+        <Form.Item
+          label={ t('form.label.new-item') }
+          name="key"
+          rules={ [{ required: true, message: t('form.validation.required') }] }
+        >
+          <Input
+            ref={ firstInputRef }
+          />
+        </Form.Item>
+      </Form>
+    )
+  }
+
+  // Modal form content component for document creation
+  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+    return formType === AddDocumentFormType.FULL
+      ? (
+        <FullFormContent
+          firstInputRef={ firstInputRef }
+          form={ form }
+          t={ t }
+        />
+        )
+      : (
+        <KeyOnlyFormContent
+          firstInputRef={ firstInputRef }
+          form={ form }
+          t={ t }
+        />
+        )
+  }
+
   const createDocument = (docType: DocType | null, parentId: number): void => {
-    form.resetFields() // Always reset before opening
+    // Reset form with appropriate initial values based on form type
+    // const initialValues = formType === AddDocumentFormType.FULL
+    //   ? { title: '', navigationName: '', key: '' }
+    //   : { key: '' }
+
+    form.resetFields()
+    // form.setFieldsValue(initialValues)
     const submitForm = async (): Promise<void> => {
       await form.validateFields()
         .then(async () => {
           const values = form.getFieldsValue()
-          const { title, navigationName, key } = values
+
+          // For key-only forms, use the key as title and navigationName
+          const title = formType === AddDocumentFormType.FULL ? values.title : values.key
+          const navigationName = formType === AddDocumentFormType.FULL ? values.navigationName : values.key
+          const key = values.key
+
           await createDocumentMutation(!isNil(docType) ? docType.id : null, key as string, title as string, navigationName as string, parentId)
         })
     }
@@ -184,7 +253,7 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     modal.confirm({
       icon: null,
-      title: t('document.add-page', { docTypeName: docType.name }),
+      title: modalTitle,
       content: <ModalFormContent
         firstInputRef={ firstInputRef }
         form={ form }
@@ -242,8 +311,8 @@ export const useAddDocument = (type: string): UseAddDocumentHookReturn => {
   const addDocumentTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t(`document.action.add-${type}`),
-      key: `add${type}`, // todo: use ContextMenuActionName -> get from options
-      icon: <Icon value={ 'folder' } />, // todo: change according to type
+      key: contextMenuKey,
+      icon: <Icon value={ iconValue } />,
       hidden: isAddDocumentHidden(node),
       children: getDocumentEntries(node)
     }

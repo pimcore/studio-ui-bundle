@@ -36,6 +36,9 @@ export enum ContextMenuActionName {
   openPreviewInNewWindow = 'openPreviewInNewWindow',
 
   addPage = 'addPage',
+  addSnippet = 'addSnippet',
+  addNewsletter = 'addNewsletter',
+  addEmail = 'addEmail',
 
   downloadAsZip = 'downloadAsZip',
   uploadNewVersion = 'uploadNewVersion',
