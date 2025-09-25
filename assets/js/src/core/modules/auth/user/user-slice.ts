@@ -14,8 +14,12 @@ import { injectSliceWithState, type RootState } from '@sdk/app'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useTrackableChangesReducers } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 
+interface IUserInformationExtended extends UserInformation {
+  image: string | undefined
+}
+
 // The logic dependency is in the rtkQueryErrorLogger middleware
-const initialState: UserInformation = {
+const initialState: IUserInformationExtended = {
   id: 0,
   username: '',
   email: '',
@@ -32,6 +36,7 @@ const initialState: UserInformation = {
   welcomeScreen: false,
   memorizeTabs: false,
   hasImage: false,
+  image: undefined,
   contentLanguages: [],
   keyBindings: [],
   allowedLanguagesForEditingWebsiteTranslations: [],
@@ -70,6 +75,13 @@ const slice = createSlice({
         changes: {}
       }
     },
+    userProfileImageUpdated: (state, { payload }) => {
+      return {
+        ...state,
+        image: payload.data.image,
+        hasImage: payload.data.hasImage
+      }
+    },
 
     ...useTrackableChangesReducers()
   }
@@ -82,6 +94,7 @@ injectSliceWithState(slice)
 export const {
   setUser,
   userProfileUpdated,
+  userProfileImageUpdated,
   resetChanges,
   setModifiedCells
 } = slice.actions
