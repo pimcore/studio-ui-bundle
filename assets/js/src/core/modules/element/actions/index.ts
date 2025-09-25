@@ -39,6 +39,8 @@ export enum ContextMenuActionName {
   addSnippet = 'addSnippet',
   addNewsletter = 'addNewsletter',
   addEmail = 'addEmail',
+  addLink = 'addLink',
+  addHardlink = 'addHardlink',
 
   downloadAsZip = 'downloadAsZip',
   uploadNewVersion = 'uploadNewVersion',

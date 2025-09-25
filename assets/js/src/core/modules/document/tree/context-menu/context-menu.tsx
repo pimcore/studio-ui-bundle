@@ -59,12 +59,21 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     formType: AddDocumentFormType.KEY_ONLY,
     modalTitle: t('document.tree.context-menu.add-email')
   })
-  const { addDocumentTreeContextMenuItem: addNewsletterTreeContextMenuItem } = useAddDocument({
-    type: 'newsletter',
-    iconValue: 'mail-02',
-    contextMenuKey: ContextMenuActionName.addNewsletter,
+  const { addDocumentTreeContextMenuItem: addLinkTreeContextMenuItem } = useAddDocument({
+    type: 'link',
+    iconValue: 'document-link',
+    contextMenuKey: ContextMenuActionName.addLink,
     formType: AddDocumentFormType.KEY_ONLY,
-    modalTitle: t('document.tree.context-menu.add-newsletter')
+    modalTitle: t('document.tree.context-menu.add-link'),
+    hasNoChildren: true
+  })
+  const { addDocumentTreeContextMenuItem: addHardlinkTreeContextMenuItem } = useAddDocument({
+    type: 'hardlink',
+    iconValue: 'hardlink',
+    contextMenuKey: ContextMenuActionName.addHardlink,
+    formType: AddDocumentFormType.KEY_ONLY,
+    modalTitle: t('document.tree.context-menu.add-hardlink'),
+    hasNoChildren: true
   })
   const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', parseInt(node.id)))
@@ -98,8 +107,9 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     addFolderTreeContextMenuItem(node),
     addPageTreeContextMenuItem(node),
     addSnippetTreeContextMenuItem(node),
+    addLinkTreeContextMenuItem(node),
     addEmailTreeContextMenuItem(node),
-    addNewsletterTreeContextMenuItem(node),
+    addHardlinkTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     {

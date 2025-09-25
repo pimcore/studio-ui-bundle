@@ -84,7 +84,8 @@ document.tree.copy-paste.replacing-content: Replacing Content
 document.tree.context-menu.add-page: Add Page
 document.tree.context-menu.add-snippet: Add Snippet
 document.tree.context-menu.add-email: Add Email
-document.tree.context-menu.add-newsletter: Add Newsletter
+document.tree.context-menu.add-link: Add Link
+document.tree.context-menu.add-hardlink: Add Hardlink
 document.site.remove-site: Remove Site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
 document.site.use-as-site: Use as Site

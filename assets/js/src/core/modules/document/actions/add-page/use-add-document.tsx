@@ -41,6 +41,7 @@ export interface AddDocumentConfig {
   contextMenuKey: ContextMenuActionName | string
   formType: AddDocumentFormType
   modalTitle: string
+  hasNoChildren?: boolean // If true, item has onClick instead of children dropdown
 }
 
 interface UseAddDocumentHookReturn {
@@ -48,7 +49,7 @@ interface UseAddDocumentHookReturn {
 }
 
 export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookReturn => {
-  const { type, iconValue, contextMenuKey, formType, modalTitle } = config
+  const { type, iconValue, contextMenuKey, formType, modalTitle, hasNoChildren } = config
   const { t } = useTranslation()
   const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({ })
   const { openDocument } = useDocumentHelper()
@@ -137,7 +138,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Full form component (3 inputs: title, navigationName, key)
-  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
     useEffect(() => {
       if (firstInputRef.current !== null) {
         firstInputRef.current.focus()
@@ -184,7 +185,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Key-only form component (1 input: key)
-  const KeyOnlyFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+  const KeyOnlyFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
     useEffect(() => {
       if (firstInputRef.current !== null) {
         firstInputRef.current.focus()
@@ -217,14 +218,12 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         <FullFormContent
           firstInputRef={ firstInputRef }
           form={ form }
-          t={ t }
         />
         )
       : (
         <KeyOnlyFormContent
           firstInputRef={ firstInputRef }
           form={ form }
-          t={ t }
         />
         )
   }
@@ -285,14 +284,13 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
     try {
       const response = await createDocumentTask
 
-      if (response.error !== undefined) {
+      if (!isUndefined(response.error)) {
         trackError(new ApiError(response.error))
-        return
+      } else if (!isUndefined(response.data)) {
+        const { id } = response.data
+        void openDocument({ config: { id } })
+        dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
       }
-
-      const { id } = response.data
-      void openDocument({ config: { id } })
-      dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
     } catch {
       trackError(new GeneralError('Error creating document'))
     }
@@ -305,11 +303,26 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   const addDocumentTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
+    const baseItem = {
       label: t(`document.tree.context-menu.add-${type}`),
       key: contextMenuKey,
       icon: <Icon value={ iconValue } />,
-      hidden: isAddDocumentHidden(node),
+      hidden: isAddDocumentHidden(node)
+    }
+
+    // If hasNoChildren is true, add onClick instead of children
+    if (hasNoChildren === true) {
+      return {
+        ...baseItem,
+        onClick: () => {
+          createDocument(null, Number.parseInt(node.id))
+        }
+      }
+    }
+
+    // Default behavior: add children dropdown
+    return {
+      ...baseItem,
       children: getDocumentEntries(node)
     }
   }
