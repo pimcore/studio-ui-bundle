@@ -81,6 +81,23 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.site.remove-site: Remove Site
+document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+document.site.use-as-site: Use as Site
+document.site.edit-site: Edit Site
+document.site.form.main-domain: Main Domain
+document.site.form.additional-domains: Additional Domains
+document.site.form.additional-domains-tooltip: Enter additional domains, one per line. Wildcards are supported (*example.com)
+document.site.form.redirect-to-main-domain: Redirect additional domains to main domain
+document.site.form.error-documents: Error Documents
+document.site.form.default-error-document: Default Error Document
+document.site.form.error-document-language: Error Document ({{language}})
+save-and-continue: Save and Continue
+discard-and-continue: Discard and Continue
+discard-changes: Discard Changes
+unsaved-changes.title: Unsaved Changes
+unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document
 convert-document-warning: All content will be lost. Are you sure you want to convert this document?
@@ -401,6 +418,7 @@ translations.add-translation-mandatory-field-missing.error: Key is a mandatory f
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.confirm: Confirm
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
 button.cancel-edits: Cancel edits
@@ -484,10 +502,10 @@ jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
-jobs.zip-job.title: "ZIP of {{title}}"
+jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
-jobs.csv-job.title: "CSV of {{title}}"
-jobs.xlsx-job.title: "XLSX of {{title}}"
+jobs.csv-job.title: "CSV download of {{title}}"
+jobs.xlsx-job.title: "XLSX download of {{title}}"
 batch-edit.job-title: Batch Edit
 jobs.zip-upload-job.title: "Upload ZIP"
 jobs.zip-upload-job.step1.title: "Extracting ZIP"
@@ -645,6 +663,7 @@ tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
 tree.actions.add-user: Add User
+tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
 tree.actions.remove-role: Remove Role
@@ -670,7 +689,7 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
-user-management.tree.all: All Users
+user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
@@ -728,8 +747,8 @@ user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
-user-management.firstname: Firstname
-user-management.lastname: Lastname
+user-management.firstname: First name
+user-management.lastname: Last name
 user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
@@ -775,9 +794,13 @@ user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
 user-management.add-folder.success: Folder added successfully
 user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user: Clone user
+user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
 user-management.add-user.success: User added successfully
+user-management.remove-user: Delete user
+user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
 user-management.remove-user.success: User removed successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
@@ -789,9 +812,14 @@ user-management.add-folder.label: Enter the name of the new folder
 user-management.add-user: Add new User
 user-management.add-user.label: Enter the name of the new user
 user-management.last-login: Last Login
+user-management.search.id: ID
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
+roles.clone-role: Clone role
+roles.clone-role.text: Enter the name of the new role
+roles.remove-role: Delete role
+roles.remove-role.text: 'Are you sure you want to permanently delete role "{{name}}"? This action cannot be undone.'
 roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
@@ -802,6 +830,7 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce
@@ -988,7 +1017,7 @@ edit-modal.apply-changes: Apply changes
 edit-modal.discard: Discard
 preview-not-available: Preview not available
 user-menu.notifications: Notifications
-user-menu.my-profile: My Profile
+user-menu.my-profile: My profile
 user-menu.log-out: Log out
 user-menu.title: Profile
 user-menu.notification.send: Send
@@ -1084,7 +1113,7 @@ please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
-email-blocklist.add: Add
+email-blocklist.new: New 
 email-blocklist.add.validation: Please enter a valid email address
 email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
@@ -1180,6 +1209,11 @@ embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
 document.open-preview-in-new-window: Open Preview in new window
+document.translation.title: Translation
+document.translation.open-translation: Open Translation
+document.translation.link-existing-document: Link existing Document
+document.translation.unlink-existing-document: Unlink existing Document
+document.translation.all-translations: All Translations
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1242,19 +1276,21 @@ perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
 perspective-editor.form.general.title: General
-perspective-editor.form.specific.title: Specific
+perspective-editor.form.general.name: Name
+perspective-editor.form.general.icon: Icon
+perspective-editor.form.general.widget-congfiguration: Widget areas
 perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
 perspective-editor.form.allowed-context-menu.category.extras: Extras
 perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
-perspective-editor.form.allowed-context-menu.extras.emails: Sent Emails
+perspective-editor.form.allowed-context-menu.extras.emails: E-Mails
 perspective-editor.form.allowed-context-menu.extras.gdpr_data_extractor: GDPR Data Extractor
 perspective-editor.form.allowed-context-menu.extras.glossary: Glossary
-perspective-editor.form.allowed-context-menu.extras.hidden: Extra Hidden -> move
+perspective-editor.form.allowed-context-menu.extras.hidden: Hide Extras Menu
 perspective-editor.form.allowed-context-menu.extras.maintenance: Maintenance
 perspective-editor.form.allowed-context-menu.extras.notesEvents: Notes & Events
 perspective-editor.form.allowed-context-menu.extras.recycle_bin: Recycle Bin
 perspective-editor.form.allowed-context-menu.extras.redirects: Redirects
-perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: System Tools (hidden) -> move
+perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: Hide Systemtools Menu
 perspective-editor.form.allowed-context-menu.extras.systemTools_requirements: Sytem-Requirements Check
 perspective-editor.form.allowed-context-menu.extras.translations: Translations
 perspective-editor.form.allowed-context-menu.category.file: File
@@ -1262,59 +1298,55 @@ perspective-editor.form.allowed-context-menu.file.about: About
 perspective-editor.form.allowed-context-menu.file.close_all: Close All
 perspective-editor.form.allowed-context-menu.file.dashboards: Dashboards
 perspective-editor.form.allowed-context-menu.file.help: Help
-perspective-editor.form.allowed-context-menu.file.hidden: File Hidden -> move
+perspective-editor.form.allowed-context-menu.file.hidden: Hide File Menu
 perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
 perspective-editor.form.allowed-context-menu.file.open_document: Open Document
 perspective-editor.form.allowed-context-menu.file.open_object: Open Object
-perspective-editor.form.allowed-context-menu.file.perspectives: Perspectives
-perspective-editor.form.allowed-context-menu.file.schedule: Schedule -> WTF
+perspective-editor.form.allowed-context-menu.file.perspectives: Perspective & Widget Editor
+perspective-editor.form.allowed-context-menu.file.schedule: Schedule
 perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
 perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
 perspective-editor.form.allowed-context-menu.category.marketing: Marketing
-perspective-editor.form.allowed-context-menu.marketing.hidden: Marketing Hidden -> move
+perspective-editor.form.allowed-context-menu.marketing.hidden: Hide Markeing Menu
 perspective-editor.form.allowed-context-menu.marketing.reports: Reports
 perspective-editor.form.allowed-context-menu.category.search: Search
 perspective-editor.form.allowed-context-menu.search.assets: Assets
 perspective-editor.form.allowed-context-menu.search.documents: Documents
-perspective-editor.form.allowed-context-menu.search.hidden: Search Hidden -> move
+perspective-editor.form.allowed-context-menu.search.hidden: Hide Search Menu
 perspective-editor.form.allowed-context-menu.search.objects: Data Objects
 perspective-editor.form.allowed-context-menu.search.quickSearch: Quick Search
 perspective-editor.form.allowed-context-menu.category.settings: Settings
 perspective-editor.form.allowed-context-menu.settings.adminTranslations: Admin Translations
 perspective-editor.form.allowed-context-menu.settings.appearance: Appearance
-perspective-editor.form.allowed-context-menu.settings.cache_clearAll: All Caches (Symfony + Data)
-perspective-editor.form.allowed-context-menu.settings.cache_clearData: Data Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Clear Full Page Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Symfony Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Clear Temporary Files
-perspective-editor.form.allowed-context-menu.settings.cache_hidden: Cache Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.cache_clearAll: Cache > Clear All
+perspective-editor.form.allowed-context-menu.settings.cache_clearData: Cache > Data Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Cache > Clear Full Page Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Cache > Clean Symfony Cache
+perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Cache > Clear temporary files
+perspective-editor.form.allowed-context-menu.settings.cache_hidden: Hide Cache Menu
 perspective-editor.form.allowed-context-menu.settings.customReports: Custom Reports
 perspective-editor.form.allowed-context-menu.settings.documentTypes: Document Types
-perspective-editor.form.allowed-context-menu.settings.hidden: Settings Hidden -> move
-perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Bulk Export
-perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Bulk Import
-perspective-editor.form.allowed-context-menu.settings.object_classes: Classes
-perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Classification Store
-perspective-editor.form.allowed-context-menu.settings.object_field_collections: Field Collections
-perspective-editor.form.allowed-context-menu.settings.object_hidden: Data Object Hidden -> move
-perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Object Bricks
-perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Quantity Value
+perspective-editor.form.allowed-context-menu.settings.hidden: Hide Settings Menu
+perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Data Objects > Bulk Export
+perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Data Objects > Bulk Import
+perspective-editor.form.allowed-context-menu.settings.object_classes: Data Objects > Classes
+perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Data Objects > Classification Store
+perspective-editor.form.allowed-context-menu.settings.object_field_collections: Data Objects > Field Collections
+perspective-editor.form.allowed-context-menu.settings.object_hidden: Hide Data Objects Menu
+perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Data Objects > Object Bricks
+perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Data Objects > Quantity Value
 perspective-editor.form.allowed-context-menu.settings.predefinedMetadata: Predefined Metadata
 perspective-editor.form.allowed-context-menu.settings.predefinedProperties: Predefined Properties
 perspective-editor.form.allowed-context-menu.settings.system: System
 perspective-editor.form.allowed-context-menu.settings.tagConfiguration: Tag Configuration
 perspective-editor.form.allowed-context-menu.settings.thumbnails: Thumbnails
-perspective-editor.form.allowed-context-menu.settings.users_hidden: User Hidden -> move
+perspective-editor.form.allowed-context-menu.settings.users_hidden: Hide Users/Roles Menu
 perspective-editor.form.allowed-context-menu.settings.users_roles: Roles
 perspective-editor.form.allowed-context-menu.settings.users_users: Users
 perspective-editor.form.allowed-context-menu.settings.website: Website Settings
 perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
-perspective-editor.system-widgets: System Widgets
 perspective-editor.system-widgets.trees: Trees
-perspective-editor.system-widgets.documents: Documents
-perspective-editor.system-widgets.assets: Assets
-perspective-editor.system-widgets.data-objects: Data Objects
 perspective-editor.system-widgets.left: Left widgets
 perspective-editor.system-widgets.bottom: Bottom widgets
 perspective-editor.system-widgets.right: Right widgets
@@ -1324,6 +1356,7 @@ widget-editor.create-form.name: Name
 widget-editor.create-form.name.required: Please enter a valid name
 widget-editor.create-form.widgetType: Widget Type
 widget-editor.create-form.widgetType.element_tree: Element Tree
+widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
@@ -1394,4 +1427,26 @@ icon-selector.custom-icon-path: Custom path
 icon-selector.custom-icon-path-placeholder: Add a custom path and submit
 icon-selector.Twemoji: Twemoji Library
 icon-selector.Pimcore: Pimcore Library
-
+language: Language
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overrides path from tree-structure)
+content-main-document: Content-Main Document
+never: never
+document-configuration.sidebar-title: Document Configuration
+document-configuration.predefined-document-type: Predefined Document Type
+document-configuration.controller: Controller
+document-configuration.template: Template
+document-configuration.static-page-generator: Static Page Generator
+document-configuration.enable-server-side-static-rendering: Enable server side static rendering
+document-configuration.lifetime-for-static-page: Lifetime for static page (in minutes)
+document-configuration.last-generated: "Last generated: {{timestamp}}"
+email-settings.sidebar-title: Email Settings
+email-settings.subject: Subject
+email-settings.from: From
+email-settings.reply-to: Reply To
+email-settings.recipients: Recipients
+email-settings.to: To
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"

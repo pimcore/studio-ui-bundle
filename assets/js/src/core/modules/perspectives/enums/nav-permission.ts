@@ -20,6 +20,7 @@ export enum NavPermission {
   OpenDocument = 'file.open_document',
   OpenObject = 'file.open_object',
   OpenAsset = 'file.open_asset',
+  Perspectives = 'file.perspectives',
 
   SettingsHidden = 'settings.hidden',
   TagConfiguration = 'settings.tagConfiguration',

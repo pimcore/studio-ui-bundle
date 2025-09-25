@@ -39,7 +39,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { Text } = Typography
   const { id } = useUserManagementContext()
   const user = useUser()
-  const { user: openedUser, isLoading, changeUserInState } = useUserManagementDraft(id)
+  const { user: openedUser, isLoading, changeUserInState, updateUserImageInState } = useUserManagementDraft(id)
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
@@ -118,6 +118,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       <Switch
                         disabled={ user?.id === openedUser?.id }
                         labelRight={ t('user-management.active') }
+                        size={ 'small' }
                       />
                     </Form.Item>
 
@@ -155,8 +156,15 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthenticationRequired' }>
-                    <Switch labelRight={ t('user-management.two-factor-authentication') } />
+
+                  <Form.Item
+                    name={ 'twoFactorAuthenticationRequired' }
+                    style={ { marginBottom: '0' } }
+                  >
+                    <Switch
+                      labelRight={ t('user-management.two-factor-authentication') }
+                      size={ 'small' }
+                    />
                   </Form.Item>
                 </>
               }
@@ -166,7 +174,10 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar user={ openedUser } />
+          <UserAvatar
+            onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
+            user={ openedUser }
+          />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />

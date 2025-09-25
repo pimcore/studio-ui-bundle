@@ -11,16 +11,24 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
+  const baseTag = css`
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &.ant-tag {
+      cursor: default;
+    }
+  `
+
   return {
     tag: css`
+      ${baseTag}
       display: block;
-      max-width: 100%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-
-      &.ant-tag {
-        cursor: default;
-      }
+    `,
+    tagInline: css`
+      ${baseTag}
+      display: inline-block;
     `,
     tagClickable: css`
       &.ant-tag {

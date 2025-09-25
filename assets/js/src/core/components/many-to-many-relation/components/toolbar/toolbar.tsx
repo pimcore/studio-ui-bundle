@@ -56,7 +56,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
               allowedTypes: props.allowedAssetTypes
             },
             documents: {
-              allowedTypes: props.allowedAssetTypes
+              allowedTypes: props.allowedDocumentTypes
             },
             objects: {
               allowedTypes: props.allowedClasses

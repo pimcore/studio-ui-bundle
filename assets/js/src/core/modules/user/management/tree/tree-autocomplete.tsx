@@ -58,7 +58,7 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
 
   return (
     <AutoComplete
-      className={ 'simple-tree--search' }
+      className={ 'tree--search' }
       onSearch={ onSearch }
       onSelect={ (id, option) => {
         openUser(Number(id))

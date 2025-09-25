@@ -40,7 +40,7 @@ export const useServerSideEvent = ({ topics, messageHandler, openHandler }: UseS
       url.searchParams.append('topic', topic)
     })
 
-    event = new EventSource(url.toString())
+    event = new EventSource(url.toString(), { withCredentials: true })
 
     if (messageHandler !== undefined) {
       event.onmessage = messageHandler

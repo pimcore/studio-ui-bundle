@@ -47,6 +47,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to restore item(s) from recycle bin'))
+      onFinish?.()
     }
   }
 
