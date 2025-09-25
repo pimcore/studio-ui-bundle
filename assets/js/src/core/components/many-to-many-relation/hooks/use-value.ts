@@ -79,7 +79,6 @@ export const useValue = (
   }
 
   const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue | undefined> => {
-    console.log('handleFormatPath', pathFormatterConfig, isValidPathFormatterConfig(pathFormatterConfig))
     if (!isValidPathFormatterConfig(pathFormatterConfig) || value === null || dataObjectId === undefined) {
       return items
     }

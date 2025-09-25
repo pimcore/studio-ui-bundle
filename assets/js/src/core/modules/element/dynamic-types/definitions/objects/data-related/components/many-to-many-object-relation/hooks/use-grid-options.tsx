@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
 import { type ColumnMeta, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
@@ -19,17 +20,41 @@ import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types
 import type { VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getElementCellConfig } from '@Pimcore/components/many-to-many-relation'
-import { isEmpty } from 'lodash'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'manualSorting'>
 
+type IGetDefaultVisibleFieldDefinitionsReturn = Array<{
+  key: string
+  title: string
+  fieldtype: string
+}>
+
 export interface UseGridOptionsReturn {
   transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
+  getDefaultVisibleFieldDefinitions: () => IGetDefaultVisibleFieldDefinitionsReturn
 }
 
 export const useGridOptions = (): UseGridOptionsReturn => {
   const { t } = useTranslation()
   const { hasType } = useDynamicTypeResolver()
+
+  const getDefaultVisibleFieldDefinitions = (): IGetDefaultVisibleFieldDefinitionsReturn => ([
+    {
+      key: 'id',
+      title: 'id',
+      fieldtype: 'input'
+    },
+    {
+      key: 'fullpath',
+      title: t('relations.reference'),
+      fieldtype: 'input'
+    },
+    {
+      key: 'classname',
+      title: t('relations.class'),
+      fieldtype: 'input'
+    }
+  ])
 
   const getDefaultSystemColumnSize = (column: VisibleFieldDefinition): number | undefined => {
     if (Array.isArray(column.group) && column.group.includes('system')) {
@@ -130,5 +155,5 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     return columnDefinition
   }
 
-  return { transformGridColumn }
+  return { transformGridColumn, getDefaultVisibleFieldDefinitions }
 }

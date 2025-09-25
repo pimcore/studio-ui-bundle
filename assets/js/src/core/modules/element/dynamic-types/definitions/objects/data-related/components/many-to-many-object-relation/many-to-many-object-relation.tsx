@@ -75,7 +75,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const { dataObject } = useDataObjectDraft(id)
   const { getByName } = useClassDefinitions()
 
-  const { transformGridColumn } = useGridOptions()
+  const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
 
   const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
   const relationField = props?.combinedFieldName
@@ -83,24 +83,6 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
   const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
-
-  const DEFAULT_VISIBLE_FIELD_DEFINITIONS = [
-    {
-      key: 'id',
-      title: 'id',
-      fieldtype: 'input'
-    },
-    {
-      key: 'fullpath',
-      title: t('relations.reference'),
-      fieldtype: 'input'
-    },
-    {
-      key: 'classname',
-      title: t('relations.class'),
-      fieldtype: 'input'
-    }
-  ]
 
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
@@ -112,7 +94,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
     const fieldDefinitions = !isNil(availableGridColumnsData)
       ? availableGridColumnsData?.columns
-      : DEFAULT_VISIBLE_FIELD_DEFINITIONS
+      : getDefaultVisibleFieldDefinitions()
 
     return fieldDefinitions?.map((field) => {
       const newField = { ...field }
