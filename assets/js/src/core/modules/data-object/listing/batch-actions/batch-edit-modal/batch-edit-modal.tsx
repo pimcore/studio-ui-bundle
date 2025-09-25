@@ -116,9 +116,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                 }
               ],
               filters: {
-                ...filters,
-                ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
-              }
+                ...filters
+              },
+              ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
             }
           })
 
