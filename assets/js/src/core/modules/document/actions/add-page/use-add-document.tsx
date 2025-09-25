@@ -293,7 +293,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
       const { id } = response.data
       void openDocument({ config: { id } })
       dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
-    } catch () {
+    } catch {
       trackError(new GeneralError('Error creating document'))
     }
   }
