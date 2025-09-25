@@ -177,10 +177,7 @@ export const BatchActions = (): React.JSX.Element => {
           body: {
             folders: [id],
             filters: {
-              includeDescendants: true,
-              ...getArgs().body.filters ?? {},
-              page: 1,
-              pageSize: 999999999990
+              ...getArgs().body.filters ?? {}
             }
           }
         }

@@ -20,4 +20,5 @@ export enum FieldFilterFrontendType {
   Number = 'system.number',
   DateTime = 'system.datetime',
   Select = 'system.select',
+  Consent = 'crm.consent'
 }

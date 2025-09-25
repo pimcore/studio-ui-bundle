@@ -25,7 +25,8 @@ export interface IFormatPathItem {
 type FormatPathCache = Map<string, string>
 
 interface UseFormatPathReturn {
-  formatPath: (items: IFormatPathItem[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse | undefined>
+  formatPath: (items: IFormatPathItem[], fieldName: string, dataObjectId: number, cachedOnly?: boolean) => Promise<DataObjectFormatPathApiResponse | undefined>
+  hasUncachedItems: (items: IFormatPathItem[], fieldName: string, dataObjectId: number) => boolean
 }
 
 export const useFormatPath = (): UseFormatPathReturn => {
@@ -117,12 +118,12 @@ export const useFormatPath = (): UseFormatPathReturn => {
     }
   }
 
-  const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
+  const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number, cachedOnly = false): Promise<DataObjectFormatPathApiResponse | undefined> => {
     const formatPathCache = formatPathCacheRef.current
 
     const { cachedItems, itemsToRequest } = checkCacheForItems(items, dataObjectId, fieldName, formatPathCache)
 
-    if (itemsToRequest.length === 0) {
+    if (cachedOnly || itemsToRequest.length === 0) {
       return buildCachedResponse(cachedItems)
     }
 
@@ -150,5 +151,11 @@ export const useFormatPath = (): UseFormatPathReturn => {
     return combineResults(cachedItems, data)
   }
 
-  return { formatPath }
+  const hasUncachedItems = (items: IFormatPathItem[], fieldName: string, dataObjectId: number): boolean => {
+    const formatPathCache = formatPathCacheRef.current
+    const { itemsToRequest } = checkCacheForItems(items, dataObjectId, fieldName, formatPathCache)
+    return itemsToRequest.length > 0
+  }
+
+  return { formatPath, hasUncachedItems }
 }
