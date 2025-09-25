@@ -69,7 +69,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
     if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
       inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-    } else if (objectDataByFrontendType !== null && !('dynamicTypeFieldFilterType' in objectDataByFrontendType)) {
+    } else if (objectDataByFrontendType !== null) {
       inferredFilterType = objectDataByFrontendType as DynamicTypeFieldFilterAbstract
     }
 
