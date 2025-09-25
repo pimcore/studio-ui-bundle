@@ -29,10 +29,10 @@ export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
 
   return (
     <Card
-      contentPadding={{
-        x: "small",
-        y: "mini"
-      }}
+      contentPadding={ {
+        x: 'small',
+        y: 'mini'
+      } }
     >
       <Flex
         align="center"
@@ -44,13 +44,13 @@ export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
           <span>{formatDateTime({ timestamp: entry.modificationDate!, dateStyle: 'short', timeStyle: 'short' })}</span>
 
           <IconButton
-            aria-label={t('aria.email-blocklist.remove.email')}
-            icon={isLoading ? { value: 'spinner' } : { value: 'trash' }}
-            loading={isLoading}
-            onClick={() => {
+            aria-label={ t('aria.email-blocklist.remove.email') }
+            icon={ isLoading ? { value: 'spinner' } : { value: 'trash' } }
+            loading={ isLoading }
+            onClick={ () => {
               setIsLoading(true)
               void removeEmail(entry.email)
-            }}
+            } }
             type="link"
           />
         </Space>
