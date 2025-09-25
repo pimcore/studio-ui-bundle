@@ -112,7 +112,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         value={ iconValue }
             />,
       onClick: () => {
-        const parentId = parseInt(node.id)
+        const parentId = Number.parseInt(node.id)
         createDocument(null, parentId)
       }
     })
@@ -130,7 +130,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         value={ iconValue }
             />,
       onClick: () => {
-        const parentId = parseInt(node.id)
+        const parentId = Number.parseInt(node.id)
         createDocument(docType, parentId)
       }
     }
@@ -242,7 +242,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
           const navigationName = formType === AddDocumentFormType.FULL ? values.navigationName : values.key
           const key = values.key
 
-          await createDocumentMutation(!isNil(docType) ? docType.id : null, key as string, title as string, navigationName as string, parentId)
+          await createDocumentMutation(isNil(docType) ? null : docType.id, key as string, title as string, navigationName as string, parentId)
         })
     }
 
@@ -293,7 +293,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
       const { id } = response.data
       void openDocument({ config: { id } })
       dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
-    } catch (error) {
+    } catch () {
       trackError(new GeneralError('Error creating document'))
     }
   }
