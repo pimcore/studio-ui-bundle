@@ -43,28 +43,28 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     iconValue: 'document',
     contextMenuKey: ContextMenuActionName.addPage,
     formType: AddDocumentFormType.FULL,
-    modalTitle: 'document.add-page'
+    modalTitle: t('document.tree.context-menu.add-page')
   })
   const { addDocumentTreeContextMenuItem: addSnippetTreeContextMenuItem } = useAddDocument({
     type: 'snippet',
     iconValue: 'snippet',
     contextMenuKey: ContextMenuActionName.addSnippet,
     formType: AddDocumentFormType.KEY_ONLY,
-    modalTitle: 'document.add-snippet'
+    modalTitle: t('document.tree.context-menu.add-snippet')
   })
   const { addDocumentTreeContextMenuItem: addEmailTreeContextMenuItem } = useAddDocument({
     type: 'email',
     iconValue: 'mail-02',
     contextMenuKey: ContextMenuActionName.addEmail,
     formType: AddDocumentFormType.KEY_ONLY,
-    modalTitle: 'document.add-email'
+    modalTitle: t('document.tree.context-menu.add-email')
   })
   const { addDocumentTreeContextMenuItem: addNewsletterTreeContextMenuItem } = useAddDocument({
     type: 'newsletter',
     iconValue: 'mail-02',
     contextMenuKey: ContextMenuActionName.addNewsletter,
     formType: AddDocumentFormType.KEY_ONLY,
-    modalTitle: 'document.add-newsletter'
+    modalTitle: t('document.tree.context-menu.add-newsletter')
   })
   const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', parseInt(node.id)))
