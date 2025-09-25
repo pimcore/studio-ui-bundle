@@ -107,6 +107,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
+  'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',

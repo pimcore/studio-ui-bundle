@@ -167,6 +167,7 @@ import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterBoolean } from './definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
+import { type DynamicTypeFieldFilterConsent } from './definitions/field-filters/types/consent/dynamic-type-field-filter-consent'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
 import { type DynamicTypeDocumentEditablePdf } from './definitions/document/editable/types/dynamic-type-document-editable-pdf'
@@ -216,6 +217,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterConsent>(serviceIds['DynamicTypes/FieldFilter/Consent']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 

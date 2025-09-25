@@ -45,6 +45,7 @@ import { DynamicTypeBatchEditText } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 import { DynamicTypeFieldFilterBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
+import { DynamicTypeFieldFilterConsent } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/consent/dynamic-type-field-filter-consent'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
@@ -294,6 +295,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Consent']).to(DynamicTypeFieldFilterConsent).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
