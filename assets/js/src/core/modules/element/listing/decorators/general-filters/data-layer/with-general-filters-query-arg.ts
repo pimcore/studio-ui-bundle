@@ -53,6 +53,8 @@ const getApplicableFieldFilters = (
   hasType: (params: any) => boolean,
   getType: (params: any) => any
 ): any[] => {
+  console.log("filters", filters);
+  
   return filters.filter((filter) =>
     shouldApplyFieldFilter(filter, availableColumns, hasType, getType)
   )
@@ -69,11 +71,16 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { hasType, getType } = useDynamicTypeResolver()
     const { currentLanguage } = useLanguageSelection()
 
+    const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
+      const column = availableColumns.find(col => col.key === columnKey)
+      return column?.localizable === true ? (providedLocale ?? currentLanguage) : null
+    }
+
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
       return columnFilters.map(({ filterType, type, ...rest }) => ({
         ...rest,
-        ...((filterType !== undefined) ? { type: filterType } : { type }),
-        locale: rest.locale ?? currentLanguage
+        type: filterType,
+        locale: getColumnLocale(rest.key as string, rest.locale as string | undefined)
       }))
     }
 
