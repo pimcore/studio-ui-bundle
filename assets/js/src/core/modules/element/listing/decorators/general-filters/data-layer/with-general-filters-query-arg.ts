@@ -53,7 +53,6 @@ const getApplicableFieldFilters = (
   hasType: (params: any) => boolean,
   getType: (params: any) => any
 ): any[] => {
-  
   return filters.filter((filter) =>
     shouldApplyFieldFilter(filter, availableColumns, hasType, getType)
   )

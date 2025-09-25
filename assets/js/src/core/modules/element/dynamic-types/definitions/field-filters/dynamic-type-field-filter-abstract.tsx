@@ -32,11 +32,11 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     if (isNil(value) || value === '') {
       return false
     }
-    
+
     if (isArray(value) && isEmpty(value)) {
       return false
     }
-    
+
     return true
   }
 }
