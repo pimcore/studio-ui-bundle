@@ -19,13 +19,20 @@ import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/componen
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { useStyles } from './reports-editor.styles'
 
 export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
 export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
 
 export const ReportsEditor = (): React.JSX.Element => {
-  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
+  const hasPermission = isAllowed(UserPermission.ReportsConfig)
+
+  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery(
+    { page: 1, pageSize: 9999 },
+    { skip: !hasPermission }
+  )
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
