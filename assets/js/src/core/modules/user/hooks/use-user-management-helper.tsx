@@ -80,6 +80,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [notificationApi] = useNotification()
+  const activeId = useAppSelector(state => state.user.activeId)
+  const getAllIds = useAppSelector(state => state.user.ids)
 
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
@@ -100,7 +102,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
   }
 
   function closeUser (id: number): void {
-    dispatch(userClosed(id))
+    dispatch(userClosed({ id, allIds: getAllIds }))
   }
 
   async function fetchUserById (props): Promise<UserGetByIdApiResponse> {
@@ -246,8 +248,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return availablePermissions
   }
 
-  const activeId = useAppSelector(state => state.user.activeId)
-  const getAllIds = useAppSelector(state => state.user.ids)
   return {
     removeTrackedChanges (): void {},
     setModifiedCells (type: string, modifiedCells): void {},

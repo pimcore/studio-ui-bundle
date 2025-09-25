@@ -37,9 +37,16 @@ export const slice = createSlice({
     userOpened: (state, action: PayloadAction<number>): void => {
       state.activeId = action.payload
     },
-    userClosed: (state, action: PayloadAction<number>): void => {
-      state.activeId = undefined
-      userAdapter.removeOne(state, action.payload)
+    userClosed: (state, action: PayloadAction<{ id: number, allIds: string[] }>): void => {
+      userAdapter.removeOne(state, action.payload.id)
+
+      if (state.activeId === action.payload.id) {
+        if (action.payload.allIds.length > 1) {
+          state.activeId = parseInt(action.payload.allIds[0])
+        } else {
+          state.activeId = undefined
+        }
+      }
     },
     userFetched: (state, action: PayloadAction<UserDraft>): void => {
       if (action.payload.id !== undefined) {
