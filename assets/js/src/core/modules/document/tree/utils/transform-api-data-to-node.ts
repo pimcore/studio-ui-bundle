@@ -26,10 +26,12 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: D
       label: documentNode.key,
       type: documentNode.type,
       parentId: documentNode.parentId.toString(),
+      fullPath: documentNode.fullPath,
       hasChildren: documentNode.hasChildren,
       locked: documentNode.locked,
       isLocked: documentNode.isLocked,
       isPublished: documentNode.published,
+      isSite: documentNode.isSite,
       metaData: {
         document: documentNode
       },

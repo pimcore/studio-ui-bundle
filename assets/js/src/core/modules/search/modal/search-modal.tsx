@@ -19,7 +19,7 @@ import { ObjectTab } from './tabs/object/object-tab'
 import { DocumentTab } from './tabs/document/document-tab'
 
 export const SearchModal = (): React.JSX.Element => {
-  const { isOpen, close } = useSearch()
+  const { isOpen, close, activeKey } = useSearch()
 
   const tabItems: ITabsProps['items'] = [
     {
@@ -55,6 +55,7 @@ export const SearchModal = (): React.JSX.Element => {
           size={ 'XL' }
         >
           <Tabs
+            activeKey={ activeKey }
             items={ tabItems }
             noTabBarMargin
           />

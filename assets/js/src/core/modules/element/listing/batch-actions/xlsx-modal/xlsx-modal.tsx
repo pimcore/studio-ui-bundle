@@ -23,6 +23,9 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportXlsxApiResponse, type ExportXlsxFolderApiResponse, useExportXlsxFolderMutation, useExportXlsxMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { isNil } from 'lodash'
 
 export interface XlsxModalProps {
   open: boolean
@@ -42,6 +45,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const { selectedColumns } = useSelectedColumns()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
+  const classDefinitionSelection = useClassDefinitionSelection(true)
+  const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
   const initialFormValues: XLSXFormValues = {
     header: 'name'
   }
@@ -104,10 +109,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
 
   function onFinish (values: XLSXFormValues): void {
     addJob(createDownloadJob({
-      // @todo add api domain
       title: t('jobs.xlsx-job.title', { title: jobTitle }),
       topics: [topics['xlsx-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/export/download/xlsx/{jobRunId}',
+      downloadUrl: `${getPrefix()}/export/download/xlsx/{jobRunId}`,
       action: async () => await getDownloadAction(values.header)
     }))
 
@@ -119,7 +123,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
     const extractedColumnsFromColumnArg = selectedColumns.map(column => {
       let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
 
-      if (currentColumn.type === 'dataobject.advanced') {
+      if (currentColumn?.type === 'dataobject.advanced') {
         currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
       }
 
@@ -150,9 +154,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            ...filters,
-            includeDescendants: true
-          }
+            ...filters
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

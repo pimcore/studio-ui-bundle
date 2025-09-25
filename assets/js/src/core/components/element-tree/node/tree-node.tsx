@@ -35,6 +35,7 @@ export interface TreeNodeProps {
   isLocked: boolean
   elementType?: ElementType
   hasChildren?: boolean
+  fullPath?: string
   metaData?: any
   type?: string
   parentId?: string
@@ -43,6 +44,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  isSite?: boolean
   wrapNode?: TreeNodeWrapper
 }
 

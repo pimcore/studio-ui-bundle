@@ -38,6 +38,8 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
+  const progress = Math.min(props.progress, 100)
+
   const StepHint = !isUndefined(props.step) && !isUndefined(props.totalSteps)
     ? <strong>{ t('jobs.job.step_hint', { step: props.step, total: props.totalSteps }) }: </strong>
     : undefined
@@ -69,8 +71,8 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
           { props.status === JobStatus.RUNNING && (
             <Progressbar
               description={ <>{StepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
-              percent={ props.progress }
-              progressStatus={ t('jobs.job.progress', { progress: props.progress }) }
+              percent={ progress }
+              progressStatus={ t('jobs.job.progress', { progress }) }
             />
           ) }
 

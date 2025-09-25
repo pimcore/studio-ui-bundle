@@ -80,7 +80,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.email-blocklist',
           icon: {
             type: 'name',
-            value: 'mail-02'
+            value: 'users-x'
           }
         }
       }

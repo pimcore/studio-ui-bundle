@@ -14,10 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { AddNoteForm } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
 import { useForm } from 'antd/es/form/Form'
-import {
-  useNoteElementCreateMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from '../../../../../../../types/enums/element/element-type'
+import { useNoteElementCreateMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface AddNoteFormValues {
   type: string
@@ -30,6 +28,7 @@ export interface AddNoteModalProps {
   setOpen: (open: boolean) => void
   elementType: ElementType
   elementId: number
+  refetchNotes: () => void
 }
 
 export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element => {
@@ -47,14 +46,16 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
         title,
         description
       }
-    }).unwrap()
+    })
   }
 
   async function onFinish (values: AddNoteFormValues): Promise<void> {
     await addNote(values.title, values.type, values.description)
 
-    form.resetFields()
+    props.refetchNotes()
     props.setOpen(false)
+
+    form.resetFields()
   }
 
   return (
@@ -62,8 +63,8 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
       okButtonProps={ { loading: isLoading } }
       okText={ t('save') }
       onCancel={ () => {
-        form.resetFields()
         props.setOpen(false)
+        form.resetFields()
       } }
       onOk={ () => { form.submit() } }
       open={ props.open }

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
-import type { ManyToManyRelationValueItem } from './use-value'
+import type { DisplayManyToManyRelationValueItem } from './use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Box } from '@Pimcore/components/box/box'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
@@ -100,7 +100,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
       size: 110,
       cell: (info) => {
         const rowIndex = info.row.index
-        const rowValue = info.row.original as ManyToManyRelationValueItem
+        const rowValue = info.row.original as DisplayManyToManyRelationValueItem
 
         const buttons: ReactElement[] = []
         buttons.push(
@@ -156,7 +156,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
                     title: t('remove'),
                     content: t('delete-confirmation-advanced', {
                       type: t('relation'),
-                      value: rowValue.fullPath,
+                      value: rowValue.originalPath ?? rowValue.fullPath,
                       interpolation: { escapeValue: false }
                     }),
                     onOk: () => {

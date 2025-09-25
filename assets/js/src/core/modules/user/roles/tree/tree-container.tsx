@@ -20,6 +20,7 @@ import { useStyle } from '@Pimcore/modules/user/management/tree/tree-container.s
 import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
+import { TreeAutocomplete } from '@Pimcore/modules/user/roles/tree/tree-autocomplete'
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
@@ -57,6 +58,10 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
       }
     })
   }
+  const getRoleNameByKey = (data: TreeDataItem[], key: number | string): string => {
+    const node = findNodeByKey(data, key)
+    return node?.title as string ?? ''
+  }
 
   return (
     <ContentLayout
@@ -65,13 +70,13 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
           actions={ [
             {
               key: 'add-role',
-              label: t('tree.actions.add-role'),
-              icon: <Icon value='add-user'></Icon>,
+              label: t('tree.actions.role'),
+              icon: <Icon value='shield-plus'></Icon>,
               onClick: () => { handleAddRole(0) }
             },
             {
               key: 'add-folder',
-              label: t('tree.actions.add-folder'),
+              label: t('tree.actions.folder'),
               icon: <Icon value='folder-plus'></Icon>,
               onClick: () => { handleAddFolder(0) }
             }
@@ -83,6 +88,8 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
       <Content
         className={ classNames.join(', ') }
       >
+        <TreeAutocomplete />
+
         <Tree
           defaultExpandedKeys={ expandedKeys }
           draggable
@@ -104,7 +111,7 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
               case 'clone-role':
                 modal.input({
                   title: t('roles.clone-role'),
-                  label: t('roles.clone-role.label'),
+                  label: t('roles.clone-role.text'),
                   onOk: async (value: string) => {
                     const parentId = findParentByKey(treeData, key)?.key
                     const data = await cloneRole({ id: key, name: value })
@@ -119,7 +126,9 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
               case 'remove-role':
                 modal.confirm({
                   title: t('roles.remove-role'),
-                  content: t('roles.remove-role.text'),
+                  content: t('roles.remove-role.text', { name: getRoleNameByKey(treeData, key) }),
+                  okText: t('button.confirm'),
+                  cancelText: t('button.cancel'),
                   onOk: async () => {
                     await removeRole({ id: Number(key) })
                     onReloadTree([findParentByKey(treeData, key)?.key])
@@ -131,6 +140,8 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
                 modal.confirm({
                   title: t('roles.remove-folder'),
                   content: t('roles.remove-folder.text'),
+                  okText: t('button.confirm'),
+                  cancelText: t('button.cancel'),
                   onOk: async () => {
                     await removeFolder({ id: Number(key) })
                     onReloadTree([findParentByKey(treeData, key)?.key])

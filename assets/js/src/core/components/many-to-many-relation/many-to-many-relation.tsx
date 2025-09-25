@@ -13,7 +13,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ManyToManyRelationGrid } from './grid'
-import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, useValue } from './hooks/use-value'
+import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, type DisplayManyToManyRelationValue, useValue } from './hooks/use-value'
 import type { DragAndDropInfo } from '@sdk/components'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { ManyToManyRelationToolbar } from './components/toolbar/toolbar'
@@ -51,10 +51,19 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
 
 export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
+  const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
-  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined })
-  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1
+  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined })
+  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch
+
+  // Wrapper for onUpdateCellData that maps displayed row index to original index
+  const handleUpdateCellData = (event: OnUpdateCellDataEvent): void => {
+    if (props.onUpdateCellData === undefined) return
+
+    const originalIndex = getOriginalIndex(event.rowIndex)
+    const eventWithOriginalIndex = { ...event, rowIndex: originalIndex }
+    props.onUpdateCellData(eventWithOriginalIndex)
+  }
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
@@ -65,7 +74,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
   useEffect(() => {
     if (!isEqual(value, props.value)) {
       setValue(props.value ?? null)
-      setDisplayedValue(props.value ?? null)
+      updateDisplayValue(props.value ?? null)
     }
   }, [props.value])
 
@@ -102,7 +111,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           height={ props.height }
           hint={ props.hint }
           inherited={ props.inherited }
-          onUpdateCellData={ props.onUpdateCellData }
+          onUpdateCellData={ handleUpdateCellData }
           pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
           value={ displayedValue }
           width={ props.width }
@@ -121,7 +130,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           assetUploadPath={ props.assetUploadPath }
           disabled={ props.disabled }
           empty={ () => {
-            setDisplayedValue(null)
+            updateDisplayValue(null)
             setValue(null)
           } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
