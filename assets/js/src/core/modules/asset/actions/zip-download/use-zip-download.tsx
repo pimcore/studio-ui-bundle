@@ -23,6 +23,9 @@ import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-p
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
+import { isUndefined } from 'lodash'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -65,10 +68,9 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
 
   const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
     addJob(createJob({
-      // @todo add api domain
       title: t('jobs.zip-job.title', { title: jobTitle }),
       topics: [topics['zip-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
+      downloadUrl: `${getPrefix()}/assets/download/zip/{jobRunId}`,
       action: async () => {
         let promise: ReturnType<typeof fetchFolder> | ReturnType<typeof fetchAssets>
 
@@ -79,6 +81,12 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
         }
 
         const response = (await promise) as any
+
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error as ApiErrorData))
+          throw new ApiError(response.error as ApiErrorData)
+        }
+
         const data = response.data as AssetExportZipAssetApiResponse | AssetExportZipFolderApiResponse
         return data.jobRunId
       }

@@ -502,10 +502,10 @@ jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
-jobs.zip-job.title: "ZIP of {{title}}"
+jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
-jobs.csv-job.title: "CSV of {{title}}"
-jobs.xlsx-job.title: "XLSX of {{title}}"
+jobs.csv-job.title: "CSV download of {{title}}"
+jobs.xlsx-job.title: "XLSX download of {{title}}"
 batch-edit.job-title: Batch Edit
 jobs.zip-upload-job.title: "Upload ZIP"
 jobs.zip-upload-job.step1.title: "Extracting ZIP"

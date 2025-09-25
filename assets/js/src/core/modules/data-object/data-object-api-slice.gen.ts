@@ -460,7 +460,8 @@ export type DataObjectPatchFolderByIdApiArg = {
             published?: boolean | null;
             editableData?: object | null;
         }[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
+        classId?: string;
     };
 };
 export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
@@ -880,6 +881,12 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+};
+export type ExportAllFilter = {
+    /** Column Filter */
+    columnFilters: object;
+    /** Sort Filter */
+    sortFilter: object;
 };
 export type SelectOption = {
     /** AdditionalAttributes */
