@@ -12,14 +12,11 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { type UserDocumentWorkspace, type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
 import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
-import { useModal } from '@Pimcore/components/modal/useModal'
-import {ModalFooter} from "@Pimcore/components/modal/footer/modal-footer";
-import {Button} from "@Pimcore/components/button/button";
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -27,6 +24,7 @@ interface ITableProps {
   type?: string
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
+  onShowSpecialSettings?: (data: UserDocumentWorkspace) => void
 }
 
 export const Table = ({
@@ -34,7 +32,7 @@ export const Table = ({
   data,
   type,
   isLoading,
-  onUpdateData
+  onUpdateData, onShowSpecialSettings
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
@@ -46,34 +44,7 @@ export const Table = ({
     setGridData(data)
   }, [data])
 
-    const { renderModal: RenderModal, showModal, handleCancel, handleOk } = useModal({ type: 'default' })
-
-    const renderModal = (): React.JSX.Element => (
-        <RenderModal
-            footer={
-                <ModalFooter>
-                    <Button
-                        type={ 'default' }
-                        onClick={handleCancel}
-                    >
-                        {t('button.cancel')}
-                    </Button>
-                    <Button
-                        type={ 'primary' }
-                        onClick={() => console.log('todo')}
-                    >
-                        {t('button.apply')}
-                    </Button>
-                </ModalFooter>
-            }
-            title={ t('version.clear-unpublished-versions') }
-        >
-            TODO
-        </RenderModal>
-    )
-
-
-    const columnHelper = createColumnHelper()
+  const columnHelper = createColumnHelper()
   const createColumns = (): any => [
     columnHelper.accessor('cpath', {
       header: t('user-management.workspaces.columns.cpath'),
@@ -216,8 +187,11 @@ export const Table = ({
           cell: (context) => {
             return (
               <>
-                  <IconButton icon={ { value: 'settings' } } onClick={ showModal } type="link" />
-                  {renderModal()}
+                <IconButton
+                  icon={ { value: 'settings' } }
+                  onClick={ () => onShowSpecialSettings?.(context.row.original as UserDocumentWorkspace) }
+                  type="link"
+                />
               </>
             )
           }

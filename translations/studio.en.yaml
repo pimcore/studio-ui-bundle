@@ -792,6 +792,12 @@ user-management.workspaces.columns.properties: Properties
 user-management.workspaces.columns.path: Path
 user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
+user-management.workspaces.additional-settings: Additional Settings /Products
+user-management.workspaces.localized-fields: Localized Fields
+user-management.workspaces.localized-fields.view: View permissions
+user-management.workspaces.localized-fields.edit: Edit permissions
+user-management.workspaces.custom-layouts: Custom Layouts
+user-management.workspaces.custom-layouts.select: Select one or more fields
 user-management.add-folder.success: Folder added successfully
 user-management.remove-folder.success: Folder removed successfully
 user-management.clone-user: Clone user
