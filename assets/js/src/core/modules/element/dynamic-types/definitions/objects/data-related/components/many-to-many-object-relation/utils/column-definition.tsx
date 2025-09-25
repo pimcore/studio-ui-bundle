@@ -58,7 +58,7 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
 export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem, rowData: GridColumnData[]): ManyToManyRelationValueItem & Record<string, any> => {
   const additionalColumns = {}
 
-  visibleFieldDefinitions?.forEach(field => {
+  for (const field of visibleFieldDefinitions ?? []) {
     const key = field.key
     const value = rowData?.find(item => item.key === key)?.value
 
@@ -69,7 +69,7 @@ export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] 
     } else if (key !== 'id') {
       additionalColumns[key] = value
     }
-  })
+  }
 
   return {
     ...row,

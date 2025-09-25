@@ -156,7 +156,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
       const currentIds = new Set((props?.value ?? []).map(item => item.id))
 
       setLoadedIds(prev => prev.filter(id => currentIds.has(id)))
-      setCachedGridFullData(prev => prev.filter(item => currentIds.has(item.id!)))
+      setCachedGridFullData(prev => prev.filter(item => !isUndefined(item.id) && currentIds.has(item.id)))
     }
   }, [props?.value])
 
