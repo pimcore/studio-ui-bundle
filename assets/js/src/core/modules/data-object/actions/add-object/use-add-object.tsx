@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { useAppDispatch } from '@sdk/app'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
