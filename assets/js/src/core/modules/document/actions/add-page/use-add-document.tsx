@@ -166,7 +166,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
           />
         </Form.Item>
         <Form.Item
-          label={ t('add-document-form.label.navigation) }
+          label={ t('add-document-form.label.navigation') }
           name="navigationName"
         >
           <Input />
