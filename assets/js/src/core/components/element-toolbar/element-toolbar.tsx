@@ -72,7 +72,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
     },
     {
       key: '4',
-      label: 'Show all info',
+      label: t('element.toolbar.show-full-info'),
       onClick: () => { openModal() }
     }
   ]
