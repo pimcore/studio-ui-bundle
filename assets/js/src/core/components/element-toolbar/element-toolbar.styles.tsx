@@ -16,29 +16,42 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       align-items: center;
       gap: 8px;
-
-      .element-toolbar__info-dropdown {
-        .ant-dropdown-trigger {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          border: 1px solid ${token.colorBorder};
-          background: ${token.colorFillTertiary};
-          color: ${token.colorText};
-
-          .ant-btn-icon.ant-btn-icon-end {
-            margin-left: 0;
-          }
-
-          &:hover .pimcore-icon {
-            color: ${token.colorIconHover};
-          }
-        }
-      }
         
       .pimcore-icon {
         color: ${token.colorIcon};
       }
+    `,
+
+    dropdownInfoWrapper: css`
+      .ant-dropdown-trigger {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        border: 1px solid ${token.colorBorder};
+        background: ${token.colorFillTertiary};
+        color: ${token.colorText};
+
+        .ant-btn-icon.ant-btn-icon-end {
+          margin-left: 0;
+        }
+
+        &:hover .pimcore-icon {
+          color: ${token.colorIconHover};
+        }
+      }
+    `,
+
+    dropdownInfo: css`
+      min-width: 130px !important;
+        
+      .ant-dropdown-menu-title-content > span {
+        display: block;
+        width: 100%;
+      }
+    `,
+
+    dropdownInfoTextId: css`
+      font-weight: lighter;
     `
   }
 })

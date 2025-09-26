@@ -8,17 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React, { useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Button } from '@Pimcore/components/button/button'
+import { Space } from '@Pimcore/components/space/space'
+import { Divider } from '@Pimcore/components/divider/divider'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { Button, Space } from 'antd'
-import React, { useLayoutEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { IconButton } from '../icon-button/icon-button'
 import { useSystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/hooks/use-system-info-modal'
 
@@ -47,7 +51,15 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const menuItems: DropdownMenuProps['items'] = [
     {
       key: '1',
-      label: t('element.toolbar.copy-id', { id: element.id }),
+      label: (
+        <Flex justify="space-between">
+          <Text>{t('element.toolbar.copy-id')}</Text>
+          <Text
+            className={ styles.dropdownInfoTextId }
+            type="secondary"
+          >{element.id}</Text>
+        </Flex>
+      ),
       onClick: () => {
         void navigator.clipboard.writeText(
           element.id.toString()
@@ -71,8 +83,19 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       }
     },
     {
-      key: '4',
-      label: t('element.toolbar.show-full-info'),
+      type: 'divider'
+    },
+    {
+      key: '5',
+      label: (
+        <Flex
+          align="center"
+          gap="extra-small"
+        >
+          <Icon value="info-circle" />
+          <Text>{t('element.toolbar.show-full-info')}</Text>
+        </Flex>
+      ),
       onClick: () => { openModal() }
     }
   ]
@@ -102,8 +125,11 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
         path={ element.fullPath! }
       />
 
-      <div className={ 'element-toolbar__info-dropdown' }>
-        <Dropdown menu={ { items: menuItems } }>
+      <div className={ styles.dropdownInfoWrapper }>
+        <Dropdown
+          menu={ { items: menuItems } }
+          rootClassName={ styles.dropdownInfo }
+        >
           <Button
             icon={
               <Icon
