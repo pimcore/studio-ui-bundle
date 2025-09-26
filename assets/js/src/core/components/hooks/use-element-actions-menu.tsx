@@ -50,7 +50,9 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
           >{element.id}</Text>
         </Flex>
       ),
-      onClick: () => {
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+
         void navigator.clipboard.writeText(
           element.id.toString()
         )
@@ -59,7 +61,9 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
     {
       key: 'copy-full-path',
       label: t('element.toolbar.copy-full-path-to-clipboard'),
-      onClick: () => {
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+
         void navigator.clipboard.writeText(
           element.fullPath!
         )
@@ -68,7 +72,9 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
     {
       key: 'copy-deep-link',
       label: t('element.toolbar.copy-deep-link-to-clipboard'),
-      onClick: () => {
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+
         void navigator.clipboard.writeText(deeplinkUrl)
       }
     },
@@ -86,7 +92,11 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
           <Text>{t('element.toolbar.show-full-info')}</Text>
         </Flex>
       ),
-      onClick: () => { openModal() }
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+
+        openModal()
+      }
     }
   ]
 
@@ -94,7 +104,9 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
     actionMenuItems?.splice(0, 0, {
       key: 'copy-className',
       label: t('element.toolbar.copy-className', { className: element.className }),
-      onClick: () => {
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+
         void navigator.clipboard.writeText(
           element.className as string
         )

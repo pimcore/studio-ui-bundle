@@ -8,8 +8,8 @@
     },
     "index": {
       "js": [
-        "http://localhost:3030/static/js/index.js",
-        "http://localhost:3030/static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-eef062.js"
+        "http://localhost:3030/static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-eef062.js",
+        "http://localhost:3030/static/js/index.js"
       ],
       "css": []
     },
