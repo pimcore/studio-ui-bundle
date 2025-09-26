@@ -48,10 +48,6 @@ export const useStyle = createStyles(({ token, css }) => {
         display: block;
         width: 100%;
       }
-    `,
-
-    dropdownInfoTextId: css`
-      font-weight: lighter;
     `
   }
 })
