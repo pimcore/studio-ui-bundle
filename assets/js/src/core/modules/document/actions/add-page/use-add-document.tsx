@@ -19,7 +19,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil, isUndefined } from 'lodash'
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
@@ -139,12 +139,6 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
   // Full form component (3 inputs: title, navigationName, key)
   const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
-    useEffect(() => {
-      if (firstInputRef.current !== null) {
-        firstInputRef.current.focus()
-      }
-    }, [firstInputRef])
-
     return (
       <Form
         form={ form }
@@ -186,12 +180,6 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
   // Key-only form component (1 input: key)
   const KeyOnlyFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
-    useEffect(() => {
-      if (firstInputRef.current !== null) {
-        firstInputRef.current.focus()
-      }
-    }, [firstInputRef])
-
     return (
       <Form
         form={ form }
@@ -212,7 +200,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Modal form content component for document creation
-  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
     return formType === AddDocumentFormType.FULL
       ? (
         <FullFormContent
@@ -252,8 +240,13 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
       content: <ModalFormContent
         firstInputRef={ firstInputRef }
         form={ form }
-        t={ t }
                />,
+      modalRender: (node) => {
+        if (firstInputRef.current !== null) {
+          firstInputRef.current.focus()
+        }
+        return node
+      },
       onOk: async () => {
         await submitForm()
       }
