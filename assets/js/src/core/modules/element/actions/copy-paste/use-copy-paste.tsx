@@ -167,10 +167,12 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   }
 
   const copyTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    if (node.isRoot) return null;
+
     return {
       label: t('element.tree.copy'),
       key: ContextMenuActionName.copy,
-      icon: <Icon value={ 'copy' } />,
+      icon: <Icon value={'copy'} />,
       hidden: !isTreeActionAllowed(TreePermission.Copy) || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         closeContextMenu?.()
@@ -183,7 +185,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.copy'),
       key: ContextMenuActionName.copy,
-      icon: <Icon value={ 'copy' } />,
+      icon: <Icon value={'copy'} />,
       hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
         onFinish?.()
@@ -196,7 +198,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.cut'),
       key: ContextMenuActionName.cut,
-      icon: <Icon value={ 'cut' } />,
+      icon: <Icon value={'cut'} />,
       hidden: !isTreeActionAllowed(TreePermission.Cut) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         closeContextMenu?.()
@@ -209,7 +211,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.cut'),
       key: ContextMenuActionName.cut,
-      icon: <Icon value={ 'cut' } />,
+      icon: <Icon value={'cut'} />,
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         onFinish?.()
@@ -222,7 +224,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.paste'),
       key: ContextMenuActionName.paste,
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteHiddenHook(node, 'copy'),
       onClick: async () => {
         await paste(parseInt(node.id))
@@ -234,7 +236,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.paste-cut'),
       key: ContextMenuActionName.pasteCut,
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteHiddenHook(targetNode, 'cut'),
       onClick: async () => {
         await pasteCut(parseInt(targetNode.id))
