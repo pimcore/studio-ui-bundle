@@ -43,11 +43,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
     dropdownInfo: css`
       min-width: 130px !important;
-        
-      .ant-dropdown-menu-title-content > span {
-        display: block;
-        width: 100%;
-      }
     `
   }
 })
