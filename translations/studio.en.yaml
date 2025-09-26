@@ -53,6 +53,7 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."

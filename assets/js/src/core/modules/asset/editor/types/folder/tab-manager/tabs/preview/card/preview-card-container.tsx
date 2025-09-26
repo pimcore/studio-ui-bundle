@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isString } from 'lodash'
+import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
@@ -21,7 +22,9 @@ import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
-import { isString } from 'lodash'
+import { useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import type { IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 interface PreviewCardContainerProps {
   asset: AssetGetTreeApiResponse['items'][number]
@@ -30,11 +33,13 @@ interface PreviewCardContainerProps {
 export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
-  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', asset.id))
-  const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset.id))
+  const { renameContextMenuItem } = useRename(elementTypes.asset, getElementActionCacheKey(elementTypes.asset, 'rename', asset.id))
+  const { deleteContextMenuItem } = useDelete(elementTypes.asset, getElementActionCacheKey(elementTypes.asset, 'delete', asset.id))
   const { downloadContextMenuItem } = useDownload()
   const { uploadNewVersionContextMenuItem } = useUploadNewVersion()
-  const { openContextMenuItem } = useOpen('asset')
+  const { openContextMenuItem } = useOpen(elementTypes.asset)
+
+  const { actionMenuItems } = useElementActionsMenu({ element: asset as unknown as IElementDraft, elementType: elementTypes.asset })
 
   const onClickCard = (e): void => {
     openAsset({
@@ -55,8 +60,8 @@ export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): Reac
     {
       key: 'info',
       icon: <Icon value="info-circle" />,
-      label: t('info'),
-      hidden: true
+      label: t('asset.copy-info'),
+      children: actionMenuItems
     },
     renameContextMenuItem(asset),
     uploadNewVersionContextMenuItem(asset),

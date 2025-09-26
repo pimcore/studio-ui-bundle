@@ -30,7 +30,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
   const { locateInTree } = useLocateInTree(elementType)
 
-  const { actionMenuItems: menuItems } = useElementActionsMenu({ id, elementType })
+  const { actionMenuItems: menuItems } = useElementActionsMenu({ element, elementType })
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
