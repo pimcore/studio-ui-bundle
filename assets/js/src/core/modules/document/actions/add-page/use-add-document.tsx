@@ -29,6 +29,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export enum AddDocumentFormType {
   FULL = 'full', // title, navigationName, key
@@ -57,6 +58,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   const dispatch = useAppDispatch()
   const { isTreeActionAllowed } = useTreePermission()
   const { modal } = App.useApp()
+  const formModal = useFormModal()
   const [form] = Form.useForm()
   const firstInputRef = useRef<InputRef>(null)
 
@@ -178,79 +180,61 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
     )
   }
 
-  // Key-only form component (1 input: key)
-  const KeyOnlyFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
-    return (
-      <Form
-        form={ form }
-        initialValues={ { key: '' } }
-        layout="vertical"
-      >
-        <Form.Item
-          label={ t('form.label.new-item') }
-          name="key"
-          rules={ [{ required: true, message: t('form.validation.required') }] }
-        >
-          <Input
-            ref={ firstInputRef }
-          />
-        </Form.Item>
-      </Form>
-    )
-  }
-
-  // Modal form content component for document creation
-  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
-    return formType === AddDocumentFormType.FULL
-      ? (
-        <FullFormContent
-          firstInputRef={ firstInputRef }
-          form={ form }
-        />
-        )
-      : (
-        <KeyOnlyFormContent
-          firstInputRef={ firstInputRef }
-          form={ form }
-        />
-        )
-  }
-
   const createDocument = (docType: DocType | null, parentId: number): void => {
-    form.resetFields() // Always reset before opening
-
-    const submitForm = async (): Promise<void> => {
-      await form.validateFields()
-        .then(async () => {
-          const values = form.getFieldsValue()
-
-          // For key-only forms, use the key as title and navigationName
-          const title = formType === AddDocumentFormType.FULL ? values.title : values.key
-          const navigationName = formType === AddDocumentFormType.FULL ? values.navigationName : values.key
-          const key = values.key
-
-          await createDocumentMutation(isNil(docType) ? null : docType.id, key as string, title as string, navigationName as string, parentId)
-        })
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    modal.confirm({
-      icon: null,
-      title: modalTitle,
-      content: <ModalFormContent
-        firstInputRef={ firstInputRef }
-        form={ form }
-               />,
-      modalRender: (node) => {
-        if (firstInputRef.current !== null) {
-          firstInputRef.current.focus()
+    if (formType === AddDocumentFormType.KEY_ONLY) {
+      // Use formModal.input for key-only forms (like in use-add-object)
+      formModal.input({
+        title: modalTitle,
+        label: t('form.label.new-item'),
+        rule: {
+          required: true,
+          message: t('form.validation.required')
+        },
+        onOk: async (key: string) => {
+          await createDocumentMutation(
+            isNil(docType) ? null : docType.id,
+            key,
+            key, // Use key as title for key-only forms
+            key, // Use key as navigationName for key-only forms
+            parentId
+          )
         }
-        return node
-      },
-      onOk: async () => {
-        await submitForm()
+      })
+    } else {
+      // Use existing modal.confirm for full forms
+      form.resetFields() // Always reset before opening
+
+      const submitForm = async (): Promise<void> => {
+        await form.validateFields()
+          .then(async () => {
+            const values = form.getFieldsValue()
+            const title = values.title
+            const navigationName = values.navigationName
+            const key = values.key
+
+            await createDocumentMutation(isNil(docType) ? null : docType.id, key as string, title as string, navigationName as string, parentId)
+          })
       }
-    })
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      modal.confirm({
+        icon: null,
+        title: modalTitle,
+        content: <FullFormContent
+          firstInputRef={ firstInputRef }
+          form={ form }
+                 />,
+        modalRender: (node) => {
+          if (firstInputRef.current !== null) {
+            firstInputRef.current.focus()
+          }
+          return node
+        },
+        onOk: async () => {
+          await submitForm()
+        }
+      })
+    }
   }
 
   const createDocumentMutation = async (
