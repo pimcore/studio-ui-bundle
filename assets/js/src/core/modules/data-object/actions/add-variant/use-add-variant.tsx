@@ -16,7 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
-  ClassDefinition,
+  type ClassDefinition,
   type ClassDefinitionListItem
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
@@ -138,10 +138,12 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
       key: ContextMenuActionName.addVariant,
       icon: <Icon value={ 'data-object-variant' } />,
       hidden: isAddObjectHidden(node),
-      onClick: () => createDataObjectVariantFromListItem(
-        findClassDefinitionByName(node.metaData.dataObject.className)!,
-        parseInt(node.id)
-      )
+      onClick: () => {
+        createDataObjectVariantFromListItem(
+          findClassDefinitionByName(node.metaData.dataObject.className as string)!,
+          parseInt(node.id)
+        )
+      }
     }
   }
 

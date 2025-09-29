@@ -50,11 +50,11 @@ const defaultProps = {
 }
 
 export const VariantsContainer = (): React.JSX.Element => {
-  const {id} = useElementContext()
-  const draft = useDataObjectDraft(id);
-  const currentClassName = "className" in draft ? draft.className : undefined
+  const { id } = useElementContext()
+  const draft = useDataObjectDraft(id)
+  const currentClassName = 'className' in draft ? draft.className : undefined
 
-  console.log({currentClassName});
+  console.log({ currentClassName })
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const props = compose<AbstractDecoratorProps>(

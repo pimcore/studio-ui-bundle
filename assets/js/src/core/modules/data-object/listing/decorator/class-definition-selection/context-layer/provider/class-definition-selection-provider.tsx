@@ -37,7 +37,7 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
   const { data } = useClassDefinitions()
   const [selectedClassDefinition, setSelectedClassDefinition] = useState<ClassDefinitionSelectionData['selectedClassDefinition']>(undefined)
 
-  console.log({data, config})
+  console.log({ data, config })
 
   const availableClassDefinitions = useMemo(() => {
     if (config.classRestriction !== undefined) {
@@ -54,7 +54,7 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
 
   let computedSelectedClassDefinition = selectedClassDefinition
 
-  console.log({computedSelectedClassDefinition})
+  console.log({ computedSelectedClassDefinition })
 
   if (availableClassDefinitions.length === 1 && selectedClassDefinition === undefined) {
     computedSelectedClassDefinition = availableClassDefinitions[0]
