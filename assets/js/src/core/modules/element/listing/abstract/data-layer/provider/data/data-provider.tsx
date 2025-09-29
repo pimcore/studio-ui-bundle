@@ -11,7 +11,7 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { type SettingsContextProps } from '../../../settings/settings-provider'
 
-export type DataLoadingState = 'initial' | 'config-changed' | 'data-available' | 'data-loading' | 'data-error'
+export type DataLoadingState = 'initial' | 'config-changed' | 'filters-applied' | 'data-available' | 'data-loading' | 'data-error'
 
 export interface DataContextProps {
   dataQueryResult: ReturnType<SettingsContextProps['useDataQuery']> | undefined
