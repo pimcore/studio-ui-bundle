@@ -30,6 +30,15 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     return <></>
   }
 
+  const renderInputItem = ({ label, name }: { label: string, name: string }): React.JSX.Element => (
+    <Form.Item
+      label={ label }
+      name={ name }
+    >
+      <Input disabled />
+    </Form.Item>
+  )
+
   return (
     <Modal
       footer={ null }
@@ -39,12 +48,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     >
       <FormKit formProps={ { initialValues: data?.elementInfo } }>
         <FormKit.Panel>
-          <Form.Item
-            label="ID"
-            name="id"
-          >
-            <Input disabled />
-          </Form.Item>
+          {renderInputItem({ label: 'ID', name: 'id' })}
         </FormKit.Panel
       ></FormKit>
     </Modal>
