@@ -16,6 +16,7 @@ import {
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
 
 type Layout = CustomLayoutsInCompactFormatToBeUsedForEGListings
 
@@ -33,7 +34,8 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   }
 
   const layouts = data !== undefined ? data.items : undefined
-  const hasWorkflowAvailable = dataObject !== undefined && 'hasWorkflowAvailable' in dataObject && dataObject.hasWorkflowAvailable === true
+  const hasWorkflowAvailable = isWorkflowAvailable(dataObject, 'data-object')
+  
   const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType: 'data-object', elementId: id }, { skip: !hasWorkflowAvailable })
 
   const getDefaultLayoutId = (currentLayout?: string | null): string | null => {

@@ -81,6 +81,11 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.tree.context-menu.add-page: Add Page
+document.tree.context-menu.add-snippet: Add Snippet
+document.tree.context-menu.add-email: Add Email
+document.tree.context-menu.add-link: Add Link
+document.tree.context-menu.add-hardlink: Add Hardlink
 document.site.remove-site: Remove Site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
 document.site.use-as-site: Use as Site
@@ -105,6 +110,7 @@ page: Page
 email: Email
 link: Link
 hardlink: Hardlink
+blank: "Blank"
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -1450,3 +1456,6 @@ email-settings.cc: Cc
 email-settings.bcc: Bcc
 email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
 email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
+add-document-form.label.title: Title
+add-document-form.label.navigation: Navigation
+add-document-form.label.key: Key

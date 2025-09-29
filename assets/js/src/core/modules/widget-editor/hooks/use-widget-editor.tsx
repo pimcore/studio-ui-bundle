@@ -89,7 +89,8 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       widgetType,
       body: {
         data: {
-          ...config
+          ...config,
+          rootFolder: config.rootFolder.fullPath ?? '/'
         }
       }
     })
@@ -98,6 +99,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       const response = await widgetUpdateTask
 
       if (response.error !== undefined) {
+        onFinish?.(config)
         trackError(new ApiError(response.error))
         return
       }
@@ -105,6 +107,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       onFinish?.(config)
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
+      onFinish?.(config)
     }
   }
 
