@@ -97,8 +97,8 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
 
         openModal({
           data: {
-            elementInfo: element,
-            deeplinkUrl
+            ...element,
+            deeplink: deeplinkUrl
           }
         })
       }

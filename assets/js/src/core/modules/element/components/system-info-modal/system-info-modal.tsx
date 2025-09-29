@@ -46,9 +46,16 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       open={ isOpen }
       title={ t('element.full-information') }
     >
-      <FormKit formProps={ { initialValues: data?.elementInfo } }>
+      <FormKit formProps={ { initialValues: data } }>
         <FormKit.Panel>
           {renderInputItem({ label: 'ID', name: 'id' })}
+          {renderInputItem({ label: 'Path', name: 'fullPath' })}
+          {renderInputItem({ label: 'Type', name: 'type' })}
+          {renderInputItem({ label: 'Modification Date', name: 'modificationDate' })}
+          {renderInputItem({ label: 'Creation Date', name: 'creationDate' })}
+          {renderInputItem({ label: 'User Modification', name: 'userModification' })}
+          {renderInputItem({ label: 'Owner', name: 'userOwner' })}
+          {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
     </Modal>

@@ -12,9 +12,8 @@ import React, { createContext, useMemo, useState } from 'react'
 import { SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
 import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
-export interface ISystemInfoModalData {
-  elementInfo: IElementDraft
-  deeplinkUrl: string
+export interface ISystemInfoModalData extends IElementDraft {
+  deeplink: string
 }
 
 export interface SystemInfoModalContextProps {
