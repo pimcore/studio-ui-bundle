@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
@@ -36,9 +36,11 @@ import { useSearchTermFilter } from '../../../../../context-layer/provider/searc
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchTermFilter } from '../../../search/search-term-filter'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { FocusProvider } from './focus-context'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const contentRef = useRef<HTMLDivElement>(null)
   const { setPage } = usePaging()
   const { setFieldFilters: setListingFieldFilters } = useFieldFilters()
   const { setOnlyDirectChildren: setListingOnlyDirectChildren } = useDirectChildrenFilter()
@@ -90,6 +92,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
     }
   }
 
+  const restoreFocus = (): void => {
+    contentRef.current?.focus()
+  }
+
   return (
     <ContentLayout
       renderToolbar={
@@ -111,71 +117,76 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content 
+      <div 
         onKeyDown={ handleKeyDown }
-        padded
+        ref={ contentRef }
+        style={{ outline: 'none' }}
         tabIndex={ 0 }
       >
-        <Flex
-          align='center'
-          justify='space-between'
-        >
-          <Title>{t('sidebar.search_filter')}</Title>
-          <Flex gap='extra-small'>
-            <Text>{t('toggle.advanced-mode')}</Text>
-            <Switch
-              checked={ isAdvancedMode }
-              onChange={ () => {
-                setIsAdvancedMode(!isAdvancedMode)
-              } }
-            />
-          </Flex>
-        </Flex>
+        <Content padded>
+          <FocusProvider restoreFocus={ restoreFocus }>
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Title>{t('sidebar.search_filter')}</Title>
+              <Flex gap='extra-small'>
+                <Text>{t('toggle.advanced-mode')}</Text>
+                <Switch
+                  checked={ isAdvancedMode }
+                  onChange={ () => {
+                    setIsAdvancedMode(!isAdvancedMode)
+                  } }
+                />
+              </Flex>
+            </Flex>
 
-        {isAdvancedMode
-          ? (
-            <PQLQueryInput
-              handleBlur={ (e) => { setPqlQuery(e.target.value) } }
-              handleChange={ (e) => { setPqlQuery(e.target.value) } }
-              isShowError={ false }
-              value={ pqlQuery }
-            />
-            )
-          : (
-            <>
-              <Form>
-                <Space
-                  direction='vertical'
-                  style={ { width: '100%' } }
-                >
-                  {handleSearchTermInSidebar && (
-                    <SearchTermFilter />
-                  )}
+            {isAdvancedMode
+              ? (
+                <PQLQueryInput
+                  handleBlur={ (e) => { setPqlQuery(e.target.value) } }
+                  handleChange={ (e) => { setPqlQuery(e.target.value) } }
+                  isShowError={ false }
+                  value={ pqlQuery }
+                />
+                )
+              : (
+                <>
+                  <Form>
+                    <Space
+                      direction='vertical'
+                      style={ { width: '100%' } }
+                    >
+                      {handleSearchTermInSidebar && (
+                        <SearchTermFilter />
+                      )}
 
-                  <Checkbox
-                    checked={ onlyDirectChildren }
-                    onChange={ (e) => { setOnlyDirectChildren(e.target.checked) } }
-                  >
-                    {t('element.sidebar.filter.only-direct-children')}
-                  </Checkbox>
+                      <Checkbox
+                        checked={ onlyDirectChildren }
+                        onChange={ (e) => { setOnlyDirectChildren(e.target.checked) } }
+                      >
+                        {t('element.sidebar.filter.only-direct-children')}
+                      </Checkbox>
 
-                  {/* <Checkbox */}
-                  {/*  checked={ false } */}
-                  {/*  value={ 'referenced' } */}
-                  {/* > */}
-                  {/*  only unreferenced */}
-                  {/* </Checkbox> */}
-                </Space>
-              </Form>
+                      {/* <Checkbox */}
+                      {/*  checked={ false } */}
+                      {/*  value={ 'referenced' } */}
+                      {/* > */}
+                      {/*  only unreferenced */}
+                      {/* </Checkbox> */}
+                    </Space>
+                  </Form>
 
-              <Title>
-                {t('element.sidebar.field-filters')}
-              </Title>
+                  <Title>
+                    {t('element.sidebar.field-filters')}
+                  </Title>
 
-              <FieldFiltersContainer />
-            </>
-            )}
-      </Content>
+                  <FieldFiltersContainer />
+                </>
+                )}
+          </FocusProvider>
+        </Content>
+      </div>
     </ContentLayout>
   )
 }

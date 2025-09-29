@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
+import { useFocusRestore } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/focus-context'
 
 interface IObjectSelectConfig {
   fieldDefinition: {
@@ -25,6 +26,7 @@ interface IAssetSelectConfig {
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
+  const { restoreFocus } = useFocusRestore()
   const [_value, setValue] = useState<string[]>(data as string[])
 
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
@@ -55,6 +57,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     <Select
       mode="multiple"
       onChange={ handleChange }
+      onDropdownVisibleChange={ (open: boolean) => { if (!open) restoreFocus() } }
       options={ formattedOptions }
       showSearch={ rawConfig?.showSearch ?? false }
       style={ { width: '100%' } }

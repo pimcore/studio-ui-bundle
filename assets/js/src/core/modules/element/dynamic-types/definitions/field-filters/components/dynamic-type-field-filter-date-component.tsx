@@ -17,6 +17,7 @@ import { DateRangePicker } from '@Pimcore/components/date-picker/date-range-pick
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { useFocusRestore } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/focus-context'
 
 enum DatePickerSettingValue {
   ON = 'on',
@@ -38,6 +39,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
   }
 
   const { data: rawData, setData } = useDynamicFilter()
+  const { restoreFocus } = useFocusRestore()
 
   const data: DateValue = rawData ?? {
     setting: DatePickerSettingValue.ON,
@@ -105,10 +107,9 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: string | null): void => {
     setData({
+      ...data,
       setting: currentSetting,
-      from: (field === 'from') ? value : null,
-      to: (field === 'to') ? value : null,
-      on: (field === 'on') ? value : null
+      [field]: value
     })
   }
 
@@ -152,6 +153,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
 
             handleDateRangeChange(convertValueToISOFormat(newFrom), convertValueToISOFormat(newTo))
           } }
+          onOpenChange={ (open: boolean) => { if (!open) restoreFocus() } }
           outputType="timestamp"
           value={ [convertISOToTimestamp(data?.from ?? null), convertISOToTimestamp(data?.to ?? null)] }
         />
@@ -172,6 +174,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
             handleDateChange('from', convertedValue)
           }
         } }
+        onOpenChange={ (open: boolean) => { if (!open) restoreFocus() } }
         outputType="timestamp"
         value={ convertISOToTimestamp(getDatePickerValue()) }
       />

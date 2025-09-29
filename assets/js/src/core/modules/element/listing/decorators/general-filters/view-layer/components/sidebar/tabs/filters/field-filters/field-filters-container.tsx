@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +20,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useFilter } from '../provider/filter-provider/use-filter'
 import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { useFocusRestore } from '../focus-context'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
@@ -28,6 +29,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useFilter()
+  const { restoreFocus } = useFocusRestore()
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
@@ -46,6 +48,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }), [fieldFilters, availableColumns])
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
+  const previousFilterCount = useRef<number>(filters.length)
 
   const onFilterChange: FieldFiltersProps['onChange'] = (data) => {
     setFilters(data)
@@ -61,6 +64,13 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   useEffect(() => {
     setFilters(initialFilters)
   }, [initialFilters])
+
+  useEffect(() => {
+    if (filters.length > previousFilterCount.current) {
+      restoreFocus()
+    }
+    previousFilterCount.current = filters.length
+  }, [filters.length, restoreFocus])
 
   const handleColumnClick = (column: AvailableColumn): void => {
     const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
