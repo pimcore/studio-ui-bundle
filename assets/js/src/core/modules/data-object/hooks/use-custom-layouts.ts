@@ -35,7 +35,7 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
 
   const layouts = data !== undefined ? data.items : undefined
   const hasWorkflowAvailable = isWorkflowAvailable(dataObject, 'data-object')
-  
+
   const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType: 'data-object', elementId: id }, { skip: !hasWorkflowAvailable })
 
   const getDefaultLayoutId = (currentLayout?: string | null): string | null => {
