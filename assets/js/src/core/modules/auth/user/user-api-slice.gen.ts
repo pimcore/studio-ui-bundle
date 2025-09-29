@@ -457,13 +457,13 @@ export type User = {
     /** ID of the User */
     id: number;
     /** Name of Folder or User */
-    name: string | null;
+    name?: string | null;
     /** Email of the User */
-    email: string | null;
+    email?: string | null;
     /** Firstname of the User */
-    firstname: string | null;
+    firstname?: string | null;
     /** Lastname of the User */
-    lastname: string | null;
+    lastname?: string | null;
     /** If a User is active */
     active: boolean;
     /** If User is admin */
@@ -482,8 +482,6 @@ export type User = {
     keyBindings: KeyBindingForAUser[];
     /** Language of the User */
     language: string;
-    /** Locale for dateTime */
-    dateTimeLocale?: string | null;
     /** Timestamp of the last login */
     lastLogin?: number | null;
     /** Memorize Tabs */
@@ -515,13 +513,13 @@ export type User = {
 };
 export type User2 = {
     /** Email of the User */
-    email: string | null;
+    email?: string | null;
     /** Firstname of the User */
-    firstname: string | null;
+    firstname?: string | null;
     /** Lastname of the User */
-    lastname: string | null;
+    lastname?: string | null;
     /** If User is admin */
-    admin: boolean;
+    admin?: boolean;
     /** If User is active */
     active: boolean;
     /** Classes the user is allows to see */
@@ -536,8 +534,6 @@ export type User2 = {
     keyBindings: KeyBindingForAUser[];
     /** Language of the User */
     language: string;
-    /** Date Time Locale for the User */
-    dateTimeLocale?: string;
     /** Memorize Tabs */
     memorizeTabs: boolean;
     /** Parent ID */
