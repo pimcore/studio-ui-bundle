@@ -121,7 +121,10 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       }
     }).then((response) => {
       if (response.error === undefined) {
-        setDraftData(response.data?.draftData ?? null)
+        if ("draftData" in response.data) {
+          setDraftData(response.data?.draftData ?? null)
+        }
+
         if (task === SaveTaskType.Publish) {
           dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: true }))
         }
