@@ -41,7 +41,6 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         },
         onFinish: async (values: any) => {
           setIsLoading(true)
-          console.table(values)
           await updateWidget(widget.id, widget.widgetType, values, () => {
             setIsLoading(false)
           })
