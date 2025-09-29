@@ -47,7 +47,7 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
     columnDefinition.push(
       columnHelper.accessor(column.key, {
         ...baseColumn,
-        ...(isNonEmptyString(pathFormatterClass) ? { cell: renderFullPathCell } : {})
+        ...(isNonEmptyString(pathFormatterClass) && column.key === 'fullPath' ? { cell: renderFullPathCell } : {})
       })
     )
   }
