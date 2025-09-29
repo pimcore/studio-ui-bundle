@@ -10,6 +10,7 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import '@Pimcore/modules/data-object/editor/types/object'
+import '@Pimcore/modules/data-object/editor/types/variant'
 import '@Pimcore/modules/data-object/editor/types/folder'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -29,6 +30,11 @@ moduleSystem.registerModule({
     typeRegistry.register({
       name: 'object',
       tabManagerServiceId: 'DataObject/Editor/ObjectTabManager'
+    })
+
+    typeRegistry.register({
+      name: 'variant',
+      tabManagerServiceId: 'DataObject/Editor/VariantTabManager'
     })
 
     typeRegistry.register({
