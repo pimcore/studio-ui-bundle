@@ -83,6 +83,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
     }
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLOrSVGElement>): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      handleApplyClick()
+    }
+  }
+
   return (
     <ContentLayout
       renderToolbar={
@@ -104,7 +111,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content 
+        onKeyDown={ handleKeyDown }
+        padded
+        tabIndex={ 0 }
+      >
         <Flex
           align='center'
           justify='space-between'

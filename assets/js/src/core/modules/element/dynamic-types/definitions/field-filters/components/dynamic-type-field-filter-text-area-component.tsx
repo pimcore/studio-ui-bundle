@@ -29,13 +29,11 @@ export const DynamicTypeFieldFilterTextAreaComponent = (): React.JSX.Element => 
 
   return (
     <TextArea
-      onBlur={ onBlur }
-      onChange={ (event) => { setValue(event.target.value) } }
+      onChange={ (event) => { 
+        const newValue = event.target.value
+        setData(newValue)
+      } }
       value={ _value }
     />
   )
-
-  function onBlur (): void {
-    setData(_value)
-  }
 }

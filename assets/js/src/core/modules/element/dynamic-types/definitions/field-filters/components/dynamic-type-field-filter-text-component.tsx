@@ -25,14 +25,12 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
 
   return (
     <Input
-      onBlur={ onBlur }
-      onChange={ (event) => { setValue(event.target.value) } }
+      onChange={ (event) => { 
+        const newValue = event.target.value
+        setData(newValue)
+      } }
       type='text'
       value={ _value }
     />
   )
-
-  function onBlur (): void {
-    setData(_value)
-  }
 }
