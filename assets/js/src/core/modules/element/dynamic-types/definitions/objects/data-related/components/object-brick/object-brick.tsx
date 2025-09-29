@@ -40,7 +40,7 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
 
-  if (dataObject !== undefined && !("objectData" in dataObject)) {
+  if (dataObject !== undefined && !('objectData' in dataObject)) {
     throw new Error('Data Object data is undefined in Object Brick')
   }
 

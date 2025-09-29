@@ -46,7 +46,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
 
-  if (dataObject !== undefined && !("objectData" in dataObject)) {
+  if (dataObject !== undefined && !('objectData' in dataObject)) {
     throw new Error('Data Object data is undefined in Classification Store')
   }
 
