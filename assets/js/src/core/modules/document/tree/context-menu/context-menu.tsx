@@ -22,11 +22,13 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { AddDocumentFormType, useAddDocument } from '../../actions/add-page/use-add-document'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 import { useConvert } from '@Pimcore/modules/document/actions/convert/use-convert'
 import { usePaste } from '@Pimcore/modules/document/actions/paste/use-paste'
 import { useSiteActions } from '@Pimcore/modules/document/actions/site/use-site-actions'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface DocumentTreeContextMenuProps {
   node: TreeNodeProps
@@ -36,6 +38,43 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
   const { addFolderTreeContextMenuItem } = useAddFolder('document')
+  const { addDocumentTreeContextMenuItem: addPageTreeContextMenuItem } = useAddDocument({
+    type: 'page',
+    iconValue: 'document',
+    contextMenuKey: ContextMenuActionName.addPage,
+    formType: AddDocumentFormType.FULL,
+    modalTitle: t('document.tree.context-menu.add-page')
+  })
+  const { addDocumentTreeContextMenuItem: addSnippetTreeContextMenuItem } = useAddDocument({
+    type: 'snippet',
+    iconValue: 'snippet',
+    contextMenuKey: ContextMenuActionName.addSnippet,
+    formType: AddDocumentFormType.KEY_ONLY,
+    modalTitle: t('document.tree.context-menu.add-snippet')
+  })
+  const { addDocumentTreeContextMenuItem: addEmailTreeContextMenuItem } = useAddDocument({
+    type: 'email',
+    iconValue: 'mail-02',
+    contextMenuKey: ContextMenuActionName.addEmail,
+    formType: AddDocumentFormType.KEY_ONLY,
+    modalTitle: t('document.tree.context-menu.add-email')
+  })
+  const { addDocumentTreeContextMenuItem: addLinkTreeContextMenuItem } = useAddDocument({
+    type: 'link',
+    iconValue: 'document-link',
+    contextMenuKey: ContextMenuActionName.addLink,
+    formType: AddDocumentFormType.KEY_ONLY,
+    modalTitle: t('document.tree.context-menu.add-link'),
+    hasNoChildren: true
+  })
+  const { addDocumentTreeContextMenuItem: addHardlinkTreeContextMenuItem } = useAddDocument({
+    type: 'hardlink',
+    iconValue: 'hardlink',
+    contextMenuKey: ContextMenuActionName.addHardlink,
+    formType: AddDocumentFormType.KEY_ONLY,
+    modalTitle: t('document.tree.context-menu.add-hardlink'),
+    hasNoChildren: true
+  })
   const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('document')
@@ -66,6 +105,11 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
+    addPageTreeContextMenuItem(node),
+    addSnippetTreeContextMenuItem(node),
+    addLinkTreeContextMenuItem(node),
+    addEmailTreeContextMenuItem(node),
+    addHardlinkTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     {
