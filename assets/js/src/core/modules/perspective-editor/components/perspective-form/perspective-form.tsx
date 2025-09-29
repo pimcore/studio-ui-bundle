@@ -38,7 +38,7 @@ interface OptimizedPerspectiveConfigDetail extends Omit<PerspectiveConfigDetail,
 export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
-  const { isLoading, setIsLoading, setPerspectives } = usePerspectiveEditorContext()
+  const { isLoading, setIsLoading, setPerspectives, closePerspective } = usePerspectiveEditorContext()
   const [form] = Form.useForm<OptimizedPerspectiveConfigDetail>()
   const initialValues = {
     ...perspective,
@@ -114,6 +114,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
               icon={ { value: 'trash' } }
               onClick={ () => {
                 removeWithConfirmation(perspective.id, () => {
+                  closePerspective(perspective.id)
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
                 })
               } }

@@ -28,7 +28,7 @@ interface WidgetFormProps {
 export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { form, widget } = useWidgetFormContext()
-  const { isLoading, setWidgets, setIsLoading } = useWidgetEditorContext()
+  const { isLoading, setWidgets, setIsLoading, closeWidget } = useWidgetEditorContext()
   const { removeWithConfirmation, updateWidget } = useWidgetEditor()
 
   return (
@@ -41,7 +41,6 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         },
         onFinish: async (values: any) => {
           setIsLoading(true)
-          console.table(values)
           await updateWidget(widget.id, widget.widgetType, values, () => {
             setIsLoading(false)
           })
@@ -80,6 +79,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
               icon={ { value: 'trash' } }
               onClick={ () => {
                 removeWithConfirmation(widget.id, widget.widgetType, () => {
+                  closeWidget(widget.id)
                   setWidgets((prev) => prev.filter((w) => w.id !== widget.id))
                 })
               } }
