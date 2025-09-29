@@ -38,7 +38,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const [documentWorkspaces, setDocumentWorkspaces] = useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = useState<UserDocumentWorkspace[]>(user?.dataObjectWorkspaces ?? [])
 
-  const [specialModalContext, setSpecialModalContext] = useState<UserDocumentWorkspace | null>(null)
+  const [specialModalContext, setSpecialModalContext] = useState<number | null>(null)
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -138,13 +138,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
   ]
 
-  let currentSpecialModalData = specialModalContext
+  let currentSpecialModalData: object = {}
 
-  const getSpecialModalValues = (values: string | string[]): string[] => {
-    if (typeof values === 'string') {
-      return values.split(',')
-    }
-    return values
+  const getSpecialModalValues = (type: string): string[] => {
+    return user?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.[type] ?? []
   }
 
   const objectsAccordion = [
@@ -180,8 +177,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         <Table
           data={ objectWorkspaces }
           isLoading={ isLoading }
-          onShowSpecialSettings={ (data) => {
-            setSpecialModalContext(data)
+          onShowSpecialSettings={ (id) => {
+            setSpecialModalContext(id)
             showSpecialSettingsModal()
           } }
           onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
@@ -254,12 +251,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             </Button>
             <Button
               onClick={ () => {
-                // update data with data from specialSettings modal
-                // currentSpecialModalData.localizedView = currentSpecialModalData.localizedView? currentSpecialModalData.localizedView.toString() : '';
-                // currentSpecialModalData.localizedEdit = currentSpecialModalData.localizedEdit? currentSpecialModalData.localizedEdit.toString() : '';
-                // currentSpecialModalData.layouts = currentSpecialModalData.layouts? currentSpecialModalData.layouts.toString() : '';
                 changeUserInState({
-                  dataObjectWorkspaces: objectWorkspaces.map(ws => ws.cid === currentSpecialModalData?.cid ? currentSpecialModalData : ws)
+                  dataObjectWorkspaces: user.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...currentSpecialModalData } : ws)
                 })
 
                 handleOk()
@@ -274,11 +267,11 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         title={ t('user-management.workspaces.additional-settings') }
       >
         <SpecialSettings
-          layouts={ getSpecialModalValues(specialModalContext?.layouts ?? []) }
-          localizedEdit={ getSpecialModalValues(specialModalContext?.localizedEdit ?? []) }
-          localizedView={ getSpecialModalValues(specialModalContext?.localizedView ?? []) }
+          layouts={ getSpecialModalValues('layouts') }
+          localizedEdit={ getSpecialModalValues('localizedEdit') }
+          localizedView={ getSpecialModalValues('localizedView') }
           onValuesChange={ (changedValues) => {
-            const mergedData = { ...specialModalContext, ...currentSpecialModalData, ...changedValues }
+            const mergedData = { ...currentSpecialModalData, ...changedValues }
             currentSpecialModalData = mergedData
           } }
         />

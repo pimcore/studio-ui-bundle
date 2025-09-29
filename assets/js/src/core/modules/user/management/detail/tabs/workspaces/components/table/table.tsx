@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type UserDocumentWorkspace, type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
@@ -24,7 +24,7 @@ interface ITableProps {
   type?: string
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
-  onShowSpecialSettings?: (data: UserDocumentWorkspace) => void
+  onShowSpecialSettings?: (id: number) => void
 }
 
 export const Table = ({
@@ -188,7 +188,7 @@ export const Table = ({
             return (
               <IconButton
                 icon={ { value: 'settings' } }
-                onClick={ () => onShowSpecialSettings?.(context.row.original as UserDocumentWorkspace) }
+                onClick={ () => onShowSpecialSettings?.((context.row.original as UserWorkspace).cid) }
                 type="link"
               />
             )
