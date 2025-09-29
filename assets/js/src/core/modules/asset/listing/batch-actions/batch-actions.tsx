@@ -70,7 +70,7 @@ export const BatchActions = (): React.JSX.Element => {
   const handleBatchDelete = (): void => {
     addJob(createJob({
       title: t('batch-delete.job-title'),
-      topics: [topics['deletion-finished'], ...defaultTopics],
+      topics: [topics['batch-deletion-finished'], ...defaultTopics],
       action: async () => {
         const response = await batchDelete({
           body: {
