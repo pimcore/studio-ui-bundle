@@ -20,6 +20,7 @@ export const SearchButton = (): React.JSX.Element => {
   useHandleKeyBindings(() => { open('all') }, 'quickSearch', true)
   useHandleKeyBindings(() => { open(elementTypes.asset) }, 'searchAsset', true)
   useHandleKeyBindings(() => { open(elementTypes.dataObject) }, 'searchObject', true)
+  useHandleKeyBindings(() => { open(elementTypes.document) }, 'searchDocument', true)
 
   return (
     <IconButton
