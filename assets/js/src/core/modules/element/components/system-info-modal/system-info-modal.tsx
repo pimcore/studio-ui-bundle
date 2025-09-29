@@ -9,14 +9,21 @@
  */
 
 import React from 'react'
+import { isNil } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
+import { type ISystemInfoModalData } from './provider/system-info-modal-provider'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
   onClose: () => void
+  data: ISystemInfoModalData | null
 }
 
-export const SystemInfoModal = ({ isOpen, onClose }: ISystemInfoModalProps): React.JSX.Element => {
+export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps): React.JSX.Element => {
+  if (isNil(data)) {
+    return <></>
+  }
+
   return (
     <Modal
       onCancel={ onClose }

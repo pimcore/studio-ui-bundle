@@ -8,20 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import {
-  useSystemInfoModalContext
-} from '@Pimcore/modules/element/components/system-info-modal/provider/use-system-info-modal-context'
+import { useSystemInfoModalContext } from '@Pimcore/modules/element/components/system-info-modal/provider/use-system-info-modal-context'
+import { type ISystemInfoModalData } from '@Pimcore/modules/element/components/system-info-modal/provider/system-info-modal-provider'
+
+interface IOpenModalData {
+  data: ISystemInfoModalData
+}
 
 interface ISystemInfoModalReturn {
-  openModal: () => void
+  openModal: (data: IOpenModalData) => void
   closeModal: () => void
 }
 
 export const useSystemInfoModal = (): ISystemInfoModalReturn => {
   const systemModalContext = useSystemInfoModalContext()
 
-  const openModal = (): void => {
-    systemModalContext.openModal()
+  const openModal = ({ data }: IOpenModalData): void => {
+    systemModalContext.openModal(data)
   }
 
   const closeModal = (): void => {

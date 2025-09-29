@@ -95,7 +95,12 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        openModal()
+        openModal({
+          data: {
+            elementInfo: element,
+            deeplinkUrl
+          }
+        })
       }
     }
   ]

@@ -10,9 +10,15 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
+import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+
+export interface ISystemInfoModalData {
+  elementInfo: IElementDraft
+  deeplinkUrl: string
+}
 
 export interface SystemInfoModalContextProps {
-  openModal: () => void
+  openModal: (data: ISystemInfoModalData) => void
   closeModal: () => void
   isOpen: boolean
 }
@@ -25,13 +31,16 @@ export const SystemInfoModalContext = createContext<SystemInfoModalContextProps 
 
 export const SystemInfoModalProvider = ({ children }: SystemInfoModalProviderProps): React.JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
+  const [modalData, setModalData] = useState<ISystemInfoModalData | null>(null)
 
-  const openModal = (): void => {
+  const openModal = (data: ISystemInfoModalData): void => {
+    setModalData(data)
     setIsOpen(true)
   }
 
   const closeModal = (): void => {
     setIsOpen(false)
+    setModalData(null)
   }
 
   const contextValue = useMemo(
@@ -47,6 +56,7 @@ export const SystemInfoModalProvider = ({ children }: SystemInfoModalProviderPro
     <SystemInfoModalContext.Provider value={ contextValue }>
       {children}
       <SystemInfoModal
+        data={ modalData }
         isOpen={ isOpen }
         onClose={ closeModal }
       />
