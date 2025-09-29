@@ -72,7 +72,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: true, updateReferences: false }, getStoredNode())
       }
     }
@@ -85,7 +84,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: true, updateReferences: true }, getStoredNode())
       }
     }
@@ -98,7 +96,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: false, updateReferences: false }, getStoredNode())
       }
     }

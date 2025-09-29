@@ -178,6 +178,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Documents"],
             }),
+            documentGetSite: build.query<DocumentGetSiteApiResponse, DocumentGetSiteApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.documentId}` }),
+                providesTags: ["Documents"],
+            }),
             documentAddTranslation: build.mutation<DocumentAddTranslationApiResponse, DocumentAddTranslationApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/translations/${queryArg.id}/add/${queryArg.translationId}`,
@@ -387,6 +391,11 @@ export type DocumentDeleteSiteApiArg = {
     /** Id of the document */
     id: number;
 };
+export type DocumentGetSiteApiResponse = /** status 200 Site detail data */ SiteDetailData;
+export type DocumentGetSiteApiArg = {
+    /** DocumentId of the document */
+    documentId: number;
+};
 export type DocumentAddTranslationApiResponse = unknown;
 export type DocumentAddTranslationApiArg = {
     /** Id of the document */
@@ -564,7 +573,7 @@ export type Element = {
     /** path */
     path: string;
     /** icon */
-    icon?: ElementIcon;
+    icon: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
@@ -734,6 +743,42 @@ export type UpdateSite = {
     /** Redirect to main domain */
     redirectToMainDomain: boolean;
 };
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+};
+export type SiteDetailData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Creation Date */
+    creationDate: number | null;
+    /** Modification Date */
+    modificationDate: number | null;
+    /** Main domain */
+    mainDomain: string;
+    /** Domains */
+    domains: string[];
+    /** Data of error document */
+    errorDocument: RelatedElementData | null;
+    /** Localized error documents mapped by locale */
+    localizedErrorDocuments: {
+        [key: string]: RelatedElementData;
+    };
+    /** Redirect to main domain */
+    redirectToMainDomain: boolean;
+};
 export type DocumentTranslationLink = {
     /** Language */
     language: string;
@@ -782,6 +827,7 @@ export const {
     useDocumentsListAvailableSitesQuery,
     useDocumentUpdateSiteMutation,
     useDocumentDeleteSiteMutation,
+    useDocumentGetSiteQuery,
     useDocumentAddTranslationMutation,
     useDocumentDeleteTranslationMutation,
     useDocumentGetTranslationsQuery,

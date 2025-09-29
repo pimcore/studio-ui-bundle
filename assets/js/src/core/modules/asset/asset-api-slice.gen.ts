@@ -1024,7 +1024,7 @@ export type Element = {
     /** path */
     path: string;
     /** icon */
-    icon?: ElementIcon;
+    icon: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */

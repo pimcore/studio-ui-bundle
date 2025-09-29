@@ -19,7 +19,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { invalidatingTags } from '@sdk/api'
 import { Icon, Pagination } from '@sdk/components'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEmailBlocklistGetCollectionQuery } from '../emails-api-slice.gen'
 import { EmailCard } from './components/email-card/email-card'
@@ -33,7 +33,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { data, isLoading: isRTKLoading } = useEmailBlocklistGetCollectionQuery({
+  const { data, isLoading: isRTKLoading, isFetching } = useEmailBlocklistGetCollectionQuery({
     page: currentPage,
     pageSize
   })
@@ -43,6 +43,12 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
     setCurrentPage(page)
     setPageSize(pageSize)
   }
+
+  useEffect(() => {
+    if (!isFetching) {
+      setIsLoading(false)
+    }
+  }, [isFetching])
 
   return (
     <ContentLayout
@@ -61,9 +67,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
                   invalidatingTags.EMAIL_BLOCKLIST()
                 )
               )
-              setIsLoading(false)
-            }
-            }
+            } }
           />
           <Pagination
             current={ currentPage }
@@ -98,7 +102,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
                   setIsLoading(false)
                 })
               } }
-            >{t('email-blocklist.add')}</IconTextButton>
+            >{t('email-blocklist.new')}</IconTextButton>
           </Flex>
         </Toolbar>
       }

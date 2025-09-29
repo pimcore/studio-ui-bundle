@@ -198,7 +198,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
                   allowedTypes: props.allowedAssetTypes
                 },
                 documents: {
-                  allowedTypes: props.allowedAssetTypes
+                  allowedTypes: props.allowedDocumentTypes
                 },
                 objects: {
                   allowedTypes: props.allowedClasses

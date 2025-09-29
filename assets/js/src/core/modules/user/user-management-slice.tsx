@@ -37,9 +37,16 @@ export const slice = createSlice({
     userOpened: (state, action: PayloadAction<number>): void => {
       state.activeId = action.payload
     },
-    userClosed: (state, action: PayloadAction<number>): void => {
-      state.activeId = undefined
-      userAdapter.removeOne(state, action.payload)
+    userClosed: (state, action: PayloadAction<{ id: number, allIds: string[] }>): void => {
+      userAdapter.removeOne(state, action.payload.id)
+
+      if (state.activeId === action.payload.id) {
+        if (action.payload.allIds.length > 1) {
+          state.activeId = parseInt(action.payload.allIds[0])
+        } else {
+          state.activeId = undefined
+        }
+      }
     },
     userFetched: (state, action: PayloadAction<UserDraft>): void => {
       if (action.payload.id !== undefined) {
@@ -62,10 +69,10 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
-    userImageLoaded: (state, action: PayloadAction<{ id: any, image: any }>): void => {
+    updateUserImage: (state, action: PayloadAction<{ id: any, image: any }>): void => {
       const update: Update<any, any> = {
         id: action.payload.id,
-        changes: { image: action.payload.image }
+        changes: { image: action.payload.image, hasImage: action.payload.image !== undefined }
       }
       userAdapter.updateOne(state, update)
     },
@@ -88,7 +95,7 @@ export const {
   userFetched,
   userAvailablePermissionsFetched,
   changeUser,
-  userImageLoaded,
+  updateUserImage,
   userUpdated
 } = slice.actions
 

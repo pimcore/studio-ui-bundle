@@ -21,12 +21,12 @@ export const DynamicTypeFieldFilterCheckboxComponent = (props: DynamicTypeFieldF
   const { setData, data } = useDynamicFilter()
 
   useEffect(() => {
-    setData(false)
+    setData([false])
   }, [])
 
   const handleChange = (val: 'true' | 'false'): void => {
     const boolValue = val === 'true'
-    setData(boolValue)
+    setData([boolValue])
   }
 
   return (
@@ -36,7 +36,7 @@ export const DynamicTypeFieldFilterCheckboxComponent = (props: DynamicTypeFieldF
         { label: 'True', value: 'true' },
         { label: 'False', value: 'false' }
       ] }
-      value={ (data === true) ? 'true' : 'false' }
+      value={ (Array.isArray(data) && data[0] === true) ? 'true' : 'false' }
     />
 
   )

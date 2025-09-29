@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Popconfirm } from 'antd'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 
 interface IDetailProps {
   onRemoveRole: (id: any, parentId: any) => void
@@ -35,6 +36,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
   const { styles } = useStyle()
   const classNames = ['detail-tabs', styles.detailTabs]
   const modal = useFormModal()
+  const { user } = useUserDraft()
 
   const { openRole, closeRole, removeRole, cloneRole, getAllIds, activeId } = useRoleHelper()
   const { role } = useRoleDraft(activeId)
@@ -48,7 +50,11 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
   const onHandleClose = (key: string): void => {
     const role = selectRoleById(store.getState(), parseInt(key))
     if (role?.modified && popConfirmOpen === null) {
-      setPopConfirmOpen(parseInt(key))
+      if (user?.allowDirtyClose) {
+        triggerConfirm()
+      } else {
+        setPopConfirmOpen(parseInt(key))
+      }
       return
     }
 

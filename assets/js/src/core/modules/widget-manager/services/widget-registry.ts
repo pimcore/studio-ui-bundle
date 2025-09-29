@@ -21,6 +21,7 @@ export interface Widget {
   titleComponent?: ComponentType<TabTitleOuterContainerProps>
   isModified?: (tabNode: TabNode) => boolean
   getContextProvider?: (context: GlobalContext, children: React.ReactNode) => React.JSX.Element
+  defaultGlobalContext?: boolean
 }
 
 @injectable()
@@ -30,7 +31,8 @@ export class WidgetRegistry {
   registerWidget (widget: Widget): void {
     const newWidget = {
       ...widget,
-      component: memo(widget.component)
+      component: memo(widget.component),
+      defaultGlobalContext: widget.defaultGlobalContext ?? true
     }
 
     this.widgets.push(newWidget)

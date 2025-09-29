@@ -83,7 +83,9 @@ jobs:
 
       - name: Set package version
         working-directory: ./assets
-        run: npm version ${{ inputs.version }} --no-git-tag-version --allow-same-version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: npm version "$VERSION" --no-git-tag-version --allow-same-version
 
       - name: Set auth token
         working-directory: ./assets
@@ -91,4 +93,6 @@ jobs:
 
       - name: Publish package to npm
         working-directory: ./assets
-        run: npm publish --tag ${{ inputs.tag }} --access public
+        env:
+          TAG: ${{ inputs.tag }}
+        run: npm publish --tag "$TAG" --access public
