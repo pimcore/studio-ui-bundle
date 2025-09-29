@@ -16,6 +16,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { cornersOfRectangle } from '@dnd-kit/core/dist/utilities/algorithms/helpers'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -52,12 +53,12 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      return context.type === 'data-object'
+      return context.type === 'data-object' && context.data.type !== 'variant'
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceObject: DataObject = info.data
-      return info.type === 'data-object' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
+      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
     }
 
     return (
