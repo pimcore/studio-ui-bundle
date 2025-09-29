@@ -16,6 +16,20 @@ import { ApplicationLoggerContainer } from './application-logger-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+
+export const APPLICATION_LOGGER_WIDGET: WidgetManagerTabConfig = {
+  name: 'Application Logger',
+  id: 'application-logger',
+  component: 'application-logger',
+  config: {
+    translationKey: 'widget.application-logger',
+    icon: {
+      type: 'name',
+      value: 'application-logger'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -28,18 +42,7 @@ moduleSystem.registerModule({
       order: 400,
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,
-      widgetConfig: {
-        name: 'Application Logger',
-        id: 'application-logger',
-        component: 'application-logger',
-        config: {
-          translationKey: 'widget.application-logger',
-          icon: {
-            type: 'name',
-            value: 'application-logger'
-          }
-        }
-      }
+      widgetConfig: APPLICATION_LOGGER_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

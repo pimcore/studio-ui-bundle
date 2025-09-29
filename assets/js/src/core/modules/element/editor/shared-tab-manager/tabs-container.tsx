@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { EditorTabs as EditorTabsView } from '@Pimcore/modules/element/editor/tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
@@ -28,6 +28,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import { isNull } from 'lodash'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
