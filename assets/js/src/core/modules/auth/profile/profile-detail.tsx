@@ -156,8 +156,10 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                     name="dateTimeLocale"
                   >
                     <Select
+                      optionFilterProp="label"
                       options={ validLocalesOptions }
                       placeholder={ t('user-management.dateTime') }
+                      showSearch
                     />
                   </Form.Item>
 

@@ -142,11 +142,11 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
 
         <Form.Item
           label={ t('user-management.dateTime') }
-          name="datetimeLocale"
+          name="dateTimeLocale"
         >
           <Select
-            options={ validLocalesOptions }
             optionFilterProp="label"
+            options={ validLocalesOptions }
             placeholder={ t('user-management.dateTime') }
             showSearch
           />
