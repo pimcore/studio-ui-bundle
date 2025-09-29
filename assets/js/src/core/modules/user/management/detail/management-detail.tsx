@@ -43,15 +43,14 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
   const { user: openedUser } = useUserManagementDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
-  const triggerConfirm = (): void => {
-    closeUser(activeId)
-    openUser(getAllIds[getAllIds.length - 2])
+  const triggerConfirm = (id: number): void => {
+    closeUser(id)
   }
 
   const onHandleClose = (key: string): void => {
     if (selectUserById(store.getState(), parseInt(key))?.modified && popConfirmOpen === null) {
       if (user?.allowDirtyClose) {
-        triggerConfirm()
+        triggerConfirm(parseInt(key))
       } else {
         setPopConfirmOpen(parseInt(key))
       }
@@ -60,7 +59,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
     }
 
     if (!selectUserById(store.getState(), parseInt(key))?.modified) {
-      triggerConfirm()
+      triggerConfirm(parseInt(key))
 
       return
     }
@@ -86,7 +85,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
       title: t('user-management.remove-user'),
       content: t('user-management.remove-user.text'),
       onOk: async () => {
-        triggerConfirm()
+        triggerConfirm(activeId)
         await removeUser({ id: activeId })
 
         onRemoveItem(activeId, openedUser?.parentId)
@@ -119,7 +118,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
             key: id.toString(),
             label: <Popconfirm
               onCancel={ () => { setPopConfirmOpen(null) } }
-              onConfirm={ triggerConfirm }
+              onConfirm={ () => { triggerConfirm(id) } }
               open={ popConfirmOpen === id }
               title={ t('widget-manager.tab-title.close-confirmation') }
                    >
