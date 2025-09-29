@@ -11,7 +11,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isEqual, isUndefined } from 'lodash'
+import { isEmpty, isEqual, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import type { DragAndDropInfo } from '@sdk/components'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -53,9 +53,11 @@ export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
+  showOpenForTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
   readOnly?: boolean
+  vertical?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -89,10 +91,14 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [props.value])
 
   const clickOpenElement = (): void => {
-    if (value !== null && value.textInput !== true) {
-      const elementType = mapToElementType(value.type)
-      if (!isUndefined(elementType)) {
-        openElement({ type: elementType, id: value.id }).catch(() => { })
+    if (value !== null) {
+      if (value.textInput === true) {
+        window.open(value.fullPath, '_blank', 'noopener,noreferrer')
+      } else {
+        const elementType = mapToElementType(value.type)
+        if (!isUndefined(elementType)) {
+          openElement({ type: elementType, id: value.id }).catch(() => { })
+        }
       }
 
       props.onOpenElement?.()
@@ -108,6 +114,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
+      vertical={ props.vertical }
     >
       <div className={ styles.droppableWrapper }>
         <Droppable
@@ -130,14 +137,16 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Droppable>
       </div>
-      <Flex gap="extra-small">
-        {props.allowPathTextInput !== true && (
+      <Flex
+        gap="extra-small"
+        justify={ props.vertical === true ? 'start' : undefined }
+      >
+        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
           >
             <IconButton
-              disabled={ value === null }
               icon={ { value: 'open-folder' } }
               onClick={ clickOpenElement }
               style={ { flex: '0 0 auto' } }
@@ -164,13 +173,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           </Tooltip>
         )}
 
-        {props.allowToClearRelation === true && (
+        {props.allowToClearRelation === true && !(isNull(value) || props.disabled === true) && (
           <Tooltip
             key="empty"
             title={ t('empty') }
           >
             <IconButton
-              disabled={ value === null || props.disabled === true }
               icon={ { value: 'trash' } }
               onClick={ () => {
                 setValue(null)
@@ -190,7 +198,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
                   allowedTypes: props.allowedAssetTypes
                 },
                 documents: {
-                  allowedTypes: props.allowedAssetTypes
+                  allowedTypes: props.allowedDocumentTypes
                 },
                 objects: {
                   allowedTypes: props.allowedClasses

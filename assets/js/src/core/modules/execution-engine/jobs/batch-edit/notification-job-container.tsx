@@ -45,7 +45,9 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
   function openHandler (): void {
     action().then(actionJobId => {
       jobId.current = actionJobId
-    }).catch(console.error)
+    }).catch(
+      () => { removeJob(id) }
+    )
   }
 
   function messageHandler (event: MessageEvent): void {

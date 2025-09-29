@@ -19,6 +19,7 @@ import { type AreaType, type AreablockEditableConfig } from '../../areablock-edi
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableAreablockToolbarProps {
   id: string
@@ -34,6 +35,8 @@ export interface SortableAreablockToolbarProps {
   onMoveAreaDown: (element: HTMLElement) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
+  isInherited?: boolean
+  onOverwrite?: () => void
 }
 
 export const SortableAreablockToolbar = ({
@@ -49,7 +52,9 @@ export const SortableAreablockToolbar = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onOpenDialog,
-  onToggleHidden
+  onToggleHidden,
+  isInherited = false,
+  onOverwrite
 }: SortableAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
@@ -122,7 +127,6 @@ export const SortableAreablockToolbar = ({
     />
   )
 
-  // Add dialog button if area type has dialog box configuration
   if (areaTypeConfig?.hasDialogBoxConfiguration === true) {
     buttons.push(
       <IconButton
@@ -134,7 +138,6 @@ export const SortableAreablockToolbar = ({
     )
   }
 
-  // Add hide/show button
   buttons.push(
     <IconButton
       icon={ { value: isHidden ? 'eye-off' : 'eye' } }
@@ -154,11 +157,13 @@ export const SortableAreablockToolbar = ({
     />
   )
 
-  return (
+  const toolStripContent = (
     <ToolStrip
-      activateOnHover
+      activateOnHover={ !isInherited }
+      additionalIcon={ isInherited ? 'inheritance-active' : undefined }
       className={ styles.areablockToolstrip }
-      dragger={ { listeners } }
+      disabled={ isInherited }
+      dragger={ isInherited ? true : { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
       title={ toolbarTitle }
@@ -174,5 +179,14 @@ export const SortableAreablockToolbar = ({
         {deleteButton}
       </Split>
     </ToolStrip>
+  )
+
+  return (
+    <InheritanceWrapper
+      isInherited={ isInherited }
+      onOverwrite={ onOverwrite }
+    >
+      {toolStripContent}
+    </InheritanceWrapper>
   )
 }

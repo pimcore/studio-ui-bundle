@@ -20,16 +20,25 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
+import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
+import { SIDEBAR_CONTENT_SETTINGS, SIDEBAR_NAVIGATION } from '../../shared-tab-manager/sidebar-definitions'
+import { TAB_LINK_EDIT } from './tab-manager/tabs/edit'
 
 moduleSystem.registerModule({
   onInit: () => {
     const linkEditorTabManager = container.get<LinkTabManager>(serviceIds['Document/Editor/LinkTabManager'])
 
+    linkEditorTabManager.register(TAB_LINK_EDIT)
     linkEditorTabManager.register(TAB_PROPERTIES)
     linkEditorTabManager.register(TAB_SCHEDULE)
     linkEditorTabManager.register(TAB_DEPENDENCIES)
     linkEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     linkEditorTabManager.register(TAB_TAGS)
     linkEditorTabManager.register(TAB_WORKFLOW)
+
+    const linkSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/LinkSidebarManager'])
+
+    linkSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    linkSidebarManager.registerEntry(SIDEBAR_NAVIGATION)
   }
 })

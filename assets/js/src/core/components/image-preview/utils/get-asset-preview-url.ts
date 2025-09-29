@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { createImageThumbnailUrl, type ImageThumbnailSettings } from './custom-image-thumbnail'
+import { getThumbnailUrl } from '@Pimcore/modules/asset/utils/get-thumbnail-url'
+import { type ImageThumbnailSettings } from './custom-image-thumbnail'
 import { isNil } from 'lodash'
 
 interface AssetPreviewUrlParams {
@@ -35,15 +35,18 @@ export const getAssetPreviewUrl = ({
   const roundedHeight = !isNil(height) ? Math.round(height) : undefined
 
   if (assetType === 'video') {
-    if (isNil(height)) {
-      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${roundedWidth}&frame=true&aspectRatio=true`
-    }
-    return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${roundedWidth}&height=${roundedHeight}&frame=true&aspectRatio=true`
+    return getThumbnailUrl({
+      assetId,
+      assetType: 'video',
+      width: roundedWidth,
+      height: roundedHeight,
+      aspectRatio: true,
+      frame: true
+    }) ?? undefined
   }
 
   const defaultSettings: ImageThumbnailSettings = {
     width: roundedWidth,
-    mimeType: 'JPEG',
     frame: true
   }
 
@@ -51,8 +54,10 @@ export const getAssetPreviewUrl = ({
     defaultSettings.height = roundedHeight
   }
 
-  return createImageThumbnailUrl(assetId, {
+  return getThumbnailUrl({
+    assetId,
+    assetType: 'image',
     ...defaultSettings,
     ...thumbnailSettings
-  })
+  }) ?? undefined
 }

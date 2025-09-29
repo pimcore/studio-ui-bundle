@@ -18,8 +18,10 @@ import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modul
 import { type DynamicTypeFieldFilterString } from './definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { type DynamicTypeFieldFilterFulltext } from './definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
+import { type DynamicTypeFieldFilterInput } from './definitions/field-filters/types/input/dynamic-type-field-filter-input'
+import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
-import { type DynamicTypeFieldFilterSelect } from './definitions/field-filters/types/select/dynamic-type-field-filter-select'
+import { type DynamicTypeFieldFilterMultiselect } from './definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
 import { type DynamicTypeFieldFilterDate } from './definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DynamicTypeGridCellText } from './definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './definitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -165,6 +167,7 @@ import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterBoolean } from './definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
+import { type DynamicTypeFieldFilterConsent } from './definitions/field-filters/types/consent/dynamic-type-field-filter-consent'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
 import { type DynamicTypeDocumentEditablePdf } from './definitions/document/editable/types/dynamic-type-document-editable-pdf'
@@ -181,6 +184,7 @@ import { type DynamicTypeDocumentEditableTable } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { type DynamicTypeDocumentEditableRenderlet } from './definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
+import { type DynamicTypeDocumentEditableScheduledblock } from './definitions/document/editable/types/dynamic-type-document-editable-scheduledblock'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
 import { type DynamicTypeDocumentEditableAreablock } from './definitions/document/editable/types/dynamic-type-document-editable-areablock'
@@ -205,12 +209,15 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterString>(serviceIds['DynamicTypes/FieldFilter/String']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFulltext>(serviceIds['DynamicTypes/FieldFilter/Fulltext']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterInput>(serviceIds['DynamicTypes/FieldFilter/Input']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterMultiselect>(serviceIds['DynamicTypes/FieldFilter/Multiselect']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterConsent>(serviceIds['DynamicTypes/FieldFilter/Consent']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 
@@ -352,6 +359,7 @@ moduleSystem.registerModule({
     const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
 
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableBlock>(serviceIds['DynamicTypes/DocumentEditable/Block']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableScheduledblock>(serviceIds['DynamicTypes/DocumentEditable/ScheduledBlock']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))

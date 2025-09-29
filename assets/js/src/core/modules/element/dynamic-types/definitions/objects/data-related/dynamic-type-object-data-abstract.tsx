@@ -83,6 +83,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
   supportsBatchAppendModes: boolean = false
+  isAllowedInBatchEdit: boolean = true
 
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {

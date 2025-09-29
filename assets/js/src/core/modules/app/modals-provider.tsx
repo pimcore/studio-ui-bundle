@@ -15,6 +15,8 @@ import { CropModalProvider } from '../element/components/crop-modal/provider/cro
 import { HotspotMarkersModalProvider } from '../element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
 import { VideoModalProvider } from '../element/components/video-modal/provider/video-modal-provider'
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
+import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
+import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
 
 export interface ModalsProviderProps {
   children: React.ReactNode
@@ -26,18 +28,22 @@ export interface ModalsProviderProps {
  */
 export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Element => {
   return (
-    <UploadModalProvider>
-      <LinkModalProvider>
-        <CropModalProvider>
-          <HotspotMarkersModalProvider>
-            <VideoModalProvider>
-              <SendTestEmailProvider>
-                {children}
-              </SendTestEmailProvider>
-            </VideoModalProvider>
-          </HotspotMarkersModalProvider>
-        </CropModalProvider>
-      </LinkModalProvider>
-    </UploadModalProvider>
+    <ModalHolderProvider>
+      <UploadModalProvider>
+        <LinkModalProvider>
+          <CropModalProvider>
+            <HotspotMarkersModalProvider>
+              <VideoModalProvider>
+                <SendTestEmailProvider>
+                  <SiteModalProvider>
+                    {children}
+                  </SiteModalProvider>
+                </SendTestEmailProvider>
+              </VideoModalProvider>
+            </HotspotMarkersModalProvider>
+          </CropModalProvider>
+        </LinkModalProvider>
+      </UploadModalProvider>
+    </ModalHolderProvider>
   )
 }

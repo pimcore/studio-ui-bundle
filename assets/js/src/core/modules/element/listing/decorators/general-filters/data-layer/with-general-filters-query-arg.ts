@@ -19,13 +19,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { type ColumnFilter } from '@tanstack/react-table'
-
-const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-  return columnFilters.map(({ filterType, ...rest }) => ({
-    ...rest,
-    ...(filterType !== undefined && { type: filterType })
-  }))
-}
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 const shouldApplyFieldFilter = (
   filter: any,
@@ -41,12 +35,16 @@ const shouldApplyFieldFilter = (
   }
 
   const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
-  if (dynamicType === null || !('dynamicTypeFieldFilterType' in dynamicType)) {
+  if (dynamicType === null) {
     return false
   }
 
-  const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-  return fieldFilterType.shouldApply(filter.filterValue)
+  if (('dynamicTypeFieldFilterType' in dynamicType)) {
+    const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+    return fieldFilterType.shouldApply(filter.filterValue)
+  }
+
+  return dynamicType.shouldApply(filter.filterValue)
 }
 
 const getApplicableFieldFilters = (
@@ -69,6 +67,24 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
     const { hasType, getType } = useDynamicTypeResolver()
+    const { currentLanguage } = useLanguageSelection()
+
+    const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
+      const column = availableColumns.find(col => col.key === columnKey)
+      return column?.localizable === true ? (providedLocale ?? currentLanguage) : null
+    }
+
+    const getFilterType = (filterType?: string, type?: string): string | undefined => {
+      return filterType ?? type
+    }
+
+    const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
+      return columnFilters.map(({ filterType, type, ...rest }) => ({
+        ...rest,
+        type: getFilterType(filterType as string | undefined, type as string | undefined),
+        locale: getColumnLocale(rest.key as string, rest.locale as string | undefined)
+      }))
+    }
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()

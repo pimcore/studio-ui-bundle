@@ -33,6 +33,7 @@ export const tagNames = {
   DOCUMENT_DETAIL: 'DOCUMENT_DETAIL',
   DOCUMENT_TREE: 'DOCUMENT_TREE',
   DOCUMENT_TYPES: 'DOCUMENT_TYPES',
+  DOCUMENT_SITE: 'DOCUMENT_SITE',
   WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
@@ -92,6 +93,7 @@ export const providingTags = {
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
+  DOCUMENT_SITE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_SITE],
   DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
   LOCALES: () => [tagNames.LOCALES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
@@ -151,6 +153,7 @@ export const invalidatingTags = {
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
+  DOCUMENT_SITE: () => [tagNames.DOCUMENT_SITE],
   DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
   LOCALES: () => [tagNames.LOCALES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
@@ -197,6 +200,6 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
     case 'data-object':
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
-      return { type: tagNames.DATA_OBJECT_DETAIL, id }
+      return { type: tagNames.DOCUMENT_DETAIL, id }
   }
 }

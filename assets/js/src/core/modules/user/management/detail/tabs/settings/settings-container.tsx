@@ -39,7 +39,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { Text } = Typography
   const { id } = useUserManagementContext()
   const user = useUser()
-  const { user: openedUser, isLoading, changeUserInState } = useUserManagementDraft(id)
+  const { user: openedUser, isLoading, changeUserInState, updateUserImageInState } = useUserManagementDraft(id)
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
@@ -52,7 +52,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         admin: openedUser?.admin,
         classes: openedUser?.classes,
         name: openedUser?.name,
-        twoFactorAuthenticationEnabled: openedUser?.twoFactorAuthenticationEnabled,
+        twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
         firstname: openedUser?.firstname,
         lastname: openedUser?.lastname,
         email: openedUser?.email,
@@ -118,12 +118,13 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       <Switch
                         disabled={ user?.id === openedUser?.id }
                         labelRight={ t('user-management.active') }
+                        size={ 'small' }
                       />
                     </Form.Item>
 
                     { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin as number) }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
                         )
                       : null}
                   </Flex>
@@ -155,8 +156,15 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
-                    <Switch labelRight={ t('user-management.two-factor-authentication') } />
+
+                  <Form.Item
+                    name={ 'twoFactorAuthenticationRequired' }
+                    style={ { marginBottom: '0' } }
+                  >
+                    <Switch
+                      labelRight={ t('user-management.two-factor-authentication') }
+                      size={ 'small' }
+                    />
                   </Form.Item>
                 </>
               }
@@ -166,7 +174,10 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar user={ openedUser } />
+          <UserAvatar
+            onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
+            user={ openedUser }
+          />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />

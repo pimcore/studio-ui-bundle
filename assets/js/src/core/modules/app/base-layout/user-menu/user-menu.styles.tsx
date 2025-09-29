@@ -16,6 +16,9 @@ export const useStyle = createStyles(({ token, css }) => {
       .user-menu__title {
         text-transform: uppercase;
       }
+      .user-menu__title-username {
+        text-transform: none;
+      }
       
       .user-menu__item-extra {
         margin-left: auto;

@@ -19,6 +19,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { useStyles } from './reports-view.styles'
 
 interface IReportsViewProps {
@@ -28,7 +30,12 @@ interface IReportsViewProps {
 export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element => {
   const [currentReport, setCurrentReport] = useState<string | null>(reportId ?? null)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
+  const hasPermission = isAllowed(UserPermission.Reports)
+
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery(
+    { page: 1, pageSize: 9999 },
+    { skip: !hasPermission }
+  )
 
   const { styles } = useStyles()
 

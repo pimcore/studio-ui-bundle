@@ -40,7 +40,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       frontendType: currentColumn?.frontendType,
       localizable: currentColumn?.localizable,
       locale: filter?.locale,
-      config: currentColumn?.config
+      config: currentColumn?.config,
+      nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
     }
   }), [fieldFilters, availableColumns])
 
@@ -64,10 +65,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const handleColumnClick = (column: AvailableColumn): void => {
     const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
 
-    let inferedFilterType: DynamicTypeFieldFilterAbstract | null = null
+    let inferredFilterType: DynamicTypeFieldFilterAbstract | null = null
 
     if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
-      inferedFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+    } else if (objectDataByFrontendType !== null) {
+      inferredFilterType = objectDataByFrontendType as DynamicTypeFieldFilterAbstract
     }
 
     setFilters((prevFilters) => [
@@ -80,7 +83,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         localizable: column.localizable,
         locale: column.locale,
         config: column.config,
-        ...(inferedFilterType !== null && { filterType: inferedFilterType.getFieldFilterType() })
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     ])
   }
@@ -107,46 +111,36 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       const groupTree: Record<string, any> = {}
       let menuIndex = 0
 
-      // Build the tree structure by processing each column's group(s)
+      // Build the tree structure by processing each column's group
       columns.forEach((column) => {
-        const groups = Array.isArray(column.group) ? column.group : [column.group]
+        // Handle the group - it's always a one-dimensional array representing a single group path
+        let groupParts: string[] = []
 
-        groups.forEach((groupPath) => {
-          let groupParts: string[] = []
+        if (Array.isArray(column.group)) {
+          // Convert array elements to strings
+          groupParts = column.group.map(part => String(part))
+        } else {
+          return
+        }
 
-          // Handle different group path formats:
-          // 1. String: "assets.metadata" -> ["assets", "metadata"]
-          // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
-          // 3. Nested array: [["Attributes", "attributes", "Bodywork"]] -> ["Attributes", "attributes", "Bodywork"]
-          if (typeof groupPath === 'string') {
-            groupParts = groupPath.split('.')
-          } else if (Array.isArray(groupPath)) {
-            // If it's an array, flatten it and convert all elements to strings
-            groupParts = groupPath.flat().map(part => String(part))
-          } else {
-            // Fallback for any other type
-            groupParts = [String(groupPath)]
+        let currentLevel = groupTree
+
+        // Navigate/create the nested tree structure
+        groupParts.forEach((part, index) => {
+          if (isNil(currentLevel[part])) {
+            currentLevel[part] = {
+              items: [], // Columns that belong directly to this group level
+              subGroups: {} // Nested sub-groups
+            }
           }
 
-          let currentLevel = groupTree
-
-          // Navigate/create the nested tree structure
-          groupParts.forEach((part, index) => {
-            if (isNil(currentLevel[part])) {
-              currentLevel[part] = {
-                items: [], // Columns that belong directly to this group level
-                subGroups: {} // Nested sub-groups
-              }
-            }
-
-            // If this is the final part of the group path, add the column to this level
-            if (index === groupParts.length - 1) {
-              currentLevel[part].items.push(column)
-            } else {
-              // Move deeper into the tree structure
-              currentLevel = currentLevel[part].subGroups
-            }
-          })
+          // If this is the final part of the group path, add the column to this level
+          if (index === groupParts.length - 1) {
+            currentLevel[part].items.push(column)
+          } else {
+            // Move deeper into the tree structure
+            currentLevel = currentLevel[part].subGroups
+          }
         })
       })
 
@@ -195,8 +189,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
     return createNestedStructure(availableFilterColumns)
   }, [availableFilterColumns, t])
-
-  console.log({ filters })
 
   return (
     <Space

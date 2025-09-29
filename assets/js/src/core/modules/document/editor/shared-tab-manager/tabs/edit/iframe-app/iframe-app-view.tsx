@@ -10,7 +10,7 @@
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import React, { StrictMode } from 'react'
-import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
+import { EditablesLoader } from '../components/editables-renderer/editables-loader'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
 import { isNaN, isNil, isNumber } from 'lodash'
@@ -63,7 +63,7 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
             <ModalsProvider>
               <DateTimeConfig>
                 <DocumentProvider id={ documentId }>
-                  <EditablesRenderer editableDefinitions={ editableDefinitions } />
+                  <EditablesLoader editableDefinitions={ editableDefinitions } />
                 </DocumentProvider>
               </DateTimeConfig>
             </ModalsProvider>

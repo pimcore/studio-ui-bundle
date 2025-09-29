@@ -10,6 +10,10 @@
 
 import { type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type BatchEdit } from '../batch-edit-provider'
+import { type UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { container } from '@Pimcore/app/depency-injection'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 // Helper function to compare groups that can be strings, arrays, or nested arrays
 export const areGroupsEqual = (group1: any, group2: any): boolean => {
@@ -39,7 +43,8 @@ export const areGroupsEqual = (group1: any, group2: any): boolean => {
 export const shouldIncludeColumnItem = (
   item: any,
   batchEdits: BatchEdit[],
-  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean
+  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
+  getType: UseDynamicTypeResolverReturnType['getType']
 ): boolean => {
   const isEditable: boolean = item.editable === true
   const isAlreadyInBatchEditList = batchEdits.some(batchItem =>
@@ -50,14 +55,23 @@ export const shouldIncludeColumnItem = (
     dynamicTypeIds: [item?.mainType, item?.frontendType as string]
   })
 
-  return isEditable && hasDynamicType && !isAlreadyInBatchEditList
+  let isAllowedInBatchEdit = false
+  const objectTypeRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+  if (objectTypeRegistry.hasDynamicType(item?.frontendType as string)) {
+    const objectType = objectTypeRegistry.getDynamicType(item?.frontendType as string)
+    isAllowedInBatchEdit = objectType.isAllowedInBatchEdit
+  }
+
+  return isEditable && hasDynamicType && !isAlreadyInBatchEditList && isAllowedInBatchEdit
 }
 
 // Recursively filter the dropdown menu while preserving the nested structure
 export const filterDropdownItems = (
   items: Array<ItemType<MenuItemType>>,
   batchEdits: BatchEdit[],
-  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean
+  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
+  getType: UseDynamicTypeResolverReturnType['getType']
 ): Array<ItemType<MenuItemType>> => {
   return items.map((item: ItemType<MenuItemType>) => {
     // If this item has children, it's a group - process its children recursively
@@ -65,7 +79,8 @@ export const filterDropdownItems = (
       const filteredChildren = filterDropdownItems(
         item.children,
         batchEdits,
-        hasType
+        hasType,
+        getType
       )
       return {
         ...item,
@@ -73,7 +88,7 @@ export const filterDropdownItems = (
       }
     } else {
       // This is a column item - check if it should be included
-      return shouldIncludeColumnItem(item, batchEdits, hasType) ? item : null
+      return shouldIncludeColumnItem(item, batchEdits, hasType, getType) ? item : null
     }
   }).filter((item): item is ItemType<MenuItemType> => {
     // Remove null items and groups with no valid children

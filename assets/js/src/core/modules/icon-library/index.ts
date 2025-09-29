@@ -81,6 +81,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentConfigurations from '@Pimcore/assets/icons/document-configurations.inline.svg?react'
 import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
@@ -157,6 +158,7 @@ import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
 import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg?react'
+import navigation from '@Pimcore/assets/icons/navigation.inline.svg?react'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg?react'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg?react'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg?react'
@@ -179,6 +181,7 @@ import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
+import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
@@ -208,6 +211,7 @@ import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
+import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
@@ -510,6 +514,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-configurations',
+      component: documentConfigurations
     })
     iconLibrary.register({
       name: 'document-link',
@@ -816,6 +824,10 @@ moduleSystem.registerModule({
       component: multiSelect
     })
     iconLibrary.register({
+      name: 'navigation',
+      component: navigation
+    })
+    iconLibrary.register({
       name: 'new-circle',
       component: newCircle
     })
@@ -902,6 +914,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'pined',
       component: pined
+    })
+    iconLibrary.register({
+      name: 'plus-circle',
+      component: plusCircle
     })
     iconLibrary.register({
       name: 'plus-square',
@@ -1018,6 +1034,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'shared-users',
       component: sharedUsers
+    })
+    iconLibrary.register({
+      name: 'shield-plus',
+      component: shieldPlus
     })
     iconLibrary.register({
       name: 'shield',

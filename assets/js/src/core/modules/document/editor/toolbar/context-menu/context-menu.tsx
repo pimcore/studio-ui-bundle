@@ -23,6 +23,7 @@ import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReloadButton } from './components/reload-button/reload-button'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
+import { useTranslations } from '@Pimcore/modules/document/actions/translations/use-translations'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -31,7 +32,8 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { unpublishContextMenuItem } = useUnpublish('document')
   const { renameContextMenuItem } = useRename('document')
   const { deleteContextMenuItem } = useDelete('document')
-  const { openInNewWindowContextMenuItem } = useOpenInNewWindow()
+  const { openInNewWindowContextMenuItem, openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
+  const { translationContextMenuItem } = useTranslations(document as Document)
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
   const items: DropdownMenuProps['items'] = [
@@ -40,7 +42,11 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     }),
     deleteContextMenuItem(document as Document),
     renameContextMenuItem(document as Document),
-    openInNewWindowContextMenuItem(document as Document)
+    translationContextMenuItem(() => {
+      setIsOpen(undefined)
+    }),
+    openInNewWindowContextMenuItem(document as Document),
+    openPreviewInNewWindowContextMenuItem(document as Document)
   ]
 
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)

@@ -26,6 +26,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: D
       label: dataObjectNode.key,
       type: dataObjectNode.type,
       parentId: dataObjectNode.parentId.toString(),
+      fullPath: dataObjectNode.fullPath,
       hasChildren: dataObjectNode.hasChildren,
       locked: dataObjectNode.locked,
       isLocked: dataObjectNode.isLocked,

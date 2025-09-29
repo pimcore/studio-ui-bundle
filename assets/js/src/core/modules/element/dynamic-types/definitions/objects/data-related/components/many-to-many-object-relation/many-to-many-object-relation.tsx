@@ -8,23 +8,27 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import { type ColumnDef } from '@tanstack/react-table'
-import type {
-  ManyToManyRelationValue,
-  ManyToManyRelationValueItem
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import type {
-  IRelationAllowedTypesDataComponent
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { useTranslation } from 'react-i18next'
-import _ from 'lodash'
-import {
-  enrichRowData,
-  visibleFieldsToColumnDefinitions
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
+import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
+import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import {
+  type AdvancedColumnConfig,
+  type GridColumnData,
+  useDataObjectGetAvailableGridColumnsForRelationQuery
+} from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
+import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -36,13 +40,23 @@ export interface ManyToManyObjectRelationClassDefinitionProps {
 }
 
 export interface VisibleFieldDefinition {
-  name: string
+  additionalAttributes: object
+  config: Array<string | AdvancedColumnConfig>
+  editable: boolean
+  exportable: boolean
+  filterable: boolean
+  frontendType: string
+  group: string[]
+  key: string
+  locale: string | null
+  localizable: boolean
+  sortable: boolean
   title: string
-  fieldtype: string
-  autoWidth?: boolean
+  type: string
 }
 
 export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyObjectRelationClassDefinitionProps {
+  combinedFieldName?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
@@ -54,52 +68,142 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   className?: string
 }
 
-export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
+const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const hasVisibleFieldDefinitions = props.visibleFieldDefinitions !== undefined && !_.isEmpty(props.visibleFieldDefinitions)
-  const visibleFieldDefinitions = hasVisibleFieldDefinitions
-    ? { ...props.visibleFieldDefinitions }
-    : {
-        id: {
-          name: 'id',
-          title: 'id',
-          fieldtype: 'input'
-        },
-        fullpath: {
-          name: 'fullpath',
-          title: t('relations.reference'),
-          fieldtype: 'input'
-        },
-        classname: {
-          name: 'classname',
-          title: t('relations.class'),
-          fieldtype: 'input'
+  const { id } = useElementContext()
+  const { dataObject } = useDataObjectDraft(id)
+  const { getByName } = useClassDefinitions()
+
+  const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
+
+  const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
+  const relationField = props?.combinedFieldName
+  const dataRelationClasses = props?.allowedClasses
+
+  const [loadedIds, setLoadedIds] = useState<number[]>([])
+  const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
+
+  const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
+    classId,
+    relationField
+  }, { skip: isUndefined(classId) || isUndefined(relationField) })
+
+  const visibleFieldDefinitions: VisibleFieldDefinition[] | undefined = useMemo(() => {
+    if (isAvailableGridColumnsLoading) return undefined
+
+    const fieldDefinitions = !isNil(availableGridColumnsData)
+      ? availableGridColumnsData?.columns
+      : getDefaultVisibleFieldDefinitions()
+
+    return fieldDefinitions?.map((field) => {
+      const newField = { ...field }
+
+      if (newField.key === 'id' || newField.key === 'fullpath' || newField.key === 'classname') {
+        if (newField.title === t('relations.reference')) {
+          return newField // skip modifications
         }
+
+        newField.title = t(`relations.${newField.key}`)
+      } else {
+        newField.title = t(newField.title as string)
       }
 
-  for (const key in visibleFieldDefinitions) {
-    const field = { ...visibleFieldDefinitions[key] }
-    if (key === 'id' || key === 'fullpath' || key === 'classname') {
-      if (field.title === t('relations.reference')) {
-        continue
+      const fieldData = find(availableGridColumnsData?.columns, { key: newField.key })
+
+      return {
+        ...newField,
+        ...fieldData?.config
       }
-      field.title = t(`relations.${key}`)
-    } else {
-      field.title = t(field.title as string)
+    })
+  }, [availableGridColumnsData])
+
+  const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
+    ...col,
+    group: col?.group?.[0]
+  }))
+
+  const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
+    classIds: dataRelationClasses,
+    convertClassName: getByName,
+    columns: visibleColumns,
+    dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
+  })
+
+  useEffect(() => {
+    if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
+      setLoadedIds(prev => {
+        const ids = gridFullData.map(item => item.id).filter(id => !isUndefined(id))
+        const next = [...new Set([...prev, ...ids])]
+
+        return next.length === prev.length ? prev : next
+      })
+
+      setCachedGridFullData(prev => {
+        const existingIds = new Set(prev.map(item => item.id))
+        const next = gridFullData.filter(item => !existingIds.has(item.id))
+
+        if (next.length === 0) return prev
+
+        return [...prev, ...next]
+      })
     }
-    visibleFieldDefinitions[key] = field
-  }
+  }, [gridFullData, isGridFullDataLoading])
 
-  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true, props.pathFormatterClass ?? '')
+  useEffect(() => {
+    // Remove IDs from loadedIds and cachedGridFullData if they no longer exist in the new props.value
+    if (!isEmpty(props.value)) {
+      const currentIds = new Set((props?.value ?? []).map(item => item.id))
+
+      setLoadedIds(prev => prev.filter(id => currentIds.has(id)))
+      setCachedGridFullData(prev => prev.filter(item => !isUndefined(item.id) && currentIds.has(item.id)))
+    }
+  }, [props?.value])
+
+  const columnDefinition = visibleFieldsToColumnDefinitions({
+    visibleFieldDefinitions,
+    disabled: props.inherited === true || props.disabled === true,
+    pathFormatterClass: props.pathFormatterClass ?? '',
+    transformGridColumn
+  })
+
+  const mergedGridFullData = useMemo(() => {
+    const existingIds = new Set(cachedGridFullData.map(item => item.id))
+
+    const newData = gridFullData.filter(item => !existingIds.has(item.id))
+    return [...cachedGridFullData, ...newData]
+  }, [cachedGridFullData, gridFullData])
+
+  const handleEnrichRowData = useCallback(
+    (row: ManyToManyRelationValueItem) => {
+      const rowData: GridColumnData[] = mergedGridFullData?.find(item => item.id === row.id)?.columns ?? []
+
+      return enrichRowData(visibleFieldDefinitions, row, rowData)
+    },
+    [mergedGridFullData, visibleFieldDefinitions]
+  )
 
   return (
     <ManyToManyRelation
       { ...props }
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
-      dataObjectsAllowed={ !_.isEmpty(props.allowedClasses) }
-      enrichRowData={ (row: ManyToManyRelationValueItem) => enrichRowData(visibleFieldDefinitions, row) }
-      // isLoading // todo: set this prop while loading the column definition data
+      dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
+      enrichRowData={ handleEnrichRowData }
+      isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+      value={ props.value }
     />
+  )
+}
+
+export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
+  return (
+    <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
+      'DynamicTypes/MetadataRegistry',
+      'DynamicTypes/ListingRegistry'
+    ] }
+    >
+      <ManyToManyObjectRelationInner { ...props } />
+    </DynamicTypeRegistryProvider>
   )
 }

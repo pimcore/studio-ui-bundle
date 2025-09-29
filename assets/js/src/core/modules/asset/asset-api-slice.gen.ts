@@ -64,6 +64,23 @@ const injectedRtkApi = api
                         height: queryArg.height,
                         quality: queryArg.quality,
                         dpi: queryArg.dpi,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamDynamic: build.query<
+                AssetDocumentStreamDynamicApiResponse,
+                AssetDocumentStreamDynamicApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/dynamic`,
+                    params: {
+                        config: queryArg.config,
                     },
                 }),
                 providesTags: ["Assets"],
@@ -95,6 +112,11 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/thumbnail/${queryArg.thumbnailName}`,
                     params: {
                         page: queryArg.page,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
                     },
                 }),
                 providesTags: ["Assets"],
@@ -251,6 +273,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamDynamic: build.query<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/dynamic`,
+                    params: {
+                        config: queryArg.config,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
                 AssetImageDownloadByFormatApiArg
@@ -283,6 +314,14 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
+                        mimeType: queryArg.mimeType,
+                    },
                 }),
                 providesTags: ["Assets"],
             }),
@@ -473,6 +512,23 @@ export type AssetDocumentStreamCustomApiArg = {
     quality?: number;
     /** Dpi of downloaded image */
     dpi?: number;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetDocumentStreamDynamicApiResponse =
+    /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
+export type AssetDocumentStreamDynamicApiArg = {
+    /** Id of the document */
+    id: number;
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
@@ -496,6 +552,15 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     page?: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -530,7 +595,7 @@ export type AssetExportZipFolderApiResponse =
 export type AssetExportZipFolderApiArg = {
     body: {
         folders?: number[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
@@ -698,14 +763,22 @@ export type AssetImageStreamCustomApiArg = {
     /** Force resize */
     forceResize?: boolean;
     cropPercent?: boolean;
-    /** CropWidth of downloaded image */
-    cropWidth?: number;
-    /** CropHeight of downloaded image */
-    cropHeight?: number;
-    /** CropTop of downloaded image */
-    cropTop?: number;
-    /** CropLeft of downloaded image */
-    cropLeft?: number;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+};
+export type AssetImageStreamDynamicApiResponse =
+    /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
+export type AssetImageStreamDynamicApiArg = {
+    /** Id of the asset */
+    id: number;
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -739,6 +812,17 @@ export type AssetImageStreamByThumbnailApiArg = {
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+    cropPercent?: boolean;
+    /** CropWidth of image thumbnail */
+    cropWidth?: any;
+    /** CropHeight of image thumbnail */
+    cropHeight?: any;
+    /** CropTop of image thumbnail */
+    cropTop?: any;
+    /** CropLeft of image thumbnail */
+    cropLeft?: any;
+    /** Mime type of steamed image. */
+    mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
 export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
@@ -771,7 +855,7 @@ export type AssetPatchFolderByIdApiArg = {
             locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
         }[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetClearThumbnailApiResponse = unknown;
@@ -914,17 +998,11 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
+export type ExportAllFilter = {
     /** Column Filter */
-    columnFilters?: object;
+    columnFilters: object;
     /** Sort Filter */
-    sortFilter?: object;
+    sortFilter: object;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1133,6 +1211,18 @@ export type GridColumnRequest = {
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
 };
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
+};
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1254,6 +1344,7 @@ export const {
     useAssetGetTextDataByIdQuery,
     useAssetDocumentDownloadCustomQuery,
     useAssetDocumentStreamCustomQuery,
+    useAssetDocumentStreamDynamicQuery,
     useAssetDocumentStreamPreviewQuery,
     useAssetDocumentDownloadByThumbnailQuery,
     useAssetDocumentStreamByThumbnailQuery,
@@ -1274,6 +1365,7 @@ export const {
     useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
+    useAssetImageStreamDynamicQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,

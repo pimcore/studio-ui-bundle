@@ -10,8 +10,9 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ManyToOneRelation, type ManyToOneRelationValue } from '@sdk/modules/element'
+import { type ManyToOneRelationValue } from '@sdk/modules/element'
 import { isEmpty, isNil } from 'lodash'
+import { RelationEditable } from '../components/relation-editable/relation-editable'
 
 export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -42,7 +43,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
 
   getEditableDataComponent (props: RelationEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToOneRelation
+      <RelationEditable
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
         allowedClasses={ props.config?.classes }
@@ -52,6 +53,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         className={ props.config?.class }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
+        inherited={ props.inherited }
         width={ props.config?.width }
       />
     )

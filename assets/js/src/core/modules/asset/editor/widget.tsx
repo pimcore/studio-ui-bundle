@@ -22,6 +22,7 @@ export const AssetEditorWidget: Widget = {
   name: 'asset-editor',
   component: EditorContainerRenderer,
   titleComponent: TitleContainer,
+  defaultGlobalContext: false,
   isModified: (tabNode) => {
     const config = tabNode.getConfig() as EditorContainerProps
     const asset = selectAssetById(store.getState(), config.id)

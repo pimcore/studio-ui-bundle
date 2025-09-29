@@ -23,6 +23,7 @@ export interface TreeNode {
   id: string
   elementType?: ElementType
   parentId?: string
+  fullPath?: string
   icon: ElementIcon
   label: string
   type?: string
@@ -31,6 +32,7 @@ export interface TreeNode {
   locked: string | null
   isLocked: boolean
   isPublished?: boolean
+  isSite?: boolean
   hasChildren?: boolean
   metaData?: any
 
@@ -430,6 +432,25 @@ const slice = createSlice({
         }
       })
     },
+    updateNodeType: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, newType: string, newIcon: ElementIcon }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  type: payload.newType,
+                  icon: payload.newIcon
+                }
+              : undefined
+          }))
+        }
+      })
+    },
 
     refreshTargetNode: (
       state,
@@ -523,6 +544,27 @@ const slice = createSlice({
         isExpanded: true,
         isRoot: true
       }))
+    },
+    setDocumentNodeSiteStatus: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, isSite: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === 'document') {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  isSite: payload.isSite,
+                  icon: payload.isSite
+                    ? { type: 'name' as const, value: 'home-root-folder' }
+                    : { type: 'name' as const, value: 'document' }
+                }
+              : undefined
+          }))
+        }
+      })
     },
     setNodeLocked: (
       state,
@@ -630,7 +672,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked, refreshTreeByElementType } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

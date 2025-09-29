@@ -26,6 +26,10 @@ export const getElementIcon = (element: Element, defaultIcon: ElementIcon): Elem
     return element.customAttributes.icon
   }
 
+  if ('isSite' in element && element.isSite) {
+    return { type: 'name' as const, value: 'home-root-folder' }
+  }
+
   if (
     element.icon !== undefined &&
     element.icon !== null

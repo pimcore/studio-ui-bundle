@@ -14,10 +14,9 @@ import { StackList, type StackListProps } from '../stack-list/stack-list'
 import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
 import { IconButton } from '../icon-button/icon-button'
 import { Tag } from '../tag/tag'
-import { LanguageSelection } from '../language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '../flex/flex'
-import { isNil } from 'lodash'
+import { Tooltip } from '../tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -26,7 +25,6 @@ export interface FieldFiltersProps {
 
 export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
   const [_data, _setData] = useState(data)
-  const { requiredLanguages } = useSettings()
 
   const setData = (data: IDynamicFilter[]): void => {
     _setData(data)
@@ -61,10 +59,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   const items: StackListProps['items'] = _data.map((filter) => {
     return {
       id: filter.id,
-
       key: filter.id,
       title: filter.id,
-      children: <Tag>{filter.id}</Tag>,
+      children: <Tooltip title={ filter.nameTooltip }>
+        <Tag>{filter.id}</Tag>
+      </Tooltip>,
       body: (
         <DynamicFilter
           { ...filter }
@@ -74,11 +73,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       renderRightToolbar: (
         <Flex gap="mini">
           {filter.localizable === true && (
-            <LanguageSelection
+            <PermissionBasedLanguageSelectionControl
+              isNullable
               key={ 'language' }
-              languages={ requiredLanguages }
-              onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
-              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
+              onChange={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
+              value={ filter.locale === undefined ? null : filter.locale }
             />
           )}
           <IconButton

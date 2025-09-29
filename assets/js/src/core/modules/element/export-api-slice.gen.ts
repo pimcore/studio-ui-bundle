@@ -79,6 +79,7 @@ export type ExportCsvApiArg = {
                 | "id"
                 | "custom_report_config"
                 | "custom_report_to_export"
+                | "element_class_id"
                 | "element_to_export"
                 | "element_type"
                 | "folder_to_export"
@@ -110,12 +111,13 @@ export type ExportCsvFolderApiArg = {
     body: {
         folders?: number[];
         columns?: GridColumnRequest[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
         config?: {
             header?:
                 | "id"
                 | "custom_report_config"
                 | "custom_report_to_export"
+                | "element_class_id"
                 | "element_to_export"
                 | "element_type"
                 | "folder_to_export"
@@ -137,6 +139,7 @@ export type ExportCsvFolderApiArg = {
             delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
+        classId?: string | null;
     };
 };
 export type ExportDownloadXlsxApiResponse = /** status 200 XLSX File as attachment */ Blob;
@@ -162,6 +165,7 @@ export type ExportXlsxApiArg = {
                 | "id"
                 | "custom_report_config"
                 | "custom_report_to_export"
+                | "element_class_id"
                 | "element_to_export"
                 | "element_type"
                 | "folder_to_export"
@@ -193,12 +197,13 @@ export type ExportXlsxFolderApiArg = {
     body: {
         folders?: number[];
         columns?: GridColumnRequest[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
         config?: {
             header?:
                 | "id"
                 | "custom_report_config"
                 | "custom_report_to_export"
+                | "element_class_id"
                 | "element_to_export"
                 | "element_type"
                 | "folder_to_export"
@@ -219,6 +224,7 @@ export type ExportXlsxFolderApiArg = {
                 | "bool";
         };
         elementType?: "data-object" | "object" | "asset" | "document";
+        classId?: string | null;
     };
 };
 export type Error = {
@@ -273,17 +279,11 @@ export type GridColumnRequest = {
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
+export type ExportAllFilter = {
     /** Column Filter */
-    columnFilters?: object;
+    columnFilters: object;
     /** Sort Filter */
-    sortFilter?: object;
+    sortFilter: object;
 };
 export const {
     useExportDownloadCsvQuery,

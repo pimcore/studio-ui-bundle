@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
@@ -15,6 +16,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
+  'DynamicTypes/CustomReportDefinitionRegistry': 'DynamicTypes/CustomReportDefinitionRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
@@ -24,7 +26,11 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
   'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
-  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry'
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry',
+  'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
+  'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
+  'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
 }
 
 export const serviceIds = {
@@ -36,6 +42,10 @@ export const serviceIds = {
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
+
+  // Global message system
+  globalMessageBusProcess: 'GlobalMessageBusProcess',
+  globalMessageBus: 'GlobalMessageBus',
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
@@ -52,6 +62,7 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
+  'Asset/ThumbnailService': 'Asset/ThumbnailService',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
@@ -67,7 +78,14 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
-  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
+
+  // Document Sidebar Managers
+  'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
+  'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
+  'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',
+  'Document/Editor/Sidebar/LinkSidebarManager': 'Document/Editor/Sidebar/LinkSidebarManager',
+  'Document/Editor/Sidebar/HardlinkSidebarManager': 'Document/Editor/Sidebar/HardlinkSidebarManager',
+  'Document/Editor/Sidebar/FolderSidebarManager': 'Document/Editor/Sidebar/FolderSidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -82,12 +100,15 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
   'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
+  'DynamicTypes/FieldFilter/Input': 'DynamicTypes/FieldFilter/Input',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
+  'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
-  'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
+  'DynamicTypes/FieldFilter/Multiselect': 'DynamicTypes/FieldFilter/Multiselect',
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
+  'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -147,6 +168,8 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
+
+  'DynamicTypes/CustomReportDefinition/Sql': 'DynamicTypes/CustomReportDefinition/Sql',
 
   // Object layout
   'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
@@ -230,6 +253,7 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
   'DynamicTypes/DocumentEditable/Relations': 'DynamicTypes/DocumentEditable/Relations',
   'DynamicTypes/DocumentEditable/Renderlet': 'DynamicTypes/DocumentEditable/Renderlet',
+  'DynamicTypes/DocumentEditable/ScheduledBlock': 'DynamicTypes/DocumentEditable/ScheduledBlock',
   'DynamicTypes/DocumentEditable/Select': 'DynamicTypes/DocumentEditable/Select',
   'DynamicTypes/DocumentEditable/Snippet': 'DynamicTypes/DocumentEditable/Snippet',
   'DynamicTypes/DocumentEditable/Table': 'DynamicTypes/DocumentEditable/Table',
@@ -274,8 +298,14 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
 
+  // Widget Editor types
+  'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
+
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+
+  // Execution Engine
+  executionEngine: 'ExecutionEngine',
 
   // Component registry
   'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
