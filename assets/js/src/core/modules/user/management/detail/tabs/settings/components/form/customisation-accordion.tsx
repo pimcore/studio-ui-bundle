@@ -145,8 +145,8 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           name="datetimeLocale"
         >
           <Select
-            options={ validLocalesOptions }
             optionFilterProp="label"
+            options={ validLocalesOptions }
             placeholder={ t('user-management.dateTime') }
             showSearch
           />
