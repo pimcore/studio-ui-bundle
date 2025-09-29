@@ -35,6 +35,7 @@ import {
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchTermFilter } from '../../../search/search-term-filter'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -44,6 +45,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { setPqlQuery: setListingPqlQuery } = usePqlFilter()
   const { setSearchTerm: setListingSearchTerm } = useSearchTermFilter()
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
+  const { setDataLoadingState } = useData()
 
   const {
     fieldFilters,
@@ -68,6 +70,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
     }
 
     setPage(1)
+    setDataLoadingState('filters-applied')
   }
 
   const handleResetAllFiltersClick = (): void => {
