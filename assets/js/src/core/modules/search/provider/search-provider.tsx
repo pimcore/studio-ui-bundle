@@ -33,5 +33,5 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
     <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open])
+  ), [open, activeKey])
 }

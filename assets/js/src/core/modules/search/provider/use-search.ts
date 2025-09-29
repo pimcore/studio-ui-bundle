@@ -13,6 +13,7 @@ import { SearchContext } from './search-provider'
 
 export interface UseSearchReturn {
   activeKey: string
+  setActiveKey: (key: string) => void
   isOpen: boolean
   open: (key?: string) => void
   close: () => void
@@ -38,6 +39,7 @@ export const useSearch = (): UseSearchReturn => {
 
   return {
     activeKey: context.activeKey,
+    setActiveKey: context.setActiveKey,
     isOpen: context.open,
     open,
     close

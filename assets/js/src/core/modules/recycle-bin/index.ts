@@ -16,6 +16,20 @@ import { RecycleBinContainer } from './recycle-bin-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+
+export const RECYCLE_BIN_WIDGET: WidgetManagerTabConfig = {
+  name: 'recycleBin',
+  id: 'recycle-bin',
+  component: 'recycle-bin',
+  config: {
+    translationKey: 'widget.recycle-bin',
+    icon: {
+      type: 'name',
+      value: 'trash'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -34,18 +48,7 @@ moduleSystem.registerModule({
       permission: UserPermission.RecycleBin,
       order: 400,
       perspectivePermission: NavPermission.RecycleBin,
-      widgetConfig: {
-        name: 'recycleBin',
-        id: 'recycle-bin',
-        component: 'recycle-bin',
-        config: {
-          translationKey: 'widget.recycle-bin',
-          icon: {
-            type: 'name',
-            value: 'trash'
-          }
-        }
-      }
+      widgetConfig: RECYCLE_BIN_WIDGET
     })
   }
 })

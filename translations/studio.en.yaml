@@ -719,6 +719,7 @@ key-bindings.openObject: Open Object
 key-bindings.openClassEditor: Open Class Editor
 key-bindings.openInTree: Open in Tree
 key-bindings.closeAllTabs: Close All Tabs
+key-bindings.search: Search
 key-bindings.searchDocument: Search Document
 key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
@@ -745,7 +746,8 @@ key-bindings.glossary: Glossary
 key-bindings.seoDocumentEditor: SEO Document Editor
 key-bindings.robots: Robots
 key-bindings.httpErrorLog: HTTP Error Log
-key-bindings.redirects: redirects
+key-bindings.seo: SEO
+key-bindings.redirects: Redirects
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID

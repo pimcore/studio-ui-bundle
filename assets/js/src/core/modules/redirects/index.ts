@@ -16,6 +16,20 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 import { RedirectsContainer } from './redirects-container'
+import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+export const REDIRECTS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Redirects',
+  id: 'redirects',
+  component: 'redirects',
+  config: {
+    translationKey: 'widget.redirects',
+    icon: {
+      type: 'name',
+      value: 'redirect'
+    }
+  }
+}
+
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
@@ -27,18 +41,7 @@ moduleSystem.registerModule({
       order: 600,
       permission: UserPermission.Redirects,
       perspectivePermission: NavPermission.Redirects,
-      widgetConfig: {
-        name: 'Redirects',
-        id: 'redirects',
-        component: 'redirects',
-        config: {
-          translationKey: 'widget.redirects',
-          icon: {
-            type: 'name',
-            value: 'redirect'
-          }
-        }
-      }
+      widgetConfig: REDIRECTS_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

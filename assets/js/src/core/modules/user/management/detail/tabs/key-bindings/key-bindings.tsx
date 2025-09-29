@@ -138,7 +138,7 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
     }
   ]
 
-  const seoFields = ['redirects', 'tagManager', 'tagConfiguration', 'seoDocumentEditor', 'robots']
+  const seoFields = ['redirects', 'tagConfiguration', 'seoDocumentEditor', 'robots']
   const seoAccordion = [
     {
       key: '1',

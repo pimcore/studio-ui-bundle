@@ -27,6 +27,14 @@ import { modalTexts } from '@Pimcore/modules/open-element/open-element'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { Divider } from '@sdk/components'
+import { RECYCLE_BIN_WIDGET } from '@Pimcore/modules/recycle-bin'
+import { NOTES_AND_EVENTS_WIDGET } from '@Pimcore/modules/notes-and-events'
+import { APPLICATION_LOGGER_WIDGET } from '@Pimcore/modules/application-logger'
+import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
+import { ROLES_WIDGET, USERS_WIDGET } from '@Pimcore/modules/user'
+import { CUSTOM_REPORTS_WIDGET, REPORTS_WIDGET } from '@Pimcore/modules/reports'
+import { REDIRECTS_WIDGET } from '@Pimcore/modules/redirects'
+import { TAG_CONFIGURATION_WIDGET } from '@Pimcore/modules/tags'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -204,6 +212,21 @@ export const MainNav = (): React.JSX.Element => {
   useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true)
   useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true)
   useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true)
+
+  useHandleKeyBindings(() => { openMainWidget(TRANSLATIONS_WIDGET) }, 'sharedTranslations', true)
+  useHandleKeyBindings(() => { openMainWidget(RECYCLE_BIN_WIDGET) }, 'recycleBin', true)
+  useHandleKeyBindings(() => { openMainWidget(NOTES_AND_EVENTS_WIDGET) }, 'notesEvents', true)
+
+  useHandleKeyBindings(() => { openMainWidget(USERS_WIDGET) }, 'users', true)
+  useHandleKeyBindings(() => { openMainWidget(ROLES_WIDGET) }, 'roles', true)
+
+  useHandleKeyBindings(() => { openMainWidget(REPORTS_WIDGET) }, 'reports', true)
+  useHandleKeyBindings(() => { openMainWidget(CUSTOM_REPORTS_WIDGET) }, 'customReports', true)
+
+  useHandleKeyBindings(() => { openMainWidget(APPLICATION_LOGGER_WIDGET) }, 'applicationLogger', true)
+
+  useHandleKeyBindings(() => { openMainWidget(REDIRECTS_WIDGET) }, 'redirects', true)
+  useHandleKeyBindings(() => { openMainWidget(TAG_CONFIGURATION_WIDGET) }, 'tagConfiguration', true)
 
   return (
     <div ref={ elRef }>
