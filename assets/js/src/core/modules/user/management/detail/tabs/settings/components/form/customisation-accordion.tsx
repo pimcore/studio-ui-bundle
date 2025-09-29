@@ -24,7 +24,7 @@ interface ICustomisationAccordion {
 }
 const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
   const { t } = useTranslation()
-  const { availableAdminLanguages } = useSettings()
+  const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const [roleOptions, setRoleOptions] = useState<any[]>([])
   const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
@@ -64,6 +64,12 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
       })
     }
   }, [])
+
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
   const content = [
     {
@@ -135,15 +141,12 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           : null }
 
         <Form.Item
-          label={ 'TODO ' + t('user-management.dateTime') }
-          name="dateTime"
+          label={ t('user-management.dateTime') }
+          name="dateTimeLocale"
         >
           <Select
             optionFilterProp="label"
-            options={ availableAdminLanguages.map((language: string) => ({
-              value: language,
-              label: getDisplayName(language)
-            })) }
+            options={ validLocalesOptions }
             placeholder={ t('user-management.dateTime') }
             showSearch
           />

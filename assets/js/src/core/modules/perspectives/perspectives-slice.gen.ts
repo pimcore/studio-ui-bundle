@@ -370,15 +370,25 @@ export type DocumentContextPermissions = SaveDocumentContextPermissions & {
         [key: string]: string | number | boolean | object;
     };
 };
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+};
 export type ElementTreeWidget = WidgetConfig & {
     /** Context Permissions */
     contextPermissions: AssetContextPermissions | DataObjectContextPermissions | DocumentContextPermissions;
     /** Element Type */
     elementType: string;
-    /** Root Folder */
-    rootFolder: string;
-    /** Root Folder ID */
-    rootFolderId: number;
+    /** Data of root folder element */
+    rootFolder: RelatedElementData;
     /** Show Root */
     showRoot: boolean;
     /** Classes */

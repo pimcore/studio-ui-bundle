@@ -42,7 +42,11 @@ const createDefaultColumnConfig = (name: string): ReportFormData['columnConfigur
   [COLUMN_KEYS.FILTER_DRILLDOWN]: null,
   [COLUMN_KEYS.WIDTH]: null,
   [COLUMN_KEYS.LABEL]: '',
-  [COLUMN_KEYS.ACTION]: ''
+  [COLUMN_KEYS.ACTION]: '',
+  disableOrderBy: false,
+  disableFilterable: false,
+  disableDropdownFilterable: false,
+  disableLabel: false
 })
 
 export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): React.JSX.Element => {
