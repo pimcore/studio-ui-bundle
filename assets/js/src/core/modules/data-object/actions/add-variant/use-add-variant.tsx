@@ -16,6 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
+  ClassDefinition,
   type ClassDefinitionListItem
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
@@ -29,8 +30,15 @@ import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
 import { useClassDefinitions } from '../../utils/provider/class-defintions/use-class-definitions'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
+interface ClassDefinitionListItemPartial extends Pick<ClassDefinition, 'id' | 'name'> {}
+
 interface UseAddVariantHookReturn {
   addVariantTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  createDataObjectVariant: (
+    classDefinition: ClassDefinitionListItemPartial,
+    parentId: number,
+    onFinish?: (newName: string) => void
+  ) => void
 }
 
 export const useAddVariant = (): UseAddVariantHookReturn => {
@@ -50,8 +58,27 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
     return getClassDefinitionsForCurrentUser().find((classDefinition) => classDefinition.name === name)
   }
 
-  const createDataObjectVariant = (
+  const createDataObjectVariantFromListItem = (
     classDefinition: ClassDefinitionListItem,
+    parentId: number,
+    onFinish?: (newName: string) => void
+  ): void => {
+    modal.input({
+      title: t('data-object.create-variant', { className: classDefinition.name }),
+      label: t('form.label.new-item'),
+      rule: {
+        required: true,
+        message: t('form.validation.required')
+      },
+      onOk: async (value: string) => {
+        await createDataObjectMutation(classDefinition.id, value, parentId)
+        onFinish?.(value)
+      }
+    })
+  }
+
+  const createDataObjectVariant = (
+    classDefinition: ClassDefinitionListItemPartial,
     parentId: number,
     onFinish?: (newName: string) => void
   ): void => {
@@ -111,7 +138,7 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
       key: ContextMenuActionName.addVariant,
       icon: <Icon value={ 'data-object-variant' } />,
       hidden: isAddObjectHidden(node),
-      onClick: () => createDataObjectVariant(
+      onClick: () => createDataObjectVariantFromListItem(
         findClassDefinitionByName(node.metaData.dataObject.className)!,
         parseInt(node.id)
       )
@@ -119,6 +146,7 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   }
 
   return {
-    addVariantTreeContextMenuItem
+    addVariantTreeContextMenuItem,
+    createDataObjectVariant
   }
 }

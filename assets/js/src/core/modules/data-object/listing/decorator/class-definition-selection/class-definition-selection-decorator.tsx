@@ -14,13 +14,14 @@ import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/elem
 import { withClassDefinitionSelectionLayer } from './configuration-layer/with-class-definition-selection-layer'
 
 export interface ClassDefinitionSelectionDecoratorConfig {
-  classRestriction?: IRelationAllowedTypesClassDefinition['classes']
+  classRestriction?: IRelationAllowedTypesClassDefinition['classes'],
+  isResolvingClassDefinitionsBasedOnElementId?: boolean
   showConfigLayer?: boolean
 }
 
 export const defaultConfig: ClassDefinitionSelectionDecoratorConfig = {
   classRestriction: undefined,
-  showConfigLayer: false
+  isResolvingClassDefinitionsBasedOnElementId: true,
 }
 
 export const ClassDefinitionSelectionDecorator: AbstractDecorator<ClassDefinitionSelectionDecoratorConfig> = (props, config = defaultConfig) => {

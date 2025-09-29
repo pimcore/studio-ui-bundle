@@ -19,7 +19,7 @@ import {
 import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 import { TAB_PREVIEW, TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT } from './tab-manager/tabs/edit/edit-container'
-import { TAB_VARIANTS } from './tab-manager/tabs/variants/variants-container'
+import { TAB_VARIANTS } from '../variant/tab-manager/tabs/variants/variants-container'
 import { TAB_LISTING } from '../folder/tab-manager/tabs/listing/listing-container'
 
 moduleSystem.registerModule({
@@ -29,7 +29,7 @@ moduleSystem.registerModule({
     const childrenTab = { ...TAB_LISTING }
 
     childrenTab.hidden = elementApi => elementApi?.hasChildren === false
-    childrenTab.label = 'object.variant-editor-tabs.children-listing'
+    childrenTab.label = 'object.object-editor-tabs.children-listing'
 
     objectEditorTabManager.register(TAB_EDIT)
     objectEditorTabManager.register(TAB_PREVIEW)

@@ -25,13 +25,15 @@ import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/int
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDataObjectGetGridQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataQueryHelper } from '@Pimcore/modules/data-object/listing/data-layer/hooks/use-data-query-helper'
-import { DefaultView } from '@Pimcore/modules/data-object/listing/views/default-view'
 import { ActionColumnDecorator } from '@Pimcore/modules/data-object/listing/decorator/action-column/action-column-decorator'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/column-configuration-decorator'
 import { ContextMenuDecorator } from '@Pimcore/modules/data-object/listing/decorator/context-menu/context-menu-decorator'
 import { useInlineEditApiUpdate } from '@Pimcore/modules/data-object/listing/decorator/inline-editing/hooks/use-inline-edit-api-update'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { DefaultView } from './views/default-view'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -47,23 +49,29 @@ const defaultProps = {
   useElementId
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-const props = compose<AbstractDecoratorProps>(
-  ActionColumnDecorator,
-  SortingDecorator,
-  PagingDecorator,
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
-  ColumnConfigurationDecorator,
-  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
-  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  ContextMenuDecorator,
-  TagFilterDecorator,
-  GeneralFiltersDecorator,
-  [TypeFilterDecorator, { elementType: 'data-object', restrictedOptions: ['variant'] } as TypeFilterDecoratorConfig]
-)(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
-
 export const VariantsContainer = (): React.JSX.Element => {
+  const {id} = useElementContext()
+  const draft = useDataObjectDraft(id);
+  const currentClassName = "className" in draft ? draft.className : undefined
+
+  console.log({currentClassName});
+
+  /* eslint-disable @typescript-eslint/consistent-type-assertions */
+  const props = compose<AbstractDecoratorProps>(
+    ActionColumnDecorator,
+    SortingDecorator,
+    PagingDecorator,
+    [ClassDefinitionSelectionDecorator, { isResolvingClassDefinitionsBasedOnElementId: false, classRestriction: [{ classes: currentClassName }] } as ClassDefinitionSelectionDecoratorConfig],
+    ColumnConfigurationDecorator,
+    [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
+    [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
+    ContextMenuDecorator,
+    TagFilterDecorator,
+    GeneralFiltersDecorator,
+    [TypeFilterDecorator, { elementType: 'data-object', restrictedOptions: ['variant'] } as TypeFilterDecoratorConfig]
+  )(defaultProps)
+  /* eslint-enable @typescript-eslint/consistent-type-assertions */
+
   return (
     <DynamicTypeRegistryProvider
       serviceIds={ [
@@ -86,6 +94,5 @@ export const TAB_VARIANTS: IEditorTab = {
   label: 'data-object.object-editor-tabs.variants',
   icon: <Icon value="data-object-variant" />,
   children: <VariantsContainer />,
-  isDetachable: true,
   hidden: (elementApi) => !('allowVariants' in elementApi && elementApi?.allowVariants === true)
 }
