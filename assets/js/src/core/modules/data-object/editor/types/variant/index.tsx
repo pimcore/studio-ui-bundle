@@ -33,7 +33,7 @@ moduleSystem.registerModule({
     objectEditorTabManager.register(TAB_DEPENDENCIES)
     objectEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     objectEditorTabManager.register(TAB_TAGS)
-    objectEditorTabManager.register(TAB_VARIANTS)
+    // objectEditorTabManager.register(TAB_VARIANTS)
     objectEditorTabManager.register(TAB_WORKFLOW)
   }
 })
