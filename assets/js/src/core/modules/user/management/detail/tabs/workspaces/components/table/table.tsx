@@ -24,6 +24,7 @@ interface ITableProps {
   type?: string
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
+  onShowSpecialSettings?: (id: number) => void
 }
 
 export const Table = ({
@@ -31,12 +32,13 @@ export const Table = ({
   data,
   type,
   isLoading,
-  onUpdateData
+  onUpdateData, onShowSpecialSettings
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 
   const isAsset = type === WorkspaceType.ASSET
+  const isObject = type === WorkspaceType.OBJECT
 
   useEffect(() => {
     setGridData(data)
@@ -178,9 +180,24 @@ export const Table = ({
         }
       }
     }),
+    ...isObject
+      ? [columnHelper.accessor('specialSettings', {
+          header: '',
+          size: 40,
+          cell: (context) => {
+            return (
+              <IconButton
+                icon={ { value: 'settings' } }
+                onClick={ () => onShowSpecialSettings?.((context.row.original as UserWorkspace).cid) }
+                type="link"
+              />
+            )
+          }
+        })]
+      : [],
     columnHelper.accessor('actions', {
-      header: t('user-management.workspaces.columns.delete'),
-      size: 60,
+      header: '',
+      size: 40,
       cell: (context) => {
         return (
           <Flex
