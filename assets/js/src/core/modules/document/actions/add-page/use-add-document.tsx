@@ -107,7 +107,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
     // add blank entry
     documentHierarchy.push({
-      label: t('blank'),
+      label: `> ${t('blank')}`,
       key: 'blank' + type,
       icon: <Icon
         subIconName='new'
