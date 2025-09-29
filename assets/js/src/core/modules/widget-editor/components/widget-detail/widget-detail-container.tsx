@@ -18,20 +18,20 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
 
   return (
     <Tabs
-      activeKey={ activeTabId }
+      activeKey={activeTabId}
       fullHeight
-      items={ widgets.map((widget) => ({
+      items={widgets.map((widget) => ({
         key: widget.id,
         label: widget.name,
         closable: true,
-        children: <WidgetDetailTab id={ widget.id } />
-      })) }
-      onChange={ (key) => {
+        children: <WidgetDetailTab id={widget.id} />
+      }))}
+      onChange={(key) => {
         setActiveTabId(key)
-      } }
-      onClose={ (key) => {
+      }}
+      onClose={(key) => {
         closeWidget(key as string)
-      } }
+      }}
     />
   )
 }
