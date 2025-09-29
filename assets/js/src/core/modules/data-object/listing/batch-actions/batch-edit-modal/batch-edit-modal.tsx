@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
