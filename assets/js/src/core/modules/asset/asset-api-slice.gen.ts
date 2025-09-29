@@ -595,7 +595,7 @@ export type AssetExportZipFolderApiResponse =
 export type AssetExportZipFolderApiArg = {
     body: {
         folders?: number[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
@@ -855,7 +855,7 @@ export type AssetPatchFolderByIdApiArg = {
             locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
         }[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetClearThumbnailApiResponse = unknown;
@@ -998,17 +998,11 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
+export type ExportAllFilter = {
     /** Column Filter */
-    columnFilters?: object;
+    columnFilters: object;
     /** Sort Filter */
-    sortFilter?: object;
+    sortFilter: object;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1213,9 +1207,21 @@ export type GridColumnRequest = {
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+};
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */

@@ -197,7 +197,7 @@ export type GridColumnRequest = {
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
 };
