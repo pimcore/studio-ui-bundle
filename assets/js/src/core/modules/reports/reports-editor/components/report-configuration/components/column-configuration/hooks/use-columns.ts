@@ -83,7 +83,7 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
     }),
     columnHelper.accessor(COLUMN_KEYS.WIDTH, {
       header: t('reports.editor.manage-column-configuration.width'),
-      meta: { type: 'number-cell', editable: true }
+      meta: { type: 'number', editable: true }
     }),
     columnHelper.accessor(COLUMN_KEYS.LABEL, {
       header: t('reports.editor.manage-column-configuration.label'),

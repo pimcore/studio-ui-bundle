@@ -18,6 +18,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
 
 interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkflowAction'> {
   workflowDetailsData: WorkflowGetDetailsApiResponse | undefined
@@ -32,7 +33,7 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
 
   const { element } = useElementDraft(id, elementType)
 
-  const hasWorkflowAvailable = element?.hasWorkflowAvailable ?? false
+  const hasWorkflowAvailable = isWorkflowAvailable(element, elementType)
   const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType, elementId: id }, { skip: !hasWorkflowAvailable })
 
   return {

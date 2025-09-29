@@ -28,6 +28,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import { isNull } from 'lodash'
+import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -50,7 +51,7 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
     if (tab.key === 'workflow') {
       return {
         ...baseTab,
-        hidden: () => element?.hasWorkflowAvailable === false || element?.hasWorkflowAvailable === undefined
+        hidden: () => !isWorkflowAvailable(element, elementType)
       }
     }
     return baseTab

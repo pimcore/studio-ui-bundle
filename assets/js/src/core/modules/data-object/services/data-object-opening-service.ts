@@ -50,6 +50,7 @@ export class DataObjectOpeningService {
 
     if (!isNil(data)) {
       const mergedDataObjectData = {
+        draftData: null,
         ...data,
         id,
         modified: false,
@@ -60,6 +61,7 @@ export class DataObjectOpeningService {
         modifiedObjectData: {},
         ...initialTabsStateValue
       }
+
       store.dispatch(dataObjectReceived(mergedDataObjectData))
     }
   }

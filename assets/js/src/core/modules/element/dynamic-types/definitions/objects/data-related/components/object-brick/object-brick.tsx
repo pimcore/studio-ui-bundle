@@ -39,6 +39,11 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const changedFieldsRef = useRef<Set<string>>(new Set())
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
+
+  if (dataObject !== undefined && !('objectData' in dataObject)) {
+    throw new Error('Data Object data is undefined in Object Brick')
+  }
+
   const objectData = dataObject?.objectData ?? {}
   const originalValue = getOriginalValue(objectData, props.name)
   const fieldNameToString = (field: NamePath): string => {
