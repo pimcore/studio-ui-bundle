@@ -21,17 +21,17 @@ import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/so
 import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
-import { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDataObjectGetGridQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataQueryHelper } from '@Pimcore/modules/data-object/listing/data-layer/hooks/use-data-query-helper'
 import { DefaultView } from '@Pimcore/modules/data-object/listing/views/default-view'
 import { ActionColumnDecorator } from '@Pimcore/modules/data-object/listing/decorator/action-column/action-column-decorator'
-import { ClassDefinitionSelectionDecorator, ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
+import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/column-configuration-decorator'
 import { ContextMenuDecorator } from '@Pimcore/modules/data-object/listing/decorator/context-menu/context-menu-decorator'
 import { useInlineEditApiUpdate } from '@Pimcore/modules/data-object/listing/decorator/inline-editing/hooks/use-inline-edit-api-update'
-import { TypeFilterDecorator, TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
+import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -87,5 +87,5 @@ export const TAB_VARIANTS: IEditorTab = {
   icon: <Icon value="data-object-variant" />,
   children: <VariantsContainer />,
   isDetachable: true,
-  hidden: (elementApi) => !("allowVariants" in elementApi && elementApi?.allowVariants === true)
+  hidden: (elementApi) => !('allowVariants' in elementApi && elementApi?.allowVariants === true)
 }

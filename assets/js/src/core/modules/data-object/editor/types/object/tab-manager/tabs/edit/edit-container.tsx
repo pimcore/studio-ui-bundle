@@ -41,7 +41,7 @@ export const EditContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
-  if (!(dataObject !== undefined && "objectData" in dataObject)) {
+  if (!(dataObject !== undefined && 'objectData' in dataObject)) {
     throw new Error('Data Object data is undefined in Edit Container')
   }
 

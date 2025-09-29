@@ -121,7 +121,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       }
     }).then((response) => {
       if (response.error === undefined) {
-        if ("draftData" in response.data) {
+        if ('draftData' in response.data) {
           setDraftData(response.data?.draftData ?? null)
         }
 
