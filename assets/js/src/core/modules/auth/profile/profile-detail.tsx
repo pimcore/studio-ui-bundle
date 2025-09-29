@@ -56,7 +56,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         lastname: user?.lastname,
         email: user?.email,
         language: user?.language,
-        dateTimeLocale: user?.dateTimeLocale,
+        dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,
