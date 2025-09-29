@@ -21,8 +21,6 @@ import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/so
 import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
-import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useDataObjectGetGridQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useDataQueryHelper } from '@Pimcore/modules/data-object/listing/data-layer/hooks/use-data-query-helper'
 import { ActionColumnDecorator } from '@Pimcore/modules/data-object/listing/decorator/action-column/action-column-decorator'
@@ -53,8 +51,6 @@ export const VariantsContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
   const draft = useDataObjectDraft(id)
   const currentClassName = 'className' in draft ? draft.className : undefined
-
-  console.log({ currentClassName })
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const props = compose<AbstractDecoratorProps>(
@@ -87,12 +83,4 @@ export const VariantsContainer = (): React.JSX.Element => {
       />
     </DynamicTypeRegistryProvider>
   )
-}
-
-export const TAB_VARIANTS: IEditorTab = {
-  key: 'variants',
-  label: 'data-object.object-editor-tabs.variants',
-  icon: <Icon value="data-object-variant" />,
-  children: <VariantsContainer />,
-  hidden: (elementApi) => !('allowVariants' in elementApi && elementApi?.allowVariants === true)
 }
