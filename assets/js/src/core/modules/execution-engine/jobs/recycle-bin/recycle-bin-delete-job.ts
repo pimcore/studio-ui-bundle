@@ -25,20 +25,23 @@ export interface RecycleBinDeleteJobOptions {
   itemIds: number[]
   elementTypes: ElementType[]
   title: string
+  onFinish?: () => void
 }
 
 export class RecycleBinDeleteJob implements JobInterface {
   protected readonly itemIds: number[]
   protected readonly elementTypes: ElementType[]
   protected readonly title: string
+  protected readonly onFinish?: () => void
 
-  constructor (options: RecycleBinDeleteJobOptions) {
+  constructor(options: RecycleBinDeleteJobOptions) {
     this.itemIds = options.itemIds
     this.elementTypes = options.elementTypes
     this.title = options.title
+    this.onFinish = options.onFinish
   }
 
-  async run (options: JobRunOptions): Promise<void> {
+  async run(options: JobRunOptions): Promise<void> {
     const { messageBus } = options
 
     try {
@@ -68,7 +71,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  protected async executeDeleteRequest (): Promise<string | number | null> {
+  protected async executeDeleteRequest(): Promise<string | number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinDeleteItems.initiate({
         body: {
@@ -85,7 +88,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  protected getJobConfig (): RecycleBinDeleteJobConfig {
+  protected getJobConfig(): RecycleBinDeleteJobConfig {
     return {
       title: this.title,
       progress: 0,
@@ -93,16 +96,18 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  protected async handleCompletion (): Promise<void> {
+  protected async handleCompletion(): Promise<void> {
     // Refresh the recycle bin data
     store.dispatch(
       api.util.invalidateTags(
         invalidatingTags.RECYCLING_BIN()
       )
     )
+
+    this.onFinish?.()
   }
 
-  protected async handleJobFailure (error: any): Promise<void> {
+  protected async handleJobFailure(error: any): Promise<void> {
     console.error('Recycle bin delete job failed:', error)
   }
 }

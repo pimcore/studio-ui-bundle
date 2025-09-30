@@ -23,7 +23,7 @@ interface BatchActionsProps {
 
 export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { selectedRows } = useSelectedRowsContext()
+  const { selectedRows, resetSelectedRows } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
 
   const getItemToSelectedRowsId = (): RecycleBin[] => {
@@ -34,38 +34,29 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
       .filter((item): item is RecycleBin => item !== undefined)
   }
 
-  const removeItemsFromSelectedRows = (itemsToRestore: RecycleBin[]): void => {
-    Object.keys(selectedRows).forEach((key) => {
-      const itemId = parseInt(key, 10)
-      if (itemsToRestore.find((item) => item.id === itemId)) {
-        delete selectedRows[itemId]
-      }
-    })
-  }
-
   const menu: DropdownMenuProps = {
     items: [
       {
         key: '1',
         label: t('recycle-bin.actions.delete'),
-        icon: <Icon value={'trash'} />,
+        icon: <Icon value={ 'trash' } />,
         onClick: () => {
           const itemsToDelete = getItemToSelectedRowsId()
 
           void removeItems(itemsToDelete, () => {
-            removeItemsFromSelectedRows(itemsToDelete)
+            resetSelectedRows()
           })
         }
       },
       {
         key: '2',
         label: t('recycle-bin.actions.restore'),
-        icon: <Icon value={'restore'} />,
+        icon: <Icon value={ 'restore' } />,
         onClick: () => {
           const itemsToRestore = getItemToSelectedRowsId()
 
           void restoreItems(itemsToRestore, () => {
-            removeItemsFromSelectedRows(itemsToRestore)
+            resetSelectedRows()
           })
         }
       }
@@ -74,9 +65,9 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
 
   return (
     <Dropdown
-      menu={menu}
+      menu={ menu }
     >
-      <DropdownButton key={'dropdown-button'}>{t('listing.actions')}</DropdownButton>
+      <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>
     </Dropdown>
   )
 }
