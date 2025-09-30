@@ -11,6 +11,7 @@
 import React from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
+import Link from 'antd/es/typography/Link'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { type ISystemInfoModalData } from './provider/system-info-modal-provider'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -19,6 +20,8 @@ import { Input } from '@Pimcore/components/input/input'
 import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -29,6 +32,7 @@ export interface ISystemInfoModalProps {
 export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const currentUser = useUser()
   const { data: userList } = useUserGetCollectionQuery()
 
   if (isNil(data)) {
@@ -47,22 +51,27 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     </Form.Item>
   )
 
-  const getUserModification = (userId: number | null): string | JSX.Element => {
+  const getUserLabel = (userId: number | null, fallback: string): JSX.Element => {
     const user = userList?.items.find(user => user.id === userId)
 
     if (!isUndefined(user)) {
-      return <span>{user.username}</span>
+      return (
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <Text type="secondary">{user.username}</Text>
+          {/* need to add the redirect to the admin panel */}
+          {currentUser.id === userId && (
+            <Link style={ { textDecoration: 'underline' } }>
+              (click to open)
+            </Link>
+          )}
+        </Flex>
+      )
     }
 
-    return 'system'
-  }
-
-  const getUserOwner = (userId: number): string => {
-    const user = userList?.items.find(user => user.id === userId)
-
-    if (!isUndefined(user)) return user.username
-
-    return 'User unknown'
+    return <Text type="secondary">{fallback}</Text>
   }
 
   return (
@@ -86,10 +95,10 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
             value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
           <Form.Item label="User Modification">
-            <Text type="secondary">{getUserModification(data.userModification)}</Text>
+            <Text type="secondary">{getUserLabel(data.userModification, 'system')}</Text>
           </Form.Item>
           <Form.Item label="Owner">
-            <Text type="secondary">{getUserOwner(data.userOwner)}</Text>
+            {getUserLabel(data.userOwner, 'User unknown')}
           </Form.Item>
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
