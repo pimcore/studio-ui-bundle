@@ -136,8 +136,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
-      // @todo Currently the type in backend is not matching anymore
-      // group: column.group,
+      group: column.group,
       type: column.type,
       config: column.__meta?.advancedColumnConfig ?? column.config
     }))
