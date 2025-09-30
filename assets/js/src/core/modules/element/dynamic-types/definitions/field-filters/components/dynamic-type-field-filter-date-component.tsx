@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useRef } from 'react'
 import dayjs from 'dayjs'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -30,6 +30,8 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
+  const datePickerRef = useRef<any>(null)
+  
   interface DateValue {
     setting: DatePickerSettingValue
     from: string | null
@@ -135,6 +137,8 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
     <Flex
       align="center"
       gap="extra-small"
+      ref={ datePickerRef }
+      tabIndex={ -1 }
     >
       <Select
         defaultValue={ DatePickerSettingValue.ON }
@@ -151,6 +155,11 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
             const [newFrom, newTo] = value as [number | null, number | null]
 
             handleDateRangeChange(convertValueToISOFormat(newFrom), convertValueToISOFormat(newTo))
+          } }
+          onOpenChange={ (open: boolean) => { 
+            if (!open && datePickerRef.current) {
+              datePickerRef.current.focus()
+            }
           } }
           outputType="timestamp"
           value={ [convertISOToTimestamp(data?.from ?? null), convertISOToTimestamp(data?.to ?? null)] }
@@ -170,6 +179,11 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
             handleDateChange('to', convertedValue)
           } else if (currentSetting === DatePickerSettingValue.AFTER) {
             handleDateChange('from', convertedValue)
+          }
+        } }
+        onOpenChange={ (open: boolean) => { 
+          if (!open && datePickerRef.current) {
+            datePickerRef.current.focus()
           }
         } }
         outputType="timestamp"

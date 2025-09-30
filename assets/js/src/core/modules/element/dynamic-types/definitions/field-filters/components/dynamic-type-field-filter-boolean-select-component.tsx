@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
@@ -42,6 +42,7 @@ const boolToNum = (value: boolean | null): number => {
 export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
+  const selectRef = useRef<any>(null)
 
   const [_value, setValue] = useState<number[]>([])
 
@@ -75,7 +76,13 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
     <Select
       mode="multiple"
       onChange={ handleChange }
+      onDropdownVisibleChange={ (open: boolean) => { 
+        if (!open && selectRef.current) {
+          selectRef.current.focus()
+        }
+      } }
       options={ formattedOptions }
+      ref={ selectRef }
       style={ { width: '100%' } }
       value={ _value }
     />

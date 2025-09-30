@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
@@ -26,6 +26,7 @@ interface IAssetSelectConfig {
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const [_value, setValue] = useState<string[]>(data as string[])
+  const selectRef = useRef<any>(null)
 
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
   let formattedOptions: DefaultOptionType[] = []
@@ -55,7 +56,13 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     <Select
       mode="multiple"
       onChange={ handleChange }
+      onDropdownVisibleChange={ (open: boolean) => { 
+        if (!open && selectRef.current) {
+          selectRef.current.focus()
+        }
+      } }
       options={ formattedOptions }
+      ref={ selectRef }
       showSearch={ rawConfig?.showSearch ?? false }
       style={ { width: '100%' } }
       value={ _value }
