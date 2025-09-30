@@ -26,17 +26,20 @@ export interface RecycleBinRestoreJobOptions {
   itemIds: number[]
   elementTypes: ElementType[]
   title: string
+  onFinish?: () => void
 }
 
 export class RecycleBinRestoreJob implements JobInterface {
   protected readonly itemIds: number[]
   protected readonly elementTypes: ElementType[]
   protected readonly title: string
+  protected readonly onFinish?: () => void
 
   constructor (options: RecycleBinRestoreJobOptions) {
     this.itemIds = options.itemIds
     this.elementTypes = options.elementTypes
     this.title = options.title
+    this.onFinish = options.onFinish
   }
 
   async run (options: JobRunOptions): Promise<void> {
@@ -106,6 +109,8 @@ export class RecycleBinRestoreJob implements JobInterface {
         invalidatingTags.RECYCLING_BIN()
       )
     )
+
+    this.onFinish?.()
   }
 
   protected async handleJobFailure (error: any): Promise<void> {

@@ -23,7 +23,7 @@ interface BatchActionsProps {
 
 export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { selectedRows } = useSelectedRowsContext()
+  const { selectedRows, resetSelectedRows } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
 
   const getItemToSelectedRowsId = (): RecycleBin[] => {
@@ -43,7 +43,9 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         onClick: () => {
           const itemsToDelete = getItemToSelectedRowsId()
 
-          void removeItems(itemsToDelete)
+          void removeItems(itemsToDelete, () => {
+            resetSelectedRows()
+          })
         }
       },
       {
@@ -53,7 +55,9 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         onClick: () => {
           const itemsToRestore = getItemToSelectedRowsId()
 
-          void restoreItems(itemsToRestore)
+          void restoreItems(itemsToRestore, () => {
+            resetSelectedRows()
+          })
         }
       }
     ]
