@@ -19,7 +19,11 @@ export const DynamicTypeBatchEditCheckboxComponent = ({ batchEdit }: DynamicType
   const { key } = batchEdit
 
   return (
-    <Form.Item name={ key } valuePropName='checked' initialValue={ false }>
+    <Form.Item
+      initialValue={ false }
+      name={ key }
+      valuePropName='checked'
+    >
       <Checkbox />
     </Form.Item>
   )
