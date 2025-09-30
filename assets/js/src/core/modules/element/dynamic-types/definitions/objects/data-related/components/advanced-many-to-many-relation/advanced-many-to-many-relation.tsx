@@ -30,10 +30,8 @@ import { useTranslation } from 'react-i18next'
 import {
   getElementCellConfig
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
-import { Flex } from 'antd'
-import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { LoadingOutlined } from '@ant-design/icons'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { renderFullPathCell } from '@Pimcore/components/many-to-many-relation/utils/full-path-cell-renderer'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -74,18 +72,6 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
 
   const onChange = (value?: ManyToManyRelationValue | null): void => {
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
-  }
-
-  const renderFullPathCell = (info: any): React.JSX.Element => {
-    return (
-      <Flex
-        align={ 'center' }
-        className={ 'p-mini' }
-      >
-        <SanitizeHtml html={ info.getValue() ?? '' } />
-        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
-      </Flex>
-    )
   }
 
   const addNotEditableColumns = (columnDefinition: Array<ColumnDef<any>>): Array<ColumnDef<any>> => {

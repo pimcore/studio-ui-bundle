@@ -27,6 +27,7 @@ export enum ContextMenuActionName {
   addFolder = 'addFolder',
 
   addObject = 'addObject',
+  addVariant = 'addVariant',
   pasteAsChildRecursive = 'pasteAsChildRecursive',
   pasteRecursiveUpdatingReferences = 'pasteRecursiveUpdatingReferences',
   pasteAsChild = 'pasteAsChild',

@@ -262,7 +262,7 @@ export type BundleCustomReportsChartData = {
     /** Chart data depending on the adapter in the report configuration. */
     data: object;
 };
-export type BundleCustomReportsColumnConfiguration = {
+export type BundleCustomReportsColumnConfigurationUpdateData = {
     /** Name */
     name: string;
     /** Display column */
@@ -286,6 +286,38 @@ export type BundleCustomReportsColumnConfiguration = {
     /** Drilldown filter */
     filterDrilldown: string | null;
 };
+export type BundleCustomReportsColumnConfiguration = BundleCustomReportsColumnConfigurationUpdateData & {
+    /** Name */
+    name?: string;
+    /** Display column */
+    display?: boolean;
+    /** Whether the column should be included in exports */
+    export?: boolean;
+    /** Order */
+    order?: boolean;
+    /** Label/display name of column */
+    label?: string;
+    /** Action of the column */
+    action?: string;
+    /** Id */
+    id?: string;
+    /** Width of the column */
+    width?: number | null;
+    /** Display type of the column */
+    displayType?: string | null;
+    /** Type of the filter */
+    filterType?: string | null;
+    /** Drilldown filter */
+    filterDrilldown?: string | null;
+    /** Disable order by */
+    disableOrderBy: boolean;
+    /** Disable filterable */
+    disableFilterable: boolean;
+    /** Disable dropdown filterable */
+    disableDropdownFilterable: boolean;
+    /** Disable label */
+    disableLabel: boolean;
+};
 export type BundleCustomReportsDetails = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -300,7 +332,7 @@ export type BundleCustomReportsDetails = {
     /** Label/nice name of report */
     niceName: string;
     /** Group of the report */
-    group?: string;
+    group: string;
     /** Group icon class */
     groupIconClass: string;
     /** Icon class */
@@ -366,7 +398,7 @@ export type BundleCustomReportUpdate = {
     /** Sql */
     sql: string;
     /** Configuration for columns to be displayed in report */
-    columnConfigurations: BundleCustomReportsColumnConfiguration[];
+    columnConfigurations: BundleCustomReportsColumnConfigurationUpdateData[];
     /** Label/nice name of report */
     niceName: string;
     /** Group of the report */

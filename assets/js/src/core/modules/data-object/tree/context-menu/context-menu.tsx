@@ -25,6 +25,7 @@ import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
+import { useAddVariant } from '../../actions/add-variant/use-add-variant'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -48,10 +49,12 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     isPasteMenuHidden
   } = usePaste()
   const { addObjectTreeContextMenuItem } = useAddObject()
+  const { addVariantTreeContextMenuItem } = useAddVariant()
   const { publishTreeContextMenuItem } = usePublish('data-object')
 
   const items: IMenuProps['items'] = [
     addObjectTreeContextMenuItem(node),
+    ...(node.metaData.dataObject.allowVariants === true ? [addVariantTreeContextMenuItem(node)] : []),
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),

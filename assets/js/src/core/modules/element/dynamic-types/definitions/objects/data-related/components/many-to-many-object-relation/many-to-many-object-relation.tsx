@@ -120,7 +120,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
   const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
     ...col,
-    group: col?.group?.[0]
+    group: col?.group
   }))
 
   const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
