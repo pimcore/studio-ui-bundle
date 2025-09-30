@@ -32,7 +32,10 @@ export const useTranslation = (): UseTranslationReturn => {
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
     try {
-      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple', domain }] }
+      const translationData: TranslationCreate = { 
+        errorOnDuplicate: true,
+        translationData: [{ key, type: 'simple', domain }] 
+      }
       const result = await createTranslation({ createTranslation: translationData })
 
       if ('data' in result) {
