@@ -14,6 +14,8 @@ import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-d
 
 export interface ISystemInfoModalData extends IElementDraft {
   deeplink: string
+  modificationDate: number
+  creationDate: number
 }
 
 export interface SystemInfoModalContextProps {

@@ -16,6 +16,7 @@ import { type ISystemInfoModalData } from './provider/system-info-modal-provider
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -51,8 +52,18 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           {renderInputItem({ label: 'ID', name: 'id' })}
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
           {renderInputItem({ label: 'Type', name: 'type' })}
-          {renderInputItem({ label: 'Modification Date', name: 'modificationDate' })}
-          {renderInputItem({ label: 'Creation Date', name: 'creationDate' })}
+          <Form.Item label={ 'Modification Date' }>
+            <Input
+              disabled
+              value={ formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' }) }
+            />
+          </Form.Item>
+          <Form.Item label={ 'Creation Date' }>
+            <Input
+              disabled
+              value={ formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' }) }
+            />
+          </Form.Item>
           {renderInputItem({ label: 'User Modification', name: 'userModification' })}
           {renderInputItem({ label: 'Owner', name: 'userOwner' })}
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
