@@ -73,32 +73,20 @@ export const useTranslation = (): UseTranslationReturn => {
   const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
       if (columnId === 'type') {
-        const rowLocales = Object.keys(row)
-          .filter(key => key.startsWith('_'))
-          .map(key => key.substring(1))
+        const result = await updateTranslation({
+          domain: domainParam,
+          body: {
+            data: [
+              {
+                key: row.key,
+                type: row.type,
+                translationData: []
+              }
+            ]
+          }
+        })
 
-        if (rowLocales.length > 0) {
-          const firstLocale = rowLocales[0]
-          const translationData = [toApiTranslation(row, firstLocale, domainParam)]
-
-          const result = await updateTranslation({
-            domain: domainParam,
-            body: {
-              data: [
-                {
-                  key: row.key,
-                  type: row.type,
-                  translationData
-                }
-              ]
-            }
-          })
-
-          return { success: 'data' in result }
-        }
-
-        trackError(new GeneralError('No locales found in translation row data'))
-        return { success: false }
+        return { success: 'data' in result }
       }
 
       const locale = columnId.substring(1)
