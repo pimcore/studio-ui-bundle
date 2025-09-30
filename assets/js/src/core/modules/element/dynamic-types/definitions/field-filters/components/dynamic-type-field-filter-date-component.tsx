@@ -31,7 +31,7 @@ export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefi
 
 export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
   const datePickerRef = useRef<any>(null)
-  
+
   interface DateValue {
     setting: DatePickerSettingValue
     from: string | null
@@ -156,7 +156,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
 
             handleDateRangeChange(convertValueToISOFormat(newFrom), convertValueToISOFormat(newTo))
           } }
-          onOpenChange={ (open: boolean) => { 
+          onOpenChange={ (open: boolean) => {
             if (!open && datePickerRef.current !== null) {
               datePickerRef.current.focus()
             }
@@ -181,7 +181,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
             handleDateChange('from', convertedValue)
           }
         } }
-        onOpenChange={ (open: boolean) => { 
+        onOpenChange={ (open: boolean) => {
           if (!open && datePickerRef.current !== null) {
             datePickerRef.current.focus()
           }
