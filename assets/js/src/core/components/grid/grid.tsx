@@ -35,7 +35,7 @@ import {
 } from '@tanstack/react-table'
 import { Checkbox, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber } from 'lodash'
+import { isEmpty, isFunction, isNumber } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -51,7 +51,7 @@ import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from 
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
-  editable?: boolean
+  editable?: boolean | ((column: any) => boolean)
   clearable?: boolean
   showPublishedState?: boolean
   autoWidth?: boolean
@@ -79,6 +79,7 @@ export interface GridCellReference {
 }
 
 export interface ExtendedCellContext extends CellContext<any, any> {
+  editable?: boolean
   modified?: boolean
   active?: boolean
   onFocus?: (cell: GridCellReference) => void
@@ -180,7 +181,28 @@ export const Grid = ({
     columns,
     initialState: props.initialState,
     defaultColumn: {
-      cell: DefaultCell
+      cell: (cellData) => {
+        const { meta } = cellData.column.columnDef
+        const editable = isFunction(meta?.editable)
+          ? meta?.editable(cellData)
+          : meta?.editable
+
+        return (
+          <DefaultCell
+            { ...cellData }
+            column={ {
+              ...cellData.column,
+              columnDef: {
+                ...cellData.column.columnDef,
+                meta: {
+                  ...meta,
+                  editable
+                }
+              }
+            } }
+          />
+        )
+      }
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
