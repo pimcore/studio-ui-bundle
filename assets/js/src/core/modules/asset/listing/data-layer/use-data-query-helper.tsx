@@ -25,6 +25,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const columnsArg: AssetGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
     key: column.key,
     type: column.type,
+    group: column.group as unknown as string[] | undefined,
     locale: column.locale,
     config: column.config
   }))
@@ -38,6 +39,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       columnsArg.push({
         key: column.key,
         type: column.type,
+        group: column.group as unknown as string[] | undefined,
         locale: column.locale,
         config: []
       })
