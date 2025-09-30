@@ -9,14 +9,16 @@
  */
 
 import React from 'react'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { type ISystemInfoModalData } from './provider/system-info-modal-provider'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
+import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -27,18 +29,41 @@ export interface ISystemInfoModalProps {
 export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const { data: userList } = useUserGetCollectionQuery()
+
   if (isNil(data)) {
     return <></>
   }
 
-  const renderInputItem = ({ label, name }: { label: string, name: string }): React.JSX.Element => (
+  const renderInputItem = ({ label, name, value }: { label: string, name?: string, value?: any }): React.JSX.Element => (
     <Form.Item
       label={ label }
       name={ name }
     >
-      <Input disabled />
+      <Input
+        disabled
+        value={ value }
+      />
     </Form.Item>
   )
+
+  const getUserModification = (userId: number | null): string | JSX.Element => {
+    const user = userList?.items.find(user => user.id === userId)
+
+    if (!isUndefined(user)) {
+      return <span>{user.username}</span>
+    }
+
+    return 'system'
+  }
+
+  const getUserOwner = (userId: number): string => {
+    const user = userList?.items.find(user => user.id === userId)
+
+    if (!isUndefined(user)) return user.username
+
+    return 'User unknown'
+  }
 
   return (
     <Modal
@@ -52,20 +77,20 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           {renderInputItem({ label: 'ID', name: 'id' })}
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
           {renderInputItem({ label: 'Type', name: 'type' })}
-          <Form.Item label={ 'Modification Date' }>
-            <Input
-              disabled
-              value={ formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' }) }
-            />
+          {renderInputItem({
+            label: 'Modification Date',
+            value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
+          })}
+          {renderInputItem({
+            label: 'Creation Date',
+            value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
+          })}
+          <Form.Item label="User Modification">
+            <Text type="secondary">{getUserModification(data.userModification)}</Text>
           </Form.Item>
-          <Form.Item label={ 'Creation Date' }>
-            <Input
-              disabled
-              value={ formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' }) }
-            />
+          <Form.Item label="Owner">
+            <Text type="secondary">{getUserOwner(data.userOwner)}</Text>
           </Form.Item>
-          {renderInputItem({ label: 'User Modification', name: 'userModification' })}
-          {renderInputItem({ label: 'Owner', name: 'userOwner' })}
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
