@@ -117,13 +117,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <div 
-        onKeyDown={ handleKeyDown }
+      <div
         ref={ contentRef }
-        style={{ outline: 'none' }}
-        tabIndex={ 0 }
+        style={ { outline: 'none' } }
       >
-        <Content padded>
+        <Content
+          onKeyDown={ handleKeyDown }
+          padded
+        >
           <FocusProvider restoreFocus={ restoreFocus }>
             <Flex
               align='center'

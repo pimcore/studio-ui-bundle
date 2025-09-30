@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 
 interface FocusContextType {
   restoreFocus: () => void
@@ -30,8 +30,10 @@ export interface FocusProviderProps {
 }
 
 export const FocusProvider = ({ children, restoreFocus }: FocusProviderProps): React.JSX.Element => {
+  const contextValue = useMemo(() => ({ restoreFocus }), [restoreFocus])
+
   return (
-    <FocusContext.Provider value={{ restoreFocus }}>
+    <FocusContext.Provider value={ contextValue }>
       {children}
     </FocusContext.Provider>
   )

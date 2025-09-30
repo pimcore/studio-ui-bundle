@@ -29,7 +29,7 @@ export const DynamicTypeFieldFilterTextAreaComponent = (): React.JSX.Element => 
 
   return (
     <TextArea
-      onChange={ (event) => { 
+      onChange={ (event) => {
         const newValue = event.target.value
         setData(newValue)
       } }
