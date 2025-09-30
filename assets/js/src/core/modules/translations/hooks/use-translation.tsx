@@ -72,8 +72,8 @@ export const useTranslation = (): UseTranslationReturn => {
 
   const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
-      const translationData = columnId === 'type' 
-        ? [] 
+      const translationData = columnId === 'type'
+        ? []
         : [toApiTranslation(row, columnId.substring(1), domainParam)]
 
       const result = await updateTranslation({
