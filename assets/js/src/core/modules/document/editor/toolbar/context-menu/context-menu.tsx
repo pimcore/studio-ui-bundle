@@ -15,39 +15,27 @@ import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { type MenuProps } from 'antd'
 import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReloadButton } from './components/reload-button/reload-button'
-import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
-import { useTranslations } from '@Pimcore/modules/document/actions/translations/use-translations'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
+import { type DocumentEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DocumentContext)
   const { document } = useDocumentDraft(id)
-  const { unpublishContextMenuItem } = useUnpublish('document')
-  const { renameContextMenuItem } = useRename('document')
-  const { deleteContextMenuItem } = useDelete('document')
-  const { openInNewWindowContextMenuItem, openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
-  const { translationContextMenuItem } = useTranslations(document as Document)
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
-  const items: DropdownMenuProps['items'] = [
-    unpublishContextMenuItem(document as Document, () => {
-      setIsOpen(undefined)
-    }),
-    deleteContextMenuItem(document as Document),
-    renameContextMenuItem(document as Document),
-    translationContextMenuItem(() => {
-      setIsOpen(undefined)
-    }),
-    openInNewWindowContextMenuItem(document as Document),
-    openPreviewInNewWindowContextMenuItem(document as Document)
-  ]
+  const contextMenuProps: DocumentEditorContextMenuProps = {
+    target: document as Document,
+    onComplete: () => setIsOpen(undefined)
+  }
+
+  // Get context menu items from registry
+  const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.documentEditorToolbar.name, contextMenuProps)
 
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 

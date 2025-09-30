@@ -308,5 +308,8 @@ export const serviceIds = {
   executionEngine: 'ExecutionEngine',
 
   // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
+
+  // Context menu registry
+  'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry'
 }
