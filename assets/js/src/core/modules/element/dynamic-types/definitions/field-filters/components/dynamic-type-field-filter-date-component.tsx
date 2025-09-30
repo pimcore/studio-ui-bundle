@@ -157,7 +157,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
             handleDateRangeChange(convertValueToISOFormat(newFrom), convertValueToISOFormat(newTo))
           } }
           onOpenChange={ (open: boolean) => { 
-            if (!open && datePickerRef.current) {
+            if (!open && datePickerRef.current !== null) {
               datePickerRef.current.focus()
             }
           } }
@@ -182,7 +182,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
           }
         } }
         onOpenChange={ (open: boolean) => { 
-          if (!open && datePickerRef.current) {
+          if (!open && datePickerRef.current !== null) {
             datePickerRef.current.focus()
           }
         } }

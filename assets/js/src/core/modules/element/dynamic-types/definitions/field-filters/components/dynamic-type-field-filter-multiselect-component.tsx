@@ -57,7 +57,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
       mode="multiple"
       onChange={ handleChange }
       onDropdownVisibleChange={ (open: boolean) => { 
-        if (!open && selectRef.current) {
+        if (!open && selectRef.current !== null) {
           selectRef.current.focus()
         }
       } }
