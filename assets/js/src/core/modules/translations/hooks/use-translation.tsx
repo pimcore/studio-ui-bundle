@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -31,24 +31,29 @@ export const useTranslation = (): UseTranslationReturn => {
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
-    try {
-      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple', domain }] }
-      const result = await createTranslation({ createTranslation: translationData })
-
-      if ('data' in result) {
-        const createdTranslation: TranslationDataItem = {
-          key: translationData.translationData[0].key,
-          type: translationData.translationData[0].type,
-          ...settings.validLanguages.reduce((acc, lang) => {
-            acc[`_${lang}`] = ''
-            return acc
-          }, {} satisfies Record<string, string>)
-        }
-        return { success: true, data: createdTranslation }
-      }
-    } catch {
-      trackError(new GeneralError('Was not able to create Translation'))
+    const translationData: TranslationCreate = {
+      errorOnDuplicate: true,
+      translationData: [{ key, type: 'simple', domain }]
     }
+    const result = await createTranslation({ createTranslation: translationData })
+
+    if ('data' in result) {
+      const createdTranslation: TranslationDataItem = {
+        key: translationData.translationData[0].key,
+        type: translationData.translationData[0].type,
+        ...settings.validLanguages.reduce((acc, lang) => {
+          acc[`_${lang}`] = ''
+          return acc
+        }, {} satisfies Record<string, string>)
+      }
+      return { success: true, data: createdTranslation }
+    }
+
+    if ('error' in result && result.error !== undefined) {
+      trackError(new ApiError(result.error))
+      return { success: false }
+    }
+
     return { success: false }
   }
 
