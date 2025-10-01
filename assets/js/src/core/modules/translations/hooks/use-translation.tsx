@@ -31,36 +31,33 @@ export const useTranslation = (): UseTranslationReturn => {
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
-    try {
-      const translationData: TranslationCreate = { 
-        errorOnDuplicate: true,
-        translationData: [{ key, type: 'simple', domain }] 
-      }
-      const result = await createTranslation({ createTranslation: translationData })
-
-      if ('data' in result) {
-        const createdTranslation: TranslationDataItem = {
-          key: translationData.translationData[0].key,
-          type: translationData.translationData[0].type,
-          ...settings.validLanguages.reduce((acc, lang) => {
-            acc[`_${lang}`] = ''
-            return acc
-          }, {} satisfies Record<string, string>)
-        }
-        return { success: true, data: createdTranslation }
-      }
-
-      if ('error' in result && result.error) {
-        const error = result.error as any
-        if (error?.data && typeof error.data === 'object' && 'message' in error.data) {
-          trackError(new ApiError(error.data))
-        } else {
-          trackError(new GeneralError('Was not able to create Translation'))
-        }
-      }
-    } catch {
-      trackError(new GeneralError('Was not able to create Translation'))
+    const translationData: TranslationCreate = { 
+      errorOnDuplicate: true,
+      translationData: [{ key, type: 'simple', domain }] 
     }
+    const result = await createTranslation({ createTranslation: translationData })
+
+    if ('data' in result) {
+      const createdTranslation: TranslationDataItem = {
+        key: translationData.translationData[0].key,
+        type: translationData.translationData[0].type,
+        ...settings.validLanguages.reduce((acc, lang) => {
+          acc[`_${lang}`] = ''
+          return acc
+        }, {} satisfies Record<string, string>)
+      }
+      return { success: true, data: createdTranslation }
+    }
+
+    if ('error' in result && result.error) {
+      const error = result.error as any
+      if (error?.data && typeof error.data === 'object' && 'message' in error.data) {
+        trackError(new ApiError(error.data))
+      } else {
+        trackError(new GeneralError('Was not able to create Translation'))
+      }
+    }
+
     return { success: false }
   }
 
