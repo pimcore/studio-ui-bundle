@@ -11,21 +11,13 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { type ContextMenuRegistry } from './context-menu-registry'
-import { type TreeContextMenuProps, type DocumentEditorContextMenuProps, type DataObjectTreeContextMenuProps, type AssetTreeContextMenuProps } from './context-types'
+import { type ContextMenuRegistryInterface } from './context-menu-registry'
 
-// Overloaded hook signatures for each specific slot
-export function useContextMenuSlot (slotName: 'document.tree', context: TreeContextMenuProps): ItemType[]
-export function useContextMenuSlot (slotName: 'document.tree.advanced', context: TreeContextMenuProps): ItemType[]
-export function useContextMenuSlot (slotName: 'document.editor.toolbar', context: DocumentEditorContextMenuProps): ItemType[]
-export function useContextMenuSlot (slotName: 'asset.tree', context: AssetTreeContextMenuProps): ItemType[]
-export function useContextMenuSlot (slotName: 'data-object.tree', context: DataObjectTreeContextMenuProps): ItemType[]
-export function useContextMenuSlot (slotName: string, context: any): ItemType[]
 export function useContextMenuSlot (
   slotName: string,
   context: any
 ): ItemType[] {
-  const contextMenuRegistry = container.get<ContextMenuRegistry>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
+  const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
   const providers = contextMenuRegistry.getSlotProviders(slotName)
 
   return providers.map((provider) => {
