@@ -51,8 +51,6 @@ export const useTranslation = (): UseTranslationReturn => {
       }
 
       if ('error' in result && result.error) {
-        console.log("error", result.error);
-        
         const error = result.error as any
         if (error?.data && typeof error.data === 'object' && 'message' in error.data) {
           trackError(new ApiError(error.data))
