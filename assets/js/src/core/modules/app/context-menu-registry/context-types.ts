@@ -38,3 +38,8 @@ export interface DataObjectTreeContextMenuProps {
   target: TreeNodeProps
   onComplete?: () => void
 }
+
+export interface AssetTreeContextMenuProps {
+  target: TreeNodeProps
+  onComplete?: () => void
+}

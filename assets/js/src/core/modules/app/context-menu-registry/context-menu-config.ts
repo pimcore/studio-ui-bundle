@@ -86,17 +86,19 @@ export const contextMenuConfig = {
   assetTree: {
     name: 'asset.tree',
     priority: {
-      addFolder: 100,
-      upload: 110,
-      zipUpload: 120,
+      newAssets: 100,
+      addFolder: 120,
       rename: 200,
       copy: 300,
       paste: 400,
       cut: 500,
-      delete: 600,
-      download: 700,
-      zipDownload: 750,
-      refreshTree: 800
+      pasteCut: 510,
+      delete: 800,
+      createZipDownload: 850,
+      uploadNewVersion: 860,
+      download: 870,
+      advanced: 880,
+      refreshTree: 900
     }
   },
 
