@@ -53,6 +53,9 @@ export const useRoleHelper = (): IUseRoleReturn => {
   const [notificationApi] = useNotification()
   const dispatch = useAppDispatch()
 
+  const activeId = useAppSelector(state => state.role.activeId)
+  const getAllIds = useAppSelector(state => state.role.ids)
+
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
       notificationApi.open({
@@ -71,7 +74,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
   }
 
   function closeRole (id: number): void {
-    dispatch(roleClosed(id))
+    dispatch(roleClosed({ id, allIds: getAllIds }))
   }
 
   async function fetchRoleById (props): Promise<RoleGetByIdApiResponse> {
@@ -177,9 +180,6 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { data }: any = await dispatch(api.endpoints.roleGetCollection.initiate())
     return data
   }
-
-  const activeId = useAppSelector(state => state.role.activeId)
-  const getAllIds = useAppSelector(state => state.role.ids)
 
   return {
     openRole,

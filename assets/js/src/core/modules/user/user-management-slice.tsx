@@ -41,7 +41,7 @@ export const slice = createSlice({
     userClosed: (state, action: PayloadAction<{ id: number, allIds: string[] }>): void => {
       const { id, allIds } = action.payload
 
-      userAdapter.removeOne(state, action.payload.id)
+      userAdapter.removeOne(state, id)
 
       if (state.activeId === id) {
         const targetIndex = allIds.findIndex(itemId => parseInt(itemId, 10) === id)
