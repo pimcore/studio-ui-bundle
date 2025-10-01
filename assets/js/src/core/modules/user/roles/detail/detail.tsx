@@ -42,24 +42,25 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
   const { role } = useRoleDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
-  const triggerConfirm = (): void => {
-    closeRole(activeId)
-    openRole(getAllIds[getAllIds.length - 2])
+  const triggerConfirm = (id: number): void => {
+    closeRole(id)
   }
 
   const onHandleClose = (key: string): void => {
-    const role = selectRoleById(store.getState(), parseInt(key))
+    const id = parseInt(key)
+    const role = selectRoleById(store.getState(), id)
+
     if (role?.modified && popConfirmOpen === null) {
       if (user?.allowDirtyClose) {
-        triggerConfirm()
+        triggerConfirm(id)
       } else {
-        setPopConfirmOpen(parseInt(key))
+        setPopConfirmOpen(id)
       }
       return
     }
 
     if (!role?.modified) {
-      triggerConfirm()
+      triggerConfirm(id)
       return
     }
 
@@ -84,7 +85,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
       title: t('roles.remove-item'),
       content: t('roles.remove-item.text'),
       onOk: async () => {
-        triggerConfirm()
+        triggerConfirm(activeId)
         await removeRole({ id: activeId })
         onRemoveRole(activeId, role?.parentId ?? 0)
       }
@@ -116,7 +117,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
             key: id.toString(),
             label: <Popconfirm
               onCancel={ () => { setPopConfirmOpen(null) } }
-              onConfirm={ triggerConfirm }
+              onConfirm={ () => { triggerConfirm(id) } }
               open={ popConfirmOpen === id }
               title={ t('widget-manager.tab-title.close-confirmation') }
                    >
