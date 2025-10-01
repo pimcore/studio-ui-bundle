@@ -37,17 +37,17 @@ export const slice = createSlice({
       roleAdapter.removeOne(state, id)
 
       if (state.activeId === id) {
-        const targetIndex = allIds.findIndex(itemId => parseInt(itemId, 10) === id)
+        const targetIndex = allIds.findIndex(itemId => Number.parseInt(itemId, 10) === id)
         const prevTab = allIds[targetIndex - 1]
         const nextTab = allIds[targetIndex + 1]
 
-        const prevTabId = !isUndefined(prevTab) ? parseInt(prevTab, 10) : undefined
-        const nextTabId = !isUndefined(nextTab) ? parseInt(nextTab, 10) : undefined
+        const prevTabId = !isUndefined(prevTab) ? Number.parseInt(prevTab, 10) : undefined
+        const nextTabId = !isUndefined(nextTab) ? Number.parseInt(nextTab, 10) : undefined
 
         state.activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
       }
     },
-    roleFetched: (state, action: PayloadAction<IRole>): void => {
+    roleFetched: (state, action: PayloadAction<DetailedUserRole>): void => {
       if (action.payload.id !== undefined) {
         roleAdapter.upsertOne(state, { ...action.payload, modified: false })
       }
