@@ -210,18 +210,6 @@ export const usePaste = (): UsePasteHookReturn => {
     return isPasteOptionHidden(node)
   }
 
-  const pasteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
-      label: t('element.tree.paste'),
-      key: ContextMenuActionName.paste,
-      icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOptionHidden(node),
-      onClick: async () => {
-        await paste(parseInt(node.id))
-      }
-    }
-  }
-
   const pasteAsChildRecursiveTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-as-child-recursive'),

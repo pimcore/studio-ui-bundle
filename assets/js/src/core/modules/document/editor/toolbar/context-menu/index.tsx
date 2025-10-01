@@ -14,11 +14,11 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { type DocumentEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
-import { useDelete, type UseDeleteHookReturn } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useRename, type UseRenameHookReturn } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useUnpublish, type UseUnpublishHookReturn } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
-import { useOpenInNewWindow, type UseOpenInNewWindowHookReturn } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
-import { useTranslations, type UseTranslationsHookReturn } from '@Pimcore/modules/document/actions/translations/use-translations'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
+import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
+import { useTranslations } from '@Pimcore/modules/document/actions/translations/use-translations'
 
 moduleSystem.registerModule({
   onInit: () => {
