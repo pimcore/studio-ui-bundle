@@ -28,6 +28,7 @@ export const contextMenuConfig = {
       paste: 400,
       pasteInheritance: 410,
       cut: 500,
+      pasteCut: 510,
       publish: 600,
       unpublish: 700,
       delete: 800,

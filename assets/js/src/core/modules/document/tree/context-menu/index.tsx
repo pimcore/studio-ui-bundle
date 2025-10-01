@@ -158,6 +158,15 @@ moduleSystem.registerModule({
     })
 
     contextMenuRegistry.registerToSlot(config.name, {
+      name: 'pasteCut',
+      priority: config.priority.pasteCut,
+      useMenuItem: (context: TreeContextMenuProps) => {
+        const { pasteCutContextMenuItem } = useCopyPaste('document')
+        return pasteCutContextMenuItem(context.target)
+      }
+    })
+
+    contextMenuRegistry.registerToSlot(config.name, {
       name: 'publish',
       priority: config.priority.publish,
       useMenuItem: (context: TreeContextMenuProps) => {
