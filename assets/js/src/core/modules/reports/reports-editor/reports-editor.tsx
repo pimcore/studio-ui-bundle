@@ -74,13 +74,12 @@ export const ReportsEditor = (): React.JSX.Element => {
       const prevTab = openedReports[targetIndex - 1]
       const nextTab = openedReports[targetIndex + 1]
 
-      const nextActiveId = !isUndefined(prevTab)
-        ? prevTab.id
-        : !isUndefined(nextTab)
-            ? nextTab.id
-            : undefined
+      const prevTabId = prevTab.id
+      const nextTabId = !isUndefined(nextTab) ? nextTab.id : undefined
 
-      setActiveTabKey(nextActiveId)
+      const activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
+
+      setActiveTabKey(activeId)
     }
 
     setOpenedReports(updatedOpenedReports)
