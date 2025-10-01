@@ -50,12 +50,7 @@ export const useTranslation = (): UseTranslationReturn => {
     }
 
     if ('error' in result && result.error !== undefined) {
-      const error = result.error as { data?: { message?: string, errorKey?: string, detail?: string } }
-      if (error.data !== undefined && typeof error.data === 'object' && error.data !== null && 'message' in error.data) {
-        trackError(new ApiError(error.data))
-      } else {
-        trackError(new GeneralError('Was not able to create Translation'))
-      }
+      trackError(new ApiError(result.error))
     }
 
     return { success: false }
