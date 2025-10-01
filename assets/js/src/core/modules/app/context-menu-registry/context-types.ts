@@ -33,3 +33,8 @@ export interface AssetEditorContextMenuProps {
   target: Asset
   onComplete?: () => void
 }
+
+export interface DataObjectTreeContextMenuProps {
+  target: TreeNodeProps
+  onComplete?: () => void
+}

@@ -103,14 +103,29 @@ export const contextMenuConfig = {
   dataObjectTree: {
     name: 'data-object.tree',
     priority: {
-      addFolder: 100,
-      addObject: 110,
+      addObject: 100,
+      addVariant: 110,
+      addFolder: 120,
       rename: 200,
       copy: 300,
       paste: 400,
       cut: 500,
-      delete: 600,
-      refreshTree: 700
+      pasteCut: 510,
+      publish: 600,
+      unpublish: 700,
+      delete: 800,
+      advanced: 870,
+      refreshTree: 900
+    }
+  },
+
+  dataObjectTreeAdvanced: {
+    name: 'data-object.tree.advanced',
+    priority: {
+      lock: 100,
+      lockAndPropagate: 110,
+      unlock: 120,
+      unlockAndPropagate: 130
     }
   }
 }
