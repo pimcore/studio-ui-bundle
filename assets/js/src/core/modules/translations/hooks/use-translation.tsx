@@ -51,6 +51,7 @@ export const useTranslation = (): UseTranslationReturn => {
 
     if ('error' in result && result.error !== undefined) {
       trackError(new ApiError(result.error))
+      return { success: false }
     }
 
     return { success: false }
