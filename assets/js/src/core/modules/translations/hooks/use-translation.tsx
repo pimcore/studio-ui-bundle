@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -49,7 +49,18 @@ export const useTranslation = (): UseTranslationReturn => {
         }
         return { success: true, data: createdTranslation }
       }
-    } catch {
+
+      if ('error' in result && result.error) {
+        console.log("error", result.error);
+        
+        const error = result.error as any
+        if (error?.data && typeof error.data === 'object' && 'message' in error.data) {
+          trackError(new ApiError(error.data))
+        } else {
+          trackError(new GeneralError('Was not able to create Translation'))
+        }
+      }
+    } catch (error: any) {
       trackError(new GeneralError('Was not able to create Translation'))
     }
     return { success: false }
