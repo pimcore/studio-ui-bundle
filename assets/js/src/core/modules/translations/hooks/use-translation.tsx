@@ -31,9 +31,9 @@ export const useTranslation = (): UseTranslationReturn => {
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
-    const translationData: TranslationCreate = { 
+    const translationData: TranslationCreate = {
       errorOnDuplicate: true,
-      translationData: [{ key, type: 'simple', domain }] 
+      translationData: [{ key, type: 'simple', domain }]
     }
     const result = await createTranslation({ createTranslation: translationData })
 
