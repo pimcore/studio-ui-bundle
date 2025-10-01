@@ -58,7 +58,7 @@ export const useTranslation = (): UseTranslationReturn => {
           trackError(new GeneralError('Was not able to create Translation'))
         }
       }
-    } catch (error: any) {
+    } catch {
       trackError(new GeneralError('Was not able to create Translation'))
     }
     return { success: false }
