@@ -48,7 +48,6 @@ export interface UsePasteHookReturn {
 export const usePaste = (): UsePasteHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { paste } = useCopyPaste('document')
   const { treeId } = useTreeId(true)
   const { getStoredNode } = useTreeCopyPasteContext('document')
   const { isPasteHidden } = usePasteVisibility('document')

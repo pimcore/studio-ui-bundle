@@ -57,7 +57,8 @@ moduleSystem.registerModule({
       name: 'translations',
       priority: config.priority.translations,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useTranslations(context?.target ?? {} as DocumentEditorContextMenuProps['target']).translationContextMenuItem(context.onComplete)
+        const target: DocumentEditorContextMenuProps['target'] = context?.target ?? {} as DocumentEditorContextMenuProps['target']
+        return useTranslations(target).translationContextMenuItem(context.onComplete)
       }
     })
 

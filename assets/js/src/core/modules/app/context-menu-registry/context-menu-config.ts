@@ -61,6 +61,28 @@ export const contextMenuConfig = {
     }
   },
 
+  dataObjectEditorToolbar: {
+    name: 'data-object.editor.toolbar',
+    priority: {
+      unpublish: 100,
+      delete: 200,
+      rename: 300
+    }
+  },
+
+  assetEditorToolbar: {
+    name: 'asset.editor.toolbar',
+    priority: {
+      rename: 100,
+      delete: 200,
+      download: 300,
+      zipDownload: 400,
+      clearImageThumbnail: 500,
+      clearVideoThumbnail: 600,
+      clearPdfThumbnail: 700
+    }
+  },
+
   assetTree: {
     name: 'asset.tree',
     priority: {
