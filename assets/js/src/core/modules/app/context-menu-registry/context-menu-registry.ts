@@ -14,8 +14,7 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 export interface ContextMenuItemProvider {
   name: string
   priority?: number
-  useHook?: (context?: any) => any
-  getMenuItem: (context: any, hookResult?: any) => ItemType
+  useMenuItem: (context: any) => ItemType
 }
 
 export interface ContextMenuRegistryInterface {

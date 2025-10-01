@@ -31,7 +31,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   const contextMenuProps: DocumentEditorContextMenuProps = {
     target: document as Document,
-    onComplete: () => setIsOpen(undefined)
+    onComplete: () => { setIsOpen(undefined) }
   }
 
   // Get context menu items from registry

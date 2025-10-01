@@ -41,22 +41,8 @@ export interface LanguageOption {
 export type LanguageModalType = 'child' | 'recursive' | 'recursive-update-references'
 
 export interface UsePasteHookReturn {
-  pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteRecursiveUpdatingReferencesTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteOnlyContentsTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildRecursiveInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  isPasteMenuHidden: (node: Element | TreeNodeProps) => boolean
-  isPasteInheritanceMenuHidden: (node: Element | TreeNodeProps) => boolean
+  pasteMenuTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  pasteInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const usePaste = (): UsePasteHookReturn => {
@@ -422,22 +408,43 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
+  const pasteMenuTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value="paste" />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    }
+  }
+
+  const pasteInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('document.paste-inheritance'),
+      key: 'paste-inheritance',
+      icon: <Icon value="paste" />,
+      hidden: isPasteInheritanceMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveInheritanceTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
+        pasteAsChildInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node)
+      ]
+    }
+  }
+
   return {
-    pasteTreeContextMenuItem,
-    pasteAsChildRecursiveTreeContextMenuItem,
-    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
-    pasteAsChildTreeContextMenuItem,
-    pasteAsNewLanguageVariantTreeContextMenuItem,
-    pasteAsNewLanguageVariantRecursiveTreeContextMenuItem,
-    pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem,
-    pasteOnlyContentsTreeContextMenuItem,
-    pasteAsChildRecursiveInheritanceTreeContextMenuItem,
-    pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
-    pasteAsChildInheritanceTreeContextMenuItem,
-    pasteAsNewLanguageVariantInheritanceTreeContextMenuItem,
-    pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
-    pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
-    isPasteMenuHidden,
-    isPasteInheritanceMenuHidden
+    pasteMenuTreeContextMenuItem,
+    pasteInheritanceTreeContextMenuItem
   }
 }

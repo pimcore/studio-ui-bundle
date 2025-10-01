@@ -26,12 +26,25 @@ export const contextMenuConfig = {
       rename: 200,
       copy: 300,
       paste: 400,
+      pasteInheritance: 410,
       cut: 500,
       publish: 600,
       unpublish: 700,
       delete: 800,
       openInNewWindow: 850,
+      advanced: 870,
       refreshTree: 900
+    }
+  },
+
+  documentTreeAdvanced: {
+    name: 'document.tree.advanced',
+    priority: {
+      convertTo: 100,
+      lock: 200,
+      useAsSite: 300,
+      editSite: 310,
+      removeSite: 320
     }
   },
 

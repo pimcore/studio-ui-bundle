@@ -37,6 +37,7 @@ export interface UseLockHookReturn {
   unlockContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   unlockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   unlockAndPropagateContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  lockMenuTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   isLockMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
@@ -232,6 +233,21 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return isLockHidden(node) && isLockPropagateHidden(node) && isUnlockHidden(node) && isUnlockPropagateHidden(node)
   }
 
+  const lockMenuTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.lock'),
+      key: 'advanced-lock',
+      icon: <Icon value="lock" />,
+      hidden: isLockMenuHidden(node),
+      children: [
+        lockTreeContextMenuItem(node),
+        lockAndPropagateTreeContextMenuItem(node),
+        unlockTreeContextMenuItem(node),
+        unlockAndPropagateTreeContextMenuItem(node)
+      ]
+    }
+  }
+
   return {
     lock,
     lockAndPropagate,
@@ -245,6 +261,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     unlockContextMenuItem,
     unlockAndPropagateTreeContextMenuItem,
     unlockAndPropagateContextMenuItem,
+    lockMenuTreeContextMenuItem,
     isLockMenuHidden
   }
 }

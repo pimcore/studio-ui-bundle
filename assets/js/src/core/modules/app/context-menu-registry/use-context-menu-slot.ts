@@ -16,6 +16,7 @@ import { type TreeContextMenuProps, type DocumentEditorContextMenuProps } from '
 
 // Overloaded hook signatures for each specific slot
 export function useContextMenuSlot (slotName: 'document.tree', context: TreeContextMenuProps): ItemType[]
+export function useContextMenuSlot (slotName: 'document.tree.advanced', context: TreeContextMenuProps): ItemType[]
 export function useContextMenuSlot (slotName: 'document.editor.toolbar', context: DocumentEditorContextMenuProps): ItemType[]
 export function useContextMenuSlot (slotName: 'asset.tree', context: TreeContextMenuProps): ItemType[]
 export function useContextMenuSlot (slotName: 'data-object.tree', context: TreeContextMenuProps): ItemType[]
@@ -28,10 +29,7 @@ export function useContextMenuSlot (
   const providers = contextMenuRegistry.getSlotProviders(slotName)
 
   return providers.map((provider) => {
-    // Execute the hook if available
-    const hookResult = provider.useHook?.(context)
-
-    // Generate the menu item
-    return provider.getMenuItem(context, hookResult)
+    // Generate the menu item directly
+    return provider.useMenuItem(context)
   })
 }

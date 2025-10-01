@@ -10,11 +10,7 @@
 
 export { ContextMenuRegistry, type ContextMenuItemProvider, type ContextMenuRegistryInterface } from './context-menu-registry'
 export { useContextMenuSlot } from './use-context-menu-slot'
-export { 
-  contextMenuConfig, 
-  type ContextMenuSlotConfig, 
-  type ContextMenuSlotTypes,
-  type ContextMenuSlotTarget,
-  type ContextMenuSlotContext,
-  type ContextMenuSlotPayload
+export {
+  contextMenuConfig,
+  type ContextMenuSlotConfig
 } from './context-menu-config'
