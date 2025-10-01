@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -23,6 +23,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { isString } from 'lodash'
 import type { Element } from '@Pimcore/modules/element/element-helper'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { useDocumentGetTranslationParentByLanguageQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface NewTranslationModalProps {
   isOpen: boolean
@@ -51,6 +52,7 @@ export const NewTranslationModal = ({
   const { getDisplayName } = useLanguageLookup()
   const settings = useSettings()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('')
   const [form] = Form.useForm<NewTranslationFormValues>()
 
   const languageProperty = currentDocument?.properties?.find(prop => prop.key === 'language')
@@ -62,6 +64,25 @@ export const NewTranslationModal = ({
       value: locale,
       label: `${getDisplayName(locale)} [${locale}]`
     }))
+
+  const { data: translationParentData } = useDocumentGetTranslationParentByLanguageQuery(
+    {
+      id: currentDocument?.id ?? 0,
+      language: selectedLanguage
+    },
+    { skip: !selectedLanguage || !currentDocument?.id }
+  )
+
+  // Auto-preselect parent when translation parent data is available and contains fullPath
+  useEffect(() => {
+    if (translationParentData?.fullPath && translationParentData?.id) {
+      form.setFieldValue('parent', {
+        id: translationParentData.id,
+        type: 'document',
+        fullPath: translationParentData.fullPath
+      })
+    }
+  }, [translationParentData, form])
 
   const handleSubmit = async (): Promise<void> => {
     setIsSubmitting(true)
@@ -80,6 +101,13 @@ export const NewTranslationModal = ({
       navigation: value,
       key: value
     })
+  }
+
+  const handleLanguageChange = (language: string): void => {
+    form.setFieldValue('language', language)
+    setSelectedLanguage(language)
+    // Reset parent field when language changes - it will be auto-filled by useEffect if translation parent exists
+    form.setFieldValue('parent', null)
   }
 
   const modalTitle = useInheritance
@@ -127,8 +155,8 @@ export const NewTranslationModal = ({
           rules={ [{ required: true, message: t('form.validation.required') }] }
         >
           <Select
+            onChange={ handleLanguageChange }
             options={ availableLanguages }
-            placeholder={ t('select-language') }
           />
         </Form.Item>
 

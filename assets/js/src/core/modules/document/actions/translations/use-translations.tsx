@@ -166,7 +166,6 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           key: 'new-document-inheritance',
           icon: <Icon value="inheritance-active" />,
           onClick: () => {
-            console.log('document', document)
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(true)
