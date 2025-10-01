@@ -67,13 +67,19 @@ export const ReportsEditor = (): React.JSX.Element => {
   }
 
   const handleCloseTab = (key: string): void => {
-    const targetIndex = openedReports.findIndex((tab) => tab.id === key)
+    const targetIndex = openedReports.findIndex((tab) => tab?.id === key)
     const updatedOpenedReports = openedReports.filter((report) => report.id !== key)
 
     if (key === activeTabKey) {
       const prevTab = openedReports[targetIndex - 1]
+      const nextTab = openedReports[targetIndex + 1]
 
-      setActiveTabKey(!isUndefined(prevTab) ? prevTab.id : undefined)
+      const prevTabId = prevTab?.id
+      const nextTabId = !isUndefined(nextTab) ? nextTab?.id : undefined
+
+      const activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
+
+      setActiveTabKey(activeId)
     }
 
     setOpenedReports(updatedOpenedReports)
