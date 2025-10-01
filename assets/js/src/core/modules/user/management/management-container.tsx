@@ -25,6 +25,8 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserManagementHelper()
 
+  console.log('====== PROPS: ', props)
+
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   const treeParentItem = {

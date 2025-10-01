@@ -22,6 +22,8 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { USERS_WIDGET } from '@Pimcore/modules/user'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -34,9 +36,23 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
 
   const currentUser = useUser()
   const { data: userList } = useUserGetCollectionQuery()
+  const { openMainWidget } = useWidgetManager()
 
   if (isNil(data)) {
     return <></>
+  }
+
+  const handleOpenUserManagement = (userId: number): void => {
+    const updConfig = {
+      ...USERS_WIDGET,
+      config: {
+        ...USERS_WIDGET.config,
+        userId
+      }
+    }
+
+    openMainWidget(updConfig)
+    onClose()
   }
 
   const renderInputItem = ({ label, name, value }: { label: string, name?: string, value?: any }): React.JSX.Element => (
@@ -63,7 +79,10 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           <Text type="secondary">{user.username}</Text>
           {/* need to add the redirect to the admin panel */}
           {currentUser.id === userId && (
-            <Link style={ { textDecoration: 'underline' } }>
+            <Link
+              onClick={ () => { handleOpenUserManagement(userId) } }
+              style={ { textDecoration: 'underline' } }
+            >
               (click to open)
             </Link>
           )}
@@ -98,7 +117,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
             <Text type="secondary">{getUserLabel(data.userModification, 'system')}</Text>
           </Form.Item>
           <Form.Item label="Owner">
-            {getUserLabel(data.userOwner, 'User unknown')}
+            {getUserLabel(20, 'User unknown')}
           </Form.Item>
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
