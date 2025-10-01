@@ -176,7 +176,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           label: `> ${t('blank')}`,
           key: 'new-document-blank',
           icon: <Icon
-            value="document" // todo: actually we need blank document icon here
+            value="document"
                 />,
           onClick: () => {
             setCurrentDocument(document)
