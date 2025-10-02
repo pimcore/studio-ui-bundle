@@ -38,7 +38,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         return {
           key: t(`${workflow.workflowName}`),
           type: 'group',
-          label: t(`${workflow.workflowName}`).toUpperCase(),
+          label: t(`${workflow.workflowLabel}`).toUpperCase(),
           children: result
         }
       })
