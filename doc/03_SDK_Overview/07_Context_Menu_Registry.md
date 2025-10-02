@@ -25,34 +25,29 @@ Context menu items are organized into **slots**, which are specific locations wh
 Use the `registerToSlot` method to register custom menu items:
 
 ```typescript
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ContextMenuRegistryInterface } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
-import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
-import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { container } from '@pimcore/studio-ui-bundle'
+import { serviceIds } from '@pimcore/studio-ui-bundle/app'
+import { contextMenuConfig, type ContextMenuRegistryInterface } from '@pimcore/studio-ui-bundle/modules/app'
 
-moduleSystem.registerModule({
-  onInit: () => {
-    const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(
-      serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']
-    )
+const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(
+  serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']
+)
 
-    contextMenuRegistry.registerToSlot(contextMenuConfig.dataObjectTree.name, {
-      name: 'customAction',
-      priority: contextMenuConfig.dataObjectTree.priority.addObject + 1,
-      useMenuItem: (context) => {
-        const { t } = useTranslation()
-   
-        return {
-          label: t('custom.action.label'),
-          key: 'customAction',
-          icon: <Icon value='custom-icon' />,
-          onClick: () => {
-            // Perform custom action
-          }
-        }
+contextMenuRegistry.registerToSlot(contextMenuConfig.dataObjectTree.name, {
+  name: 'customAction',
+  priority: contextMenuConfig.dataObjectTree.priority.addObject + 1,
+  useMenuItem: (context) => {
+    const { t } = useTranslation()
+
+
+    return {
+      label: t('custom.action.label'),
+      key: 'customAction',
+      icon: <Icon value='custom-icon' />,
+      onClick: () => {
+        // Perform custom action
       }
-    })
+    }
   }
 })
 ```
