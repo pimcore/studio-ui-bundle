@@ -188,7 +188,7 @@ moduleSystem.registerModule({
       name: 'delete',
       priority: config.priority.delete,
       useMenuItem: (context: TreeContextMenuProps) => {
-        const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', parseInt(context.target.id)))
+        const { deleteTreeContextMenuItem } = useDelete('document', getElementActionCacheKey('document', 'delete', Number.parseInt(context.target.id)))
         return deleteTreeContextMenuItem(context.target)
       }
     })
