@@ -20,7 +20,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { type LanguageOption } from '@Pimcore/modules/document/actions/paste/use-paste'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { has, isNil, isNull, isString } from 'lodash'
+import { has, isNil, isString } from 'lodash'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentGetTranslationParentByLanguageQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element } from '@Pimcore/modules/element/element-helper'
@@ -72,7 +72,7 @@ export const NewTranslationModal = ({
       id: currentDocument?.id ?? 0,
       language: selectedLanguage
     },
-    { skip: isNull(selectedLanguage) || isNull(currentDocument?.id) }
+    { skip: selectedLanguage === '' || isNil(currentDocument?.id) }
   )
 
   // Auto-preselect parent when translation parent data is available and contains fullPath
