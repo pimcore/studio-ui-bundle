@@ -250,7 +250,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       if (!isNull(currentOnFinish)) {
         currentOnFinish()
       }
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Error creating translation document'))
     }
   }
