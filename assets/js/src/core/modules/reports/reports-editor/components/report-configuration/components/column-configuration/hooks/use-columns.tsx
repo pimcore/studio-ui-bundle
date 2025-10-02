@@ -8,15 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
+import React from 'react'
+import { type AccessorKeyColumnDef, type CellContext, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import {
-  COLUMN_KEYS
-} from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
+import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
+import { DefaultCell, type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { addColumnMeta } from '@Pimcore/components/grid/columns/helpers'
 
 export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
   const columnHelper = createColumnHelper()
   const { t } = useTranslation()
+
+  const withEditable = (cellData: CellContext<unknown, unknown>, editable: boolean): DefaultCellProps => (
+    addColumnMeta(cellData, { editable })
+  )
 
   return [
     columnHelper.accessor(COLUMN_KEYS.ROW_DRAG, { header: '', size: 40 }),
@@ -34,13 +39,22 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
     }),
     columnHelper.accessor(COLUMN_KEYS.ORDER, {
       header: t('reports.editor.manage-column-configuration.order'),
-      meta: { type: 'checkbox', editable: true }
+      cell: (cellData: CellContext<any, any>) => {
+        const disableOrderBy: boolean = cellData.row.original.disableOrderBy
+
+        return <DefaultCell { ...withEditable(cellData, !disableOrderBy) } />
+      },
+      meta: { type: 'checkbox' }
     }),
     columnHelper.accessor(COLUMN_KEYS.FILTER_TYPE, {
       header: t('reports.editor.manage-column-configuration.filter-type'),
+      cell: (cellData: CellContext<any, any>) => {
+        const disableFilterable: boolean = cellData.row.original.disableFilterable
+
+        return <DefaultCell { ...withEditable(cellData, !disableFilterable) } />
+      },
       meta: {
         type: 'select',
-        editable: true,
         config: {
           options: [
             { label: t('reports.editor.manage-column-configuration.filter-type.empty'), value: '' },
@@ -69,9 +83,13 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
     }),
     columnHelper.accessor(COLUMN_KEYS.FILTER_DRILLDOWN, {
       header: t('reports.editor.manage-column-configuration.filter-drilldown'),
+      cell: (cellData: CellContext<any, any>) => {
+        const disableDropdownFilterable: boolean = cellData.row.original.disableDropdownFilterable
+
+        return <DefaultCell { ...withEditable(cellData, !disableDropdownFilterable) } />
+      },
       meta: {
         type: 'select',
-        editable: true,
         config: {
           options: [
             { label: t('reports.editor.manage-column-configuration.filter-drilldown.empty'), value: '' },
@@ -87,7 +105,14 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
     }),
     columnHelper.accessor(COLUMN_KEYS.LABEL, {
       header: t('reports.editor.manage-column-configuration.label'),
-      meta: { type: 'text-cell', editable: true }
+      cell: (cellData: CellContext<any, any>) => {
+        const disableLabel: boolean = cellData.row.original.disableLabel
+
+        return <DefaultCell { ...withEditable(cellData, !disableLabel) } />
+      },
+      meta: {
+        type: 'text-cell'
+      }
     }),
     columnHelper.accessor(COLUMN_KEYS.ACTION, {
       header: t('reports.editor.manage-column-configuration.action'),
