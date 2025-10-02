@@ -19,6 +19,7 @@ Context menu items are organized into **slots**, which are specific locations wh
 ### List Grid Context Menus
 - **`data-object.list-grid`** - Data Object list view right-click menu
 - **`asset.list-grid`** - Asset list view right-click menu
+- **`asset.preview-card`** - Asset folder preview card context menu
 
 ## Registering Context Menu Items
 
