@@ -129,5 +129,29 @@ export const contextMenuConfig = {
       unlock: 120,
       unlockAndPropagate: 130
     }
+  },
+
+  assetListGrid: {
+    name: 'asset.list-grid',
+    priority: {
+      open: 100,
+      rename: 200,
+      locateInTree: 300,
+      delete: 400,
+      download: 500
+    }
+  },
+
+  assetPreviewCard: {
+    name: 'asset.preview-card',
+    priority: {
+      open: 100,
+      info: 200,
+      rename: 300,
+      locateInTree: 400,
+      uploadNewVersion: 500,
+      download: 600,
+      delete: 700
+    }
   }
 }

@@ -10,6 +10,7 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 
@@ -41,5 +42,18 @@ export interface DataObjectTreeContextMenuProps {
 
 export interface AssetTreeContextMenuProps {
   target: TreeNodeProps
+  onComplete?: () => void
+}
+
+export interface AssetListGridContextMenuProps {
+  row: {
+    id: string
+    [x: string]: any
+  }
+  onComplete?: () => void
+}
+
+export interface AssetPreviewCardContextMenuProps {
+  asset: AssetGetTreeApiResponse['items'][number]
   onComplete?: () => void
 }

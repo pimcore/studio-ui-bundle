@@ -1,5 +1,6 @@
 /**
- * This source file is available under the t* Pimcore Open Core License (POCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
@@ -34,7 +35,6 @@ moduleSystem.registerModule({
     const contextMenuRegistry = container.get<ContextMenuRegistry>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
     const config = contextMenuConfig.dataObjectTree
 
-    // Add Object
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'addObject',
       priority: config.priority.addObject,
@@ -44,7 +44,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Add Variant (conditional)
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'addVariant',
       priority: config.priority.addVariant,
@@ -57,7 +56,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Add Folder
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'addFolder',
       priority: config.priority.addFolder,
@@ -67,7 +65,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Rename
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'rename',
       priority: config.priority.rename,
@@ -77,7 +74,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Copy
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'copy',
       priority: config.priority.copy,
@@ -87,7 +83,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Paste (as sub-menu)
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'paste',
       priority: config.priority.paste,
@@ -116,7 +111,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Cut
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'cut',
       priority: config.priority.cut,
@@ -126,7 +120,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Paste Cut
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'pasteCut',
       priority: config.priority.pasteCut,
@@ -136,7 +129,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Publish
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'publish',
       priority: config.priority.publish,
@@ -146,7 +138,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Unpublish
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'unpublish',
       priority: config.priority.unpublish,
@@ -156,7 +147,6 @@ moduleSystem.registerModule({
       }
     })
 
-    // Delete
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'delete',
       priority: config.priority.delete,
@@ -166,18 +156,17 @@ moduleSystem.registerModule({
       }
     })
 
-    // Advanced (as sub-menu)
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'advanced',
       priority: config.priority.advanced,
       useMenuItem: (context: DataObjectTreeContextMenuProps) => {
         const { t } = useTranslation()
-        const { 
-          lockTreeContextMenuItem, 
-          lockAndPropagateTreeContextMenuItem, 
-          unlockTreeContextMenuItem, 
-          unlockAndPropagateTreeContextMenuItem, 
-          isLockMenuHidden 
+        const {
+          lockTreeContextMenuItem,
+          lockAndPropagateTreeContextMenuItem,
+          unlockTreeContextMenuItem,
+          unlockAndPropagateTreeContextMenuItem,
+          isLockMenuHidden
         } = useLock('data-object')
 
         return {

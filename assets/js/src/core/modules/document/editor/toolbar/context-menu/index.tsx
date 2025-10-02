@@ -25,49 +25,48 @@ moduleSystem.registerModule({
     const contextMenuRegistry = container.get<ContextMenuRegistry>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
     const config = contextMenuConfig.documentEditorToolbar
 
-    // Register unpublish action
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'unpublish',
       priority: config.priority.unpublish,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useUnpublish('document').unpublishContextMenuItem(context.target, context.onComplete)
+        const { unpublishContextMenuItem } = useUnpublish('document')
+        return unpublishContextMenuItem(context.target, context.onComplete)
       }
     })
 
-    // Register delete action
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'delete',
       priority: config.priority.delete,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useDelete('document').deleteContextMenuItem(context.target)
+        const { deleteContextMenuItem } = useDelete('document')
+        return deleteContextMenuItem(context.target)
       }
     })
 
-    // Register rename action
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'rename',
       priority: config.priority.rename,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useRename('document').renameContextMenuItem(context.target)
+        const { renameContextMenuItem } = useRename('document')
+        return renameContextMenuItem(context.target)
       }
     })
 
-    // Register translations action
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'translations',
       priority: config.priority.translations,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        const target: DocumentEditorContextMenuProps['target'] = context?.target ?? {} as DocumentEditorContextMenuProps['target']
-        return useTranslations(target).translationContextMenuItem(context.onComplete)
+        const { translationContextMenuItem } = useTranslations(context.target)
+        return translationContextMenuItem(context.onComplete)
       }
     })
 
-    // Register open in new window actions
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'openInNewWindow',
       priority: config.priority.openInNewWindow,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useOpenInNewWindow().openInNewWindowContextMenuItem(context.target)
+        const { openInNewWindowContextMenuItem } = useOpenInNewWindow()
+        return openInNewWindowContextMenuItem(context.target)
       }
     })
 
@@ -75,7 +74,8 @@ moduleSystem.registerModule({
       name: 'openPreviewInNewWindow',
       priority: config.priority.openPreviewInNewWindow,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
-        return useOpenInNewWindow().openPreviewInNewWindowContextMenuItem(context.target)
+        const { openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
+        return openPreviewInNewWindowContextMenuItem(context.target)
       }
     })
   }

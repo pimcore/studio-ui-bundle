@@ -12,7 +12,6 @@
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { Element } from '@Pimcore/modules/element/element-helper'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import React from 'react'

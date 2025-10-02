@@ -161,12 +161,12 @@ moduleSystem.registerModule({
       priority: config.priority.advanced,
       useMenuItem: (context: AssetTreeContextMenuProps) => {
         const { t } = useTranslation()
-        const { 
-          lockTreeContextMenuItem, 
-          lockAndPropagateTreeContextMenuItem, 
-          unlockTreeContextMenuItem, 
-          unlockAndPropagateTreeContextMenuItem, 
-          isLockMenuHidden 
+        const {
+          lockTreeContextMenuItem,
+          lockAndPropagateTreeContextMenuItem,
+          unlockTreeContextMenuItem,
+          unlockAndPropagateTreeContextMenuItem,
+          isLockMenuHidden
         } = useLock('asset')
 
         return {
