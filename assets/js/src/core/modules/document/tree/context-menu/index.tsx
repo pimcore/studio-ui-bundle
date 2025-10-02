@@ -134,7 +134,7 @@ moduleSystem.registerModule({
       name: 'rename',
       priority: config.priority.rename,
       useMenuItem: (context: TreeContextMenuProps) => {
-        const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', parseInt(context.target.id)))
+        const { renameTreeContextMenuItem } = useRename('document', getElementActionCacheKey('document', 'rename', Number.parseInt(context.target.id)))
         return renameTreeContextMenuItem(context.target)
       }
     })

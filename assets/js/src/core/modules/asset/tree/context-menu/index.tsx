@@ -79,7 +79,7 @@ moduleSystem.registerModule({
       name: 'rename',
       priority: config.priority.rename,
       useMenuItem: (context: AssetTreeContextMenuProps) => {
-        const { renameTreeContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', parseInt(context.target.id)))
+        const { renameTreeContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', Number.parseInt(context.target.id)))
         return renameTreeContextMenuItem(context.target)
       }
     })
@@ -124,7 +124,7 @@ moduleSystem.registerModule({
       name: 'delete',
       priority: config.priority.delete,
       useMenuItem: (context: AssetTreeContextMenuProps) => {
-        const { deleteTreeContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', parseInt(context.target.id)))
+        const { deleteTreeContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', Number.parseInt(context.target.id)))
         return deleteTreeContextMenuItem(context.target)
       }
     })

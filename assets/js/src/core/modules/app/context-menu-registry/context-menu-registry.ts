@@ -27,18 +27,12 @@ export class ContextMenuRegistry implements ContextMenuRegistryInterface {
   private slots: Record<string, ContextMenuItemProvider[]> = {}
 
   registerToSlot (slotName: string, provider: ContextMenuItemProvider): void {
-    if (this.slots[slotName] === undefined) {
-      this.slots[slotName] = []
-    }
-
+    this.slots[slotName] = this.slots[slotName] ?? []
     this.slots[slotName].push(provider)
   }
 
   getSlotProviders (slotName: string): ContextMenuItemProvider[] {
-    if (this.slots[slotName] === undefined) {
-      return []
-    }
-
+    this.slots[slotName] = this.slots[slotName] ?? []
     return this.slots[slotName].sort((a, b) => (a.priority ?? 999) - (b.priority ?? 999))
   }
 }
