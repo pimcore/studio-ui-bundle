@@ -34,9 +34,11 @@ import { normalizeChartData, normalizeDataSourceConfig } from '@Pimcore/modules/
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
   isActive: boolean
+  modifiedReports: string[]
+  setModifiedReports: (modifiedReports: string[]) => void
 }
 
-export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
+export const ReportConfiguration = ({ report, isActive, modifiedReports, setModifiedReports }: IReportConfigurationProps): React.JSX.Element => {
   const { isLoading, data, isFetching, refetch } = useCustomReportsReportQuery({ name: report.id })
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
@@ -51,6 +53,14 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
       initializeForm(data)
     }
   }, [data])
+
+  useEffect(() => {
+    if (isDirty) {
+      setModifiedReports([...modifiedReports, report.id])
+    } else {
+      setModifiedReports(modifiedReports.filter((item) => item !== report.id))
+    }
+  }, [isDirty])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
     updateFormData({ ...currentData, ...allValues })
