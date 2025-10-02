@@ -10,6 +10,7 @@
 
 import '@Pimcore/modules/data-object/editor'
 import '@Pimcore/modules/data-object/tree'
+import '@Pimcore/modules/data-object/listing/decorator/context-menu'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
