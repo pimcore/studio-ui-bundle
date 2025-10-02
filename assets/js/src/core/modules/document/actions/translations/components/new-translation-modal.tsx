@@ -20,10 +20,10 @@ import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { type LanguageOption } from '@Pimcore/modules/document/actions/paste/use-paste'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { isNull, isString } from 'lodash'
-import type { Element } from '@Pimcore/modules/element/element-helper'
+import { has, isNil, isNull, isString } from 'lodash'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentGetTranslationParentByLanguageQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
 export interface NewTranslationModalProps {
   isOpen: boolean
@@ -55,7 +55,9 @@ export const NewTranslationModal = ({
   const [selectedLanguage, setSelectedLanguage] = useState<string>('')
   const [form] = Form.useForm<NewTranslationFormValues>()
 
-  const languageProperty = currentDocument?.properties?.find(prop => prop.key === 'language')
+  const languageProperty = (!isNil(currentDocument) && has(currentDocument, 'properties') && Array.isArray(currentDocument?.properties))
+    ? currentDocument.properties?.find(prop => prop.key === 'language')
+    : undefined
   const currentDocumentLanguage = isString(languageProperty?.data) ? languageProperty.data : ''
 
   const availableLanguages: LanguageOption[] = (settings.validLanguages ?? [])
@@ -75,7 +77,7 @@ export const NewTranslationModal = ({
 
   // Auto-preselect parent when translation parent data is available and contains fullPath
   useEffect(() => {
-    if (!isNull(translationParentData?.fullPath) && !isNull(translationParentData?.id)) {
+    if (!isNil(translationParentData?.fullPath) && !isNil(translationParentData?.id)) {
       form.setFieldValue('parent', {
         id: translationParentData.id,
         type: 'document',

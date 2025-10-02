@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -25,6 +26,8 @@ import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-rel
 import { LinkTranslationModal } from './components/link-translation-modal'
 import { NewTranslationModal, type NewTranslationFormValues } from './components/new-translation-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseTranslationsHookReturn {
   translationContextMenuItem: (onFinish?: () => void) => ItemType
@@ -37,6 +40,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const [deleteTranslation, { error: deleteError }] = useDocumentDeleteTranslationMutation()
   const [addTranslation, { error: addError }] = useDocumentAddTranslationMutation()
   const [addDocument] = useDocumentAddMutation()
+  const dispatch = useAppDispatch()
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
   const [isNewTranslationModalOpen, setIsNewTranslationModalOpen] = useState(false)
   const [useInheritance, setUseInheritance] = useState(false)
@@ -216,9 +220,9 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const handleNewTranslationSubmit = async (values: NewTranslationFormValues): Promise<void> => {
     try {
       // Create new document with translation parameters
-      // todo: i think we should use the mutation here
+      const parentId = values.parent?.id ?? 1
       const response = await addDocument({
-        parentId: values.parent?.id ?? 0,
+        parentId,
         documentAddParameters: {
           key: values.key,
           type: document.type, // Use the same type as the current document
@@ -238,8 +242,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
             id: response.id
           }
         })
-
-        // we need to refresh the tree
+        dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
       }
 
       setIsNewTranslationModalOpen(false)
@@ -248,7 +251,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         currentOnFinish()
       }
     } catch (error) {
-      trackError(new GeneralError('Error creating document'))
+      trackError(new GeneralError('Error creating translation document'))
     }
   }
 
