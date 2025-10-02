@@ -27,6 +27,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
@@ -42,7 +43,10 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const [isShowLoading, setIsShowLoading] = useState(false)
   const prevReportRef = useRef<string | null>(null)
 
+  const reportName = reportDetailData?.name ?? ''
+
   const { sorting, setSorting } = useReportDataContext()
+  const { data: fullChartDataList } = useFullChartData({ name: reportName })
 
   useEffect(() => {
     if (currentReport !== prevReportRef.current) {
@@ -159,7 +163,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
-  const reportName = reportDetailData?.name ?? ''
+  const fullChartData = fullChartDataList?.items?.map((item) => item.data)
 
   if (isLoading && isShowLoading) {
     return <Content loading />
@@ -193,7 +197,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       >
         {isShowChart && (
           <ReportChart
-            chartData={ chartData }
+            chartData={ fullChartData }
             reportData={ reportDetailData }
           />
         )}
