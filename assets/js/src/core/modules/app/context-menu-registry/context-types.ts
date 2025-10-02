@@ -59,6 +59,6 @@ export interface AssetPreviewCardContextMenuProps {
 }
 
 export interface DataObjectListGridContextMenuProps {
-  target: any // Should be properly typed based on the data object grid item structure
+  target: DataObject
   onComplete?: () => void
 }
