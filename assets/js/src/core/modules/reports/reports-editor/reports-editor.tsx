@@ -36,6 +36,7 @@ export const ReportsEditor = (): React.JSX.Element => {
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
+  const [modifiedReports, setModifiedReports] = useState<string[]>([])
 
   const { styles } = useStyles()
 
@@ -46,15 +47,17 @@ export const ReportsEditor = (): React.JSX.Element => {
       .filter(report => existingReportIds.has(report.id))
       .map((report) => ({
         key: report.id,
-        label: report.text,
+        label: `${report.text} ${modifiedReports.includes(report.id) ? '*' : ''}`,
         children: (
           <ReportConfiguration
             isActive={ activeTabKey === report.id }
+            modifiedReports={ modifiedReports }
             report={ report }
+            setModifiedReports={ setModifiedReports }
           />
         )
       }))
-  }, [reportsConfigTreeData, openedReports, activeTabKey])
+  }, [reportsConfigTreeData, openedReports, activeTabKey, modifiedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)
