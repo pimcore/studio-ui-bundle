@@ -14,11 +14,11 @@ import { Button } from '@Pimcore/components/button/button'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
 import { t } from 'i18next'
-import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
+import { useSubmitWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-submit-workflow'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
   const { isModalOpen, closeModal, contextWorkflowDetails } = useWorkflow()

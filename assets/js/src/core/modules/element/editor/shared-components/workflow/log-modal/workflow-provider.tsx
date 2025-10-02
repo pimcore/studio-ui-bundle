@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { type TransitionType } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { type TransitionType } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 
 export interface WorkflowDetails {
   workflowName: string

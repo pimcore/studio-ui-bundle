@@ -20,7 +20,7 @@ import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/serv
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { ConditionalLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/conditional-language-selection'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 
 moduleSystem.registerModule({

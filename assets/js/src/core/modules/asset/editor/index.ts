@@ -30,7 +30,7 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { AssetVersionsTabContainer } from './shared-tab-manager/tabs/versions/tab-container'
 import { EmbeddedMetadataTabContainer } from './shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 import { EditorToolbarContextMenu as AssetEditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButton as AssetEditorToolbarSaveButton } from '@Pimcore/modules/asset/editor/toolbar/save-button/save-button'
 import { EditorContainer } from './editor-container'
 

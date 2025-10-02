@@ -14,11 +14,11 @@ import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Badge } from '@Pimcore/components/badge/badge'
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
-import { WorkflowTransitionGroup } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-transition-group'
+import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()

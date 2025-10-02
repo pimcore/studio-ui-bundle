@@ -12,8 +12,8 @@ import React, { type ReactNode, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Button } from '@Pimcore/components/button/button'
-import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { useSubmitWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-submit-workflow'
+import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 import { type IWorkflowCardProps } from '../../types'
 
 export const DropdownButton = ({ workflow }: IWorkflowCardProps): ReactNode => {

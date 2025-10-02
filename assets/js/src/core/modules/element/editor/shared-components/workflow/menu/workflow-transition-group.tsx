@@ -13,10 +13,10 @@ import { useTranslation } from 'react-i18next'
 import {
   type TransitionType,
   useWorkflow
-} from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+} from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 import { Button } from '@Pimcore/components/button/button'
-import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
-import { useStyles } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-transition-group.styles'
+import { useSubmitWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-submit-workflow'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group.styles'
 import cn from 'classnames'
 import type {
   WorkflowDetails

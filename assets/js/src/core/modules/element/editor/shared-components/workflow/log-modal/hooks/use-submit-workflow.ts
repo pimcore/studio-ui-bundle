@@ -17,7 +17,7 @@ import _ from 'lodash'
 import {
   type TransitionType,
   useWorkflow
-} from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+} from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useEffect } from 'react'

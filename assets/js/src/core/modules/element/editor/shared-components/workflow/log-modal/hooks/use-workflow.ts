@@ -12,7 +12,7 @@ import { useContext } from 'react'
 import {
   type IWorkflowContext,
   WorkflowContext
-} from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+} from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-provider'
 import {
   useWorkflowGetDetailsQuery, type WorkflowGetDetailsApiResponse
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
