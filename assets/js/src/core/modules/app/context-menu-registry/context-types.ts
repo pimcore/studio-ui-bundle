@@ -57,3 +57,8 @@ export interface AssetPreviewCardContextMenuProps {
   asset: AssetGetTreeApiResponse['items'][number]
   onComplete?: () => void
 }
+
+export interface DataObjectListGridContextMenuProps {
+  target: any // Should be properly typed based on the data object grid item structure
+  onComplete?: () => void
+}

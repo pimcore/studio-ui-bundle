@@ -131,6 +131,18 @@ export const contextMenuConfig = {
     }
   },
 
+  dataObjectListGrid: {
+    name: 'data-object.list-grid',
+    priority: {
+      open: 100,
+      rename: 200,
+      locateInTree: 300,
+      publish: 400,
+      unpublish: 500,
+      delete: 600
+    }
+  },
+
   assetListGrid: {
     name: 'asset.list-grid',
     priority: {
