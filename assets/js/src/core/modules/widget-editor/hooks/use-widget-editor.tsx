@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -52,13 +51,6 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       }
 
       onFinish?.(name)
-
-      dispatch(
-        api.util.invalidateTags(
-          invalidatingTags.WIDGETS()
-        )
-      )
-
       void success(t('widget-editor.create.success'))
     } catch {
       trackError(new GeneralError('Failed to create new widget.'))
@@ -139,13 +131,6 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       }
 
       onFinish?.()
-
-      dispatch(
-        api.util.invalidateTags(
-          invalidatingTags.WIDGETS()
-        )
-      )
-
       void success(t('widget-editor.delete.success'))
     } catch {
       trackError(new GeneralError('Failed to delete widget'))
