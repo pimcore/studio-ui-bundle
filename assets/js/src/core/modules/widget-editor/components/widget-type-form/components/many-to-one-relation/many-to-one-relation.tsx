@@ -1,12 +1,16 @@
+import { Form } from '@Pimcore/components/form/form'
 import { ManyToOneRelation as BaseManyToOneRelation, ManyToOneRelationProps as BaseManyToOneRelationProps } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useWidgetFormContext } from '../../context/hooks/use-widget-form-context'
 
-interface ManyToOneRelationProps extends Pick<BaseManyToOneRelationProps, 'onChange' | 'value'> {
-  elementType?: string
-}
+export const ManyToOneRelation = (props: BaseManyToOneRelationProps): React.JSX.Element => {
+  const { form } = useWidgetFormContext()
+  const elementType = Form.useWatch('elementType', form)
+  useEffect(() => {
+    form.setFieldValue('rootFolder', null)
+  }, [elementType, form])
 
-export const ManyToOneRelation = ({ elementType, ...props }: ManyToOneRelationProps): React.JSX.Element => {
   return <BaseManyToOneRelation
     {...props}
     key={elementType}
