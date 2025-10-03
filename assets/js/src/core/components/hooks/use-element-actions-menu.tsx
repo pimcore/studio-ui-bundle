@@ -14,13 +14,12 @@ import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { getElementDeeplink } from '@Pimcore/modules/element/element-helper'
+import { type Element, getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useSystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/hooks/use-system-info-modal'
-import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 interface IUseElementActionsMenuProps {
-  element?: IElementDraft
+  element?: Element
   elementType: ElementType
 }
 
@@ -65,7 +64,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
         e.domEvent.stopPropagation()
 
         void navigator.clipboard.writeText(
-          element.fullPath!
+          element.fullPath
         )
       }
     },
@@ -113,7 +112,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
         e.domEvent.stopPropagation()
 
         void navigator.clipboard.writeText(
-          element.className as string
+          element.className
         )
       }
     })

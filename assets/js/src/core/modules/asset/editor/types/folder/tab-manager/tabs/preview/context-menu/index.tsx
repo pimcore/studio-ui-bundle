@@ -25,7 +25,6 @@ import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
-import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 moduleSystem.registerModule({
@@ -47,7 +46,7 @@ moduleSystem.registerModule({
       priority: config.priority.info,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
         const { t } = useTranslation()
-        const { actionMenuItems } = useElementActionsMenu({ element: context.asset as unknown as IElementDraft, elementType: elementTypes.asset })
+        const { actionMenuItems } = useElementActionsMenu({ element: context.asset, elementType: elementTypes.asset })
 
         return {
           key: 'info',

@@ -10,9 +10,9 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
-import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
-export interface ISystemInfoModalData extends IElementDraft {
+export type ISystemInfoModalData = Element & {
   deeplink: string
   modificationDate: number | null
   creationDate: number | null

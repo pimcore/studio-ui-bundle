@@ -18,6 +18,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { IconButton } from '../icon-button/icon-button'
 
@@ -30,7 +31,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
   const { locateInTree } = useLocateInTree(elementType)
 
-  const { actionMenuItems: menuItems } = useElementActionsMenu({ element, elementType })
+  const { actionMenuItems: menuItems } = useElementActionsMenu({ element: element as unknown as Element, elementType })
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
