@@ -10,7 +10,7 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
-import React, { createContext, type Dispatch, type SetStateAction, useMemo, useState } from 'react'
+import React, { createContext, useMemo } from 'react'
 
 interface WidgetFormProviderProps {
   children: React.ReactNode
