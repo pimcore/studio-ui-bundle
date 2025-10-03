@@ -187,7 +187,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     <ManyToManyRelation
       { ...props }
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
-      dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
+      dataObjectsAllowed
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
       value={ props.value }
