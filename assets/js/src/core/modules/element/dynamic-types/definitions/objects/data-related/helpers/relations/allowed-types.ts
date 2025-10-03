@@ -10,7 +10,7 @@
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@sdk/components'
-import _, { isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 
@@ -34,10 +34,26 @@ export interface IRelationAllowedTypesDataComponent {
 }
 
 export const convertAllowedTypes = (props: IRelationAllowedTypesClassDefinition): IRelationAllowedTypesDataComponent => {
+  const objectAllowedTypes: string[] = []
+  const objectAllowedClasses: string[] = []
+
+  props.classes?.forEach((classConfig) => {
+    if (classConfig.classes === 'folder') {
+      objectAllowedTypes.push('folder')
+    } else {
+      objectAllowedClasses.push(classConfig.classes)
+    }
+  })
+
+  if (objectAllowedClasses.length > 0) {
+    objectAllowedTypes.push('object', 'variant')
+  }
+
   return {
     allowedAssetTypes: props.assetTypes?.map((assetType) => assetType.assetTypes) ?? [],
-    allowedClasses: props.classes?.map((classType) => classType.classes) ?? [],
     allowedDocumentTypes: props.documentTypes?.map((documentType) => documentType.documentTypes) ?? [],
+    allowedClasses: objectAllowedClasses.length > 0 ? objectAllowedClasses : undefined,
+    allowedDataObjectTypes: objectAllowedTypes.length > 0 ? objectAllowedTypes : undefined,
     assetsAllowed: props.assetsAllowed,
     documentsAllowed: props.documentsAllowed,
     dataObjectsAllowed: props.objectsAllowed
@@ -74,7 +90,6 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   if (type === 'document') {
-    console.log('props.allowedDocumentTypes', props.allowedDocumentTypes)
     return isValidType(props.allowedDocumentTypes, subType)
   }
 
@@ -83,7 +98,11 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
 
 export const isAllowedClass = (type: ElementType, className: string, props: IRelationAllowedTypesDataComponent): boolean => {
   if (type === 'data-object') {
-    return isValidType(props.allowedClasses, className)
+    // If no classes are specified, allow all classes
+    if (isNil(props.allowedClasses) || props.allowedClasses.length === 0) {
+      return true
+    }
+    return props.allowedClasses.includes(className)
   }
   return true
 }
@@ -108,9 +127,17 @@ export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTyp
   if (type === null) {
     return false
   }
-  const className: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
+
   const subType: string = info.data.type
-  return isAllowedSubType(type, subType, props) && isAllowedClass(type, className, props)
+
+  if (type === 'data-object' && subType !== 'folder') {
+    const className = String(info.data.className)
+    if (!isAllowedClass(type, className, props)) {
+      return false
+    }
+  }
+
+  return isAllowedSubType(type, subType, props)
 }
 
 export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {
@@ -118,5 +145,20 @@ export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComp
     asset: config.assetsAllowed ?? false,
     document: config.documentsAllowed ?? false,
     object: config.dataObjectsAllowed ?? false
+  }
+}
+
+export const createElementSelectorConfig = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['config'] => {
+  return {
+    assets: {
+      allowedTypes: config.allowedAssetTypes
+    },
+    documents: {
+      allowedTypes: config.allowedDocumentTypes
+    },
+    objects: {
+      allowedTypes: config.allowedDataObjectTypes,
+      allowedClasses: config.allowedClasses
+    }
   }
 }

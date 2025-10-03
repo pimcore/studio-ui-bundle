@@ -21,6 +21,7 @@ import { useDownload } from '@Pimcore/modules/asset/actions/download/use-downloa
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
+  createElementSelectorConfig,
   dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
@@ -193,17 +194,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             elementSelectorConfig={ {
               selectionType: SelectionType.Single,
               areas: createElementSelectorAreas(props),
-              config: {
-                assets: {
-                  allowedTypes: props.allowedAssetTypes
-                },
-                documents: {
-                  allowedTypes: props.allowedDocumentTypes
-                },
-                objects: {
-                  allowedTypes: props.allowedClasses
-                }
-              },
+              config: createElementSelectorConfig(props),
               onFinish: (event) => {
                 if (!isEmpty(event.items)) {
                   setValue({

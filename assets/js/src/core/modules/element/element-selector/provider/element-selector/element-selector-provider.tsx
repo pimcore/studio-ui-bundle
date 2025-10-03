@@ -53,7 +53,8 @@ export interface ElementSelectorConfig {
     }
 
     objects?: {
-      allowedTypes?: IRelationAllowedTypesDataComponent['allowedClasses']
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDataObjectTypes']
+      allowedClasses?: IRelationAllowedTypesDataComponent['allowedClasses']
     }
   }
 }
@@ -73,7 +74,8 @@ export const defaultElementSelectorConfig: ElementSelectorConfig = {
       allowedTypes: undefined
     },
     objects: {
-      allowedTypes: undefined
+      allowedTypes: undefined,
+      allowedClasses: undefined
     }
   }
 }
