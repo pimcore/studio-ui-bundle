@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Link from 'antd/es/typography/Link'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -24,6 +24,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { USERS_WIDGET } from '@Pimcore/modules/user'
+import { formatDataUnit } from '@Pimcore/utils/data-unit'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -103,22 +104,37 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       <FormKit formProps={ { initialValues: data } }>
         <FormKit.Panel>
           {renderInputItem({ label: 'ID', name: 'id' })}
+
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
-          {renderInputItem({ label: 'Type', name: 'type' })}
+
+          {renderInputItem({
+            label: 'Type',
+            value: `${data.type} ${!isNull(data.mimeType) ? `(MIME: ${data.mimeType})` : ''}`
+          })}
+
+          {data.fileSize > 0 && renderInputItem({
+            label: 'File Size',
+            value: formatDataUnit(data.fileSize)
+          })}
+
           {renderInputItem({
             label: 'Modification Date',
             value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
+
           {renderInputItem({
             label: 'Creation Date',
             value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
+
           <Form.Item label="User Modification">
             <Text type="secondary">{getUserLabel(data.userModification, 'system')}</Text>
           </Form.Item>
+
           <Form.Item label="Owner">
             {getUserLabel(20, 'User unknown')}
           </Form.Item>
+
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
