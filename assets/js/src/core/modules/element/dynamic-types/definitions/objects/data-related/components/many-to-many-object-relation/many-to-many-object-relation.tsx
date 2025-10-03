@@ -92,7 +92,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const visibleFieldDefinitions: VisibleFieldDefinition[] | undefined = useMemo(() => {
     if (isAvailableGridColumnsLoading) return undefined
 
-    const fieldDefinitions = !isNil(availableGridColumnsData)
+    const fieldDefinitions = !isNil(availableGridColumnsData) && !isEmpty(availableGridColumnsData.columns)
       ? availableGridColumnsData?.columns
       : getDefaultVisibleFieldDefinitions()
 
