@@ -13,13 +13,21 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const ElementTypeSelect = (props: SelectProps): React.JSX.Element => {
+interface ElementTypeSelectProps extends SelectProps {
+  onElementTypeChange?: (elementType: string) => void
+}
+
+export const ElementTypeSelect = ({ onElementTypeChange, ...props }: ElementTypeSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
     <Select
-      { ...props }
-      options={ [
+      {...props}
+      onChange={(value) => {
+        onElementTypeChange?.(value)
+        props.onChange?.(value)
+      }}
+      options={[
         {
           label: t('document'),
           value: elementTypes.document
@@ -32,7 +40,7 @@ export const ElementTypeSelect = (props: SelectProps): React.JSX.Element => {
           label: t('data-object'),
           value: elementTypes.dataObject
         }
-      ] }
+      ]}
     />
   )
 }
