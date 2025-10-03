@@ -25,6 +25,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { USERS_WIDGET } from '@Pimcore/modules/user'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
+import { currentDomain } from '@Pimcore/app/config/app-config'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -107,9 +108,11 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
 
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
 
+          {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
+
           {renderInputItem({
             label: 'Type',
-            value: `${data.type} ${!isNull(data.mimeType) ? `(MIME: ${data.mimeType})` : ''}`
+            value: data.type + ' ' + (!isNull(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
           })}
 
           {data.fileSize > 0 && renderInputItem({
