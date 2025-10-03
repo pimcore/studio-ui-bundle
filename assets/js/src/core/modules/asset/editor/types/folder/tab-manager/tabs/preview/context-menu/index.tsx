@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -22,8 +24,9 @@ import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
+import { useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
+import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -34,7 +37,7 @@ moduleSystem.registerModule({
       name: 'open',
       priority: config.priority.open,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
-        const { openContextMenuItem } = useOpen('asset')
+        const { openContextMenuItem } = useOpen(elementTypes.asset)
         return openContextMenuItem(context.asset) ?? null
       }
     })
@@ -44,11 +47,13 @@ moduleSystem.registerModule({
       priority: config.priority.info,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
         const { t } = useTranslation()
+        const { actionMenuItems } = useElementActionsMenu({ element: context.asset as unknown as IElementDraft, elementType: elementTypes.asset })
+
         return {
           key: 'info',
           icon: <Icon value="info-circle" />,
-          label: t('info'),
-          hidden: true
+          label: t('asset.copy-info'),
+          children: actionMenuItems
         }
       }
     })
@@ -57,7 +62,7 @@ moduleSystem.registerModule({
       name: 'rename',
       priority: config.priority.rename,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
-        const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', context.asset.id))
+        const { renameContextMenuItem } = useRename(elementTypes.asset, getElementActionCacheKey(elementTypes.asset, 'rename', context.asset.id))
         return renameContextMenuItem(context.asset) ?? null
       }
     })
@@ -67,7 +72,7 @@ moduleSystem.registerModule({
       priority: config.priority.locateInTree,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
         const { t } = useTranslation()
-        const { locateInTree } = useLocateInTree('asset')
+        const { locateInTree } = useLocateInTree(elementTypes.asset)
 
         return {
           label: t('element.locate-in-tree'),
@@ -102,7 +107,7 @@ moduleSystem.registerModule({
       name: 'delete',
       priority: config.priority.delete,
       useMenuItem: (context: AssetPreviewCardContextMenuProps) => {
-        const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', context.asset.id))
+        const { deleteContextMenuItem } = useDelete(elementTypes.asset, getElementActionCacheKey(elementTypes.asset, 'delete', context.asset.id))
         return deleteContextMenuItem(context.asset) ?? null
       }
     })
