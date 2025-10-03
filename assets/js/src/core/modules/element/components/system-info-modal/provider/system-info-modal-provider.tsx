@@ -22,6 +22,7 @@ export type ISystemInfoModalData = Element & {
   userModification: number | null
   fileSize: number
   mimeType: string | null
+  className?: string
 }
 
 export interface SystemInfoModalContextProps {

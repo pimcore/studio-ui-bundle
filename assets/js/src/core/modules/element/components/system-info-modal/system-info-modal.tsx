@@ -27,6 +27,7 @@ import { USERS_WIDGET } from '@Pimcore/modules/user'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import { currentDomain } from '@Pimcore/app/config/app-config'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ClassDefinitionListItem, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -40,9 +41,14 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
   const currentUser = useUser()
   const { data: userList } = useUserGetCollectionQuery()
   const { openMainWidget } = useWidgetManager()
+  const { data: classDefinitionData } = useClassDefinitionCollectionQuery()
 
   if (isNil(data)) {
     return <></>
+  }
+
+  const getByName = (name: string): ClassDefinitionListItem | undefined => {
+    return classDefinitionData?.items?.find((classDefinition) => classDefinition.name === name)
   }
 
   const handleOpenUserManagement = (userId: number): void => {
@@ -93,6 +99,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       )
     }
 
+    // system?
     return <Text type="secondary">User unknown</Text>
   }
 
@@ -106,16 +113,20 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       <FormKit formProps={ { initialValues: data } }>
         <FormKit.Panel>
           {renderInputItem({ label: 'ID', name: 'id' })}
-
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
 
-          {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
+          {data.elementType === elementTypes.dataObject && [
+            renderInputItem({ label: 'Parent ID', name: 'parentId' }),
+            renderInputItem({ label: 'Class ID', value: getByName(data.className!)?.id ?? '' }),
+            renderInputItem({ label: 'Class', name: 'className' }),
+            renderInputItem({ label: 'Type', name: 'type' })
+          ]}
 
+          {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
           {data.elementType === elementTypes.asset && renderInputItem({
             label: 'Type',
             value: data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
           })}
-
           {data.fileSize > 0 && renderInputItem({
             label: 'File Size',
             value: formatDataUnit(data.fileSize)
@@ -125,20 +136,16 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
             label: 'Modification Date',
             value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
-
           {renderInputItem({
             label: 'Creation Date',
             value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
-
           <Form.Item label="User Modification">
             <Text type="secondary">{getUserLabel(data.userModification)}</Text>
           </Form.Item>
-
           <Form.Item label="Owner">
             {getUserLabel(data.userModification)}
           </Form.Item>
-
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
