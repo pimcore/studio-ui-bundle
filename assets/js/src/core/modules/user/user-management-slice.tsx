@@ -16,6 +16,7 @@ import {
   type TrackableChangesDraft,
   useTrackableChangesReducers
 } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
+import { isUndefined } from 'lodash'
 
 export interface UserDraft extends User, TrackableChangesDraft {
   password?: string
@@ -38,14 +39,19 @@ export const slice = createSlice({
       state.activeId = action.payload
     },
     userClosed: (state, action: PayloadAction<{ id: number, allIds: string[] }>): void => {
-      userAdapter.removeOne(state, action.payload.id)
+      const { id, allIds } = action.payload
 
-      if (state.activeId === action.payload.id) {
-        if (action.payload.allIds.length > 1) {
-          state.activeId = parseInt(action.payload.allIds[0])
-        } else {
-          state.activeId = undefined
-        }
+      userAdapter.removeOne(state, id)
+
+      if (state.activeId === id) {
+        const targetIndex = allIds.findIndex(itemId => Number.parseInt(itemId, 10) === id)
+        const prevTab = allIds[targetIndex - 1]
+        const nextTab = allIds[targetIndex + 1]
+
+        const prevTabId = !isUndefined(prevTab) ? Number.parseInt(prevTab, 10) : undefined
+        const nextTabId = !isUndefined(nextTab) ? Number.parseInt(nextTab, 10) : undefined
+
+        state.activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
       }
     },
     userFetched: (state, action: PayloadAction<UserDraft>): void => {

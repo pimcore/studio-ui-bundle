@@ -11,11 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import {
-  type BundleCustomReportsConfigurationTreeNode,
-  type CustomReportsConfigUpdateApiArg,
-  useCustomReportsReportQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { type BundleCustomReportsConfigurationTreeNode, type BundleCustomReportUpdate, useCustomReportsReportQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -29,14 +25,20 @@ import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/compon
 import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
 import { ChartSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/chart-settings/chart-settings'
 import { Permissions } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/permissions/permissions'
-import { normalizeChartData, normalizeDataSourceConfig } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
+import {
+  normalizeChartData,
+  normalizeColumnConfigurations,
+  normalizeDataSourceConfig
+} from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
   isActive: boolean
+  modifiedReports: string[]
+  setModifiedReports: (modifiedReports: string[]) => void
 }
 
-export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
+export const ReportConfiguration = ({ report, isActive, modifiedReports, setModifiedReports }: IReportConfigurationProps): React.JSX.Element => {
   const { isLoading, data, isFetching, refetch } = useCustomReportsReportQuery({ name: report.id })
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
@@ -52,6 +54,14 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
     }
   }, [data])
 
+  useEffect(() => {
+    if (isDirty) {
+      setModifiedReports([...modifiedReports, report.id])
+    } else {
+      setModifiedReports(modifiedReports.filter((item) => item !== report.id))
+    }
+  }, [isDirty])
+
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
     updateFormData({ ...currentData, ...allValues })
   }
@@ -61,10 +71,11 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
     setIsUpdatingReport(true)
 
-    const bundleCustomReportUpdateData = {
+    const bundleCustomReportUpdateData: BundleCustomReportUpdate = {
       ...currentData,
       ...normalizeDataSourceConfig(currentData),
       ...normalizeChartData(currentData),
+      ...normalizeColumnConfigurations(currentData),
       ...(currentData.sharedGlobally && {
         sharedRoleNames: [],
         sharedUserNames: []
@@ -73,7 +84,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
     void updateReport({
       name: report.id,
-      bundleCustomReportUpdate: bundleCustomReportUpdateData as unknown as CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']
+      bundleCustomReportUpdate: bundleCustomReportUpdateData
     }).then(() => {
       markFormSaved()
       setIsUpdatingReport(false)

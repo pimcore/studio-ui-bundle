@@ -17,10 +17,10 @@ import {
   ReloadButton
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/components/reload-button/reload-button'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
+import { type DataObjectEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { type MenuProps } from 'antd'
 import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -29,18 +29,14 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
-  const { unpublishContextMenuItem } = useUnpublish('data-object')
-  const { renameContextMenuItem } = useRename('data-object')
-  const { deleteContextMenuItem } = useDelete('data-object')
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
-  const items: DropdownMenuProps['items'] = [
-    unpublishContextMenuItem(dataObject as DataObject, () => {
-      setIsOpen(undefined)
-    }),
-    deleteContextMenuItem(dataObject as DataObject),
-    renameContextMenuItem(dataObject as DataObject)
-  ]
+  const contextMenuProps: DataObjectEditorContextMenuProps = {
+    target: dataObject as DataObject,
+    onComplete: () => { setIsOpen(undefined) }
+  }
+
+  const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.dataObjectEditorToolbar.name, contextMenuProps)
 
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
@@ -53,13 +49,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const buttonGroupItems: ReactElement[] = []
 
   buttonGroupItems.push(
-    <ReloadButton key={ 'reload-button' } />
+    <ReloadButton key="reload-button" />
   )
 
   if (visibleItems.length > 0) {
     buttonGroupItems.push(
       <Dropdown
-        key={ 'dropdown-button' }
+        key="dropdown-button"
         menu={ {
           items,
           onClick: handleMenuClick

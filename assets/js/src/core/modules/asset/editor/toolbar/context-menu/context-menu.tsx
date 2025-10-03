@@ -14,42 +14,27 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
-import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
-import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { ReloadPopconfirm } from '@Pimcore/components/reload-popconfirm/reload-popconfirm'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
+import { type AssetEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset } = useAssetDraft(id)
-  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', asset!.id))
-  const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
-  const { downloadContextMenuItem } = useDownload()
-  const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
   const { refreshElement } = useElementRefresh('asset')
-  const {
-    clearImageThumbnailContextMenuItem,
-    clearVideoThumbnailContextMenuItem,
-    clearPdfThumbnailContextMenuItem
-  } = useClearThumbnails()
 
-  const items: DropdownMenuProps['items'] = [
-    renameContextMenuItem(asset as Asset, () => { refreshElement(asset!.id) }),
-    deleteContextMenuItem(asset as Asset),
-    downloadContextMenuItem(asset as Asset),
-    createZipDownloadContextMenuItem(asset as Asset),
-    clearImageThumbnailContextMenuItem(asset as Asset),
-    clearVideoThumbnailContextMenuItem(asset as Asset),
-    clearPdfThumbnailContextMenuItem(asset as Asset)
-  ]
+  const contextMenuProps: AssetEditorContextMenuProps = {
+    target: asset as Asset
+  }
+
+  const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.assetEditorToolbar.name, contextMenuProps)
+
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
   const buttonGroupItems: ReactElement[] = []
@@ -57,7 +42,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   buttonGroupItems.push(
     <ReloadPopconfirm
       hasDataChanged={ hasDataChanged }
-      key={ 'reload-button' }
+      key="reload-button"
       onReload={ onReload }
       title={ t('toolbar.reload.confirmation') }
     >
@@ -66,17 +51,16 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       >
         {t('toolbar.reload')}
       </IconButton>
-
     </ReloadPopconfirm>
   )
 
   if (visibleItems.length > 0) {
     buttonGroupItems.push(
       <Dropdown
-        key={ 'more-button' }
+        key="more-button"
         menu={ { items } }
       >
-        <DropdownButton key={ 'dropdown-button' }>
+        <DropdownButton key="dropdown-button">
           {t('toolbar.more')}
         </DropdownButton>
       </Dropdown>

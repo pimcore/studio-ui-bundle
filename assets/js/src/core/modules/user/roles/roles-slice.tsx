@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import type { EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { createEntityAdapter, createSlice, type PayloadAction, type Update } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
@@ -30,13 +31,25 @@ export const slice = createSlice({
     roleOpened: (state, action: PayloadAction<number>): void => {
       state.activeId = action.payload
     },
-    roleClosed: (state, action: PayloadAction<number>): void => {
-      state.activeId = undefined
-      roleAdapter.removeOne(state, action.payload)
+    roleClosed: (state, action: PayloadAction<{ id: number, allIds: string[] }>): void => {
+      const { id, allIds } = action.payload
+
+      roleAdapter.removeOne(state, id)
+
+      if (state.activeId === id) {
+        const targetIndex = allIds.findIndex(itemId => Number.parseInt(itemId, 10) === id)
+        const prevTab = allIds[targetIndex - 1]
+        const nextTab = allIds[targetIndex + 1]
+
+        const prevTabId = !isUndefined(prevTab) ? Number.parseInt(prevTab, 10) : undefined
+        const nextTabId = !isUndefined(nextTab) ? Number.parseInt(nextTab, 10) : undefined
+
+        state.activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
+      }
     },
-    roleFetched: (state, action: PayloadAction<any>): void => {
+    roleFetched: (state, action: PayloadAction<DetailedUserRole>): void => {
       if (action.payload.id !== undefined) {
-        roleAdapter.upsertOne(state, action)
+        roleAdapter.upsertOne(state, { ...action.payload, modified: false })
       }
     },
     roleRemoved: (state, action: PayloadAction<number>): void => {

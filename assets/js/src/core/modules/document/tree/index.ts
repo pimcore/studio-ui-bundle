@@ -14,6 +14,7 @@ import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DocumentTreeContextMenu } from '@Pimcore/modules/document/tree/context-menu/context-menu'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import './context-menu' // Import context menu registry module
 
 moduleSystem.registerModule({
   onInit: () => {

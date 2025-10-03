@@ -27,8 +27,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface UseConvertHookReturn {
-  convertTreeContextMenuItem: (node: TreeNodeProps, targetType: string) => ItemType
-  canConvert: (node: TreeNodeProps) => boolean
+  convertMenuTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 interface DocumentTypeConfig {
@@ -140,8 +139,23 @@ export const useConvert = (): UseConvertHookReturn => {
            checkElementPermission(node.permissions, 'publish')
   }
 
+  const convertMenuTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('convert-to'),
+      key: 'convert-to',
+      icon: <Icon value="flip-forward" />,
+      hidden: !canConvert(node),
+      children: [
+        convertTreeContextMenuItem(node, 'page'),
+        convertTreeContextMenuItem(node, 'snippet'),
+        convertTreeContextMenuItem(node, 'email'),
+        convertTreeContextMenuItem(node, 'link'),
+        convertTreeContextMenuItem(node, 'hardlink')
+      ]
+    }
+  }
+
   return {
-    convertTreeContextMenuItem,
-    canConvert
+    convertMenuTreeContextMenuItem
   }
 }

@@ -10,7 +10,10 @@
 
 import { castArray, isNull } from 'lodash'
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
-import type { CustomReportsConfigUpdateApiArg } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import {
+  type BundleCustomReportsColumnConfigurationUpdateData,
+  type CustomReportsConfigUpdateApiArg
+} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 export const normalizeDataSourceConfig = (data: ReportFormData): {
   dataSourceConfig: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['dataSourceConfig']
@@ -39,5 +42,19 @@ export const normalizeChartData = (data: ReportFormData): INormalizeChartDataRet
     pieLabelColumn: data.pieLabelColumn,
     xAxis: data.xAxis,
     yAxis: isNull(data.yAxis) ? [] : castArray(data.yAxis)
+  }
+}
+
+interface INormalizeColumnConfigurationsDataReturn {
+  columnConfigurations: BundleCustomReportsColumnConfigurationUpdateData[]
+}
+
+export const normalizeColumnConfigurations = (data: ReportFormData): INormalizeColumnConfigurationsDataReturn => {
+  const cleanedColumns = data?.columnConfigurations?.map(
+    ({ disableLabel, disableDropdownFilterable, disableOrderBy, disableFilterable, ...rest }) => rest
+  )
+
+  return {
+    columnConfigurations: cleanedColumns
   }
 }
