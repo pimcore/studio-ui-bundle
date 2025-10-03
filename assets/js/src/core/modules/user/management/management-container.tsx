@@ -21,11 +21,9 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 
-const ManagementContainer = ({ ...props }): React.JSX.Element => {
+const ManagementContainer = ({ userId, ...props }: Record<string, any>): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserManagementHelper()
-
-  console.log('====== PROPS: ', props)
 
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
@@ -142,6 +140,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
         } }
         onUpdateTreeData={ updateTreeData }
         treeData={ treeData }
+        userId={ userId }
       />
     ]
   }
