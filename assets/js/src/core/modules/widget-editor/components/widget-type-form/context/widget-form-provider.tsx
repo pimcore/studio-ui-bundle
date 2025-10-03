@@ -33,7 +33,7 @@ export const WidgetFormProvider = ({ children, widget }: WidgetFormProviderProps
   }), [widget, form])
 
   return (
-    <WidgetFormContext.Provider value={contextValue}>
+    <WidgetFormContext.Provider value={ contextValue }>
       {children}
     </WidgetFormContext.Provider>
   )
