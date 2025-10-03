@@ -18,8 +18,13 @@ import { type Element, getElementDeeplink } from '@Pimcore/modules/element/eleme
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useSystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/hooks/use-system-info-modal'
 
+export type IElement = Element & {
+  fileSize: number
+  mimeType: string | null
+}
+
 interface IUseElementActionsMenuProps {
-  element?: Element
+  element?: IElement
   elementType: ElementType
 }
 
