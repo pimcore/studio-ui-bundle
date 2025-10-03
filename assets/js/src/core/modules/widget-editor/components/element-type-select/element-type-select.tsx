@@ -18,8 +18,8 @@ export const ElementTypeSelect = (props: SelectProps): React.JSX.Element => {
 
   return (
     <Select
-      {...props}
-      options={[
+      { ...props }
+      options={ [
         {
           label: t('document'),
           value: elementTypes.document
@@ -32,7 +32,7 @@ export const ElementTypeSelect = (props: SelectProps): React.JSX.Element => {
           label: t('data-object'),
           value: elementTypes.dataObject
         }
-      ]}
+      ] }
     />
   )
 }

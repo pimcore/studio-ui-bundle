@@ -22,19 +22,19 @@ export const SpecificPanel = (): React.JSX.Element => {
 
   return (
     <FormKit.Panel
-      collapsed={false}
+      collapsed={ false }
       collapsible
-      title={t('widget-editor.widget-form.specific.title')}
+      title={ t('widget-editor.widget-form.specific.title') }
     >
       <Form.Item
-        label={t('widget-editor.widget-form.specific.element-type')}
+        label={ t('widget-editor.widget-form.specific.element-type') }
         name="elementType"
       >
         <ElementTypeSelect />
       </Form.Item>
 
       <Form.Item
-        label={t('widget-editor.widget-form.specific.root-folder')}
+        label={ t('widget-editor.widget-form.specific.root-folder') }
         name="rootFolder"
       >
         <ManyToOneRelation />
@@ -43,11 +43,11 @@ export const SpecificPanel = (): React.JSX.Element => {
       <Form.Item
         name="showRoot"
       >
-        <Switch labelRight={t('widget-editor.widget-form.specific.show-root')} />
+        <Switch labelRight={ t('widget-editor.widget-form.specific.show-root') } />
       </Form.Item>
 
       <Form.Item
-        label={t('widget-editor.widget-form.specific.page-size')}
+        label={ t('widget-editor.widget-form.specific.page-size') }
         name="pageSize"
       >
         <InputNumber />
