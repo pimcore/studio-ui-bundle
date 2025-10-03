@@ -20,25 +20,20 @@ interface WidgetFormProviderProps {
 export interface WidgetFormContextProps {
   widget: WidgetConfig
   form: ReturnType<typeof Form.useForm>[0]
-  formData: WidgetConfig
-  setFormData: Dispatch<SetStateAction<WidgetConfig>>
 }
 
 export const WidgetFormContext = createContext<WidgetFormContextProps | undefined>(undefined)
 
 export const WidgetFormProvider = ({ children, widget }: WidgetFormProviderProps): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formData, setFormData] = useState<WidgetConfig>(widget)
 
   const contextValue: WidgetFormContextProps = useMemo(() => ({
     widget,
-    form,
-    formData,
-    setFormData
-  }), [widget, form, formData])
+    form
+  }), [widget, form])
 
   return (
-    <WidgetFormContext.Provider value={ contextValue }>
+    <WidgetFormContext.Provider value={contextValue}>
       {children}
     </WidgetFormContext.Provider>
   )
