@@ -11,8 +11,10 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type ISystemInfoModalData = Element & {
+  elementType: ElementType
   deeplink: string
   modificationDate: number | null
   creationDate: number | null

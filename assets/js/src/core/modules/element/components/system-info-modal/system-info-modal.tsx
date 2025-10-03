@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isNil, isNull, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Link from 'antd/es/typography/Link'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -26,6 +26,7 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { USERS_WIDGET } from '@Pimcore/modules/user'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface ISystemInfoModalProps {
   isOpen: boolean
@@ -69,7 +70,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     </Form.Item>
   )
 
-  const getUserLabel = (userId: number | null, fallback: string): JSX.Element => {
+  const getUserLabel = (userId: number | null): JSX.Element => {
     const user = userList?.items.find(user => user.id === userId)
 
     if (!isUndefined(user)) {
@@ -92,7 +93,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       )
     }
 
-    return <Text type="secondary">{fallback}</Text>
+    return <Text type="secondary">User unknown</Text>
   }
 
   return (
@@ -110,9 +111,9 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
 
           {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
 
-          {renderInputItem({
+          {data.elementType === elementTypes.asset && renderInputItem({
             label: 'Type',
-            value: data.type + ' ' + (!isNull(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
+            value: data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
           })}
 
           {data.fileSize > 0 && renderInputItem({
@@ -131,11 +132,11 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           })}
 
           <Form.Item label="User Modification">
-            <Text type="secondary">{getUserLabel(data.userModification, 'system')}</Text>
+            <Text type="secondary">{getUserLabel(data.userModification)}</Text>
           </Form.Item>
 
           <Form.Item label="Owner">
-            {getUserLabel(20, 'User unknown')}
+            {getUserLabel(data.userModification)}
           </Form.Item>
 
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
