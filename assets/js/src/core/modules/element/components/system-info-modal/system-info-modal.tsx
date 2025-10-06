@@ -79,9 +79,16 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
   const getUserLabel = (userId: number | null): JSX.Element => {
     const user = userList?.items.find(user => user.id === userId)
 
-    if (userId === 0) {
-      return <Text type="secondary">{t('system-information.system')}</Text>
-    }
+    const renderLabel = (value: string): JSX.Element => (
+      <Text
+        className="m-l-mini"
+        type="secondary"
+      >
+        {value}
+      </Text>
+    )
+
+    if (userId === 0) return renderLabel(t('system-information.system'))
 
     if (!isUndefined(user)) {
       return (
@@ -89,8 +96,8 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           align="center"
           gap="mini"
         >
-          <Text type="secondary">{user.username}</Text>
-          {currentUser.id === userId && (
+          {renderLabel(user.username)}
+          {userId === currentUser.id && (
             <Link
               onClick={ () => { handleOpenUserManagement(userId) } }
               style={ { textDecoration: 'underline' } }
@@ -102,7 +109,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       )
     }
 
-    return <Text type="secondary">{t('system-information.user-unknown')}</Text>
+    return renderLabel(t('system-information.user-unknown'))
   }
 
   return (
@@ -147,7 +154,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           })}
 
           <Form.Item label={ t('system-information.user-modification') }>
-            <Text type="secondary">{getUserLabel(data.userModification)}</Text>
+            {getUserLabel(data.userModification)}
           </Form.Item>
           <Form.Item label={ t('system-information.owner') }>
             {getUserLabel(data.userOwner)}
