@@ -19,7 +19,6 @@ export interface ContentEditableProps {
   value?: string | null
   onChange?: (newValue: string | null) => void
   placeholder?: string
-  required?: boolean
   width?: number
   height?: number
   nowrap?: boolean
@@ -33,7 +32,6 @@ const ContentEditable = ({
   value,
   onChange,
   placeholder,
-  required,
   width,
   height,
   nowrap,
@@ -208,7 +206,6 @@ const ContentEditable = ({
         contentEditable={ !disabled }
         data-empty={ isEmpty }
         data-placeholder={ placeholder }
-        data-required={ required }
         onInput={ disabled ? undefined : handleContentChange }
         onKeyDown={ disabled ? undefined : handleKeyDown }
         onPaste={ disabled ? undefined : handlePaste }
