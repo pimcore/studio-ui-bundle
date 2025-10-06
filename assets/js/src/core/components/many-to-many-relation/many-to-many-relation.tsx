@@ -38,6 +38,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
+  visibleFieldsValue?: Array<Record<string, any> | undefined>
   onChange?: (value?: ManyToManyRelationValue | null) => void
   isLoading?: boolean
   columnDefinition?: Array<ColumnDef<any>>
@@ -53,7 +54,9 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
-  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined })
+  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
+    value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue
+  )
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch
 
   // Wrapper for onUpdateCellData that maps displayed row index to original index

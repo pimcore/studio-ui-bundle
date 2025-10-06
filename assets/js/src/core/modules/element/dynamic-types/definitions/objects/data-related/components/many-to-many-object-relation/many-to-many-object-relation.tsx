@@ -174,6 +174,15 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     return [...cachedGridFullData, ...newData]
   }, [cachedGridFullData, gridFullData])
 
+  const visibleFieldsValue = useMemo(() => {
+    return mergedGridFullData.map(item => {
+      return item?.columns?.reduce<Record<string, any>>((acc, col) => {
+        acc[col.key!] = col.value
+        return acc
+      }, {})
+    })
+  }, [mergedGridFullData])
+
   const handleEnrichRowData = useCallback(
     (row: ManyToManyRelationValueItem) => {
       const rowData: GridColumnData[] = mergedGridFullData?.find(item => item.id === row.id)?.columns ?? []
@@ -191,6 +200,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
       value={ props.value }
+      visibleFieldsValue={ visibleFieldsValue }
     />
   )
 }
