@@ -1,5 +1,16 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api, NotificationGetCollectionApiResponse } from '../notifications-slice-enhanced'
+import { api, type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse } from '../notifications-slice-enhanced'
+import { isNil } from 'lodash'
 
 interface UseOptimisticUpdateProps {
   updateNotificationReadStateById: (id: number, read: boolean) => void
@@ -15,21 +26,22 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
       const queries = state.api?.queries ?? {}
 
       // Find all notificationGetCollection queries in the cache
-      Object.entries(queries).forEach(([queryKey, queryState]) => {
+      Object.entries(queries as Record<string, unknown>).forEach(([queryKey, queryState]) => {
         if (
-          queryKey.startsWith('notificationGetCollection(')
-          && queryState
-          && typeof queryState === 'object'
-          && 'originalArgs' in queryState
+          queryKey.startsWith('notificationGetCollection(') &&
+          !isNil(queryState) &&
+          typeof queryState === 'object' &&
+          'originalArgs' in queryState &&
+          !isNil(queryState.originalArgs)
         ) {
           try {
             dispatch(
               api.util.updateQueryData(
                 'notificationGetCollection',
-                (queryState as any).originalArgs,
+                queryState.originalArgs as NotificationGetCollectionApiArg,
                 (draft): NotificationGetCollectionApiResponse => {
                   const notification = draft.items?.find((note) => note.id === id)
-                  if (notification) {
+                  if (!isNil(notification)) {
                     notification.read = read
                   }
                   return draft
