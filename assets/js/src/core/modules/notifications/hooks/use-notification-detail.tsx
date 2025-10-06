@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { type Notification, useNotificationDeleteByIdMutation, useNotificationGetByIdQuery } from '../notifications-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { useOptimisticUpdate } from './use-optimistic-update'
 
 export interface UseNotificationDetailProps {
   id: number
@@ -28,6 +29,7 @@ interface UseNotificationsReturn {
 
 export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNotificationsReturn => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const { updateNotificationReadStateById } = useOptimisticUpdate()
 
   const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
     (isExpanded) ? { id } : skipToken)
@@ -37,6 +39,12 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
   const deleteNotificationDetail = async (): Promise<void> => {
     await deleteNotification({ id })
   }
+
+  useEffect(() => {
+    if (isExpanded) {
+      updateNotificationReadStateById(id, true)
+    }
+  }, [isExpanded])
 
   useEffect(() => {
     if (isDetailError) {
