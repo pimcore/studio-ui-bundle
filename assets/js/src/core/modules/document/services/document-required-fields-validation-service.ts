@@ -61,9 +61,9 @@ class DocumentRequiredFieldsValidationServiceImpl implements DocumentRequiredFie
         const currentValue = iframeApi.documentEditable.getValue(editableDefinition.name)?.data
 
         if (!dynamicType.validateRequired(currentValue, editableDefinition)) {
-          const fieldName = !isEmpty(editableDefinition.name)
-            ? editableDefinition.name
-            : editableDefinition.realName
+          const fieldName = isEmpty(editableDefinition.name)
+            ? editableDefinition.realName
+            : editableDefinition.name
 
           requiredFields.push(fieldName)
           applyRequiredStyling(editableDefinition.name, iframeDocument)

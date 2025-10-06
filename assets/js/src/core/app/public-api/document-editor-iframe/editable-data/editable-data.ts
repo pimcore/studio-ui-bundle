@@ -87,16 +87,16 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
   }
 
   registerDynamicEditables (editables: AbstractDocumentEditableDefinition[]): void {
-    editables.forEach(editable => {
+    for (const editable of editables) {
       this.dynamicEditables[editable.id] = editable
-    })
+    }
   }
 
   unregisterDynamicEditables (editableIds: string[]): void {
-    editableIds.forEach(id => {
+    for (const id of editableIds) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.dynamicEditables[id]
-    })
+    }
   }
 
   getEditableDefinitions (): AbstractDocumentEditableDefinition[] {
