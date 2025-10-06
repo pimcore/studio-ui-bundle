@@ -11,13 +11,14 @@
 /* eslint-disable max-lines */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { find, flatMap, isArray, isNil, isObject, isString, isUndefined, values } from 'lodash'
+import { find, isNil, isUndefined } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
+import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -125,18 +126,6 @@ export const useValue = (
       originalPath: item.fullPath,
       fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
     }))
-  }
-
-  function flattenValues (value: unknown): string[] {
-    if (isNil(value)) return []
-
-    if (isString(value)) return [value]
-
-    if (isArray(value)) return flatMap(value, flattenValues)
-
-    if (isObject(value)) return values(value).filter(isString)
-
-    return []
   }
 
   function applySearchFilter (items: DisplayManyToManyRelationValue, searchTerm: string): DisplayManyToManyRelationValue {
