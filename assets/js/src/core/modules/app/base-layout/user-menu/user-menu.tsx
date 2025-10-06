@@ -67,9 +67,9 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'title',
       label: (
-        <div className={'user-menu__title'}>
+        <div className={ 'user-menu__title' }>
           {t('user-menu.title')}
-          <span className={'user-menu__title-username'}>
+          <span className={ 'user-menu__title-username' }>
             ({user.username})
           </span>
         </div>
@@ -79,10 +79,10 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'notifications',
       label: t('user-menu.notifications'),
-      icon: <div className={'user-menu__item-icon'}>
+      icon: <div className={ 'user-menu__item-icon' }>
         <Badge
+          count={ data?.unreadNotificationsCount ?? 0 }
           showZero
-          count={data?.unreadNotificationsCount ?? 0}
         />
       </div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
@@ -90,26 +90,26 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       extra: isAllowed(UserPermission.SendNotifications)
         ? (
           <Button
-            className={'user-menu__item-extra'}
-            onClick={(e) => {
+            className={ 'user-menu__item-extra' }
+            onClick={ (e) => {
               e.stopPropagation()
               setSendModal(true)
-            }}
-            size={'small'}
+            } }
+            size={ 'small' }
           >{t('user-menu.notification.send')}</Button>
-        )
+          )
         : null
     },
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
-      icon: <div className={'user-menu__item-icon'}><Icon value={'user'} /></div>,
+      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
     {
       key: 'logout',
       label: t('user-menu.log-out'),
-      icon: <div className={'user-menu__item-icon'}><Icon value={'log-out'} /></div>,
+      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'log-out' } /></div>,
       onClick: handleLogout
     }
   ]
@@ -117,23 +117,23 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   return (
     <>
       <Dropdown
-        className={className}
-        menu={{ items }}
-        overlayClassName={[styles.userMenu].join(' ')}
-        overlayStyle={{ minWidth: 275 }}
-        trigger={['click']}
+        className={ className }
+        menu={ { items } }
+        overlayClassName={ [styles.userMenu].join(' ') }
+        overlayStyle={ { minWidth: 275 } }
+        trigger={ ['click'] }
       >
         <Avatar
           data-testid="user-menu-avatar"
-          icon={<Icon value='user' />}
-          size={26}
-          src={user?.hasImage && user?.image != null ? user?.image : undefined}
+          icon={ <Icon value='user' /> }
+          size={ 26 }
+          src={ user?.hasImage && user?.image != null ? user?.image : undefined }
         ></Avatar>
       </Dropdown>
 
       <SendNotificationModal
-        onClose={() => { setSendModal(false) }}
-        open={sendModal}
+        onClose={ () => { setSendModal(false) } }
+        open={ sendModal }
       />
     </>
   )
