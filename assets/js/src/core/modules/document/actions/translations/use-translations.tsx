@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
-import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
@@ -58,6 +58,8 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     skip: isNil(document.id)
   })
 
+  const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
+
   useEffect(() => {
     if (!isUndefined(deleteError)) {
       trackError(new ApiError(deleteError))
@@ -84,6 +86,11 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     )
 
     const hasLinkedTranslations = !isEmpty(otherTranslations)
+
+    // Check if the document type is translatable
+    const documentTypeInfo = docTypeTypes?.items?.find(type => type.name === document.type)
+    const isTranslatable = documentTypeInfo?.translatable ?? false
+    const isTranslatableInheritance = documentTypeInfo?.translatableInheritance ?? false
 
     const translationItems: ItemType[] = []
 
@@ -159,6 +166,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     translationItems.push({
       label: t('document.translation.new-document'),
       key: 'new-document',
+      hidden: !isTranslatable,
       icon: <Icon
         subIconName='new'
         subIconVariant='green'
@@ -168,6 +176,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         {
           label: t('document.translation.use-inheritance'),
           key: 'new-document-inheritance',
+          hidden: !isTranslatableInheritance,
           icon: <Icon value="inheritance-active" />,
           onClick: () => {
             setCurrentDocument(document)
