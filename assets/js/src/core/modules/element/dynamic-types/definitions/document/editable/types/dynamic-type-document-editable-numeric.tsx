@@ -46,6 +46,6 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
   }
 
   isEmpty (value: any, props: NumericEditableDefinition): boolean {
-    return !isNonEmptyString(value)
+    return isNil(value) || value === ''
   }
 }
