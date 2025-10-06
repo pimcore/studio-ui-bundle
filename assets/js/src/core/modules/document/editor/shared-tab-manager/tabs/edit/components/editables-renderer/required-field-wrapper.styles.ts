@@ -8,6 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export * from './document-save-service'
-export * from './document-save-task-manager'
-export * from './document-required-fields-validation-service'
+import { createStyles } from 'antd-style'
+
+export const useStyles = createStyles(({ css }) => {
+  return {
+    requiredFieldWrapper: css`
+      display: contents;
+    `
+  }
+})

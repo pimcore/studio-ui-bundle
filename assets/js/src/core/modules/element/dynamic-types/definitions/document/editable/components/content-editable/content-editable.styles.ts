@@ -25,11 +25,6 @@ export const useStyles = createStyles(({ token }) => {
         outlineOffset: '5px'
       },
 
-      '&[data-empty=true][data-required=true]': {
-        outline: `2px dashed ${token.colorError} !important`,
-        outlineOffset: '5px'
-      },
-
       '&:focus': {
         outline: 'none'
       },

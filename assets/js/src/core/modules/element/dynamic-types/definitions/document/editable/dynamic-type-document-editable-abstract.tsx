@@ -9,6 +9,7 @@
  */
 
 import { injectable } from 'inversify'
+import { isNil } from 'lodash'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
 import { type IFieldWidthContext } from '@sdk/modules/element'
@@ -18,7 +19,7 @@ export interface AbstractDocumentEditableDefinition {
   name: string
   realName: string
   data: any
-  config: any
+  config?: any
   type: string
   inherited: boolean
   inDialogBox: string | null
@@ -57,12 +58,45 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   }
 
   /**
+   * Helper method to check if the editable has required config enabled
+   */
+  hasRequiredConfig (props: AbstractDocumentEditableDefinition): boolean {
+    return Boolean(props.config?.required)
+  }
+
+  /**
    * Determines if the editable should trigger immediate auto-save and reload on change
    * @param props The editable props
    * @returns true if should reload on change, false for normal debounced auto-save
    */
   reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
+  }
+
+  /**
+   * Determines if the current value is empty for validation purposes.
+   * Base implementation only checks for null and undefined.
+   * Each editable type should override this method to implement type-specific empty checks.
+   * @param value The current value of the editable
+   * @param props The editable props
+   * @returns true if the value is considered empty, false otherwise
+   */
+  isEmpty (value: any, props: AbstractDocumentEditableDefinition): boolean {
+    return isNil(value)
+  }
+
+  /**
+   * Validates if the editable meets the required field constraint
+   * @param value The current value of the editable
+   * @param props The editable props
+   * @returns true if validation passes, false if the field is required but empty
+   */
+  validateRequired (value: any, props: AbstractDocumentEditableDefinition): boolean {
+    if (!this.hasRequiredConfig(props)) {
+      return true // Not required, so validation passes
+    }
+
+    return !this.isEmpty(value, props)
   }
 
   /**

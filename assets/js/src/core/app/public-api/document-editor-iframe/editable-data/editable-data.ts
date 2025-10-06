@@ -25,6 +25,7 @@ export interface DocumentEditableApi {
   getInheritanceState: (key: string) => boolean
   setInheritanceState: (key: string, inherited: boolean) => void
   initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
+  getEditableDefinitions: () => AbstractDocumentEditableDefinition[]
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
@@ -82,7 +83,7 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
     Object.assign(this.inheritanceState, inheritanceState)
   }
 
-  private getEditableDefinitions (): AbstractDocumentEditableDefinition[] {
+  getEditableDefinitions (): AbstractDocumentEditableDefinition[] {
     try {
       const iframeWindow = window as any
       return iframeWindow.editableDefinitions ?? []
