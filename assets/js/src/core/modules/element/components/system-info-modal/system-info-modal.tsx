@@ -116,6 +116,10 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
         <FormKit.Panel>
           {renderInputItem({ label: 'ID', name: 'id' })}
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
+          {(data.type === 'image' || data.type === 'page') &&
+            renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })
+          }
+          {!isNil(data?.parentId) && renderInputItem({ label: 'Parent ID', name: 'parentId' })}
           {renderInputItem({
             label: 'Type',
             value: data.elementType === elementTypes.asset
@@ -124,18 +128,16 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           })}
 
           {data.elementType === elementTypes.dataObject && [
-            renderInputItem({ label: 'Parent ID', name: 'parentId' }),
             renderInputItem({ label: 'Class ID', value: getByName(data.className!)?.id ?? '' }),
             renderInputItem({ label: 'Class', name: 'className' })
           ]}
 
-          {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
           {data.fileSize > 0 && renderInputItem({
             label: 'File Size',
             value: formatDataUnit(data.fileSize)
           })}
 
-          {renderInputItem({
+          {!isNil(data.modificationDate) && renderInputItem({
             label: 'Modification Date',
             value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
@@ -143,12 +145,14 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
             label: 'Creation Date',
             value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
+
           <Form.Item label="User Modification">
             <Text type="secondary">{getUserLabel(data.userModification)}</Text>
           </Form.Item>
           <Form.Item label="Owner">
-            {getUserLabel(data.userModification)}
+            {getUserLabel(data.userOwner)}
           </Form.Item>
+
           {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
