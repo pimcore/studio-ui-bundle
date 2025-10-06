@@ -9,15 +9,15 @@
  */
 
 /* eslint-disable max-lines */
+import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { find, flatMap, isArray, isNil, isObject, isString, isUndefined, values } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { useEffect, useRef } from 'react'
 import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
-import { find, isNil, isNull, isObject, isUndefined } from 'lodash'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -127,6 +127,18 @@ export const useValue = (
     }))
   }
 
+  function flattenValues (value: unknown): string[] {
+    if (isNil(value)) return []
+
+    if (isString(value)) return [value]
+
+    if (isArray(value)) return flatMap(value, flattenValues)
+
+    if (isObject(value)) return values(value).filter(isString)
+
+    return []
+  }
+
   function applySearchFilter (items: DisplayManyToManyRelationValue, searchTerm: string): DisplayManyToManyRelationValue {
     if (searchTerm === '') return items
 
@@ -142,12 +154,9 @@ export const useValue = (
           const visibleItem = find(visibleFieldsValue, (visibleField) => visibleField?.id === item.id)
 
           if (!isUndefined(visibleItem)) {
-            matched = Object.values(visibleItem).some((val) => {
-              if (isNull(val)) return false
-
-              const valueToString = isObject(val) ? JSON.stringify(val) : String(val)
-              return valueToString.toLowerCase().includes(normalizedSearch)
-            })
+            matched = Object.values(visibleItem).some((val) =>
+              flattenValues(val).some((str) => str.toLowerCase().includes(normalizedSearch))
+            )
           }
         }
 
