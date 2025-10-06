@@ -32,6 +32,7 @@ import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
+import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
@@ -139,6 +140,7 @@ import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
 import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
+import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
 import locationMarker from '@Pimcore/assets/icons/location-marker.inline.svg?react'
@@ -161,6 +163,7 @@ import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg?react'
 import navigation from '@Pimcore/assets/icons/navigation.inline.svg?react'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg?react'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg?react'
+import newDocument from '@Pimcore/assets/icons/new-document.inline.svg?react'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg?react'
 import newMarker from '@Pimcore/assets/icons/new-marker.inline.svg?react'
 import newRow from '@Pimcore/assets/icons/new-row.inline.svg?react'
@@ -229,6 +232,7 @@ import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
 import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
+import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
@@ -318,6 +322,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'batch-selection',
       component: batchSelection
+    })
+    iconLibrary.register({
+      name: 'blank',
+      component: blank
     })
     iconLibrary.register({
       name: 'body-style',
@@ -748,6 +756,10 @@ moduleSystem.registerModule({
       component: layout
     })
     iconLibrary.register({
+      name: 'link-document',
+      component: linkDocument
+    })
+    iconLibrary.register({
       name: 'list',
       component: list
     })
@@ -834,6 +846,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'new-column',
       component: newColumn
+    })
+    iconLibrary.register({
+      name: 'new-document',
+      component: newDocument
     })
     iconLibrary.register({
       name: 'new-hotspot',
@@ -1106,6 +1122,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unknown',
       component: unknown
+    })
+    iconLibrary.register({
+      name: 'unlink-document',
+      component: unlinkDocument
     })
     iconLibrary.register({
       name: 'unlocked',

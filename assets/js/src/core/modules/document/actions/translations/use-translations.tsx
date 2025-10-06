@@ -97,7 +97,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     translationItems.push({
       label: t('document.translation.link-existing-document'),
       key: 'link-existing-document',
-      icon: <Icon value="document-link" />,
+      icon: <Icon value="link-document" />,
       onClick: () => {
         setCurrentDocument(document)
         setCurrentOnFinish(() => onFinish)
@@ -157,7 +157,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       translationItems.push({
         label: t('document.translation.unlink-existing-document'),
         key: 'unlink-existing-document',
-        icon: <Icon value="trash" />,
+        icon: <Icon value="unlink-document" />,
         children: unlinkTranslationItems
       })
     }
@@ -167,11 +167,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       label: t('document.translation.new-document'),
       key: 'new-document',
       hidden: !isTranslatable,
-      icon: <Icon
-        subIconName='new'
-        subIconVariant='green'
-        value="document"
-            />,
+      icon: <Icon value="new-document" />,
       children: [
         {
           label: t('document.translation.use-inheritance'),
@@ -188,9 +184,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         {
           label: `> ${t('blank')}`,
           key: 'new-document-blank',
-          icon: <Icon
-            value="document"
-                />,
+          icon: <Icon value="blank" />,
           onClick: () => {
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
