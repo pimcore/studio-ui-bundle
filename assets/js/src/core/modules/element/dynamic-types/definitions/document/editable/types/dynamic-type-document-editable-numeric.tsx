@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { isNil } from 'lodash'
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { NumericEditable } from '../components/numeric-editable/numeric-editable'
 
