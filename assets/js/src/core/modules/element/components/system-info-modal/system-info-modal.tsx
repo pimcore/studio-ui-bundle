@@ -79,6 +79,10 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
   const getUserLabel = (userId: number | null): JSX.Element => {
     const user = userList?.items.find(user => user.id === userId)
 
+    if (userId === 0) {
+      return <Text type="secondary">System</Text>
+    }
+
     if (!isUndefined(user)) {
       return (
         <Flex
@@ -86,7 +90,6 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
           gap="mini"
         >
           <Text type="secondary">{user.username}</Text>
-          {/* need to add the redirect to the admin panel */}
           {currentUser.id === userId && (
             <Link
               onClick={ () => { handleOpenUserManagement(userId) } }
@@ -99,7 +102,6 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
       )
     }
 
-    // system?
     return <Text type="secondary">User unknown</Text>
   }
 
@@ -114,19 +116,20 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
         <FormKit.Panel>
           {renderInputItem({ label: 'ID', name: 'id' })}
           {renderInputItem({ label: 'Path', name: 'fullPath' })}
+          {renderInputItem({
+            label: 'Type',
+            value: data.elementType === elementTypes.asset
+              ? data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
+              : data.type
+          })}
 
           {data.elementType === elementTypes.dataObject && [
             renderInputItem({ label: 'Parent ID', name: 'parentId' }),
             renderInputItem({ label: 'Class ID', value: getByName(data.className!)?.id ?? '' }),
-            renderInputItem({ label: 'Class', name: 'className' }),
-            renderInputItem({ label: 'Type', name: 'type' })
+            renderInputItem({ label: 'Class', name: 'className' })
           ]}
 
           {data.type === 'image' && renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })}
-          {data.elementType === elementTypes.asset && renderInputItem({
-            label: 'Type',
-            value: data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
-          })}
           {data.fileSize > 0 && renderInputItem({
             label: 'File Size',
             value: formatDataUnit(data.fileSize)
