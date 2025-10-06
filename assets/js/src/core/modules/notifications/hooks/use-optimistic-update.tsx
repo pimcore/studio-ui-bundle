@@ -26,7 +26,7 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
       const queries = state.api?.queries ?? {}
 
       // Find all notificationGetCollection queries in the cache
-      Object.entries(queries as Record<string, unknown>).forEach(([queryKey, queryState]) => {
+      for (const [queryKey, queryState] of Object.entries(queries as Record<string, unknown>)) {
         if (
           queryKey.startsWith('notificationGetCollection(') &&
           !isNil(queryState) &&
@@ -48,10 +48,9 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
                 }
               )
             )
-          } catch {
-          }
+          } catch { }
         }
-      })
+      }
     })
   }
 
