@@ -80,7 +80,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     const user = userList?.items.find(user => user.id === userId)
 
     if (userId === 0) {
-      return <Text type="secondary">System</Text>
+      return <Text type="secondary">{t('system-information.system')}</Text>
     }
 
     if (!isUndefined(user)) {
@@ -95,14 +95,14 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
               onClick={ () => { handleOpenUserManagement(userId) } }
               style={ { textDecoration: 'underline' } }
             >
-              (click to open)
+              ({t('system-information.click-to-open')})
             </Link>
           )}
         </Flex>
       )
     }
 
-    return <Text type="secondary">User unknown</Text>
+    return <Text type="secondary">{t('system-information.user-unknown')}</Text>
   }
 
   return (
@@ -114,46 +114,46 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
     >
       <FormKit formProps={ { initialValues: data } }>
         <FormKit.Panel>
-          {renderInputItem({ label: 'ID', name: 'id' })}
-          {renderInputItem({ label: 'Path', name: 'fullPath' })}
+          {renderInputItem({ label: t('system-information.id'), name: 'id' })}
+          {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
           {(data.type === 'image' || data.type === 'page') &&
-            renderInputItem({ label: 'Public URL', value: `${currentDomain}${data.fullPath}` })
+            renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
           }
-          {!isNil(data?.parentId) && renderInputItem({ label: 'Parent ID', name: 'parentId' })}
+          {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
           {renderInputItem({
-            label: 'Type',
+            label: t('system-information.type'),
             value: data.elementType === elementTypes.asset
               ? data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
               : data.type
           })}
 
           {data.elementType === elementTypes.dataObject && [
-            renderInputItem({ label: 'Class ID', value: getByName(data.className!)?.id ?? '' }),
-            renderInputItem({ label: 'Class', name: 'className' })
+            renderInputItem({ label: t('system-information.class-id'), value: getByName(data.className!)?.id ?? '' }),
+            renderInputItem({ label: t('system-information.class'), name: 'className' })
           ]}
 
           {data.fileSize > 0 && renderInputItem({
-            label: 'File Size',
+            label: t('system-information.file-size'),
             value: formatDataUnit(data.fileSize)
           })}
 
           {!isNil(data.modificationDate) && renderInputItem({
-            label: 'Modification Date',
+            label: t('system-information.modification-date'),
             value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
           {renderInputItem({
-            label: 'Creation Date',
+            label: t('system-information.creation-date'),
             value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
           })}
 
-          <Form.Item label="User Modification">
+          <Form.Item label={ t('system-information.user-modification') }>
             <Text type="secondary">{getUserLabel(data.userModification)}</Text>
           </Form.Item>
-          <Form.Item label="Owner">
+          <Form.Item label={ t('system-information.owner') }>
             {getUserLabel(data.userOwner)}
           </Form.Item>
 
-          {renderInputItem({ label: 'Deeplink', name: 'deeplink' })}
+          {renderInputItem({ label: t('system-information.deeplink'), name: 'deeplink' })}
         </FormKit.Panel
       ></FormKit>
     </Modal>

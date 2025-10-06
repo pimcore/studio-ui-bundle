@@ -610,6 +610,22 @@ element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: only direct children
 element.sidebar.field-filters: Field Filters
 element.full-information: Full information
+system-information.id: ID
+system-information.path: Path
+system-information.public-url: Public URL
+system-information.parent-id: Parent ID
+system-information.type: Type
+system-information.class-id: Class ID
+system-information.class: Class
+system-information.file-size: File Size
+system-information.modification-date: Modification Date
+system-information.creation-date: Creation Date
+system-information.user-modification: User Modification
+system-information.owner: Owner
+system-information.deeplink: Deeplink
+system-information.user-unknown: User unknown
+system-information.system: System
+system-information.click-to-open: click to open
 male: Male
 female: Female
 other: Other
