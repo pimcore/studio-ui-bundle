@@ -10,13 +10,14 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { App } from 'antd'
 import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type Element, getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
-import { useSystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/hooks/use-system-info-modal'
+import { type ISystemInfoModalProps, SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
 
 export type IElement = Element & {
   fileSize: number
@@ -34,13 +35,28 @@ interface IUseElementActionsMenuReturn {
 
 export const useElementActionsMenu = ({ element, elementType }: IUseElementActionsMenuProps): IUseElementActionsMenuReturn => {
   const { t } = useTranslation()
-  const { openModal } = useSystemInfoModal()
+  const { modal } = App.useApp()
 
   if (element === undefined) {
     return { actionMenuItems: [] }
   }
 
   const deeplinkUrl = getElementDeeplink(elementType, element.id)
+
+  const showSystemInfoModal = (data: ISystemInfoModalProps['data']): void => {
+    const modalInstance = modal.info({
+      title: t('element.full-information'),
+      content: (
+        <SystemInfoModal
+          data={ data }
+          onClose={ () => { modalInstance.destroy() } }
+        />
+      ),
+      icon: null,
+      footer: null,
+      closable: true
+    })
+  }
 
   const actionMenuItems: DropdownMenuProps['items'] = [
     {
@@ -99,12 +115,10 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        openModal({
-          data: {
-            ...element,
-            elementType,
-            deeplink: deeplinkUrl
-          }
+        showSystemInfoModal({
+          ...element,
+          elementType,
+          deeplink: deeplinkUrl
         })
       }
     }

@@ -17,7 +17,6 @@ import { VideoModalProvider } from '../element/components/video-modal/provider/v
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
 import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
 import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
-import { SystemInfoModalProvider } from '@Pimcore/modules/element/components/system-info-modal/provider/system-info-modal-provider'
 
 export interface ModalsProviderProps {
   children: React.ReactNode
@@ -37,9 +36,7 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
               <VideoModalProvider>
                 <SendTestEmailProvider>
                   <SiteModalProvider>
-                    <SystemInfoModalProvider>
-                      {children}
-                    </SystemInfoModalProvider>
+                    {children}
                   </SiteModalProvider>
                 </SendTestEmailProvider>
               </VideoModalProvider>

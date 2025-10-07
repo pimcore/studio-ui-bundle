@@ -12,8 +12,6 @@ import React from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Link from 'antd/es/typography/Link'
-import { Modal } from '@Pimcore/components/modal/modal'
-import { type ISystemInfoModalData } from './provider/system-info-modal-provider'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
@@ -26,16 +24,28 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { USERS_WIDGET } from '@Pimcore/modules/user'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import { currentDomain } from '@Pimcore/app/config/app-config'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type Element } from '@Pimcore/modules/element/element-helper'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ClassDefinitionListItem, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 
-export interface ISystemInfoModalProps {
-  isOpen: boolean
-  onClose: () => void
-  data: ISystemInfoModalData | null
+export type ISystemInfoModalData = Element & {
+  elementType: ElementType
+  deeplink: string
+  modificationDate: number | null
+  creationDate: number | null
+  userOwner: number
+  userModification: number | null
+  fileSize?: number
+  mimeType?: string | null
+  className?: string
 }
 
-export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps): React.JSX.Element => {
+export interface ISystemInfoModalProps {
+  onClose: () => void
+  data: ISystemInfoModalData
+}
+
+export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const currentUser = useUser()
@@ -113,56 +123,49 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
   }
 
   return (
-    <Modal
-      footer={ null }
-      onCancel={ onClose }
-      open={ isOpen }
-      title={ t('element.full-information') }
-    >
-      <FormKit formProps={ { initialValues: data } }>
-        <FormKit.Panel>
-          {renderInputItem({ label: t('system-information.id'), name: 'id' })}
-          {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
-          {(data.type === 'image' || data.type === 'page') &&
+    <FormKit formProps={ { initialValues: data } }>
+      <FormKit.Panel>
+        {renderInputItem({ label: t('system-information.id'), name: 'id' })}
+        {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
+        {(data.type === 'image' || data.type === 'page') &&
             renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
           }
-          {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
-          {renderInputItem({
-            label: t('system-information.type'),
-            value: data.elementType === elementTypes.asset
-              ? data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
-              : data.type
-          })}
+        {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
+        {renderInputItem({
+          label: t('system-information.type'),
+          value: data.elementType === elementTypes.asset
+            ? data.type + ' ' + (!isNil(data.mimeType) ? '(MIME: ' + data.mimeType + ')' : '')
+            : data.type
+        })}
 
-          {data.elementType === elementTypes.dataObject && [
-            renderInputItem({ label: t('system-information.class-id'), value: getByName(data.className!)?.id ?? '' }),
-            renderInputItem({ label: t('system-information.class'), name: 'className' })
-          ]}
+        {data.elementType === elementTypes.dataObject && [
+          renderInputItem({ label: t('system-information.class-id'), value: getByName(data.className!)?.id ?? '' }),
+          renderInputItem({ label: t('system-information.class'), name: 'className' })
+        ]}
 
-          {!isUndefined(data.fileSize) && data.fileSize > 0 && renderInputItem({
-            label: t('system-information.file-size'),
-            value: formatDataUnit(data.fileSize)
-          })}
+        {!isUndefined(data.fileSize) && data.fileSize > 0 && renderInputItem({
+          label: t('system-information.file-size'),
+          value: formatDataUnit(data.fileSize)
+        })}
 
-          {!isNil(data.modificationDate) && renderInputItem({
-            label: t('system-information.modification-date'),
-            value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
-          })}
-          {renderInputItem({
-            label: t('system-information.creation-date'),
-            value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
-          })}
+        {!isNil(data.modificationDate) && renderInputItem({
+          label: t('system-information.modification-date'),
+          value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
+        })}
+        {renderInputItem({
+          label: t('system-information.creation-date'),
+          value: formatDateTime({ timestamp: data.creationDate, dateStyle: 'full', timeStyle: 'full' })
+        })}
 
-          <Form.Item label={ t('system-information.user-modification') }>
-            {getUserLabel(data.userModification)}
-          </Form.Item>
-          <Form.Item label={ t('system-information.owner') }>
-            {getUserLabel(data.userOwner)}
-          </Form.Item>
+        <Form.Item label={ t('system-information.user-modification') }>
+          {getUserLabel(data.userModification)}
+        </Form.Item>
+        <Form.Item label={ t('system-information.owner') }>
+          {getUserLabel(data.userOwner)}
+        </Form.Item>
 
-          {renderInputItem({ label: t('system-information.deeplink'), name: 'deeplink' })}
-        </FormKit.Panel
-      ></FormKit>
-    </Modal>
+        {renderInputItem({ label: t('system-information.deeplink'), name: 'deeplink' })}
+      </FormKit.Panel>
+    </FormKit>
   )
 }
