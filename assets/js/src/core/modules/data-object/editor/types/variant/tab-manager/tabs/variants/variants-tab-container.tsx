@@ -13,6 +13,7 @@ import { VariantsContainer } from './variants-container'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
 
 export const VariantsTabContainer = (): React.JSX.Element => {
   const { setHasLocalizedFields } = useLanguageSelection()
@@ -28,6 +29,6 @@ export const TAB_VARIANTS: IEditorTab = {
   key: 'variants',
   label: 'data-object.object-editor-tabs.variants',
   icon: <Icon value="data-object-variant" />,
-  children: <VariantsTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.variants.name } />,
   hidden: (elementApi) => !('allowVariants' in elementApi && elementApi?.allowVariants === true)
 }

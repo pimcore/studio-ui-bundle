@@ -25,6 +25,9 @@ import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar
 import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 import { PreviewView } from './shared-tab-manager/tabs/preview/preview-view'
 import { VersionViewContainer } from './shared-tab-manager/tabs/versions/version-view-container'
+import { ListingContainer } from './types/folder/tab-manager/tabs/listing/listing-container'
+import { EditContainer } from './types/object/tab-manager/tabs/edit/edit-container'
+import { VariantsTabContainer } from './types/variant/tab-manager/tabs/variants/variants-tab-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -83,6 +86,21 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: componentConfig.dataObject.editor.tab.versions.name,
       component: VersionViewContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.listing.name,
+      component: ListingContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.edit.name,
+      component: EditContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.variants.name,
+      component: VariantsTabContainer
     })
   }
 })

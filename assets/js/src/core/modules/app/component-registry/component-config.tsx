@@ -73,8 +73,11 @@ const defaultComponentConfig = {
         }
       },
       tab: {
+        listing: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.listing' },
+        edit: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.edit' },
         preview: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.preview' },
-        versions: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.versions' }
+        versions: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.versions' },
+        variants: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.variants' }
       }
     },
     tree: {
