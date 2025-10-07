@@ -139,7 +139,7 @@ export const SystemInfoModal = ({ isOpen, onClose, data }: ISystemInfoModalProps
             renderInputItem({ label: t('system-information.class'), name: 'className' })
           ]}
 
-          {data.fileSize > 0 && renderInputItem({
+          {!isUndefined(data.fileSize) && data.fileSize > 0 && renderInputItem({
             label: t('system-information.file-size'),
             value: formatDataUnit(data.fileSize)
           })}
