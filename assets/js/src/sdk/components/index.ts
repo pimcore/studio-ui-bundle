@@ -44,8 +44,6 @@ export * from '@Pimcore/components/dropdown-button/dropdown-button'
 export * from '@Pimcore/components/dynamic-filter/dynamic-filter'
 export * from '@Pimcore/components/editable-empty-placeholder/editable-empty-placeholder'
 export * from '@Pimcore/components/element-tag/element-tag'
-export * from '@Pimcore/modules/element/components/element-toolbar/element-toolbar'
-export * from '@Pimcore/modules/element/components/element-toolbar/element-toolbar.skeleton'
 export * from '@Pimcore/components/element-tree/element-tree'
 // @todo check usage and naming of nodeState
 export { type NodeState, type UseElementTreeReturnType, useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
