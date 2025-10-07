@@ -16,14 +16,24 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import '@Pimcore/modules/asset/tree'
 import '@Pimcore/modules/asset/listing/decorator/context-menu'
+import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     widgetRegistryService.registerWidget({
       name: 'asset-tree',
       component: TreeContainer
+    })
+
+    componentRegistry.registerToSlot(componentConfig.asset.tree.node.meta.name, {
+      name: 'lockIcon',
+      component: TreeNodeLockIcon,
+      priority: 100
     })
   }
 })
