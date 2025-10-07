@@ -11,15 +11,15 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Space } from '@Pimcore/components/space/space'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { type IElement, useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
+import { type IElement, useElementActionsMenu } from '@Pimcore/modules/element/hooks/use-element-actions-menu'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { IconButton } from '../icon-button/icon-button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useStyle } from '@Pimcore/modules/element/components/element-toolbar/element-toolbar.styles'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const elementRef = useRef<HTMLDivElement>(null)

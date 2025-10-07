@@ -24,7 +24,7 @@ import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type IElement, useElementActionsMenu } from '@Pimcore/components/hooks/use-element-actions-menu'
+import { type IElement, useElementActionsMenu } from '@Pimcore/modules/element/hooks/use-element-actions-menu'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 moduleSystem.registerModule({
