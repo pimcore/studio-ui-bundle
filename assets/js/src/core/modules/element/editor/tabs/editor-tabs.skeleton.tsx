@@ -11,7 +11,7 @@
 import { Skeleton } from 'antd'
 import React from 'react'
 import { useStyle } from './editor-tabs.skeleton.styles'
-import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
+import { ElementToolbarSkeleton } from '@Pimcore/modules/element/components/element-toolbar/element-toolbar.skeleton'
 
 export const EditorTabsSkeleton = (): React.JSX.Element => {
   const { styles } = useStyle()

@@ -20,7 +20,7 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { type GlobalElementContext } from '@Pimcore/modules/element/hooks/use-global-element-context'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
+import { ElementToolbar } from '@Pimcore/modules/element/components/element-toolbar/element-toolbar'
 import DraftIndicator from '@Pimcore/modules/data-object/editor/detached-tab/draft-indicator'
 import { useTranslation } from 'react-i18next'
 

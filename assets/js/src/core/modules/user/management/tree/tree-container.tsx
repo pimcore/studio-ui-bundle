@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { TreeElement as Tree, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
-import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { type TreeDataNode } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { TreeElement as Tree, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { ToolbarTree } from '@Pimcore/modules/user/management/toolbar/toolbar-tree'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -28,12 +29,19 @@ interface ITreeContainerProps {
   onReloadTree: (keys: any[]) => void
   onSetExpandedKeys: (keys: any[]) => void
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
+  userId?: number
 }
-const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, onSetExpandedKeys, onUpdateTreeData, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, onSetExpandedKeys, onUpdateTreeData, userId, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserManagementHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
+
+  useEffect(() => {
+    if (!isNil(userId)) {
+      openUser(userId)
+    }
+  }, [userId])
 
   const modal = useFormModal()
 

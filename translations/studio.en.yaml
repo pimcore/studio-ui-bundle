@@ -53,6 +53,7 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
@@ -600,15 +601,33 @@ element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
 element.open: Open
-element.toolbar.copy-id: ID {{id}} - Copy
-element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
-element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
+element.toolbar.copy-id: Copy ID
+element.toolbar.copy-full-path-to-clipboard: Copy Full Path
+element.toolbar.copy-deep-link-to-clipboard: Copy Deep link
+element.toolbar.show-full-info: Full info
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: only direct children
 element.sidebar.field-filters: Field Filters
+element.full-information: Full information
+system-information.id: ID
+system-information.path: Path
+system-information.public-url: Public URL
+system-information.parent-id: Parent ID
+system-information.type: Type
+system-information.class-id: Class ID
+system-information.class: Class
+system-information.file-size: File Size
+system-information.modification-date: Modification Date
+system-information.creation-date: Creation Date
+system-information.user-modification: User Modification
+system-information.owner: Owner
+system-information.deeplink: Deeplink
+system-information.user-unknown: User unknown
+system-information.system: System
+system-information.click-to-open: click to open
 male: Male
 female: Female
 other: Other
