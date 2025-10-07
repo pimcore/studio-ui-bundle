@@ -67,7 +67,7 @@ export const EditContainer = (): React.JSX.Element => {
   }, [id, dispatch])
 
   return (
-    <ContentLayout 
+    <ContentLayout
       renderSidebar={
         <Sidebar
           buttons={ sidebarButtons }
