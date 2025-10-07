@@ -8,14 +8,51 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { DocumentPreview } from './document-preview'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
+import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { getDocumentSidebarManager } from '../../../sidebar/sidebar-manager-helper'
+import { useDocumentEditorSidebarEntries } from '../edit/hooks/use-document-editor-sidebar-entries'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const PreviewView = (): React.JSX.Element => {
   const { id } = useElementContext()
+  const { id: contextId } = useContext(DocumentContext)
+  const { document } = useDocumentDraft(contextId)
+
+  const isEditTabHidden = !checkElementPermission(document?.permissions, 'save') &&
+                          !checkElementPermission(document?.permissions, 'publish')
+
+  const showSidebar = isEditTabHidden
+
+  if (!showSidebar) {
+    return <DocumentPreview id={ id } />
+  }
+
+  const sidebarManager = getDocumentSidebarManager(document?.type)
+  const sidebarButtons = sidebarManager.getButtons()
+  const sidebarEntries = useDocumentEditorSidebarEntries()
 
   return (
-    <DocumentPreview id={ id } />
+    <ContentLayout
+      renderSidebar={
+        sidebarEntries.length > 0
+          ? (
+            <Sidebar
+              buttons={ sidebarButtons }
+              entries={ sidebarEntries }
+              sizing="medium"
+              translateTooltips
+            />
+            )
+          : undefined
+      }
+    >
+      <DocumentPreview id={ id } />
+    </ContentLayout>
   )
 }
