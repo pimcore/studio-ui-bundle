@@ -18,11 +18,13 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { DataObjectEditorWidget } from '@Pimcore/modules/data-object/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { ConditionalLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/conditional-language-selection'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
+import { PreviewView } from './shared-tab-manager/tabs/preview/preview-view'
+import { VersionViewContainer } from './shared-tab-manager/tabs/versions/version-view-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -71,6 +73,16 @@ moduleSystem.registerModule({
       name: 'saveButtons',
       priority: 200,
       component: DataObjectEditorToolbarSaveButtons
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.preview.name,
+      component: PreviewView
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.versions.name,
+      component: VersionViewContainer
     })
   }
 })

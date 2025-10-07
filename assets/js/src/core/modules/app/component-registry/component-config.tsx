@@ -71,6 +71,10 @@ const defaultComponentConfig = {
             ]
           }
         }
+      },
+      tab: {
+        preview: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.preview' },
+        versions: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.versions' }
       }
     },
     tree: {
@@ -102,6 +106,18 @@ const defaultComponentConfig = {
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+    }
+  },
+  element: {
+    editor: {
+      tab: {
+        properties: { type: ComponentType.SINGLE, name: 'element.editor.tab.properties' },
+        schedule: { type: ComponentType.SINGLE, name: 'element.editor.tab.schedule' },
+        dependencies: { type: ComponentType.SINGLE, name: 'element.editor.tab.dependencies' },
+        workflow: { type: ComponentType.SINGLE, name: 'element.editor.tab.workflow' },
+        notesAndEvents: { type: ComponentType.SINGLE, name: 'element.editor.tab.notesAndEvents' },
+        tags: { type: ComponentType.SINGLE, name: 'element.editor.tab.tags' }
+      }
     }
   },
   leftSidebar: {
