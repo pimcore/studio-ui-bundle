@@ -16,6 +16,8 @@ import { DocumentContext } from '../../document-provider'
 import { useDocumentDraft } from '../../hooks/use-document-draft'
 import { SaveTaskType } from '@sdk/modules/data-object'
 import { documentSaveService } from '../../services'
+import { useAppDispatch } from '@sdk/app'
+import { setDocumentNodeNavigationExclude } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseSaveHookReturn {
   save: (task?: SaveTaskType, onFinish?: () => void) => Promise<void>
@@ -31,6 +33,7 @@ export { SaveTaskType }
 export const useSave = (): UseSaveHookReturn => {
   const { id } = useContext(DocumentContext)
   const { document } = useDocumentDraft(id)
+  const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -52,8 +55,16 @@ export const useSave = (): UseSaveHookReturn => {
       setError(undefined)
       setIsSuccess(false)
 
-      // Simply call the document save service
       await documentSaveService.saveDocument(id, task)
+
+      if (task !== SaveTaskType.AutoSave && document?.changes?.properties) {
+        const currentNavigationExclude = Boolean(document?.properties?.find(prop => prop.key === 'navigation_exclude')?.data)
+
+        dispatch(setDocumentNodeNavigationExclude({
+          nodeId: String(id),
+          navigationExclude: currentNavigationExclude
+        }))
+      }
 
       setIsSuccess(true)
       onFinish?.()

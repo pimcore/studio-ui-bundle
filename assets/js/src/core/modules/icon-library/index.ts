@@ -168,6 +168,7 @@ import newSomething from '@Pimcore/assets/icons/new-something.inline.svg?react'
 import newIcon from '@Pimcore/assets/icons/new.inline.svg?react'
 import news from '@Pimcore/assets/icons/news.inline.svg?react'
 import noContent from '@Pimcore/assets/icons/no-content.inline.svg?react'
+import notVisibleElement from '@Pimcore/assets/icons/not-visible-element.inline.svg?react'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg?react'
 import notificationRead from '@Pimcore/assets/icons/notification-read.inline.svg?react'
 import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline.svg?react'
@@ -862,6 +863,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'no-content',
       component: noContent
+    })
+    iconLibrary.register({
+      name: 'not-visible-element',
+      component: notVisibleElement
     })
     iconLibrary.register({
       name: 'notes-events',

@@ -47,7 +47,16 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'asset.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   dataObject: {
@@ -81,7 +90,16 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   document: {
@@ -108,7 +126,17 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'document.tree.node.meta',
+          defaultEntries: [
+            { name: 'navigationExcludeIcon', priority: 100 },
+            { name: 'lockIcon', priority: 200 }
+          ]
+        }
+      }
     }
   },
   element: {
