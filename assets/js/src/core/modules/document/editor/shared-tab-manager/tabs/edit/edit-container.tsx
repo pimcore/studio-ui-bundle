@@ -22,6 +22,7 @@ import { getDocumentSidebarManager } from '../../../sidebar/sidebar-manager-help
 import { useDocumentEditorSidebarEntries } from './hooks/use-document-editor-sidebar-entries'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { removeDocument } from '@Pimcore/modules/document/document-editor-slice'
+import { DraftAlert } from './components/draft-alert/draft-alert'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
@@ -66,14 +67,16 @@ export const EditContainer = (): React.JSX.Element => {
   }, [id, dispatch])
 
   return (
-    <ContentLayout renderSidebar={
-      <Sidebar
-        buttons={ sidebarButtons }
-        entries={ sidebarEntries }
-        sizing="medium"
-        translateTooltips
-      />
+    <ContentLayout
+      renderSidebar={
+        <Sidebar
+          buttons={ sidebarButtons }
+          entries={ sidebarEntries }
+          sizing="medium"
+          translateTooltips
+        />
       }
+      renderTopBar={ <DraftAlert /> }
     >
       <Iframe
         onLoad={ handleIframeLoad }
