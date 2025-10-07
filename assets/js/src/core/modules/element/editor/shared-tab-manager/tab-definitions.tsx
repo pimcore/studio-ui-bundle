@@ -9,27 +9,16 @@
  */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
-import {
-  PropertiesContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { ScheduleTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import {
-  DependenciesTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
-import { WorkflowTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-container'
-import {
-  NotesAndEventsTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
-import { TagsTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-container'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
+import React from 'react'
 import { checkElementPermission } from '../../permissions/permission-helper'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
   label: 'properties.label',
   workspacePermission: 'properties',
-  children: <PropertiesContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.properties.name } />,
   icon: <Icon value={ 'settings' } />,
   isDetachable: true
 }
@@ -37,7 +26,7 @@ export const TAB_SCHEDULE: IEditorTab = {
   key: 'schedule',
   label: 'schedule.label',
   workspacePermission: 'settings',
-  children: <ScheduleTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.schedule.name } />,
   icon: <Icon value={ 'schedule' } />,
   isDetachable: true,
   hidden: (element): boolean => {
@@ -48,8 +37,7 @@ export const TAB_SCHEDULE: IEditorTab = {
 export const TAB_DEPENDENCIES: IEditorTab = {
   key: 'dependencies',
   label: 'dependencies.label',
-
-  children: <DependenciesTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.dependencies.name } />,
   icon: <Icon value={ 'dependencies' } />,
   isDetachable: true
 }
@@ -57,7 +45,7 @@ export const TAB_WORKFLOW: IEditorTab = {
   key: 'workflow',
   label: 'workflow.label',
   userPermission: 'workflow_details',
-  children: <WorkflowTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.workflow.name } />,
   icon: <Icon value={ 'workflow' } />,
   isDetachable: true
 }
@@ -65,7 +53,7 @@ export const TAB_NOTES_AND_EVENTS: IEditorTab = {
   key: 'notes-events',
   label: 'notes-and-events.label',
   userPermission: 'notes_events',
-  children: <NotesAndEventsTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.notesAndEvents.name } />,
   icon: <Icon value={ 'notes-events' } />,
   isDetachable: true
 }
@@ -73,7 +61,7 @@ export const TAB_TAGS: IEditorTab = {
   key: 'tags',
   label: 'tags.label',
   userPermission: 'tags_assignment',
-  children: <TagsTabContainer />,
+  children: <ComponentRenderer component={ componentConfig.element.editor.tab.tags.name } />,
   icon: <Icon value={ 'tag' } />,
   isDetachable: true
 }
