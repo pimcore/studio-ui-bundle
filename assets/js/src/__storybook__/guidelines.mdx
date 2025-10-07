@@ -1,0 +1,409 @@
+import {Meta, Title, Subtitle, Description} from '@storybook/blocks';
+import InfoIcon from './media/info-outline.svg';
+import { useState } from 'react';
+
+export const ImageLightbox = ({ src, alt, style, captionStyle, caption }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <>
+      <div style={{ textAlign: 'center' }}>
+        <img 
+          src={src} 
+          alt={alt} 
+          style={{ ...style, cursor: 'pointer' }} 
+          onClick={() => setIsOpen(true)}
+        />
+        {caption && <p style={captionStyle}>{caption}</p>}
+      </div>
+      
+      {isOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            cursor: 'pointer'
+          }}
+          onClick={() => setIsOpen(false)}
+        >
+          <button
+            onClick={() => setIsOpen(false)}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'white',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              fontSize: '24px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 'bold',
+              color: '#333',
+              zIndex: 10000
+            }}
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <img 
+            src={src} 
+            alt={alt}
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              cursor: 'default'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+<Meta title="Docs/Guidelines" />
+
+<div style={{ marginLeft: '2rem', marginRight: '2rem' }}>
+
+# Guidelines
+
+<div style={{ marginBottom: '3rem', padding: '1.5rem 2.5rem', backgroundColor: '#722ED105', borderRadius: '8px', fontSize: '14px' }}>
+
+**<a href="#layout" style={{ color: '#722ED1', textDecoration: 'none' }}>Layout</a>** - Pimcore's three-panel layout system with a 12-column responsive grid and fixed gutters for consistent visual rhythm.
+
+**<a href="#spacing" style={{ color: '#722ED1', textDecoration: 'none' }}>Spacing</a>** - Pimcore Studio's 4px baseline system for consistent layouts and hierarchy across all components and interfaces.
+
+**<a href="#action-labels" style={{ color: '#722ED1', textDecoration: 'none' }}>Action Labels</a>** - Clear naming conventions for user interface actions like Add, New, Delete, and Remove with visual examples.
+
+**<a href="#writing-style" style={{ color: '#722ED1', textDecoration: 'none' }}>Writing Style</a>** - Guidelines for Title case, Sentence case, and action-oriented wording to ensure consistent language throughout the interface.
+
+**<a href="#theme-switch" style={{ color: '#722ED1', textDecoration: 'none' }}>Theme Switch</a>** - Upcoming light and dark mode toggle with seamless theme switching and enhanced customization capabilities.
+
+**<a href="#additional-documentation" style={{ color: '#722ED1', textDecoration: 'none' }}>Additional Documentation</a>** - Additional documentation resources and links to comprehensive Pimcore Studio information.
+
+</div>
+
+<div style={{ marginBottom: '3rem' }}>
+<h2 style={{ marginBottom: '1.5rem' }}>Layout</h2>
+
+<div style={{ fontSize: '14px', marginBottom: '2rem' }}>
+
+The Pimcore layout is divided into three horizontal areas: a left panel, a content area, and a right panel. The left and right panels have a default, optimized width, while the central content area is structured on a 12-column responsive grid. All panels flex in width as needed, while gutters remain fixed - ensuring a consistent rhythm across viewports.
+
+</div>
+
+<div style={{ marginLeft: '4rem', marginRight: '4rem', marginBottom: '2rem' }}>
+<div style={{ textAlign: 'center', marginTop: '1rem' }}>
+  <ImageLightbox
+    src="/media/layout-widgets.svg"
+    alt="Pimcore three-panel layout"
+    style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
+    captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
+    caption="Studio UI layout - left and right widgets"
+  />
+</div>
+</div>
+
+<div style={{ fontSize: '14px', marginBottom: '2rem' }}>
+
+The content area itself is flexible: its space is treated as individual boxes aligned to the grid, and bottom widgets - or tabs detached from the content area - can be expanded to allow multitasking views. The layout always respects the fixed gutter size, preserving visual and structural coherence.
+
+</div>
+
+<div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
+  <ImageLightbox
+    src="/media/Layout-areas-content.svg"
+    alt="Pimcore layout structure"
+    style={{ width: '100%', maxWidth: '600px', height: 'auto', marginBottom: '0.5rem' }}
+    captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
+    caption="Studio UI layout - widgets and content area"
+  />
+  <ImageLightbox
+    src="/media/layout-areas-content2.svg"
+    alt="Pimcore content area layout"
+    style={{ width: '100%', maxWidth: '600px', height: 'auto', marginBottom: '0.5rem' }}
+    captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
+    caption="Studio UI layout - utilising the flexible layout"
+  />
+</div>
+</div>
+</div>
+
+<div style={{ marginBottom: '3rem' }}>
+<h2 style={{ marginBottom: '1.5rem' }}>Spacing</h2>
+
+<div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+  <div style={{ flex: 1, fontSize: '14px' }}>
+    <p style={{ margin: '0', marginBlockStart: '0', marginBlockEnd: '0', padding: '0' }}>
+      Pimcore Studio uses a 4 px baseline to keep layouts clear, readable, and predictable across breakpoints - aligned with Ant Design's proximity guidance (spacing as a primary tool to organize hierarchy).
+      
+      **Notes for parity with Ant Design:** Ant's spec commonly cites 8/16/24 px tiers; our 4 px baseline extends this into a finer-grained scale while remaining compatible with those anchors. Designers working in Figma and engineers in React can map tokens directly to these steps for consistent spacing behaviors.
+    </p>
+  </div>
+  
+  <div style={{ flex: 1 }}>
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px', tableLayout: 'fixed' }}>
+      <colgroup>
+        <col style={{ width: '30%' }} />
+        <col style={{ width: '25%' }} />
+        <col style={{ width: '45%' }} />
+      </colgroup>
+      <thead>
+        <tr>
+          <th style={{ padding: '8px 4px 8px 16px', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', verticalAlign: 'middle' }}>Size Name</th>
+          <th style={{ padding: '8px 4px', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', verticalAlign: 'middle' }}>Token Value</th>
+          <th style={{ padding: '8px 16px 8px 4px', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', verticalAlign: 'middle' }}>Visualisation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>none</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>0px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '0px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr style={{ backgroundColor: '#722ED105' }}>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>mini</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>4px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '4px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>extra-small</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>8px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '8px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr style={{ backgroundColor: '#722ED105' }}>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>small</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>12px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '12px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>normal</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>16px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '16px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr style={{ backgroundColor: '#722ED105' }}>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>medium</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>20px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '20px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>large</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>24px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '24px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr style={{ backgroundColor: '#722ED105' }}>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>extra-large</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}>32px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}><div style={{ width: '100%', height: '32px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+        <tr>
+          <td style={{ padding: '8px 4px 8px 16px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none' }}>maxi</td>
+          <td style={{ padding: '8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none' }}>48px</td>
+          <td style={{ padding: '8px 16px 8px 4px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none' }}><div style={{ width: '100%', height: '48px', backgroundColor: '#722ED1' }}></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<div style={{ marginBottom: '3rem' }}>
+<h2 style={{ marginBottom: '1.5rem' }}>Action Labels</h2>
+
+<div>
+<table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '2rem', tableLayout: 'fixed' }}>
+  <thead>
+    <tr>
+      <th style={{ width: '15%', padding: '8px 12px 8px clamp(24px, 4vw, 48px)', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px' }}>Name</th>
+      <th style={{ width: '60%', padding: '8px 8px', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px' }}>Description</th>
+      <th style={{ width: '25%', padding: '8px 8px', textAlign: 'left', fontWeight: 'bold', backgroundColor: '#722ED10A', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px' }}>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: '12px 12px 12px clamp(24px, 4vw, 48px)', fontWeight: '600', borderLeft: 'none', borderRight: 'none', borderTop: 'none', verticalAlign: 'middle', textAlign: 'left', fontSize: '14px' }}>Add</td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px', verticalAlign: 'middle', textAlign: 'left', lineHeight: '1.2' }}>
+        <div>
+          Inserts or appends something that already exists - for example adding content to a field, group, list, or specific position.
+          <br />
+          It is recommended to use a magnifying-glass icon to suggest browsing or searching within the system.
+        </div>
+      </td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
+        <img src="/media/Buttons-add.svg" alt="Add button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
+          <strong>Examples:</strong> Add predefined properties, Add custom metadata set
+        </div>
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: '#722ED105' }}>
+      <td style={{ padding: '12px 12px 12px clamp(24px, 4vw, 48px)', fontWeight: '600', borderLeft: 'none', borderRight: 'none', borderTop: 'none', verticalAlign: 'middle', textAlign: 'left', fontSize: '14px' }}>New</td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px', verticalAlign: 'middle', textAlign: 'left', lineHeight: '1.2' }}>
+        <div>
+          Creates something from scratch directly or in a modal with further customizations.
+          <br />
+          When the context and the expected outcome is clear, then "New" does not need the be specified. In cases where only icons are used (such in grid actions or table controls), then a plus icon is purposefully applied only in relation to "New".
+        </div>
+      </td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
+        <img src="/media/Buttons-new.svg" alt="New button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0 0 16px 0' }} />
+        <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
+          <strong>Examples:</strong> New report, New dashboard
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: '12px 12px 12px clamp(24px, 4vw, 48px)', fontWeight: '600', borderLeft: 'none', borderRight: 'none', borderTop: 'none', verticalAlign: 'middle', textAlign: 'left', fontSize: '14px' }}>Delete</td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', fontSize: '14px', verticalAlign: 'middle', textAlign: 'left', lineHeight: '1.2' }}>
+        <div>
+          Erases an object or a value from the system permanently. This is a destructive action.
+          <br />
+          It is advised to use a trash icon, include the word "Delete," and apply additional emphasis (e.g. red) when needed.
+        </div>
+      </td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
+        <img src="/media/Buttons-delete.svg" alt="Delete button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
+          <strong>Examples:</strong> Delete template, Delete asset
+        </div>
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: '#722ED105' }}>
+      <td style={{ padding: '12px 12px 12px clamp(24px, 4vw, 48px)', fontWeight: '600', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', verticalAlign: 'middle', textAlign: 'left', fontSize: '14px' }}>Remove</td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', fontSize: '14px', verticalAlign: 'middle', textAlign: 'left', lineHeight: '1.2' }}>
+        <div>
+          Use when an object is removed only from the current UI or context - not from the backend system. For example, Remove widget hides it visually but does not delete the data.
+        </div>
+      </td>
+      <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
+        <img src="/media/Buttons-remove.svg" alt="Remove button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
+          <strong>Examples:</strong> Remove current element tag, Remove widget
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '4rem', marginBottom: '2rem' }}>
+    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flexGrow: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+        <img src="/media/Hotspot.svg" alt="Hotspot example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+      </div>
+      <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>"New" button variants</h3>
+      <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
+       The hotspot modal lets users create and position image markers, with each button clearly distinguished by an icon that includes a required plus symbol.
+      </p>
+    </div>
+    
+    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flexGrow: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+        <img src="/media/remove-clear-example.svg" alt="Advanced grid options example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+      </div>
+      <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>Clear = Remove</h3>
+      <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
+        In certain cases where “Clear,” “Remove,” and “Close” share the same icon, this follows common design conventions that users have been continuously exposed to.
+      </p>
+    </div>
+  </div>
+  
+  <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+    <img src="/media/Asset-tab.svg" alt="Asset tab example" style={{ width: '100%', maxWidth: '800px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+    <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>Combination of buttons and symbols</h3>
+    <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
+     When distributed correctly across the interface, each icon and label helps users orient themselves more quickly and navigate more fluently over time.
+    </p>
+  </div>
+</div>
+</div>
+</div>
+
+<div style={{ marginBottom: '3rem' }}>
+<h2 style={{ marginBottom: '1.5rem' }}>Writing style</h2>
+
+<div style={{ fontSize: '14px', marginBottom: '2rem' }}>
+
+**Title case for navigation**  
+Menu items, tab titles, context menus, and labels shown when a menu item is opened in a tab use Title case, meaning each principal word is capitalized (e.g. Custom Reports, Output Channels). This ensures clear scannability in navigation and structural elements.
+
+**Sentence case for actions**  
+Buttons, modal titles, and other interactive elements with verbs or longer phrases use Sentence case, where only the first word is capitalized (e.g. Save draft, Merge version, Review changes). This emphasizes actionability and improves readability.
+
+**Action-oriented wording**  
+Use verb-first phrasing for all actionable interface elements. Static or noun-based labels, such as "CSV Export," should be reframed into active, action-oriented text like "Export CSV." Apply sentence case for buttons, menus, and other interactive elements to maintain readability and consistency. Use title case only when the phrase appears as a section heading or title (for example, "CSV Export"). This approach ensures a consistent tone across the interface and reinforces Pimcore's focus on clarity and usability.
+
+</div>
+
+<div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
+<div style={{ textAlign: 'center', marginTop: '1rem' }}>
+  <ImageLightbox
+    src="/media/data-object-writing-style.svg"
+    alt="Examples of the wording style applied in Studio UI"
+    style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
+    captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
+    caption="Examples of the wording style applied in Studio UI"
+  />
+</div>
+</div>
+</div>
+
+<div style={{ marginBottom: '3rem' }}>
+<h2 style={{ marginBottom: '1.5rem' }}>Theme Switch</h2>
+
+<div style={{ fontSize: '14px', marginBottom: '2rem' }}>
+
+Soon, Pimcore Studio will support a true light ⇆ dark mode toggle. The existing color tokens will gain dark-mode variants so users can switch seamlessly between themes without visual disruption. For developers, this also means a stronger foundation for branding, custom theme creation, and easier adaptations - all designed to maintain accessibility and consistency.
+
+</div>
+
+<div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
+<div style={{ textAlign: 'center', marginTop: '1rem' }}>
+  <ImageLightbox
+    src="/media/theme-switch.svg"
+    alt="Theme switch demonstration"
+    style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
+    captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
+  />
+</div>
+</div>
+</div>
+
+<div>
+<h2 style={{ marginBottom: '1.5rem' }}>Additional Documentation</h2>
+
+<div style={{ 
+  padding: '24px', 
+  backgroundColor: '#f8f4ff', 
+  borderRadius: '0 8px 8px 0',
+  borderLeft: '4px solid rgba(114, 46, 209, 0.5)'
+}}>
+  <div style={{ margin: '0', padding: '0', color: '#4a5568', lineHeight: '1.8', fontSize: '14px' }}>
+    <div style={{ marginBottom: '0.75rem', fontSize: '14px' }}>
+      <a href="https://docs.pimcore.com/platform/Studio_UI/" target="_blank" rel="noopener noreferrer" style={{ color: '#1890ff', textDecoration: 'underline', fontWeight: '500', fontSize: '14px' }}>Pimcore Studio UI Documentation</a>
+      <span className="sb-unstyled" style={{ fontSize: '14px' }}> - comprehensive information about Pimcore Studio architecture, development guidelines, and advanced features.</span>
+    </div>
+    <div style={{ fontSize: '14px' }}>
+      <a href="https://ant.design/components/overview" target="_blank" rel="noopener noreferrer" style={{ color: '#1890ff', textDecoration: 'underline', fontWeight: '500', fontSize: '14px' }}>Ant Design Components</a>
+      <span className="sb-unstyled" style={{ fontSize: '14px' }}> - overview of all available foundation components used in Studio UI.</span>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
