@@ -45,6 +45,8 @@ export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): Us
           userKeyBindingsMap.get(defaultBinding.action) || defaultBinding
         )
 
+        // Convert back to array
+        console.log('mergedKeyBindings', mergedKeyBindings)
 
         setMergedKeyBindings(mergedKeyBindings)
       } catch (error) {
