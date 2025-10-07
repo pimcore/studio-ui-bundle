@@ -79,7 +79,7 @@ export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
         onClick={ async () => await updateUserProfile(user) }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )
