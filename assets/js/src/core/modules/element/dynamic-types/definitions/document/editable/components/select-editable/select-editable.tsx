@@ -63,6 +63,7 @@ export const SelectEditable = ({
         optionFilterProp="label"
         options={ options }
         popupClassName={ className }
+        popupMatchSelectWidth={ false }
         showSearch
         style={ containerStyle }
         value={ value }
