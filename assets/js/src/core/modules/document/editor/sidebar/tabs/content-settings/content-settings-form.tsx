@@ -27,6 +27,11 @@ import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import { isNull, isUndefined } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useDocumentPageSnippetChangeMainDocumentMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface ContentSettingsFormProps {
   documentId: number
@@ -48,6 +53,15 @@ export const ContentSettingsForm = ({
   const { getDisplayName } = useLanguageLookup()
   const { document, updateSettingsData, updateProperty, addProperty, properties } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
+  const modal = useFormModal()
+  const [changeMainDocument, { isLoading: isApplyingMainDocument, error: applyingMainDocumentError }] = useDocumentPageSnippetChangeMainDocumentMutation()
+  const { refreshElement } = useElementRefresh('document')
+
+  React.useEffect(() => {
+    if (!isUndefined(applyingMainDocumentError)) {
+      trackError(new ApiError(applyingMainDocumentError))
+    }
+  }, [applyingMainDocumentError])
 
   const titleCountRef = useRef<HTMLSpanElement>(null)
   const descriptionCountRef = useRef<HTMLSpanElement>(null)
@@ -95,6 +109,32 @@ export const ContentSettingsForm = ({
 
     debouncedAutoSave()
   }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave])
+
+  const handleApplyMainDocument = (): void => {
+    const contentMainDocumentPath = document?.settingsData?.contentMainDocumentPath
+
+    if (isNull(contentMainDocumentPath) || isUndefined(contentMainDocumentPath)) {
+      return
+    }
+
+    modal.confirm({
+      title: t('content-main-document.apply-warning-title'),
+      content: t('content-main-document.apply-warning-message'),
+      onOk: async () => {
+        const { data } = await changeMainDocument({
+          id: documentId,
+          changeMainDocument: {
+            mainDocumentPath: contentMainDocumentPath
+          }
+        })
+
+        // Only reload the document if the operation was successful
+        if (!isUndefined(data)) {
+          refreshElement(documentId)
+        }
+      }
+    })
+  }
 
   const languageOptions = [
     { value: '', label: t('none') },
@@ -212,6 +252,20 @@ export const ContentSettingsForm = ({
           name="contentMainDocument"
         >
           <ManyToOneRelation
+            additionalButtons={ (value) =>
+              !isNull(value) && !isUndefined(value)
+                ? (
+                  <IconTextButton
+                    icon={ { value: 'checkmark' } }
+                    loading={ isApplyingMainDocument }
+                    onClick={ handleApplyMainDocument }
+                    type="default"
+                  >
+                    {t('apply')}
+                  </IconTextButton>
+                  )
+                : null
+            }
             allowToClearRelation
             allowedDocumentTypes={ ['page', 'snippet'] }
             documentsAllowed
