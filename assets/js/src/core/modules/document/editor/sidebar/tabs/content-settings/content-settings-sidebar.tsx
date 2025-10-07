@@ -16,9 +16,10 @@ import { type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one
 import { Box } from '@Pimcore/components/box/box'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import { isNull, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { usePropertiesInitialization } from '@Pimcore/modules/element/hooks/use-properties-initialization'
 import { ContentSettingsForm } from './content-settings-form'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const ContentSettingsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -45,10 +46,10 @@ export const ContentSettingsSidebar = (): React.JSX.Element => {
       description: settingsData?.description ?? '',
       language: currentLanguage,
       prettyUrl: settingsData?.prettyUrl ?? '',
-      contentMainDocument: !isUndefined(settingsData?.contentMainDocumentId) && !isNull(settingsData?.contentMainDocumentId)
+      contentMainDocument: !isNil(settingsData?.contentMainDocumentId)
         ? {
           id: settingsData.contentMainDocumentId,
-          type: 'document' as const,
+          type: elementTypes.document,
           fullPath: settingsData.contentMainDocumentPath ?? ''
         } satisfies ManyToOneRelationValueType
         : null

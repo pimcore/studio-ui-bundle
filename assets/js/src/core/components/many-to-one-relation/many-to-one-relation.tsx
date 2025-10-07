@@ -69,6 +69,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   className?: string
   combinedFieldName?: string
   pathFormatterClass?: string
+  additionalButtons?: (value: ManyToOneRelationValueType) => React.ReactNode
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
@@ -209,6 +210,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         )}
+
+        {props.additionalButtons?.(value)}
       </Flex>
     </Flex>
   )
