@@ -41,7 +41,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { user, setModifiedCells } = useUserDraft()
-  const { mergedKeyBindings, isLoading: isMergingKeyBindings } = useMergedKeyBindings(user?.keyBindings)
+  const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
   const { updateUserImageInState } = useUserHelper()
 

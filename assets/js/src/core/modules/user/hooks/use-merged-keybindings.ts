@@ -30,32 +30,30 @@ export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): Us
   const { getDefaultKeyBindings } = useUserManagementHelper()
 
   useEffect(() => {
-    const loadAndMergeKeyBindings = async () => {
+    const loadAndMergeKeyBindings = async (): Promise<void> => {
       try {
         setIsLoading(true)
         const defaultData: UserDefaultKeyBindingsApiResponse = await getDefaultKeyBindings()
 
         // Create a map of user's existing keybindings by action name
         const userKeyBindingsMap = new Map(
-          (userKeyBindings || []).map(binding => [binding.action, binding])
+          (userKeyBindings ?? []).map(binding => [binding.action, binding])
         )
 
-        // Merge: use user's keybinding if exists, otherwise use default
-        const mergedKeyBindings = defaultData.items.map(defaultBinding =>
-          userKeyBindingsMap.get(defaultBinding.action) || defaultBinding
+        const mergedKeyBindings: KeyBindingForAUser[] = defaultData.items.map((defaultBinding: KeyBindingForAUser): KeyBindingForAUser =>
+          userKeyBindingsMap.get(defaultBinding.action) ?? defaultBinding
         )
-
         setMergedKeyBindings(mergedKeyBindings)
       } catch (error) {
         console.error('error loading default key bindings', error)
         // Fallback to user's keybindings only
-        setMergedKeyBindings(userKeyBindings || [])
+        setMergedKeyBindings(userKeyBindings ?? [])
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadAndMergeKeyBindings()
+    void loadAndMergeKeyBindings()
   }, [userKeyBindings])
 
   return {

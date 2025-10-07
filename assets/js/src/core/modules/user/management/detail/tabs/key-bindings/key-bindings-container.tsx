@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
