@@ -207,6 +207,13 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-table-content {
           table {
             width: 100% !important;
+            min-width: 100% !important;
+            table-layout: auto;
+              
+            .ant-table-cell {
+              width: inherit !important;
+              min-width: inherit !important;
+            }
           }
         }
       }
