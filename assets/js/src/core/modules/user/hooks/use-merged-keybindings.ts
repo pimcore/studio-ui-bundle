@@ -22,7 +22,6 @@ interface UseMergedKeyBindingsReturn {
 
 /**
  * Hook that merges user keybindings with default keybindings
- * Uses spread operator approach: defaults first, then user overrides
  */
 export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): UseMergedKeyBindingsReturn => {
   const [mergedKeyBindings, setMergedKeyBindings] = useState<KeyBindingForAUser[]>([])
