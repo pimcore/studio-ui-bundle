@@ -18,8 +18,8 @@ import React from 'react'
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
   label: 'version.label',
-  children: <ComponentRenderer component={componentConfig.dataObject.editor.tab.versions.name} />,
-  icon: <Icon value={'history'} />,
+  children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.versions.name } />,
+  icon: <Icon value={ 'history' } />,
   isDetachable: true,
   hidden: (element): boolean => {
     return !checkElementPermission(element.permissions, 'versions')
@@ -29,8 +29,8 @@ export const TAB_VERSIONS: IEditorTab = {
 export const TAB_PREVIEW: IEditorTab = {
   key: 'preview',
   label: 'preview.label',
-  children: <ComponentRenderer component={componentConfig.dataObject.editor.tab.preview.name} />,
-  icon: <Icon value={'preview'} />,
+  children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.preview.name } />,
+  icon: <Icon value={ 'preview' } />,
   isDetachable: true,
   hidden: (element): boolean => {
     return !(element.hasPreview!)
