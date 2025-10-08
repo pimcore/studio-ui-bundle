@@ -21,9 +21,6 @@ import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { Button } from '@Pimcore/components/button/button'
-import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode

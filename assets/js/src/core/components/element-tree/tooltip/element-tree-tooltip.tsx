@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React from "react"
 import { Tooltip } from "../../tooltip/tooltip"
 import { TreeNodeProps } from "../node/tree-node"
 import { Box } from "@Pimcore/components/box/box"
@@ -14,8 +14,8 @@ export interface ElementTreeTooltipProps {
 export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps): React.JSX.Element => {
   const { t } = useTranslation();
   const element = node.metaData?.asset || node.metaData?.dataObject || node.metaData?.document
-  const isAsset = !!node.metaData?.asset;
-  const hasTooltip = element?.customAttributes?.tooltip;
+  const isAsset = node.metaData?.asset !== undefined;
+  const hasTooltip = element?.customAttributes?.tooltip !== undefined;
   let tooltipTitle = (
     <>
       <div>{t("ID")}: {node.id}</div>
@@ -26,7 +26,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   return (
     <Tooltip overlayStyle={{width: 280}} mouseEnterDelay={ 0.5 } title={
         <Box padding={'extra-small'}>
-          {isAsset && element?.imageThumbnailPath !== undefined && (
+          {isAsset === true && element?.imageThumbnailPath !== undefined && (
             <Box className="w-full" padding={{ bottom: 'extra-small'}}>
               <Flex style={{ maxHeight: 200, overflow: 'hidden' }} className="w-full" justify="center">
                 <Image style={{ maxHeight: 200 }} src={element.imageThumbnailPath} alt={element.filename} />
@@ -47,5 +47,3 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     </Tooltip>
   )
 }
-
-export { ElementTreeTooltip as Tooltip }
