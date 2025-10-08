@@ -135,7 +135,7 @@ export const NewTranslationModal = ({
             onClick={ handleSubmit }
             type="primary"
           >
-            {t('create')}
+            {t('document.translation.new-document-modal.create')}
           </Button>
         </ModalFooter>
       }
@@ -156,7 +156,7 @@ export const NewTranslationModal = ({
         layout="vertical"
       >
         <Form.Item
-          label={ t('language') }
+          label={ t('document.translation.new-document-modal.label.language') }
           name="language"
           rules={ [{ required: true, message: t('form.validation.required') }] }
         >
@@ -167,7 +167,7 @@ export const NewTranslationModal = ({
         </Form.Item>
 
         <Form.Item
-          label={ t('parent') }
+          label={ t('document.translation.new-document-modal.label.parent') }
           name="parent"
           rules={ [{ required: true, message: t('form.validation.required') }] }
         >
