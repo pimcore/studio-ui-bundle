@@ -48,6 +48,7 @@ const defaultComponentConfig = {
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'asset.tree.tooltip' },
       node: {
         meta: {
           type: ComponentType.SLOT,
@@ -91,6 +92,7 @@ const defaultComponentConfig = {
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'dataObject.tree.tooltip' },
       node: {
         meta: {
           type: ComponentType.SLOT,
@@ -127,6 +129,7 @@ const defaultComponentConfig = {
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'document.tree.tooltip' },
       node: {
         meta: {
           type: ComponentType.SLOT,

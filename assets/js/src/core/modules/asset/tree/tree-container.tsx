@@ -67,6 +67,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       renderPager={ PagerContainer }
       rootNode={ rootNode }
       showRoot={ showRoot }
+      tooltipSlotName={ componentConfig.asset.tree.tooltip.name }
     />
   )
 }

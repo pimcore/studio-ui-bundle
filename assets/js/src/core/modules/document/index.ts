@@ -16,6 +16,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TreeContainer } from '@Pimcore/modules/document/tree/tree-container'
+import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/element-tree-tooltip'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeNavigationExcludeIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-navigation-exclude-icon'
@@ -29,6 +30,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'document-tree',
       component: TreeContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.document.tree.tooltip.name,
+      component: ElementTreeTooltip
     })
 
     componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {

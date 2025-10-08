@@ -21,7 +21,6 @@ interface SlotRendererProps {
 export const SlotRenderer = ({ slot, props, onRenderComponent }: SlotRendererProps): React.JSX.Element => {
   const name = slot
   const ComponentRegistry = useComponentRegistry()
-
   const components = ComponentRegistry.getSlotComponents(name)
 
   return (
