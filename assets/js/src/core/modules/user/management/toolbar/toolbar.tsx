@@ -116,7 +116,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )
