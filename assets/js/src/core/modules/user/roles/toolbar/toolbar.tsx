@@ -112,7 +112,7 @@ export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )

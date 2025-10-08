@@ -10,7 +10,7 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
-import React, { createContext, type Dispatch, type SetStateAction, useMemo, useState } from 'react'
+import React, { createContext, useMemo } from 'react'
 
 interface WidgetFormProviderProps {
   children: React.ReactNode
@@ -20,22 +20,17 @@ interface WidgetFormProviderProps {
 export interface WidgetFormContextProps {
   widget: WidgetConfig
   form: ReturnType<typeof Form.useForm>[0]
-  formData: WidgetConfig
-  setFormData: Dispatch<SetStateAction<WidgetConfig>>
 }
 
 export const WidgetFormContext = createContext<WidgetFormContextProps | undefined>(undefined)
 
 export const WidgetFormProvider = ({ children, widget }: WidgetFormProviderProps): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formData, setFormData] = useState<WidgetConfig>(widget)
 
   const contextValue: WidgetFormContextProps = useMemo(() => ({
     widget,
-    form,
-    formData,
-    setFormData
-  }), [widget, form, formData])
+    form
+  }), [widget, form])
 
   return (
     <WidgetFormContext.Provider value={ contextValue }>

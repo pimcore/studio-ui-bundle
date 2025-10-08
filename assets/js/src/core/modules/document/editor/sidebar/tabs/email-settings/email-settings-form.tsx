@@ -28,6 +28,7 @@ interface EmailSettingsFormProps {
     cc: string
     bcc: string
   }
+  hasSavePermission?: boolean
 }
 
 interface SettingsData {
@@ -41,17 +42,22 @@ interface SettingsData {
 
 export const EmailSettingsForm = ({
   documentId,
-  initialValues
+  initialValues,
+  hasSavePermission = true
 }: EmailSettingsFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettingsData } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
   const [form] = Form.useForm()
 
+  const canEdit = hasSavePermission
+
   const handleFormChange = useCallback((changedValues: Partial<SettingsData>) => {
+    if (!canEdit) return
+
     updateSettingsData(changedValues)
     debouncedAutoSave()
-  }, [updateSettingsData, debouncedAutoSave])
+  }, [updateSettingsData, debouncedAutoSave, canEdit])
 
   return (
     <FormKit
@@ -65,7 +71,7 @@ export const EmailSettingsForm = ({
         label={ t('email-settings.subject') }
         name="subject"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
@@ -73,14 +79,14 @@ export const EmailSettingsForm = ({
         label={ t('email-settings.from') }
         name="from"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('email-settings.reply-to') }
         name="replyTo"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <SidebarHeadline
@@ -94,21 +100,21 @@ export const EmailSettingsForm = ({
         label={ t('email-settings.to') }
         name="to"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('email-settings.cc') }
         name="cc"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('email-settings.bcc') }
         name="bcc"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Text type="secondary">

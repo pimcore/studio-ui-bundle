@@ -12,6 +12,7 @@ For practical examples and step-by-step guides on implementing specific features
 - [Services and Dependency Injection](./03_Services_and_Dependency_Injection.md)
 - [Component Registry](./05_Component_Registry.md)
 - [Widget Manager](./06_Widget_Manager.md)
+- [Context Menu Registry](./07_Context_Menu_Registry.md)
 - [Dynamic Types](./08_Dynamic_Types.md)
 - [RTK Query API](./09_RTK_Query_API.md)
 - [SDK Imports](./10_SDK_Imports.md)

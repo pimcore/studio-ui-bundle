@@ -16,28 +16,20 @@ import { Content } from '@Pimcore/components/content/content'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { KeyBindings } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
+import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 
-const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
+const KeyBindingsContainer = (): React.JSX.Element => {
   const [form] = Form.useForm()
   const { id } = useUserManagementContext()
-  const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserManagementDraft(id)
-  const { resetUserKeyBindings, getDefaultKeyBindings } = useUserManagementHelper()
+  const { user, updateUserKeyBinding } = useUserManagementDraft(id)
+  const { resetUserKeyBindings } = useUserManagementHelper()
+  const { mergedKeyBindings, isLoading: isMergingKeyBindings } = useMergedKeyBindings(user?.keyBindings)
 
   const handleOnChange = (name: string, code: object): void => {
     updateUserKeyBinding(name, code)
   }
 
-  if (!isLoading) {
-    if (user?.keyBindings?.length === 0) {
-      getDefaultKeyBindings().then((data) => {
-        changeUserInState({ keyBindings: data.items })
-      }).catch((error) => {
-        console.error('error setting default key bindings', error)
-      })
-    }
-  }
-
-  if (isLoading) {
+  if (isMergingKeyBindings) {
     return <Content loading></Content>
   }
 
@@ -50,7 +42,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
       <KeyBindings
         onChange={ handleOnChange }
         onResetKeyBindings={ async () => await resetUserKeyBindings(id) }
-        values={ user?.keyBindings }
+        values={ mergedKeyBindings }
       />
     </Form>
   )

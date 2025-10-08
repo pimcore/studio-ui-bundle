@@ -16,6 +16,7 @@ import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-d
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { getDocumentSidebarManager } from '../../../../../sidebar/sidebar-manager-helper'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useDocumentEditorSidebarEntries } from '../../../../../shared-tab-manager/tabs/edit/hooks/use-document-editor-sidebar-entries'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Content } from '@sdk/components'
@@ -32,6 +33,10 @@ export const LinkEditContainer = (): React.JSX.Element => {
 
   const { id } = useContext(DocumentContext)
   const { document, updateSettingsData } = useDocumentDraft(id)
+
+  // Check if user has save or publish permissions (need at least one to edit)
+  const canEdit = checkElementPermission(document?.permissions, 'save') ||
+                  checkElementPermission(document?.permissions, 'publish')
 
   const sidebarManager = getDocumentSidebarManager(document?.type)
   const sidebarButtons = sidebarManager.getButtons()
@@ -64,6 +69,8 @@ export const LinkEditContainer = (): React.JSX.Element => {
   }, [document?.settingsData])
 
   const handleLinkTargetChange = (value: ManyToOneRelationValueType): void => {
+    if (!canEdit) return
+
     const settingsDataUpdate: Record<string, any> = {}
 
     if (value === null) {
@@ -93,12 +100,16 @@ export const LinkEditContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout renderSidebar={
-      <Sidebar
-        buttons={ sidebarButtons }
-        entries={ sidebarEntries }
-        sizing="medium"
-        translateTooltips
-      />
+      sidebarEntries.length > 0
+        ? (
+          <Sidebar
+            buttons={ sidebarButtons }
+            entries={ sidebarEntries }
+            sizing="medium"
+            translateTooltips
+          />
+          )
+        : undefined
     }
     >
       <Content padded>
@@ -116,6 +127,7 @@ export const LinkEditContainer = (): React.JSX.Element => {
               allowToClearRelation
               assetsAllowed
               dataObjectsAllowed
+              disabled={ !canEdit }
               documentsAllowed
               onChange={ handleLinkTargetChange }
               showOpenForTextInput

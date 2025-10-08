@@ -9,9 +9,9 @@
  */
 
 import React from 'react'
+import { isNil } from 'lodash'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { NumericEditable } from '../components/numeric-editable/numeric-editable'
-import { isNil } from 'lodash'
 
 export type NumericEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -42,5 +42,9 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
       return props.config?.defaultValue
     }
     return value
+  }
+
+  isEmpty (value: any, props: NumericEditableDefinition): boolean {
+    return isNil(value) || value === ''
   }
 }

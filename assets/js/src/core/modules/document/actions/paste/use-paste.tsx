@@ -12,7 +12,6 @@
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { Element } from '@Pimcore/modules/element/element-helper'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import React from 'react'
@@ -41,28 +40,13 @@ export interface LanguageOption {
 export type LanguageModalType = 'child' | 'recursive' | 'recursive-update-references'
 
 export interface UsePasteHookReturn {
-  pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteRecursiveUpdatingReferencesTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantRecursiveTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteOnlyContentsTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildRecursiveInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsChildInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  isPasteMenuHidden: (node: Element | TreeNodeProps) => boolean
-  isPasteInheritanceMenuHidden: (node: Element | TreeNodeProps) => boolean
+  pasteMenuTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  pasteInheritanceTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const usePaste = (): UsePasteHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { paste } = useCopyPaste('document')
   const { treeId } = useTreeId(true)
   const { getStoredNode } = useTreeCopyPasteContext('document')
   const { isPasteHidden } = usePasteVisibility('document')
@@ -222,18 +206,6 @@ export const usePaste = (): UsePasteHookReturn => {
 
   const isPasteInheritanceMenuHidden = (node: Element | TreeNodeProps): boolean => {
     return isPasteOptionHidden(node)
-  }
-
-  const pasteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
-      label: t('element.tree.paste'),
-      key: ContextMenuActionName.paste,
-      icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOptionHidden(node),
-      onClick: async () => {
-        await paste(parseInt(node.id))
-      }
-    }
   }
 
   const pasteAsChildRecursiveTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -422,22 +394,43 @@ export const usePaste = (): UsePasteHookReturn => {
     }
   }
 
+  const pasteMenuTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value="paste" />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    }
+  }
+
+  const pasteInheritanceTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('document.paste-inheritance'),
+      key: 'paste-inheritance',
+      icon: <Icon value="paste" />,
+      hidden: isPasteInheritanceMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveInheritanceTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node),
+        pasteAsChildInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantInheritanceTreeContextMenuItem(node),
+        pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem(node),
+        pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem(node)
+      ]
+    }
+  }
+
   return {
-    pasteTreeContextMenuItem,
-    pasteAsChildRecursiveTreeContextMenuItem,
-    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
-    pasteAsChildTreeContextMenuItem,
-    pasteAsNewLanguageVariantTreeContextMenuItem,
-    pasteAsNewLanguageVariantRecursiveTreeContextMenuItem,
-    pasteLanguageRecursiveUpdatingReferencesTreeContextMenuItem,
-    pasteOnlyContentsTreeContextMenuItem,
-    pasteAsChildRecursiveInheritanceTreeContextMenuItem,
-    pasteRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
-    pasteAsChildInheritanceTreeContextMenuItem,
-    pasteAsNewLanguageVariantInheritanceTreeContextMenuItem,
-    pasteAsNewLanguageVariantRecursiveInheritanceTreeContextMenuItem,
-    pasteLanguageRecursiveUpdatingReferencesInheritanceTreeContextMenuItem,
-    isPasteMenuHidden,
-    isPasteInheritanceMenuHidden
+    pasteMenuTreeContextMenuItem,
+    pasteInheritanceTreeContextMenuItem
   }
 }

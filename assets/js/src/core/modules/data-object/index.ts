@@ -10,28 +10,36 @@
 
 import '@Pimcore/modules/data-object/editor'
 import '@Pimcore/modules/data-object/tree'
+import '@Pimcore/modules/data-object/listing/decorator/context-menu'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TreeContainer } from '@Pimcore/modules/data-object/tree/tree-container'
-import { componentConfig, type ComponentRegistry } from '../app/component-registry/component-registry'
 import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/element-tree-tooltip'
+import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     widgetRegistryService.registerWidget({
       name: 'data-object-tree',
       component: TreeContainer
     })
 
-    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-
     componentRegistry.register({
       name: componentConfig.dataObject.tree.tooltip.name,
       component: ElementTreeTooltip
+    })
+
+    componentRegistry.registerToSlot(componentConfig.dataObject.tree.node.meta.name, {
+      name: 'lockIcon',
+      component: TreeNodeLockIcon,
+      priority: 100
     })
   }
 })

@@ -8,15 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { find, isNil, isUndefined } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { useEffect, useRef } from 'react'
 import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
-import { isNil } from 'lodash'
+import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -56,7 +58,8 @@ export const useValue = (
   setDisplayedValue: (value: DisplayManyToManyRelationValue | null) => void,
   maxItems: number | null,
   allowMultipleAssignments?: boolean,
-  pathFormatterConfig?: { name: string | undefined, class: string | undefined }
+  pathFormatterConfig?: { name: string | undefined, class: string | undefined },
+  visibleFieldsValue?: Array<Record<string, any> | undefined>
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
   const { formatPath, hasUncachedItems } = useFormatPath()
@@ -128,14 +131,34 @@ export const useValue = (
   function applySearchFilter (items: DisplayManyToManyRelationValue, searchTerm: string): DisplayManyToManyRelationValue {
     if (searchTerm === '') return items
 
+    const normalizedSearch = searchTerm.toLowerCase()
+    const hasVisibleFields = !isNil(visibleFieldsValue)
+
     return items
       .map((item, originalIndex): DisplayManyToManyRelationValueItem => ({ ...item, originalIndex }))
-      .filter((item: DisplayManyToManyRelationValueItem) =>
-        item.fullPath.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.id.toString().includes(searchTerm) ||
-          item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.subtype?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      .filter((item: DisplayManyToManyRelationValueItem) => {
+        let matched: boolean | undefined = false
+
+        if (hasVisibleFields) {
+          const visibleItem = find(visibleFieldsValue, (visibleField) => visibleField?.id === item.id)
+
+          if (!isUndefined(visibleItem)) {
+            matched = Object.values(visibleItem).some((val) =>
+              flattenValues(val).some((str) => str.toLowerCase().includes(normalizedSearch))
+            )
+          }
+        }
+
+        if (!matched) {
+          matched =
+            item.fullPath.toLowerCase().includes(normalizedSearch) ||
+            item.id.toString().includes(searchTerm) ||
+            item.type.toLowerCase().includes(normalizedSearch) ||
+            item.subtype?.toLowerCase().includes(normalizedSearch)
+        }
+
+        return matched
+      })
   }
 
   function applyFormattingWithLoadingState (

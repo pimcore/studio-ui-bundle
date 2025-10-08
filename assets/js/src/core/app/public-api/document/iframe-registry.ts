@@ -51,6 +51,11 @@ class IframeDocumentEditorRegistry {
     return this.iframes.get(documentId)?.contentWindow
   }
 
+  getIframeDocument (documentId: number): Document | undefined {
+    const iframe = this.getIframe(documentId)
+    return iframe?.contentDocument ?? iframe?.contentWindow?.document
+  }
+
   getDocumentEditorApi (documentId: number): PublicApiDocumentEditorIframe {
     const contentWindow = this.getContentWindow(documentId)
     if (isNull(contentWindow)) {

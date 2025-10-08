@@ -9,11 +9,12 @@
  */
 
 import React from 'react'
+import { injectable } from 'inversify'
+import { isObject, has, isNull, isNil } from 'lodash'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { VideoEditable } from '../components/video-editable/video-editable'
 import { type VideoType, type VideoValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
-import { injectable } from 'inversify'
-import { isNull, isNil } from 'lodash'
 
 export type VideoEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -22,6 +23,7 @@ export type VideoEditableDefinition = Omit<AbstractDocumentEditableDefinition, '
     class?: string
     allowedTypes?: VideoType[]
     reload?: boolean
+    required?: boolean
     poster?: string
     title?: string
     description?: string
@@ -120,6 +122,20 @@ export class DynamicTypeDocumentEditableVideo extends DynamicTypeDocumentEditabl
       type: value.type,
       path: value.data ?? undefined
     }
+  }
+
+  isEmpty (value: any, props: VideoEditableDefinition): boolean {
+    if (isObject(value) && has(value, 'type')) {
+      // For asset type, check if there's a valid asset ID
+      if (value.type === 'asset') {
+        return !has(value, 'data') || !has(value.data, 'id') || value.data.id <= 0
+      }
+
+      // For other types (youtube, vimeo, dailymotion), check if there's path data
+      return !has(value, 'data') || !isNonEmptyString(value.data)
+    }
+
+    return true
   }
 
   reloadOnChange (props: VideoEditableDefinition): boolean {

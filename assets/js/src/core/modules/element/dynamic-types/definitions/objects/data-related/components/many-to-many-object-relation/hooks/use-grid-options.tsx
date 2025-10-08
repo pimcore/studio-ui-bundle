@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isObject } from 'lodash'
 import { type ColumnMeta, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
@@ -114,7 +114,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
           }
     }
 
-    const fieldDefinition = 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
+    const fieldDefinition = isObject(column.config) && 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
 
     const advancedDataObjectHeader = getDataObjectHeader(fieldDefinition?.title as string | undefined)
     const defaultDataObjectHeader = getDataObjectHeader(column.title)

@@ -92,7 +92,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const visibleFieldDefinitions: VisibleFieldDefinition[] | undefined = useMemo(() => {
     if (isAvailableGridColumnsLoading) return undefined
 
-    const fieldDefinitions = !isNil(availableGridColumnsData)
+    const fieldDefinitions = !isNil(availableGridColumnsData) && !isEmpty(availableGridColumnsData.columns)
       ? availableGridColumnsData?.columns
       : getDefaultVisibleFieldDefinitions()
 
@@ -174,6 +174,15 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     return [...cachedGridFullData, ...newData]
   }, [cachedGridFullData, gridFullData])
 
+  const visibleFieldsValue = useMemo(() => {
+    return mergedGridFullData.map(item => {
+      return item?.columns?.reduce<Record<string, any>>((acc, col) => {
+        acc[col.key!] = col.value
+        return acc
+      }, {})
+    })
+  }, [mergedGridFullData])
+
   const handleEnrichRowData = useCallback(
     (row: ManyToManyRelationValueItem) => {
       const rowData: GridColumnData[] = mergedGridFullData?.find(item => item.id === row.id)?.columns ?? []
@@ -187,10 +196,11 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     <ManyToManyRelation
       { ...props }
       columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
-      dataObjectsAllowed={ !isEmpty(props.allowedClasses) }
+      dataObjectsAllowed
       enrichRowData={ handleEnrichRowData }
       isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
       value={ props.value }
+      visibleFieldsValue={ visibleFieldsValue }
     />
   )
 }

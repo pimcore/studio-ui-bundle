@@ -13,6 +13,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
@@ -175,6 +176,7 @@ import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardl
 import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 import { DocumentSidebarManager } from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
+import { DocumentRequiredFieldsValidationServiceImpl } from '@Pimcore/modules/document/services/document-required-fields-validation-service'
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
@@ -240,6 +242,9 @@ import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
+// Context menu registry
+container.bind(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']).to(ContextMenuRegistry).inSingletonScope()
+
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
 
@@ -271,6 +276,9 @@ container.bind(serviceIds['Document/Editor/FolderTabManager']).to(FolderTabManag
 container.bind(serviceIds['Document/Editor/HardlinkTabManager']).to(HardlinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/LinkTabManager']).to(LinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/SnippetTabManager']).to(SnippetTabManager).inSingletonScope()
+
+// Document Services
+container.bind(serviceIds['Document/RequiredFieldsValidationService']).to(DocumentRequiredFieldsValidationServiceImpl).inSingletonScope()
 
 // Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()

@@ -23,6 +23,7 @@ import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,6 +49,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
+  const {
+    validateRequiredFields,
+    showValidationErrorModal
+  } = useRequiredFieldsValidation()
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -86,6 +91,14 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (document?.changes === undefined) return
+
+    if (task === SaveTaskType.Publish) {
+      const validationResult = validateRequiredFields(id)
+      if (!validationResult.isValid) {
+        showValidationErrorModal(validationResult.requiredFields)
+        return
+      }
+    }
 
     Promise.all([
       saveDocument(task, () => {
@@ -233,7 +246,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           noSpacing
         />
       )}
-
     </>
   )
 }

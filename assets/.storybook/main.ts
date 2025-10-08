@@ -104,7 +104,10 @@ const config: StorybookConfig = {
     };
   },
 
-  staticDirs: [{from: __dirname + '/../../doc/img', to: 'img'}],
+  staticDirs: [
+    {from: __dirname + '/../../doc/img', to: 'img'},
+    {from: __dirname + '/../js/src/__storybook__/media', to: 'media'}
+  ],
 };
 
 export default config;

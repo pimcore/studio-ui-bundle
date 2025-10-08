@@ -14,15 +14,33 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { isEmpty, isNil } from 'lodash'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
 }
 
+export interface TreeNodeContentMetaProps {
+  node: TreeNodeProps
+}
+
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label, isPublished, isLocked, locked } = props.node
+  const { icon, label, isPublished, elementType } = props.node
   const { styles } = useStyles()
+
+  const getMetaSlotName = (): string => {
+    switch (elementType) {
+      case elementTypes.asset:
+        return componentConfig.asset.tree.node.meta.name
+      case elementTypes.document:
+        return componentConfig.document.tree.node.meta.name
+      case elementTypes.dataObject:
+        return componentConfig.dataObject.tree.node.meta.name
+    }
+    throw new Error(`Unknown element type: ${elementType}`)
+  }
 
   return (
     <Flex
@@ -54,17 +72,12 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
       <Flex
         align='center'
         data-testid={ `tree-node-content-meta-${props.node.id}` }
-        gap={ 'mini' }
         ref={ ref }
       >
-        {isLocked && (
-          <Icon
-            className={ !isNil(locked) && !isEmpty(locked) ? '' : styles.indirectLockedIcon }
-            data-testid={ `tree-node-lock-icon-${props.node.id}` }
-            options={ { width: 14, height: 14 } }
-            value='lock'
-          />
-        )}
+        <SlotRenderer
+          props={ { node: props.node } }
+          slot={ getMetaSlotName() }
+        />
       </Flex>
     </Flex>
   )

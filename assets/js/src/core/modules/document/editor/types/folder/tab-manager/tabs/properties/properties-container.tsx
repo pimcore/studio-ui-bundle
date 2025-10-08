@@ -30,12 +30,16 @@ export const PropertiesContainer = (): React.JSX.Element => {
   return (
     <ContentLayout
       renderSidebar={
-        <Sidebar
-          buttons={ sidebarButtons }
-          entries={ sidebarEntries }
-          sizing="medium"
-          translateTooltips
-        />
+        sidebarEntries.length > 0
+          ? (
+            <Sidebar
+              buttons={ sidebarButtons }
+              entries={ sidebarEntries }
+              sizing="medium"
+              translateTooltips
+            />
+            )
+          : undefined
       }
     >
       <SharedPropertiesContainer />

@@ -18,11 +18,15 @@ import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-d
 import { useDocumentAvailableControllersListQuery, useDocumentAvailableTemplatesListQuery, useDocumentDocTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { DocumentConfigurationForm } from './document-configuration-form'
+import { checkDocumentPermission } from '../../visibility/document-permission-helper'
 
 export const DocumentConfigurationSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(DocumentContext)
+  const context = useContext(DocumentContext)
+  const { id } = context
   const { document } = useDocumentDraft(id)
+
+  const hasSavePermission = checkDocumentPermission(context, 'save') || checkDocumentPermission(context, 'publish')
 
   // Load API data with refetch on mount
   const { data: controllersData, isLoading: isLoadingControllers } = useDocumentAvailableControllersListQuery(undefined, {
@@ -74,6 +78,7 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
             apiData={ apiData }
             documentId={ id }
             documentType={ document?.type }
+            hasSavePermission={ hasSavePermission }
             initialValues={ initialValues }
           />
         )}

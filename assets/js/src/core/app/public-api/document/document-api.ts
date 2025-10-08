@@ -20,6 +20,7 @@ import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 export interface DocumentApi {
   markDraftAsModified: (documentId: number) => void
   getIframeApi: (documentId: number) => PublicApiDocumentEditorIframe
+  getIframeDocument: (documentId: number) => Document | undefined
   isIframeAvailable: (documentId: number) => boolean
   registerIframe: (documentId: number, iframe: HTMLIFrameElement, iframeRef: React.RefObject<IframeRef>) => void
   unregisterIframe: (documentId: number) => void
@@ -41,6 +42,10 @@ class DocumentApiImpl implements DocumentApi {
 
   getIframeApi (documentId: number): PublicApiDocumentEditorIframe {
     return iframeDocumentEditorRegistry.getDocumentEditorApi(documentId)
+  }
+
+  getIframeDocument (documentId: number): Document | undefined {
+    return iframeDocumentEditorRegistry.getIframeDocument(documentId)
   }
 
   isIframeAvailable (documentId: number): boolean {
