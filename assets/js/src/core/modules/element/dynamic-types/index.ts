@@ -428,12 +428,12 @@ moduleSystem.registerModule({
 
     const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry'])
 
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
-    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersSubstring>(serviceIds['DynamicTypes/Grid/Transformers/Substring']))
-    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
-    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
   }
 })

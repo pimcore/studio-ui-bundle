@@ -517,13 +517,13 @@ container.bind(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']).to(Dy
 
 // Advanced columns transformers
 container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicTypePipelineGridTransformersTrim).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']).to(DynamicTypePipelineGridTransformersStringReplace).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Substring']).to(DynamicTypePipelineGridTransformersSubstring).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicTypePipelineGridTransformersTrim).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

@@ -296,13 +296,13 @@ export const serviceIds = {
   'DynamicTypes/Grid/SourceFields/RelationField': 'DynamicTypes/Grid/SourceFields/RelationField',
 
   // Advanced Columns transformers
+  'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
+  'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/Transformers/Combine',
-  'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
   'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
   'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
-  'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
-  'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
+  'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
