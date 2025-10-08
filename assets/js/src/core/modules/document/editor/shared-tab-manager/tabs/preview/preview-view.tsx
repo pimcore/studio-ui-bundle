@@ -24,6 +24,11 @@ export const PreviewView = (): React.JSX.Element => {
   const { id: contextId } = useContext(DocumentContext)
   const { document } = useDocumentDraft(contextId)
 
+
+  const sidebarManager = getDocumentSidebarManager(document?.type)
+  const sidebarButtons = sidebarManager.getButtons()
+  const sidebarEntries = useDocumentEditorSidebarEntries()
+
   const isEditTabHidden = !checkElementPermission(document?.permissions, 'save') &&
                           !checkElementPermission(document?.permissions, 'publish')
 
@@ -32,10 +37,6 @@ export const PreviewView = (): React.JSX.Element => {
   if (!showSidebar) {
     return <DocumentPreview id={ id } />
   }
-
-  const sidebarManager = getDocumentSidebarManager(document?.type)
-  const sidebarButtons = sidebarManager.getButtons()
-  const sidebarEntries = useDocumentEditorSidebarEntries()
 
   return (
     <ContentLayout
