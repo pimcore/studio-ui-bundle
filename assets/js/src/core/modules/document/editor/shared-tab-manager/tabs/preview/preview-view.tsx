@@ -24,7 +24,6 @@ export const PreviewView = (): React.JSX.Element => {
   const { id: contextId } = useContext(DocumentContext)
   const { document } = useDocumentDraft(contextId)
 
-
   const sidebarManager = getDocumentSidebarManager(document?.type)
   const sidebarButtons = sidebarManager.getButtons()
   const sidebarEntries = useDocumentEditorSidebarEntries()
