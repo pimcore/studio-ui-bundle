@@ -177,6 +177,7 @@ import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipe
 import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
 import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
 import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipelines/grid/transformers/types/trim/trim'
+import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -425,5 +426,6 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
   }
 })

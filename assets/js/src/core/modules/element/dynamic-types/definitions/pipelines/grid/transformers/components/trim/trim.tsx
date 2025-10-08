@@ -28,7 +28,7 @@ export const DynamicTypePipelineGridTransformersTrimComponent = (): React.JSX.El
   return (
     <Form.Item
       initialValue={ modeOptions[0].value }
-      label={ t('mode') }
+      label={ t('grid.advanced-column.trim') }
       name={ 'mode' }
     >
       <Select
