@@ -39,7 +39,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const { getDisplayName } = useLanguageLookup()
   const [deleteTranslation, { error: deleteError }] = useDocumentDeleteTranslationMutation()
   const [addTranslation, { error: addError }] = useDocumentAddTranslationMutation()
-  const [addDocument] = useDocumentAddMutation()
+  const [addDocument, { error: addDocumentError }] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
   const [isNewTranslationModalOpen, setIsNewTranslationModalOpen] = useState(false)
@@ -77,6 +77,12 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       trackError(new ApiError(translationsError))
     }
   }, [translationsError])
+
+  useEffect(() => {
+    if (!isUndefined(addDocumentError)) {
+      trackError(new ApiError(addDocumentError))
+    }
+  }, [addDocumentError])
 
   const translationContextMenuItem = (onFinish?: () => void): ItemType => {
     const translationLinks = translations?.translationLinks ?? []
