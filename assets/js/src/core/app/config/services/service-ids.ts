@@ -297,6 +297,7 @@ export const serviceIds = {
 
   // Advanced Columns transformers
   'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
+  'DynamicTypes/Grid/Transformers/DateFormatter': 'DynamicTypes/Grid/Transformers/DateFormatter',
   'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/Transformers/Combine',

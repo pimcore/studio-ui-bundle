@@ -181,6 +181,7 @@ import { type DynamicTypePipelineGridTransformersStringReplace } from './definit
 import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
 import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
 import { type DynamicTypePipelineGridTransformersBooleanFormatter } from './definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
+import { type DynamicTypePipelineGridTransformersDateFormatter } from './definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -429,6 +430,7 @@ moduleSystem.registerModule({
     const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry'])
 
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersDateFormatter>(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))

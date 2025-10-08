@@ -202,6 +202,7 @@ import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modul
 import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
 import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
 import { DynamicTypePipelineGridTransformersBooleanFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
+import { DynamicTypePipelineGridTransformersDateFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { DynamicTypePipelineGridSourceFieldsSimpleField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { DynamicTypePipelineGridSourceFieldsRelationField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -518,6 +519,7 @@ container.bind(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']).to(Dy
 // Advanced columns transformers
 container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']).to(DynamicTypePipelineGridTransformersDateFormatter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
