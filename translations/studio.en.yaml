@@ -1254,6 +1254,13 @@ document.translation.open-translation: Open Translation
 document.translation.link-existing-document: Link existing Document
 document.translation.unlink-existing-document: Unlink existing Document
 document.translation.all-translations: All Translations
+document.translation.new-document: New Document
+document.translation.use-inheritance: Using inheritance
+document.translation.new-document-with-inheritance.modal-title: New Document (using inheritance)
+document.translation.new-document-blank.modal-title: New Document (blank)
+document.translation.new-document-modal.label.parent: Parent
+document.translation.new-document-modal.label.language: Language
+document.translation.new-document-modal.create: Create
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type

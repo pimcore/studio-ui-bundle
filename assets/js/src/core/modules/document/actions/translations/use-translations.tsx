@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
-import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
@@ -23,7 +24,10 @@ import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-hold
 import { uuid } from '@Pimcore/utils/uuid'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { LinkTranslationModal } from './components/link-translation-modal'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { NewTranslationModal, type NewTranslationFormValues } from './components/new-translation-modal'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseTranslationsHookReturn {
   translationContextMenuItem: (onFinish?: () => void) => ItemType
@@ -35,19 +39,26 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const { getDisplayName } = useLanguageLookup()
   const [deleteTranslation, { error: deleteError }] = useDocumentDeleteTranslationMutation()
   const [addTranslation, { error: addError }] = useDocumentAddTranslationMutation()
+  const [addDocument, { error: addDocumentError }] = useDocumentAddMutation()
+  const dispatch = useAppDispatch()
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
+  const [isNewTranslationModalOpen, setIsNewTranslationModalOpen] = useState(false)
+  const [useInheritance, setUseInheritance] = useState(false)
   const [selectedDocument, setSelectedDocument] = useState<ManyToOneRelationValue | null>(null)
   const [currentDocument, setCurrentDocument] = useState<Element | null>(null)
   const [currentOnFinish, setCurrentOnFinish] = useState<(() => void) | null>(null)
   const { addModal, removeModal } = useModalHolder()
 
-  const MODAL_ID = useMemo(() => `translation-modal-${uuid()}`, [])
+  const LINK_MODAL_ID = useMemo(() => `link-translation-modal-${uuid()}`, [])
+  const NEW_MODAL_ID = useMemo(() => `new-translation-modal-${uuid()}`, [])
 
   const { data: translations, error: translationsError } = useDocumentGetTranslationsQuery({
     id: document.id
   }, {
     skip: isNil(document.id)
   })
+
+  const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
 
   useEffect(() => {
     if (!isUndefined(deleteError)) {
@@ -67,6 +78,12 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     }
   }, [translationsError])
 
+  useEffect(() => {
+    if (!isUndefined(addDocumentError)) {
+      trackError(new ApiError(addDocumentError))
+    }
+  }, [addDocumentError])
+
   const translationContextMenuItem = (onFinish?: () => void): ItemType => {
     const translationLinks = translations?.translationLinks ?? []
 
@@ -76,12 +93,17 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
 
     const hasLinkedTranslations = !isEmpty(otherTranslations)
 
+    // Check if the document type is translatable
+    const documentTypeInfo = docTypeTypes?.items?.find(type => type.name === document.type)
+    const isTranslatable = documentTypeInfo?.translatable ?? false
+    const isTranslatableInheritance = documentTypeInfo?.translatableInheritance ?? false
+
     const translationItems: ItemType[] = []
 
     translationItems.push({
       label: t('document.translation.link-existing-document'),
       key: 'link-existing-document',
-      icon: <Icon value="document-link" />,
+      icon: <Icon value="link-document" />,
       onClick: () => {
         setCurrentDocument(document)
         setCurrentOnFinish(() => onFinish)
@@ -141,10 +163,43 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       translationItems.push({
         label: t('document.translation.unlink-existing-document'),
         key: 'unlink-existing-document',
-        icon: <Icon value="trash" />,
+        icon: <Icon value="unlink-document" />,
         children: unlinkTranslationItems
       })
     }
+
+    // Add the new document translation menu item with subItems
+    translationItems.push({
+      label: t('document.translation.new-document'),
+      key: 'new-document',
+      hidden: !isTranslatable,
+      icon: <Icon value="new-document" />,
+      children: [
+        {
+          label: t('document.translation.use-inheritance'),
+          key: 'new-document-inheritance',
+          hidden: !isTranslatableInheritance,
+          icon: <Icon value="inheritance-active" />,
+          onClick: () => {
+            setCurrentDocument(document)
+            setCurrentOnFinish(() => onFinish)
+            setUseInheritance(true)
+            setIsNewTranslationModalOpen(true)
+          }
+        },
+        {
+          label: `> ${t('blank')}`,
+          key: 'new-document-blank',
+          icon: <Icon value="blank" />,
+          onClick: () => {
+            setCurrentDocument(document)
+            setCurrentOnFinish(() => onFinish)
+            setUseInheritance(false)
+            setIsNewTranslationModalOpen(true)
+          }
+        }
+      ]
+    })
 
     return {
       label: t('document.translation.title'),
@@ -171,15 +226,54 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     }
   }
 
+  const handleNewTranslationSubmit = async (values: NewTranslationFormValues): Promise<void> => {
+    try {
+      // Create new document with translation parameters
+      const parentId = values.parent?.id ?? 1
+      const response = await addDocument({
+        parentId,
+        documentAddParameters: {
+          key: values.key,
+          type: document.type, // Use the same type as the current document
+          title: values.title,
+          navigationName: values.navigation,
+          docTypeId: null,
+          language: values.language,
+          translationsSourceId: Number(document.id),
+          inheritanceSourceId: useInheritance ? Number(document.id) : null
+        }
+      }).unwrap()
+
+      if (!isNull(response?.id)) {
+        // Open the new document
+        await openDocument({
+          config: {
+            id: response.id
+          }
+        })
+        dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
+      }
+
+      setIsNewTranslationModalOpen(false)
+
+      if (!isNull(currentOnFinish)) {
+        currentOnFinish()
+      }
+    } catch {
+      trackError(new GeneralError('Error creating translation document'))
+    }
+  }
+
   const handleModalClose = (): void => {
     setSelectedDocument(null)
     setIsLinkModalOpen(false)
     setCurrentOnFinish(null)
+    setIsNewTranslationModalOpen(false)
   }
 
   useEffect(() => {
     if (isLinkModalOpen && !isNull(currentDocument)) {
-      addModal(MODAL_ID, (
+      addModal(LINK_MODAL_ID, (
         <LinkTranslationModal
           isOpen={ isLinkModalOpen }
           onClose={ handleModalClose }
@@ -189,13 +283,33 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         />
       ))
     } else {
-      removeModal(MODAL_ID)
+      removeModal(LINK_MODAL_ID)
     }
 
     return () => {
-      removeModal(MODAL_ID)
+      removeModal(LINK_MODAL_ID)
     }
   }, [isLinkModalOpen, currentDocument, selectedDocument])
+
+  useEffect(() => {
+    if (isNewTranslationModalOpen) {
+      addModal(NEW_MODAL_ID, (
+        <NewTranslationModal
+          currentDocument={ currentDocument }
+          isOpen={ isNewTranslationModalOpen }
+          onClose={ handleModalClose }
+          onSubmit={ handleNewTranslationSubmit }
+          useInheritance={ useInheritance }
+        />
+      ))
+    } else {
+      removeModal(NEW_MODAL_ID)
+    }
+
+    return () => {
+      removeModal(NEW_MODAL_ID)
+    }
+  }, [isNewTranslationModalOpen, useInheritance])
 
   return {
     translationContextMenuItem
