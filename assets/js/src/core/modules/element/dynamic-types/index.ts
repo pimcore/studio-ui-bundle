@@ -180,6 +180,7 @@ import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipe
 import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
 import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { type DynamicTypePipelineGridTransformersBooleanFormatter } from './definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
 import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -433,5 +434,6 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersSubstring>(serviceIds['DynamicTypes/Grid/Transformers/Substring']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
   }
 })

@@ -88,7 +88,7 @@ document.tree.context-menu.add-email: Add Email
 document.tree.context-menu.add-link: Add Link
 document.tree.context-menu.add-hardlink: Add Hardlink
 document.required-fields.validation-title: Required Fields Missing
-document.required-fields.validation-message: The following required fields must be filled before publishing:
+document.required-fields.validation-message: The following required fields must be filled before publishing
 document.site.remove-site: Remove Site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
 document.site.use-as-site: Use as Site
@@ -202,6 +202,8 @@ grid.advanced-column.find: Find
 grid.advanced-column.replace: Replace
 grid.advanced-column.start: Start
 grid.advanced-column.length: Length
+grid.advanced-column.trueLabel: True Label
+grid.advanced-column.falseLabel: False Label
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
 grid.advanced-column.advancedColumns.staticText: Static text

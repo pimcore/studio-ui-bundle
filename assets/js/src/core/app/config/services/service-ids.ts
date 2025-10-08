@@ -302,6 +302,7 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
   'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
   'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
+  'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',

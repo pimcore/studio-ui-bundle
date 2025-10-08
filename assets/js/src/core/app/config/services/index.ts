@@ -201,6 +201,7 @@ import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/elemen
 import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
 import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { DynamicTypePipelineGridTransformersBooleanFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
 import { DynamicTypePipelineGridSourceFieldsSimpleField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { DynamicTypePipelineGridSourceFieldsRelationField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -522,6 +523,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']).to(DynamicTypePipelineGridTransformersStringReplace).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Substring']).to(DynamicTypePipelineGridTransformersSubstring).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
