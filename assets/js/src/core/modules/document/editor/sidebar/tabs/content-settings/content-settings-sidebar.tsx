@@ -18,15 +18,22 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { isNil, isUndefined } from 'lodash'
 import { usePropertiesInitialization } from '@Pimcore/modules/element/hooks/use-properties-initialization'
+import { checkDocumentPermission } from '../../visibility/document-permission-helper'
 import { ContentSettingsForm } from './content-settings-form'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const ContentSettingsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(DocumentContext)
+  const context = useContext(DocumentContext)
+  const { id } = context
   const { document } = useDocumentDraft(id)
 
-  const { data: propertiesData, isLoading: isLoadingProperties } = usePropertiesInitialization()
+  const hasPropertiesPermission = checkDocumentPermission(context, 'properties')
+  const hasSavePermission = checkDocumentPermission(context, 'save') || checkDocumentPermission(context, 'publish')
+
+  const { data: propertiesData, isLoading: isLoadingProperties } = usePropertiesInitialization({
+    skip: !hasPropertiesPermission
+  })
 
   const languageProperty = propertiesData?.items?.find(prop => prop.key === 'language')
   const currentLanguage = languageProperty?.data ?? ''
@@ -56,7 +63,7 @@ export const ContentSettingsSidebar = (): React.JSX.Element => {
     }
   }, [document?.settingsData, currentLanguage])
 
-  const isDataReady = !isLoadingProperties && !isUndefined(propertiesData)
+  const isDataReady = hasPropertiesPermission ? (!isLoadingProperties && !isUndefined(propertiesData)) : true
 
   return (
     <Content loading={ !isDataReady }>
@@ -67,6 +74,8 @@ export const ContentSettingsSidebar = (): React.JSX.Element => {
       <Box padding={ { x: 'extra-small', bottom: 'small' } }>
         <ContentSettingsForm
           documentId={ id }
+          hasPropertiesPermission={ hasPropertiesPermission }
+          hasSavePermission={ hasSavePermission }
           initialValues={ initialValues }
         />
       </Box>

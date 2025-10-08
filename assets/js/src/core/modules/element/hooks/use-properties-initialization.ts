@@ -18,18 +18,24 @@ import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/mod
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
+interface UsePropertiesInitializationOptions {
+  skip?: boolean
+}
+
 interface UsePropertiesInitializationReturn {
   data: { items?: DataPropertyApi[] } | undefined
   isLoading: boolean
 }
 
-export const usePropertiesInitialization = (): UsePropertiesInitializationReturn => {
+export const usePropertiesInitialization = (options?: UsePropertiesInitializationOptions): UsePropertiesInitializationReturn => {
   const { elementType, id } = useElementContext()
   const { element, setProperties } = useElementDraft(id, elementType)
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
+  }, {
+    skip: options?.skip
   })
 
   const enrichProperties = (apiProperties: DataPropertyApi[]): DataProperty[] => {

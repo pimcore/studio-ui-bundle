@@ -22,6 +22,7 @@ import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import { isNull, isUndefined } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface NavigationFormProps {
   initialValues: NavigationFormValues
@@ -45,8 +46,11 @@ export const NavigationForm = ({
 }: NavigationFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id: documentId } = useContext(DocumentContext)
-  const { properties, updateProperty, addProperty } = useDocumentDraft(documentId)
+  const { properties, updateProperty, addProperty, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
+
+  const canEdit = checkElementPermission(document?.permissions, 'save') ||
+                  checkElementPermission(document?.permissions, 'publish')
 
   const getNavigationProperty = (key: string): DataProperty | undefined => {
     return !isNull(properties) && !isUndefined(properties)
@@ -82,10 +86,12 @@ export const NavigationForm = ({
   }, [getNavigationProperty, updateProperty, addProperty, debouncedAutoSave])
 
   const handleFormChange = useCallback((changedValues: Record<string, any>) => {
+    if (!canEdit) return
+
     Object.entries(changedValues).forEach(([key, value]) => {
       updateNavigationProperty(key, value)
     })
-  }, [updateNavigationProperty])
+  }, [updateNavigationProperty, canEdit])
 
   return (
     <FormKit
@@ -99,14 +105,14 @@ export const NavigationForm = ({
         label={ t('navigation.name') }
         name="navigation_name"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('link.title') }
         name="navigation_title"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
@@ -114,6 +120,7 @@ export const NavigationForm = ({
         name="navigation_target"
       >
         <Select
+          disabled={ !canEdit }
           options={ [
             { label: t('link.not-set'), value: '' },
             { label: '_self', value: '_self' },
@@ -128,14 +135,17 @@ export const NavigationForm = ({
         name="navigation_exclude"
         valuePropName="checked"
       >
-        <Switch labelRight={ t('navigation.exclude') } />
+        <Switch
+          disabled={ !canEdit }
+          labelRight={ t('navigation.exclude') }
+        />
       </Form.Item>
 
       <Form.Item
         label={ t('link.rel') }
         name="navigation_relation"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <SidebarHeadline
@@ -149,35 +159,38 @@ export const NavigationForm = ({
         label={ t('link.class') }
         name="navigation_class"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('link.anchor') }
         name="navigation_anchor"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('link.parameters') }
         name="navigation_parameters"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
 
       <Form.Item
         label={ t('link.accesskey') }
         name="navigation_accesskey"
       >
-        <Input maxLength={ 1 } />
+        <Input
+          disabled={ !canEdit }
+          maxLength={ 1 }
+        />
       </Form.Item>
 
       <Form.Item
         label={ t('link.tabindex') }
         name="navigation_tabindex"
       >
-        <Input />
+        <Input disabled={ !canEdit } />
       </Form.Item>
     </FormKit>
   )

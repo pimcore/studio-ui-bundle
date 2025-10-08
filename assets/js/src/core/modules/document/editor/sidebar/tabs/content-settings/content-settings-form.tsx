@@ -42,11 +42,15 @@ interface ContentSettingsFormProps {
     prettyUrl: string
     contentMainDocument: ManyToOneRelationValueType | null
   }
+  hasPropertiesPermission?: boolean
+  hasSavePermission?: boolean
 }
 
 export const ContentSettingsForm = ({
   documentId,
-  initialValues
+  initialValues,
+  hasPropertiesPermission = true,
+  hasSavePermission = true
 }: ContentSettingsFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
@@ -63,6 +67,8 @@ export const ContentSettingsForm = ({
     }
   }, [applyingMainDocumentError])
 
+  const canEdit = hasSavePermission
+
   const titleCountRef = useRef<HTMLSpanElement>(null)
   const descriptionCountRef = useRef<HTMLSpanElement>(null)
 
@@ -75,6 +81,8 @@ export const ContentSettingsForm = ({
   const languageProperty = !isNull(properties) && !isUndefined(properties) ? properties.find(prop => prop.key === 'language' && !prop.inherited) : undefined
 
   const handleFormChange = useCallback((changedValues: Record<string, any>, allValues: Record<string, any>) => {
+    if (!canEdit) return
+
     const { language, contentMainDocument, ...settingsDataChanges } = changedValues
 
     if (!isUndefined(language)) {
@@ -108,7 +116,7 @@ export const ContentSettingsForm = ({
     }
 
     debouncedAutoSave()
-  }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave])
+  }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave, canEdit])
 
   const handleApplyMainDocument = (): void => {
     const contentMainDocumentPath = document?.settingsData?.contentMainDocumentPath
@@ -177,6 +185,7 @@ export const ContentSettingsForm = ({
             ] }
           >
             <Input
+              disabled={ !canEdit }
               onChange={ (e) => {
                 updateCharCount(titleCountRef, e.target.value.length)
               } }
@@ -192,35 +201,39 @@ export const ContentSettingsForm = ({
           >
             <TextArea
               autoSize={ { minRows: 3, maxRows: 8 } }
+              disabled={ !canEdit }
               onChange={ (e) => { updateCharCount(descriptionCountRef, e.target.value.length) } }
             />
           </Form.Item>
         </>
       )}
 
-      <Form.Item
-        label={
-          document?.type === 'page'
-            ? (
-              <SidebarHeadline
-                asFormLabel
-                withBorder
-              >
-                {t('language')}
-              </SidebarHeadline>
-              )
-            : (
-                t('language')
-              )
-        }
-        name="language"
-      >
-        <Select
-          labelRender={ (option) => renderLanguageOption(option) }
-          optionRender={ (option) => renderLanguageOption(option) }
-          options={ languageOptions }
-        />
-      </Form.Item>
+      {hasPropertiesPermission && (
+        <Form.Item
+          label={
+            document?.type === 'page'
+              ? (
+                <SidebarHeadline
+                  asFormLabel
+                  withBorder
+                >
+                  {t('language')}
+                </SidebarHeadline>
+                )
+              : (
+                  t('language')
+                )
+          }
+          name="language"
+        >
+          <Select
+            disabled={ !canEdit }
+            labelRender={ (option) => renderLanguageOption(option) }
+            optionRender={ (option) => renderLanguageOption(option) }
+            options={ languageOptions }
+          />
+        </Form.Item>
+      )}
 
       {document?.type === 'page' && (
         <Form.Item
@@ -235,7 +248,7 @@ export const ContentSettingsForm = ({
             }
           name="prettyUrl"
         >
-          <Input />
+          <Input disabled={ !canEdit } />
         </Form.Item>
       )}
 
@@ -268,6 +281,7 @@ export const ContentSettingsForm = ({
             }
             allowToClearRelation
             allowedDocumentTypes={ ['page', 'snippet'] }
+            disabled={ !canEdit }
             documentsAllowed
             vertical
           />

@@ -23,7 +23,11 @@ export const TAB_EDIT: IEditorTab = {
   label: 'edit.label',
   children: <EditContainer />,
   icon: <Icon value={ 'edit-pen' } />,
-  isDetachable: true
+  isDetachable: false,
+  hidden: (element): boolean => {
+    return !checkElementPermission(element.permissions, 'save') &&
+           !checkElementPermission(element.permissions, 'publish')
+  }
 }
 
 export const TAB_VERSIONS: IEditorTab = {

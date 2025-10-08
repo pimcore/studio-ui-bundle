@@ -17,6 +17,7 @@ import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import type {
   DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil, isUndefined } from 'lodash'
 
 export enum SaveTaskType {
@@ -91,6 +92,16 @@ export class DocumentSaveTaskManager {
     onFinish?: () => void,
     useDraftData: boolean = true
   ): Promise<void> {
+    // Skip auto-save if user doesn't have save permission
+    if (task === SaveTaskType.AutoSave) {
+      const state = store.getState()
+      const document = selectDocumentById(state, this.documentId)
+
+      if (!checkElementPermission(document?.permissions, 'save')) {
+        return
+      }
+    }
+
     // Handle task queuing logic
     if (this.runningTask != null) {
       if (task === SaveTaskType.AutoSave) {
