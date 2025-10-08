@@ -175,7 +175,6 @@ export const NewTranslationModal = ({
             allowToClearRelation
             disabled={ isParentLoading }
             documentsAllowed
-            onChange={ (value) => { form.setFieldValue('parent', value) } }
           />
         </Form.Item>
 
