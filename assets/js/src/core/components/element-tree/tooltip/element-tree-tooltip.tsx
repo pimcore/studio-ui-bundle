@@ -25,7 +25,8 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const { t } = useTranslation()
   const element: Record<string, any> | undefined = node.metaData?.asset ?? node.metaData?.dataObject ?? node.metaData?.document
   const isAsset = node.metaData?.asset !== undefined
-  const hasTooltip = element?.customAttributes?.tooltip !== undefined
+  const hasTooltip = element?.customAttributes?.tooltip !== null
+
   const tooltipTitle = (
     <>
       <div>{t('ID')}: {node.id}</div>
