@@ -252,24 +252,26 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       data-testid={ createNodeTestId(parseInt(id, 10), props.elementType) }
       ref={ forwardRef }
     >
-      {!isNil(tooltipSlotName) ? (
-        <ComponentRenderer 
-          component={ tooltipSlotName}
-          props={ { 
-            node: treeNodeProps,
-            children: (
-              <div className="tree-node__content">
-                {wrapNode(nodeContent)}
-              </div>
-            )
-          } } 
-        />
-      ) : (
-        <div className="tree-node__content">
-          {wrapNode(nodeContent)}
-        </div>
-      )}
-        
+      {!isNil(tooltipSlotName)
+        ? (
+          <ComponentRenderer
+            component={ tooltipSlotName }
+            props={ {
+              node: treeNodeProps,
+              children: (
+                <div className="tree-node__content">
+                  {wrapNode(nodeContent)}
+                </div>
+              )
+            } }
+          />
+          )
+        : (
+          <div className="tree-node__content">
+            {wrapNode(nodeContent)}
+          </div>
+          )}
+
       {isExpanded && (
         <TreeList node={ treeNodeProps } />
       )}

@@ -16,7 +16,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TreeContainer } from '@Pimcore/modules/document/tree/tree-container'
-import { componentConfig, ComponentRegistry } from '../app/component-registry/component-registry'
+import { componentConfig, type ComponentRegistry } from '../app/component-registry/component-registry'
 import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/element-tree-tooltip'
 
 moduleSystem.registerModule({
@@ -28,7 +28,7 @@ moduleSystem.registerModule({
       component: TreeContainer
     })
 
-    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry']);
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
       name: componentConfig.document.tree.tooltip.name,
