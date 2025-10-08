@@ -205,6 +205,7 @@ grid.advanced-column.length: Length
 grid.advanced-column.trueLabel: True Label
 grid.advanced-column.falseLabel: False Label
 grid.advanced-column.format: Format
+grid.advanced-column.delimiter: Delimiter
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
 grid.advanced-column.advancedColumns.staticText: Static text
