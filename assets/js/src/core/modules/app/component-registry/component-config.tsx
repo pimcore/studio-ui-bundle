@@ -47,7 +47,8 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'asset.tree.tooltip' }
     }
   },
   dataObject: {
@@ -74,7 +75,8 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'dataObject.tree.tooltip' }
     }
   },
   document: {
@@ -101,7 +103,8 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'document.tree.tooltip' }
     }
   },
   leftSidebar: {

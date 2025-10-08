@@ -15,6 +15,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TreeContainer } from '@Pimcore/modules/data-object/tree/tree-container'
+import { componentConfig, ComponentRegistry } from '../app/component-registry/component-registry'
+import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/element-tree-tooltip'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -23,6 +25,13 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'data-object-tree',
       component: TreeContainer
+    })
+
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry']);
+    
+    componentRegistry.register({
+      name: componentConfig.dataObject.tree.tooltip.name,
+      component: ElementTreeTooltip
     })
   }
 })
