@@ -67,7 +67,7 @@ export const NewTranslationModal = ({
       label: `${getDisplayName(locale)} [${locale}]`
     }))
 
-  const { data: translationParentData } = useDocumentGetTranslationParentByLanguageQuery(
+  const { data: translationParentData, error: translationParentError, isLoading: isLoadingParent, isFetching: isFetchingParent } = useDocumentGetTranslationParentByLanguageQuery(
     {
       id: currentDocument?.id ?? 0,
       language: selectedLanguage
@@ -75,16 +75,21 @@ export const NewTranslationModal = ({
     { skip: selectedLanguage === '' || isNil(currentDocument?.id) }
   )
 
+  const isParentLoading = isLoadingParent || isFetchingParent
+
   // Auto-preselect parent when translation parent data is available and contains fullPath
   useEffect(() => {
-    if (!isNil(translationParentData?.fullPath) && !isNil(translationParentData?.id)) {
+    if (!isNil(translationParentError)) {
+      // Reset parent field when there's an error (no translation parent found)
+      form.setFieldValue('parent', null)
+    } else if (!isNil(translationParentData?.fullPath) && !isNil(translationParentData?.id)) {
       form.setFieldValue('parent', {
         id: translationParentData.id,
         type: 'document',
         fullPath: translationParentData.fullPath
       })
     }
-  }, [translationParentData, form])
+  }, [translationParentData, translationParentError, form])
 
   const handleSubmit = async (): Promise<void> => {
     setIsSubmitting(true)
@@ -106,7 +111,6 @@ export const NewTranslationModal = ({
   }
 
   const handleLanguageChange = (language: string): void => {
-    form.setFieldValue('language', language)
     setSelectedLanguage(language)
     // Reset parent field when language changes - it will be auto-filled by useEffect if translation parent exists
     form.setFieldValue('parent', null)
@@ -169,6 +173,7 @@ export const NewTranslationModal = ({
         >
           <ManyToOneRelation
             allowToClearRelation
+            disabled={ isParentLoading }
             documentsAllowed
             onChange={ (value) => { form.setFieldValue('parent', value) } }
           />
