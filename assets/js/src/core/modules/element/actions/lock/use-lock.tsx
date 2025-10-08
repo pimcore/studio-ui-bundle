@@ -209,7 +209,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     if (!isTreeActionAllowed(TreePermission.Lock) || !user.isAdmin) {
       return true
     }
-    
+
     return node.isLocked && !isNodeInheritedLocked(node)
   }
 
@@ -217,7 +217,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     if (!isTreeActionAllowed(TreePermission.LockAndPropagate) || !user.isAdmin) {
       return true
     }
-    
+
     return isNodeDirectlyLocked(node)
   }
 
