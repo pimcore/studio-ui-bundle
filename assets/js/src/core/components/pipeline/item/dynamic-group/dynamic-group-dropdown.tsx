@@ -16,6 +16,8 @@ import React from 'react'
 import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'
 import { type DynamicTypePipelineAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-abstract'
 import { useTranslation } from 'react-i18next'
+import { useTransformersMenuItems } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/hooks/use-transformers-menu-items'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface DynamicGroupDropdownProps {
   children: React.ReactNode
@@ -32,15 +34,21 @@ export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: Dynami
     return dynamicType.isAvailableForSelection(config)
   })
 
-  const items: DropdownProps['menu']['items'] = availableDynamicTypes.map((dynamicType) => ({
-    key: dynamicType.id,
-    label: t(`grid.advanced-column.advancedColumns.${dynamicType.id}`),
-    onClick: () => {
-      operations.add({
-        key: dynamicType.id
-      })
-    }
-  }))
+  const { transformersMenuItems } = useTransformersMenuItems(availableDynamicTypes)
+
+  const isTransformersRegistry = dynamicTypeRegistryId === serviceIds['DynamicTypes/Grid/TransformersRegistry']
+
+  const items: DropdownProps['menu']['items'] = isTransformersRegistry
+    ? transformersMenuItems
+    : availableDynamicTypes.map((dynamicType) => ({
+      key: dynamicType.id,
+      label: t(`grid.advanced-column.advancedColumns.${dynamicType.id}`),
+      onClick: () => {
+        operations.add({
+          key: dynamicType.id
+        })
+      }
+    }))
 
   return (
     <Dropdown
