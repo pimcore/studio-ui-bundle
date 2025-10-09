@@ -37,14 +37,13 @@ class DocumentApiImpl implements DocumentApi {
   private readonly autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
 
   markDraftAsModified (documentId: number): void {
-
     const currentState = store.getState()
     const document = selectDocumentById(currentState, documentId)
-    
+
     if (document?.changes?.documentEditable) {
       return
     }
-    
+
     setTimeout(() => {
       store.dispatch(markDocumentEditablesAsModified(documentId))
     }, 0)
