@@ -217,4 +217,14 @@ const ContentEditable = ({
   )
 }
 
-export default ContentEditable
+export default React.memo(ContentEditable, (prevProps, nextProps) => {
+  const propsToCompare = Object.keys(nextProps).filter(key => key !== 'value')
+
+  for (const key of propsToCompare) {
+    if (prevProps[key as keyof ContentEditableProps] !== nextProps[key as keyof ContentEditableProps]) {
+      return false
+    }
+  }
+
+  return true
+})
