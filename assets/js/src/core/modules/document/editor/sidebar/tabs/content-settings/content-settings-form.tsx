@@ -231,6 +231,7 @@ export const ContentSettingsForm = ({
             labelRender={ (option) => renderLanguageOption(option) }
             optionRender={ (option) => renderLanguageOption(option) }
             options={ languageOptions }
+            showSearch
           />
         </Form.Item>
       )}
