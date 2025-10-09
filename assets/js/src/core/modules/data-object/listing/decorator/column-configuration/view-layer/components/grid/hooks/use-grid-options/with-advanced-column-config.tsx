@@ -30,7 +30,7 @@ export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['us
           ...baseColumn.meta,
           config: {
             ...baseColumn?.meta?.config ?? {},
-            dataObjectType: column.frontendType,
+            dataObjectType: column.config?.fieldDefinition?.fieldtype ?? column.frontendType,
             dataObjectConfig: {
               ...column.config
             }
