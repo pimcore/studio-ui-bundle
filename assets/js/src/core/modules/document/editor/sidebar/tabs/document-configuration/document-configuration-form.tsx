@@ -102,7 +102,7 @@ export const DocumentConfigurationForm = ({
 
     Object.entries(changedValues as Record<string, unknown>).forEach(([key, value]) => {
       if (key !== 'predefinedDocumentType') {
-        settingsUpdates[key] = value
+        settingsUpdates[key] = value ?? null
       }
     })
 
@@ -142,6 +142,8 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          showSearch
+          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ predefinedDocTypeOptions }
         />
@@ -153,6 +155,8 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          showSearch
+          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ controllerOptions }
         />
@@ -164,6 +168,8 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          showSearch
+          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ templateOptions }
         />
