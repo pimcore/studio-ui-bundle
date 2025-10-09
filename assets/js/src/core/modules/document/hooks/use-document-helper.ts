@@ -51,11 +51,11 @@ export const useDocumentHelper = (): UseDocumentReturn => {
     })
 
     try {
-      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: true }))
       const response = (await updateTask)
 
       if (response.error !== undefined) {
-        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
         trackError(new ApiError(response.error))
         onFinish?.()
         return
@@ -70,10 +70,10 @@ export const useDocumentHelper = (): UseDocumentReturn => {
       }
 
       if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-        dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
+        dispatch(setNodePublished({ nodeId: String(id), elementType: 'document', isPublished: task === 'publish' }))
       }
 
-      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
       onFinish?.()
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
