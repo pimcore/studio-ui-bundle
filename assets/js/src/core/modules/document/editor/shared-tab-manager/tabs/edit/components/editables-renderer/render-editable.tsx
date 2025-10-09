@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { Alert } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
@@ -51,6 +51,32 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
     containerRef
   }), [editableDefinition, isInherited, containerRef])
 
+  const handleChange = useCallback((newValue: any) => {
+    const oldValue = localValue
+    setLocalValue(newValue)
+
+    if (isRequired) {
+      const isEmpty = editableType?.isEmpty(newValue, editableDefinition) ?? true
+      if (isEmpty) {
+        applyRequiredStyling(editableDefinition.name, document)
+      } else {
+        removeRequiredStyling(editableDefinition.name, document)
+      }
+    }
+
+    if (isInherited) {
+      handleOverwrite()
+    }
+
+    const shouldReload = !isEqual(oldValue, newValue) && editableType?.reloadOnChange(editableProps, oldValue, newValue)
+
+    if (shouldReload) {
+      updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+    } else {
+      updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+    }
+  }, [isRequired, isInherited])
+
   const renderEditableComponent = useMemo((): React.ReactElement => {
     if (isNil(editableType)) {
       return <></>
@@ -61,34 +87,10 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
       {
         key: editableDefinition.name,
         value: localValue,
-        onChange: (newValue) => {
-          const oldValue = localValue
-          setLocalValue(newValue)
-
-          if (isRequired) {
-            const isEmpty = editableType?.isEmpty(newValue, editableDefinition) ?? true
-            if (isEmpty) {
-              applyRequiredStyling(editableDefinition.name, document)
-            } else {
-              removeRequiredStyling(editableDefinition.name, document)
-            }
-          }
-
-          if (isInherited) {
-            handleOverwrite()
-          }
-
-          const shouldReload = !isEqual(oldValue, newValue) && editableType.reloadOnChange(editableProps, oldValue, newValue)
-
-          if (shouldReload) {
-            updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
-          } else {
-            updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
-          }
-        }
+        onChange: handleChange
       }
     )
-  }, [editableType, editableProps, localValue, isInherited])
+  }, [editableType, editableProps, localValue, isInherited, handleChange])
 
   if (isNil(editableType)) {
     return (
