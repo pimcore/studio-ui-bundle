@@ -196,6 +196,7 @@ grid.advanced-column.transformers.add: Add a Transformer
 grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.error-preview-data: Error loading preview
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Find
 grid.advanced-column.replace: Replace
@@ -205,6 +206,7 @@ grid.advanced-column.trueLabel: True Label
 grid.advanced-column.falseLabel: False Label
 grid.advanced-column.format: Format
 grid.advanced-column.delimiter: Delimiter
+grid.advanced-column.twigTemplate: Twig Template
 grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field

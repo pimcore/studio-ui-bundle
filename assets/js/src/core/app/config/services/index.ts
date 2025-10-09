@@ -203,6 +203,7 @@ import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/elemen
 import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
 import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { DynamicTypePipelineGridTransformersTwigOperator } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/twig-operator/twig-operator'
 import { DynamicTypePipelineGridTransformersBooleanFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
 import { DynamicTypePipelineGridTransformersDateFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { DynamicTypePipelineGridSourceFieldsSimpleField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
@@ -226,6 +227,7 @@ import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/elemen
 import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { DynamicTypeGridCellInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
+import { DynamicTypeGridCellError } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { DynamicTypeGridCellArray } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
@@ -366,6 +368,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']).to(Dyn
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']).to(DynamicTypeGridCellDataObjectAdvanced).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCellString).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Integer']).to(DynamicTypeGridCellInteger).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Error']).to(DynamicTypeGridCellError).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Array']).to(DynamicTypeGridCellArray).inSingletonScope()
 
 // Advanced grid cell registry
@@ -525,6 +528,7 @@ container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']).to(DynamicTypePipelineGridTransformersDateFormatter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/TwigOperator']).to(DynamicTypePipelineGridTransformersTwigOperator).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Anonymizer']).to(DynamicTypePipelineGridTransformersAnonymizer).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()

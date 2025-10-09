@@ -34,6 +34,7 @@ export const useStyle = createStyles(({ token, css }) => {
         overflow: hidden;
         text-overflow: ellipsis;
         align-items: center;
+        white-space: normal;
       }
 
       &.default-cell--modified, .default-cell--modified {
