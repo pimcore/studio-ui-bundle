@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
+import { WorkflowCard } from '@Pimcore/modules/element/editor/shared-components/workflow/card/workflow-card'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { Space } from 'antd'
