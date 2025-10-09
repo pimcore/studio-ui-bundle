@@ -196,6 +196,7 @@ import { DynamicTypeDocumentEditableAreablock } from '@Pimcore/modules/element/d
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { DynamicTypePipelineGridTransformersAnonymizer } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/anonymizer/anonymizer'
 import { DynamicTypePipelineGridTransformersCombine } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/combine/combine'
 import { DynamicTypePipelineGridTransformersExplode } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/explode/explode'
 import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/trim/trim'
@@ -524,6 +525,7 @@ container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']).to(DynamicTypePipelineGridTransformersDateFormatter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Anonymizer']).to(DynamicTypePipelineGridTransformersAnonymizer).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Explode']).to(DynamicTypePipelineGridTransformersExplode).inSingletonScope()
