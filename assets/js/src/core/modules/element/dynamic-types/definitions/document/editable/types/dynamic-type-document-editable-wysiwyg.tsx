@@ -9,6 +9,9 @@
  */
 
 import React from 'react'
+import { isString } from 'lodash'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { stripTags } from '@Pimcore/utils/html'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { WysiwygEditable } from '../components/wysiwyg-editable/wysiwyg-editable'
 import { WysiwygContext } from '@sdk/modules/wysiwyg'
@@ -20,6 +23,7 @@ export interface WysiwygEditableConfig {
   placeholder?: string
   editorConfig?: Record<string, any>
   class?: string
+  required?: boolean
 }
 
 export type WysiwygEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
@@ -42,5 +46,14 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
         width={ props.config?.width }
       />
     )
+  }
+
+  isEmpty (value: any, props: WysiwygEditableDefinition): boolean {
+    if (isString(value)) {
+      const textContent = stripTags(value)
+      return !isNonEmptyString(textContent)
+    }
+
+    return true
   }
 }

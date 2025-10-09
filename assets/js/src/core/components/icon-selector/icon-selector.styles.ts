@@ -41,7 +41,6 @@ export const useStyles = createStyles(({ token, css }) => {
       
       &:hover {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transform: translateY(-1px);
         background-color: ${token.colorPrimaryBg};
         border-color: ${token.colorPrimaryBorder};
       }
@@ -51,6 +50,12 @@ export const useStyles = createStyles(({ token, css }) => {
       border-color: ${token.colorPrimary};
       background-color: ${token.colorPrimaryBg};
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      
+      &:hover {
+        border-color: ${token.colorPrimary};
+        background-color: ${token.colorPrimaryBg};
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
     `,
 
     iconName: css`
@@ -77,6 +82,10 @@ export const useStyles = createStyles(({ token, css }) => {
       color: ${token.colorIcon};
     `,
 
+    selectionPreviewError: css`
+      border-color: ${token.colorError};
+    `,
+
     noSelection: css`
       color: ${token.colorTextSecondary};
       font-style: italic;
@@ -84,6 +93,11 @@ export const useStyles = createStyles(({ token, css }) => {
 
     selectionLabel: css`
       color: ${token.colorTextDescription};
+    `,
+
+    customIconContainer: css`
+      padding-top: ${token.paddingSM}px;
+      padding-bottom: ${token.paddingSM}px;
     `,
 
     iconSelectorModal: css`

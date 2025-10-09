@@ -21,6 +21,7 @@ import { useDownload } from '@Pimcore/modules/asset/actions/download/use-downloa
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
+  createElementSelectorConfig,
   dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
@@ -53,9 +54,11 @@ export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
+  showOpenForTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
   readOnly?: boolean
+  vertical?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -66,6 +69,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   className?: string
   combinedFieldName?: string
   pathFormatterClass?: string
+  additionalButtons?: (value: ManyToOneRelationValueType) => React.ReactNode
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
@@ -89,10 +93,14 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [props.value])
 
   const clickOpenElement = (): void => {
-    if (value !== null && value.textInput !== true) {
-      const elementType = mapToElementType(value.type)
-      if (!isUndefined(elementType)) {
-        openElement({ type: elementType, id: value.id }).catch(() => { })
+    if (value !== null) {
+      if (value.textInput === true) {
+        window.open(value.fullPath, '_blank', 'noopener,noreferrer')
+      } else {
+        const elementType = mapToElementType(value.type)
+        if (!isUndefined(elementType)) {
+          openElement({ type: elementType, id: value.id }).catch(() => { })
+        }
       }
 
       props.onOpenElement?.()
@@ -108,6 +116,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
+      vertical={ props.vertical }
     >
       <div className={ styles.droppableWrapper }>
         <Droppable
@@ -130,8 +139,11 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Droppable>
       </div>
-      <Flex gap="extra-small">
-        {props.allowPathTextInput !== true && (!isNull(value)) && (
+      <Flex
+        gap="extra-small"
+        justify={ props.vertical === true ? 'start' : undefined }
+      >
+        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
@@ -183,17 +195,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             elementSelectorConfig={ {
               selectionType: SelectionType.Single,
               areas: createElementSelectorAreas(props),
-              config: {
-                assets: {
-                  allowedTypes: props.allowedAssetTypes
-                },
-                documents: {
-                  allowedTypes: props.allowedAssetTypes
-                },
-                objects: {
-                  allowedTypes: props.allowedClasses
-                }
-              },
+              config: createElementSelectorConfig(props),
               onFinish: (event) => {
                 if (!isEmpty(event.items)) {
                   setValue({
@@ -208,6 +210,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         )}
+
+        {props.additionalButtons?.(value)}
       </Flex>
     </Flex>
   )

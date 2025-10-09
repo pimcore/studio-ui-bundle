@@ -15,12 +15,13 @@ import { withClassDefinitionSelectionLayer } from './configuration-layer/with-cl
 
 export interface ClassDefinitionSelectionDecoratorConfig {
   classRestriction?: IRelationAllowedTypesClassDefinition['classes']
+  isResolvingClassDefinitionsBasedOnElementId?: boolean
   showConfigLayer?: boolean
 }
 
 export const defaultConfig: ClassDefinitionSelectionDecoratorConfig = {
   classRestriction: undefined,
-  showConfigLayer: false
+  isResolvingClassDefinitionsBasedOnElementId: true
 }
 
 export const ClassDefinitionSelectionDecorator: AbstractDecorator<ClassDefinitionSelectionDecoratorConfig> = (props, config = defaultConfig) => {

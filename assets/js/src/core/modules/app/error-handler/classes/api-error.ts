@@ -46,7 +46,7 @@ class ApiError extends Error {
       }
     }
 
-    if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR) {
+    if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR && errorKey !== ErrorKeyTypes.INVALID_ARGUMENT) {
       return { errorKey: errorKey! }
     }
 

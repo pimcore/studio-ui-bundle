@@ -14,13 +14,16 @@ import { DataObjectContext } from '../../../data-object-provider'
 
 import { TAB_EDIT } from '../../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection'
+import { TAB_LISTING } from '../../types/folder/tab-manager/tabs/listing/listing-container'
+import { TAB_VARIANTS } from '../../types/variant/tab-manager/tabs/variants/variants-tab-container'
 
 export const ConditionalLanguageSelection = (): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
   const { activeTab } = useDataObjectDraft(id)
 
-  if (activeTab !== TAB_EDIT.key) {
-    return <></>
+  if ([TAB_EDIT.key, TAB_LISTING.key, TAB_VARIANTS.key].includes(activeTab ?? '')) {
+    return <LanguageSelection />
   }
-  return <LanguageSelection />
+
+  return <></>
 }

@@ -18,7 +18,7 @@ import { useSettings } from '../../../settings/use-settings'
 export const GridContainer = (): React.JSX.Element => {
   const { dataQueryResult, dataLoadingState } = useData()
   const { isLoading, isFetching, data } = dataQueryResult!
-  const { selectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } = useSelectedColumns()
+  const { selectedColumns, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } = useSelectedColumns()
   const { useGridOptions } = useSettings()
   const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
@@ -65,12 +65,7 @@ export const GridContainer = (): React.JSX.Element => {
           return
         }
 
-        let rowColumn = row.columns.find((r) => r.key === currentSelectedColumn.key && r.locale === currentSelectedColumn.locale)
-
-        if (currentSelectedColumn?.type === 'dataobject.classificationstore') {
-          console.log(row.columns);
-          rowColumn = row.columns.find((r) => r?.config?.keyId === currentSelectedColumn?.config?.keyId && r?.config?.groupId === currentSelectedColumn?.config?.groupId && r?.locale === currentSelectedColumn?.locale)
-        }
+        const rowColumn = row.columns.find((r) => shouldMapDataToColumn(r, currentSelectedColumn))
 
         if (rowColumn === undefined) {
           return

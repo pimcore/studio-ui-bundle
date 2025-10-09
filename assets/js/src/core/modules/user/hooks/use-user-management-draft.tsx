@@ -13,7 +13,8 @@ import {
   selectUserById,
   userFetched,
   userRemoved,
-  changeUser
+  changeUser,
+  updateUserImage
 } from '@Pimcore/modules/user/user-management-slice'
 import {
   api,
@@ -29,6 +30,7 @@ interface UseUserReturnDraft {
 
   removeUserFromState: () => void
   changeUserInState: (changedValues: any) => void
+  updateUserImageInState: (image: string) => void
   updateUserKeyBinding: (name: string, code: object) => void
   reloadUser: () => void
 }
@@ -72,9 +74,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
         ...data,
         modified: false,
         changes: {},
-        modifiedCells: {},
-        // @todo check twofactorauth handling
-        twoFactorAuthenticationEnabled: data?.twoFactorAuthentication?.[0]?.enabled ?? false
+        modifiedCells: {}
       }))
     }).catch(() => {
       setIsError(true)
@@ -91,7 +91,19 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
 
   function changeUserInState (changes: any): void {
     if (user === undefined) return
+
+    if (typeof changes.twoFactorAuthenticationRequired === 'boolean') {
+      changes.twoFactorAuthentication = {
+        ...user.twoFactorAuthentication,
+        required: changes.twoFactorAuthenticationRequired
+      }
+    }
+
     dispatch(changeUser({ id: user.id, changes }))
+  }
+
+  function updateUserImageInState (image: string): void {
+    dispatch(updateUserImage({ id: user.id, image }))
   }
 
   function updateUserKeyBinding (name: string, code: { key: number, ctrl: boolean, alt: boolean, shift: boolean }): void {
@@ -114,6 +126,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     removeUserFromState,
     changeUserInState,
     reloadUser,
-    updateUserKeyBinding
+    updateUserKeyBinding,
+    updateUserImageInState
   }
 }

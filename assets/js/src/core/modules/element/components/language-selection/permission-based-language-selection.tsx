@@ -8,33 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import React from 'react'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
-import { useElementContext } from '../../hooks/use-element-context'
-import { useElementDraft } from '../../hooks/use-element-draft'
+import { PermissionBasedLanguageSelectionControl } from './permission-based-language-selection-control'
 
-export const PermissionBasedLanguageSelection = (): React.JSX.Element => {
-  const user = useUser()
-  const elementContext = useElementContext()
-  const elementDraft = useElementDraft(elementContext.id, elementContext.elementType)
-  const availableLanguages: string[] = []
+export interface PermissionBasedLanguageSelectionProps {
+  isNullable?: boolean
+}
+
+export const PermissionBasedLanguageSelection = (props: PermissionBasedLanguageSelectionProps): React.JSX.Element => {
   const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
 
-  if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
-    availableLanguages.push(...viewableLanguages)
-  } else {
-    availableLanguages.push(...(Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []))
-  }
-
   return (
-    <BaseLanguageSelection
-      languages={ availableLanguages }
-      onSelectLanguage={ setCurrentLanguage }
-      selectedLanguage={ currentLanguage }
+    <PermissionBasedLanguageSelectionControl
+      isNullable={ props.isNullable }
+      onChange={ setCurrentLanguage }
+      value={ currentLanguage }
     />
   )
 }

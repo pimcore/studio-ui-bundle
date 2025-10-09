@@ -45,6 +45,11 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
+
+  if (dataObject !== undefined && !('objectData' in dataObject)) {
+    throw new Error('Data Object data is undefined in Classification Store')
+  }
+
   const objectData = dataObject?.objectData ?? {}
   const originalValue = getOriginalValue(objectData, classificationStoreName)
   const inheritanceState = useInheritanceState()
@@ -128,6 +133,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
         <ClassificationStoreModal
           classId={ classId }
           fieldName={ fieldName }
+          objectId={ dataObject.id }
           { ...props }
         />
       </Form.KeyedList>

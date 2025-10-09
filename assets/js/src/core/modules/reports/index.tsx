@@ -21,12 +21,48 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { api } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import {
+  type DynamicTypeCustomReportDefinitionRegistry
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
+import {
+  type DynamicTypeCustomReportDefinitionSqlAdapter
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/types/dynamic-type-custom-report-definition-sql-adapter'
+import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 const REPORTS_SECTION_NAME = 'Reporting'
+
+export const REPORTS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Reports',
+  id: 'reports',
+  component: 'reports',
+  config: {
+    translationKey: 'navigation.reports',
+    icon: {
+      type: 'name',
+      value: 'pie-chart'
+    }
+  }
+}
+
+export const CUSTOM_REPORTS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Custom Reports',
+  id: 'custom-reports',
+  component: 'custom-reports',
+  config: {
+    translationKey: 'navigation.custom-reports',
+    icon: {
+      type: 'name',
+      value: 'chart-scatter'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+    const sourceDefinitionRegistry = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/CustomReportDefinitionRegistry'])
+
+    sourceDefinitionRegistry.registerDynamicType(container.get<DynamicTypeCustomReportDefinitionSqlAdapter>(serviceIds['DynamicTypes/CustomReportDefinition/Sql']))
 
     mainNavRegistryService.registerMainNavItem({
       path: `${REPORTS_SECTION_NAME}/Reports`,
@@ -36,18 +72,7 @@ moduleSystem.registerModule({
       dividerBottom: true,
       permission: UserPermission.Reports,
       perspectivePermission: NavPermission.Reports,
-      widgetConfig: {
-        name: 'Reports',
-        id: 'reports',
-        component: 'reports',
-        config: {
-          translationKey: 'navigation.reports',
-          icon: {
-            type: 'name',
-            value: 'pie-chart'
-          }
-        }
-      }
+      widgetConfig: REPORTS_WIDGET
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -57,18 +82,7 @@ moduleSystem.registerModule({
       dividerBottom: true,
       permission: UserPermission.ReportsConfig,
       perspectivePermission: NavPermission.Reports,
-      widgetConfig: {
-        name: 'Custom Reports',
-        id: 'custom-reports',
-        component: 'custom-reports',
-        config: {
-          translationKey: 'navigation.custom-reports',
-          icon: {
-            type: 'name',
-            value: 'chart-scatter'
-          }
-        }
-      }
+      widgetConfig: CUSTOM_REPORTS_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

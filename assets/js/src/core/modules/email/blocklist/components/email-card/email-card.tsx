@@ -28,7 +28,12 @@ export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   return (
-    <Card>
+    <Card
+      contentPadding={ {
+        x: 'small',
+        y: 'mini'
+      } }
+    >
       <Flex
         align="center"
         justify="space-between"

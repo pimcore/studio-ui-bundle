@@ -23,6 +23,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
@@ -41,6 +42,10 @@ export const EditContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
+  if (!(dataObject !== undefined && 'objectData' in dataObject)) {
+    throw new Error('Data Object data is undefined in Edit Container')
+  }
+
   return (
     <FieldCollectionProvider>
       <ObjectBrickProvider>
@@ -56,8 +61,8 @@ export const EditContainer = (): React.JSX.Element => {
 
 export const TAB_EDIT: IEditorTab = {
   key: 'edit',
-  label: 'asset.asset-editor-tabs.edit',
-  children: <EditContainer />,
+  label: 'edit',
+  children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.edit.name } />,
   icon: <Icon value={ 'edit-pen' } />,
-  isDetachable: true
+  isDetachable: false
 }

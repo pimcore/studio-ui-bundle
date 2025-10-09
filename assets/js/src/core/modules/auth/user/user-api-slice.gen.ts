@@ -233,12 +233,12 @@ export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users */ {
     totalItems: number;
     items: SimpleUser[];
 };
 export type PimcoreStudioApiUserSearchApiArg = {
-    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
+    /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
 };
 export type UserUpdateActivePerspectiveApiResponse = unknown;
@@ -374,6 +374,8 @@ export type UserInformation = {
     welcomeScreen: boolean;
     /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Allow Dirty Close */
+    allowDirtyClose: boolean;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
@@ -385,7 +387,7 @@ export type UserInformation = {
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
-    twoFactorAuthentication?: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Active studio perspective ID */
     activePerspective: string | null;
     /** Allowed studio perspectives */
@@ -415,6 +417,24 @@ export type UserWorkspace = {
     /** Properties Permission */
     properties: boolean;
 };
+export type UserDocumentWorkspace = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+    /** Localized Edit */
+    localizedEdit?: string | null;
+    /** Localized View */
+    localizedView?: string | null;
+    /** Layouts */
+    layouts?: string | null;
+};
+export type UserDocumentWorkspace2 = UserWorkspace & {
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+};
 export type DependencyToAnObject = {
     /** ID of the object */
     id: number;
@@ -437,13 +457,13 @@ export type User = {
     /** ID of the User */
     id: number;
     /** Name of Folder or User */
-    name?: string | null;
+    name: string | null;
     /** Email of the User */
-    email?: string | null;
+    email: string | null;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname: string | null;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname: string | null;
     /** If a User is active */
     active: boolean;
     /** If User is admin */
@@ -462,6 +482,8 @@ export type User = {
     keyBindings: KeyBindingForAUser[];
     /** Language of the User */
     language: string;
+    /** Locale for dateTime */
+    dateTimeLocale?: string | null;
     /** Timestamp of the last login */
     lastLogin?: number | null;
     /** Memorize Tabs */
@@ -473,7 +495,7 @@ export type User = {
     /** ID List of roles the user is assigned */
     roles: object;
     /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData[];
+    twoFactorAuthentication: TwoFactorAuthenticationData;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */
@@ -483,9 +505,9 @@ export type User = {
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
     /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
+    dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
+    documentWorkspaces: UserDocumentWorkspace2[];
     /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
@@ -493,13 +515,13 @@ export type User = {
 };
 export type User2 = {
     /** Email of the User */
-    email?: string | null;
+    email: string | null;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname: string | null;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname: string | null;
     /** If User is admin */
-    admin?: boolean;
+    admin: boolean;
     /** If User is active */
     active: boolean;
     /** Classes the user is allows to see */
@@ -514,6 +536,8 @@ export type User2 = {
     keyBindings: KeyBindingForAUser[];
     /** Language of the User */
     language: string;
+    /** Date Time Locale for the User */
+    dateTimeLocale?: string;
     /** Memorize Tabs */
     memorizeTabs: boolean;
     /** Parent ID */
@@ -523,7 +547,7 @@ export type User2 = {
     /** ID List of roles the user is assigned */
     roles: object;
     /** Two Factor Authentication Enabled */
-    twoFactorAuthenticationEnabled: boolean;
+    twoFactorAuthenticationRequired: boolean;
     /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
     /** Website Translation Languages View */

@@ -13,6 +13,7 @@ import { TreeContainer as DataObjectTreeContainer } from '@Pimcore/modules/data-
 import { TreeContainer as DocumentTreeContainer } from '@Pimcore/modules/document/tree/tree-container'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
+import { type ElementReference } from '../element-helper'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 import { TreeIdProvider } from './provider/tree-id-provider/tree-id-provider'
@@ -21,10 +22,11 @@ import { useNodeApiHook as useNodeApiHookDataObject } from '@Pimcore/modules/dat
 import { useNodeApiHook as useNodeApiHookAsset } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
 import { useNodeApiHook as useNodeApiHookDocument } from '@Pimcore/modules/document/tree/hooks/use-node-api-hook'
 import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export interface TreeWidgetProps {
   id: string
-  rootFolderId?: number
+  rootFolder?: ElementReference
   elementType: ElementType
   classes?: string[]
   pql?: string | null
@@ -32,7 +34,7 @@ export interface TreeWidgetProps {
   contextPermissions: Record<string, boolean>
   showRoot?: boolean
 }
-export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
   const { asset_tree_paging_limit: pageSizeAsset, object_tree_paging_limit: pageSizeObject } = useSettings()
 
   const usedPageSize = pageSize ?? (elementType === elementTypes.asset ? pageSizeAsset : pageSizeObject)
@@ -43,12 +45,12 @@ export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSi
         <TreeFilterProvider
           classIds={ classes }
           pageSize={ usedPageSize }
-          pqlQuery={ pql ?? undefined }
+          pqlQuery={ isNonEmptyString(pql) ? pql : undefined }
         >
           { elementType === elementTypes.asset && (
           <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
             <AssetTreeContainer
-              id={ rootFolderId ?? 1 }
+              id={ rootFolder?.id ?? 1 }
               showRoot={ showRoot }
             />
           </NodeApiHookProvider>
@@ -57,7 +59,7 @@ export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSi
 
           <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
             <DataObjectTreeContainer
-              id={ rootFolderId ?? 1 }
+              id={ rootFolder?.id ?? 1 }
               showRoot={ showRoot }
             />
           </NodeApiHookProvider>
@@ -66,7 +68,7 @@ export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSi
 
           <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
             <DocumentTreeContainer
-              id={ rootFolderId ?? 1 }
+              id={ rootFolder?.id ?? 1 }
               showRoot={ showRoot }
             />
           </NodeApiHookProvider>

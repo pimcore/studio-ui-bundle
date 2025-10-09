@@ -68,13 +68,13 @@ export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.
     {
       key: '1',
       label: t('tree.actions.clone-role'),
-      icon: <Icon value='copy-03'></Icon>,
+      icon: <Icon value='copy'></Icon>,
       onClick: onCloneRole
     },
     {
       key: '2',
       label: t('tree.actions.remove-role'),
-      icon: <Icon value='delete-outlined'></Icon>,
+      icon: <Icon value='trash'></Icon>,
       onClick: onRemoveRole
     }
   ]
@@ -112,7 +112,7 @@ export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )

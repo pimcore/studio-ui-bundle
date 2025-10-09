@@ -28,6 +28,7 @@ import {
   type UserDeleteByIdApiArg,
   type UserFolderDeleteByIdApiArg,
   type User,
+  type User2,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import {
@@ -68,6 +69,7 @@ interface UseUserReturn extends
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
   uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
+  deleteUserAvatar: (id: number) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
   getAvailablePermissions: () => any[]
@@ -78,6 +80,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [notificationApi] = useNotification()
+  const activeId = useAppSelector(state => state.user.activeId)
+  const getAllIds = useAppSelector(state => state.user.ids)
 
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
@@ -98,7 +102,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
   }
 
   function closeUser (id: number): void {
-    dispatch(userClosed(id))
+    dispatch(userClosed({ id, allIds: getAllIds }))
   }
 
   async function fetchUserById (props): Promise<UserGetByIdApiResponse> {
@@ -173,37 +177,34 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
   async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
+
+    const updateUser: User2 = {
+      ...user,
+      twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
+      parentId: user.parentId ?? 0,
+      dateTimeLocale: user.dateTimeLocale ?? ''
+    }
+
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
-      updateUser: {
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        active: user.active,
-        admin: user.admin,
-        classes: user.classes,
-        // @todo check twofactorauth handling
-        twoFactorAuthenticationEnabled: user?.twoFactorAuthentication?.[0]?.enabled ?? false,
-        language: user.language,
-        welcomeScreen: user.welcomeScreen,
-        memorizeTabs: user.memorizeTabs,
-        allowDirtyClose: user.allowDirtyClose,
-        closeWarning: user.closeWarning,
-        permissions: user.permissions,
-        parentId: user.parentId ?? 0,
-        roles: user.roles,
-        contentLanguages: user.contentLanguages,
-        websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
-        websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
-        keyBindings: user.keyBindings,
-        assetWorkspaces: user.assetWorkspaces,
-        dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives,
-        ...user.password !== undefined ? { password: user.password } : {}
-      }
+      updateUser
     }))
+
+    if (user.password !== undefined) {
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id,
+        body: {
+          password: user.password,
+          passwordConfirmation: user.password,
+          oldPassword: ''
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
+
     handleNotification(t('user-management.save-user.success'), error)
+
     const userDraft: UserDraft = {
       ...data,
       modified: false,
@@ -218,8 +219,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    // @todo check twofactorauth handling
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, twoFactorAuthenticationEnabled: user?.twoFactorAuthentication?.[0]?.enabled ?? false, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '' } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }
@@ -227,6 +227,13 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
     handleNotification(t('user-management.upload-image.success'), error)
+    return data
+  }
+
+  async function deleteUserAvatar (id: number): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
+    const { data, error }: any = await dispatch(api.endpoints.userImageDeleteById.initiate({ id }))
+    handleNotification(t('user-management.upload-image.success'), error)
+
     return data
   }
 
@@ -255,8 +262,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return availablePermissions
   }
 
-  const activeId = useAppSelector(state => state.user.activeId)
-  const getAllIds = useAppSelector(state => state.user.ids)
   return {
     removeTrackedChanges (): void {},
     setModifiedCells (type: string, modifiedCells): void {},
@@ -275,6 +280,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
+    deleteUserAvatar,
     getAvailablePermissions,
     activeId,
     getAllIds

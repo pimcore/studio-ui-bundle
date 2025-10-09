@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/ap
 import { api as baseApi } from './properties-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
+  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.DOCUMENT_DETAIL],
   endpoints: {
     propertyGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {

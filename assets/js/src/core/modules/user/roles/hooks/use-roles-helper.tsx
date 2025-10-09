@@ -23,7 +23,7 @@ import {
   type RoleUpdateByIdApiResponse,
   type DetailedUserRole,
   type RoleFolderDeleteByIdApiResponse,
-  type RoleGetByIdApiResponse
+  type RoleGetByIdApiResponse, type RoleSearchApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 
 interface IAddRoleArgs {
@@ -43,6 +43,7 @@ interface IUseRoleReturn {
   updateRoleById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   moveRoleById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   getRoleCollection: () => Promise<RoleGetCollectionApiResponse>
+  searchRoleByText: (query: string) => Promise<RoleSearchApiResponse>
   activeId: number
   getAllIds: number[]
 }
@@ -51,6 +52,9 @@ export const useRoleHelper = (): IUseRoleReturn => {
   const { t } = useTranslation()
   const [notificationApi] = useNotification()
   const dispatch = useAppDispatch()
+
+  const activeId = useAppSelector(state => state.role.activeId)
+  const getAllIds = useAppSelector(state => state.role.ids)
 
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
@@ -70,7 +74,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
   }
 
   function closeRole (id: number): void {
-    dispatch(roleClosed(id))
+    dispatch(roleClosed({ id, allIds: getAllIds }))
   }
 
   async function fetchRoleById (props): Promise<RoleGetByIdApiResponse> {
@@ -84,6 +88,11 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.roleGetTree.initiate({ parentId }))
 
+    return data
+  }
+
+  async function searchRoleByText (query: string): Promise<RoleSearchApiResponse> {
+    const { data }: any = await dispatch(api.endpoints.roleSearch.initiate({ searchQuery: query }))
     return data
   }
 
@@ -172,9 +181,6 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  const activeId = useAppSelector(state => state.role.activeId)
-  const getAllIds = useAppSelector(state => state.role.ids)
-
   return {
     openRole,
     closeRole,
@@ -187,6 +193,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     updateRoleById,
     moveRoleById,
     getRoleCollection,
+    searchRoleByText,
     activeId,
     getAllIds
   }

@@ -19,10 +19,17 @@ import {
 import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 import { TAB_PREVIEW, TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT } from './tab-manager/tabs/edit/edit-container'
+import { TAB_LISTING } from '../folder/tab-manager/tabs/listing/listing-container'
+import { TAB_VARIANTS } from '../variant/tab-manager/tabs/variants/variants-tab-container'
 
 moduleSystem.registerModule({
   onInit: () => {
     const objectEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/ObjectTabManager'])
+
+    const childrenTab = { ...TAB_LISTING }
+
+    childrenTab.hidden = elementApi => elementApi?.hasChildren === false
+    childrenTab.label = 'object.object-editor-tabs.children-listing'
 
     objectEditorTabManager.register(TAB_EDIT)
     objectEditorTabManager.register(TAB_PREVIEW)
@@ -32,6 +39,8 @@ moduleSystem.registerModule({
     objectEditorTabManager.register(TAB_DEPENDENCIES)
     objectEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     objectEditorTabManager.register(TAB_TAGS)
+    objectEditorTabManager.register(childrenTab)
+    objectEditorTabManager.register(TAB_VARIANTS)
     objectEditorTabManager.register(TAB_WORKFLOW)
   }
 })

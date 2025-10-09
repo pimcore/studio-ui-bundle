@@ -23,6 +23,7 @@ import { useClassificationStoreModalOptional } from '../../../../provider/classi
 interface GroupTabProps {
   storeId: ClassificationStoreGetGroupsApiArg['storeId']
   classId: ClassificationStoreGetGroupsApiArg['classId']
+  objectId?: number
   fieldName: ClassificationStoreGetGroupsApiArg['fieldName']
 }
 
@@ -58,6 +59,7 @@ export const GroupTab = (props: GroupTabProps): React.JSX.Element => {
           queryArgs={ {
             storeId: props.storeId,
             classId: props.classId,
+            objectId: props.objectId,
             fieldName: props.fieldName
           } }
           queryHook={ useClassificationStoreGetGroupsQuery }

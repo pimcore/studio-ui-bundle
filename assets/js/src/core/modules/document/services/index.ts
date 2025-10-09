@@ -10,3 +10,4 @@
 
 export * from './document-save-service'
 export * from './document-save-task-manager'
+export * from './document-required-fields-validation-service'

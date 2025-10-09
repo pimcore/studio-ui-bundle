@@ -45,3 +45,12 @@ export const VeryLongPath = {
     published: false
   }
 }
+
+export const Inline = {
+  args: {
+    path: '/inline/element/path',
+    elementType: elementTypes.document,
+    id: 789,
+    inline: true
+  }
+}

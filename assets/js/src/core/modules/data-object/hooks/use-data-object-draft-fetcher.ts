@@ -42,6 +42,7 @@ export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => 
 
       if (!isUndefined(dataObjectData)) {
         const mergedDataObjectData = {
+          draftData: null,
           ...dataObjectData,
           id,
           modified: false,

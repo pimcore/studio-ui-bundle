@@ -17,6 +17,7 @@ import { isNil, isEqual } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
+import { RequiredFieldWrapper, applyRequiredStyling, removeRequiredStyling } from './required-field-wrapper'
 
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
@@ -41,6 +42,8 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
     forceUpdate({})
   }
 
+  const isRequired = Boolean(editableDefinition.config?.required)
+
   const editableProps: AbstractDocumentEditableDefinition = useMemo(() => ({
     ...editableDefinition,
     inherited: isInherited,
@@ -61,6 +64,15 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
         onChange: (newValue) => {
           const oldValue = localValue
           setLocalValue(newValue)
+
+          if (isRequired) {
+            const isEmpty = editableType?.isEmpty(newValue, editableDefinition) ?? true
+            if (isEmpty) {
+              applyRequiredStyling(editableDefinition.name, document)
+            } else {
+              removeRequiredStyling(editableDefinition.name, document)
+            }
+          }
 
           if (isInherited) {
             handleOverwrite()
@@ -90,7 +102,12 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
   return (
     <ErrorBoundary>
       <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
-        { renderEditableComponent }
+        <RequiredFieldWrapper
+          editableName={ editableDefinition.name }
+          isRequired={ isRequired }
+        >
+          { renderEditableComponent }
+        </RequiredFieldWrapper>
       </FieldWidthProvider>
     </ErrorBoundary>
   )

@@ -26,9 +26,10 @@ export interface IconProps extends Omit<ElementIcon, 'type'> {
   subIconName?: string
   subIconVariant?: SubIconVariant
   sphere?: boolean
+  onLoadError?: (hasError: boolean) => void
 }
 
-export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, onLoadError, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
@@ -44,6 +45,8 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
         <img
           alt={ '' }
           className='pimcore-icon__image'
+          onError={ () => { onLoadError?.(true) } }
+          onLoad={ () => { onLoadError?.(false) } }
           src={ value }
           style={ { width, height } }
         />

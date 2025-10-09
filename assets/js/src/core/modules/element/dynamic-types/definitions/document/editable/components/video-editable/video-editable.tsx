@@ -82,6 +82,7 @@ export const VideoEditable = ({
     if (!isNull(containerRef?.current)) {
       const emptyVideoElement: HTMLDivElement | null = containerRef.current.querySelector('.pimcore_editable_video_empty')
       if (!isNull(emptyVideoElement) && isNull(emptyElement)) {
+        emptyVideoElement.className = cn(emptyVideoElement.className, 'studio-required-field-target')
         setEmptyElement(emptyVideoElement)
       }
 

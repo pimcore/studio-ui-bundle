@@ -10,7 +10,7 @@
 
 import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { isNil } from 'lodash'
+import { isNil, isEmpty, isArray } from 'lodash'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AbstractFieldFilterDefinition {}
@@ -29,6 +29,14 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
   }
 
   shouldApply (value: any): boolean {
-    return !isNil(value) && value !== ''
+    if (isNil(value) || value === '') {
+      return false
+    }
+
+    if (isArray(value) && isEmpty(value)) {
+      return false
+    }
+
+    return true
   }
 }

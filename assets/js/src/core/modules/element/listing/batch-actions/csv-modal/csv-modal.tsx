@@ -23,6 +23,9 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportCsvApiResponse, type ExportCsvFolderApiResponse, useExportCsvFolderMutation, useExportCsvMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { isNil } from 'lodash'
 
 export interface CsvModalProps {
   open: boolean
@@ -42,6 +45,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { selectedColumns } = useSelectedColumns()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
+  const classDefinitionSelection = useClassDefinitionSelection(true)
+  const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
     header: 'name'
@@ -105,10 +110,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   function onFinish (values: CSVFormValues): void {
     addJob(createDownloadJob({
-      // @todo add api domain
       title: t('jobs.csv-job.title', { title: jobTitle }),
       topics: [topics['csv-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/export/download/csv/{jobRunId}',
+      downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
       action: async () => await getDownloadAction(values.delimiter, values.header)
     }))
 
@@ -120,7 +124,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
     const extractedColumnsFromColumnArg = selectedColumns.map(column => {
       let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
 
-      if (currentColumn.type === 'dataobject.advanced') {
+      if (currentColumn?.type === 'dataobject.advanced') {
         currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
       }
 
@@ -129,6 +133,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       return {
         key: currentColumn.key,
         type: currentColumn.type,
+        group: currentColumn.group as unknown as string[] | undefined,
         locale: currentColumn.locale,
         config: currentColumn.config
       }
@@ -152,9 +157,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            ...filters,
-            includeDescendants: true
-          }
+            ...filters
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

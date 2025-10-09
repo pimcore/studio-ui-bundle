@@ -39,29 +39,12 @@ const defaultProps = {
 
 export const DataObjectSelectorListing = (): React.JSX.Element => {
   const { config } = useElementSelectorHelper()
+  const allowedTypes = config.config?.objects?.allowedTypes
+  const allowedClasses = config.config?.objects?.allowedClasses
 
-  const hasAllowedTypes = config.config?.objects?.allowedTypes?.length !== undefined
-  const isFolderIncluded = config.config?.objects?.allowedTypes?.includes('folder') ?? false
-  const areClassesIncluded = config.config?.objects?.allowedTypes?.some((type) => type !== 'folder') ?? false
-  const typeRestriction: TypeFilterDecoratorConfig['restrictedOptions'] = []
-
-  if (isFolderIncluded) {
-    typeRestriction.push('folder')
-  }
-
-  if (areClassesIncluded) {
-    typeRestriction.push('object')
-    typeRestriction.push('variant')
-  }
-
-  let classRestriction: ClassDefinitionSelectionDecoratorConfig['classRestriction'] = []
-
-  if (hasAllowedTypes) {
-    const classesWithoutFolder = config.config?.objects?.allowedTypes?.filter((type) => type !== 'folder') ?? []
-    classRestriction = classesWithoutFolder.map((type) => ({
-      classes: type
-    }))
-  }
+  const typeRestriction: TypeFilterDecoratorConfig['restrictedOptions'] = allowedTypes ?? []
+  const classRestriction: ClassDefinitionSelectionDecoratorConfig['classRestriction'] =
+    allowedClasses?.map((className) => ({ classes: className })) ?? []
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(

@@ -32,6 +32,7 @@ import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
+import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
@@ -81,6 +82,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentConfigurations from '@Pimcore/assets/icons/document-configurations.inline.svg?react'
 import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
@@ -138,6 +140,7 @@ import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
 import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
+import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
 import locationMarker from '@Pimcore/assets/icons/location-marker.inline.svg?react'
@@ -157,8 +160,10 @@ import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
 import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg?react'
+import navigation from '@Pimcore/assets/icons/navigation.inline.svg?react'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg?react'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg?react'
+import newDocument from '@Pimcore/assets/icons/new-document.inline.svg?react'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg?react'
 import newMarker from '@Pimcore/assets/icons/new-marker.inline.svg?react'
 import newRow from '@Pimcore/assets/icons/new-row.inline.svg?react'
@@ -166,6 +171,7 @@ import newSomething from '@Pimcore/assets/icons/new-something.inline.svg?react'
 import newIcon from '@Pimcore/assets/icons/new.inline.svg?react'
 import news from '@Pimcore/assets/icons/news.inline.svg?react'
 import noContent from '@Pimcore/assets/icons/no-content.inline.svg?react'
+import notVisibleElement from '@Pimcore/assets/icons/not-visible-element.inline.svg?react'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg?react'
 import notificationRead from '@Pimcore/assets/icons/notification-read.inline.svg?react'
 import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline.svg?react'
@@ -179,6 +185,7 @@ import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
+import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
@@ -208,6 +215,7 @@ import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
+import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
@@ -225,6 +233,7 @@ import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
 import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
+import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
@@ -314,6 +323,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'batch-selection',
       component: batchSelection
+    })
+    iconLibrary.register({
+      name: 'blank',
+      component: blank
     })
     iconLibrary.register({
       name: 'body-style',
@@ -510,6 +523,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-configurations',
+      component: documentConfigurations
     })
     iconLibrary.register({
       name: 'document-link',
@@ -740,6 +757,10 @@ moduleSystem.registerModule({
       component: layout
     })
     iconLibrary.register({
+      name: 'link-document',
+      component: linkDocument
+    })
+    iconLibrary.register({
       name: 'list',
       component: list
     })
@@ -816,12 +837,20 @@ moduleSystem.registerModule({
       component: multiSelect
     })
     iconLibrary.register({
+      name: 'navigation',
+      component: navigation
+    })
+    iconLibrary.register({
       name: 'new-circle',
       component: newCircle
     })
     iconLibrary.register({
       name: 'new-column',
       component: newColumn
+    })
+    iconLibrary.register({
+      name: 'new-document',
+      component: newDocument
     })
     iconLibrary.register({
       name: 'new-hotspot',
@@ -850,6 +879,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'no-content',
       component: noContent
+    })
+    iconLibrary.register({
+      name: 'not-visible-element',
+      component: notVisibleElement
     })
     iconLibrary.register({
       name: 'notes-events',
@@ -902,6 +935,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'pined',
       component: pined
+    })
+    iconLibrary.register({
+      name: 'plus-circle',
+      component: plusCircle
     })
     iconLibrary.register({
       name: 'plus-square',
@@ -1020,6 +1057,10 @@ moduleSystem.registerModule({
       component: sharedUsers
     })
     iconLibrary.register({
+      name: 'shield-plus',
+      component: shieldPlus
+    })
+    iconLibrary.register({
       name: 'shield',
       component: shield
     })
@@ -1086,6 +1127,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unknown',
       component: unknown
+    })
+    iconLibrary.register({
+      name: 'unlink-document',
+      component: unlinkDocument
     })
     iconLibrary.register({
       name: 'unlocked',

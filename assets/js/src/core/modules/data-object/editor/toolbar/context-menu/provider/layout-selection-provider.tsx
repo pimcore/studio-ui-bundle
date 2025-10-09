@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 
 export interface ILayoutSelectionContext {
@@ -28,13 +28,15 @@ export interface LayoutSelectionProviderProps {
 }
 
 export const LayoutSelectionProvider = ({ children, defaultLayout, isLoading }: LayoutSelectionProviderProps): React.JSX.Element => {
-  const [currentLayout, setCurrentLayout] = useState<string | null>(defaultLayout)
+  const [currentLayout, setCurrentLayout] = useState<string | null>(null)
+  const isInitializedRef = useRef<boolean>(false)
 
   useEffect(() => {
-    if (currentLayout === null && defaultLayout !== null) {
+    if (!isInitializedRef.current && !isLoading && defaultLayout !== null) {
       setCurrentLayout(defaultLayout)
+      isInitializedRef.current = true
     }
-  }, [defaultLayout])
+  }, [defaultLayout, isLoading])
 
   const value = useMemo(() => ({
     currentLayout,

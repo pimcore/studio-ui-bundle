@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
-import type { ManyToManyRelationValueItem } from './use-value'
+import type { DisplayManyToManyRelationValueItem } from './use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Box } from '@Pimcore/components/box/box'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
@@ -22,10 +22,8 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ManyToManyRelationGridProps } from '../grid'
 import { getElementCellConfig } from '../utils/helpers'
-import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { LoadingOutlined } from '@ant-design/icons'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
+import { renderFullPathCell } from '../utils/full-path-cell-renderer'
 
 interface UseColumnsReturn {
   columns: Array<ColumnDef<any>>
@@ -40,17 +38,6 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
   const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
-  const renderFullPathCell = (info: any): React.JSX.Element => {
-    return (
-      <Flex
-        align={ 'center' }
-        className={ 'p-mini' }
-      >
-        <SanitizeHtml html={ info.getValue() ?? '' } />
-        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
-      </Flex>
-    )
-  }
 
   const defaultColumns = [
     columnHelper.accessor('id', {
@@ -100,7 +87,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
       size: 110,
       cell: (info) => {
         const rowIndex = info.row.index
-        const rowValue = info.row.original as ManyToManyRelationValueItem
+        const rowValue = info.row.original as DisplayManyToManyRelationValueItem
 
         const buttons: ReactElement[] = []
         buttons.push(
@@ -156,7 +143,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
                     title: t('remove'),
                     content: t('delete-confirmation-advanced', {
                       type: t('relation'),
-                      value: rowValue.fullPath,
+                      value: rowValue.originalPath ?? rowValue.fullPath,
                       interpolation: { escapeValue: false }
                     }),
                     onOk: () => {

@@ -26,7 +26,7 @@ import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Avatar } from 'antd'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
-import { isNil } from 'lodash'
+import { useNotificationGetUnreadCountQuery } from '@Pimcore/modules/notifications/notifications-slice.gen'
 
 interface IUserMenuProps {
   className?: string
@@ -38,15 +38,19 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
   const user = useUser()
-  const { getUserImageById } = useUserHelper()
+  const { getUserImageById, updateUserImageInState } = useUserHelper()
+  const { data } = useNotificationGetUnreadCountQuery()
 
-  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(undefined)
   useEffect(() => {
-    getUserImageById(user.id).then((imageUrl) => {
-      setUserImageUrl(imageUrl)
-    }).catch((error: Error) => {
-      console.error('Error fetching user image:', error)
-    })
+    if (user.hasImage) {
+      getUserImageById(user.id).then((data) => {
+        if (data !== undefined) {
+          updateUserImageInState(data, true)
+        }
+      }).catch((error: Error) => {
+        console.error('Error fetching user image:', error)
+      })
+    }
   }, [])
 
   const handleLogout = (): void => {
@@ -59,26 +63,28 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     })
   }
 
-  const getUserName = (): string => {
-    if (!isNil(user.firstname) && !isNil(user.lastname)) {
-      return `${user.firstname} ${user.lastname}`
-    }
-
-    return t('user-menu.my-profile')
-  }
-
   const items: DropdownMenuProps['items'] = [
     {
       key: 'title',
       label: (
-        <div className={ 'user-menu__title' }>{t('user-menu.title')}</div>
+        <div className={ 'user-menu__title' }>
+          {t('user-menu.title')}
+          <span className={ 'user-menu__title-username' }>
+            ({user.username})
+          </span>
+        </div>
       ),
       type: 'group'
     },
     {
       key: 'notifications',
       label: t('user-menu.notifications'),
-      icon: <div className={ 'user-menu__item-icon' }><Badge count={ 5 } /></div>,
+      icon: <div className={ 'user-menu__item-icon' }>
+        <Badge
+          count={ data?.unreadNotificationsCount ?? 0 }
+          showZero
+        />
+      </div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
       extra: isAllowed(UserPermission.SendNotifications)
@@ -96,7 +102,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     },
     {
       key: 'myprofile',
-      label: getUserName(),
+      label: t('user-menu.my-profile'),
       icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
@@ -121,7 +127,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
           data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
-          src={ userImageUrl }
+          src={ user?.hasImage && user?.image != null ? user?.image : undefined }
         ></Avatar>
       </Dropdown>
 

@@ -55,7 +55,17 @@ export interface CustomThumbnailDefinition extends BaseThumbnailDefinition {
   page?: number
 }
 
-export type ThumbnailDefinition = NamedThumbnailDefinition | CustomThumbnailDefinition
+export interface DynamicThumbnailDefinition extends BaseThumbnailDefinition {
+  dynamicConfig: Record<string, any>
+  // Optional crop parameters that will be injected into dynamicConfig
+  cropPercent?: boolean
+  cropWidth?: number
+  cropHeight?: number
+  cropTop?: number
+  cropLeft?: number
+}
+
+export type ThumbnailDefinition = NamedThumbnailDefinition | DynamicThumbnailDefinition | CustomThumbnailDefinition
 
 // Parameter lists for different thumbnail endpoints
 const NAMED_THUMBNAIL_PARAMS: Array<keyof NamedThumbnailDefinition> = [
@@ -75,12 +85,14 @@ const VIDEO_PARAMS: Array<keyof CustomThumbnailDefinition> = [
 export class ThumbnailService {
   /**
    * Generate thumbnail URL based on the thumbnail definition.
-   * Auto-detects between named and custom thumbnails based on presence of thumbnailName.
+   * Priority: named thumbnails -> dynamic config -> custom thumbnails.
    * Always returns a URL string for the thumbnail.
    */
   getThumbnailUrl (definition: ThumbnailDefinition): string {
     if ('thumbnailName' in definition && !isEmpty(definition.thumbnailName)) {
       return this.generateNamedThumbnailUrl(definition)
+    } else if ('dynamicConfig' in definition && !isNil(definition.dynamicConfig)) {
+      return this.generateDynamicThumbnailUrl(definition)
     } else {
       return this.generateCustomThumbnailUrl(definition as CustomThumbnailDefinition)
     }
@@ -101,6 +113,30 @@ export class ThumbnailService {
 
     const queryString = params.toString()
     return `${baseUrl}${path}${!isEmpty(queryString) ? `?${queryString}` : ''}`
+  }
+
+  private generateDynamicThumbnailUrl (definition: DynamicThumbnailDefinition): string {
+    const { assetId, assetType, dynamicConfig } = definition
+    const baseUrl = `${getPrefix()}/assets/${assetId}`
+
+    if (assetType === 'video') {
+      throw new Error('Video assets do not support dynamic thumbnails. Use custom thumbnail instead.')
+    }
+
+    const path = `/${assetType}/stream/dynamic`
+    const params = new URLSearchParams()
+
+    const finalConfig = { ...dynamicConfig }
+    const cropKeys = ['cropPercent', 'cropWidth', 'cropHeight', 'cropTop', 'cropLeft']
+    cropKeys.forEach(key => {
+      if (key in definition && !isNil(definition[key as keyof DynamicThumbnailDefinition])) {
+        finalConfig[key] = definition[key as keyof DynamicThumbnailDefinition]
+      }
+    })
+    params.set('config', JSON.stringify(finalConfig))
+
+    const queryString = params.toString()
+    return `${baseUrl}${path}?${queryString}`
   }
 
   private generateCustomThumbnailUrl (definition: CustomThumbnailDefinition): string {

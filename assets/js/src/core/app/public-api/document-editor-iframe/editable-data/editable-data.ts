@@ -25,11 +25,15 @@ export interface DocumentEditableApi {
   getInheritanceState: (key: string) => boolean
   setInheritanceState: (key: string, inherited: boolean) => void
   initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
+  getEditableDefinitions: () => AbstractDocumentEditableDefinition[]
+  registerDynamicEditables: (editables: AbstractDocumentEditableDefinition[]) => void
+  unregisterDynamicEditables: (editableIds: string[]) => void
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
   private values: Record<string, ValueType> = {}
   private inheritanceState: Record<string, boolean> = {}
+  private dynamicEditables: Record<string, AbstractDocumentEditableDefinition> = {}
 
   getValues (forApi: boolean = false): Record<string, ValueType> {
     if (!forApi) {
@@ -82,14 +86,39 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
     Object.assign(this.inheritanceState, inheritanceState)
   }
 
-  private getEditableDefinitions (): AbstractDocumentEditableDefinition[] {
-    try {
-      const iframeWindow = window as any
-      return iframeWindow.editableDefinitions ?? []
-    } catch (error) {
-      console.warn('Could not get editable definitions from iframe window:', error)
-      return []
+  registerDynamicEditables (editables: AbstractDocumentEditableDefinition[]): void {
+    for (const editable of editables) {
+      this.dynamicEditables[editable.id] = editable
     }
+  }
+
+  unregisterDynamicEditables (editableIds: string[]): void {
+    for (const id of editableIds) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.dynamicEditables[id]
+    }
+  }
+
+  getEditableDefinitions (): AbstractDocumentEditableDefinition[] {
+    const getInitialEditables = (): AbstractDocumentEditableDefinition[] => {
+      try {
+        const iframeWindow = window as any
+        return iframeWindow.editableDefinitions ?? []
+      } catch (error) {
+        console.warn('Could not get editable definitions from iframe window:', error)
+        return []
+      }
+    }
+
+    const initialEditables = getInitialEditables()
+    const dynamicEditables = Object.values(this.dynamicEditables)
+
+    const allEditables = [...initialEditables, ...dynamicEditables.filter(
+      dynamic => !initialEditables.some(initial => initial.id === dynamic.id)
+    )]
+
+    // Filter to only include editables that have values. Editables without values are removed by the user.
+    return allEditables.filter(editable => editable.name in this.values)
   }
 
   private transformEditableValue (editableName: string, editableValue: ValueType): ValueType {

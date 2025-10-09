@@ -9,8 +9,8 @@
  */
 
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
+import { useSettings } from '../../../settings/use-settings'
 
 export interface SelectedColumn {
   key?: string
@@ -32,13 +32,15 @@ export interface SelectedColumnsContextProps {
   setSelectedColumns: (columns: SelectedColumn[]) => void
   encodeColumnIdentifier: (column: SelectedColumn) => string
   decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn | undefined
+  shouldMapDataToColumn: (data: any, column: SelectedColumn) => boolean
 }
 
 export const SelectedColumnsContext = createContext<SelectedColumnsContextProps>({
   selectedColumns: [],
   setSelectedColumns: () => {},
   encodeColumnIdentifier: () => '',
-  decodeColumnIdentifier: () => undefined
+  decodeColumnIdentifier: () => undefined,
+  shouldMapDataToColumn: () => false
 })
 
 export interface SelectedColumnsProviderProps {
@@ -47,6 +49,8 @@ export interface SelectedColumnsProviderProps {
 
 export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
+  const { useColumnMapper } = useSettings()
+  const columnMapper = useColumnMapper()
 
   const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
     return selectedColumns.map(column => ({
@@ -56,49 +60,19 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   }, [selectedColumns])
 
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    let columnIdentifier: Record<string, any> = {
-      uuid: uuid(),
-      key: column?.key,
-      locale: column.locale
-    }
-
-    if (column.type === 'dataobject.classificationstore') {
-      columnIdentifier = {
-        uuid: uuid(),
-        locale: column.locale,
-        type: column.type,
-        config: {
-          keyId: column.config?.keyId,
-          groupId: column.config?.groupId
-        }
-      }
-    }
-
-    return JSON.stringify(columnIdentifier).replaceAll('.', '*||*')
+    return columnMapper.encodeColumnIdentifier(column)
   }
 
   const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
-    try {
-      JSON.parse(columnIdentifier.replaceAll('*||*', '.'))
-    } catch (e) {
-      return undefined
-    }
+    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
+  }
 
-    const { key, locale, config, type } = JSON.parse(columnIdentifier.replaceAll('*||*', '.'))
-
-    console.log({key, locale, config, type})
-    console.log({formattedSelectedColumns})
-
-    if (type === 'dataobject.classificationstore' && config?.keyId !== undefined && config?.groupId !== undefined) {
-      // @todo also should check for something unique to identify same classifications in different class properties
-      return formattedSelectedColumns.find(column => type === 'dataobject.classificationstore' && column.config?.keyId === config.keyId && column.config?.groupId === config.groupId && column.locale === locale)
-    }
-
-    return formattedSelectedColumns.find(column => column.key === key && column.locale === locale)!
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => {
+    return columnMapper.shouldMapDataToColumn(data, column)
   }
 
   return useMemo(() => (
-    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } }>
+    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } }>
       {children}
     </SelectedColumnsContext.Provider>
   ), [formattedSelectedColumns])

@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Popconfirm } from 'antd'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 
 interface IDetailProps {
   onRemoveRole: (id: any, parentId: any) => void
@@ -35,25 +36,31 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
   const { styles } = useStyle()
   const classNames = ['detail-tabs', styles.detailTabs]
   const modal = useFormModal()
+  const { user } = useUserDraft()
 
   const { openRole, closeRole, removeRole, cloneRole, getAllIds, activeId } = useRoleHelper()
   const { role } = useRoleDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
-  const triggerConfirm = (): void => {
-    closeRole(activeId)
-    openRole(getAllIds[getAllIds.length - 2])
+  const triggerConfirm = (id: number): void => {
+    closeRole(id)
   }
 
   const onHandleClose = (key: string): void => {
-    const role = selectRoleById(store.getState(), parseInt(key))
+    const id = parseInt(key)
+    const role = selectRoleById(store.getState(), id)
+
     if (role?.modified && popConfirmOpen === null) {
-      setPopConfirmOpen(parseInt(key))
+      if (user?.allowDirtyClose) {
+        triggerConfirm(id)
+      } else {
+        setPopConfirmOpen(id)
+      }
       return
     }
 
     if (!role?.modified) {
-      triggerConfirm()
+      triggerConfirm(id)
       return
     }
 
@@ -78,7 +85,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
       title: t('roles.remove-item'),
       content: t('roles.remove-item.text'),
       onOk: async () => {
-        triggerConfirm()
+        triggerConfirm(activeId)
         await removeRole({ id: activeId })
         onRemoveRole(activeId, role?.parentId ?? 0)
       }
@@ -110,7 +117,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
             key: id.toString(),
             label: <Popconfirm
               onCancel={ () => { setPopConfirmOpen(null) } }
-              onConfirm={ triggerConfirm }
+              onConfirm={ () => { triggerConfirm(id) } }
               open={ popConfirmOpen === id }
               title={ t('widget-manager.tab-title.close-confirmation') }
                    >

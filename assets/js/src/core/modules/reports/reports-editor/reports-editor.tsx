@@ -11,17 +11,32 @@
 import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Content } from '@Pimcore/components/content/content'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { useStyles } from './reports-editor.styles'
 
+export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
+export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
+
 export const ReportsEditor = (): React.JSX.Element => {
-  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
+  const hasPermission = isAllowed(UserPermission.ReportsConfig)
+
+  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery(
+    { page: 1, pageSize: 9999 },
+    { skip: !hasPermission }
+  )
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
+  const [modifiedReports, setModifiedReports] = useState<string[]>([])
 
   const { styles } = useStyles()
 
@@ -32,10 +47,17 @@ export const ReportsEditor = (): React.JSX.Element => {
       .filter(report => existingReportIds.has(report.id))
       .map((report) => ({
         key: report.id,
-        label: report.text,
-        children: <ReportConfiguration report={ report } />
+        label: `${report.text} ${modifiedReports.includes(report.id) ? '*' : ''}`,
+        children: (
+          <ReportConfiguration
+            isActive={ activeTabKey === report.id }
+            modifiedReports={ modifiedReports }
+            report={ report }
+            setModifiedReports={ setModifiedReports }
+          />
+        )
       }))
-  }, [reportsConfigTreeData, openedReports])
+  }, [reportsConfigTreeData, openedReports, activeTabKey, modifiedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)
@@ -48,13 +70,19 @@ export const ReportsEditor = (): React.JSX.Element => {
   }
 
   const handleCloseTab = (key: string): void => {
-    const targetIndex = openedReports.findIndex((tab) => tab.id === key)
+    const targetIndex = openedReports.findIndex((tab) => tab?.id === key)
     const updatedOpenedReports = openedReports.filter((report) => report.id !== key)
 
     if (key === activeTabKey) {
       const prevTab = openedReports[targetIndex - 1]
+      const nextTab = openedReports[targetIndex + 1]
 
-      setActiveTabKey(!isUndefined(prevTab) ? prevTab.id : undefined)
+      const prevTabId = prevTab?.id
+      const nextTabId = !isUndefined(nextTab) ? nextTab?.id : undefined
+
+      const activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
+
+      setActiveTabKey(activeId)
     }
 
     setOpenedReports(updatedOpenedReports)
@@ -62,6 +90,33 @@ export const ReportsEditor = (): React.JSX.Element => {
 
   const handleChangeTab = (key: string): void => {
     setActiveTabKey(key)
+  }
+
+  const mainContent = (): React.JSX.Element => {
+    if (isUndefined(activeTabKey)) {
+      return <Content none />
+    }
+
+    return (
+      <ContentLayout
+        renderToolbar={ (
+          <Toolbar justify="space-between">
+            <PortalSlot id={ REFETCH_BTN_PORTAL_ID } />
+            <PortalSlot id={ SAVE_BTN_PORTAL_ID } />
+          </Toolbar>
+        ) }
+      >
+        <Tabs
+          activeKey={ activeTabKey }
+          className={ styles.tabs }
+          hasStickyHeader
+          items={ tabItems }
+          onChange={ handleChangeTab }
+          onClose={ handleCloseTab }
+          rootClassName={ styles.tabsContainer }
+        />
+      </ContentLayout>
+    )
   }
 
   return (
@@ -78,17 +133,7 @@ export const ReportsEditor = (): React.JSX.Element => {
           />
         )
       } }
-      rightItem={ {
-        children: (
-          <Tabs
-            activeKey={ activeTabKey }
-            className={ styles.tabs }
-            items={ tabItems }
-            onChange={ handleChangeTab }
-            onClose={ handleCloseTab }
-          />
-        )
-      } }
+      rightItem={ { children: mainContent() } }
     />
   )
 }

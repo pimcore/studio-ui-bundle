@@ -21,6 +21,7 @@ import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
@@ -35,6 +36,7 @@ export interface TreeNodeProps {
   isLocked: boolean
   elementType?: ElementType
   hasChildren?: boolean
+  fullPath?: string
   metaData?: any
   type?: string
   parentId?: string
@@ -43,6 +45,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  isSite?: boolean
   wrapNode?: TreeNodeWrapper
 }
 
@@ -93,7 +96,8 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     onSelect,
     onRightClick,
     nodesRefs,
-    nodeOrder
+    nodeOrder,
+    tooltipSlotName
   } = useContext(TreeContext)
   const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
@@ -248,9 +252,25 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       data-testid={ createNodeTestId(parseInt(id, 10), props.elementType) }
       ref={ forwardRef }
     >
-      <div className="tree-node__content">
-        {wrapNode(nodeContent)}
-      </div>
+      {!isNil(tooltipSlotName)
+        ? (
+          <ComponentRenderer
+            component={ tooltipSlotName }
+            props={ {
+              node: treeNodeProps,
+              children: (
+                <div className="tree-node__content">
+                  {wrapNode(nodeContent)}
+                </div>
+              )
+            } }
+          />
+          )
+        : (
+          <div className="tree-node__content">
+            {wrapNode(nodeContent)}
+          </div>
+          )}
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />

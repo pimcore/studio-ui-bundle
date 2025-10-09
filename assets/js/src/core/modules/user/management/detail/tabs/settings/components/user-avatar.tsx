@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
 import { Avatar, Flex, Upload, Skeleton } from 'antd'
@@ -17,39 +17,49 @@ import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface IUserAvatar {
   user: any
+  onUserImageChanged?: (image: string | undefined, hasImage: boolean) => void
 }
-const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
+const UserAvatar = ({ user, onUserImageChanged, ...props }: IUserAvatar): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  const { uploadUserAvatar } = useUserManagementHelper()
+  const { uploadUserAvatar, deleteUserAvatar } = useUserManagementHelper()
   const { getUserImageById } = useUserHelper()
 
-  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(user?.image as string ?? undefined)
-  const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImageUrl === null)
+  const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && user?.image === undefined)
 
   const getUserImage = (): void => {
     setUserImageLoading(true)
 
-    getUserImageById(user.id as number).then((imageUrl) => {
-      setUserImageUrl(imageUrl)
+    getUserImageById(user.id as number).then((image) => {
+      if (image !== undefined) {
+        onUserImageChanged?.(image, true)
+      }
       setUserImageLoading(false)
     }).catch((error: Error) => {
       console.error('Error fetching user image:', error)
     })
   }
 
-  useEffect(() => {
-    if (user?.hasImage === true && userImageUrl === undefined) {
-      getUserImage()
-    } else {
-      setUserImageUrl(undefined)
+  const handleDeleteImage = async (): Promise<void> => {
+    try {
+      await deleteUserAvatar(user?.id as number)
+      onUserImageChanged?.(undefined, false)
+    } catch (error) {
+      console.error('Error deleting user image:', error)
     }
-  }, [user.id])
+  }
+
+  useEffect(() => {
+    if (user?.hasImage === true) {
+      getUserImage()
+    }
+  }, [])
 
   return (
     <Card title={ t('user-management.settings.avatar') }>
@@ -69,11 +79,11 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
               className={ classNames.join(' ') }
               icon={ <UserOutlined /> }
               size={ 64 }
-              src={ userImageUrl }
+              src={ user?.hasImage === true && user?.image != null ? user.image : undefined }
             />
             )}
 
-        <div>
+        <Flex gap={ 'small' }>
           <Upload
             customRequest={ async ({ file }) => {
               await uploadUserAvatar({ id: user?.id, file: file as File })
@@ -87,7 +97,17 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
           >
             <Button type={ 'default' }>{t('user-management.settings.upload-avatar')}</Button>
           </Upload>
-        </div>
+
+          {user?.hasImage === true
+            ? (
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ handleDeleteImage }
+                type={ 'default' }
+              />
+              )
+            : null}
+        </Flex>
       </Flex>
     </Card>
   )

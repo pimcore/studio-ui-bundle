@@ -47,7 +47,17 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'asset.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'asset.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   dataObject: {
@@ -71,10 +81,27 @@ const defaultComponentConfig = {
             ]
           }
         }
+      },
+      tab: {
+        listing: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.listing' },
+        edit: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.edit' },
+        preview: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.preview' },
+        versions: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.versions' },
+        variants: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.variants' }
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'dataObject.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   document: {
@@ -101,7 +128,30 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'document.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'document.tree.node.meta',
+          defaultEntries: [
+            { name: 'navigationExcludeIcon', priority: 100 },
+            { name: 'lockIcon', priority: 200 }
+          ]
+        }
+      }
+    }
+  },
+  element: {
+    editor: {
+      tab: {
+        properties: { type: ComponentType.SINGLE, name: 'element.editor.tab.properties' },
+        schedule: { type: ComponentType.SINGLE, name: 'element.editor.tab.schedule' },
+        dependencies: { type: ComponentType.SINGLE, name: 'element.editor.tab.dependencies' },
+        workflow: { type: ComponentType.SINGLE, name: 'element.editor.tab.workflow' },
+        notesAndEvents: { type: ComponentType.SINGLE, name: 'element.editor.tab.notesAndEvents' },
+        tags: { type: ComponentType.SINGLE, name: 'element.editor.tab.tags' }
+      }
     }
   },
   leftSidebar: {

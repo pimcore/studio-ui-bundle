@@ -73,16 +73,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            assetDocumentStreamDynamic: build.mutation<
+            assetDocumentStreamDynamic: build.query<
                 AssetDocumentStreamDynamicApiResponse,
                 AssetDocumentStreamDynamicApiArg
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/dynamic`,
-                    method: "POST",
-                    body: queryArg.body,
+                    params: {
+                        config: queryArg.config,
+                    },
                 }),
-                invalidatesTags: ["Assets"],
+                providesTags: ["Assets"],
             }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
@@ -272,13 +273,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            assetImageStreamDynamic: build.mutation<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
+            assetImageStreamDynamic: build.query<AssetImageStreamDynamicApiResponse, AssetImageStreamDynamicApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/dynamic`,
-                    method: "POST",
-                    body: queryArg.body,
+                    params: {
+                        config: queryArg.config,
+                    },
                 }),
-                invalidatesTags: ["Assets"],
+                providesTags: ["Assets"],
             }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
@@ -525,9 +527,8 @@ export type AssetDocumentStreamDynamicApiResponse =
 export type AssetDocumentStreamDynamicApiArg = {
     /** Id of the document */
     id: number;
-    body: {
-        dynamicConfig: object;
-    };
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
@@ -594,7 +595,7 @@ export type AssetExportZipFolderApiResponse =
 export type AssetExportZipFolderApiArg = {
     body: {
         folders?: number[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
@@ -776,9 +777,8 @@ export type AssetImageStreamDynamicApiResponse =
 export type AssetImageStreamDynamicApiArg = {
     /** Id of the asset */
     id: number;
-    body: {
-        dynamicConfig: object;
-    };
+    /** A JSON encoded thumbnail configuration. */
+    config: string;
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -855,7 +855,7 @@ export type AssetPatchFolderByIdApiArg = {
             locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
         }[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
     };
 };
 export type AssetClearThumbnailApiResponse = unknown;
@@ -998,17 +998,11 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
+export type ExportAllFilter = {
     /** Column Filter */
-    columnFilters?: object;
+    columnFilters: object;
     /** Sort Filter */
-    sortFilter?: object;
+    sortFilter: object;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1024,7 +1018,7 @@ export type Element = {
     /** path */
     path: string;
     /** icon */
-    icon?: ElementIcon;
+    icon: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
@@ -1213,9 +1207,21 @@ export type GridColumnRequest = {
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+};
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -1338,7 +1344,7 @@ export const {
     useAssetGetTextDataByIdQuery,
     useAssetDocumentDownloadCustomQuery,
     useAssetDocumentStreamCustomQuery,
-    useAssetDocumentStreamDynamicMutation,
+    useAssetDocumentStreamDynamicQuery,
     useAssetDocumentStreamPreviewQuery,
     useAssetDocumentDownloadByThumbnailQuery,
     useAssetDocumentStreamByThumbnailQuery,
@@ -1359,7 +1365,7 @@ export const {
     useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
-    useAssetImageStreamDynamicMutation,
+    useAssetImageStreamDynamicQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,

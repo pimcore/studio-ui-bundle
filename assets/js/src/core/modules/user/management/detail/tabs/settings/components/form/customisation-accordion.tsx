@@ -24,7 +24,7 @@ interface ICustomisationAccordion {
 }
 const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
   const { t } = useTranslation()
-  const { availableAdminLanguages } = useSettings()
+  const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const [roleOptions, setRoleOptions] = useState<any[]>([])
   const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
@@ -65,6 +65,12 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
     }
   }, [])
 
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
+
   const content = [
     {
       key: '1',
@@ -96,11 +102,13 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           name="language"
         >
           <Select
+            optionFilterProp="label"
             options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
             })) }
             placeholder={ t('user-management.language') }
+            showSearch
           />
         </Form.Item>
 
@@ -133,40 +141,55 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           : null }
 
         <Form.Item
-          label={ 'TODO ' + t('user-management.dateTime') }
-          name="dateTime"
+          label={ t('user-management.dateTime') }
+          name="dateTimeLocale"
         >
           <Select
-            options={ availableAdminLanguages.map((language: string) => ({
-              value: language,
-              label: getDisplayName(language)
-            })) }
+            optionFilterProp="label"
+            options={ validLocalesOptions }
             placeholder={ t('user-management.dateTime') }
+            showSearch
           />
         </Form.Item>
 
         <Form.Item
           name="welcomeScreen"
+          style={ { marginBottom: '0' } }
         >
-          <Switch labelRight={ t('user-management.welcomeScreen') } />
+          <Switch
+            labelRight={ t('user-management.welcomeScreen') }
+            size={ 'small' }
+          />
         </Form.Item>
 
         <Form.Item
           name="memorizeTabs"
+          style={ { marginBottom: '0' } }
         >
-          <Switch labelRight={ t('user-management.memorizeTabs') } />
+          <Switch
+            labelRight={ t('user-management.memorizeTabs') }
+            size={ 'small' }
+          />
         </Form.Item>
 
         <Form.Item
           name="allowDirtyClose"
+          style={ { marginBottom: '0' } }
         >
-          <Switch labelRight={ t('user-management.allowDirtyClose') } />
+          <Switch
+            labelRight={ t('user-management.allowDirtyClose') }
+            size={ 'small' }
+          />
         </Form.Item>
 
         <Form.Item
           name="closeWarning"
+          style={ { marginBottom: '0' } }
         >
-          <Switch labelRight={ t('user-management.closeWarning') } />
+          <Switch
+            labelRight={ t('user-management.closeWarning') }
+            size={ 'small' }
+          />
         </Form.Item>
       </>
     }

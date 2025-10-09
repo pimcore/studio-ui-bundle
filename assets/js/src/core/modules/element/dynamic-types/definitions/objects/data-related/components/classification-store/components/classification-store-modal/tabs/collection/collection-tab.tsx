@@ -23,6 +23,7 @@ import { useClassificationStoreModalOptional } from '../../../../provider/classi
 interface CollectionTabProps {
   storeId: ClassificationStoreGetCollectionsApiArg['storeId']
   classId: ClassificationStoreGetCollectionsApiArg['classId']
+  objectId?: number
   fieldName: ClassificationStoreGetCollectionsApiArg['fieldName']
 }
 
@@ -58,6 +59,7 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
           queryArgs={ {
             storeId: props.storeId,
             classId: props.classId,
+            objectId: props.objectId,
             fieldName: props.fieldName
           } }
           queryHook={ useClassificationStoreGetCollectionsQuery }

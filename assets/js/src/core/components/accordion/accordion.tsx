@@ -107,7 +107,7 @@ export const Accordion = ({
       className: itemClassNames.join(' '),
       label: <>
         <Flex
-          align={ 'baseline' }
+          align={ 'center' }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}

@@ -10,17 +10,24 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import '@Pimcore/modules/data-object/editor/types/object'
+import '@Pimcore/modules/data-object/editor/types/variant'
 import '@Pimcore/modules/data-object/editor/types/folder'
+import '@Pimcore/modules/data-object/editor/toolbar/context-menu'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { DataObjectEditorWidget } from '@Pimcore/modules/data-object/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { ConditionalLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/conditional-language-selection'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
+import { PreviewView } from './shared-tab-manager/tabs/preview/preview-view'
+import { VersionViewContainer } from './shared-tab-manager/tabs/versions/version-view-container'
+import { ListingContainer } from './types/folder/tab-manager/tabs/listing/listing-container'
+import { EditContainer } from './types/object/tab-manager/tabs/edit/edit-container'
+import { VariantsTabContainer } from './types/variant/tab-manager/tabs/variants/variants-tab-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,6 +36,11 @@ moduleSystem.registerModule({
     typeRegistry.register({
       name: 'object',
       tabManagerServiceId: 'DataObject/Editor/ObjectTabManager'
+    })
+
+    typeRegistry.register({
+      name: 'variant',
+      tabManagerServiceId: 'DataObject/Editor/VariantTabManager'
     })
 
     typeRegistry.register({
@@ -64,6 +76,31 @@ moduleSystem.registerModule({
       name: 'saveButtons',
       priority: 200,
       component: DataObjectEditorToolbarSaveButtons
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.preview.name,
+      component: PreviewView
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.versions.name,
+      component: VersionViewContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.listing.name,
+      component: ListingContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.edit.name,
+      component: EditContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.dataObject.editor.tab.variants.name,
+      component: VariantsTabContainer
     })
   }
 })

@@ -15,7 +15,7 @@ import type { DocumentRenderletRenderApiArg, DocumentRenderletRenderApiResponse 
 import { isNil } from 'lodash'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES],
+  addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES, tagNames.DOCUMENT_SITE],
   endpoints: {
 
     documentClone: {
@@ -52,6 +52,34 @@ const api = baseApi.enhanceEndpoints({
 
     documentAdd: {
       invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
+    },
+
+    documentGetSite: {
+      providesTags: () => []
+    },
+
+    documentUpdateSite: {
+      invalidatesTags: () => invalidatingTags.DOCUMENT_SITE()
+    },
+
+    documentDeleteSite: {
+      invalidatesTags: () => invalidatingTags.DOCUMENT_SITE()
+    },
+
+    documentsListAvailableSites: {
+      providesTags: () => providingTags.DOCUMENT_SITE()
+    },
+
+    documentGetTranslations: {
+      providesTags: (result, error, args) => providingTags.DOCUMENT_DETAIL_ID(args.id)
+    },
+
+    documentAddTranslation: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+    },
+
+    documentDeleteTranslation: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
     }
   }
 }).injectEndpoints({
@@ -111,10 +139,20 @@ export const {
   useDocumentDocTypeAddMutation,
   useDocumentDocTypeUpdateByIdMutation,
   useDocumentDocTypeDeleteMutation,
+  useDocumentPageSnippetChangeMainDocumentMutation,
   useDocumentPageSnippetAreaBlockRenderQuery,
   useLazyDocumentPageSnippetAreaBlockRenderQuery,
   useDocumentRenderletRenderQuery,
-  useDocumentsListAvailableSitesQuery
+  useDocumentsListAvailableSitesQuery,
+  useDocumentGetSiteQuery,
+  useLazyDocumentGetSiteQuery,
+  useDocumentUpdateSiteMutation,
+  useDocumentDeleteSiteMutation,
+  useDocumentGetTranslationsQuery,
+  useLazyDocumentGetTranslationsQuery,
+  useDocumentAddTranslationMutation,
+  useDocumentDeleteTranslationMutation,
+  useDocumentGetTranslationParentByLanguageQuery
 } = api
 
 export { api }
