@@ -27,7 +27,7 @@ import {
 import { EditorContainer } from './editor-container'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { EditorToolbarContextMenu } from './toolbar/context-menu/context-menu'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButtons } from './toolbar/save-buttons/save-buttons'
 
 moduleSystem.registerModule({
