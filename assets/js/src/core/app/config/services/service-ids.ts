@@ -121,6 +121,8 @@ export const serviceIds = {
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
+  'DynamicTypes/GridCell/Integer': 'DynamicTypes/GridCell/Integer',
+  'DynamicTypes/GridCell/Array': 'DynamicTypes/GridCell/Array',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -295,8 +297,15 @@ export const serviceIds = {
   'DynamicTypes/Grid/SourceFields/RelationField': 'DynamicTypes/Grid/SourceFields/RelationField',
 
   // Advanced Columns transformers
-  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
-  'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
+  'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
+  'DynamicTypes/Grid/Transformers/DateFormatter': 'DynamicTypes/Grid/Transformers/DateFormatter',
+  'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
+  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',
+  'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/Transformers/Combine',
+  'DynamicTypes/Grid/Transformers/Explode': 'DynamicTypes/Grid/Transformers/Explode',
+  'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
+  'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
+  'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',

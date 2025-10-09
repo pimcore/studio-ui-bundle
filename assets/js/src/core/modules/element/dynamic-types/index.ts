@@ -176,6 +176,13 @@ import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynami
 import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
 import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
 import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
+import { type DynamicTypePipelineGridTransformersExplode } from './definitions/pipelines/grid/transformers/types/explode/explode'
+import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipelines/grid/transformers/types/trim/trim'
+import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
+import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
+import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { type DynamicTypePipelineGridTransformersBooleanFormatter } from './definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
+import { type DynamicTypePipelineGridTransformersDateFormatter } from './definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -192,6 +199,8 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { type DynamicTypeGridCellInteger } from './definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
+import { type DynamicTypeGridCellArray } from './definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
 import { type DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
 import { type DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
 import { type DynamicTypeDocumentFolder } from './definitions/document/types/dynamic-type-document-folder'
@@ -276,6 +285,8 @@ moduleSystem.registerModule({
     const advancedGridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/AdvancedGridCellRegistry'])
 
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellInteger>(serviceIds['DynamicTypes/GridCell/Integer']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellArray>(serviceIds['DynamicTypes/GridCell/Array']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
@@ -421,7 +432,14 @@ moduleSystem.registerModule({
 
     const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry'])
 
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersDateFormatter>(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersExplode>(serviceIds['DynamicTypes/Grid/Transformers/Explode']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersSubstring>(serviceIds['DynamicTypes/Grid/Transformers/Substring']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
   }
 })
