@@ -61,7 +61,7 @@ export const useAreablockEditable = ({
     applyStylesToAreaEntries()
   }, [applyStylesToAreaEntries])
 
-  const { hideElementUntilRendered } = usePendingElementsReveal({
+  const { hideElementUntilRendered, revealPendingElements } = usePendingElementsReveal({
     dynamicEditables,
     getContainer: () => areablockManager.getContainer()
   })
@@ -180,6 +180,9 @@ export const useAreablockEditable = ({
         const editablesData = createEditableDataFromDefinitions(editableDefinitions)
         initializeData(editablesData)
         setDynamicEditables(prev => [...prev, ...editableDefinitions])
+      } else {
+        // Manually reveal elements when no editables are added
+        revealPendingElements()
       }
 
       handlePostOperation()

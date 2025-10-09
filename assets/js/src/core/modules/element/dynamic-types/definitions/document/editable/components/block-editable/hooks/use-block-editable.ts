@@ -51,7 +51,7 @@ export const useBlockEditable = ({
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(blockManager.queryElements())
 
-  const { hideElementUntilRendered } = usePendingElementsReveal({
+  const { hideElementUntilRendered, revealPendingElements } = usePendingElementsReveal({
     dynamicEditables,
     getContainer: () => blockManager.getContainer()
   })
@@ -137,6 +137,11 @@ export const useBlockEditable = ({
       const editableData = createEditableDataFromDefinitions(editableDefinitions)
       initializeData(editableData)
       setDynamicEditables(prev => [...prev, ...editableDefinitions])
+
+      // Manually reveal elements when no editables are added
+      if (editableDefinitions.length === 0) {
+        revealPendingElements()
+      }
 
       handlePostOperation()
     }
