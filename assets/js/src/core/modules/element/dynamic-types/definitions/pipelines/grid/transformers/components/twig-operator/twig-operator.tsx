@@ -11,19 +11,11 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
-import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { getLanguageExtensions } from '@Pimcore/components/text-editor/detect-language'
 import { CodeEditor } from '@Pimcore/components/code-editor'
 
 export const DynamicTypePipelineGridTransformersTwigOperatorComponent = (): React.JSX.Element => {
-  const { config } = usePipelineConfig()
-  const transformerConfig = config?.transformers?.twigOperator
-
   const { t } = useTranslation()
-
-  if (transformerConfig === undefined) {
-    throw new Error('Transformer configuration for twigOperator is missing')
-  }
 
   return (
     <Form.Item
