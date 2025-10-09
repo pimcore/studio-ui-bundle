@@ -142,10 +142,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
-          showSearch
-          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ predefinedDocTypeOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 
@@ -155,10 +155,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
-          showSearch
-          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ controllerOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 
@@ -168,10 +168,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
-          showSearch
-          popupMatchSelectWidth={ false }
           disabled={ !canEdit }
           options={ templateOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 
