@@ -8,27 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
-import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { type MenuProps } from 'antd'
 import React, { useState } from 'react'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
-  const { openGridContextMenuItem } = useOpen('data-object')
-  const { deleteGridContextMenuItem } = useDelete('data-object')
-  const { locateInTreeGridContextMenuItem } = useLocateInTree('data-object')
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
-  const items = [
-    openGridContextMenuItem(row),
-    locateInTreeGridContextMenuItem(row, () => { setIsOpen(undefined) }),
-    deleteGridContextMenuItem(row)
-  ].filter(Boolean) as DropdownMenuProps['items']
+  const context = {
+    target: row,
+    onComplete: () => { setIsOpen(undefined) }
+  }
+
+  const items = useContextMenuSlot(contextMenuConfig.dataObjectListGrid.name, context)
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     if (e.key === ContextMenuActionName.locateInTree) {

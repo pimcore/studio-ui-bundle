@@ -42,7 +42,6 @@ asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
 asset.asset-editor-tabs.view: View
-asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
@@ -53,6 +52,7 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
@@ -81,6 +81,13 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
+document.tree.context-menu.add-page: Add Page
+document.tree.context-menu.add-snippet: Add Snippet
+document.tree.context-menu.add-email: Add Email
+document.tree.context-menu.add-link: Add Link
+document.tree.context-menu.add-hardlink: Add Hardlink
+document.required-fields.validation-title: Required Fields Missing
+document.required-fields.validation-message: The following required fields must be filled before publishing
 document.site.remove-site: Remove Site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
 document.site.use-as-site: Use as Site
@@ -105,10 +112,16 @@ page: Page
 email: Email
 link: Link
 hardlink: Hardlink
+blank: "Blank"
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
+data-object.tree.context-menu.add-variant: Add Variant
+data-object.variant-listing.create-data-variant: New Variant
 data-object.create-data-object: Add new Object of type {{className}}
+data-object.create-variant: Add new Variant of type {{className}} 
+data-object.object-editor-tabs.variants: Variants
+object.object-editor-tabs.children-listing: Children Grid
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
@@ -183,11 +196,32 @@ grid.advanced-column.transformers.add: Add a Transformer
 grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.trim: Trim
+grid.advanced-column.find: Find
+grid.advanced-column.replace: Replace
+grid.advanced-column.start: Start
+grid.advanced-column.length: Length
+grid.advanced-column.trueLabel: True Label
+grid.advanced-column.falseLabel: False Label
+grid.advanced-column.format: Format
+grid.advanced-column.delimiter: Delimiter
+grid.advanced-column.blurringRule: Blurring Rule
+grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
 grid.advanced-column.advancedColumns.staticText: Static text
-grid.advanced-column.advancedColumns.caseChange: Case Change
-grid.advanced-column.advancedColumns.combine: Combine
+grid.advanced-column.advancedColumns.booleanFormatter: Boolean Formatter
+grid.advanced-column.advancedColumns.caseChange: Change Case
+grid.advanced-column.advancedColumns.combine: Combine Values
+grid.advanced-column.advancedColumns.dateFormatter: Date Formatter
+grid.advanced-column.advancedColumns.elementCounter: Element Counter
+grid.advanced-column.advancedColumns.explode: Explode
+grid.advanced-column.advancedColumns.stringReplace: String Replace
+grid.advanced-column.advancedColumns.substring: SubString
+grid.advanced-column.advancedColumns.trim: Trim
+grid.advanced-column.advancedColumns.twigOperator: Twig Operator
+grid.advanced-column.advancedColumns.anonymizer: Anonymizer
+grid.advanced-column.advancedColumns.blur: Blur
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -502,10 +536,10 @@ jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
-jobs.zip-job.title: "ZIP of {{title}}"
+jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
-jobs.csv-job.title: "CSV of {{title}}"
-jobs.xlsx-job.title: "XLSX of {{title}}"
+jobs.csv-job.title: "CSV download of {{title}}"
+jobs.xlsx-job.title: "XLSX download of {{title}}"
 batch-edit.job-title: Batch Edit
 jobs.zip-upload-job.title: "Upload ZIP"
 jobs.zip-upload-job.step1.title: "Extracting ZIP"
@@ -587,15 +621,33 @@ element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
 element.open: Open
-element.toolbar.copy-id: ID {{id}} - Copy
-element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
-element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
+element.toolbar.copy-id: Copy ID
+element.toolbar.copy-full-path-to-clipboard: Copy Full Path
+element.toolbar.copy-deep-link-to-clipboard: Copy Deep link
+element.toolbar.show-full-info: Full info
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: only direct children
 element.sidebar.field-filters: Field Filters
+element.full-information: Full information
+system-information.id: ID
+system-information.path: Path
+system-information.public-url: Public URL
+system-information.parent-id: Parent ID
+system-information.type: Type
+system-information.class-id: Class ID
+system-information.class: Class
+system-information.file-size: File Size
+system-information.modification-date: Modification Date
+system-information.creation-date: Creation Date
+system-information.user-modification: User Modification
+system-information.owner: Owner
+system-information.deeplink: Deeplink
+system-information.user-unknown: User unknown
+system-information.system: System
+system-information.click-to-open: click to open
 male: Male
 female: Female
 other: Other
@@ -708,6 +760,7 @@ key-bindings.openObject: Open Object
 key-bindings.openClassEditor: Open Class Editor
 key-bindings.openInTree: Open in Tree
 key-bindings.closeAllTabs: Close All Tabs
+key-bindings.search: Search
 key-bindings.searchDocument: Search Document
 key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
@@ -734,7 +787,8 @@ key-bindings.glossary: Glossary
 key-bindings.seoDocumentEditor: SEO Document Editor
 key-bindings.robots: Robots
 key-bindings.httpErrorLog: HTTP Error Log
-key-bindings.redirects: redirects
+key-bindings.seo: SEO
+key-bindings.redirects: Redirects
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
@@ -792,6 +846,12 @@ user-management.workspaces.columns.properties: Properties
 user-management.workspaces.columns.path: Path
 user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
+user-management.workspaces.additional-settings: Additional Settings /Products
+user-management.workspaces.localized-fields: Localized Fields
+user-management.workspaces.localized-fields.view: View permissions
+user-management.workspaces.localized-fields.edit: Edit permissions
+user-management.workspaces.custom-layouts: Custom Layouts
+user-management.workspaces.custom-layouts.select: Select one or more fields
 user-management.add-folder.success: Folder added successfully
 user-management.remove-folder.success: Folder removed successfully
 user-management.clone-user: Clone user
@@ -1113,7 +1173,7 @@ please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
-email-blocklist.add: Add
+email-blocklist.new: New 
 email-blocklist.add.validation: Please enter a valid email address
 email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
@@ -1209,6 +1269,18 @@ embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
 document.open-preview-in-new-window: Open Preview in new window
+document.translation.title: Translation
+document.translation.open-translation: Open Translation
+document.translation.link-existing-document: Link existing Document
+document.translation.unlink-existing-document: Unlink existing Document
+document.translation.all-translations: All Translations
+document.translation.new-document: New Document
+document.translation.use-inheritance: Using inheritance
+document.translation.new-document-with-inheritance.modal-title: New Document (using inheritance)
+document.translation.new-document-blank.modal-title: New Document (blank)
+document.translation.new-document-modal.label.parent: Parent
+document.translation.new-document-modal.label.language: Language
+document.translation.new-document-modal.create: Create
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1426,6 +1498,8 @@ language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
+content-main-document.apply-warning-title: Are you sure?
+content-main-document.apply-warning-message: All content will be lost
 never: never
 document-configuration.sidebar-title: Document Configuration
 document-configuration.predefined-document-type: Predefined Document Type
@@ -1445,3 +1519,6 @@ email-settings.cc: Cc
 email-settings.bcc: Bcc
 email-settings.multiple-recipients-hint: "Multiple recipients can be specified by separating the email addresses with a semicolon. Example: receiver@pimcore.org; receiver2@pimcore.org"
 email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@example.com>"
+add-document-form.label.title: Title
+add-document-form.label.navigation: Navigation
+add-document-form.label.key: Key

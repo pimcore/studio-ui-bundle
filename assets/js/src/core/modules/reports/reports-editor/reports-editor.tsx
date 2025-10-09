@@ -19,16 +19,24 @@ import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/componen
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { useStyles } from './reports-editor.styles'
 
 export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
 export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
 
 export const ReportsEditor = (): React.JSX.Element => {
-  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
+  const hasPermission = isAllowed(UserPermission.ReportsConfig)
+
+  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery(
+    { page: 1, pageSize: 9999 },
+    { skip: !hasPermission }
+  )
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
+  const [modifiedReports, setModifiedReports] = useState<string[]>([])
 
   const { styles } = useStyles()
 
@@ -39,15 +47,17 @@ export const ReportsEditor = (): React.JSX.Element => {
       .filter(report => existingReportIds.has(report.id))
       .map((report) => ({
         key: report.id,
-        label: report.text,
+        label: `${report.text} ${modifiedReports.includes(report.id) ? '*' : ''}`,
         children: (
           <ReportConfiguration
             isActive={ activeTabKey === report.id }
+            modifiedReports={ modifiedReports }
             report={ report }
+            setModifiedReports={ setModifiedReports }
           />
         )
       }))
-  }, [reportsConfigTreeData, openedReports, activeTabKey])
+  }, [reportsConfigTreeData, openedReports, activeTabKey, modifiedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)
@@ -60,13 +70,19 @@ export const ReportsEditor = (): React.JSX.Element => {
   }
 
   const handleCloseTab = (key: string): void => {
-    const targetIndex = openedReports.findIndex((tab) => tab.id === key)
+    const targetIndex = openedReports.findIndex((tab) => tab?.id === key)
     const updatedOpenedReports = openedReports.filter((report) => report.id !== key)
 
     if (key === activeTabKey) {
       const prevTab = openedReports[targetIndex - 1]
+      const nextTab = openedReports[targetIndex + 1]
 
-      setActiveTabKey(!isUndefined(prevTab) ? prevTab.id : undefined)
+      const prevTabId = prevTab?.id
+      const nextTabId = !isUndefined(nextTab) ? nextTab?.id : undefined
+
+      const activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
+
+      setActiveTabKey(activeId)
     }
 
     setOpenedReports(updatedOpenedReports)

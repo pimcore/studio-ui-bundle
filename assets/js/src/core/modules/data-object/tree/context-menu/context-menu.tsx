@@ -9,91 +9,18 @@
  */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { defaultProps, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
-import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
-import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
-import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
-import { useAddObject } from '../../actions/add-object/use-add-object'
-import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
-import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
-import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { Menu } from '@Pimcore/components/menu/menu'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
 }
 
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
-  const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
-  const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
-  const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
-  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
-  const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
-  const {
-    pasteAsChildRecursiveTreeContextMenuItem,
-    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
-    pasteAsChildTreeContextMenuItem,
-    pasteOnlyContentsTreeContextMenuItem,
-    isPasteMenuHidden
-  } = usePaste()
-  const { addObjectTreeContextMenuItem } = useAddObject()
-  const { publishTreeContextMenuItem } = usePublish('data-object')
-
-  const items: IMenuProps['items'] = [
-    addObjectTreeContextMenuItem(node),
-    addFolderTreeContextMenuItem(node),
-    renameTreeContextMenuItem(node),
-    copyTreeContextMenuItem(node),
-    {
-      label: t('element.tree.paste'),
-      key: 'paste',
-      icon: <Icon value={ 'paste' } />,
-      hidden: isPasteMenuHidden(node),
-      children: [
-        pasteAsChildRecursiveTreeContextMenuItem(node),
-        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
-        pasteAsChildTreeContextMenuItem(node),
-        pasteOnlyContentsTreeContextMenuItem(node)
-      ]
-    },
-    cutTreeContextMenuItem(node),
-    pasteCutContextMenuItem(node),
-    publishTreeContextMenuItem(node),
-    unpublishTreeContextMenuItem(node),
-    deleteTreeContextMenuItem(node),
-    {
-      label: t('element.tree.context-menu.advanced'),
-      key: 'advanced',
-      icon: <Icon value={ 'more' } />,
-      hidden: isLockMenuHidden(node),
-      children: [
-        {
-          label: t('element.lock'),
-          key: 'advanced-lock',
-          icon: <Icon value={ 'lock' } />,
-          hidden: isLockMenuHidden(node),
-          children: [
-            lockTreeContextMenuItem(node),
-            lockAndPropagateTreeContextMenuItem(node),
-            unlockTreeContextMenuItem(node),
-            unlockAndPropagateTreeContextMenuItem(node)
-          ]
-        }
-      ]
-    },
-    refreshTreeContextMenuItem(node)
-  ]
+  const items = useContextMenuSlot('data-object.tree', { target: node, onComplete: () => {} })
 
   return (
     <Menu

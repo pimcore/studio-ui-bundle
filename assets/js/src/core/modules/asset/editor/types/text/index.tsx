@@ -31,7 +31,7 @@ moduleSystem.registerModule({
 
     textTabManager.register({
       key: 'edit',
-      label: 'asset.asset-editor-tabs.edit',
+      label: 'edit',
       children: <EditContainer />,
       icon: <Icon value={ 'edit-pen' } />
     })

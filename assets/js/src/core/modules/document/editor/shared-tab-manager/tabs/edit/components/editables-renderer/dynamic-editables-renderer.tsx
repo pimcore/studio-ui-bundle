@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createRef, useMemo } from 'react'
+import React, { createRef, useMemo, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull } from 'lodash'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
+import { documentEditableApi } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
 
 export interface DynamicEditablesRendererProps {
   editableDefinitions: AbstractDocumentEditableDefinition[]
@@ -25,6 +26,15 @@ export const DynamicEditablesRenderer = ({ editableDefinitions }: DynamicEditabl
       refs[editable.id] = createRef<HTMLDivElement>()
     })
     return refs
+  }, [editableDefinitions])
+
+  useEffect(() => {
+    documentEditableApi.registerDynamicEditables(editableDefinitions)
+
+    return () => {
+      const editableIds = editableDefinitions.map(editable => editable.id)
+      documentEditableApi.unregisterDynamicEditables(editableIds)
+    }
   }, [editableDefinitions])
 
   return (

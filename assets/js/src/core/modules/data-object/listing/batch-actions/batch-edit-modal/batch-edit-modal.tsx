@@ -38,6 +38,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -60,6 +61,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const selectedRowsCount = selectedRowsIds.length
   const { hasType, getType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
+  const classDefinitionSelection = useClassDefinitionSelection()
+  const selectedClassDefinition = classDefinitionSelection.selectedClassDefinition
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -100,6 +103,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         title: t('batch-edit.job-title'),
         topics: [topics['patch-finished'], ...defaultTopics],
         action: async () => {
+          const filters = getArgs()?.body?.filters ?? {}
+          delete filters.page
+          delete filters.pageSize
+
           const response = await patchObjectsInFolder({
             body: {
               data: [
@@ -108,7 +115,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   editableData: values
                 }
               ],
-              filters: getArgs()?.body?.filters
+              filters: {
+                ...filters
+              },
+              classId: String(selectedClassDefinition?.id)
             }
           })
 

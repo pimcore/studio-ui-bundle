@@ -44,8 +44,6 @@ export * from '@Pimcore/components/dropdown-button/dropdown-button'
 export * from '@Pimcore/components/dynamic-filter/dynamic-filter'
 export * from '@Pimcore/components/editable-empty-placeholder/editable-empty-placeholder'
 export * from '@Pimcore/components/element-tag/element-tag'
-export * from '@Pimcore/components/element-toolbar/element-toolbar'
-export * from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 export * from '@Pimcore/components/element-tree/element-tree'
 // @todo check usage and naming of nodeState
 export { type NodeState, type UseElementTreeReturnType, useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
@@ -154,7 +152,7 @@ export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
 
 // @todo check if this component should really be branded to workflows or if we can find a mor re-usable name
-export * from '@Pimcore/components/workflow-card/workflow-card'
+export * from '@Pimcore/modules/element/editor/shared-components/workflow/card/workflow-card'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
 // export * from '@Pimcore/components/upload/upload-modal/upload-modal'

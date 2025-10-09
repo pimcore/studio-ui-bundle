@@ -39,7 +39,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       key: column.key,
       type: column.type,
       locale: column.localizable ? column.locale ?? currentLanguage : undefined,
-      // group: column.group,
+      group: column.group as unknown as string[] | undefined,
       config: advancedColumnConfig ?? column.config
     })
   })
@@ -54,6 +54,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
         key: column.key,
         type: column.type,
         locale: column.locale,
+        group: column.group as unknown as string[] | undefined,
         config: []
       })
     }

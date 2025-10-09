@@ -16,6 +16,7 @@ import { ManyToOneRelation, type ManyToOneRelationValueType } from '@Pimcore/com
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getDocumentSidebarManager } from '../../../../../sidebar/sidebar-manager-helper'
 import { useDocumentEditorSidebarEntries } from '../../../../../shared-tab-manager/tabs/edit/hooks/use-document-editor-sidebar-entries'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
@@ -33,6 +34,10 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
 
   const { id } = useContext(DocumentContext)
   const { document, updateSettingsData } = useDocumentDraft(id)
+
+  // Check if user has save or publish permissions (need at least one to edit)
+  const canEdit = checkElementPermission(document?.permissions, 'save') ||
+                  checkElementPermission(document?.permissions, 'publish')
 
   const sidebarManager = getDocumentSidebarManager(document?.type)
   const sidebarButtons = sidebarManager.getButtons()
@@ -60,6 +65,8 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
   }, [document?.settingsData])
 
   const handleSourceDocumentChange = (value: ManyToOneRelationValueType): void => {
+    if (!canEdit) return
+
     const settingsDataUpdate: Record<string, any> = {}
 
     if (isNull(value)) {
@@ -74,21 +81,27 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
   }
 
   const handlePropertiesFromSourceChange = (checked: boolean): void => {
+    if (!canEdit) return
     updateSettingsData({ propertiesFromSource: checked })
   }
 
   const handleChildrenFromSourceChange = (checked: boolean): void => {
+    if (!canEdit) return
     updateSettingsData({ childrenFromSource: checked })
   }
 
   return (
     <ContentLayout renderSidebar={
-      <Sidebar
-        buttons={ sidebarButtons }
-        entries={ sidebarEntries }
-        sizing="medium"
-        translateTooltips
-      />
+      sidebarEntries.length > 0
+        ? (
+          <Sidebar
+            buttons={ sidebarButtons }
+            entries={ sidebarEntries }
+            sizing="medium"
+            translateTooltips
+          />
+          )
+        : undefined
     }
     >
       <Content padded>
@@ -103,6 +116,7 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
           >
             <ManyToOneRelation
               allowToClearRelation
+              disabled={ !canEdit }
               documentsAllowed
               onChange={ handleSourceDocumentChange }
               showOpenForTextInput
@@ -114,7 +128,10 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
             name="propertiesFromSource"
             valuePropName="checked"
           >
-            <Switch onChange={ handlePropertiesFromSourceChange } />
+            <Switch
+              disabled={ !canEdit }
+              onChange={ handlePropertiesFromSourceChange }
+            />
           </Form.Item>
 
           <Form.Item
@@ -122,7 +139,10 @@ export const HardlinkEditContainer = (): React.JSX.Element => {
             name="childrenFromSource"
             valuePropName="checked"
           >
-            <Switch onChange={ handleChildrenFromSourceChange } />
+            <Switch
+              disabled={ !canEdit }
+              onChange={ handleChildrenFromSourceChange }
+            />
           </Form.Item>
         </Form>
       </Content>

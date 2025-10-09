@@ -268,14 +268,14 @@ export type DataObjectCloneApiArg = {
     cloneParameters: DataObjectCloneParameters;
 };
 export type DataObjectGetByIdApiResponse = /** status 200 Successfully retrieved data object data as JSON */
-    | DataObject
+    | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectGetByIdApiArg = {
     /** Id of the data-object */
     id: number;
 };
 export type DataObjectUpdateByIdApiResponse = /** status 200 Successfully updated data object */
-    | DataObject
+    | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectUpdateByIdApiArg = {
     /** Id of the data-object */
@@ -460,7 +460,8 @@ export type DataObjectPatchFolderByIdApiArg = {
             published?: boolean | null;
             editableData?: object | null;
         }[];
-        filters?: GridFilter;
+        filters?: ExportAllFilter;
+        classId: string;
     };
 };
 export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
@@ -568,7 +569,7 @@ export type Element = {
     /** path */
     path: string;
     /** icon */
-    icon?: ElementIcon;
+    icon: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
@@ -624,31 +625,13 @@ export type DataObjectPermissions = Permissions & {
     /** Localized View */
     localizedView: string | null;
 };
-export type DataObjectDraftData = {
-    /** ID */
-    id: number;
-    /** Modification date */
-    modificationDate: number;
-    /** Is auto save */
-    isAutoSave: boolean;
-};
 export type DataObject = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Inheritance allowed */
-    allowInheritance: boolean;
-    /** Variants allowed */
-    allowVariants: boolean;
-    /** Show variants */
-    showVariants: boolean;
-    /** Has preview */
-    hasPreview: boolean;
     /** Custom attributes for the tree */
     customAttributes: CustomAttributes;
-    /** Has workflow available */
-    hasWorkflowAvailable?: boolean;
     /** Key */
     key: string;
     /** Class name */
@@ -670,13 +653,36 @@ export type DataObject = Element & {
     childrenSortBy: string;
     /** Sort order of children */
     childrenSortOrder: string;
+    /** Allow variants */
+    allowVariants: boolean | null;
+};
+export type DataObjectDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
+};
+export type DataObjectWithDetailData = DataObject & {
+    /** Show variants */
+    showVariants: boolean;
+    /** Inheritance allowed */
+    allowInheritance: boolean;
+    /** Has preview */
+    hasPreview: boolean;
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
     /** Detail object data */
     objectData: object;
     /** Inheritance object data */
     inheritanceData: object;
     draftData: DataObjectDraftData | null;
 };
-export type DataObjectFolder = DataObject;
+export type DataObjectFolder = DataObject & {
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
+};
 export type UpdateDataProperty = {
     /** key */
     key: string;
@@ -741,7 +747,7 @@ export type GridColumnRequest = {
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
 };
@@ -880,6 +886,12 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+};
+export type ExportAllFilter = {
+    /** Column Filter */
+    columnFilters: object;
+    /** Sort Filter */
+    sortFilter: object;
 };
 export type SelectOption = {
     /** AdditionalAttributes */

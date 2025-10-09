@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { isEmpty, isNil } from 'lodash'
 import { SelectEditable } from '../components/select-editable/select-editable'
@@ -21,6 +22,7 @@ export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 
     class?: string
     defaultValue?: string
     reload?: boolean
+    required?: boolean
     editable?: boolean
   }
 }
@@ -44,6 +46,10 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
         width={ props.config?.width }
       />
     )
+  }
+
+  isEmpty (value: any, props: SelectEditableDefinition): boolean {
+    return !isNonEmptyString(value)
   }
 
   transformValue (value: any, props: SelectEditableDefinition): any {

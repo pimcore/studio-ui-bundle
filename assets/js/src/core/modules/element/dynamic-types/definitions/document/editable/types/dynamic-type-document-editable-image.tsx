@@ -11,7 +11,7 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { ImageEditable } from '../components/image-editable/image-editable'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isPlainObject, isUndefined } from 'lodash'
 
 export interface ImageEditableConfig {
   title?: string
@@ -126,6 +126,14 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return undefined
     }
     return value.id
+  }
+
+  isEmpty (value: ImageEditableValue | null | undefined, props: ImageEditableDefinition): boolean {
+    if (!isNil(value) && isPlainObject(value)) {
+      return isNil(value.id)
+    }
+
+    return true
   }
 
   reloadOnChange (props: ImageEditableDefinition, oldValue: any, newValue: any): boolean {

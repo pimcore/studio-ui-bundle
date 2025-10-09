@@ -27,6 +27,11 @@ import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import { isNull, isUndefined } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useDocumentPageSnippetChangeMainDocumentMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface ContentSettingsFormProps {
   documentId: number
@@ -37,17 +42,32 @@ interface ContentSettingsFormProps {
     prettyUrl: string
     contentMainDocument: ManyToOneRelationValueType | null
   }
+  hasPropertiesPermission?: boolean
+  hasSavePermission?: boolean
 }
 
 export const ContentSettingsForm = ({
   documentId,
-  initialValues
+  initialValues,
+  hasPropertiesPermission = true,
+  hasSavePermission = true
 }: ContentSettingsFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { document, updateSettingsData, updateProperty, addProperty, properties } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
+  const modal = useFormModal()
+  const [changeMainDocument, { isLoading: isApplyingMainDocument, error: applyingMainDocumentError }] = useDocumentPageSnippetChangeMainDocumentMutation()
+  const { refreshElement } = useElementRefresh('document')
+
+  React.useEffect(() => {
+    if (!isUndefined(applyingMainDocumentError)) {
+      trackError(new ApiError(applyingMainDocumentError))
+    }
+  }, [applyingMainDocumentError])
+
+  const canEdit = hasSavePermission
 
   const titleCountRef = useRef<HTMLSpanElement>(null)
   const descriptionCountRef = useRef<HTMLSpanElement>(null)
@@ -61,6 +81,8 @@ export const ContentSettingsForm = ({
   const languageProperty = !isNull(properties) && !isUndefined(properties) ? properties.find(prop => prop.key === 'language' && !prop.inherited) : undefined
 
   const handleFormChange = useCallback((changedValues: Record<string, any>, allValues: Record<string, any>) => {
+    if (!canEdit) return
+
     const { language, contentMainDocument, ...settingsDataChanges } = changedValues
 
     if (!isUndefined(language)) {
@@ -94,7 +116,33 @@ export const ContentSettingsForm = ({
     }
 
     debouncedAutoSave()
-  }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave])
+  }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave, canEdit])
+
+  const handleApplyMainDocument = (): void => {
+    const contentMainDocumentPath = document?.settingsData?.contentMainDocumentPath
+
+    if (isNull(contentMainDocumentPath) || isUndefined(contentMainDocumentPath)) {
+      return
+    }
+
+    modal.confirm({
+      title: t('content-main-document.apply-warning-title'),
+      content: t('content-main-document.apply-warning-message'),
+      onOk: async () => {
+        const { data } = await changeMainDocument({
+          id: documentId,
+          changeMainDocument: {
+            mainDocumentPath: contentMainDocumentPath
+          }
+        })
+
+        // Only reload the document if the operation was successful
+        if (!isUndefined(data)) {
+          refreshElement(documentId)
+        }
+      }
+    })
+  }
 
   const languageOptions = [
     { value: '', label: t('none') },
@@ -137,6 +185,7 @@ export const ContentSettingsForm = ({
             ] }
           >
             <Input
+              disabled={ !canEdit }
               onChange={ (e) => {
                 updateCharCount(titleCountRef, e.target.value.length)
               } }
@@ -152,35 +201,39 @@ export const ContentSettingsForm = ({
           >
             <TextArea
               autoSize={ { minRows: 3, maxRows: 8 } }
+              disabled={ !canEdit }
               onChange={ (e) => { updateCharCount(descriptionCountRef, e.target.value.length) } }
             />
           </Form.Item>
         </>
       )}
 
-      <Form.Item
-        label={
-          document?.type === 'page'
-            ? (
-              <SidebarHeadline
-                asFormLabel
-                withBorder
-              >
-                {t('language')}
-              </SidebarHeadline>
-              )
-            : (
-                t('language')
-              )
-        }
-        name="language"
-      >
-        <Select
-          labelRender={ (option) => renderLanguageOption(option) }
-          optionRender={ (option) => renderLanguageOption(option) }
-          options={ languageOptions }
-        />
-      </Form.Item>
+      {hasPropertiesPermission && (
+        <Form.Item
+          label={
+            document?.type === 'page'
+              ? (
+                <SidebarHeadline
+                  asFormLabel
+                  withBorder
+                >
+                  {t('language')}
+                </SidebarHeadline>
+                )
+              : (
+                  t('language')
+                )
+          }
+          name="language"
+        >
+          <Select
+            disabled={ !canEdit }
+            labelRender={ (option) => renderLanguageOption(option) }
+            optionRender={ (option) => renderLanguageOption(option) }
+            options={ languageOptions }
+          />
+        </Form.Item>
+      )}
 
       {document?.type === 'page' && (
         <Form.Item
@@ -195,7 +248,7 @@ export const ContentSettingsForm = ({
             }
           name="prettyUrl"
         >
-          <Input />
+          <Input disabled={ !canEdit } />
         </Form.Item>
       )}
 
@@ -212,8 +265,23 @@ export const ContentSettingsForm = ({
           name="contentMainDocument"
         >
           <ManyToOneRelation
+            additionalButtons={ (value) =>
+              !isNull(value) && !isUndefined(value)
+                ? (
+                  <IconTextButton
+                    icon={ { value: 'checkmark' } }
+                    loading={ isApplyingMainDocument }
+                    onClick={ handleApplyMainDocument }
+                    type="default"
+                  >
+                    {t('apply')}
+                  </IconTextButton>
+                  )
+                : null
+            }
             allowToClearRelation
             allowedDocumentTypes={ ['page', 'snippet'] }
+            disabled={ !canEdit }
             documentsAllowed
             vertical
           />

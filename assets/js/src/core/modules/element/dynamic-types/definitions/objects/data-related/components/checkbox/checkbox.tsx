@@ -43,7 +43,7 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
     props.onChange?.(null)
   }
 
-  const showClearButton = props.disableClearButton !== true && checkboxValue !== null && dataObject?.allowInheritance === true && props.disabled !== true
+  const showClearButton = props.disableClearButton !== true && checkboxValue !== null && dataObject !== undefined && 'allowInheritance' in dataObject && dataObject.allowInheritance === true && props.disabled !== true
 
   return (
     <Flex

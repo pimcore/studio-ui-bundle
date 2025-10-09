@@ -13,6 +13,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
@@ -45,6 +46,7 @@ import { DynamicTypeBatchEditText } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 import { DynamicTypeFieldFilterBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
+import { DynamicTypeFieldFilterConsent } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/consent/dynamic-type-field-filter-consent'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
@@ -174,6 +176,7 @@ import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardl
 import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 import { DocumentSidebarManager } from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
+import { DocumentRequiredFieldsValidationServiceImpl } from '@Pimcore/modules/document/services/document-required-fields-validation-service'
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
@@ -193,7 +196,16 @@ import { DynamicTypeDocumentEditableAreablock } from '@Pimcore/modules/element/d
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { DynamicTypePipelineGridTransformersAnonymizer } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/anonymizer/anonymizer'
+import { DynamicTypePipelineGridTransformersBlur } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/blur/blur'
 import { DynamicTypePipelineGridTransformersCombine } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/combine/combine'
+import { DynamicTypePipelineGridTransformersExplode } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/explode/explode'
+import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/trim/trim'
+import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/string-replace/string-replace'
+import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
+import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { DynamicTypePipelineGridTransformersBooleanFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
+import { DynamicTypePipelineGridTransformersDateFormatter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { DynamicTypePipelineGridSourceFieldsSimpleField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
 import { DynamicTypePipelineGridSourceFieldsRelationField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
@@ -214,6 +226,8 @@ import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/elemen
 import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { DynamicTypeGridCellInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
+import { DynamicTypeGridCellArray } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
 import { DynamicTypeFieldFilterInput } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input/dynamic-type-field-filter-input'
@@ -226,6 +240,7 @@ import { DynamicTypeDocumentLink } from '@Pimcore/modules/element/dynamic-types/
 import { DynamicTypeDocumentNewsletter } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-newsletter'
 import { DynamicTypeDocumentSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-snippet'
 import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
+import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/variant/tab-manager/object-tab-manager'
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
@@ -237,6 +252,9 @@ import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
+
+// Context menu registry
+container.bind(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']).to(ContextMenuRegistry).inSingletonScope()
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -258,6 +276,7 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 // Data Objects
 container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/VariantTabManager']).to(VariantTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
 
 // Documents
@@ -268,6 +287,9 @@ container.bind(serviceIds['Document/Editor/FolderTabManager']).to(FolderTabManag
 container.bind(serviceIds['Document/Editor/HardlinkTabManager']).to(HardlinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/LinkTabManager']).to(LinkTabManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/SnippetTabManager']).to(SnippetTabManager).inSingletonScope()
+
+// Document Services
+container.bind(serviceIds['Document/RequiredFieldsValidationService']).to(DocumentRequiredFieldsValidationServiceImpl).inSingletonScope()
 
 // Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
@@ -294,6 +316,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Consent']).to(DynamicTypeFieldFilterConsent).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
@@ -343,6 +366,8 @@ container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(Dynamic
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']).to(DynamicTypeGridCellDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']).to(DynamicTypeGridCellDataObjectAdvanced).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCellString).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Integer']).to(DynamicTypeGridCellInteger).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Array']).to(DynamicTypeGridCellArray).inSingletonScope()
 
 // Advanced grid cell registry
 container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
@@ -498,8 +523,17 @@ container.bind(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']).to(Dy
 
 // Advanced columns transformers
 container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']).to(DynamicTypePipelineGridTransformersBooleanFormatter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']).to(DynamicTypePipelineGridTransformersDateFormatter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']).to(DynamicTypePipelineGridTransformersElementCounter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Anonymizer']).to(DynamicTypePipelineGridTransformersAnonymizer).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Blur']).to(DynamicTypePipelineGridTransformersBlur).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Explode']).to(DynamicTypePipelineGridTransformersExplode).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']).to(DynamicTypePipelineGridTransformersStringReplace).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Substring']).to(DynamicTypePipelineGridTransformersSubstring).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicTypePipelineGridTransformersTrim).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

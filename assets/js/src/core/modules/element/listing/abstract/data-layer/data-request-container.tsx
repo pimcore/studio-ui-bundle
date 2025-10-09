@@ -15,11 +15,11 @@ import { useData } from './provider/data/use-data'
 export const DataRequestContainer = (): React.JSX.Element => {
   const { ViewComponent, useDataQueryHelper, useDataQuery } = useSettings()
   const { getArgs, dataLoadingState, setDataLoadingState } = useDataQueryHelper()
-  const dataQueryResult = useDataQuery(getArgs(), { skip: dataLoadingState !== 'config-changed' && dataLoadingState !== 'data-available' })
+  const dataQueryResult = useDataQuery(getArgs(), { skip: dataLoadingState !== 'config-changed' && dataLoadingState !== 'filters-applied' && dataLoadingState !== 'data-available' })
   const { setDataQueryResult, setData } = useData()
 
   useEffect(() => {
-    if (!dataQueryResult.isLoading && dataLoadingState === 'config-changed') {
+    if (!dataQueryResult.isLoading && (dataLoadingState === 'config-changed' || dataLoadingState === 'filters-applied')) {
       void dataQueryResult.refetch()
       setDataLoadingState('data-available')
     }

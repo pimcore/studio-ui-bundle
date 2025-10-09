@@ -67,6 +67,7 @@ export const serviceIds = {
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
+  'DataObject/Editor/VariantTabManager': 'DataObject/Editor/VariantTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
   // Documents
@@ -107,6 +108,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
+  'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -119,6 +121,8 @@ export const serviceIds = {
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
+  'DynamicTypes/GridCell/Integer': 'DynamicTypes/GridCell/Integer',
+  'DynamicTypes/GridCell/Array': 'DynamicTypes/GridCell/Array',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -293,8 +297,17 @@ export const serviceIds = {
   'DynamicTypes/Grid/SourceFields/RelationField': 'DynamicTypes/Grid/SourceFields/RelationField',
 
   // Advanced Columns transformers
-  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
-  'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
+  'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
+  'DynamicTypes/Grid/Transformers/DateFormatter': 'DynamicTypes/Grid/Transformers/DateFormatter',
+  'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
+  'DynamicTypes/Grid/Transformers/Anonymizer': 'DynamicTypes/Grid/Transformers/Anonymizer',
+  'DynamicTypes/Grid/Transformers/Blur': 'DynamicTypes/Grid/Transformers/Blur',
+  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',
+  'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/Transformers/Combine',
+  'DynamicTypes/Grid/Transformers/Explode': 'DynamicTypes/Grid/Transformers/Explode',
+  'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
+  'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
+  'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
@@ -306,5 +319,11 @@ export const serviceIds = {
   executionEngine: 'ExecutionEngine',
 
   // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry',
+
+  // Context menu registry
+  'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry',
+
+  // Document required fields validation service
+  'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService'
 }

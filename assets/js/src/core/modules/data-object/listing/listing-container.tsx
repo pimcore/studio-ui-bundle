@@ -14,7 +14,7 @@ import { useDataQueryHelper } from './data-layer/hooks/use-data-query-helper'
 import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { compose } from '@Pimcore/utils/compose'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
@@ -29,6 +29,7 @@ import { ActionColumnDecorator } from './decorator/action-column/action-column-d
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 import { useDataObjectColumnMapper } from './column-mapper/use-column-mapper'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -61,6 +62,12 @@ const props = compose<AbstractDecoratorProps>(
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const ListingContainer = (): React.JSX.Element => {
+  const { setHasLocalizedFields } = useLanguageSelection()
+
+  useEffect(() => {
+    setHasLocalizedFields(true)
+  }, [])
+
   return (
     <DynamicTypeRegistryProvider
       serviceIds={ [

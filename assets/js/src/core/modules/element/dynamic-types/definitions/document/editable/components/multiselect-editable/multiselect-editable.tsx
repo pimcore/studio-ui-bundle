@@ -58,6 +58,7 @@ export const MultiSelectEditable = ({
         onChange={ onChange }
         optionFilterProp="label"
         options={ options }
+        popupMatchSelectWidth={ false }
         style={ containerStyle }
         value={ value }
       />

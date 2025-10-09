@@ -10,11 +10,13 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
+import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { elementTypes } from '@sdk/modules/data-object'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { usePrevious } from '@sdk/utils'
 import { InputNumber } from 'antd'
-import React from 'react'
+import { isNil } from 'lodash'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ElementTypeSelect } from '../../../element-type-select/element-type-select'
 import { useWidgetFormContext } from '../../context/hooks/use-widget-form-context'
@@ -22,6 +24,15 @@ import { useWidgetFormContext } from '../../context/hooks/use-widget-form-contex
 export const SpecificPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { form } = useWidgetFormContext()
+  const elementType = Form.useWatch('elementType', form)
+  const previousElementType = usePrevious(elementType)
+
+  useEffect(() => {
+    // Only reset the rootFolder when elementType actually changes (not on initial render)
+    if (!isNil(previousElementType)) {
+      form.setFieldValue('rootFolder', null)
+    }
+  }, [previousElementType, form])
 
   return (
     <FormKit.Panel
@@ -42,9 +53,10 @@ export const SpecificPanel = (): React.JSX.Element => {
       >
         <ManyToOneRelation
           allowToClearRelation
-          assetsAllowed={ form.getFieldValue('elementType') === elementTypes.asset }
-          dataObjectsAllowed={ form.getFieldValue('elementType') === elementTypes.dataObject }
-          documentsAllowed={ form.getFieldValue('elementType') === elementTypes.document }
+          assetsAllowed={ elementType === elementTypes.asset }
+          dataObjectsAllowed={ elementType === elementTypes.dataObject }
+          documentsAllowed={ elementType === elementTypes.document }
+          key={ elementType }
         />
       </Form.Item>
 

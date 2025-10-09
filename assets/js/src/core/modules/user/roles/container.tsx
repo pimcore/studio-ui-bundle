@@ -60,7 +60,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
-      isLeaf: item.children === false
+      isLeaf: item.hasChildren === false
     }))
   }
 

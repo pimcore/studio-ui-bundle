@@ -59,7 +59,7 @@ const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<s
     typeof dataObjectDraft === 'object' &&
       'inheritanceData' in dataObjectDraft &&
       typeof dataObjectDraft.inheritanceData === 'object' &&
-      'metaData' in dataObjectDraft.inheritanceData &&
+      dataObjectDraft.inheritanceData !== null && 'metaData' in dataObjectDraft.inheritanceData &&
       typeof dataObjectDraft.inheritanceData.metaData === 'object'
   ) {
     traverseMetaData(dataObjectDraft.inheritanceData.metaData)

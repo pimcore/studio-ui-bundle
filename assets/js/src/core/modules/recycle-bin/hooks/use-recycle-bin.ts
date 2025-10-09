@@ -40,13 +40,14 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
       const job = new RecycleBinRestoreJob({
         itemIds: items.map(item => item.id),
         elementTypes: items.map(item => mapToElementType(item.type)!),
-        title: t('recycle-bin.actions.restore.title')
+        title: t('recycle-bin.actions.restore.title'),
+        onFinish
       })
 
       await executionEngine.runJob(job)
-      onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to restore item(s) from recycle bin'))
+      onFinish?.()
     }
   }
 
@@ -55,13 +56,14 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
       const job = new RecycleBinDeleteJob({
         itemIds: items.map(item => item.id),
         elementTypes: items.map(item => mapToElementType(item.type)!),
-        title: t('recycle-bin.actions.delete.title')
+        title: t('recycle-bin.actions.delete.title'),
+        onFinish
       })
 
       await executionEngine.runJob(job)
-      onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to remove item(s) from recycle bin'))
+      onFinish?.()
     }
   }
 

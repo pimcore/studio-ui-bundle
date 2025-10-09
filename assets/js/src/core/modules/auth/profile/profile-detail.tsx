@@ -28,6 +28,8 @@ import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 
 interface IProfileDetail {
   id: number
@@ -36,10 +38,18 @@ interface IProfileDetail {
 const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
-  const { availableAdminLanguages } = useSettings()
+  const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { user, setModifiedCells } = useUserDraft()
+  const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
+  const { updateUserImageInState } = useUserHelper()
+
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
   useEffect(() => {
     if (user?.modified === false) {
@@ -48,6 +58,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         lastname: user?.lastname,
         email: user?.email,
         language: user?.language,
+        dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,
@@ -143,15 +154,14 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                   </Form.Item>
 
                   <Form.Item
-                    label={ 'TODO ' + t('user-management.dateTime') }
-                    name="dateTime"
+                    label={ t('user-management.dateTime') }
+                    name="dateTimeLocale"
                   >
                     <Select
-                      options={ availableAdminLanguages.map((language: string) => ({
-                        value: language,
-                        label: getDisplayName(language)
-                      })) }
+                      optionFilterProp="label"
+                      options={ validLocalesOptions }
                       placeholder={ t('user-management.dateTime') }
+                      showSearch
                     />
                   </Form.Item>
 
@@ -174,7 +184,10 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
           />
         </Col>
         <Col span={ 6 }>
-          <UserAvatar user={ user } />
+          <UserAvatar
+            onUserImageChanged={ updateUserImageInState }
+            user={ user }
+          />
         </Col>
         <Col span={ 14 }>
           <Accordion
@@ -248,7 +261,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             modified={ keyBindingsModified }
             onChange={ handleOnChangeKeyBindings }
             onResetKeyBindings={ handleOnResetKeyBindings }
-            values={ user?.keyBindings }
+            values={ mergedKeyBindings }
           />
         </Col>
       </Row>

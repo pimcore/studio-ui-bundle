@@ -13,7 +13,7 @@ import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import type { UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import type { UserWorkspace, UserDocumentWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -21,6 +21,7 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
+import { SpecialSettings } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings'
 
 export enum WorkspaceType {
   DOCUMENT = 'document',
@@ -35,7 +36,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const [assetWorkspaces, setAssetWorkspaces] = useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
-  const [objectWorkspaces, setObjectWorkspaces] = useState<UserWorkspace[]>(user?.dataObjectWorkspaces ?? [])
+  const [objectWorkspaces, setObjectWorkspaces] = useState<UserDocumentWorkspace[]>(user?.dataObjectWorkspaces ?? [])
+
+  const [specialModalContext, setSpecialModalContext] = useState<number | null>(null)
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -44,6 +47,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   } = useModal({
     type: 'error'
   })
+
+  const { renderModal: SpecialSettingsModal, showModal: showSpecialSettingsModal, handleCancel, handleOk } = useModal({ type: 'default' })
 
   if (user === undefined) {
     return <></>
@@ -133,6 +138,12 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
   ]
 
+  let currentSpecialModalData: object = {}
+
+  const getSpecialModalValues = (type: string): string[] => {
+    return user?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.[type] ?? []
+  }
+
   const objectsAccordion = [
     {
       key: 'objects',
@@ -166,6 +177,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         <Table
           data={ objectWorkspaces }
           isLoading={ isLoading }
+          onShowSpecialSettings={ (id) => {
+            setSpecialModalContext(id)
+            showSpecialSettingsModal()
+          } }
           onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
@@ -224,6 +239,43 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       >
         {t('properties.property-already-exist.error')}
       </DuplicatePropertyModal>
+
+      <SpecialSettingsModal
+        footer={
+          <ModalFooter>
+            <Button
+              onClick={ handleCancel }
+              type={ 'default' }
+            >
+              {t('button.cancel')}
+            </Button>
+            <Button
+              onClick={ () => {
+                changeUserInState({
+                  dataObjectWorkspaces: user.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...currentSpecialModalData } : ws)
+                })
+
+                handleOk()
+              } }
+              type={ 'primary' }
+            >
+              {t('button.apply')}
+            </Button>
+          </ModalFooter>
+            }
+        size={ 'L' }
+        title={ t('user-management.workspaces.additional-settings') }
+      >
+        <SpecialSettings
+          layouts={ getSpecialModalValues('layouts') }
+          localizedEdit={ getSpecialModalValues('localizedEdit') }
+          localizedView={ getSpecialModalValues('localizedView') }
+          onValuesChange={ (changedValues) => {
+            const mergedData = { ...currentSpecialModalData, ...changedValues }
+            currentSpecialModalData = mergedData
+          } }
+        />
+      </SpecialSettingsModal>
     </Flex>
   )
 }

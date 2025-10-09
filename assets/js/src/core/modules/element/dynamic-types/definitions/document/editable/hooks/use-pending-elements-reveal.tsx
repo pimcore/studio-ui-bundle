@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useCallback } from 'react'
 import { isNil } from 'lodash'
 import { type AbstractDocumentEditableDefinition } from '../dynamic-type-document-editable-abstract'
 
@@ -19,6 +19,7 @@ export interface UsePendingElementsRevealParams {
 
 export interface UsePendingElementsRevealReturn {
   hideElementUntilRendered: (element: HTMLElement) => void
+  revealPendingElements: () => void
 }
 
 /**
@@ -34,8 +35,7 @@ export const usePendingElementsReveal = ({
     element.setAttribute('data-pending-editables', 'true')
   }
 
-  // Use layoutEffect to show pending elements after React rendering is complete
-  useLayoutEffect(() => {
+  const revealPendingElements = useCallback((): void => {
     const container = getContainer()
     if (!isNil(container)) {
       const pendingElements = container.querySelectorAll('[data-pending-editables="true"]')
@@ -47,9 +47,15 @@ export const usePendingElementsReveal = ({
         })
       }
     }
-  }, [dynamicEditables.length])
+  }, [getContainer])
+
+  // Use layoutEffect to show pending elements after React rendering is complete
+  useLayoutEffect(() => {
+    revealPendingElements()
+  }, [dynamicEditables.length, revealPendingElements])
 
   return {
-    hideElementUntilRendered
+    hideElementUntilRendered,
+    revealPendingElements
   }
 }

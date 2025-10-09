@@ -12,15 +12,19 @@ import React, { type ReactNode, type Ref } from 'react'
 import { Dropdown as AntdDropdown, type MenuRef } from 'antd'
 import { type DropdownProps } from './dropdown'
 import { Menu } from '../menu/menu'
+import { useStyle } from './dropdown.styles'
 
 export type DropdownInnerProps = DropdownProps & {
   menuRef?: Ref<MenuRef>
 }
 
 export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
+  const { styles } = useStyle()
+
   const renderMenuComponent = (): ReactNode => (
     <Menu
       ref={ menuRef }
+      rootClassName={ styles.menu }
       { ...menu }
     />
   )

@@ -20,7 +20,7 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { createElementSelectorAreas, createElementSelectorConfig, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
@@ -51,17 +51,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         elementSelectorConfig={ {
           selectionType: SelectionType.Multiple,
           areas: createElementSelectorAreas(props),
-          config: {
-            assets: {
-              allowedTypes: props.allowedAssetTypes
-            },
-            documents: {
-              allowedTypes: props.allowedDocumentTypes
-            },
-            objects: {
-              allowedTypes: props.allowedClasses
-            }
-          },
+          config: createElementSelectorConfig(props),
           onFinish: (event) => {
             const getSubType = (item: SelectedItem): string | null => {
               if (item.elementType === 'data-object') {

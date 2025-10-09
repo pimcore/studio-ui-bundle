@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
 
@@ -32,9 +33,12 @@ export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditabl
         inherited={ props.inherited }
         nowrap={ props.config?.nowrap }
         placeholder={ props.config?.placeholder }
-        required={ props.config?.required }
         width={ props.config?.width }
       />
     )
+  }
+
+  isEmpty (value: any, props: InputEditableDefinition): boolean {
+    return !isNonEmptyString(value)
   }
 }

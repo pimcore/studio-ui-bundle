@@ -167,6 +167,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   }
 
   const copyTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    if (node.isRoot === true) return null
+
     return {
       label: t('element.tree.copy'),
       key: ContextMenuActionName.copy,

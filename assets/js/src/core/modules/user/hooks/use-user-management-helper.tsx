@@ -69,6 +69,7 @@ interface UseUserReturn extends
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
   uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
+  deleteUserAvatar: (id: number) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
   getAvailablePermissions: () => any[]
@@ -79,6 +80,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [notificationApi] = useNotification()
+  const activeId = useAppSelector(state => state.user.activeId)
+  const getAllIds = useAppSelector(state => state.user.ids)
 
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
@@ -99,7 +102,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
   }
 
   function closeUser (id: number): void {
-    dispatch(userClosed(id))
+    dispatch(userClosed({ id, allIds: getAllIds }))
   }
 
   async function fetchUserById (props): Promise<UserGetByIdApiResponse> {
@@ -178,13 +181,27 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const updateUser: User2 = {
       ...user,
       twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
-      parentId: user.parentId ?? 0
+      parentId: user.parentId ?? 0,
+      dateTimeLocale: user.dateTimeLocale ?? ''
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
       updateUser
     }))
+
+    if (user.password !== undefined) {
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id,
+        body: {
+          password: user.password,
+          passwordConfirmation: user.password,
+          oldPassword: ''
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
 
     handleNotification(t('user-management.save-user.success'), error)
 
@@ -202,7 +219,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '' } }))
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }
@@ -210,6 +227,13 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
     handleNotification(t('user-management.upload-image.success'), error)
+    return data
+  }
+
+  async function deleteUserAvatar (id: number): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
+    const { data, error }: any = await dispatch(api.endpoints.userImageDeleteById.initiate({ id }))
+    handleNotification(t('user-management.upload-image.success'), error)
+
     return data
   }
 
@@ -238,8 +262,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return availablePermissions
   }
 
-  const activeId = useAppSelector(state => state.user.activeId)
-  const getAllIds = useAppSelector(state => state.user.ids)
   return {
     removeTrackedChanges (): void {},
     setModifiedCells (type: string, modifiedCells): void {},
@@ -258,6 +280,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
+    deleteUserAvatar,
     getAvailablePermissions,
     activeId,
     getAllIds

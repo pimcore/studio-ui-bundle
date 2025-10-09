@@ -52,6 +52,7 @@ export interface TreeProps {
   contextMenu?: ElementType<TreeContextMenuProps>
   renderFilter?: ElementType<TreeSearchProps>
   renderPager?: ElementType<TreePagerProps>
+  tooltipSlotName?: string
 
   onLoad?: (node: TreeNode) => Promise<void>
   onSelect?: (node: TreeNode) => void

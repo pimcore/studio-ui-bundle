@@ -52,12 +52,12 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      return context.type === 'data-object'
+      return context.type === 'data-object' && context.data.type !== 'variant'
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceObject: DataObject = info.data
-      return info.type === 'data-object' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
+      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
     }
 
     return (
