@@ -139,6 +139,7 @@ export const {
   useDocumentDocTypeAddMutation,
   useDocumentDocTypeUpdateByIdMutation,
   useDocumentDocTypeDeleteMutation,
+  useDocumentPageSnippetChangeMainDocumentMutation,
   useDocumentPageSnippetAreaBlockRenderQuery,
   useLazyDocumentPageSnippetAreaBlockRenderQuery,
   useDocumentRenderletRenderQuery,

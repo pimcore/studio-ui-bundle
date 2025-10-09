@@ -42,7 +42,6 @@ asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
 asset.asset-editor-tabs.view: View
-asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
@@ -1273,6 +1272,13 @@ document.translation.open-translation: Open Translation
 document.translation.link-existing-document: Link existing Document
 document.translation.unlink-existing-document: Unlink existing Document
 document.translation.all-translations: All Translations
+document.translation.new-document: New Document
+document.translation.use-inheritance: Using inheritance
+document.translation.new-document-with-inheritance.modal-title: New Document (using inheritance)
+document.translation.new-document-blank.modal-title: New Document (blank)
+document.translation.new-document-modal.label.parent: Parent
+document.translation.new-document-modal.label.language: Language
+document.translation.new-document-modal.create: Create
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1490,6 +1496,8 @@ language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
+content-main-document.apply-warning-title: Are you sure?
+content-main-document.apply-warning-message: All content will be lost
 never: never
 document-configuration.sidebar-title: Document Configuration
 document-configuration.predefined-document-type: Predefined Document Type

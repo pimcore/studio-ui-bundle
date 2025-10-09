@@ -29,6 +29,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 
 interface IProfileDetail {
   id: number
@@ -40,6 +41,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { user, setModifiedCells } = useUserDraft()
+  const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
   const { updateUserImageInState } = useUserHelper()
 
@@ -259,7 +261,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             modified={ keyBindingsModified }
             onChange={ handleOnChangeKeyBindings }
             onResetKeyBindings={ handleOnResetKeyBindings }
-            values={ user?.keyBindings }
+            values={ mergedKeyBindings }
           />
         </Col>
       </Row>

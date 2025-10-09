@@ -12,8 +12,8 @@ import React from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 
 import { Flex } from '@Pimcore/components/flex/flex'
-import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
-import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import { WorkflowLogModal } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-log-modal'
+import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-provider'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 

@@ -25,6 +25,8 @@ import {
   DocumentConfigurationSidebar
 } from '../sidebar/tabs/document-configuration/document-configuration-sidebar'
 import { checkAreablockTypesVisibility } from '../sidebar/visibility/areablock-types-visibility'
+import { checkSettingsVisibility } from '../sidebar/visibility/content-settings-visibility'
+import { checkNavigationVisibility } from '../sidebar/visibility/navigation-visibility'
 
 export const SIDEBAR_AREABLOCK_TYPES: ISidebarEntry<IDocumentContext> = {
   key: 'areablock-types',
@@ -38,19 +40,22 @@ export const SIDEBAR_CONTENT_SETTINGS: ISidebarEntry<IDocumentContext> = {
   key: 'content-settings',
   icon: <Icon value="content-settings" />,
   component: <ContentSettingsSidebar />,
-  tooltip: 'content-settings'
+  tooltip: 'content-settings',
+  isVisible: checkSettingsVisibility
 }
 
 export const SIDEBAR_NAVIGATION: ISidebarEntry<IDocumentContext> = {
   key: 'navigation',
   icon: <Icon value="navigation" />,
   component: <NavigationSidebar />,
-  tooltip: 'navigation.sidebar-title'
+  tooltip: 'navigation.sidebar-title',
+  isVisible: checkNavigationVisibility
 }
 
 export const SIDEBAR_DOCUMENT_CONFIGURATION: ISidebarEntry<IDocumentContext> = {
   key: 'document-configuration',
   icon: <Icon value="document-configurations" />,
   component: <DocumentConfigurationSidebar />,
-  tooltip: 'document-configuration.sidebar-title'
+  tooltip: 'document-configuration.sidebar-title',
+  isVisible: checkSettingsVisibility
 }

@@ -36,18 +36,22 @@ interface DocumentConfigurationFormProps {
     templates: Array<{ path: string }>
     predefinedDocTypes: Array<{ id: string, name?: string | null, controller?: string | null, template?: string | null }>
   }
+  hasSavePermission?: boolean
 }
 
 export const DocumentConfigurationForm = ({
   documentId,
   documentType,
   initialValues,
-  apiData
+  apiData,
+  hasSavePermission = true
 }: DocumentConfigurationFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettingsData, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
   const [form] = Form.useForm()
+
+  const canEdit = hasSavePermission
 
   const processedInitialValues = {
     ...initialValues,
@@ -78,6 +82,8 @@ export const DocumentConfigurationForm = ({
   ], [predefinedDocTypes])
 
   const handleFormChange = useCallback((changedValues: any, allValues: any) => {
+    if (!canEdit) return
+
     const settingsUpdates: Record<string, any> = {}
 
     if ('predefinedDocumentType' in changedValues && !isNil(changedValues.predefinedDocumentType)) {
@@ -104,7 +110,7 @@ export const DocumentConfigurationForm = ({
       updateSettingsData(settingsUpdates)
       debouncedAutoSave()
     }
-  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form])
+  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit])
 
   const lastGeneratedInfo = useMemo(() => {
     const lastGenerated = document?.settingsData?.staticLastGenerated
@@ -136,6 +142,7 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          disabled={ !canEdit }
           options={ predefinedDocTypeOptions }
         />
       </Form.Item>
@@ -146,6 +153,7 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          disabled={ !canEdit }
           options={ controllerOptions }
         />
       </Form.Item>
@@ -156,6 +164,7 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          disabled={ !canEdit }
           options={ templateOptions }
         />
       </Form.Item>
@@ -173,7 +182,10 @@ export const DocumentConfigurationForm = ({
             name="staticGeneratorEnabled"
             valuePropName="checked"
           >
-            <Switch labelRight={ t('document-configuration.enable-server-side-static-rendering') } />
+            <Switch
+              disabled={ !canEdit }
+              labelRight={ t('document-configuration.enable-server-side-static-rendering') }
+            />
           </Form.Item>
 
           <Form.Item
@@ -182,6 +194,7 @@ export const DocumentConfigurationForm = ({
             name="staticGeneratorLifetime"
           >
             <InputNumber
+              disabled={ !canEdit }
               min={ 1 }
               step={ 1 }
             />

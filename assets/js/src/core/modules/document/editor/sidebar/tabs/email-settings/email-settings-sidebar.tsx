@@ -17,11 +17,15 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { isUndefined } from 'lodash'
 import { EmailSettingsForm } from './email-settings-form'
+import { checkDocumentPermission } from '../../visibility/document-permission-helper'
 
 export const EmailSettingsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(DocumentContext)
+  const context = useContext(DocumentContext)
+  const { id } = context
   const { document } = useDocumentDraft(id)
+
+  const hasSavePermission = checkDocumentPermission(context, 'save') || checkDocumentPermission(context, 'publish')
 
   // Get initial values from document draft settingsData
   const initialValues = useMemo(() => {
@@ -56,6 +60,7 @@ export const EmailSettingsSidebar = (): React.JSX.Element => {
         {isDataReady && (
           <EmailSettingsForm
             documentId={ id }
+            hasSavePermission={ hasSavePermission }
             initialValues={ initialValues }
           />
         )}
