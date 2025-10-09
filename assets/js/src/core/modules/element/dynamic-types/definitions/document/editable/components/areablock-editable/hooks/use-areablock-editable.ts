@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { useCallback, useState, useRef, useContext, useEffect } from 'react'
 import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
@@ -61,7 +62,7 @@ export const useAreablockEditable = ({
     applyStylesToAreaEntries()
   }, [applyStylesToAreaEntries])
 
-  const { hideElementUntilRendered } = usePendingElementsReveal({
+  const { hideElementUntilRendered, revealPendingElements } = usePendingElementsReveal({
     dynamicEditables,
     getContainer: () => areablockManager.getContainer()
   })
@@ -180,6 +181,9 @@ export const useAreablockEditable = ({
         const editablesData = createEditableDataFromDefinitions(editableDefinitions)
         initializeData(editablesData)
         setDynamicEditables(prev => [...prev, ...editableDefinitions])
+      } else {
+        // Manually reveal elements when no editables are added
+        revealPendingElements()
       }
 
       handlePostOperation()
