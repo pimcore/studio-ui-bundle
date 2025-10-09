@@ -301,6 +301,7 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/DateFormatter': 'DynamicTypes/Grid/Transformers/DateFormatter',
   'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
   'DynamicTypes/Grid/Transformers/Anonymizer': 'DynamicTypes/Grid/Transformers/Anonymizer',
+  'DynamicTypes/Grid/Transformers/Blur': 'DynamicTypes/Grid/Transformers/Blur',
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',
   'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/Transformers/Combine',
   'DynamicTypes/Grid/Transformers/Explode': 'DynamicTypes/Grid/Transformers/Explode',

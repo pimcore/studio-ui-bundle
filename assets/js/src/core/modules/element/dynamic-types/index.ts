@@ -176,6 +176,7 @@ import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynami
 import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
 import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
 import { type DynamicTypePipelineGridTransformersAnonymizer } from './definitions/pipelines/grid/transformers/types/anonymizer/anonymizer'
+import { type DynamicTypePipelineGridTransformersBlur } from './definitions/pipelines/grid/transformers/types/blur/blur'
 import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
 import { type DynamicTypePipelineGridTransformersExplode } from './definitions/pipelines/grid/transformers/types/explode/explode'
 import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipelines/grid/transformers/types/trim/trim'
@@ -437,6 +438,7 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersDateFormatter>(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersAnonymizer>(serviceIds['DynamicTypes/Grid/Transformers/Anonymizer']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBlur>(serviceIds['DynamicTypes/Grid/Transformers/Blur']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersExplode>(serviceIds['DynamicTypes/Grid/Transformers/Explode']))
