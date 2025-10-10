@@ -184,6 +184,11 @@ export class DocumentSaveTaskManager {
   private getEditableData (): Record<string, any> {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
+
+      if (!documentApi.isIframeAvailable(this.documentId)) {
+        return {}
+      }
+
       const iframeApi = documentApi.getIframeApi(this.documentId)
       const allValues = iframeApi.documentEditable.getValues(true)
 
