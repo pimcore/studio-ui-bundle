@@ -188,6 +188,10 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.advancedColumns.group.boolean: Boolean
+grid.advanced-column.advancedColumns.group.date: Date
+grid.advanced-column.advancedColumns.group.string: String
+grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
 grid.advanced-column.advancedColumns: Source field
 grid.advanced-column.advancedColumns.add: Add a Source field
