@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { ResponsiveAssetPreview } from '../../helpers/responsive-asset-preview/responsive-asset-preview'
 import { generateThumbnailUrl } from './utils/thumbnail-sizing'
+import { isEqual, isNil } from 'lodash'
 
 interface ImageEditablePreviewProps {
-  src?: string
   assetId?: number
   width?: number | string
   height?: number | string
@@ -32,7 +32,6 @@ interface ImageEditablePreviewProps {
 }
 
 export const ImageEditablePreview = ({
-  src,
   assetId,
   width,
   height,
@@ -42,27 +41,55 @@ export const ImageEditablePreview = ({
   onImageLoadedChange,
   ...props
 }: ImageEditablePreviewProps): React.JSX.Element => {
+  const cachedThumbnailUrlRef = useRef<string | undefined>(undefined)
+  const cachedParamsRef = useRef<{
+    assetId?: number
+    width?: number | string
+    height?: number | string
+    thumbnailSettings?: ImageThumbnailSettings
+    thumbnailConfig?: string | object
+  }>({})
+
   const thumbnailUrl = useMemo(() => {
-    if (assetId === undefined) {
+    if (isNil(assetId)) {
+      cachedThumbnailUrlRef.current = undefined
+      cachedParamsRef.current = {}
       return undefined
     }
 
-    return generateThumbnailUrl({
+    const needsContainerWidth = isNil(thumbnailSettings) && isNil(thumbnailConfig)
+    if (needsContainerWidth && containerWidth <= 0) {
+      return undefined
+    }
+
+    const currentParams = { assetId, width, height, thumbnailSettings, thumbnailConfig }
+    const cachedParams = cachedParamsRef.current
+
+    const hasContentChanged = !isEqual(currentParams, cachedParams)
+
+    if (!isNil(cachedThumbnailUrlRef.current) && !hasContentChanged) {
+      return cachedThumbnailUrlRef.current
+    }
+
+    const newThumbnailUrl = generateThumbnailUrl({
       assetId,
       width,
       height,
       containerWidth,
       thumbnailSettings,
-      thumbnailConfig,
-      fallbackSrc: src
+      thumbnailConfig
     })
-  }, [assetId, src, width, height, thumbnailSettings, thumbnailConfig, containerWidth])
+
+    cachedThumbnailUrlRef.current = newThumbnailUrl
+    cachedParamsRef.current = currentParams
+
+    return newThumbnailUrl
+  }, [assetId, width, height, thumbnailSettings, thumbnailConfig, containerWidth])
 
   return (
     <ResponsiveAssetPreview
       { ...props }
       assetId={ assetId }
-      src={ src }
       thumbnailUrl={ thumbnailUrl }
     />
   )
