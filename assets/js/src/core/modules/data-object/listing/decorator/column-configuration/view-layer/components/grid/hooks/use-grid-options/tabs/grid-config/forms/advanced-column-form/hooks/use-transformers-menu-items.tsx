@@ -29,8 +29,19 @@ export const useTransformersMenuItems = (availableDynamicTypes?: DynamicTypePipe
   if (isUndefined(availableDynamicTypes)) return { transformersMenuItems: [] }
 
   const { t } = useTranslation()
-
   const { operations } = useNumberedList()
+
+  const groupedIds = new Set(Object.values(TRANSFORMERS_GROUP).flat())
+  const ungroupedTransformers = availableDynamicTypes
+    .map(dynamicType => dynamicType.id)
+    .filter(id => !groupedIds.has(id))
+
+  if (ungroupedTransformers.length > 0) {
+    TRANSFORMERS_GROUP.other = [
+      ...TRANSFORMERS_GROUP.other,
+      ...ungroupedTransformers
+    ]
+  }
 
   const transformersMenuItems: DropdownMenuProps['items'] = Object.entries(TRANSFORMERS_GROUP).map(([groupKey, transformerIds]) => ({
     key: `${groupKey}Transformers`,
