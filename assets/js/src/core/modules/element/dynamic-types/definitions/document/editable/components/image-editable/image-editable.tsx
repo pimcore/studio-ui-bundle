@@ -31,6 +31,7 @@ import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-previe
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface ImageEditableValue {
   id?: number
@@ -200,7 +201,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     if (props.config?.disableInlineUpload === true) {
       return (
         <Droppable
-          isValidContext={ () => !disabled }
+          disabled={ disabled }
+          isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
           onDrop={ (info: DragAndDropInfo) => {
             handleReplaceImage(info.data.id as number)
@@ -223,7 +225,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
         targetFolderPath={ props.config?.uploadPath }
       >
         <Droppable
-          isValidContext={ () => !disabled }
+          disabled={ disabled }
+          isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
           onDrop={ (info: DragAndDropInfo) => {
             handleReplaceImage(info.data.id as number)
