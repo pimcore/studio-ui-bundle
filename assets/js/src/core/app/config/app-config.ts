@@ -11,7 +11,6 @@
 import { type WysiwygAppConfigInterface } from '@Pimcore/modules/wysiwyg/interface/wysiwyg-app-config'
 import { getParentDocument } from '@Pimcore/utils/iframe'
 
-
 interface AppConfig {
   baseUrl: string
   mercureUrl: string
