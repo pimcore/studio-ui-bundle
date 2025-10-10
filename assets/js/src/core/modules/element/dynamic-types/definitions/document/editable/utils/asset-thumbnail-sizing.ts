@@ -80,6 +80,10 @@ const generateAssetThumbnailUrl = ({
     return thumbnailService.getThumbnailUrl(dynamicThumbnailDef)
   }
 
+  if (containerWidth <= 0) {
+    return undefined
+  }
+
   const { thumbnailWidth, thumbnailHeight, resizeMode } = calculateThumbnailDimensions({
     width,
     height,

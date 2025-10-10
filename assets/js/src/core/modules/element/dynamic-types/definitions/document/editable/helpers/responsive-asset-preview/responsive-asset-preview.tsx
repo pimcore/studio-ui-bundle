@@ -22,7 +22,6 @@ import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyle } from '../../components/image-editable/image-editable-preview.styles'
 
 interface ResponsiveAssetPreviewProps {
-  src?: string
   assetId?: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
@@ -35,7 +34,6 @@ interface ResponsiveAssetPreviewProps {
 }
 
 export const ResponsiveAssetPreview = ({
-  src,
   assetId,
   className,
   dropdownItems,
@@ -74,10 +72,10 @@ export const ResponsiveAssetPreview = ({
 
   const finalImageSrc = useMemo(() => {
     if (assetId === undefined) {
-      return src
+      return undefined
     }
-    return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
-  }, [assetId, src, thumbnailUrl])
+    return thumbnailUrl ?? undefined
+  }, [assetId, thumbnailUrl])
 
   useEffect(() => {
     if (finalImageSrc !== lastImageSrcRef.current) {
