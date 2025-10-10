@@ -57,7 +57,7 @@ export const getParentDocument = (): Document => {
 
   try {
     return window.parent.document
-  } catch (error) {
+  } catch {
     // Cross-origin restriction - parent document not accessible
     return document
   }
