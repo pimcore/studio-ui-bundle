@@ -201,7 +201,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     if (props.config?.disableInlineUpload === true) {
       return (
         <Droppable
-          disabled={ disabled}
+          disabled={ disabled }
           isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
           onDrop={ (info: DragAndDropInfo) => {
@@ -225,7 +225,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
         targetFolderPath={ props.config?.uploadPath }
       >
         <Droppable
-          disabled={ disabled}
+          disabled={ disabled }
           isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
           onDrop={ (info: DragAndDropInfo) => {
