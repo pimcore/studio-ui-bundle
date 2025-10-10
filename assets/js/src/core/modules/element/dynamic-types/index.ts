@@ -183,6 +183,7 @@ import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipe
 import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
 import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
+import { type DynamicTypePipelineGridTransformersTwigOperator } from './definitions/pipelines/grid/transformers/types/twig-operator/twig-operator'
 import { type DynamicTypePipelineGridTransformersBooleanFormatter } from './definitions/pipelines/grid/transformers/types/boolean-formatter/boolean-formatter'
 import { type DynamicTypePipelineGridTransformersDateFormatter } from './definitions/pipelines/grid/transformers/types/date-formatter/date-formatter'
 import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
@@ -202,6 +203,7 @@ import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { type DynamicTypeGridCellInteger } from './definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
+import { type DynamicTypeGridCellError } from './definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { type DynamicTypeGridCellArray } from './definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
 import { type DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
 import { type DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
@@ -288,6 +290,7 @@ moduleSystem.registerModule({
 
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellInteger>(serviceIds['DynamicTypes/GridCell/Integer']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellError>(serviceIds['DynamicTypes/GridCell/Error']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellArray>(serviceIds['DynamicTypes/GridCell/Array']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
@@ -437,6 +440,7 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBooleanFormatter>(serviceIds['DynamicTypes/Grid/Transformers/BooleanFormatter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersDateFormatter>(serviceIds['DynamicTypes/Grid/Transformers/DateFormatter']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersElementCounter>(serviceIds['DynamicTypes/Grid/Transformers/ElementCounter']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTwigOperator>(serviceIds['DynamicTypes/Grid/Transformers/TwigOperator']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersAnonymizer>(serviceIds['DynamicTypes/Grid/Transformers/Anonymizer']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersBlur>(serviceIds['DynamicTypes/Grid/Transformers/Blur']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
