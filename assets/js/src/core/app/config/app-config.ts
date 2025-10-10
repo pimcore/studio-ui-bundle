@@ -9,6 +9,7 @@
  */
 
 import { type WysiwygAppConfigInterface } from '@Pimcore/modules/wysiwyg/interface/wysiwyg-app-config'
+import { getParentDocument } from '@Pimcore/utils/iframe'
 
 interface AppConfig {
   baseUrl: string
@@ -16,7 +17,7 @@ interface AppConfig {
   wysiwyg: WysiwygAppConfigInterface
 }
 
-const appElement = document.querySelector('#app')
+const appElement = getParentDocument().querySelector('#app')
 export const currentDomain = window.location.origin
 
 if (appElement === null) {
