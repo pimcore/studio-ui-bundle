@@ -23,6 +23,8 @@ import { isNull, isUndefined } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 
 interface NavigationFormProps {
   initialValues: NavigationFormValues
@@ -93,11 +95,17 @@ export const NavigationForm = ({
     })
   }, [updateNavigationProperty, canEdit])
 
+  const { handleFormChange: debouncedFormChange } = useDebouncedFormChange(handleFormChange, {
+    delay: 500,
+    immediateFields: ['navigation_exclude', 'navigation_target'],
+    tag: createDocumentDebounceTag(documentId)
+  })
+
   return (
     <FormKit
       formProps={ {
         initialValues,
-        onValuesChange: handleFormChange,
+        onValuesChange: debouncedFormChange,
         layout: 'vertical'
       } }
     >
@@ -182,7 +190,6 @@ export const NavigationForm = ({
       >
         <Input
           disabled={ !canEdit }
-          maxLength={ 1 }
         />
       </Form.Item>
 

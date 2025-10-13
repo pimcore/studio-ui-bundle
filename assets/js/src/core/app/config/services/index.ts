@@ -14,6 +14,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
+import { DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
@@ -263,6 +264,9 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
+
+// Form services
+container.bind(serviceIds.debouncedFormRegistry).to(DebouncedFormRegistry).inSingletonScope()
 
 // Assets
 container.bind(serviceIds['Asset/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
