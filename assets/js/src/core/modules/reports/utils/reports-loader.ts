@@ -22,53 +22,53 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/reports-view-wrapper'
 
 export const loadReportsMenuItems = async (): Promise<void> => {
-    if (isAllowed(UserPermission.Reports)) {
-      const REPORTS_SECTION_NAME = 'Reporting'
-      const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
-      const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+  if (isAllowed(UserPermission.Reports)) {
+    const REPORTS_SECTION_NAME = 'Reporting'
+    const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
-      try {
-        const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 })).unwrap()
-        
-        if (!isUndefined(reportsData?.items)) {
-          reportsData.items.forEach((report, index) => {
-            if (report.menuShortcut) {
-              const reportId = report.name
-              const reportName = !isEmptyValue(report.niceName) ? report.niceName : reportId
-              const path = !isEmptyValue(report.group)
-                ? `${REPORTS_SECTION_NAME}/${report.group}/${reportId}`
-                : `${REPORTS_SECTION_NAME}/${reportId}`
+    try {
+      const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 })).unwrap()
 
-              mainNavRegistryService.registerMainNavItem({
-                id: `${reportId}-${index}`,
-                path,
-                label: reportName,
-                group: report.group,
-                order: 300 + index,
-                permission: UserPermission.Reports,
-                perspectivePermission: NavPermission.Reports,
-                widgetConfig: {
-                  component: 'dynamic-report',
-                  config: {
-                    translationKey: 'navigation.reports',
-                    icon: {
-                      type: 'name',
-                      value: 'pie-chart'
-                    },
-                    reportId
-                  }
+      if (!isUndefined(reportsData?.items)) {
+        reportsData.items.forEach((report, index) => {
+          if (report.menuShortcut) {
+            const reportId = report.name
+            const reportName = !isEmptyValue(report.niceName) ? report.niceName : reportId
+            const path = !isEmptyValue(report.group)
+              ? `${REPORTS_SECTION_NAME}/${report.group}/${reportId}`
+              : `${REPORTS_SECTION_NAME}/${reportId}`
+
+            mainNavRegistryService.registerMainNavItem({
+              id: `${reportId}-${index}`,
+              path,
+              label: reportName,
+              group: report.group,
+              order: 300 + index,
+              permission: UserPermission.Reports,
+              perspectivePermission: NavPermission.Reports,
+              widgetConfig: {
+                component: 'dynamic-report',
+                config: {
+                  translationKey: 'navigation.reports',
+                  icon: {
+                    type: 'name',
+                    value: 'pie-chart'
+                  },
+                  reportId
                 }
-              })
-            }
-          })
+              }
+            })
+          }
+        })
 
-          widgetRegistryService.registerWidget({
-            name: 'dynamic-report',
-            component: ReportsViewWrapper
-          })
-        }
-      } catch (e) {
-        console.error('Failed to load reports for menu:', e)
+        widgetRegistryService.registerWidget({
+          name: 'dynamic-report',
+          component: ReportsViewWrapper
+        })
       }
+    } catch (e) {
+      console.error('Failed to load reports for menu:', e)
     }
+  }
 }

@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/reports-view-wrapper'
 import { ReportsEditor } from '@Pimcore/modules/reports/reports-editor/reports-editor'

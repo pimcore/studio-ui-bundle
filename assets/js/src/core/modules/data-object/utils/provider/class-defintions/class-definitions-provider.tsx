@@ -68,7 +68,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   const transformedQueryResult = { ...queryResultReturn }
-  
+
   // If user doesn't have objects permission, provide empty data
   if (!hasObjectsPermission) {
     transformedQueryResult.data = {
