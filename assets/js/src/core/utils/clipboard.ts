@@ -38,7 +38,7 @@ const copyToClipboardFallback = (text: string): boolean => {
     textArea.setSelectionRange(0, 99999)
 
     const successful = document.execCommand('copy')
-    document.body.removeChild(textArea)
+    textArea.remove()
 
     return successful
   } catch (error) {
