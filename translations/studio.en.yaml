@@ -115,6 +115,7 @@ hardlink: Hardlink
 blank: "Blank"
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
+data-object.select-class-to-display: Select a class to display
 data-object.tree.context-menu.add-object: Add Object
 data-object.tree.context-menu.add-variant: Add Variant
 data-object.variant-listing.create-data-variant: New Variant
