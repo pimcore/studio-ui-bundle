@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/26a6a39d-7c52-4e1e-8fb7-570f1a822acd/"
+    "publicPath": "/bundles/pimcorestudioui/build/72e5f520-661f-4487-9101-ed2fba75049d/"
   },
   "shared": [
     {
@@ -1185,8 +1185,8 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css"
           ],
           "async": []
         }
@@ -1493,12 +1493,12 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ],
           "async": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css"
           ]
         }
       }
@@ -1834,13 +1834,13 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ],
           "async": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css"
           ]
         }
       }
@@ -2587,13 +2587,13 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ],
           "async": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css"
           ]
         }
       }
@@ -2926,13 +2926,13 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ],
           "async": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css"
           ]
         }
       }
@@ -3223,7 +3223,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css"
+            "static/css/async/6534.7aed8cdb.css"
           ],
           "async": []
         }
@@ -3550,7 +3550,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css"
+            "static/css/async/6534.7aed8cdb.css"
           ],
           "async": []
         }
@@ -3900,14 +3900,14 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ],
           "async": [
-            "static/css/async/6534.5ab40e41.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.85afbbaf.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.85afbbaf.css"
+            "static/css/async/6534.7aed8cdb.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.6207a23e.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6207a23e.css"
           ]
         }
       }
