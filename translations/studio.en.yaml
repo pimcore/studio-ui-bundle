@@ -743,6 +743,8 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
+user-management.search: Search
+user-management.doc-types: Document Types
 user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
@@ -1524,3 +1526,58 @@ email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@examp
 add-document-form.label.title: Title
 add-document-form.label.navigation: Navigation
 add-document-form.label.key: Key
+user-management.permissions.quantityValueUnits: Quantity Value Units
+user-management.permissions.recyclebin: Recycle Bin
+user-management.permissions.redirects: Redirects
+user-management.permissions.seemode: Seemode
+user-management.permissions.selectoptions: Select Options
+user-management.permissions.share_configurations: Share Configurations
+user-management.permissions.objects: Objects
+user-management.permissions.objectbricks: Objectbricks
+user-management.permissions.notifications_send: Send Notifications
+user-management.permissions.notifications: Notifications
+user-management.permissions.predefined_properties: Predefined Properties
+user-management.permissions.perspective_editor: Perspective Editor
+user-management.permissions.perspective_editor_view_edit: Perspective Editor View & Edit
+user-management.permissions.qr_codes: QR-Codes
+user-management.permissions.plugins: Plugins
+user-management.permissions.notes_events: Notes & Events
+user-management.permissions.clear_cache: Clear Cache
+user-management.permissions.classificationstore: Classification Store
+user-management.permissions.classes: Classes
+user-management.permissions.workflow_details: Workflow Details
+user-management.permissions.users: Users
+user-management.permissions.website_settings: Website Settings
+user-management.permissions.asset_metadata: Asset Metadata
+user-management.permissions.clear_fullpage_cache: Clear Fullpage Cache
+user-management.permissions.clear_temp_files: Clear Temporary Files
+user-management.permissions.system_settings: System Settings
+user-management.permissions.tags_assignment: Tags Assignment
+user-management.permissions.tags_configuration: Tags Configuration
+user-management.permissions.tags_search: Tags Search
+user-management.permissions.thumbnails: Thumbnails
+user-management.permissions.translations: Translations
+user-management.permissions.fieldcollections: Field-Collections
+user-management.permissions.emails: Emails
+user-management.permissions.document_types: Document Types
+user-management.permissions.documents: Documents
+user-management.permissions.dashboards: Dashboards
+user-management.permissions.assets: Assets
+user-management.permissions.system_appearance_settings: Appearance & Branding
+user-management.permissions.gdpr_data_extractor: GDPR Data Extractor
+user-management.permissions.admin_translations: Admin Translations
+user-management.permissions.application_logging: Application Logger
+user-management.permissions.reports_config: Reports Config
+user-management.permissions.reports: Reports
+user-management.permissions.gee_job_run_permission: Job Run Permission
+user-management.permissions.gee_see_all_job_runs_permission: See All Job Runs Permission
+user-management.permissions.glossary: Glossary
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Newsletters
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP Errors
+user-management.permissions.seo_document_editor: SEO Document Editor
+user-management.permissions."robots.txt": robots.txt
+user-management.permissions.routes: Routes
+user-management.permissions.word_export: Word Export
+user-management.permissions.xliff_import_export: XLIFF Import/Export
