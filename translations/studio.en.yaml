@@ -743,6 +743,8 @@ tag-configuration.delete-all: Delete all
 tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
 tag-configuration.cancel: Cancel
 user-management.admin: Admin
+user-management.search: Search
+user-management.doc-types: Document Types
 user-management.tree.all: All users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
@@ -1524,3 +1526,93 @@ email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@examp
 add-document-form.label.title: Title
 add-document-form.label.navigation: Navigation
 add-document-form.label.key: Key
+
+user-management.permissions.quantityValueUnits: Quantity Value Units
+user-management.permissions.recyclebin: Recycle Bin
+user-management.permissions.permission_oidc_config: OIDC Configuration
+user-management.permissions.redirects: Redirects
+user-management.permissions.seemode: Seemode
+user-management.permissions.selectoptions: Select Options
+user-management.permissions.share_configurations: Share Configurations
+user-management.permissions.objects: Objects
+user-management.permissions.objectbricks: Objectbricks
+user-management.permissions.notifications_send: Send Notifications
+user-management.permissions.notifications: Notifications
+user-management.permissions.predefined_properties: Predefined Properties
+user-management.permissions.perspective_editor: Perspective Editor
+user-management.permissions.perspective_editor_view_edit: Perspective Editor View & Edit
+user-management.permissions.qr_codes: QR-Codes
+user-management.permissions.plugins: Plugins
+user-management.permissions.pimcore_headless_documents_config: Headless Documents Config
+user-management.permissions.pimcore_direct_edit: Direct Edit
+user-management.permissions.notes_events: Notes & Events
+user-management.permissions.bundle_ecommerce_pricing_rules: Pricing Rules
+user-management.permissions.clear_cache: Clear Cache
+user-management.permissions.classificationstore: Classification Store
+user-management.permissions.classes: Classes
+user-management.permissions.bundle_outputDataConfigToolkit: Output Data Config Toolkit
+user-management.permissions.workflow_details: Workflow Details
+user-management.permissions.bundle_ecommerce_back-office_order: Back-Office Orders
+user-management.permissions.bundle_advancedsearch_search: Advanced Search
+user-management.permissions.users: Users
+user-management.permissions.web2print_web2print_favourite_output_channels: Web2Print Favourite Output Channels
+user-management.permissions.website_settings: Website Settings
+user-management.permissions.asset_metadata: Asset Metadata
+user-management.permissions.clear_fullpage_cache: Clear Fullpage Cache
+user-management.permissions.clear_temp_files: Clear Temporary Files
+user-management.permissions.system_settings: System Settings
+user-management.permissions.tags_assignment: Tags Assignment
+user-management.permissions.tags_configuration: Tags Configuration
+user-management.permissions.tags_search: Tags Search
+user-management.permissions.thumbnails: Thumbnails
+user-management.permissions.translations: Translations
+user-management.permissions.fieldcollections: Field-Collections
+user-management.permissions.emails: Emails
+user-management.permissions.document_types: Document Types
+user-management.permissions.documents: Documents
+user-management.permissions.dashboards: Dashboards
+user-management.permissions.assets: Assets
+user-management.permissions.system_appearance_settings: Appearance & Branding
+user-management.permissions.gdpr_data_extractor: GDPR Data Extractor
+user-management.permissions.admin_translations: Admin Translations
+user-management.permissions.application_logging: Application Logger
+user-management.permissions.bptb_bookmark_list_share_permission: Bookmark List Share Permission
+user-management.permissions.bptb_aet_configuration_permission: AET Configuration Permission
+user-management.permissions.bptb_bookmark_list_permission: Bookmark List Permission
+user-management.permissions.pcp_general_permission: Copilot General Permission
+user-management.permissions.pcp_job_run_permission: Copilot Run Jobs Permission
+user-management.permissions.pcp_configuration_permission: Copilot Configuration Permission
+user-management.permissions.pcp_job_runs_see_all_permission: Copilot See All Job Runs Permission
+user-management.permissions.reports_config: Reports Config
+user-management.permissions.reports: Reports
+user-management.permissions.gee_job_run_permission: Job Run Permission
+user-management.permissions.gee_see_all_job_runs_permission: See All Job Runs Permission
+user-management.permissions.glossary: Glossary
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Newsletters
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP Errors
+user-management.permissions.seo_document_editor: SEO Document Editor
+user-management.permissions."robots.txt": robots.txt
+user-management.permissions.routes: Routes
+user-management.permissions.studio_perspective_editor: Studio Perspective Editor
+user-management.permissions.studio_perspective_widget_editor: Studio Perspective Widget Editor
+user-management.permissions.studio_dashboards_import: Studio Dashboards Import
+user-management.permissions.studio_dashboards_edit: Studio Dashboards Edit
+user-management.permissions.studio_dashboards_view: Studio Dashboards View
+user-management.permissions.studio_dashboards_edit_all: Studio Dashboards Edit All
+user-management.permissions.studio_dashboards_export: Studio Dashboards Export
+user-management.permissions.studio_dashboards_share: Studio Dashboards Share
+user-management.permissions.web2print_settings: Web2Print Settings
+user-management.permissions.word_export: Word Export
+user-management.permissions.wai_configuration_permission: Workflow Automation Integration Configuration Permission
+user-management.permissions.xliff_import_export: XLIFF Import/Export
+user-management.permissions.portal-engine_index-management: Portal Engine Index Management
+user-management.permissions.portal-engine_wizard: Portal Engine Wizard
+user-management.permissions.portal-engine_collection-access: Portal Engine Collection Access
+user-management.permissions.translations_job_creation: Translation Jobs Creation
+user-management.permissions.translations_job_config: Translation Jobs Configuration
+user-management.permissions.translations_job_list: Translation Jobs List
+user-management.permissions.permission_workflow_designer_trans_notifications: Workflow Designer Translation Notifications Permission
+user-management.permissions.permission_workflow_designer_place_permissions: Workflow Designer Place Permissions
+user-management.permissions.permission_workflow_designer: Workflow Designer
