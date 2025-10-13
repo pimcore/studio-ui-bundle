@@ -17,5 +17,6 @@ export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-
 
 export * from '@Pimcore/modules/reports/reports-editor/types'
 export * from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+export * from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 
 export * as ReportsApiSlice from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
