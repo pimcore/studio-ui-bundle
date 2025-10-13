@@ -32,14 +32,14 @@ const copyToClipboardFallback = (text: string): boolean => {
     textArea.style.top = '-999999px'
     textArea.setAttribute('readonly', '')
     textArea.setAttribute('aria-hidden', 'true')
-    
+
     document.body.appendChild(textArea)
     textArea.select()
     textArea.setSelectionRange(0, 99999)
-    
+
     const successful = document.execCommand('copy')
     document.body.removeChild(textArea)
-    
+
     return successful
   } catch (error) {
     console.error('Fallback clipboard method failed:', error)
@@ -53,7 +53,7 @@ export const copyToClipboardWithFeedback = async (
   onError?: (error: string) => void
 ): Promise<void> => {
   const success = await copyToClipboard(text)
-  
+
   if (success) {
     onSuccess?.()
   } else {
