@@ -39,7 +39,9 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { openMainWidget } = useWidgetManager()
   const user = useUser()
   const { getUserImageById, updateUserImageInState } = useUserHelper()
-  const { data } = useNotificationGetUnreadCountQuery()
+  const { data } = useNotificationGetUnreadCountQuery(undefined, {
+    skip: !isAllowed(UserPermission.Notifications)
+  })
 
   useEffect(() => {
     if (user.hasImage) {

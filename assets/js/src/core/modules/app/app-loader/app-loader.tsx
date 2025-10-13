@@ -24,6 +24,7 @@ import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
 import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
+import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -83,7 +84,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadTranslations(),
           loadSettings(),
           loadAvailableLocales(),
-          initActivePerspective()
+          initActivePerspective(),
+          loadReportsMenuItems()
         ])
 
         setIsLoading(() => false)
