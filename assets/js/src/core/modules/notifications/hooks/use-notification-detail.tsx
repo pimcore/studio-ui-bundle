@@ -13,6 +13,7 @@ import { type Notification, useNotificationDeleteByIdMutation, useNotificationGe
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useOptimisticUpdate } from './use-optimistic-update'
+import { isNil } from 'lodash'
 
 export interface UseNotificationDetailProps {
   id: number
@@ -41,10 +42,10 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
   }
 
   useEffect(() => {
-    if (isExpanded) {
+    if (!isNil(notificationDetail?.id)) {
       updateNotificationReadStateById(id, true)
     }
-  }, [isExpanded])
+  }, [notificationDetail])
 
   useEffect(() => {
     if (isDetailError) {
