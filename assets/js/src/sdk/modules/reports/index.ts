@@ -14,3 +14,8 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
+
+export * from '@Pimcore/modules/reports/reports-editor/types'
+export * from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+
+export * as ReportsApiSlice from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
