@@ -93,6 +93,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
           >
             <Select
               fieldNames={ { label: 'label', value: 'key' } }
+              onChange={ (value: string) => { handleSourceDefinitionTypeUpdate(value) } }
               options={ sourceDefinitionOptions }
             />
           </Form.Item>

@@ -135,6 +135,7 @@ export default defineConfig({
       './modules/document': './js/src/sdk/modules/document/index.ts',
       './modules/element': './js/src/sdk/modules/element/index.ts',
       './modules/icon-library': './js/src/sdk/modules/icon-library/index.ts',
+      './modules/reports': './js/src/sdk/modules/reports/index.ts',
       './modules/user': './js/src/sdk/modules/user/index.ts',
       './modules/widget-manager': './js/src/sdk/modules/widget-manager/index.ts',
       './modules/wysiwyg': './js/src/sdk/modules/wysiwyg/index.ts',
