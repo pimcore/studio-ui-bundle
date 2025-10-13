@@ -14,7 +14,7 @@ import cn from 'classnames'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from 'antd'
+import { Tooltip, App } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useTableValue, type TableValue } from './hooks/use-table-value'
@@ -23,6 +23,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 
 export interface TableProps {
   rows: number | null
@@ -55,6 +56,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const { confirm } = modal
+  const { message } = App.useApp()
 
   const columnConfigActivated = props.colsFixed === true ? props.columnConfigActivated ?? false : false
 
@@ -173,7 +175,16 @@ export const Table = (props: TableProps): React.JSX.Element => {
           initialValue: getCopyData(value),
           okText: t('table.copy'),
           onOk: (value: string) => {
-            void navigator.clipboard.writeText(value)
+            void copyToClipboardWithFeedback(
+              value,
+              () => {
+                void message.success(t('clipboard.copy.success'))
+              },
+              (error: string) => {
+                void message.error(t('clipboard.copy.error'))
+                console.error('Copy to clipboard failed:', error)
+              }
+            )
           }
         })
             }

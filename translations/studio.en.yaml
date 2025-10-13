@@ -705,6 +705,8 @@ table.delete-row: Delete row
 table.duplicate-row: Duplicate row
 table.copy: Copy
 table.paste: Paste
+clipboard.copy.success: Copied to clipboard successfully
+clipboard.copy.error: Failed to copy to clipboard
 table.empty: Empty
 table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
