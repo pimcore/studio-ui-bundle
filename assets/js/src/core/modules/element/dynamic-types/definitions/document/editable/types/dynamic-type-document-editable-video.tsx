@@ -33,10 +33,10 @@ export type VideoEditableDefinition = Omit<AbstractDocumentEditableDefinition, '
 interface ApiVideoValue {
   id?: number
   type: VideoType
-  title?: string
-  description?: string
-  path?: string
-  poster?: string
+  title: string
+  description: string
+  path: string
+  poster: string
 }
 
 @injectable()
@@ -110,17 +110,20 @@ export class DynamicTypeDocumentEditableVideo extends DynamicTypeDocumentEditabl
       return {
         type: 'asset',
         id: value.data?.id,
-        title: value.title,
-        description: value.description,
-        path: value.data?.fullPath,
-        poster: value.poster?.fullPath
+        title: value.title ?? '',
+        description: value.description ?? '',
+        path: value.data?.fullPath ?? '',
+        poster: value.poster?.fullPath ?? ''
       }
     }
 
     // For non-asset types (youtube, vimeo, dailymotion)
     return {
       type: value.type,
-      path: value.data ?? undefined
+      title: '',
+      description: '',
+      path: value.data ?? '',
+      poster: ''
     }
   }
 
