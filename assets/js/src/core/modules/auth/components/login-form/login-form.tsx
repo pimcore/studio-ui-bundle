@@ -11,14 +11,15 @@
 import { Checkbox, Input } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React, { useState } from 'react'
-import { useStyle } from '@Pimcore/components/login-form/login-form-style'
+import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
-import { Icon } from '../icon/icon'
+import { Icon } from '../../../../components/icon/icon'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
+import { ForgotPasswordForm } from '../forgot-password-form/forgot-password-form'
 
 export interface IAdditionalLogins {
   key: string
@@ -28,9 +29,10 @@ export interface IAdditionalLogins {
 
 interface ILoginFormProps {
   additionalLogins?: IAdditionalLogins[]
+  onPasswordForgotten?: () => void
 }
 
-export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Element => {
+export const LoginForm = ({ additionalLogins, onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
   const dispatch = useDispatch()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -78,35 +80,40 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
   }
 
   return (
-    <div className={ styles.form }>
-      <form onSubmit={ handleAuthentication }>
+    <div className={styles.form}>
+      <form onSubmit={handleAuthentication}>
         <Input
-          aria-label={ t('login-form.username') }
+          aria-label={t('login-form.username')}
           autoComplete="username"
-          name={ 'username' }
-          onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
-          placeholder={ t('login-form.username') }
-          prefix={ <Icon value="user" /> }
+          name={'username'}
+          onChange={(e) => { setFormState({ ...formState, username: e.target.value }) }}
+          placeholder={t('login-form.username')}
+          prefix={<Icon value="user" />}
         />
         <Input.Password
-          aria-label={ t('login-form.password') }
+          aria-label={t('login-form.password')}
           autoComplete="current-password"
-          name={ 'password' }
-          onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
-          placeholder={ t('login-form.password') }
+          name={'password'}
+          onChange={(e) => { setFormState({ ...formState, password: e.target.value }) }}
+          placeholder={t('login-form.password')}
         />
-        <div className={ 'flex-space' }>
+        <div className={'flex-space'}>
           <Checkbox
-            aria-label={ t('aria.login-form-additional-logins.remember-me-checkbox') }
+            aria-label={t('aria.login-form-additional-logins.remember-me-checkbox')}
           >
             {t('login-form.remember-me')}
           </Checkbox>
-          <Button type={ 'link' }>{t('login-form.forgot-password')}</Button>
+          <Button
+            type={'link'}
+            onClick={onPasswordForgotten}
+          >
+            {t('login-form.forgot-password')}
+          </Button>
         </div>
 
         <Button
           htmlType="submit"
-          loading={ isLoginLoading }
+          loading={isLoginLoading}
           type="primary"
         >
           {t('login-form.login')}
@@ -114,15 +121,15 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       </form>
 
       {Array.isArray(additionalLogins) && (
-        <div className={ 'login__additional-logins' }>
+        <div className={'login__additional-logins'}>
           <p>{t('login-form-additional-logins.or')}</p>
 
           {additionalLogins?.map((login) => (
             <Button
-              aria-label={ `${t('aria.login-form-additional-logins.additional-login-provider')} ${login.name}` }
-              href={ login.link }
-              key={ login.key }
-              type={ 'primary' }
+              aria-label={`${t('aria.login-form-additional-logins.additional-login-provider')} ${login.name}`}
+              href={login.link}
+              key={login.key}
+              type={'primary'}
             >
               {login.name}
             </Button>

@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
 import { routes } from '@Pimcore/app/router/router'
-import { LoginForm } from '@Pimcore/components/login-form/login-form'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useIsAuthenticated } from './hooks/use-is-authenticated'
+import { LoginFormContainer } from '@Pimcore/modules/auth/components/login-form/login-form-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
+import React, { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
 
 export const LoginPage = (): React.JSX.Element => {
@@ -34,18 +34,18 @@ export const LoginPage = (): React.JSX.Element => {
         navigate(redirectPath ?? routes.root)
 
         await sendStatistics(user.isAdmin)
-      })().catch(() => {})
+      })().catch(() => { })
     }
   }, [isAuthenticated])
 
   return (
-    <div className={ styles.loginPage }>
-      <div className={ styles.loginWidget }>
+    <div className={styles.loginPage}>
+      <div className={styles.loginWidget}>
         <img
-          alt={ 'Pimcore Logo' }
-          src={ '/bundles/pimcorestudioui/img/logo.png' }
+          alt={'Pimcore Logo'}
+          src={'/bundles/pimcorestudioui/img/logo.png'}
         />
-        <LoginForm />
+        <LoginFormContainer />
       </div>
     </div>
   )
