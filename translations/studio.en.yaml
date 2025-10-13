@@ -1524,3 +1524,6 @@ email-settings.from-syntax-hint: "You can use the syntax: My Name <my-name@examp
 add-document-form.label.title: Title
 add-document-form.label.navigation: Navigation
 add-document-form.label.key: Key
+forgot-password-form.username: Username
+forgot-password-form.reset-password: Reset Password
+forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
