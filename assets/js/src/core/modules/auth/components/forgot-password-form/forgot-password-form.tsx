@@ -1,13 +1,22 @@
-import { Form } from "@Pimcore/components/form/form"
-import { Icon } from "@Pimcore/components/icon/icon"
-import { Alert, Button, Content, Flex, FormKit, IconButton } from "@sdk/components"
-import { Input } from "antd"
-import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
-import { useAuthentication } from "../../hooks/use-authentication"
-import { getPrefix } from "@Pimcore/app/api/pimcore/route"
-import { baseUrl } from "@Pimcore/app/router/router"
-import { set } from "lodash"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { baseUrl } from '@Pimcore/app/router/router'
+import { Form } from '@Pimcore/components/form/form'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Alert, Button, Flex, FormKit } from '@sdk/components'
+import { Input } from 'antd'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useAuthentication } from '../../hooks/use-authentication'
 
 interface ForgetPasswordForm {
   username: string
@@ -28,20 +37,20 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
     <Flex vertical>
       {showSuccessMessage && (
         <Alert
-          type="success"
+          description={ t('forgot-password-form.success-message') }
           showIcon
-          description={t('forgot-password-form.success-message')}
+          type="success"
         />
       )}
 
       {
         !showSuccessMessage && (
           <FormKit
-            formProps={{
+            formProps={ {
               form,
               onFinish: async (values: ForgetPasswordForm) => {
                 setIsLoading(true)
-                resetPassword(
+                void resetPassword(
                   values.username,
                   `${baseUrl}${getPrefix()}/reset-password`,
                   () => {
@@ -53,25 +62,25 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
                   }
                 )
               }
-            }}
+            } }
           >
             <Form.Item
-              label={t('forgot-password-form.username')}
+              label={ t('forgot-password-form.username') }
               name="username"
             >
               <Input
                 autoComplete="username"
-                name={'username'}
-                placeholder={t('forgot-password-form.username')}
-                prefix={<Icon value="user" />}
+                name={ 'username' }
+                placeholder={ t('forgot-password-form.username') }
+                prefix={ <Icon value="user" /> }
               />
             </Form.Item>
 
             <Button
               className="w-full"
               htmlType='submit'
+              loading={ isLoading }
               type='primary'
-              loading={isLoading}
             >
               {t('forgot-password-form.reset-password')}
             </Button>
@@ -81,7 +90,7 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
 
       <Flex justify="flex-end">
         <Button
-          onClick={onGetBack}
+          onClick={ onGetBack }
           type="link"
         >
           {t('forgot-password-form.back')}

@@ -41,16 +41,16 @@ const ProfileContainer = ({ resetPassword }: ProfileContainerProps): React.JSX.E
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar id={user.id} />
+        <Toolbar id={ user.id } />
       }
     >
       <Content
-        loading={isLoading}
+        loading={ isLoading }
         padded
       >
         <ProfileDetail
-          id={user.id}
-          resetPassword={resetPassword}
+          id={ user.id }
+          resetPassword={ resetPassword }
         />
       </Content>
     </ContentLayout>

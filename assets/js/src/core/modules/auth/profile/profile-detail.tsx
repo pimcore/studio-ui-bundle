@@ -47,10 +47,10 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
   const { updateUserImageInState } = useUserHelper()
 
   const validLocalesOptions = [{ value: '', label: '(system)' },
-  ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
-    value: key,
-    label: value
-  }))]
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
   useEffect(() => {
     if (user?.modified === false) {
@@ -106,62 +106,62 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
 
   return (
     <Form
-      form={form}
+      form={ form }
       layout="vertical"
-      onValuesChange={onValuesChange}
+      onValuesChange={ onValuesChange }
     >
-      <Row gutter={[10, 10]}>
-        <Col span={8}>
+      <Row gutter={ [10, 10] }>
+        <Col span={ 8 }>
           <Accordion
-            activeKey={'1'}
+            activeKey={ '1' }
             bordered
-            items={[
+            items={ [
               {
                 key: '1',
                 title: <>{t('user-management.general')}</>,
                 children: <>
                   <Form.Item
-                    label={t('user-management.firstname')}
+                    label={ t('user-management.firstname') }
                     name="firstname"
                   >
                     <Input />
                   </Form.Item>
 
                   <Form.Item
-                    label={t('user-management.lastname')}
+                    label={ t('user-management.lastname') }
                     name="lastname"
                   >
                     <Input />
                   </Form.Item>
 
                   <Form.Item
-                    label={t('user-management.email')}
+                    label={ t('user-management.email') }
                     name="email"
                   >
-                    <Input type={'email'} />
+                    <Input type={ 'email' } />
                   </Form.Item>
 
                   <Form.Item
-                    label={t('user-management.language')}
+                    label={ t('user-management.language') }
                     name="language"
                   >
                     <Select
-                      options={availableAdminLanguages.map((language: string) => ({
+                      options={ availableAdminLanguages.map((language: string) => ({
                         value: language,
                         label: getDisplayName(language)
-                      }))}
-                      placeholder={t('user-management.language')}
+                      })) }
+                      placeholder={ t('user-management.language') }
                     />
                   </Form.Item>
 
                   <Form.Item
-                    label={t('user-management.dateTime')}
+                    label={ t('user-management.dateTime') }
                     name="dateTimeLocale"
                   >
                     <Select
                       optionFilterProp="label"
-                      options={validLocalesOptions}
-                      placeholder={t('user-management.dateTime')}
+                      options={ validLocalesOptions }
+                      placeholder={ t('user-management.dateTime') }
                       showSearch
                     />
                   </Form.Item>
@@ -169,75 +169,75 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
                   <Form.Item
                     name="welcomeScreen"
                   >
-                    <Switch labelRight={t('user-management.welcomeScreen')} />
+                    <Switch labelRight={ t('user-management.welcomeScreen') } />
                   </Form.Item>
 
                   <Form.Item
                     name="memorizeTabs"
                   >
-                    <Switch labelRight={t('user-management.memorizeTabs')} />
+                    <Switch labelRight={ t('user-management.memorizeTabs') } />
                   </Form.Item>
                 </>
               }
             ]
             }
-            size={'small'}
+            size={ 'small' }
           />
         </Col>
-        <Col span={6}>
+        <Col span={ 6 }>
           <UserAvatar
-            onUserImageChanged={updateUserImageInState}
-            user={user}
+            onUserImageChanged={ updateUserImageInState }
+            user={ user }
           />
         </Col>
-        <Col span={14}>
+        <Col span={ 14 }>
           <Accordion
-            activeKey={'2'}
+            activeKey={ '2' }
             bordered
-            items={[
+            items={ [
               {
                 key: '2',
                 title: <>{t('user-profile.change-password')}</>,
                 children: <>
                   {!resetPassword && (
                     <Form.Item
-                      label={t('user-profile.password-old')}
-                      name={'oldPassword'}
+                      label={ t('user-profile.password-old') }
+                      name={ 'oldPassword' }
                     >
                       <Input.Password />
                     </Form.Item>
                   )}
 
                   <Form.Item
-                    label={t('user-profile.password-new')}
-                    name={'password'}
-                    rules={[{ min: 10 }]}
+                    label={ t('user-profile.password-new') }
+                    name={ 'password' }
+                    rules={ [{ min: 10 }] }
                   >
                     <Input
-                      suffix={<IconButton
-                        icon={{ value: 'locked' }}
-                        onClick={() => {
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
                           const newPassword = generatePassword()
                           form.setFieldValue('password', newPassword)
                           setModifiedCells({ password: newPassword })
-                        }}
-                        title={t('user-management.generate-password')}
-                        variant={'minimal'}
-                      />}
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
                     />
                   </Form.Item>
                   <Form.Item
-                    dependencies={['password']}
-                    label={t('user-profile.password-repeat')}
-                    name={'passwordConfirmation'}
-                    rules={[{ min: 10 }, ({ getFieldValue }) => ({
-                      async validator(_, value) {
+                    dependencies={ ['password'] }
+                    label={ t('user-profile.password-repeat') }
+                    name={ 'passwordConfirmation' }
+                    rules={ [{ min: 10 }, ({ getFieldValue }) => ({
+                      async validator (_, value) {
                         if (value.length <= 0 || getFieldValue('password') === value) {
                           await Promise.resolve(); return
                         }
                         return await Promise.reject(new Error(t('user-profile.password-repeat-error')))
                       }
-                    })]}
+                    })] }
                   >
                     <Input.Password />
                   </Form.Item>
@@ -245,26 +245,26 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
               }
             ]
             }
-            size={'small'}
+            size={ 'small' }
           />
         </Col>
-        <Col span={14}>
+        <Col span={ 14 }>
           <EditorSettingsAccordion
-            data={user?.contentLanguages}
-            onChange={(languages) => { setModifiedCells({ contentLanguages: languages }) }}
+            data={ user?.contentLanguages }
+            onChange={ (languages) => { setModifiedCells({ contentLanguages: languages }) } }
           />
         </Col>
       </Row>
       <Row
-        className={'m-t-extra-large'}
-        gutter={[10, 10]}
+        className={ 'm-t-extra-large' }
+        gutter={ [10, 10] }
       >
-        <Col span={24}>
+        <Col span={ 24 }>
           <KeyBindings
-            modified={keyBindingsModified}
-            onChange={handleOnChangeKeyBindings}
-            onResetKeyBindings={handleOnResetKeyBindings}
-            values={mergedKeyBindings}
+            modified={ keyBindingsModified }
+            onChange={ handleOnChangeKeyBindings }
+            onResetKeyBindings={ handleOnResetKeyBindings }
+            values={ mergedKeyBindings }
           />
         </Col>
       </Row>

@@ -1,5 +1,16 @@
-import trackError, { ApiError, GeneralError } from "@Pimcore/modules/app/error-handler"
-import { useUserResetPasswordMutation } from "../user/user-api-slice.gen"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useUserResetPasswordMutation } from '../user/user-api-slice.gen'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 interface UseAuthenticationReturn {
   resetPassword: (username: string, resetPasswordUrl?: string, onFinish?: () => void, onSuccess?: () => void) => Promise<void>
@@ -20,7 +31,7 @@ export const useAuthentication = (): UseAuthenticationReturn => {
       const response = (await resetPasswordTask) as any
 
       if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
+        trackError(new ApiError(response.error as ApiErrorData))
         onFinish?.()
         return
       }

@@ -28,16 +28,19 @@ export const LoginFormContainer = ({ additionalLogins }: ILoginFormProps): React
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
 
   return (
-    <div className={styles.form}>
-      {showForgotPassword && <ForgotPasswordForm
-        onGetBack={() => setShowForgotPassword(false)}
-      />}
+    <div className={ styles.form }>
+      {showForgotPassword && (
+      <ForgotPasswordForm
+        onGetBack={ () => { setShowForgotPassword(false) } }
+      />
+      )}
 
-
-      {!showForgotPassword && <LoginForm
-        additionalLogins={additionalLogins}
-        onPasswordForgotten={() => setShowForgotPassword(true)}
-      />}
+      {!showForgotPassword && (
+      <LoginForm
+        additionalLogins={ additionalLogins }
+        onPasswordForgotten={ () => { setShowForgotPassword(true) } }
+      />
+      )}
     </div>
   )
 }
