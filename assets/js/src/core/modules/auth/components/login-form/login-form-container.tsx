@@ -8,17 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Checkbox, Input } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
-import React, { useState } from 'react'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
-import { useDispatch } from 'react-redux'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useTranslation } from 'react-i18next'
-import { Icon } from '../../../../components/icon/icon'
-import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
+import React, { useState } from 'react'
 import { ForgotPasswordForm } from '../forgot-password-form/forgot-password-form'
 import { LoginForm } from './login-form'
 
@@ -33,10 +24,7 @@ interface ILoginFormProps {
 }
 
 export const LoginFormContainer = ({ additionalLogins }: ILoginFormProps): React.JSX.Element => {
-  const dispatch = useDispatch()
   const { styles } = useStyle()
-  const messageApi = useMessage()
-  const { t } = useTranslation()
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
 
   return (
