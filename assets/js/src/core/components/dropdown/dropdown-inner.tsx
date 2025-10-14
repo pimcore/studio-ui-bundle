@@ -8,18 +8,61 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, type Ref } from 'react'
+import React, { type ReactNode, type Ref, useCallback, useRef, useEffect } from 'react'
 import { Dropdown as AntdDropdown, type MenuRef } from 'antd'
 import { type DropdownProps } from './dropdown'
 import { Menu } from '../menu/menu'
 import { useStyle } from './dropdown.styles'
+import { isNil, isNull } from 'lodash'
 
 export type DropdownInnerProps = DropdownProps & {
   menuRef?: Ref<MenuRef>
 }
 
-export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
+export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, dropClass, ...props }: DropdownInnerProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const dropdownElementRef = useRef<HTMLElement | null>(null)
+
+  const dropdownCallbackRef = useCallback((element: HTMLElement | null) => {
+    dropdownElementRef.current = element
+  }, [])
+
+  const handleRightClick = useCallback((e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!isNull(dropdownElementRef.current)) {
+      const childElement = dropdownElementRef.current.firstElementChild as HTMLElement
+      if (!isNull(childElement)) {
+        const syntheticEvent = new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: e.clientX,
+          clientY: e.clientY,
+          button: 2
+        })
+        childElement.dispatchEvent(syntheticEvent)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isNil(dropClass)) {
+      return
+    }
+
+    const elements = Array.from(document.querySelectorAll(`.${dropClass}`))
+
+    elements.forEach((element) => {
+      element.addEventListener('contextmenu', handleRightClick)
+    })
+
+    return () => {
+      elements.forEach((element) => {
+        element.removeEventListener('contextmenu', handleRightClick)
+      })
+    }
+  }, [dropClass, handleRightClick])
 
   const renderMenuComponent = (): ReactNode => (
     <Menu
@@ -34,7 +77,12 @@ export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props 
       { ...props }
       dropdownRender={ renderMenuComponent }
     >
-      {props.children}
+      <span
+        ref={ dropdownCallbackRef }
+        style={ { display: 'contents !important' } }
+      >
+        {props.children}
+      </span>
     </AntdDropdown>
   )
 }

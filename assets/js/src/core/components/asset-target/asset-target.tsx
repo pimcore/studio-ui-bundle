@@ -34,6 +34,7 @@ interface AssetTargetProps {
   height?: number | string
   dndIcon?: boolean
   uploadIcon?: boolean
+  dropClass?: string
 }
 
 export const AssetTarget = ({
@@ -46,7 +47,8 @@ export const AssetTarget = ({
   onRemove,
   onSearch,
   onUpload,
-  onResize
+  onResize,
+  dropClass
 }: AssetTargetProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -92,6 +94,7 @@ export const AssetTarget = ({
   return (
     <Dropdown
       disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      dropClass={ dropClass }
       menu={ { items: dropdownItems } }
       trigger={ ['contextMenu'] }
     >

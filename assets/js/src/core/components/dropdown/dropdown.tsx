@@ -25,6 +25,7 @@ export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender' 
   menuRef?: Ref<MenuRef>
   selectedKeys?: React.Key[]
   onSelect?: (keys: React.Key[]) => void
+  dropClass?: string
 }
 
 export const Dropdown = ({ menu, ...props }: DropdownProps): React.JSX.Element => {
