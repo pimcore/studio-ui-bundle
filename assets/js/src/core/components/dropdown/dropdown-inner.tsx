@@ -73,16 +73,18 @@ export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, dropClass
   )
 
   return (
-    <AntdDropdown
-      { ...props }
-      dropdownRender={ renderMenuComponent }
+    <span
+      ref={ dropdownCallbackRef }
+      style={ { display: 'contents !important' } }
     >
-      <span
-        ref={ dropdownCallbackRef }
-        style={ { display: 'contents !important' } }
+      <AntdDropdown
+        { ...props }
+        dropdownRender={ renderMenuComponent }
       >
+
         {props.children}
-      </span>
-    </AntdDropdown>
+
+      </AntdDropdown>
+    </span>
   )
 }
