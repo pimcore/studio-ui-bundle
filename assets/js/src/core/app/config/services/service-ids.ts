@@ -43,6 +43,9 @@ export const serviceIds = {
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
 
+  // Form services
+  debouncedFormRegistry: 'DebouncedFormRegistry',
+
   // Global message system
   globalMessageBusProcess: 'GlobalMessageBusProcess',
   globalMessageBus: 'GlobalMessageBus',

@@ -17,6 +17,8 @@ import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { Content } from '@Pimcore/components/content/content'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export type ClassDefinitionsData = TypedUseQueryHookResult<ClassDefinitionCollectionApiResponse, ClassDefinitionCollectionApiArg, BaseQuery>
 
@@ -35,7 +37,10 @@ export interface FolderQueryState {
 }
 
 export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
-  const queryResultReturn = useClassDefinitionCollectionQuery()
+  const hasObjectsPermission = isAllowed(UserPermission.Objects)
+  const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
+    skip: !hasObjectsPermission
+  })
   const dispatch = useAppDispatch()
   const [folderQueryState, setFolderQueryState] = useState<FolderQueryState>({
     isLoading: elementId !== undefined,
@@ -43,7 +48,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   })
 
   useEffect(() => {
-    if (elementId === undefined) {
+    if (elementId === undefined || !hasObjectsPermission) {
       return
     }
 
@@ -56,15 +61,26 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
     }).catch((error) => {
       trackError(new ApiError(error as unknown as ApiErrorData))
     })
-  }, [elementId])
+  }, [elementId, hasObjectsPermission])
 
   if (queryResultReturn?.error !== undefined) {
     trackError(new ApiError(queryResultReturn.error))
   }
 
   const transformedQueryResult = { ...queryResultReturn }
-  transformedQueryResult.isLoading = queryResultReturn.isLoading || folderQueryState.isLoading
-  transformedQueryResult.isFetching = queryResultReturn.isFetching || folderQueryState.isLoading
+
+  // If user doesn't have objects permission, provide empty data
+  if (!hasObjectsPermission) {
+    transformedQueryResult.data = {
+      items: [],
+      totalItems: 0
+    }
+    transformedQueryResult.isLoading = false
+    transformedQueryResult.isFetching = false
+  } else {
+    transformedQueryResult.isLoading = queryResultReturn.isLoading || folderQueryState.isLoading
+    transformedQueryResult.isFetching = queryResultReturn.isFetching || folderQueryState.isLoading
+  }
 
   if (elementId !== undefined && folderQueryState.data !== undefined && queryResultReturn.data !== undefined) {
     transformedQueryResult.data = {

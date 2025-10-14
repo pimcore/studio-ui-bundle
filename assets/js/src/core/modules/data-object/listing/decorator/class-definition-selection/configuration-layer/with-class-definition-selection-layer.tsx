@@ -17,11 +17,13 @@ import { Content } from '@Pimcore/components/content/content'
 import { ClassDefinitionSelect } from '../components/class-definition-select/class-definition-select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { useTranslation } from 'react-i18next'
 
 export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorProps['ConfigurationComponent'], config: ClassDefinitionSelectionDecoratorConfig): AbstractDecoratorProps['ConfigurationComponent'] => {
   const ClassDefinitionSelectionConfigurationComponent = (): React.JSX.Element => {
     const { ViewComponent } = useSettings()
     const { selectedClassDefinition } = useClassDefinitionSelection()
+    const { t } = useTranslation()
 
     if (config.showConfigLayer === true && selectedClassDefinition === undefined) {
       return (
@@ -30,7 +32,7 @@ export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorPr
             align='center'
             gap={ 'extra-small' }
           >
-            <Text>Select a class to display</Text>
+            <Text>{t('data-object.select-class-to-display')}</Text>
             <ClassDefinitionSelect />
           </Flex>
         </Content>

@@ -15,6 +15,7 @@ import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-li
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Card, Flex, Form, Space, Input } from 'antd'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 
 export const IconLibraryOverview = (): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
@@ -66,15 +67,17 @@ export const IconLibraryOverview = (): React.JSX.Element => {
   )
 
   function copy (name: string): void {
-    const promise = navigator.clipboard.writeText(name)
-
-    promise.then(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      success('Copied to clipboard')
-    }).catch(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      error('Failed to copy to clipboard')
-    })
+    void copyToClipboardWithFeedback(
+      name,
+      () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        success('Copied to clipboard')
+      },
+      () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        error('Failed to copy to clipboard')
+      }
+    )
   }
 
   function onSearch (event: ChangeEvent<HTMLInputElement>): void {

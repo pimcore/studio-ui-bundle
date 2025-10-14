@@ -46,6 +46,10 @@ class PimcoreStudioUiExtension extends Extension
             ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['css']))
             ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['js']));
 
+        $container->getDefinition('pimcore_studio.static_resources_resolver.document_editor_iframe')
+            ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['editmode']['css']))
+            ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['editmode']['js']));
+
         $container->setParameter('pimcore_studio_ui.wysiwyg_configuration', $config['wysiwyg']);
     }
 }
