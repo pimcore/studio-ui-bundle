@@ -30,21 +30,28 @@ export const USERPROFILE: WidgetManagerTabConfig = {
   }
 }
 
-const ProfileContainer = (): React.JSX.Element => {
+interface ProfileContainerProps {
+  resetPassword?: boolean
+}
+
+const ProfileContainer = ({ resetPassword }: ProfileContainerProps): React.JSX.Element => {
   const user = useUser()
   const { isLoading } = useUserDraft()
 
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar id={ user.id } />
-        }
+        <Toolbar id={user.id} />
+      }
     >
       <Content
-        loading={ isLoading }
+        loading={isLoading}
         padded
       >
-        <ProfileDetail id={ user.id } />
+        <ProfileDetail
+          id={user.id}
+          resetPassword={resetPassword}
+        />
       </Content>
     </ContentLayout>
   )

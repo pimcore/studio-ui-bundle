@@ -1,15 +1,14 @@
-import { useMessage } from "@Pimcore/components/message/useMessage"
+import trackError, { ApiError, GeneralError } from "@Pimcore/modules/app/error-handler"
 import { useUserResetPasswordMutation } from "../user/user-api-slice.gen"
 
 interface UseAuthenticationReturn {
-  resetPassword: (username: string, resetPasswordUrl?: string, onFinish?: () => void) => Promise<void>
+  resetPassword: (username: string, resetPasswordUrl?: string, onFinish?: () => void, onSuccess?: () => void) => Promise<void>
 }
 
 export const useAuthentication = (): UseAuthenticationReturn => {
   const [resetPasswordMutation] = useUserResetPasswordMutation()
-  const { success } = useMessage()
 
-  const resetPassword = async (username: string, resetPasswordUrl: string = '', onFinish?: () => void): Promise<void> => {
+  const resetPassword = async (username: string, resetPasswordUrl: string = '', onFinish?: () => void, onSuccess?: () => void): Promise<void> => {
     const resetPasswordTask = resetPasswordMutation({
       resetPassword: {
         username,
@@ -21,14 +20,16 @@ export const useAuthentication = (): UseAuthenticationReturn => {
       const response = (await resetPasswordTask) as any
 
       if (response.error !== undefined) {
-        throw new Error(response.error.data.error as string)
+        trackError(new ApiError(response.error))
+        onFinish?.()
+        return
       }
 
-      success('Password reset link has been sent to your email address.')
-
       onFinish?.()
+      onSuccess?.()
     } catch (error) {
-      console.error('Error resetting password', error)
+      trackError(new GeneralError('Error resetting password'))
+      onFinish?.()
     }
   }
 

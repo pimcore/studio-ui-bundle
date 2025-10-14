@@ -2,9 +2,12 @@ import { Form } from "@Pimcore/components/form/form"
 import { Icon } from "@Pimcore/components/icon/icon"
 import { Alert, Button, Content, Flex, FormKit, IconButton } from "@sdk/components"
 import { Input } from "antd"
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useAuthentication } from "../../hooks/use-authentication"
+import { getPrefix } from "@Pimcore/app/api/pimcore/route"
+import { baseUrl } from "@Pimcore/app/router/router"
+import { set } from "lodash"
 
 interface ForgetPasswordForm {
   username: string
@@ -18,7 +21,8 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
   const { t } = useTranslation()
   const [form] = Form.useForm<ForgetPasswordForm>()
   const { resetPassword } = useAuthentication()
-  const [showSuccessMessage, setShowSuccessMessage] = React.useState<boolean>(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   return (
     <Flex vertical>
@@ -36,10 +40,18 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
             formProps={{
               form,
               onFinish: async (values: ForgetPasswordForm) => {
-                resetPassword(values.username, undefined, () => {
-                  form.resetFields()
-                  setShowSuccessMessage(true)
-                })
+                setIsLoading(true)
+                resetPassword(
+                  values.username,
+                  `${baseUrl}${getPrefix()}/reset-password`,
+                  () => {
+                    setIsLoading(false)
+                  },
+                  () => {
+                    form.resetFields()
+                    setShowSuccessMessage(true)
+                  }
+                )
               }
             }}
           >
@@ -56,8 +68,10 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
             </Form.Item>
 
             <Button
+              className="w-full"
               htmlType='submit'
               type='primary'
+              loading={isLoading}
             >
               {t('forgot-password-form.reset-password')}
             </Button>
