@@ -25,6 +25,7 @@ interface ResponsiveAssetPreviewProps {
   assetId?: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  dropClass?: string
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
@@ -37,6 +38,7 @@ export const ResponsiveAssetPreview = ({
   assetId,
   className,
   dropdownItems,
+  dropClass,
   imgAttributes,
   onImageLoad,
   onResize,
@@ -103,6 +105,7 @@ export const ResponsiveAssetPreview = ({
   return (
     <Dropdown
       disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      dropClass={ dropClass }
       menu={ { items: dropdownItems } }
       trigger={ ['contextMenu'] }
     >

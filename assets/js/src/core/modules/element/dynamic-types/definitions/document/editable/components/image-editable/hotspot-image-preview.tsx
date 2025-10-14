@@ -44,6 +44,7 @@ interface DocumentHotspotImagePreviewProps {
   disableInlineUpload?: boolean
   imgAttributes?: Record<string, string>
   focalPointContextMenuItem?: boolean
+  dropClass?: string
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
   // Alt text overlay props
@@ -73,6 +74,7 @@ export const DocumentHotspotImagePreview = ({
   disableInlineUpload,
   imgAttributes,
   focalPointContextMenuItem,
+  dropClass,
   onResize,
   lastImageDimensions,
   altText,
@@ -185,6 +187,7 @@ export const DocumentHotspotImagePreview = ({
       <ImageEditablePreview
         assetId={ assetId }
         containerWidth={ containerWidth }
+        dropClass={ dropClass }
         dropdownItems={ dropdownItems }
         height={ height }
         imgAttributes={ imgAttributes }
