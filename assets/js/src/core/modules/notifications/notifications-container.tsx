@@ -39,14 +39,14 @@ const NotificationsContainer = (): React.JSX.Element => {
 
   return (
     <NotificationsView
-      deleteLoading={deleteLoading}
-      deleteNotificationsForUser={deleteNotificationsForUser}
-      isFetching={isFetching}
-      isLoading={isLoading}
-      notifications={notifications}
-      page={page}
-      setPage={setPage}
-      setPageSize={setPageSize}
+      deleteLoading={ deleteLoading }
+      deleteNotificationsForUser={ deleteNotificationsForUser }
+      isFetching={ isFetching }
+      isLoading={ isLoading }
+      notifications={ notifications }
+      page={ page }
+      setPage={ setPage }
+      setPageSize={ setPageSize }
     />
   )
 }
