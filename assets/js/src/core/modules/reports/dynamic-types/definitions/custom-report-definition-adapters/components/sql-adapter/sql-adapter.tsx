@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { isEmpty, isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -53,12 +53,20 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
   const { t } = useTranslation()
 
   const debouncedValue = useDebounce(currentData?.dataSourceConfig, 1000)
+  const shouldSkipColumnConfigDataRequest = useMemo(() => {
+    if (isNil(debouncedValue)) return true
+
+    const keys = Object.keys(debouncedValue)
+
+    return keys.length === 0 || (keys.length === 1 && keys[0] === 'type')
+  }, [debouncedValue])
+
   const { data: columnConfigData, isError, error } = useCustomReportsColumnConfigListQuery({
     name: currentData.name,
     bundleCustomReportsDataSourceConfig: {
       configuration: debouncedValue!
     }
-  }, { skip: isNil(debouncedValue) })
+  }, { skip: shouldSkipColumnConfigDataRequest })
 
   const errorMessage = isError && ('data' in error) && (error.data as IApiErrorDetails)?.message
 

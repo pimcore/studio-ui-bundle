@@ -49,7 +49,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
     form.resetFields(['dataSourceConfig'])
     form.setFieldsValue({ dataSourceConfig: { type } })
 
-    updateFormData?.({ ...currentData, dataSourceConfig: null })
+    updateFormData?.({ ...currentData, dataSourceConfig: { type } })
 
     setCurrentSourceDefinition(type)
   }
