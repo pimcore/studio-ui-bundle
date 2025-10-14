@@ -9,7 +9,7 @@
  */
 
 import { type Meta } from '@storybook/react'
-import { LoginForm } from './login-form-container'
+import { LoginForm } from './login-form'
 
 // @todo refactor due to business logic
 const config: Meta = {

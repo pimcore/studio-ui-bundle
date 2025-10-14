@@ -38,7 +38,7 @@ export const useAuthentication = (): UseAuthenticationReturn => {
 
       onFinish?.()
       onSuccess?.()
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Error resetting password'))
       onFinish?.()
     }
