@@ -46,9 +46,12 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
   })), [adapters])
 
   const handleSourceDefinitionTypeUpdate = (type: string): void => {
-    setCurrentSourceDefinition(type)
-
+    form.resetFields(['dataSourceConfig'])
     form.setFieldsValue({ dataSourceConfig: { type } })
+
+    updateFormData?.({ ...currentData, dataSourceConfig: null })
+
+    setCurrentSourceDefinition(type)
   }
 
   const renderAddButton = (): React.JSX.Element => {
