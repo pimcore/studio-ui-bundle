@@ -19,7 +19,9 @@ const NotificationsContainer = (): React.JSX.Element => {
 
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize, page])
 
-  const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+  const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs, {
+    refetchOnMountOrArgChange: true
+  })
 
   const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
 
@@ -37,14 +39,14 @@ const NotificationsContainer = (): React.JSX.Element => {
 
   return (
     <NotificationsView
-      deleteLoading={ deleteLoading }
-      deleteNotificationsForUser={ deleteNotificationsForUser }
-      isFetching={ isFetching }
-      isLoading={ isLoading }
-      notifications={ notifications }
-      page={ page }
-      setPage={ setPage }
-      setPageSize={ setPageSize }
+      deleteLoading={deleteLoading}
+      deleteNotificationsForUser={deleteNotificationsForUser}
+      isFetching={isFetching}
+      isLoading={isLoading}
+      notifications={notifications}
+      page={page}
+      setPage={setPage}
+      setPageSize={setPageSize}
     />
   )
 }
