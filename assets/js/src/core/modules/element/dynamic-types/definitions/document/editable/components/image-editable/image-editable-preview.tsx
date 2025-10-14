@@ -57,7 +57,7 @@ export const ImageEditablePreview = ({
       return undefined
     }
 
-    const needsContainerWidth = isNil(thumbnailSettings) && isNil(thumbnailConfig)
+    const needsContainerWidth = isNil(thumbnailConfig) && isNil(width) && isNil(height)
     if (needsContainerWidth && containerWidth <= 0) {
       return undefined
     }
