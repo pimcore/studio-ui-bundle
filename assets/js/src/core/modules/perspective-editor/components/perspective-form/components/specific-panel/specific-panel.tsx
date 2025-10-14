@@ -8,20 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { Flex } from '@Pimcore/components/flex/flex'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { WidgetConfigurator } from '../widget-configurator/widget-configurator'
-import { Flex } from '@Pimcore/components/flex/flex'
+import { useStyles } from './specific-panel.styles'
 
 export const SpecificPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   return (
     <Flex
-      gap={ 4 }
+      gap={0}
       vertical
+      className={styles.panel}
     >
-      <p>{t('perspective-editor.form.general.widget-congfiguration')}</p>
+      <p>{t('perspective-editor.form.general.widget-configuration')}</p>
 
       <WidgetConfigurator />
     </Flex>
