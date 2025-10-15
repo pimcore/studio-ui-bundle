@@ -176,3 +176,5 @@ export * from '@Pimcore/components/login-form/login-form'
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'
 export * from '@Pimcore/components/creatable-select/creatable-select'
+
+export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
