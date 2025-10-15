@@ -20,6 +20,8 @@ import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-d
 import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import { isNil } from 'lodash'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
+import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 
 interface DocumentConfigurationFormProps {
   documentId: number
@@ -102,7 +104,7 @@ export const DocumentConfigurationForm = ({
 
     Object.entries(changedValues as Record<string, unknown>).forEach(([key, value]) => {
       if (key !== 'predefinedDocumentType') {
-        settingsUpdates[key] = value
+        settingsUpdates[key] = value ?? null
       }
     })
 
@@ -111,6 +113,12 @@ export const DocumentConfigurationForm = ({
       debouncedAutoSave()
     }
   }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit])
+
+  const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
+    delay: 500,
+    immediateFields: ['predefinedDocumentType', 'staticGeneratorEnabled'],
+    tag: createDocumentDebounceTag(documentId)
+  })
 
   const lastGeneratedInfo = useMemo(() => {
     const lastGenerated = document?.settingsData?.staticLastGenerated
@@ -133,7 +141,7 @@ export const DocumentConfigurationForm = ({
       formProps={ {
         form,
         initialValues: processedInitialValues,
-        onValuesChange: handleFormChange
+        onValuesChange: handleFormChangeDebounced
       } }
     >
       <Form.Item
@@ -144,6 +152,8 @@ export const DocumentConfigurationForm = ({
           allowClear
           disabled={ !canEdit }
           options={ predefinedDocTypeOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 
@@ -155,6 +165,8 @@ export const DocumentConfigurationForm = ({
           allowClear
           disabled={ !canEdit }
           options={ controllerOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 
@@ -166,6 +178,8 @@ export const DocumentConfigurationForm = ({
           allowClear
           disabled={ !canEdit }
           options={ templateOptions }
+          popupMatchSelectWidth={ false }
+          showSearch
         />
       </Form.Item>
 

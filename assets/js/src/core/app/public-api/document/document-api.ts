@@ -9,7 +9,7 @@
  */
 
 import { store } from '@Pimcore/app/store'
-import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/document-draft-slice'
+import { markDocumentEditablesAsModified, selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
@@ -37,7 +37,16 @@ class DocumentApiImpl implements DocumentApi {
   private readonly autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
 
   markDraftAsModified (documentId: number): void {
-    store.dispatch(markDocumentEditablesAsModified(documentId))
+    const currentState = store.getState()
+    const document = selectDocumentById(currentState, documentId)
+
+    if (document?.changes?.documentEditable) {
+      return
+    }
+
+    setTimeout(() => {
+      store.dispatch(markDocumentEditablesAsModified(documentId))
+    }, 0)
   }
 
   getIframeApi (documentId: number): PublicApiDocumentEditorIframe {

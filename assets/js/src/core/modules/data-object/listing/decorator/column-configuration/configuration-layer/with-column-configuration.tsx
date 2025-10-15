@@ -16,10 +16,12 @@ import { ClassDefinitionSelect } from '../../class-definition-selection/componen
 import { ColumnConfigLoader } from './components/column-config-loader/column-config-loader'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { useTranslation } from 'react-i18next'
 
 export const WithColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const availableColumnsConfigurationComponent = (): React.JSX.Element => {
     const { selectedClassDefinition } = useClassDefinitionSelection()
+    const { t } = useTranslation()
 
     if (selectedClassDefinition === undefined) {
       return (
@@ -28,7 +30,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
             align='center'
             gap={ 'extra-small' }
           >
-            <Text>Select a class to display</Text>
+            <Text>{t('data-object.select-class-to-display')}</Text>
             <ClassDefinitionSelect />
           </Flex>
         </Content>

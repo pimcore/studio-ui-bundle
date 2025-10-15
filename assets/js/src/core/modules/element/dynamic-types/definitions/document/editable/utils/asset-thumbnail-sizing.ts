@@ -12,7 +12,7 @@ import { calculateThumbnailDimensions } from '../helpers/calculate-thumbnail-dim
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ThumbnailService, type CustomThumbnailDefinition, type DynamicThumbnailDefinition, type AssetType } from '@Pimcore/modules/asset/services/thumbnail-service'
-import { isString, isObject } from 'lodash'
+import { isString, isObject, isNil } from 'lodash'
 
 export interface ThumbnailSizeConfig {
   width?: number | string
@@ -24,7 +24,6 @@ export interface ThumbnailSizeConfig {
 
 export interface ThumbnailUrlConfig extends ThumbnailSizeConfig {
   assetId: number
-  fallbackSrc?: string
 }
 
 interface AssetThumbnailUrlConfig extends ThumbnailUrlConfig {
@@ -55,7 +54,6 @@ const generateAssetThumbnailUrl = ({
   containerWidth,
   thumbnailSettings,
   thumbnailConfig,
-  fallbackSrc,
   assetType,
   defaultMimeType = 'JPEG'
 }: AssetThumbnailUrlConfig): string | undefined => {
@@ -80,6 +78,10 @@ const generateAssetThumbnailUrl = ({
     return thumbnailService.getThumbnailUrl(dynamicThumbnailDef)
   }
 
+  if (isNil(width) && isNil(height) && containerWidth <= 0) {
+    return undefined
+  }
+
   const { thumbnailWidth, thumbnailHeight, resizeMode } = calculateThumbnailDimensions({
     width,
     height,
@@ -87,7 +89,7 @@ const generateAssetThumbnailUrl = ({
   })
 
   if (thumbnailWidth === undefined && thumbnailHeight === undefined) {
-    return fallbackSrc
+    return undefined
   }
 
   const defaultThumbnailSettings: Partial<CustomThumbnailDefinition> = {
@@ -117,5 +119,5 @@ const generateAssetThumbnailUrl = ({
     })
   }
 
-  return fallbackSrc
+  return undefined
 }

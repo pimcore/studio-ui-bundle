@@ -31,28 +31,9 @@ import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-previe
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
-
-export interface ImageEditableValue {
-  id?: number
-  alt?: string
-  title?: string
-  hotspots?: Hotspot[]
-  marker?: Marker[]
-  crop?: CropSettings
-}
-
-export interface ImageEditableConfig {
-  width?: number
-  height?: number
-  title?: string
-  reload?: boolean
-  hidetext?: boolean
-  imgAttributes?: Record<string, string>
-  focal_point_context_menu_item?: boolean
-  uploadPath?: string
-  disableInlineUpload?: boolean
-  thumbnail?: string | object
-}
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
+export { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
 
 interface HotspotImageValue {
   image: { type: 'asset', id: number } | null
@@ -192,6 +173,10 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     handleReplaceImage(Number(asset.id))
   }
 
+  const handleDroppableDrop = useCallback((info: DragAndDropInfo) => {
+    handleReplaceImage(info.data.id as number)
+  }, [])
+
   const renderDroppableContent = useCallback((children: React.ReactNode): React.JSX.Element => {
     // Determine the shape based on whether an image is selected
     const droppableShape = !isNil(imageValue?.id) ? 'angular' : 'round'
@@ -200,11 +185,11 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     if (props.config?.disableInlineUpload === true) {
       return (
         <Droppable
-          isValidContext={ () => !disabled }
+          disabled={ disabled }
+          dropClass={ props.config?.dropClass }
+          isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-          onDrop={ (info: DragAndDropInfo) => {
-            handleReplaceImage(info.data.id as number)
-          } }
+          onDrop={ handleDroppableDrop }
           shape={ droppableShape }
           variant="outline"
         >
@@ -223,11 +208,11 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
         targetFolderPath={ props.config?.uploadPath }
       >
         <Droppable
-          isValidContext={ () => !disabled }
+          disabled={ disabled }
+          dropClass={ props.config?.dropClass }
+          isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-          onDrop={ (info: DragAndDropInfo) => {
-            handleReplaceImage(info.data.id as number)
-          } }
+          onDrop={ handleDroppableDrop }
           shape={ droppableShape }
           variant="outline"
         >
@@ -235,7 +220,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
         </Droppable>
       </InlineUpload>
     )
-  }, [props.config?.disableInlineUpload, props.config?.uploadPath, disabled, handleFileSystemUpload, handleReplaceImage, imageValue?.id])
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, disabled, handleFileSystemUpload, handleDroppableDrop, imageValue?.id, smartDimensions?.width, width])
 
   const handleHotspotImageChange = (value: HotspotImageValue): void => {
     const { hotspots, marker } = fromIHotspots(value.hotspots as unknown as IHotspot[])
@@ -256,9 +241,11 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
             <DocumentHotspotImagePreview
               altText={ imageValue.alt }
               assetId={ imageValue.id! }
+              className="studio-image-editable"
               containerWidth={ containerWidth }
               disableInlineUpload={ props.config?.disableInlineUpload }
               disabled={ disabled }
+              dropClass={ props.config?.dropClass }
               emptyValue={ handleEmptyValue }
               focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
               handleLocateInTree={ handleLocateInTree }
@@ -282,7 +269,9 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
             )
           : (
             <AssetTarget
+              className="studio-image-editable"
               dndIcon
+              dropClass={ props.config?.dropClass }
               height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
               onResize={ handleAssetTargetResize }
               onSearch={ openElementSelector }

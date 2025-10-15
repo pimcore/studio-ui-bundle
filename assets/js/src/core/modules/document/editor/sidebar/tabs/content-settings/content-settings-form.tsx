@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -25,7 +26,9 @@ import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-langu
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import { isNull, isUndefined } from 'lodash'
+import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { uuid } from '@Pimcore/utils/uuid'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -118,6 +121,12 @@ export const ContentSettingsForm = ({
     debouncedAutoSave()
   }, [updateSettingsData, languageProperty, updateProperty, addProperty, debouncedAutoSave, canEdit])
 
+  const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
+    delay: 500,
+    immediateFields: ['language', 'contentMainDocument'],
+    tag: createDocumentDebounceTag(documentId)
+  })
+
   const handleApplyMainDocument = (): void => {
     const contentMainDocumentPath = document?.settingsData?.contentMainDocumentPath
 
@@ -172,7 +181,7 @@ export const ContentSettingsForm = ({
     <FormKit
       formProps={ {
         initialValues,
-        onValuesChange: handleFormChange
+        onValuesChange: handleFormChangeDebounced
       } }
     >
       {document?.type === 'page' && (
@@ -231,6 +240,7 @@ export const ContentSettingsForm = ({
             labelRender={ (option) => renderLanguageOption(option) }
             optionRender={ (option) => renderLanguageOption(option) }
             options={ languageOptions }
+            showSearch
           />
         </Form.Item>
       )}

@@ -85,6 +85,7 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
       disabled={ isDisabled }
       minWidth={ 'normal' }
       onChange={ (value) => { onChange(value) } }
+      optionFilterProp="label"
       options={ options }
       showSearch
       value={ isNullable ? selectedClassDefinition?.name ?? null : selectedClassDefinition?.name }

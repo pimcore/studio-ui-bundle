@@ -43,6 +43,9 @@ export const serviceIds = {
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
 
+  // Form services
+  debouncedFormRegistry: 'DebouncedFormRegistry',
+
   // Global message system
   globalMessageBusProcess: 'GlobalMessageBusProcess',
   globalMessageBus: 'GlobalMessageBus',
@@ -122,6 +125,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
   'DynamicTypes/GridCell/Integer': 'DynamicTypes/GridCell/Integer',
+  'DynamicTypes/GridCell/Error': 'DynamicTypes/GridCell/Error',
   'DynamicTypes/GridCell/Array': 'DynamicTypes/GridCell/Array',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
@@ -300,6 +304,7 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/BooleanFormatter': 'DynamicTypes/Grid/Transformers/BooleanFormatter',
   'DynamicTypes/Grid/Transformers/DateFormatter': 'DynamicTypes/Grid/Transformers/DateFormatter',
   'DynamicTypes/Grid/Transformers/ElementCounter': 'DynamicTypes/Grid/Transformers/ElementCounter',
+  'DynamicTypes/Grid/Transformers/TwigOperator': 'DynamicTypes/Grid/Transformers/TwigOperator',
   'DynamicTypes/Grid/Transformers/Anonymizer': 'DynamicTypes/Grid/Transformers/Anonymizer',
   'DynamicTypes/Grid/Transformers/Blur': 'DynamicTypes/Grid/Transformers/Blur',
   'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/Transformers/ChangeCase',

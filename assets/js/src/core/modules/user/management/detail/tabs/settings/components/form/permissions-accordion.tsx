@@ -36,7 +36,7 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
               mode="multiple"
               options={ permissions.default.map((permission) => ({
                 value: permission.key,
-                label: permission.key
+                label: t(`user-management.permissions.${permission.key}`)
               })) }
               placeholder={ t('user-management.permissions.default') }
             ></Select>

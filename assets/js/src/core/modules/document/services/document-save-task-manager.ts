@@ -19,6 +19,10 @@ import type {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil, isUndefined } from 'lodash'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -128,6 +132,10 @@ export class DocumentSaveTaskManager {
     onFinish?: () => void,
     useDraftData: boolean = true
   ): Promise<void> {
+    // Flush any pending debounced form changes for this specific document before saving
+    const debouncedFormRegistry = container.get<DebouncedFormRegistry>(serviceIds.debouncedFormRegistry)
+    debouncedFormRegistry.flushByTag(createDocumentDebounceTag(this.documentId))
+
     this.setRunningTask(task)
 
     try {
@@ -184,6 +192,11 @@ export class DocumentSaveTaskManager {
   private getEditableData (): Record<string, any> {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
+
+      if (!documentApi.isIframeAvailable(this.documentId)) {
+        return {}
+      }
+
       const iframeApi = documentApi.getIframeApi(this.documentId)
       const allValues = iframeApi.documentEditable.getValues(true)
 

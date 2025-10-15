@@ -81,6 +81,7 @@ export * from '@Pimcore/components/hotspot-image/hotspot-image'
 export * from '@Pimcore/components/icon/icon'
 export * from '@Pimcore/components/icon-button/icon-button'
 export * from '@Pimcore/components/icon-text-button/icon-text-button'
+export * from '@Pimcore/components/icon-selector/icon-selector'
 export * from '@Pimcore/components/image/image'
 export * from '@Pimcore/components/image-preview/image-preview'
 export * from '@Pimcore/components/image-zoom/image-zoom'
@@ -175,3 +176,5 @@ export * from '@Pimcore/components/login-form/login-form'
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'
 export * from '@Pimcore/components/creatable-select/creatable-select'
+
+export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'

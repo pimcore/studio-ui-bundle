@@ -109,7 +109,7 @@ The Pimcore layout is divided into three horizontal areas: a left panel, a conte
 <div style={{ marginLeft: '4rem', marginRight: '4rem', marginBottom: '2rem' }}>
 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
   <ImageLightbox
-    src="/media/layout-widgets.svg"
+    src="/bundles/pimcorestudioui/img/storybook/layout-widgets.svg"
     alt="Pimcore three-panel layout"
     style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
     captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
@@ -127,14 +127,14 @@ The content area itself is flexible: its space is treated as individual boxes al
 <div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
   <ImageLightbox
-    src="/media/Layout-areas-content.svg"
+    src="/bundles/pimcorestudioui/img/storybook/Layout-areas-content.svg"
     alt="Pimcore layout structure"
     style={{ width: '100%', maxWidth: '600px', height: 'auto', marginBottom: '0.5rem' }}
     captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
     caption="Studio UI layout - widgets and content area"
   />
   <ImageLightbox
-    src="/media/layout-areas-content2.svg"
+    src="/bundles/pimcorestudioui/img/storybook/layout-areas-content2.svg"
     alt="Pimcore content area layout"
     style={{ width: '100%', maxWidth: '600px', height: 'auto', marginBottom: '0.5rem' }}
     captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
@@ -245,7 +245,7 @@ The content area itself is flexible: its space is treated as individual boxes al
         </div>
       </td>
       <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
-        <img src="/media/Buttons-add.svg" alt="Add button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/Buttons-add.svg" alt="Add button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
         <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
           <strong>Examples:</strong> Add predefined properties, Add custom metadata set
         </div>
@@ -261,7 +261,7 @@ The content area itself is flexible: its space is treated as individual boxes al
         </div>
       </td>
       <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
-        <img src="/media/Buttons-new.svg" alt="New button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0 0 16px 0' }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/Buttons-new.svg" alt="New button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0 0 16px 0' }} />
         <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
           <strong>Examples:</strong> New report, New dashboard
         </div>
@@ -277,7 +277,7 @@ The content area itself is flexible: its space is treated as individual boxes al
         </div>
       </td>
       <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
-        <img src="/media/Buttons-delete.svg" alt="Delete button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/Buttons-delete.svg" alt="Delete button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
         <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
           <strong>Examples:</strong> Delete template, Delete asset
         </div>
@@ -291,7 +291,7 @@ The content area itself is flexible: its space is treated as individual boxes al
         </div>
       </td>
       <td style={{ padding: '12px 8px', borderLeft: 'none', borderRight: 'none', borderTop: 'none', borderBottom: 'none', textAlign: 'left', verticalAlign: 'middle' }}>
-        <img src="/media/Buttons-remove.svg" alt="Remove button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/Buttons-remove.svg" alt="Remove button" style={{ height: '110px', width: 'auto', display: 'block', margin: '0' }} />
         <div style={{ fontSize: '14px', lineHeight: '1.2' }}>
           <strong>Examples:</strong> Remove current element tag, Remove widget
         </div>
@@ -304,7 +304,7 @@ The content area itself is flexible: its space is treated as individual boxes al
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '4rem', marginBottom: '2rem' }}>
     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flexGrow: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-        <img src="/media/Hotspot.svg" alt="Hotspot example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/Hotspot.svg" alt="Hotspot example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
       </div>
       <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>"New" button variants</h3>
       <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
@@ -314,7 +314,7 @@ The content area itself is flexible: its space is treated as individual boxes al
     
     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flexGrow: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-        <img src="/media/remove-clear-example.svg" alt="Advanced grid options example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+        <img src="/bundles/pimcorestudioui/img/storybook/remove-clear-example.svg" alt="Advanced grid options example" style={{ width: '100%', maxWidth: '400px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
       </div>
       <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>Clear = Remove</h3>
       <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
@@ -324,7 +324,7 @@ The content area itself is flexible: its space is treated as individual boxes al
   </div>
   
   <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-    <img src="/media/Asset-tab.svg" alt="Asset tab example" style={{ width: '100%', maxWidth: '800px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
+    <img src="/bundles/pimcorestudioui/img/storybook/Asset-tab.svg" alt="Asset tab example" style={{ width: '100%', maxWidth: '800px', height: 'auto', marginBottom: '1rem', cursor: 'pointer' }} onClick={(e) => { const lb = document.createElement('div'); lb.innerHTML = `<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer;" onclick="this.remove()"><button onclick="event.stopPropagation(); this.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; z-index: 10000;">×</button><img src="${e.target.src}" alt="${e.target.alt}" style="max-width: 90%; max-height: 90%; object-fit: contain; cursor: default;" onclick="event.stopPropagation()"/></div>`; document.body.appendChild(lb.firstChild); }} />
     <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 0.125rem 0', padding: '0' }}>Combination of buttons and symbols</h3>
     <p className="sb-unstyled" style={{ fontSize: '14px', color: '#666', margin: '8px 0 16px 0 !important', padding: '0' }}>
      When distributed correctly across the interface, each icon and label helps users orient themselves more quickly and navigate more fluently over time.
@@ -353,7 +353,7 @@ Use verb-first phrasing for all actionable interface elements. Static or noun-ba
 <div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
   <ImageLightbox
-    src="/media/data-object-writing-style.svg"
+    src="/bundles/pimcorestudioui/img/storybook/data-object-writing-style.svg"
     alt="Examples of the wording style applied in Studio UI"
     style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
     captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}
@@ -375,7 +375,7 @@ Soon, Pimcore Studio will support a true light ⇆ dark mode toggle. The existin
 <div style={{ marginLeft: '4rem', marginRight: '4rem' }}>
 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
   <ImageLightbox
-    src="/media/theme-switch.svg"
+    src="/bundles/pimcorestudioui/img/storybook/theme-switch.svg"
     alt="Theme switch demonstration"
     style={{ width: '100%', maxWidth: '1200px', height: 'auto', marginBottom: '0.5rem' }}
     captionStyle={{ color: '#666', fontSize: '14px', marginTop: '0' }}

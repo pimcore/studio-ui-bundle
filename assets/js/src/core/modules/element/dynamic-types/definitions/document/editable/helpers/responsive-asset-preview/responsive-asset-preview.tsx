@@ -22,10 +22,10 @@ import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyle } from '../../components/image-editable/image-editable-preview.styles'
 
 interface ResponsiveAssetPreviewProps {
-  src?: string
   assetId?: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  dropClass?: string
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
@@ -35,10 +35,10 @@ interface ResponsiveAssetPreviewProps {
 }
 
 export const ResponsiveAssetPreview = ({
-  src,
   assetId,
   className,
   dropdownItems,
+  dropClass,
   imgAttributes,
   onImageLoad,
   onResize,
@@ -74,10 +74,10 @@ export const ResponsiveAssetPreview = ({
 
   const finalImageSrc = useMemo(() => {
     if (assetId === undefined) {
-      return src
+      return undefined
     }
-    return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
-  }, [assetId, src, thumbnailUrl])
+    return thumbnailUrl ?? undefined
+  }, [assetId, thumbnailUrl])
 
   useEffect(() => {
     if (finalImageSrc !== lastImageSrcRef.current) {
@@ -105,6 +105,7 @@ export const ResponsiveAssetPreview = ({
   return (
     <Dropdown
       disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      dropClass={ dropClass }
       menu={ { items: dropdownItems } }
       trigger={ ['contextMenu'] }
     >

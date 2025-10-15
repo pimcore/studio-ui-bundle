@@ -17,6 +17,8 @@ import { Text } from '@Pimcore/components/text/text'
 import { SidebarHeadline } from '@Pimcore/components/sidebar-headline/sidebar-headline'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
+import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 
 interface EmailSettingsFormProps {
   documentId: number
@@ -59,12 +61,17 @@ export const EmailSettingsForm = ({
     debouncedAutoSave()
   }, [updateSettingsData, debouncedAutoSave, canEdit])
 
+  const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
+    delay: 500,
+    tag: createDocumentDebounceTag(documentId)
+  })
+
   return (
     <FormKit
       formProps={ {
         form,
         initialValues,
-        onValuesChange: handleFormChange
+        onValuesChange: handleFormChangeDebounced
       } }
     >
       <Form.Item
