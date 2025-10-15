@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useEffect, useMemo, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useGridConfig as useTabGridConfig } from './hooks/use-grid-config'
@@ -30,6 +32,7 @@ import { useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataO
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 
 enum ViewState {
   Edit = 'edit',
@@ -47,7 +50,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate });
+  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
 
   const { isLoading, isFetching, data } = useDataObjectListSavedGridConfigurationsQuery({
     classId: selectedClassDefinition!.id
@@ -93,19 +96,19 @@ export const GridConfigInner = (): React.JSX.Element => {
     }) as AvailableColumn[])
   }, [selectedColumns])
 
-  function onClassificationStoreUpdate(data) {
-    const fieldDefinition = data.modalContext;
-    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore');
+  function onClassificationStoreUpdate (data): void {
+    const fieldDefinition = data.modalContext
+    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore')
 
     if (baseColumn === undefined) {
-      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name);
+      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name)
     }
 
-    const columnsToAdd: AvailableColumn[] = [];
+    const columnsToAdd: AvailableColumn[] = []
 
     if (data.type === 'group-by-key') {
       data.data.forEach((item) => {
-        const itemDefinition = item.definition;
+        const itemDefinition = item.definition
 
         columnsToAdd.push({
           ...baseColumn,
@@ -120,12 +123,17 @@ export const GridConfigInner = (): React.JSX.Element => {
       })
     }
 
-    addColumns(columnsToAdd);
+    addColumns(columnsToAdd)
   }
 
   const onColumnClick = (column: AvailableColumn): void => {
     if (column.type === 'dataobject.classificationstore') {
-      const fieldDefinition = column.config.fieldDefinition;
+      if (!('fieldDefinition' in column.config)) {
+        throw new Error('Field definition is missing in column config')
+      }
+
+      const fieldDefinition = column.config.fieldDefinition as ClassificationStoreModalProps
+
       openModal({
         ...fieldDefinition,
         fieldName: fieldDefinition.name,

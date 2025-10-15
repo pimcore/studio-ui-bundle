@@ -10,14 +10,14 @@
 
 import React from 'react'
 import { Alert } from 'antd'
-import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterAbstract, type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { useDynamicTypeResolver } from '../../../resolver/hooks/use-dynamic-type-resolver'
 
 export interface DynamicTypeFieldFilterObjectAdapterProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Element => {
-  const { config, ...props } = useDynamicFilter()
+  const { config } = useDynamicFilter()
   const { getType, hasType, getComponentRenderer } = useDynamicTypeResolver()
 
   if (!('fieldDefinition' in config)) {
@@ -39,7 +39,7 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
   const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })
   const type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })
 
-  if (ComponentRenderer === null || (type !== null && 'dynamicTypeFieldFilterType' in type && type.dynamicTypeFieldFilterType.id === 'none') ) {
+  if (ComponentRenderer === null || (type !== null && 'dynamicTypeFieldFilterType' in type && (type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract).id === 'none')) {
     return (
       <Alert
         message={ `Filter for ${fieldDefinition.fieldtype} is not supported` }

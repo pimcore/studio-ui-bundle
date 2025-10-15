@@ -18,9 +18,8 @@ import { useFieldFilters } from '../context-layer/provider/field-filters/use-fie
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
-import { type ColumnFilter } from '@tanstack/react-table'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
-import { FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
+import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
@@ -30,7 +29,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { onlyDirectChildren } = useDirectChildrenFilter()
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
-    const { hasType, getType } = useDynamicTypeResolver()
+    const { getType } = useDynamicTypeResolver()
     const { currentLanguage } = useLanguageSelection()
 
     const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
@@ -53,9 +52,9 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const prepareFilters = (filters: FieldFilter[]): FieldFilter[] => {
       const preparedFilters: FieldFilter[] = []
 
-      console.log({filters})
+      console.log({ filters })
       filters.forEach((filter) => {
-        console.log({filter})
+        console.log({ filter })
         const column = availableColumns.find(col => col.key === filter.key)
         let frontendType = column?.frontendType ?? filter.type ?? 'string'
 
@@ -77,7 +76,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
           type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
         }
 
-        const transformedFilter = type.transformFilterToApiResponse(filter);
+        const transformedFilter = type.transformFilterToApiResponse(filter)
 
         if (type.shouldApply(transformedFilter.filterValue)) {
           preparedFilters.push(transformedFilter)
@@ -109,7 +108,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }
 
       if (fieldFilters.length > 0) {
-        newColumnFilters.push(...prepareFilters(fieldFilters));
+        newColumnFilters.push(...prepareFilters(fieldFilters))
       }
 
       return {

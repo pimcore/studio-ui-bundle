@@ -79,11 +79,11 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     return result
   }
 
-  const prepareClassificationStoreApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]) => {
+  const prepareClassificationStoreApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
     const { update } = event
-    const locale = update.column.locale ?? 'default';
-    const columnKey = update.column.key!;
-    const columnConfig = update.column.config!;
+    const locale = update.column.locale ?? 'default'
+    const columnKey = update.column.key!
+    const columnConfig = update.column.config!
 
     return {
       id: update.id,
@@ -99,7 +99,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     }
   }
 
-  const prepareDefaultApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]) => {
+  const prepareDefaultApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
     const { update } = event
     let columnKey = update.column.key
 

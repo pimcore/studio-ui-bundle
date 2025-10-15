@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { has, isUndefined, uniqBy } from 'lodash'
+import { isUndefined } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
@@ -25,10 +25,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import {
-  useLazyClassificationStoreGetLayoutByKeyQuery,
-  useClassificationStoreGetCollectionsQuery,
-  useClassificationStoreGetGroupsQuery,
-  useClassificationStoreGetKeyGroupRelationsQuery,
+  useLazyClassificationStoreGetLayoutByKeyQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import type { ClassificationStoreCollection2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { useClassificationStoreModal } from '../../../../provider/classifcation-store-modal-provider'
@@ -47,7 +44,7 @@ interface ClassificationStoreCallbackTabProps<T> {
 
 export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreCallbackTabProps<T>): React.JSX.Element => {
   const { getSearchValue, setSearchValue, closeModal } = useClassificationStore()
-  const { fireUpdateEvent } = useClassificationStoreModal({});
+  const { fireUpdateEvent } = useClassificationStoreModal({})
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
@@ -64,20 +61,6 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
   )
-
-  const { data: collectionsData } = useClassificationStoreGetCollectionsQuery({
-    fieldName: queryArgs.fieldName,
-    page: 1,
-    pageSize: 1000,
-    storeId: queryArgs.storeId
-  });
-
-  const { data: groupsData } = useClassificationStoreGetGroupsQuery({
-    fieldName: queryArgs.fieldName,
-    page: 1,
-    pageSize: 1000,
-    storeId: queryArgs.storeId
-  });
 
   const [fetchLayoutByKey] = useLazyClassificationStoreGetLayoutByKeyQuery()
 
@@ -121,12 +104,11 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
       }
     }
 
-
     const data = await Promise.all(promisesList)
     fireUpdateEvent({
       type: tabId,
       data
-    });
+    })
 
     setIsApplyingSelection(false)
     closeModal()

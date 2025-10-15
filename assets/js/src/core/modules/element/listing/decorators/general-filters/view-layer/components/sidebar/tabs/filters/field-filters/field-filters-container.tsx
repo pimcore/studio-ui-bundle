@@ -23,6 +23,7 @@ import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
@@ -31,12 +32,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useFilter()
-  const { openModal } = useClassificationStoreModal({ onUpdate: onAddClassificationStoreColumn });
-  const classDefinitionContext = useClassDefinitionSelectionOptional();
+  const { openModal } = useClassificationStoreModal({ onUpdate: onAddClassificationStoreColumn })
+  const classDefinitionContext = useClassDefinitionSelectionOptional()
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     // @todo find a way to map columns that are not depending on the key
-    let currentColumn = availableColumns.find((column) => column.key === filter.key)
+    const currentColumn = availableColumns.find((column) => column.key === filter.key)
 
     if (currentColumn === undefined) {
       throw new Error(`Could not find column configuration for field filter with key ${filter.key}`)
@@ -77,7 +78,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     setFilters(initialFilters)
   }, [initialFilters])
 
-  function onAddClassificationStoreColumn(data): void {
+  function onAddClassificationStoreColumn (data): void {
     const column = availableColumns.find((col) => col.key === data.modalContext.fieldName)
 
     if (column === undefined) {
@@ -85,7 +86,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     }
 
     const newFilters = data.data.map((item) => {
-      const fieldDefinition = item.definition;
+      const fieldDefinition = item.definition
 
       const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [fieldDefinition.fieldtype!] })
 
@@ -106,14 +107,14 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         localizable: column.localizable,
         locale: column.locale,
         config: {
-          fieldDefinition: fieldDefinition,
+          fieldDefinition,
           groupId: item.groupId,
           keyId: item.id
         },
         nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
         ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
-    });
+    })
 
     setFilters((prevFilters) => [
       ...prevFilters,
@@ -122,8 +123,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }
 
   const handleClassificationStoreClick = (column: AvailableColumn): void => {
+    if (!('fieldDefinition' in column.config) || isNil(column.config) || classDefinitionContext === undefined) {
+      throw new Error('Column configuration is missing field definition or class definition context is undefined')
+    }
+
     openModal({
-      ...column.config.fieldDefinition,
+      ...column.config.fieldDefinition as ClassificationStoreModalProps,
       fieldName: column.key,
       allowedTabs: [TabId.GroupByKey]
     })

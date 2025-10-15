@@ -19,15 +19,13 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
-import { convertHotspotToPixel } from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
 }
 
 export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Element => {
-  const { useElementId, ViewComponent, useDataQueryHelper, useColumnMapper } = useSettings()
-  const { shouldMapDataToColumn } = useColumnMapper();
+  const { useElementId, ViewComponent, useDataQueryHelper } = useSettings()
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
@@ -52,7 +50,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
       if (availableColumn !== undefined) {
         const apiColumn = {
           ...availableColumn,
-          config: availableColumn.type === 'dataobject.classificationstore' ? column.config : availableColumn.config,
+          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
           __meta: {
             advancedColumnConfig: currentColumn.config ?? {}
           }
@@ -62,7 +60,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           key: column.key,
           locale: column.locale,
           type: availableColumn.type,
-          config: availableColumn.type === 'dataobject.classificationstore' ? column.config : availableColumn.config,
+          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
           sortable: availableColumn.sortable,
           editable: availableColumn.editable,
           localizable: availableColumn.localizable,

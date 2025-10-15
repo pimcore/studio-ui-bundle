@@ -15,9 +15,10 @@ import {
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
-import { DynamicTypeObjectDataRegistry } from '../../objects/data-related/dynamic-type-object-data-registry'
-import { AbstractDateObjectDataDefinition } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
+import { type DynamicTypeObjectDataRegistry } from '../../objects/data-related/dynamic-type-object-data-registry'
+import { type AbstractDateObjectDataDefinition } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 import { BatchEditFormItem } from '../helpers/data-object/batch-edit-form-item'
+import { isNil } from 'lodash'
 
 export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: AbstractBatchEditDefinition): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
@@ -41,9 +42,12 @@ export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: 
     defaultFieldWidth: fieldWidth
   })
 
-  const locale = column.locale || 'default'
-  const formItemKey = [key, locale, `${column.config.groupId}`, `${column.config.keyId}`]
+  if (!('config' in column) || !('groupId' in column.config) || !('keyId' in column.config)) {
+    throw new Error('Column config is missing required properties')
+  }
 
+  const locale = isNil(column.locale) ? 'default' : column.locale
+  const formItemKey = [key, locale, `${column.config.groupId as number}`, `${column.config.keyId as number}`]
 
   return (
     <BatchEditFormItem

@@ -30,12 +30,12 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     )
   }
 
-  transformFilterToApiResponse(filter: any): any {
-    const {filterType} = filter;
+  transformFilterToApiResponse (filter: any): any {
+    const { filterType } = filter
 
-    const splittedType = filterType.split('.');
-    splittedType[0] = 'classificationstore';
-    filter.filterType = splittedType.join('.');
+    const splittedType = filterType.split('.')
+    splittedType[0] = 'classificationstore'
+    filter.filterType = splittedType.join('.')
 
     return {
       ...filter,

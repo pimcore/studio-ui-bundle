@@ -200,9 +200,9 @@ import { type DynamicTypeDocumentLink } from './definitions/document/types/dynam
 import { type DynamicTypeDocumentNewsletter } from './definitions/document/types/dynamic-type-document-newsletter'
 import { type DynamicTypeDocumentSnippet } from './definitions/document/types/dynamic-type-document-snippet'
 import { type DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
-import { DynamicTypeGridCellClassificationStore } from './definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
-import { DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
-import { DynamicTypeBatchEditClassificationStore } from './definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
+import { type DynamicTypeGridCellClassificationStore } from './definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
+import { type DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
+import { type DynamicTypeBatchEditClassificationStore } from './definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 
 moduleSystem.registerModule({
   onInit () {

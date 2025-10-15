@@ -30,16 +30,16 @@ export interface ClassificationStoreModalProps extends ClassificationStoreProps 
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
-  const { 
-    storeId, 
-    classId, 
-    fieldName, 
+  const {
+    storeId,
+    classId,
+    fieldName,
     allowedTabs = [
       TabId.Collection,
       TabId.Group,
       TabId.GroupByKey
     ]
- } = props
+  } = props
 
   const { isOpenModal: isOpen, closeModal } = useClassificationStore()
   const { t } = useTranslation()
@@ -68,23 +68,29 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
   }
 
   const tabItems: ITabsProps['items'] = [
-    ...allowedTabs.includes(TabId.Collection) ? [{
-      label: renderTabLabel({ iconValue: 'keyboard', titleKeyValue: 'collection' }),
-      key: 'collection',
-      children: <CollectionTab { ...tabProps } />
-    }] : [],
+    ...allowedTabs.includes(TabId.Collection)
+      ? [{
+          label: renderTabLabel({ iconValue: 'keyboard', titleKeyValue: 'collection' }),
+          key: 'collection',
+          children: <CollectionTab { ...tabProps } />
+        }]
+      : [],
 
-    ...allowedTabs.includes(TabId.Group) ? [{
-      label: renderTabLabel({ iconValue: 'keys', titleKeyValue: 'group' }),
-      key: 'group',
-      children: <GroupTab { ...tabProps } />
-    }] : [],
-    
-    ...allowedTabs.includes(TabId.GroupByKey) ? [{
-      label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
-      key: 'group-by-key',
-      children: <GroupByKeyTab { ...tabProps } />
-    }] : []
+    ...allowedTabs.includes(TabId.Group)
+      ? [{
+          label: renderTabLabel({ iconValue: 'keys', titleKeyValue: 'group' }),
+          key: 'group',
+          children: <GroupTab { ...tabProps } />
+        }]
+      : [],
+
+    ...allowedTabs.includes(TabId.GroupByKey)
+      ? [{
+          label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
+          key: 'group-by-key',
+          children: <GroupByKeyTab { ...tabProps } />
+        }]
+      : []
   ]
 
   return (

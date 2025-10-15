@@ -48,7 +48,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
 
   return (
     <>
-      {hasModalContext === true && (
+      {hasModalContext && (
         <ClassificationStoreCallbackTab
           columns={ columns }
           queryArgs={ {
@@ -61,7 +61,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
         />
       )}
 
-      {hasModalContext === false && (
+      {!hasModalContext && (
         <ClassificationStoreDataTab
           columns={ columns }
           queryArgs={ {
