@@ -91,8 +91,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
     }
   })
 
-  const clearValueData = async (): Promise<void> => {
-    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [], crop: {} } : v))
+  const clearHotspotsData = async (): Promise<void> => {
+    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [] } : v))
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
@@ -100,12 +100,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
     return !isEmpty(value[index].hotspots) || !isEmpty(value[index].marker)
   }
 
-  const hasValueData = (index: number): boolean => {
-    return hasHotspotData(index) || !isEmpty(value[index].crop)
-  }
-
   const replaceImage = (newImage: ImageValue): void => {
-    if (hasValueData(index)) {
+    if (hasHotspotData(index)) {
       confirm({
         title: t('hotspots.clear-data'),
         content: t('hotspots.clear-data.dnd-message'),
@@ -129,7 +125,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
     if (replaceValueData) {
       newValue[index] = { image, hotspots: [], marker: [], crop: {} }
     } else {
-      newValue[index] = { ...newValue[index], image }
+      newValue[index] = { ...newValue[index], crop: {}, image }
     }
 
     setValue(newValue)
@@ -210,11 +206,11 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
             onClick: handleOpenHotspotMarkersModal
           },
           {
-            hidden: !hasValueData(index) || disabled === true,
+            hidden: !hasHotspotData(index) || disabled === true,
             label: t('hotspots.clear-data'),
             key: 'clear-data',
             icon: <Icon value={ 'remove-marker' } />,
-            onClick: clearValueData
+            onClick: clearHotspotsData
           },
           {
             label: t('element.open'),
