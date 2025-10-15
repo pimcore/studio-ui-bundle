@@ -16,6 +16,7 @@ import { DynamicTypePipelineGridTransformersAnonymizerComponent } from '@Pimcore
 @injectable()
 export class DynamicTypePipelineGridTransformersAnonymizer extends DynamicTypePipelineAbstract {
   readonly id = 'anonymizer'
+  readonly group = ['string']
 
   getComponent (): ReactElement {
     return (

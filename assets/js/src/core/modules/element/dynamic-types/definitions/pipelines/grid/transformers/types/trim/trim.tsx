@@ -16,6 +16,7 @@ import { DynamicTypePipelineGridTransformersTrimComponent } from '@Pimcore/modul
 @injectable()
 export class DynamicTypePipelineGridTransformersTrim extends DynamicTypePipelineAbstract {
   readonly id = 'trim'
+  readonly group = ['string']
 
   getComponent (): ReactElement {
     return (
