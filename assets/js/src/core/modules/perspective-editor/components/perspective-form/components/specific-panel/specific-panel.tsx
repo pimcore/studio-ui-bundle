@@ -20,9 +20,9 @@ export const SpecificPanel = (): React.JSX.Element => {
 
   return (
     <Flex
-      gap={0}
+      className={ styles.panel }
+      gap={ 0 }
       vertical
-      className={styles.panel}
     >
       <p>{t('perspective-editor.form.general.widget-configuration')}</p>
 
