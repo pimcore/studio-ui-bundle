@@ -31,7 +31,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const mouseEnterTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const mouseCheckIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const lastMousePositionRef = useRef({ x: 0, y: 0 })
-  
+
   const element: Record<string, any> | undefined = node.metaData?.asset ?? node.metaData?.dataObject ?? node.metaData?.document
   const isAsset = node.metaData?.asset !== undefined
   const hasTooltip = element?.customAttributes?.tooltip !== null && element?.customAttributes?.tooltip !== undefined
@@ -41,7 +41,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     const handleDragInfoChange = (event: DragInfoChangeEvent): void => {
       const isDragging = !isNull(event.detail)
       setIsDragActive(isDragging)
-      
+
       // Close tooltip immediately when drag starts
       if (isDragging) {
         closeTooltip()
@@ -49,7 +49,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     }
 
     window.addEventListener('studioui:draggable:change-drag-info', handleDragInfoChange as EventListener)
-    
+
     return () => {
       window.removeEventListener('studioui:draggable:change-drag-info', handleDragInfoChange as EventListener)
       cleanupTimeouts()
@@ -74,10 +74,10 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
 
   const isMouseOverElement = useCallback((): boolean => {
     if (containerRef.current === null) return false
-    
+
     const rect = containerRef.current.getBoundingClientRect()
     const { x: mouseX, y: mouseY } = lastMousePositionRef.current
-    
+
     return (
       mouseX >= rect.left &&
       mouseX <= rect.right &&
@@ -98,9 +98,9 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const handleMouseEnter = useCallback(() => {
     // Don't show tooltip if dragging is active
     if (isDragActive) return
-    
+
     cleanupTimeouts()
-    
+
     // Set timeout to match Ant Design's mouseEnterDelay
     mouseEnterTimeoutRef.current = setTimeout(() => {
       setIsTooltipOpen(true)
@@ -117,12 +117,12 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     const handleGlobalMouseMove = (event: MouseEvent): void => {
       // Update last known mouse position
       lastMousePositionRef.current = { x: event.clientX, y: event.clientY }
-      
+
       if (!isTooltipOpen || containerRef.current === null) return
-      
+
       const rect = containerRef.current.getBoundingClientRect()
       const { clientX, clientY } = event
-      
+
       // Add small buffer zone around the element (10px)
       const buffer = 10
       const isInBufferZone = (
@@ -131,14 +131,14 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
         clientY >= rect.top - buffer &&
         clientY <= rect.bottom + buffer
       )
-      
+
       if (!isInBufferZone) {
         closeTooltip()
       }
     }
 
     document.addEventListener('mousemove', handleGlobalMouseMove, { passive: true })
-    
+
     return () => {
       document.removeEventListener('mousemove', handleGlobalMouseMove)
     }
@@ -153,12 +153,12 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
 
   return (
     <div
-      ref={containerRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={ handleMouseEnter }
+      onMouseLeave={ handleMouseLeave }
+      ref={ containerRef }
     >
       <Tooltip
-        open={isTooltipOpen}
+        open={ isTooltipOpen }
         overlayStyle={ { width: 280 } }
         placement="right"
         title={
