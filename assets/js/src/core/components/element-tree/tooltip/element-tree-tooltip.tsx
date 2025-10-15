@@ -72,8 +72,8 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     cleanupTimeouts()
   }, [cleanupTimeouts])
 
-  const isMouseOverElement = useCallback(() => {
-    if (!containerRef.current) return false
+  const isMouseOverElement = useCallback((): boolean => {
+    if (containerRef.current === null) return false
     
     const rect = containerRef.current.getBoundingClientRect()
     const { x: mouseX, y: mouseY } = lastMousePositionRef.current
@@ -114,11 +114,11 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
 
   // Global mouse move listener for additional safety
   useEffect(() => {
-    const handleGlobalMouseMove = (event: MouseEvent) => {
+    const handleGlobalMouseMove = (event: MouseEvent): void => {
       // Update last known mouse position
       lastMousePositionRef.current = { x: event.clientX, y: event.clientY }
       
-      if (!isTooltipOpen || !containerRef.current) return
+      if (!isTooltipOpen || containerRef.current === null) return
       
       const rect = containerRef.current.getBoundingClientRect()
       const { clientX, clientY } = event
