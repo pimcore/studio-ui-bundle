@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 import {
   type HotspotImageValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/hotspot-image'
 
-export const hasValueData = (value?: HotspotImageValue | null): boolean => {
-  return !_.isEmpty(value?.hotspots) || !_.isEmpty(value?.marker) || !_.isEmpty(value?.crop)
+export const hasHotspotsOrMarkers = (value?: HotspotImageValue | null): boolean => {
+  return !isEmpty(value?.hotspots) || !isEmpty(value?.marker)
 }

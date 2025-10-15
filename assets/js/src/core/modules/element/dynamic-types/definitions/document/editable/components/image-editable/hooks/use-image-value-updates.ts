@@ -9,7 +9,9 @@
  */
 
 import { useCallback } from 'react'
-import { isNil } from 'lodash'
+import { isNil, isEmpty } from 'lodash'
+import { useTranslation } from 'react-i18next'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type ImageEditableValue } from '../image-editable'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { type Hotspot, type Marker } from '../../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
@@ -28,6 +30,9 @@ interface UseImageValueUpdatesReturn {
 }
 
 export const useImageValueUpdates = ({ value: imageValue, onChange }: UseImageValueUpdatesProps): UseImageValueUpdatesReturn => {
+  const { t } = useTranslation()
+  const { confirm } = useFormModal()
+
   const createNewValue = useCallback((updates: Partial<ImageEditableValue>): ImageEditableValue => ({
     id: imageValue?.id,
     alt: imageValue?.alt ?? '',
@@ -36,7 +41,14 @@ export const useImageValueUpdates = ({ value: imageValue, onChange }: UseImageVa
     marker: imageValue?.marker ?? [],
     crop: imageValue?.crop ?? {},
     ...updates
-  }), [imageValue])
+  }), [
+    imageValue?.id,
+    imageValue?.alt,
+    imageValue?.title,
+    imageValue?.hotspots,
+    imageValue?.marker,
+    imageValue?.crop
+  ])
 
   const handleCropChange = useCallback((crop: CropSettings | null) => {
     if (!isNil(imageValue?.id)) {
@@ -51,8 +63,25 @@ export const useImageValueUpdates = ({ value: imageValue, onChange }: UseImageVa
   }, [imageValue?.id, createNewValue, onChange])
 
   const handleReplaceImage = useCallback((assetId: number) => {
-    onChange?.(createNewValue({ id: assetId }))
-  }, [createNewValue, onChange])
+    const hasData = !isEmpty(imageValue?.hotspots) || !isEmpty(imageValue?.marker)
+
+    if (hasData) {
+      confirm({
+        title: t('hotspots.clear-data'),
+        content: t('hotspots.clear-data.dnd-message'),
+        okText: t('yes'),
+        cancelText: t('no'),
+        onOk: () => {
+          onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
+        },
+        onCancel: () => {
+          onChange?.(createNewValue({ id: assetId, crop: {} }))
+        }
+      })
+    } else {
+      onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
+    }
+  }, [imageValue?.hotspots, imageValue?.marker, createNewValue, onChange])
 
   const handleEmptyValue = useCallback(() => {
     onChange?.({

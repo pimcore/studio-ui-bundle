@@ -175,7 +175,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
 
   const handleDroppableDrop = useCallback((info: DragAndDropInfo) => {
     handleReplaceImage(info.data.id as number)
-  }, [])
+  }, [handleReplaceImage])
 
   const renderDroppableContent = useCallback((children: React.ReactNode): React.JSX.Element => {
     // Determine the shape based on whether an image is selected
