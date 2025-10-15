@@ -25,10 +25,12 @@ import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import {
-  useLazyClassificationStoreGetLayoutByCollectionQuery,
-  useLazyClassificationStoreGetLayoutByGroupQuery
+  useLazyClassificationStoreGetLayoutByKeyQuery,
+  useClassificationStoreGetCollectionsQuery,
+  useClassificationStoreGetGroupsQuery,
+  useClassificationStoreGetKeyGroupRelationsQuery,
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import type { ClassificationStoreGroupLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreCollection2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { useClassificationStoreModal } from '../../../../provider/classifcation-store-modal-provider'
 
 interface ClassificationStoreCallbackTabProps<T> {
@@ -62,24 +64,27 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
   )
-  const [fetchCollectionLayout] = useLazyClassificationStoreGetLayoutByCollectionQuery()
-  const [fetchGroupLayout] = useLazyClassificationStoreGetLayoutByGroupQuery()
 
-  const fetchCollectionLayoutData = async (collectionId: string): Promise<ClassificationStoreGroupLayout> => {
-    return await fetchCollectionLayout({
-      // @todo can't work with an object id, should be based on the class id
-      objectId: 372,
-      fieldName: queryArgs.fieldName,
-      collectionId: parseInt(collectionId)
-    }).unwrap()
-  }
+  const { data: collectionsData } = useClassificationStoreGetCollectionsQuery({
+    fieldName: queryArgs.fieldName,
+    page: 1,
+    pageSize: 1000,
+    storeId: queryArgs.storeId
+  });
 
-  const fetchGroupLayoutData = async (groupId: string): Promise<any> => {
-    return await fetchGroupLayout({
-      // @todo can't work with an object id, should be based on the class id
-      objectId: 372,
+  const { data: groupsData } = useClassificationStoreGetGroupsQuery({
+    fieldName: queryArgs.fieldName,
+    page: 1,
+    pageSize: 1000,
+    storeId: queryArgs.storeId
+  });
+
+  const [fetchLayoutByKey] = useLazyClassificationStoreGetLayoutByKeyQuery()
+
+  const fetchLayoutDataByKey = async (keyId: string): Promise<ClassificationStoreCollection2> => {
+    return await fetchLayoutByKey({
       fieldName: queryArgs.fieldName,
-      groupId: parseInt(groupId)
+      keyId: parseInt(keyId)
     }).unwrap()
   }
 
@@ -94,29 +99,21 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
 
     for (const key of selectedKeys) {
       if (tabId === TabId.Collection) {
-        const promise = fetchCollectionLayoutData(key).then((collectionData) => {
-          return collectionData.groups;
-        })
-
-        promisesList.push(promise)
+        throw new Error('Collections are not supported in callback version')
       }
 
       if (tabId === TabId.Group) {
-        const promise = fetchGroupLayoutData(key).then((groupData) => {
-          return groupData
-        })
-
-        promisesList.push(promise)
+        throw new Error('Groups are not supported in callback version')
       }
 
       if (tabId === TabId.GroupByKey) {
-        const groupId = key.split('-')[0]
         const itemId = key.split('-')[1]
+        const groupId = parseInt(key.split('-')[0])
 
-        const promise = fetchGroupLayoutData(groupId).then((groupData) => {
+        const promise = fetchLayoutDataByKey(itemId).then((itemData) => {
           return {
-            ...groupData,
-            keys: groupData.keys.filter((item: any) => String(item.id) === itemId)
+            ...itemData,
+            groupId
           }
         })
 

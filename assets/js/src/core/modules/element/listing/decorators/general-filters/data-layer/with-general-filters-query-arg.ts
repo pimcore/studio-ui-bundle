@@ -20,43 +20,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { type ColumnFilter } from '@tanstack/react-table'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
-
-const shouldApplyFieldFilter = (
-  filter: any,
-  availableColumns: any[],
-  hasType: (params: any) => boolean,
-  getType: (params: any) => any
-): boolean => {
-  const column = availableColumns.find(col => col.key === filter.key)
-  const frontendType = column?.frontendType ?? filter.type ?? 'string'
-
-  if (!hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] })) {
-    return false
-  }
-
-  const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
-  if (dynamicType === null) {
-    return false
-  }
-
-  if (('dynamicTypeFieldFilterType' in dynamicType)) {
-    const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-    return fieldFilterType.shouldApply(filter.filterValue)
-  }
-
-  return dynamicType.shouldApply(filter.filterValue)
-}
-
-const getApplicableFieldFilters = (
-  filters: any[],
-  availableColumns: any[],
-  hasType: (params: any) => boolean,
-  getType: (params: any) => any
-): any[] => {
-  return filters.filter((filter) =>
-    shouldApplyFieldFilter(filter, availableColumns, hasType, getType)
-  )
-}
+import { FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
@@ -86,6 +50,43 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }))
     }
 
+    const prepareFilters = (filters: FieldFilter[]): FieldFilter[] => {
+      const preparedFilters: FieldFilter[] = []
+
+      console.log({filters})
+      filters.forEach((filter) => {
+        console.log({filter})
+        const column = availableColumns.find(col => col.key === filter.key)
+        let frontendType = column?.frontendType ?? filter.type ?? 'string'
+
+        if (column === undefined) {
+          return
+        }
+
+        if (column.type === 'dataobject.classificationstore') {
+          frontendType = column.type
+        }
+
+        let type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
+
+        if (type === null) {
+          return
+        }
+
+        if ('dynamicTypeFieldFilterType' in type) {
+          type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+        }
+
+        const transformedFilter = type.transformFilterToApiResponse(filter);
+
+        if (type.shouldApply(transformedFilter.filterValue)) {
+          preparedFilters.push(transformedFilter)
+        }
+      })
+
+      return preparedFilters
+    }
+
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
       const searchTermFilter = getSearchTermFilterArg()
@@ -108,8 +109,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }
 
       if (fieldFilters.length > 0) {
-        const applicableFieldFilters = getApplicableFieldFilters(fieldFilters, availableColumns, hasType, getType)
-        newColumnFilters.push(...applicableFieldFilters as ColumnFilter[])
+        newColumnFilters.push(...prepareFilters(fieldFilters));
       }
 
       return {

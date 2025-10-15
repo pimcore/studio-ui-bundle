@@ -239,6 +239,7 @@ import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -307,6 +308,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldF
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Consent']).to(DynamicTypeFieldFilterConsent).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']).to(DynamicTypeFieldFilterClassificationStore).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()

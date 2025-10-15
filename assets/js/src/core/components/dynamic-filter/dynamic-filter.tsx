@@ -19,6 +19,8 @@ export const DynamicFilter = (props: DynamicFilterProps): React.JSX.Element => {
   const { getComponentRenderer } = useDynamicTypeResolver()
   const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType ?? ''] })
 
+  console.log({type, frontendType})
+
   if (ComponentRenderer === null) {
     // @todo implement error handling
     return <>Dynamic Field Filter not supported</>

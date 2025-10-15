@@ -83,6 +83,19 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Classification Store"],
             }),
+            classificationStoreGetLayoutByKey: build.query<
+                ClassificationStoreGetLayoutByKeyApiResponse,
+                ClassificationStoreGetLayoutByKeyApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/layout-by-key/${queryArg.keyId}`,
+                    params: {
+                        objectId: queryArg.objectId,
+                        fieldName: queryArg.fieldName,
+                    },
+                }),
+                providesTags: ["Classification Store"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -159,6 +172,16 @@ export type ClassificationStoreGetLayoutByGroupApiArg = {
     objectId: number;
     /** GroupId of the Group ID */
     groupId: number;
+    /** Field Name */
+    fieldName: string;
+};
+export type ClassificationStoreGetLayoutByKeyApiResponse =
+    /** status 200 Layout definition */ ClassificationStoreCollection2;
+export type ClassificationStoreGetLayoutByKeyApiArg = {
+    /** object ID */
+    objectId?: number;
+    /** KeyId of the Key ID */
+    keyId: number;
     /** Field Name */
     fieldName: string;
 };
@@ -250,4 +273,5 @@ export const {
     useClassificationStoreGetKeyGroupRelationsQuery,
     useClassificationStoreGetLayoutByCollectionQuery,
     useClassificationStoreGetLayoutByGroupQuery,
+    useClassificationStoreGetLayoutByKeyQuery,
 } = injectedRtkApi;

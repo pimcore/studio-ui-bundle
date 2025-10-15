@@ -33,11 +33,11 @@ export const StackList = ({ items, onItemsChange, sortable }: StackListProps): R
     <div className={ cn('stack-list', styles.stackList) }>
       {sortable === true && (
         <DndContext onDragEnd={ onDragEnd }>
-          <SortableContext items={ itemsState.map((item) => item.id) }>
+          <SortableContext items={ itemsState.map((item) => item.key ?? item.id) }>
             {itemsState.map((item) => (
               <div
                 className="stack-list__item"
-                key={ item.id }
+                key={ item.key ?? item.id }
               >
                 <StackListItem { ...item } />
               </div>
@@ -51,7 +51,7 @@ export const StackList = ({ items, onItemsChange, sortable }: StackListProps): R
           {itemsState.map((item) => (
             <div
               className="stack-list__item"
-              key={ item.id }
+              key={ item.key ?? item.id }
             >
               <StackListItem { ...item } />
             </div>
@@ -66,8 +66,8 @@ export const StackList = ({ items, onItemsChange, sortable }: StackListProps): R
 
     if (over !== null && active.id !== over.id) {
       setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id)
-        const newIndex = items.findIndex((item) => item.id === over.id)
+        const oldIndex = items.findIndex((item) => item.key ?? item.id === active.id)
+        const newIndex = items.findIndex((item) => item.key ?? item.id === over.id)
 
         const newItems = arrayMove(items, oldIndex, newIndex)
 

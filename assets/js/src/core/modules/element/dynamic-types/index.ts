@@ -201,6 +201,7 @@ import { type DynamicTypeDocumentNewsletter } from './definitions/document/types
 import { type DynamicTypeDocumentSnippet } from './definitions/document/types/dynamic-type-document-snippet'
 import { type DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeGridCellClassificationStore } from './definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
+import { DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 
 moduleSystem.registerModule({
   onInit () {
@@ -219,6 +220,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterConsent>(serviceIds['DynamicTypes/FieldFilter/Consent']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterClassificationStore>(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 

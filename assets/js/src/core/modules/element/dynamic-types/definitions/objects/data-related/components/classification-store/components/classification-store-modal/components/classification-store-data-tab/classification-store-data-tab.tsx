@@ -68,8 +68,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const fetchCollectionLayoutData = async (collectionId: string): Promise<ClassificationStoreGroupLayout> => {
     return await fetchCollectionLayout({
-      // @todo can't work with an object id, should be based on the class id
-      objectId: 372,
+      objectId: queryArgs.objectId,
       fieldName: queryArgs.fieldName,
       collectionId: parseInt(collectionId)
     }).unwrap()
@@ -77,8 +76,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const fetchGroupLayoutData = async (groupId: string): Promise<any> => {
     return await fetchGroupLayout({
-      // @todo can't work with an object id, should be based on the class id
-      objectId: 327,
+      objectId: queryArgs.objectId,
       fieldName: queryArgs.fieldName,
       groupId: parseInt(groupId)
     }).unwrap()

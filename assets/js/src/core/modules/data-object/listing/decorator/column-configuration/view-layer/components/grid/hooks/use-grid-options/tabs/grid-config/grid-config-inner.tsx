@@ -29,6 +29,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import { useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 
 enum ViewState {
   Edit = 'edit',
@@ -102,21 +103,19 @@ export const GridConfigInner = (): React.JSX.Element => {
 
     const columnsToAdd: AvailableColumn[] = [];
 
-    if (data.type === 'group' || data.type === 'group-by-key') {
-      data.data.forEach((group) => {
-        group.keys.forEach((item) => {
-          const itemDefinition = item.definition;
+    if (data.type === 'group-by-key') {
+      data.data.forEach((item) => {
+        const itemDefinition = item.definition;
 
-          columnsToAdd.push({
-            ...baseColumn,
-            key: `${baseColumn.key}`,
-            frontendType: itemDefinition?.fieldtype,
-            config: {
-              keyId: item.id,
-              groupId: group.id,
-              fieldDefinition: itemDefinition
-            },
-          })
+        columnsToAdd.push({
+          ...baseColumn,
+          key: `${baseColumn.key}`,
+          frontendType: itemDefinition?.fieldtype,
+          config: {
+            keyId: item.id,
+            groupId: item.groupId,
+            fieldDefinition: itemDefinition
+          }
         })
       })
     }
@@ -130,6 +129,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       openModal({
         ...fieldDefinition,
         fieldName: fieldDefinition.name,
+        allowedTabs: [TabId.GroupByKey]
       })
     } else {
       addColumn(column)
