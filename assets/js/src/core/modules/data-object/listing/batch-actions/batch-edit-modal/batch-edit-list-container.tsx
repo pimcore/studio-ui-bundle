@@ -31,10 +31,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     // @todo infer selected language from grid config when available
     const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
 
+    const batchEditTitle = 'fieldDefinition' in batchEdit.config ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
+    const key = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
+
     return ({
       id: `${batchEdit.key}`,
-      key: `${batchEdit.key}${batchEdit.type === 'dataobject.classificationstore' ? `-${batchEdit.config.keyId}-${batchEdit.config.groupId}` : ''}`,
-      children: <Tag>{t(`${batchEdit.config.fieldDefinition?.title ?? batchEdit.key}`)}</Tag>,
+      key,
+      children: <Tag>{t(`${batchEditTitle}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [

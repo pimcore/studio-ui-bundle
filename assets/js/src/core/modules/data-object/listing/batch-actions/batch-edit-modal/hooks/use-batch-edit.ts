@@ -92,6 +92,10 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   const removeBatchEdit = (batchEdit: BatchEdit): void => {
     const updatedEdits = batchEdits.filter(edit => {
       if (batchEdit.type === 'dataobject.classificationstore') {
+        if (!('keyId' in edit.config) || !('groupId' in edit.config) || !('keyId' in batchEdit.config) || !('groupId' in batchEdit.config)) {
+          throw new Error('keyId or groupId is missing in config')
+        }
+
         return !(edit.key === batchEdit.key && edit.config.keyId === batchEdit.config.keyId && edit.config.groupId === batchEdit.config.groupId)
       }
 
