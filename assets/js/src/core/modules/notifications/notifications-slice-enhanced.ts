@@ -19,17 +19,16 @@ export const api = baseApi.enhanceEndpoints({
         const tags: Tag[] = []
 
         result?.items.forEach((note) => {
-          tags.push(...providingTags.NOTIFICATION(note.id))
+          tags.push(...providingTags.NOTIFICATION_DETAIL(note.id))
         })
+
+        tags.push(...providingTags.NOTIFICATIONS())
 
         return tags
       }
     },
     notificationGetById: {
       providesTags: (result, error, args) => providingTags.NOTIFICATION_DETAIL(args.id)
-    },
-    notificationDeleteById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATION(args.id)
     },
     notificationDeleteAll: {
       invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATIONS()

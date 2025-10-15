@@ -48,7 +48,7 @@ export const useHandleCheck = ({
   setDefaultCheckedTags
 }: UseHandleCheckProps): UseHandleCheckReturn => {
   const messageApi = useMessage()
-  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
+  const { updateTagsForElementByTypeAndId, } = useOptimisticUpdate()
   const [assignTag] = useTagAssignToElementMutation()
   const [unassignTag] = useTagUnassignFromElementMutation()
   const [loadingNodes, setLoadingNodes] = useState<Set<string>>(new Set())
