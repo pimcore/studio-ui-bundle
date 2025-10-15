@@ -16,10 +16,12 @@ import { Switch } from '@Pimcore/components/switch/switch'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePerspectiveForm } from '../../hooks/use-perspective-form'
+import { useStyles } from './allowed-menu-entries-panel.styles'
 
 export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { menuEntries, isLoading } = usePerspectiveForm()
+  const { styles } = useStyles()
 
   if (isLoading) {
     return (
@@ -36,7 +38,8 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
 
   return (
     <Flex
-      gap={ 4 }
+      className={ styles.panel }
+      gap={ 0 }
       vertical
     >
       <p>{t('perspective-editor.form.allowed-context-menu.title')}</p>

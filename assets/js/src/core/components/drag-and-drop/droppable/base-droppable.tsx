@@ -16,6 +16,7 @@ import { isNull } from 'lodash'
 import { DroppableContextProvider } from '../droppable-context-provider'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { type DragInfoChangeEvent } from '../draggable'
+import { useDropClassHandlers } from '../hooks/use-drop-class-handlers'
 
 export interface BaseDroppableProps {
   children: ReactNode
@@ -26,11 +27,12 @@ export interface BaseDroppableProps {
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
   disableDndActiveIndicator?: boolean
+  dropClass?: string
 }
 
 type DragState = 'inactive' | 'active' | 'valid' | 'error'
 
-export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disableDndActiveIndicator = false }: BaseDroppableProps): React.JSX.Element | null => {
+export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disableDndActiveIndicator = false, dropClass }: BaseDroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle()
   const [dragState, setDragState] = useState<DragState>('inactive')
   const isContextValid = useRef<boolean>(false)
@@ -107,13 +109,21 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     }
   }, [])
 
-  const handleDrop = (e: React.DragEvent): void => {
+  const handleDrop = useCallback((e: React.DragEvent): void => {
     e.preventDefault()
     updateDragState('inactive')
     if (isInfoValid()) {
       onDrop(dragInfoRef.current!)
     }
-  }
+  }, [onDrop])
+
+  useDropClassHandlers({
+    dropClass,
+    enabled: isVisible,
+    onDragOver: handleDragOver,
+    onDragLeave: handleDragLeave,
+    onDrop: handleDrop
+  })
 
   return useMemo(() => (
     <div

@@ -12,55 +12,7 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { ImageEditable } from '../components/image-editable/image-editable'
 import { isNil, isPlainObject, isUndefined } from 'lodash'
-
-export interface ImageEditableConfig {
-  title?: string
-  width?: number
-  height?: number
-  thumbnail?: string | object
-  hidetext?: boolean
-  reload?: boolean
-  minWidth?: number
-  minHeight?: number
-  ratioX?: number
-  ratioY?: number
-  uploadPath?: string
-  disableInlineUpload?: boolean
-  highResolution?: number
-  dropClass?: string
-  deferred?: boolean
-  class?: string
-  predefinedDataTemplates?: {
-    marker?: Array<{
-      menuName: string
-      name: string
-      data: any[]
-    }>
-    hotspot?: Array<{
-      menuName: string
-      name: string
-      data: any[]
-    }>
-  }
-  cacheBuster?: boolean
-  required?: boolean
-}
-
-export interface ImageEditableValue {
-  id?: number
-  path?: string
-  alt?: string
-  title?: string
-  hotspots?: any[]
-  marker?: any[]
-  crop?: {
-    cropTop?: number
-    cropLeft?: number
-    cropWidth?: number
-    cropHeight?: number
-    cropPercent?: boolean
-  }
-}
+import { type ImageEditableConfig, type ImageEditableValue } from './image-editable-types'
 
 export type ImageEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: ImageEditableConfig

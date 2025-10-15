@@ -22,6 +22,7 @@ interface ImageEditablePreviewProps {
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  dropClass?: string
   thumbnailSettings?: ImageThumbnailSettings
   thumbnailConfig?: string | object
   imgAttributes?: Record<string, string>

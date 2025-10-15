@@ -1352,8 +1352,8 @@ perspective-editor.form.name.placeholder: Enter perspective name
 perspective-editor.form.general.title: General
 perspective-editor.form.general.name: Name
 perspective-editor.form.general.icon: Icon
-perspective-editor.form.general.widget-congfiguration: Widget areas
-perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
+perspective-editor.form.general.widget-configuration: Widget areas
+perspective-editor.form.allowed-context-menu.title: Allowed context menu actions
 perspective-editor.form.allowed-context-menu.category.extras: Extras
 perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
 perspective-editor.form.allowed-context-menu.extras.emails: E-Mails
