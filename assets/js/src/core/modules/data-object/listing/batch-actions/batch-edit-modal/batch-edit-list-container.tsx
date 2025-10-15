@@ -32,8 +32,9 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
 
     return ({
-      id: batchEdit.key,
-      children: <Tag>{t(`${batchEdit.key}`)}</Tag>,
+      id: `${batchEdit.key}`,
+      key: `${batchEdit.key}${batchEdit.type === 'dataobject.classificationstore' ? `-${batchEdit.config.keyId}-${batchEdit.config.groupId}` : ''}`,
+      children: <Tag>{t(`${batchEdit.config.fieldDefinition?.title ?? batchEdit.key}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [
@@ -41,7 +42,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
               key="language-selection"
               languages={ languages }
               onSelectLanguage={ (language) => {
-                updateLocale(batchEdit.key, transformLanguage(language))
+                updateLocale(batchEdit, transformLanguage(language))
               } }
               selectedLanguage={ selectedLanguage }
             />
@@ -51,7 +52,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
-              removeBatchEdit(batchEdit.key)
+              removeBatchEdit(batchEdit)
             } }
           />
         ]

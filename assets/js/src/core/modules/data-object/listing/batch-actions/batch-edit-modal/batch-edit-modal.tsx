@@ -39,6 +39,10 @@ import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/us
 import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -47,7 +51,7 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { getAvailableColumnsDropdown } = useAvailableColumns()
-  const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
+  const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
   const { selectedRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
@@ -63,6 +67,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { refreshGrid } = useRefreshGrid(elementType)
   const classDefinitionSelection = useClassDefinitionSelection()
   const selectedClassDefinition = classDefinitionSelection.selectedClassDefinition
+  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate });
+  const { availableColumns } = useAvailableColumns();
+
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -89,7 +96,48 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
+  function onClassificationStoreUpdate(data): void {
+    const fieldDefinition = data.modalContext;
+    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore');
+
+    if (baseColumn === undefined) {
+      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name);
+    }
+
+    const columnsToAdd: AvailableColumn[] = [];
+
+    if (data.type === 'group-by-key') {
+      data.data.forEach((item) => {
+        const itemDefinition = item.definition;
+
+        columnsToAdd.push({
+          ...baseColumn,
+          key: `${baseColumn.key}`,
+          frontendType: itemDefinition?.fieldtype,
+          config: {
+            keyId: item.id,
+            groupId: item.groupId,
+            fieldDefinition: itemDefinition
+          }
+        })
+      })
+
+      addOrUpdateBatchEdits(columnsToAdd);
+    }
+  }
+
   const onColumnClick = (column: AvailableColumn): void => {
+    if (column.type === 'dataobject.classificationstore') {
+      const fieldDefinition = column.config?.fieldDefinition;
+
+      openModal({
+        ...fieldDefinition,
+        fieldName: column.key,
+        allowedTabs: [TabId.GroupByKey]
+      })
+      return
+    }
+
     addOrUpdateBatchEdit(column, undefined)
   }
 

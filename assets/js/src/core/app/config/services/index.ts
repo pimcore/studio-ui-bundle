@@ -240,6 +240,7 @@ import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
+import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -317,6 +318,7 @@ container.bind(serviceIds['DynamicTypes/BatchEdit/Datetime']).to(DynamicTypeBatc
 container.bind(serviceIds['DynamicTypes/BatchEdit/Select']).to(DynamicTypeBatchEditSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Checkbox']).to(DynamicTypeBatchEditCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']).to(DynamicTypeBatchEditElementDropzone).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']).to(DynamicTypeBatchEditClassificationStore).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']).to(DynamicTypeBatchEditDataObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']).to(DynamicTypeBatchEditDataObjectObjectBrick).inSingletonScope()
 

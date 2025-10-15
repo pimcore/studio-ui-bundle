@@ -202,6 +202,7 @@ import { type DynamicTypeDocumentSnippet } from './definitions/document/types/dy
 import { type DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeGridCellClassificationStore } from './definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
+import { DynamicTypeBatchEditClassificationStore } from './definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 
 moduleSystem.registerModule({
   onInit () {
@@ -230,6 +231,7 @@ moduleSystem.registerModule({
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditCheckbox>(serviceIds['DynamicTypes/BatchEdit/Checkbox']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditElementDropzone>(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditClassificationStore>(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
