@@ -21,7 +21,7 @@ import { useCustomReportsColumnConfigListQuery } from '@Pimcore/modules/reports/
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
-import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/types'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 interface ISqlAdapterProps extends IReportConfigurationSectionProps {}
