@@ -259,6 +259,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
             <DocumentHotspotImagePreview
               altText={ imageValue.alt }
               assetId={ imageValue.id! }
+              className="studio-image-editable"
               containerWidth={ containerWidth }
               disableInlineUpload={ props.config?.disableInlineUpload }
               disabled={ disabled }
@@ -285,6 +286,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
             )
           : (
             <AssetTarget
+              className="studio-image-editable"
               dndIcon
               height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
               onResize={ handleAssetTargetResize }

@@ -10,6 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { ImageEditablePreview } from './image-editable-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
@@ -54,6 +55,7 @@ interface DocumentHotspotImagePreviewProps {
   onImageLoadedChange?: (isLoaded: boolean) => void
   // Thumbnail config from image editable configuration
   thumbnailConfig?: string | object
+  className?: string
 }
 
 export const DocumentHotspotImagePreview = ({
@@ -80,7 +82,8 @@ export const DocumentHotspotImagePreview = ({
   hideAltTextInput,
   isImageLoaded,
   onImageLoadedChange,
-  thumbnailConfig
+  thumbnailConfig,
+  className
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
@@ -181,7 +184,7 @@ export const DocumentHotspotImagePreview = ({
   }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <div className={ styles.root }>
+    <div className={ cn(styles.root, className) }>
       <ImageEditablePreview
         assetId={ assetId }
         containerWidth={ containerWidth }
