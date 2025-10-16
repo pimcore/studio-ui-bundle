@@ -9,6 +9,10 @@
  */
 
 /* eslint-disable max-lines */
+import {
+  DynamicTypePipelineGridTransformersTranslateComponent
+} from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/components/translate/translate'
+
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
@@ -313,6 +317,7 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
   'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
   'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
+  'DynamicTypes/Grid/Transformers/Translate': 'DynamicTypes/Grid/Transformers/Translate',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
