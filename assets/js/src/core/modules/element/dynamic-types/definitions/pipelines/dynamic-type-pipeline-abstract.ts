@@ -15,6 +15,7 @@ import { type ReactElement } from 'react'
 @injectable()
 export abstract class DynamicTypePipelineAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
+  readonly group: string | string[] | null = null
 
   abstract getComponent (): ReactElement
 
