@@ -109,17 +109,23 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         config: {
           fieldDefinition,
           groupId: item.groupId,
-          keyId: item.id
+          keyId: item.id,
+          translationKey: fieldDefinition.title,
         },
         nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
         ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     })
 
-    setFilters((prevFilters) => [
-      ...prevFilters,
-      ...newFilters
-    ])
+    setFilters((prevFilters) => {
+      // Prevent duplicates in case the user added the same classification store column twice
+      const prevFilterIds = prevFilters.map((filter) => filter.id + JSON.stringify({keyId: filter.config.keyId, groupId: filter.config?.groupId}))
+
+      return [
+        ...prevFilters,
+        ...newFilters.filter((filter) => !prevFilterIds.includes(filter.id + JSON.stringify({keyId: filter.config.keyId, groupId: filter.config?.groupId})))
+      ]
+    })
   }
 
   const handleClassificationStoreClick = (column: AvailableColumn): void => {

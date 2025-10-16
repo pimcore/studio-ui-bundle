@@ -23,7 +23,13 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     const currentLanguage = currentLanguageRef.current
 
     if (column.type === 'dataobject.classificationstore') {
-      return data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === column.locale
+      const dataKey = data.key.split('.')[0]
+      
+      if (column.localizable && (column.locale === null || column.locale === undefined)) {
+        return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === currentLanguage
+      }
+
+      return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === column.locale
     }
 
     if (column.localizable && (column.locale === null || column.locale === undefined)) {
@@ -37,6 +43,7 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     if (column.type === 'dataobject.classificationstore') {
       return JSON.stringify({
         uuid: uuid(),
+        key: column.key,
         keyId: column.config?.keyId,
         groupId: column.config?.groupId,
         locale: column.locale ?? null,
@@ -58,7 +65,7 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     const type = data.type?.replaceAll('*||*', '.')
 
     if (type === 'dataobject.classificationstore') {
-      return selectedColumns.find((column) => column.type === 'dataobject.classificationstore' && column.config?.keyId === data.keyId && column.config?.groupId === data.groupId && (column.locale ?? null) === data.locale)
+      return selectedColumns.find((column) => column.key === data.key && column.type === 'dataobject.classificationstore' && column.config?.keyId === data.keyId && column.config?.groupId === data.groupId && (column.locale ?? null) === data.locale)
     }
 
     return baseDecodeColumnIdentifier(columnIdentifier, selectedColumns)

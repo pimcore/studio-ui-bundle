@@ -48,8 +48,9 @@ export const shouldIncludeColumnItem = (
 ): boolean => {
   const isEditable: boolean = item.editable === true
   const isAlreadyInBatchEditList = batchEdits.some(batchItem =>
-    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
+    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group) && item.mainType !== 'dataobject.classificationstore'
   )
+
   const hasDynamicType = hasType({
     target: 'BATCH_EDIT',
     dynamicTypeIds: [item?.mainType, item?.frontendType as string]

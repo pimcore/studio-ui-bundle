@@ -62,9 +62,15 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   }
 
   const items: StackListProps['items'] = _data.map((filter) => {
+    let key = filter.id
+    
+    if (filter.type === 'dataobject.classificationstore') {
+      key = `${filter.id}-${JSON.stringify({keyId: filter.config.keyId, groupId: filter.config?.groupId})}`
+    }
+
     return {
       id: filter.id,
-      key: `${filter.id}-${JSON.stringify(filter.config)}`,
+      key: key,
       title: filter.id,
       children: <Tooltip title={ filter.nameTooltip }>
         <Tag>{filter.translationKey}</Tag>

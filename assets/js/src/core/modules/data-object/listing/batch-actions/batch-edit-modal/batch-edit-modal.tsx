@@ -44,6 +44,7 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { BatchEdit } from './batch-edit-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -109,6 +110,17 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     if (data.type === 'group-by-key') {
       data.data.forEach((item) => {
         const itemDefinition = item.definition
+        let alreadyInBatchEdits = false
+
+        batchEdits.forEach((batchEdit) => {
+          if (batchEdit.key === baseColumn.key && (batchEdit.config as { keyId: string, groupId: string })?.keyId === item.id && (batchEdit.config as { keyId: string, groupId: string })?.groupId === item.groupId) {
+            alreadyInBatchEdits = true
+          }
+        })
+
+        if (alreadyInBatchEdits) {
+          return
+        }
 
         columnsToAdd.push({
           ...baseColumn,
