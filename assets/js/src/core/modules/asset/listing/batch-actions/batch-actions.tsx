@@ -67,6 +67,8 @@ export const BatchActions = (): React.JSX.Element => {
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
+  console.log('---->>>>> hasSelectedItems: ', hasSelectedItems)
+
   const handleBatchDelete = (): void => {
     addJob(createJob({
       title: t('batch-delete.job-title'),
@@ -133,6 +135,7 @@ export const BatchActions = (): React.JSX.Element => {
       },
       {
         key: '4',
+        hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDelete
