@@ -9,10 +9,6 @@
  */
 
 /* eslint-disable max-lines */
-import {
-  DynamicTypePipelineGridTransformersTranslateComponent
-} from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/components/translate/translate'
-
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
