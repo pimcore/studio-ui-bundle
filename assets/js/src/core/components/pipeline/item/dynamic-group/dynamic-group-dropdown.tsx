@@ -42,13 +42,19 @@ export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: Dynami
   const groupedTree: IGroupedTree = {}
 
   availableDynamicTypes.forEach(dynamicType => {
-    const groupedIds = !isNull(dynamicType.group)
-      ? Array.isArray(dynamicType.group) ? dynamicType.group : [dynamicType.group]
-      : []
+    let groupId: string[] = []
+
+    if (!isNull(dynamicType.group)) {
+      if (Array.isArray(dynamicType.group)) {
+        groupId = dynamicType.group
+      } else {
+        groupId = [dynamicType.group]
+      }
+    }
 
     let currentLevel = groupedTree
 
-    groupedIds.forEach(groupKey => {
+    groupId.forEach(groupKey => {
       if (isNil(currentLevel[groupKey])) {
         currentLevel[groupKey] = {}
       }
