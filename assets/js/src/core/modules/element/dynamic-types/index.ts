@@ -180,6 +180,7 @@ import { type DynamicTypePipelineGridTransformersBlur } from './definitions/pipe
 import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
 import { type DynamicTypePipelineGridTransformersExplode } from './definitions/pipelines/grid/transformers/types/explode/explode'
 import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipelines/grid/transformers/types/trim/trim'
+import { type DynamicTypePipelineGridTransformersTranslate } from './definitions/pipelines/grid/transformers/types/translate/translate'
 import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
 import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
@@ -449,5 +450,6 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersSubstring>(serviceIds['DynamicTypes/Grid/Transformers/Substring']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTranslate>(serviceIds['DynamicTypes/Grid/Transformers/Translate']))
   }
 })

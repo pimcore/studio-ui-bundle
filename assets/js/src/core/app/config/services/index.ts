@@ -202,6 +202,7 @@ import { DynamicTypePipelineGridTransformersBlur } from '@Pimcore/modules/elemen
 import { DynamicTypePipelineGridTransformersCombine } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/combine/combine'
 import { DynamicTypePipelineGridTransformersExplode } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/explode/explode'
 import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/trim/trim'
+import { DynamicTypePipelineGridTransformersTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/translate/translate'
 import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
 import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
@@ -542,6 +543,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/Explode']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']).to(DynamicTypePipelineGridTransformersStringReplace).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Substring']).to(DynamicTypePipelineGridTransformersSubstring).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicTypePipelineGridTransformersTrim).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Translate']).to(DynamicTypePipelineGridTransformersTranslate).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
