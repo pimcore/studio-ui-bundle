@@ -42,5 +42,10 @@ export const Dropdown = ({ menu, dropClass, ...props }: DropdownProps): React.JS
     return <DropdownInner { ...commonProps } />
   }
 
-  return <DropdownInnerDropClass { ...commonProps } dropClass={ dropClass } />
+  return (
+    <DropdownInnerDropClass
+      { ...commonProps }
+      dropClass={ dropClass }
+    />
+  )
 }
