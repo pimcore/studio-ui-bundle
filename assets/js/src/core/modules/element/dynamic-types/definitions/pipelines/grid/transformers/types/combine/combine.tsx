@@ -16,7 +16,7 @@ import { DynamicTypePipelineGridTransformersCombineComponent } from '../../compo
 @injectable()
 export class DynamicTypePipelineGridTransformersCombine extends DynamicTypePipelineAbstract {
   readonly id = 'combine'
-  readonly group = ['string']
+  readonly group = 'string'
 
   getComponent (): ReactElement {
     return (

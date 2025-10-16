@@ -8,20 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { isNil, isNull } from 'lodash'
+import { type MenuProps } from 'antd'
+import { useTranslation } from 'react-i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
-import React from 'react'
 import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'
 import { type DynamicTypePipelineAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-abstract'
-import { useTranslation } from 'react-i18next'
-import { useTransformersMenuItems } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/hooks/use-transformers-menu-items'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface DynamicGroupDropdownProps {
   children: React.ReactNode
   dynamicTypeRegistryId: string
+}
+
+interface IGroupedTree {
+  dynamicTypes?: DynamicTypePipelineAbstract[]
+  [groupKey: string]: any
 }
 
 export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: DynamicGroupDropdownProps): React.JSX.Element => {
@@ -34,28 +39,59 @@ export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: Dynami
     return dynamicType.isAvailableForSelection(config)
   })
 
-  const { transformersMenuItems } = useTransformersMenuItems(availableDynamicTypes)
+  const groupedTree: IGroupedTree = {}
 
-  const isTransformersRegistry = dynamicTypeRegistryId === serviceIds['DynamicTypes/Grid/TransformersRegistry']
+  availableDynamicTypes.forEach(dynamicType => {
+    const groupedIds = !isNull(dynamicType.group)
+      ? Array.isArray(dynamicType.group) ? dynamicType.group : [dynamicType.group]
+      : []
 
-  const items: DropdownProps['menu']['items'] = isTransformersRegistry
-    ? transformersMenuItems
-    : availableDynamicTypes.map((dynamicType) => ({
-      key: dynamicType.id,
-      label: t(`grid.advanced-column.advancedColumns.${dynamicType.id}`),
-      onClick: () => {
-        operations.add({
-          key: dynamicType.id
-        })
+    let currentLevel = groupedTree
+
+    groupedIds.forEach(groupKey => {
+      if (isNil(currentLevel[groupKey])) {
+        currentLevel[groupKey] = {}
       }
-    }))
+
+      currentLevel = currentLevel[groupKey]
+    })
+
+    if (isNil(currentLevel.dynamicTypes)) {
+      currentLevel.dynamicTypes = []
+    }
+
+    currentLevel.dynamicTypes.push(dynamicType)
+  })
+
+  const buildMenuItemsFromTree = (group: IGroupedTree): NonNullable<MenuProps['items']> => {
+    const items: NonNullable<MenuProps['items']> = []
+
+    if (!isNil(group.dynamicTypes)) {
+      group.dynamicTypes.forEach(dynamicType => {
+        items.push({
+          key: dynamicType.id,
+          label: t(`grid.advanced-column.advancedColumns.${dynamicType.id}`),
+          onClick: () => { operations.add({ key: dynamicType.id }) }
+        })
+      })
+    }
+
+    Object.entries(group).forEach(([groupKey, childNode]) => {
+      if (groupKey === 'dynamicTypes') return
+      items.push({
+        key: `${groupKey}-group`,
+        label: t(`grid.advanced-column.advancedColumns.group.${groupKey}`),
+        children: buildMenuItemsFromTree(childNode as IGroupedTree)
+      })
+    })
+
+    return items
+  }
+
+  const items = buildMenuItemsFromTree(groupedTree)
 
   return (
-    <Dropdown
-      menu={ {
-        items
-      } }
-    >
+    <Dropdown menu={ { items } }>
       {children}
     </Dropdown>
   )

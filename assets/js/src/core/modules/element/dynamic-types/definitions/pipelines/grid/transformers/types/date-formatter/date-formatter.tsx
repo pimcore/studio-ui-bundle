@@ -16,7 +16,7 @@ import { DynamicTypePipelineGridTransformersDateFormatterComponent } from '@Pimc
 @injectable()
 export class DynamicTypePipelineGridTransformersDateFormatter extends DynamicTypePipelineAbstract {
   readonly id = 'dateFormatter'
-  readonly group = ['date']
+  readonly group = 'date'
 
   getComponent (): ReactElement {
     return (

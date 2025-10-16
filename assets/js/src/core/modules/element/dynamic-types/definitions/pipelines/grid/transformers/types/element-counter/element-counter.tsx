@@ -15,7 +15,7 @@ import { DynamicTypePipelineAbstract } from '../../../../dynamic-type-pipeline-a
 @injectable()
 export class DynamicTypePipelineGridTransformersElementCounter extends DynamicTypePipelineAbstract {
   readonly id = 'elementCounter'
-  readonly group = ['other']
+  readonly group = 'other'
 
   getComponent (): ReactElement {
     return <></>

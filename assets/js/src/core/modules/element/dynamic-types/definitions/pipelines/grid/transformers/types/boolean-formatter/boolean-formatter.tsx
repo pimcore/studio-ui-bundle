@@ -16,7 +16,7 @@ import { DynamicTypePipelineGridTransformersBooleanFormatterComponent } from '@P
 @injectable()
 export class DynamicTypePipelineGridTransformersBooleanFormatter extends DynamicTypePipelineAbstract {
   readonly id = 'booleanFormatter'
-  readonly group = ['boolean']
+  readonly group = 'boolean'
 
   getComponent (): ReactElement {
     return (
