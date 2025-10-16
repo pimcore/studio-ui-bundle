@@ -11,9 +11,11 @@
 import React, { type Ref } from 'react'
 import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
 import { DropdownInner } from './dropdown-inner'
+import { DropdownInnerDropClass } from './dropdown-inner-drop-class'
 import { useStyle } from './dropdown.styles'
 import { type ItemType } from '../menu/menu'
 import cn from 'classnames'
+import { isNil } from 'lodash'
 
 export type { ItemType, MenuItemType, SubMenuItemType, MenuItemGroupType, MenuItemCustomType } from '../menu/menu'
 export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
@@ -28,14 +30,17 @@ export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender' 
   dropClass?: string
 }
 
-export const Dropdown = ({ menu, ...props }: DropdownProps): React.JSX.Element => {
+export const Dropdown = ({ menu, dropClass, ...props }: DropdownProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const commonProps = {
+    ...props,
+    menu,
+    overlayClassName: cn(props.overlayClassName, styles.dropdown)
+  }
 
-  return (
-    <DropdownInner
-      { ...props }
-      menu={ menu }
-      overlayClassName={ cn(props.overlayClassName, styles.dropdown) }
-    />
-  )
+  if (isNil(dropClass)) {
+    return <DropdownInner { ...commonProps } />
+  }
+
+  return <DropdownInnerDropClass { ...commonProps } dropClass={ dropClass } />
 }
