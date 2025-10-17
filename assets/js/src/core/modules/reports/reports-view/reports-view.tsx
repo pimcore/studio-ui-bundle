@@ -17,6 +17,7 @@ import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-re
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
@@ -45,7 +46,7 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
       gap="mini"
     >
       {!isEmptyValue(iconClass) && <Icon value={ iconClass } />}
-      {value}
+      <SanitizeHtml html={ value } />
     </Flex>
   )
 
