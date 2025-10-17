@@ -47,7 +47,7 @@ export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: 
   }
 
   const locale = isNil(column.locale) ? 'default' : column.locale
-  const formItemKey = [key, locale, `${column.config.groupId as number}`, `${column.config.keyId as number}`]
+  const formItemKey = [key, `${column.config.groupId as number}`, locale, `${column.config.keyId as number}`]
 
   return (
     <BatchEditFormItem
