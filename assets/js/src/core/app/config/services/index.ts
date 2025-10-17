@@ -252,7 +252,7 @@ import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/processors/document-url-processor-registry'
+import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()

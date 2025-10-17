@@ -9,7 +9,7 @@
  */
 
 import { injectable } from 'inversify'
-import { AbstractHookProcessorRegistry, type HookProcessor } from '@Pimcore/modules/app/hook-processor-registry/abstract-hook-processor-registry'
+import { AbstractProcessorRegistry, type Processor } from '@Pimcore/modules/app/processor-registry/abstract-processor-registry'
 
 
 /**
@@ -37,10 +37,9 @@ export class DocumentUrlContext {
 }
 
 /**
- * Hook-based document URL processor that can use React hooks directly
- * Processors can handle all URL types and decide based on context
+ * Document URL processor that modifies URL parameters for edit or preview URLs
  */
-export interface DocumentUrlProcessor extends HookProcessor<DocumentUrlContext> {}
+export interface DocumentUrlProcessor extends Processor<DocumentUrlContext> {}
 
 @injectable()
-export class DocumentUrlProcessorRegistry extends AbstractHookProcessorRegistry<DocumentUrlContext> {}
+export class DocumentUrlProcessorRegistry extends AbstractProcessorRegistry<DocumentUrlContext> {}

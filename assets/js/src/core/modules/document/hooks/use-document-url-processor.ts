@@ -13,7 +13,7 @@ import { isNil } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
-import { DocumentUrlProcessorRegistry, DocumentUrlContext } from '../processors/document-url-processor-registry'
+import { DocumentUrlProcessorRegistry, DocumentUrlContext } from '../services/processors/document-url-processor-registry'
 
 /**
  * Custom hook that processes URL parameters using hook-based processors
