@@ -121,7 +121,8 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
         list.push(
           columnHelper.accessor(columnId, {
-            header: !isEmptyValue(item.label) ? item.label : item.name
+            header: !isEmptyValue(item.label) ? item.label : item.name,
+            enableSorting: item.order
           })
         )
 
