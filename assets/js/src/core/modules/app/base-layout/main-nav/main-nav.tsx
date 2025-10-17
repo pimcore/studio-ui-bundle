@@ -26,7 +26,7 @@ import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-elem
 import { modalTexts } from '@Pimcore/modules/open-element/open-element'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { Divider } from '@sdk/components'
+import { Divider, SanitizeHtml } from '@sdk/components'
 import { RECYCLE_BIN_WIDGET } from '@Pimcore/modules/recycle-bin'
 import { NOTES_AND_EVENTS_WIDGET } from '@Pimcore/modules/notes-and-events'
 import { APPLICATION_LOGGER_WIDGET } from '@Pimcore/modules/application-logger'
@@ -126,7 +126,7 @@ export const MainNav = (): React.JSX.Element => {
                     />
                     )
               )}
-              {t(`${item.label}`)}
+              <SanitizeHtml html={ t(`${item.label}`) } />
 
               {shouldShowChevron(item, index) && (
                 <Icon
