@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { useDocumentPreviewUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { Iframe, type IframeRef } from '@Pimcore/components/iframe/iframe'
 import { isNil } from 'lodash'
-import { createPreviewUrl } from '@Pimcore/modules/document/utils/preview-url-helper'
 
 interface DocumentPreviewProps {
   id: number
@@ -33,12 +33,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
     }
   }, [document?.draftData?.modificationDate, isVisible])
 
-  const previewUrl = useMemo(() => {
-    if (!isNil(document?.fullPath)) {
-      return createPreviewUrl(document.fullPath)
-    }
-    return ''
-  }, [document?.fullPath, refreshKey])
+  const previewUrl = useDocumentPreviewUrlProcessor(id, document?.fullPath ?? '', refreshKey)
 
   if (previewUrl === '' || isNil(document)) {
     return <div>{t('preview.label')}</div>

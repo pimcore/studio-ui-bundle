@@ -330,5 +330,8 @@ export const serviceIds = {
   'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry',
 
   // Document required fields validation service
-  'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService'
+  'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService',
+
+  // Processor registries
+  'Document/ProcessorRegistry/UrlProcessor': 'Document/ProcessorRegistry/UrlProcessor'
 }
