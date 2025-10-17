@@ -48,7 +48,6 @@ export const EditContainer = (): React.JSX.Element => {
     }
   }, [id])
 
-
   const baseParameters = useMemo(() => ({
     pimcore_editmode: 'true',
     pimcore_studio: 'true',

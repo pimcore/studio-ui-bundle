@@ -253,6 +253,9 @@ import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
+import { DocumentSaveDataProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-save-data-processor-registry'
+import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
+import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -280,11 +283,17 @@ container.bind(serviceIds['Asset/Editor/AudioTabManager']).to(AudioTabManager).i
 container.bind(serviceIds['Asset/Editor/ArchiveTabManager']).to(ArchiveTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManager).inSingletonScope()
 
+// Asset Processor Registries
+container.bind(serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']).to(AssetSaveDataProcessorRegistry).inSingletonScope()
+
 // Data Objects
 container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/VariantTabManager']).to(VariantTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+
+// Data Object Processor Registries
+container.bind(serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']).to(DataObjectSaveDataProcessorRegistry).inSingletonScope()
 
 // Documents
 container.bind(serviceIds['Document/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
@@ -300,6 +309,7 @@ container.bind(serviceIds['Document/RequiredFieldsValidationService']).to(Docume
 
 // Document Processor Registries
 container.bind(serviceIds['Document/ProcessorRegistry/UrlProcessor']).to(DocumentUrlProcessorRegistry).inSingletonScope()
+container.bind(serviceIds['Document/ProcessorRegistry/SaveDataProcessor']).to(DocumentSaveDataProcessorRegistry).inSingletonScope()
 
 // Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()

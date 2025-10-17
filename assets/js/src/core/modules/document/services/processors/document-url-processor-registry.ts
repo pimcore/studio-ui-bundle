@@ -11,14 +11,13 @@
 import { injectable } from 'inversify'
 import { AbstractProcessorRegistry, type Processor } from '@Pimcore/modules/app/processor-registry/abstract-processor-registry'
 
-
 /**
  * Context for document URL processing operations
  */
 export class DocumentUrlContext {
   private readonly parameters: Record<string, string>
 
-  constructor(
+  constructor (
     public readonly documentId: number,
     public readonly processorType: 'preview' | 'edit',
     public readonly baseUrl: string,
@@ -27,11 +26,11 @@ export class DocumentUrlContext {
     this.parameters = { ...baseParameters }
   }
 
-  addParam(key: string, value: string): void {
+  addParam (key: string, value: string): void {
     this.parameters[key] = value
   }
 
-  getParams(): Readonly<Record<string, string>> {
+  getParams (): Readonly<Record<string, string>> {
     return { ...this.parameters }
   }
 }

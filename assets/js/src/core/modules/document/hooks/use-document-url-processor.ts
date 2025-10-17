@@ -13,7 +13,7 @@ import { isNil } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
-import { DocumentUrlProcessorRegistry, DocumentUrlContext } from '../services/processors/document-url-processor-registry'
+import { type DocumentUrlProcessorRegistry, DocumentUrlContext } from '../services/processors/document-url-processor-registry'
 
 /**
  * Custom hook that processes URL parameters using hook-based processors
@@ -36,14 +36,14 @@ export const useDocumentUrlProcessor = (
       }
 
       const context = new DocumentUrlContext(documentId, processorType, baseUrl, baseParameters)
-      
+
       registry.executeProcessors(context)
-      
+
       const url = new URL(baseUrl, window.location.origin)
       Object.entries(context.getParams()).forEach(([key, value]) => {
         url.searchParams.set(key, value)
       })
-      
+
       return addCacheBusterToUrl(url.toString())
     } catch (error) {
       console.warn('Failed to process URL:', error)

@@ -333,5 +333,8 @@ export const serviceIds = {
   'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService',
 
   // Processor registries
-  'Document/ProcessorRegistry/UrlProcessor': 'Document/ProcessorRegistry/UrlProcessor'
+  'Document/ProcessorRegistry/UrlProcessor': 'Document/ProcessorRegistry/UrlProcessor',
+  'Document/ProcessorRegistry/SaveDataProcessor': 'Document/ProcessorRegistry/SaveDataProcessor',
+  'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
+  'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor'
 }
