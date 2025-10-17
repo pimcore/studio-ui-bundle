@@ -41,6 +41,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     onFinish?: () => void
   ): Promise<void> => {
     setIsLoading(true)
+
     const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
 
     if (!isUndefined(error)) {
@@ -64,16 +65,15 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     setIsLoading(false)
   }
 
-  const openInNewWindowTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
-      key: ContextMenuActionName.openInNewWindow,
-      label: t('document.open-in-new-window'),
-      icon: <Icon value="external-link" />,
-      hidden: !isTreeActionAllowed(TreePermission.Open) || !checkElementPermission(node.permissions, 'view'),
-      onClick: () => {
-        openInNewWindow(parseInt(node.id))
-      }
-    }
+  const isContextMenuEntryHidden = (node: Element | TreeNodeProps, options?: { preview?: boolean }): boolean => {
+    return !checkElementPermission(node.permissions, 'view') ||
+           ((isNil(options?.preview) || !options?.preview) && ['snippet', 'newsletter', 'folder', 'link', 'hardlink', 'email'].includes(node.type!)) ||
+           (!isNil(options?.preview) && options.preview && ['folder', 'link', 'hardlink'].includes(node.type!))
+  }
+
+  const isTreeContextMenuEntryHidden = (node: Element | TreeNodeProps): boolean => {
+    return node.type !== 'page' ||
+        !checkElementPermission(node.permissions, 'view')
   }
 
   const openInNewWindowContextMenuItem = (
@@ -81,12 +81,25 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     onFinish?: () => void
   ): ItemType => {
     return {
-      key: ContextMenuActionName.openInNewWindow,
       label: t('document.open-in-new-window'),
-      icon: <Icon value="external-link" />,
-      hidden: !checkElementPermission(document.permissions, 'view'),
-      onClick: () => {
-        openInNewWindow(document.id, onFinish)
+      key: ContextMenuActionName.openInNewWindow,
+      isLoading,
+      icon: <Icon value={ 'share' } />,
+      hidden: isContextMenuEntryHidden(document),
+      onClick: async () => {
+        await openInNewWindow(document.id, onFinish)
+      }
+    }
+  }
+
+  const openInNewWindowTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('document.open-in-new-window'),
+      key: ContextMenuActionName.openInNewWindow,
+      icon: <Icon value={ 'share' } />,
+      hidden: isTreeContextMenuEntryHidden(node) || !isTreeActionAllowed(TreePermission.Open),
+      onClick: async () => {
+        await openInNewWindow(parseInt(node.id))
       }
     }
   }
@@ -97,10 +110,10 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     onFinish?: () => void
   ): ItemType => {
     return {
-      key: ContextMenuActionName.openPreviewInNewWindow,
       label: t('document.open-preview-in-new-window'),
-      icon: <Icon value="external-link" />,
-      hidden: !checkElementPermission(document.permissions, 'view'),
+      key: ContextMenuActionName.openPreviewInNewWindow,
+      icon: <Icon value={ 'eye' } />,
+      hidden: isContextMenuEntryHidden(document, { preview: true }),
       onClick: () => {
         window.open(previewUrl)
         onFinish?.()
