@@ -101,6 +101,7 @@ export const Grid = ({
   enableRowSelection = false,
   selectedRows = {},
   disabled = false,
+  allowMultipleAutoWidthColumns = false,
   enableRowDrag,
   handleDragEnd,
   ...props
@@ -235,7 +236,7 @@ export const Grid = ({
 
   // validate if only one column has autoWidth set to true
   useMemo(() => {
-    if (tableAutoWidth) {
+    if (tableAutoWidth && !allowMultipleAutoWidthColumns) {
       let autoWidthColumnFound: boolean = false
       for (const column of columns) {
         if (column.meta?.autoWidth === true) {

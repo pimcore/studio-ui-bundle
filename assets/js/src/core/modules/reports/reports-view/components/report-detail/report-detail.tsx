@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -124,10 +124,11 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             columnHelper.accessor(columnId, {
               header: !isEmptyValue(item.label) ? item.label : item.name,
               enableSorting: item.order,
-              enableHiding: item.displayType === 'hide',
+              ...(!isNull(item.width) && { size: item.width }),
               meta: {
                 type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-                ...(item.displayType === 'date' && { config: { showTime: true } })
+                ...(item.displayType === 'date' && { config: { showTime: true } }),
+                ...(isNull(item.width) && { autoWidth: true })
               }
             })
           )
@@ -211,6 +212,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         )}
         {!isUndefined(chartData) && (
           <Grid
+            allowMultipleAutoWidthColumns
             autoWidth
             className={ styles.gridTable }
             columns={ columns }
