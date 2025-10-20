@@ -52,6 +52,12 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const apiColumns = props?.row?.original?.['__api-data']
 
   const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
+    if (column?.type === 'dataobject.classificationstore') {
+      const apiColumnKey = column.key!.split('.')[0]
+
+      return column.key === apiColumnKey && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+    }
+
     return apiColumn.key === column?.key
   })
 
@@ -60,6 +66,8 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
     cellProps: props,
     objectProps: fieldDefinition as unknown as AbstractObjectDataDefinition
   })
+
+  console.log({ cellDefinition, currentApiColumn })
 
   if (cellDefinition.mode === 'default') {
     return (
