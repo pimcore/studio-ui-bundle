@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { isEmpty, isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -21,7 +21,7 @@ import { useCustomReportsColumnConfigListQuery } from '@Pimcore/modules/reports/
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
-import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/types'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 interface ISqlAdapterProps extends IReportConfigurationSectionProps {}
@@ -53,12 +53,20 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
   const { t } = useTranslation()
 
   const debouncedValue = useDebounce(currentData?.dataSourceConfig, 1000)
+  const shouldSkipColumnConfigDataRequest = useMemo(() => {
+    if (isNil(debouncedValue)) return true
+
+    const keys = Object.keys(debouncedValue)
+
+    return keys.length === 0 || (keys.length === 1 && keys[0] === 'type')
+  }, [debouncedValue])
+
   const { data: columnConfigData, isError, error } = useCustomReportsColumnConfigListQuery({
     name: currentData.name,
     bundleCustomReportsDataSourceConfig: {
       configuration: debouncedValue!
     }
-  }, { skip: isNil(debouncedValue) })
+  }, { skip: shouldSkipColumnConfigDataRequest })
 
   const errorMessage = isError && ('data' in error) && (error.data as IApiErrorDetails)?.message
 

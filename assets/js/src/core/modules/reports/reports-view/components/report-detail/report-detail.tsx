@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -119,11 +119,20 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
 
-        list.push(
-          columnHelper.accessor(columnId, {
-            header: !isEmptyValue(item.label) ? item.label : item.name
-          })
-        )
+        if (item.displayType !== 'hide') {
+          list.push(
+            columnHelper.accessor(columnId, {
+              header: !isEmptyValue(item.label) ? item.label : item.name,
+              enableSorting: item.order,
+              ...(!isNull(item.width) && { size: item.width }),
+              meta: {
+                type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
+                ...(item.displayType === 'date' && { config: { showTime: true } }),
+                ...(isNull(item.width) && { autoWidth: true })
+              }
+            })
+          )
+        }
 
         if (!isEmptyValue(item.action)) {
           list.push(
@@ -203,6 +212,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         )}
         {!isUndefined(chartData) && (
           <Grid
+            allowMultipleAutoWidthColumns
             autoWidth
             className={ styles.gridTable }
             columns={ columns }

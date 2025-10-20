@@ -202,6 +202,7 @@ import { DynamicTypePipelineGridTransformersBlur } from '@Pimcore/modules/elemen
 import { DynamicTypePipelineGridTransformersCombine } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/combine/combine'
 import { DynamicTypePipelineGridTransformersExplode } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/explode/explode'
 import { DynamicTypePipelineGridTransformersTrim } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/trim/trim'
+import { DynamicTypePipelineGridTransformersTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/translate/translate'
 import { DynamicTypePipelineGridTransformersStringReplace } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { DynamicTypePipelineGridTransformersSubstring } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/substring/substring'
 import { DynamicTypePipelineGridTransformersElementCounter } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/element-counter/element-counter'
@@ -247,11 +248,14 @@ import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/var
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
+import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
+import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
 import { DocumentSaveDataProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-save-data-processor-registry'
 import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
@@ -337,6 +341,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldF
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Consent']).to(DynamicTypeFieldFilterConsent).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']).to(DynamicTypeFieldFilterClassificationStore).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
@@ -345,6 +350,7 @@ container.bind(serviceIds['DynamicTypes/BatchEdit/Datetime']).to(DynamicTypeBatc
 container.bind(serviceIds['DynamicTypes/BatchEdit/Select']).to(DynamicTypeBatchEditSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Checkbox']).to(DynamicTypeBatchEditCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']).to(DynamicTypeBatchEditElementDropzone).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']).to(DynamicTypeBatchEditClassificationStore).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']).to(DynamicTypeBatchEditDataObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']).to(DynamicTypeBatchEditDataObjectObjectBrick).inSingletonScope()
 
@@ -383,6 +389,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Element']).to(DynamicTypeGridCe
 container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTypeGridCellLanguageSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(DynamicTypeGridCellDataObjectAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/ClassificationStore']).to(DynamicTypeGridCellClassificationStore).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']).to(DynamicTypeGridCellDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']).to(DynamicTypeGridCellDataObjectAdvanced).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCellString).inSingletonScope()
@@ -556,6 +563,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/Explode']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']).to(DynamicTypePipelineGridTransformersStringReplace).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Substring']).to(DynamicTypePipelineGridTransformersSubstring).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Trim']).to(DynamicTypePipelineGridTransformersTrim).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Translate']).to(DynamicTypePipelineGridTransformersTranslate).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

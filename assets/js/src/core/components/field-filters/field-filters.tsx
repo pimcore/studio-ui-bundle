@@ -53,16 +53,27 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   }
 
   const onRemoveClick = (filter: IDynamicFilter): void => {
+    if (filter.type === 'dataobject.classificationstore') {
+      setData(_data.filter((f) => !(f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)))
+      return
+    }
+
     setData(_data.filter((f) => f.id !== filter.id))
   }
 
   const items: StackListProps['items'] = _data.map((filter) => {
+    let key = filter.id
+
+    if (filter.type === 'dataobject.classificationstore') {
+      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
+    }
+
     return {
       id: filter.id,
-      key: filter.id,
+      key,
       title: filter.id,
       children: <Tooltip title={ filter.nameTooltip }>
-        <Tag>{filter.id}</Tag>
+        <Tag>{filter.translationKey}</Tag>
       </Tooltip>,
       body: (
         <DynamicFilter

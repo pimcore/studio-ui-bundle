@@ -26,6 +26,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useDataObjectBatchDeleteMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
@@ -108,6 +109,7 @@ export const BatchActions = (): React.JSX.Element => {
       },
       {
         key: '3',
+        hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDelete
@@ -133,12 +135,14 @@ export const BatchActions = (): React.JSX.Element => {
         setOpen={ setXlsxModalOpen }
       />
 
-      <BatchEditProvider>
-        <BatchEditModal
-          batchEditModalOpen={ batchEditModalOpen }
-          setBatchEditModalOpen={ setBatchEditModalOpen }
-        />
-      </BatchEditProvider>
+      <ClassificationStoreModalProvider>
+        <BatchEditProvider>
+          <BatchEditModal
+            batchEditModalOpen={ batchEditModalOpen }
+            setBatchEditModalOpen={ setBatchEditModalOpen }
+          />
+        </BatchEditProvider>
+      </ClassificationStoreModalProvider>
     </>
   )
 }

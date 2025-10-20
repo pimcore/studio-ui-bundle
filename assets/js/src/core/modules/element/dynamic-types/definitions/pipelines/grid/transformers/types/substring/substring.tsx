@@ -16,6 +16,7 @@ import { DynamicTypePipelineGridTransformersSubstringComponent } from '@Pimcore/
 @injectable()
 export class DynamicTypePipelineGridTransformersSubstring extends DynamicTypePipelineAbstract {
   readonly id = 'substring'
+  readonly group = 'string'
 
   getComponent (): ReactElement {
     return (

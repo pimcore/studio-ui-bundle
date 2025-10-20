@@ -19,7 +19,7 @@ import { defaultFieldWidthValues } from '../../../objects/data-related/providers
 
 @injectable()
 export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbstract {
-  readonly id = 'dataobject.adapter'
+  id = 'dataobject.adapter'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <DataObjectAdapterCell { ...props } />

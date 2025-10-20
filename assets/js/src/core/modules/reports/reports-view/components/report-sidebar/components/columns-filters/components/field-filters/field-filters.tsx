@@ -57,6 +57,7 @@ export const FieldFilters = (): React.JSX.Element => {
       {
         data: undefined,
         id,
+        translationKey: id,
         name: fieldName,
         type,
         frontendType,

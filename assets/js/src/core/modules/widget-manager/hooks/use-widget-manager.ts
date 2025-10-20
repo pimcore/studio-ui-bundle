@@ -21,7 +21,11 @@ import {
   type WidgetManagerState,
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
-import { Model, type TabNode } from 'flexlayout-react'
+import { Model, TabNode } from 'flexlayout-react'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type CloseMainWidgetEvent, type CloseMainWidgetEventPayload } from '../events'
+import { isNull, isUndefined } from 'lodash'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -58,7 +62,38 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   }
 
   function closeWidget (id: string): void {
+    const widgetData = getMainWidgetData(id)
+
     dispatch(closeWidgetAction(id))
+
+    if (!isNull(widgetData)) {
+      const event: CloseMainWidgetEvent = {
+        identifier: {
+          type: eventTypes['widget-manager:inner:widget-closed'],
+          id
+        },
+        payload: widgetData
+      }
+      eventBus.publish(event)
+    }
+  }
+
+  function getMainWidgetData (id: string): CloseMainWidgetEventPayload | null {
+    try {
+      const innerModel = getInnerModel()
+      const node = innerModel.getNodeById(id)
+
+      if (!isUndefined(node) && node instanceof TabNode) {
+        return {
+          widgetId: id,
+          node
+        }
+      }
+    } catch (error) {
+      console.warn('Could not retrieve main widget data for event:', error)
+    }
+
+    return null
   }
 
   function getInnerModel (): Model {

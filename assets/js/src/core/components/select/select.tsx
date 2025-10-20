@@ -23,15 +23,18 @@ export const sizeOptions = {
   normal: 150
 }
 
+export type SelectTheme = 'default' | 'primary'
+
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   inherited?: boolean
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
+  theme?: SelectTheme
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', ...antdSelectProps }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
@@ -68,7 +71,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const computedWidth = getComputedWidth()
 
-  const { styles } = useStyles({ width: computedWidth })
+  const { styles } = useStyles({ width: computedWidth, theme })
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
@@ -77,7 +80,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const selectContainerClassNames = cn('studio-select', styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError,
-    [styles.selectContainerWithClear]: allowClear === true && isSelected
+    [styles.selectContainerWithClear]: allowClear === true && isSelected,
+    [styles.selectContainerPrimary]: theme === 'primary'
   })
   const selectClassNames = cn(className, styles.select, {
     [styles.selectWithCustomIcon]: withCustomIcon,

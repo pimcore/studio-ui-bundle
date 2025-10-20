@@ -16,6 +16,7 @@ import { DynamicTypePipelineGridTransformersStringReplaceComponent } from '@Pimc
 @injectable()
 export class DynamicTypePipelineGridTransformersStringReplace extends DynamicTypePipelineAbstract {
   readonly id = 'stringReplace'
+  readonly group = 'string'
 
   getComponent (): ReactElement {
     return (

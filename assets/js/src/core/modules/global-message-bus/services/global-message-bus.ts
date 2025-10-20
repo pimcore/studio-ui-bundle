@@ -92,13 +92,6 @@ export class GlobalMessageBus {
   }
 
   public async routeMessage (mercureMessage: AbstractMercureMessage): Promise<void> {
-    const eventData = JSON.parse(mercureMessage.event.data as string)
-    const eventTopic = eventData.topic ?? eventData['@topic']
-
-    if (!isNil(eventTopic) && !this.registeredTopics.has(String(eventTopic))) {
-      return
-    }
-
     const matchingHandlers: AbstractMessageHandler[] = []
 
     for (const handler of this.activeHandlers.values()) {
