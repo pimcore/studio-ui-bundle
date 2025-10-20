@@ -9,19 +9,45 @@
  */
 
 import React, { type ReactNode } from 'react'
-import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
+import { BaseHotspotDroppable } from './hotspot-droppable/base-hotspot-droppable'
 import cn from 'classnames'
 import { DroppableContextProvider } from './droppable-context-provider'
-import { type IconProps } from '@sdk/components'
+import { type DragAndDropInfo } from './droppable'
 
-export interface DroppableProps {
+export interface HotspotPosition {
+  /** X coordinate as percentage (0-100) or pixels */
+  x: number | string
+  /** Y coordinate as percentage (0-100) or pixels */
+  y: number | string
+  /** Width as percentage (0-100) or pixels */
+  width?: number | string
+  /** Height as percentage (0-100) or pixels */
+  height?: number | string
+}
+
+export interface HotspotArea {
+  id: string
+  /** Position coordinates relative to the container */
+  position: HotspotPosition
   className?: string
-  children: ReactNode
   variant?: 'default' | 'outline'
   shape?: 'round' | 'angular'
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
+  /** Optional content to render within the hotspot area */
+  children?: ReactNode
+  /**
+   * CSS class name to be applied to external DOM elements to make them droppable targets.
+   * When specified, all elements with this class will receive the same drag and drop functionality as this hotspot.
+   */
+  dropClass?: string
+}
+
+export interface HotspotDroppableProps {
+  className?: string
+  children: ReactNode
+  hotspots: HotspotArea[]
   disabled?: boolean
   /**
    * If true, it does not update the drag state to 'active' when a drag operation starts. The active state is useful
@@ -29,22 +55,9 @@ export interface DroppableProps {
    * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
    */
   disableDndActiveIndicator?: boolean
-  /**
-   * CSS class name to be applied to external DOM elements to make them droppable targets.
-   * When specified, all elements with this class will receive the same drag and drop functionality.
-   */
-  dropClass?: string
 }
 
-export interface DragAndDropInfo {
-  type: string
-  icon: IconProps
-  title: string
-  data: any
-  sortable?: any
-}
-
-export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
+export const HotspotDroppable = (props: HotspotDroppableProps): React.JSX.Element | null => {
   if (props.disabled === true) {
     return (
       <div className={ cn(props.className) }>
@@ -56,17 +69,12 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   }
 
   return (
-    <BaseDroppable
+    <BaseHotspotDroppable
       className={ props.className }
       disableDndActiveIndicator={ props.disableDndActiveIndicator }
-      dropClass={ props.dropClass }
-      isValidContext={ props.isValidContext }
-      isValidData={ props.isValidData }
-      onDrop={ props.onDrop }
-      shape={ props.shape }
-      variant={ props.variant }
+      hotspots={ props.hotspots }
     >
       { props.children }
-    </BaseDroppable>
+    </BaseHotspotDroppable>
   )
 }

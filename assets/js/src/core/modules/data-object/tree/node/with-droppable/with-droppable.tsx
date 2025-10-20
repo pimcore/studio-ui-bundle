@@ -16,6 +16,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { HotspotDroppable } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -65,14 +66,38 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         { ...props }
         ref={ ref }
         wrapNode={ (children) => (
-          <Droppable
+          <HotspotDroppable
             disableDndActiveIndicator
-            isValidContext={ checkForValidContext }
-            isValidData={ checkForValidData }
-            onDrop={ onDrop }
+            hotspots={
+              [
+                {
+                  id: 'sorting-top',
+                  className: 'dnd__sorting dnd__sorting--top',
+                  isValidContext: checkForValidContext,
+                  isValidData: checkForValidData,
+                  position: { x: 0, y: 0, width: '100%', height: '30%' },
+                  onDrop
+                },
+                {
+                  id: 'drop-middle',
+                  isValidContext: checkForValidContext,
+                  isValidData: checkForValidData,
+                  position: { x: '0', y: '30%', width: '100%', height: '40%' },
+                  onDrop
+                },
+                {
+                  id: 'sorting-bottom',
+                  className: 'dnd__sorting dnd__sorting--bottom',
+                  isValidContext: checkForValidContext,
+                  isValidData: checkForValidData,
+                  position: { x: 0, y: '70%', width: '100%', height: '30%' },
+                  onDrop
+                }
+              ]
+            }
           >
             {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
-          </Droppable>
+          </HotspotDroppable>
         ) }
       />
     )
