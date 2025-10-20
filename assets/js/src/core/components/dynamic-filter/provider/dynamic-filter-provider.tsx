@@ -12,6 +12,7 @@ import React, { createContext, useEffect, useMemo, useState } from 'react'
 
 export interface IDynamicFilter {
   id: string
+  translationKey: string
   type: string
   data: any
   frontendType?: string
@@ -36,7 +37,7 @@ export interface DynamicFilterProviderProps extends Omit<DynamicFilterData, 'set
   children: React.ReactNode
 }
 
-export const DynamicFilterProvider = ({ children, id, type, data, onChange, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
+export const DynamicFilterProvider = ({ children, id, type, translationKey, data, onChange, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
   const [_data, _setData] = useState<DynamicFilterData['data']>(data)
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export const DynamicFilterProvider = ({ children, id, type, data, onChange, fron
   }
 
   return useMemo(() => (
-    <DynamicFilterContext.Provider value={ { id, type, data: _data, setData, frontendType, config } }>
+    <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, frontendType, config } }>
       {children}
     </DynamicFilterContext.Provider>
   ), [id, type, _data, frontendType, config, children])

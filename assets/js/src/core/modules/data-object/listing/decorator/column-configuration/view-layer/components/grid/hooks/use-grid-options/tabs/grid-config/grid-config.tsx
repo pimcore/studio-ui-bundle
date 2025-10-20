@@ -11,11 +11,14 @@
 import React from 'react'
 import { GridConfigProvider } from './grid-config-provider'
 import { GridConfigInner } from './grid-config-inner'
+import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 
 export const GridConfig = (): React.JSX.Element => {
   return (
     <GridConfigProvider>
-      <GridConfigInner />
+      <ClassificationStoreModalProvider>
+        <GridConfigInner />
+      </ClassificationStoreModalProvider>
     </GridConfigProvider>
   )
 }

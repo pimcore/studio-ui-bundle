@@ -52,6 +52,54 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   }
 
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
+    const columnType = event.update.column.type
+
+    let dataItem
+
+    switch (columnType) {
+      case 'dataobject.classificationstore':
+        dataItem = prepareClassificationStoreApiUpdateData(event)
+        break
+      default:
+        dataItem = prepareDefaultApiUpdateData(event)
+        break
+    }
+
+    const promise = patchDataObject({
+      body: {
+        data: [dataItem]
+      }
+    })
+
+    const result = await promise
+    if (!isNil(result.error)) {
+      trackError(new ApiError(result.error))
+    }
+
+    return result
+  }
+
+  const prepareClassificationStoreApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
+    const { update } = event
+    const locale = update.column.locale ?? (update.column.localizable ? currentLanguage : 'default')
+    const columnKey = update.column.key!
+    const columnConfig = update.column.config!
+
+    return {
+      id: update.id,
+      editableData: {
+        [columnKey]: {
+          [columnConfig.groupId]: {
+            [locale]: {
+              [columnConfig.keyId]: update.value
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const prepareDefaultApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
     const { update } = event
     let columnKey = update.column.key
 
@@ -70,7 +118,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
 
     const isPublishedColumn = columnKey === 'published'
 
-    const dataItem = {
+    return {
       id: update.id,
       ...(isPublishedColumn
         ? {
@@ -83,19 +131,6 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
           }
       )
     }
-
-    const promise = patchDataObject({
-      body: {
-        data: [dataItem]
-      }
-    })
-
-    const result = await promise
-    if (!isNil(result.error)) {
-      trackError(new ApiError(result.error))
-    }
-
-    return result
   }
 
   return {
