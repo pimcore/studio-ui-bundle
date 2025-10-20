@@ -44,7 +44,6 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
-import { BatchEdit } from './batch-edit-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean

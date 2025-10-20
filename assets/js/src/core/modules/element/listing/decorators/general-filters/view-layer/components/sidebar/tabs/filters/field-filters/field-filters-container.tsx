@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
@@ -110,7 +112,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
           fieldDefinition,
           groupId: item.groupId,
           keyId: item.id,
-          translationKey: fieldDefinition.title,
+          translationKey: fieldDefinition.title
         },
         nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
         ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
@@ -119,11 +121,11 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
     setFilters((prevFilters) => {
       // Prevent duplicates in case the user added the same classification store column twice
-      const prevFilterIds = prevFilters.map((filter) => filter.id + JSON.stringify({keyId: filter.config.keyId, groupId: filter.config?.groupId}))
+      const prevFilterIds = prevFilters.map((filter) => filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId }))
 
       return [
         ...prevFilters,
-        ...newFilters.filter((filter) => !prevFilterIds.includes(filter.id + JSON.stringify({keyId: filter.config.keyId, groupId: filter.config?.groupId})))
+        ...newFilters.filter((filter) => !prevFilterIds.includes(filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })))
       ]
     })
   }
