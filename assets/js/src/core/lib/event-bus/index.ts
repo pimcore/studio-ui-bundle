@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
+
 interface EventIdentifier {
   type: string
   id?: any
@@ -18,7 +20,7 @@ interface ISubscriber {
   callback: (event: AbstractEvent) => void
 }
 
-interface AbstractEvent {
+export interface AbstractEvent {
   identifier: EventIdentifier
   payload?: any
 }
@@ -49,7 +51,10 @@ class EventBus implements AbstractEventBus {
 
   publish (event: AbstractEvent): void {
     this.subscribers.forEach(subscriber => {
-      if (subscriber.identifier.type === event.identifier.type && subscriber.identifier.id === event.identifier.id) {
+      const typeMatches = subscriber.identifier.type === event.identifier.type
+      const idMatches = isUndefined(subscriber.identifier.id) || subscriber.identifier.id === event.identifier.id
+      
+      if (typeMatches && idMatches) {
         subscriber.callback(event)
       }
     })
@@ -57,3 +62,4 @@ class EventBus implements AbstractEventBus {
 }
 
 export const eventBus = new EventBus()
+export { eventTypes } from './event-types'
