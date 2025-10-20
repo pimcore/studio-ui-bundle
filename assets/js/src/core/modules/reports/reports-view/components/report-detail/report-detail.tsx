@@ -119,16 +119,19 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
 
-        list.push(
-          columnHelper.accessor(columnId, {
-            header: !isEmptyValue(item.label) ? item.label : item.name,
-            enableSorting: item.order,
-            meta: {
-              type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-              ...(item.displayType === 'date' && { config: { showTime: true } })
-            }
-          })
-        )
+        if (item.displayType !== 'hide') {
+          list.push(
+            columnHelper.accessor(columnId, {
+              header: !isEmptyValue(item.label) ? item.label : item.name,
+              enableSorting: item.order,
+              enableHiding: item.displayType === 'hide',
+              meta: {
+                type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
+                ...(item.displayType === 'date' && { config: { showTime: true } })
+              }
+            })
+          )
+        }
 
         if (!isEmptyValue(item.action)) {
           list.push(
