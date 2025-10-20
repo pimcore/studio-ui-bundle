@@ -92,7 +92,6 @@ export class GlobalMessageBus {
   }
 
   public async routeMessage (mercureMessage: AbstractMercureMessage): Promise<void> {
-
     const matchingHandlers: AbstractMessageHandler[] = []
 
     for (const handler of this.activeHandlers.values()) {
