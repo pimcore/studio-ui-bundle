@@ -57,7 +57,7 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
     if (column?.type === 'dataobject.classificationstore') {
       const apiColumnKey = column.key!.split('.')[0]
 
-      if (column?.localizable === true) {
+      if (column?.localizable) {
         return column.key === apiColumnKey && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
       }
 
