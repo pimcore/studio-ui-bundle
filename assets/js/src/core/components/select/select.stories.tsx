@@ -76,5 +76,11 @@ export const WithError = {
     status: 'error'
   }
 }
+export const ThemePrimary = {
+  args: {
+    placeholder: 'Choose an option...',
+    theme: 'primary'
+  }
+}
 
 export default config

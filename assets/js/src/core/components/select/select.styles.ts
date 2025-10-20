@@ -10,9 +10,11 @@
 
 import { createStyles } from 'antd-style'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type SelectTheme } from './select'
 
 interface StylesProps {
   width?: number
+  theme?: SelectTheme
 }
 
 const ICON_WIDTH = 16
@@ -98,6 +100,27 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
             display: none;
           }
         }
+      }
+    `,
+
+    selectContainerPrimary: css`
+      .ant-select:not(.ant-select-disabled) {
+        .ant-select-selector {
+          border-color: ${token.colorPrimaryBorder};
+        }
+
+        .ant-select-selection-item {
+          color: ${token.colorPrimary};
+        }
+
+        .ant-select-selection-placeholder {
+          color: ${token.colorPrimary};
+        }
+
+        .ant-select-arrow {
+          color: ${token.colorPrimary} !important;
+        }
+
       }
     `,
 
