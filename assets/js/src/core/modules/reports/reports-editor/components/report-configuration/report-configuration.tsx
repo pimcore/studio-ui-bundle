@@ -38,6 +38,11 @@ interface IReportConfigurationProps {
   setModifiedReports: (modifiedReports: string[]) => void
 }
 
+interface IDataSourceConfig {
+  type?: string
+  [key: string]: any
+}
+
 export const ReportConfiguration = ({ report, isActive, modifiedReports, setModifiedReports }: IReportConfigurationProps): React.JSX.Element => {
   const { isLoading, data, isFetching, refetch } = useCustomReportsReportQuery({ name: report.id })
 
@@ -45,6 +50,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   const { updateReport } = useReportActions()
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
+  const dataSourceConfig: IDataSourceConfig | null | undefined = currentData?.dataSourceConfig
 
   const { t } = useTranslation()
 
@@ -120,10 +126,12 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
       padding={ { top: 'none', right: 'extra-small', bottom: 'none', left: 'extra-small' } }
     >
       {!isNull(currentData) && (
-      <FormKit formProps={ {
-        initialValues: currentData,
-        onValuesChange
-      } }
+      <FormKit
+        formProps={ {
+          initialValues: currentData,
+          onValuesChange
+        } }
+        key={ dataSourceConfig?.type }
       >
         <GeneralSettings />
         <SourceDefinition
