@@ -8,22 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/frontendTypes'
+
 export const FIELD_TYPE_MAP = {
   string: {
     frontendType: 'select',
-    type: 'system.string'
+    type: FieldFilterFrontendType.String
   },
   numeric: {
     frontendType: 'id',
-    type: 'system.id'
+    type: FieldFilterFrontendType.Number
   },
   boolean: {
-    frontendType: 'checkbox',
-    type: 'system.string'
+    frontendType: 'boolean',
+    type: FieldFilterFrontendType.Boolean
   },
   date: {
     frontendType: 'datetime',
-    type: 'system.datetime'
+    type: FieldFilterFrontendType.DateTime
   }
 }
 
