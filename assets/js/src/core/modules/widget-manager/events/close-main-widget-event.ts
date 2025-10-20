@@ -8,14 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { eventTypes, type AbstractEvent } from '@Pimcore/lib/event-bus'
+import { type eventTypes, type AbstractEvent } from '@Pimcore/lib/event-bus'
 import { type TabNode } from 'flexlayout-react'
 
 export interface CloseMainWidgetEventPayload {
   widgetId: string
   node: TabNode
 }
-
 
 export interface CloseMainWidgetEvent extends AbstractEvent {
   identifier: {

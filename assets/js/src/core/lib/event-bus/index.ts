@@ -53,7 +53,7 @@ class EventBus implements AbstractEventBus {
     this.subscribers.forEach(subscriber => {
       const typeMatches = subscriber.identifier.type === event.identifier.type
       const idMatches = isUndefined(subscriber.identifier.id) || subscriber.identifier.id === event.identifier.id
-      
+
       if (typeMatches && idMatches) {
         subscriber.callback(event)
       }

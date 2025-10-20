@@ -10,7 +10,7 @@
 
 /**
  * Event types constants for the application event bus
- * 
+ *
  * Naming convention: module:scope:action
  * - module: The main module (e.g., widget-manager, asset, document)
  * - scope: The specific area within the module (e.g., inner, outer, tree)

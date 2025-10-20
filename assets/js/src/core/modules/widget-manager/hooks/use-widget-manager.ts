@@ -63,7 +63,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
 
   function closeWidget (id: string): void {
     const widgetData = getMainWidgetData(id)
-    
+
     dispatch(closeWidgetAction(id))
 
     if (!isNull(widgetData)) {
@@ -82,7 +82,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     try {
       const innerModel = getInnerModel()
       const node = innerModel.getNodeById(id)
-      
+
       if (!isUndefined(node) && node instanceof TabNode) {
         return {
           widgetId: id,
@@ -92,7 +92,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     } catch (error) {
       console.warn('Could not retrieve main widget data for event:', error)
     }
-    
+
     return null
   }
 
