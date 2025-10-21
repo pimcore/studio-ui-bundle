@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../../hooks/use-asset-draft'
-import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../../asset-api-slice-enhanced'
+import { useAssetUpdateByIdMutation } from '../../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type DataProperty as DataPropertyApi
@@ -29,6 +29,13 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type AssetSaveDataProcessorRegistry,
+  AssetSaveDataContext,
+  type AssetSaveUpdateData
+} from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -85,7 +92,7 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const update: AssetUpdateByIdApiArg['body']['data'] = {}
+    const update: AssetSaveUpdateData = {}
 
     if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
@@ -136,6 +143,18 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
 
     if (asset.changes.textData) {
       update.data = textData
+    }
+
+    // Apply save data processors
+    try {
+      const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
+        serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
+      )
+
+      const context = new AssetSaveDataContext(id, update)
+      saveDataProcessorRegistry.executeProcessors(context)
+    } catch (error) {
+      console.warn(`Save data processors failed for asset ${id}:`, error)
     }
 
     const saveAssetPromise = saveAsset({
