@@ -224,6 +224,7 @@ import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
+import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
@@ -1091,6 +1092,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tag',
       component: tag
+    })
+    iconLibrary.register({
+      name: 'target-group',
+      component: targetGroup
     })
     iconLibrary.register({
       name: 'target',
