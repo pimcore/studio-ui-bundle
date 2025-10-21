@@ -23,7 +23,7 @@ export const TreeContainer = (): React.JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
   const { openWidget, createWidget, setIsLoading, isLoading } = useWidgetEditorContext()
-  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery({ skipWrapperWidgets: true })
   const dispatch = useAppDispatch()
 
   const generateTreeStructure = (widgets: WidgetConfig[]): TreeDataItem[] => {
