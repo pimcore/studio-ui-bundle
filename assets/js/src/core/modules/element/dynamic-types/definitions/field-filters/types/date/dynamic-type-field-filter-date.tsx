@@ -9,10 +9,19 @@
  */
 
 import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterDateComponent, type DynamicTypeFieldFilterDateProps } from '../../components/dynamic-type-field-filter-date-component'
 import { injectable } from 'inversify'
+import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import {
+  DatePickerSettingValue,
+  type DateValue,
+  DynamicTypeFieldFilterDateComponent,
+  type DynamicTypeFieldFilterDateProps
+} from '../../components/dynamic-type-field-filter-date-component'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import {
+  FieldFilterOperators,
+  type IFieldFilterTypeData
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/types'
 
 @injectable()
 export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
@@ -26,6 +35,47 @@ export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
     return (
       <DynamicTypeFieldFilterDateComponent { ...props } />
     )
+  }
+
+  getReportFieldFilterData (props: DateValue): IFieldFilterTypeData[] {
+    const { setting, from, to, on } = props
+
+    const getValue = (value: string | null): string => value ?? ''
+
+    const operatorMap: Record<DatePickerSettingValue, IFieldFilterTypeData[]> = {
+      [DatePickerSettingValue.ON]: [{
+        operator: FieldFilterOperators.EQUAL,
+        value: getValue(on)
+      }],
+      [DatePickerSettingValue.BEFORE]: [{
+        operator: FieldFilterOperators.LESS_THAN,
+        value: getValue(to)
+      }],
+      [DatePickerSettingValue.AFTER]: [{
+        operator: FieldFilterOperators.GREATER_THAN,
+        value: getValue(from)
+      }],
+      [DatePickerSettingValue.BETWEEN]: [
+        {
+          operator: FieldFilterOperators.GREATER_THAN,
+          value: getValue(from)
+        },
+        {
+          operator: FieldFilterOperators.EQUAL,
+          value: getValue(from)
+        },
+        {
+          operator: FieldFilterOperators.LESS_THAN,
+          value: getValue(to)
+        },
+        {
+          operator: FieldFilterOperators.EQUAL,
+          value: getValue(to)
+        }
+      ]
+    }
+
+    return operatorMap[setting] ?? operatorMap[DatePickerSettingValue.ON]
   }
 
   shouldApply (value: any): boolean {

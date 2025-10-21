@@ -9,10 +9,17 @@
  */
 
 import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterMultiselectComponent } from '../../components/dynamic-type-field-filter-multiselect-component'
 import { injectable } from 'inversify'
+import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import {
+  DynamicTypeFieldFilterMultiselectComponent,
+  type MultiselectValue
+} from '../../components/dynamic-type-field-filter-multiselect-component'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import {
+  FieldFilterOperators,
+  type IFieldFilterTypeData
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/types'
 
 @injectable()
 export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbstract {
@@ -26,5 +33,11 @@ export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbs
     return (
       <DynamicTypeFieldFilterMultiselectComponent />
     )
+  }
+
+  getReportFieldFilterData (props: MultiselectValue): IFieldFilterTypeData[] {
+    return props.map(value => (
+      { operator: FieldFilterOperators.EQUAL, value }
+    ))
   }
 }

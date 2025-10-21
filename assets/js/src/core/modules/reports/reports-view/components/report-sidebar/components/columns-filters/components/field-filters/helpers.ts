@@ -12,11 +12,11 @@ import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/
 
 export const FIELD_TYPE_MAP = {
   string: {
-    frontendType: 'select',
+    frontendType: 'multiselect',
     type: FieldFilterFrontendType.String
   },
   numeric: {
-    frontendType: 'id',
+    frontendType: 'number',
     type: FieldFilterFrontendType.Number
   },
   boolean: {

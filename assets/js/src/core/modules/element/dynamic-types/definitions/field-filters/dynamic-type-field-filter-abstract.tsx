@@ -44,4 +44,6 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
   transformFilterToApiResponse (filter: FieldFilter): FieldFilter {
     return filter
   }
+
+  getReportFieldFilterData (data: any): any {}
 }

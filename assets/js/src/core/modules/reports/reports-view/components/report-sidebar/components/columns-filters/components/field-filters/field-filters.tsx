@@ -20,12 +20,18 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
-import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
+import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/helpers'
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
-
-const EQUAL_OPERATOR = 'eq'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import type {
+  DynamicTypeFieldFilterAbstract
+} from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import {
+  FieldFilterOperators,
+  type IFieldFilterTypeData
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/types'
 
 export const FieldFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -35,6 +41,8 @@ export const FieldFilters = (): React.JSX.Element => {
   const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
   const { data: fullChartDetailData } = useFullChartData({ name: reportDetailData?.name ?? '' })
+
+  const { getType } = useDynamicTypeResolver()
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
     (!isEmptyValue(column.label) ? column.label : column.name)
@@ -74,12 +82,31 @@ export const FieldFilters = (): React.JSX.Element => {
 
     const updatedColumnFilters = data
       .filter(item => !isUndefined(item.data))
-      .map(item => ({
-        property: item.name!,
-        type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
-        operator: EQUAL_OPERATOR,
-        value: String(item.data)
-      }))
+      .flatMap(item => {
+        const dynType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] }) as DynamicTypeFieldFilterAbstract | null
+
+        const defaultFilterData: IFieldFilterTypeData = {
+          operator: FieldFilterOperators.EQUAL,
+          value: String(item.data)
+        }
+
+        if (!isNull(dynType) && 'getReportFieldFilterData' in dynType) {
+          const filterData: IFieldFilterTypeData[] = dynType.getReportFieldFilterData(item.data)
+
+          return filterData.map(filter => ({
+            property: item.name!,
+            type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
+            operator: filter.operator,
+            value: filter.value
+          }))
+        }
+
+        return ({
+          property: item.name!,
+          type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
+          ...defaultFilterData
+        })
+      })
 
     !isUndefined(updatedColumnFilters) && setColumnsFilters(updatedColumnFilters)
   }
