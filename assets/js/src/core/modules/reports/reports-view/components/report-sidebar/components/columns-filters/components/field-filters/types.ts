@@ -11,7 +11,8 @@
 export enum FieldFilterOperators {
   EQUAL = 'eq',
   LESS_THAN = 'lt',
-  GREATER_THAN = 'gt'
+  GREATER_THAN = 'gt',
+  LIKE = 'like'
 }
 
 export interface IFieldFilterTypeData {

@@ -61,15 +61,7 @@ export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
           value: getValue(from)
         },
         {
-          operator: FieldFilterOperators.EQUAL,
-          value: getValue(from)
-        },
-        {
           operator: FieldFilterOperators.LESS_THAN,
-          value: getValue(to)
-        },
-        {
-          operator: FieldFilterOperators.EQUAL,
           value: getValue(to)
         }
       ]

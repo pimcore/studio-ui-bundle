@@ -12,6 +12,7 @@ import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
 import { isNil, isEmpty, isArray } from 'lodash'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import type { IFieldFilterTypeData } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/types'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AbstractFieldFilterDefinition {}
@@ -45,5 +46,5 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     return filter
   }
 
-  getReportFieldFilterData (data: any): any {}
+  getReportFieldFilterData? (props: any): IFieldFilterTypeData[]
 }

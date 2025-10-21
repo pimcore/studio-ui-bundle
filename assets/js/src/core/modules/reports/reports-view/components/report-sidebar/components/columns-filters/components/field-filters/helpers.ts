@@ -12,7 +12,7 @@ import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/
 
 export const FIELD_TYPE_MAP = {
   string: {
-    frontendType: 'multiselect',
+    frontendType: 'input',
     type: FieldFilterFrontendType.String
   },
   numeric: {

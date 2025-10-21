@@ -86,12 +86,12 @@ export const FieldFilters = (): React.JSX.Element => {
         const dynType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] }) as DynamicTypeFieldFilterAbstract | null
 
         const defaultFilterData: IFieldFilterTypeData = {
-          operator: FieldFilterOperators.EQUAL,
+          operator: FieldFilterOperators.LIKE,
           value: String(item.data)
         }
 
         if (!isNull(dynType) && 'getReportFieldFilterData' in dynType) {
-          const filterData: IFieldFilterTypeData[] = dynType.getReportFieldFilterData(item.data)
+          const filterData: IFieldFilterTypeData[] = dynType.getReportFieldFilterData!(item.data)
 
           return filterData.map(filter => ({
             property: item.name!,
