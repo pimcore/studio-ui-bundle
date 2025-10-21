@@ -27,7 +27,7 @@ export type MultiselectValue = string[]
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
-  const [_value, setValue] = useState<string[]>(data as MultiselectValue)
+  const [value, setValue] = useState<string[]>(data as MultiselectValue)
 
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
   let formattedOptions: DefaultOptionType[] = []
@@ -60,7 +60,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
       options={ formattedOptions }
       showSearch={ rawConfig?.showSearch ?? false }
       style={ { width: '100%' } }
-      value={ _value }
+      value={ value }
     />
   )
 }
