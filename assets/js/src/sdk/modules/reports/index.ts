@@ -19,4 +19,8 @@ export * from '@Pimcore/modules/reports/reports-editor/types'
 export * from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 export * from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 
+export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
+export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
+export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
+
 export * as ReportsApiSlice from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
