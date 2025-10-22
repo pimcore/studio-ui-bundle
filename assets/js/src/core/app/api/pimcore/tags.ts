@@ -191,9 +191,9 @@ export const invalidatingTags = {
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
 
-const getElementSpecificTag = (tagType: string, elementType: ElementType, id: number): Tag => ({ type: tagType, id, elementType })
+export const getElementSpecificTag = (tagType: string, elementType: ElementType, id: number): Tag => ({ type: tagType, id, elementType })
 
-const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
+export const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
   switch (elementType) {
     case 'asset':
       return { type: tagNames.ASSET_DETAIL, id }
