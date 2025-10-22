@@ -28,7 +28,7 @@ export abstract class DynamicTypeWidgetTypeAbstract implements DynamicTypeAbstra
       return {
         label: config.name,
         key: config.id,
-        icon: <Icon value={ config.icon.value } />,
+        icon: <Icon { ...config.icon } />,
         onClick: onWidgetClick === undefined ? undefined : () => { onWidgetClick(config) }
       }
     })
