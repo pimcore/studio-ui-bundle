@@ -205,7 +205,6 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
             )
           }
         ] }
-        proximityThreshold={ 120 }
       >
         <div style={ {
           width: 600,
