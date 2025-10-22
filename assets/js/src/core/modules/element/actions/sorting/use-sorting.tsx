@@ -19,8 +19,8 @@ import {
   refreshNodeChildren
 } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@sdk/app'
-import { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { ItemType } from '@Pimcore/components/menu/menu'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { type ItemType } from '@Pimcore/components/menu/menu'
 import { ContextMenuActionName } from '..'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
@@ -109,7 +109,7 @@ export const useSorting = (elementType: ElementType): UseSortingHookReturn => {
       label: t('element.tree.sorting'),
       key: ContextMenuActionName.sorting,
       icon: <Icon value={ 'folder' } />,
-      hidden: !node.hasChildren,
+      hidden: node.hasChildren !== true,
       children: [
         {
           label: t('element.tree.sorting.keyed-ascending'),
@@ -137,7 +137,7 @@ export const useSorting = (elementType: ElementType): UseSortingHookReturn => {
             void updateSorting(node, 'INDEX', 'ASCENDING')
           }
         }
-      ],
+      ]
     }
   }
 

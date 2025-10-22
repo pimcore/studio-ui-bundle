@@ -23,7 +23,6 @@ import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-sli
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
-import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 import { withContextMenu } from './node/with-context-menu'
 
 export interface TreeContainerProps {

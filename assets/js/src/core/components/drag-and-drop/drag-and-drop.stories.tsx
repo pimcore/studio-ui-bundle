@@ -126,8 +126,7 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
       </div>
 
       <HotspotDroppable
-        proximityThreshold={120}
-        hotspots={[
+        hotspots={ [
           {
             id: 'hotspot1',
             position: { x: 0, y: 0, width: '100%', height: '25%' },
@@ -136,7 +135,7 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
             isValidContext: (info: DragAndDropInfo) => info.type === 'hotspot-demo',
             onDrop: (info: DragAndDropInfo) => { setHotspot1Value(info.data.value) },
             children: (
-              <div style={ { 
+              <div style={ {
                 width: '100%',
                 height: '100%',
                 display: 'flex',
@@ -147,7 +146,8 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 'bold'
-              } }>
+              } }
+              >
                 Zone 1
               </div>
             )
@@ -158,10 +158,10 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
             variant: 'default',
             shape: 'angular',
             isValidContext: (info: DragAndDropInfo) => info.type === 'hotspot-demo',
-            isValidData: (info: DragAndDropInfo) => info.data?.value === 'Item A',
+            isValidData: (info: DragAndDropInfo) => Boolean(info.data?.value) && info.data?.value === 'Item A',
             onDrop: (info: DragAndDropInfo) => { setHotspot2Value(info.data.value) },
             children: (
-              <div style={ { 
+              <div style={ {
                 width: '100%',
                 height: '100%',
                 display: 'flex',
@@ -172,7 +172,8 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
                 borderRadius: '4px',
                 fontSize: '12px',
                 fontWeight: 'bold'
-              } }>
+              } }
+              >
                 Zone 2 (A only)
               </div>
             )
@@ -183,10 +184,10 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
             variant: 'outline',
             shape: 'angular',
             isValidContext: (info: DragAndDropInfo) => info.type === 'hotspot-demo',
-            isValidData: (info: DragAndDropInfo) => info.data?.value === 'Item B',
+            isValidData: (info: DragAndDropInfo) => Boolean(info.data?.value) && info.data?.value === 'Item B',
             onDrop: (info: DragAndDropInfo) => { setHotspot3Value(info.data.value) },
             children: (
-              <div style={ { 
+              <div style={ {
                 width: '100%',
                 height: '100%',
                 display: 'flex',
@@ -197,31 +198,34 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
                 borderRadius: '4px',
                 fontSize: '12px',
                 fontWeight: 'bold'
-              } }>
+              } }
+              >
                 Zone 3 (B only)
               </div>
             )
           }
-        ]}
+        ] }
+        proximityThreshold={ 120 }
       >
-        <div style={ { 
+        <div style={ {
           width: 600,
           height: 400,
-          padding: 20, 
-          border: '2px dashed #ccc', 
-          borderRadius: 8, 
+          padding: 20,
+          border: '2px dashed #ccc',
+          borderRadius: 8,
           background: '#f9f9f9',
           backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 20 0 L 0 0 0 20" fill="none" stroke="%23e0e0e0" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")',
           position: 'relative'
-        } }>
+        } }
+        >
           <h4 style={ { margin: '0 0 10px 0' } }>Image or Container with Coordinate-Based Hotspots</h4>
           <p style={ { margin: 0, fontSize: '14px', color: '#666' } }>
-            Hotspots are positioned using coordinates relative to this container. 
+            Hotspots are positioned using coordinates relative to this container.
             Try dragging items to the colored zones positioned at specific coordinates.
           </p>
-          
+
           <div style={ { position: 'absolute', bottom: 10, left: 10, fontSize: '12px', color: '#999' } }>
-            Dropped: Zone 1: {hotspot1Value || 'none'} | Zone 2: {hotspot2Value || 'none'} | Zone 3: {hotspot3Value || 'none'}
+            Dropped: Zone 1: {hotspot1Value as string ?? 'none'} | Zone 2: {hotspot2Value as string ?? 'none'} | Zone 3: {hotspot3Value as string ?? 'none'}
           </div>
         </div>
       </HotspotDroppable>

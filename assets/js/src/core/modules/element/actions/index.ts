@@ -32,7 +32,7 @@ export enum ContextMenuActionName {
   pasteRecursiveUpdatingReferences = 'pasteRecursiveUpdatingReferences',
   pasteAsChild = 'pasteAsChild',
   pasteOnlyContents = 'pasteOnlyContents',
-  
+
   sorting = 'sorting',
   sortingAscending = 'sortingAscending',
   sortingDescending = 'sortingDescending',

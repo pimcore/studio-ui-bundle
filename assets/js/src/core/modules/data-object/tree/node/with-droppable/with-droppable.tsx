@@ -10,18 +10,18 @@
 
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
-import { DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
+import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
-import { HotspotDroppable, HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
+import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
 interface onSortingDropProps {
-  info: DragAndDropInfo,
+  info: DragAndDropInfo
   position?: 'top' | 'bottom'
 }
 
@@ -30,14 +30,14 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move } = useCopyPaste('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
-    const parentNode = useElementTreeNode(props.parentId ?? '-1');
-    const hasParent = parentNode !== undefined; 
-    let sortingMode = 'keyed';
+    const parentNode = useElementTreeNode(props.parentId ?? '-1')
+    const hasParent = parentNode !== undefined
+    let sortingMode = 'keyed'
 
-    console.log({parentNode});
+    console.log({ parentNode })
 
     if (hasParent) {
-      sortingMode = parentNode.treeNodeProps?.metaData?.dataObject?.childrenSortBy ?? 'keyed';
+      sortingMode = parentNode.treeNodeProps?.metaData?.dataObject?.childrenSortBy ?? 'keyed'
     }
 
     if (props.metaData?.dataObject === undefined) {
@@ -103,7 +103,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         position: { x: '0', y: '0%', width: '100%', height: '100%' },
         onDrop
       }
-    ];
+    ]
 
     if (sortingMode === 'index') {
       hotspots = [
@@ -113,7 +113,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
           isValidContext: checkForValidContext,
           isValidData: checkForValidData,
           position: { x: 0, y: 0, width: '100%', height: '30%' },
-          onDrop: (info) => onSortingDrop({info, position: 'top'})
+          onDrop: (info) => { onSortingDrop({ info, position: 'top' }) }
         },
         {
           id: 'drop-middle',
@@ -128,7 +128,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
           isValidContext: checkForValidContext,
           isValidData: checkForValidData,
           position: { x: 0, y: '70%', width: '100%', height: '30%' },
-          onDrop: (info) => onSortingDrop({info, position: 'bottom'})
+          onDrop: (info) => { onSortingDrop({ info, position: 'bottom' }) }
         }
       ]
     }

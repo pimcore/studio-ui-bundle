@@ -10,13 +10,19 @@
 
 import React, { type ReactNode, useMemo, useState, useRef, useCallback, useEffect } from 'react'
 import cn from 'classnames'
-import { useStyle } from '../droppable/base-droppable.styles'
 import { type DragAndDropInfo } from '../droppable'
-import { type HotspotArea, type HotspotPosition } from '../hotspot-droppable'
-import { isNull, isString, isNil } from 'lodash'
+import { type HotspotArea } from '../hotspot-droppable'
+import { isNull, isNil } from 'lodash'
 import { DroppableContextProvider } from '../droppable-context-provider'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { type DragInfoChangeEvent } from '../draggable'
+import {
+  type DragState,
+  type HotspotState,
+  getHotspotStyles,
+  createHotspotHandlers
+} from './hotspot-helpers'
+import { useHotspotAggregateState } from './use-hotspot-aggregate-state'
 
 export interface BaseHotspotDroppableProps {
   children: ReactNode
@@ -25,34 +31,8 @@ export interface BaseHotspotDroppableProps {
   disableDndActiveIndicator?: boolean
 }
 
-type DragState = 'inactive' | 'active' | 'valid' | 'error'
-
-interface HotspotState {
-  dragState: DragState
-  isContextValid: boolean
-  isDataValid: boolean
-}
-
-const formatPositionValue = (value: number | string): string => {
-  if (isString(value)) {
-    return value
-  }
-  // If it's a number between 0-100, treat as percentage, otherwise as pixels
-  return value <= 100 ? `${value}%` : `${value}px`
-}
-
-const getHotspotStyles = (position: HotspotPosition): React.CSSProperties => {
-  return {
-    position: 'absolute',
-    left: formatPositionValue(position.x),
-    top: formatPositionValue(position.y),
-    width: position.width ? formatPositionValue(position.width) : '20px',
-    height: position.height ? formatPositionValue(position.height) : '20px'
-  }
-}
-
 export const BaseHotspotDroppable = ({ children, className, hotspots, disableDndActiveIndicator = false }: BaseHotspotDroppableProps): React.JSX.Element | null => {
-  const [hotspotStates, setHotspotStates] = useState<Record<string, HotspotState>>(() => 
+  const [hotspotStates, setHotspotStates] = useState<Record<string, HotspotState>>(() =>
     hotspots.reduce((acc, hotspot) => ({
       ...acc,
       [hotspot.id]: {
@@ -93,7 +73,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
   useEffect(() => {
     const hasAnyValidDrop = Object.values(hotspotStates).some(state => state.dragState === 'valid')
     const hasAnyValidOver = Object.values(hotspotStates).some(state => state.dragState === 'valid')
-    
+
     setHasValidDrop(hasAnyValidDrop)
     setIsValidDragOver(hasAnyValidOver)
     document.body.classList.toggle('dnd--has-valid-drop', hasAnyValidDrop)
@@ -103,7 +83,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
     if (isNull(info)) {
       setIsDragHappening(false)
       setIsValidDragOver(false)
-      setHotspotStates(prev => 
+      setHotspotStates(prev =>
         Object.keys(prev).reduce((acc, hotspotId) => ({
           ...acc,
           [hotspotId]: {
@@ -121,10 +101,10 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
     }
 
     setIsDragHappening(true)
-    
+
     setHotspotStates(prev => {
       const newStates = { ...prev }
-      
+
       hotspots.forEach(hotspot => {
         const isContextValid = typeof hotspot.isValidContext === 'function'
           ? hotspot.isValidContext(info)
@@ -161,46 +141,13 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
     }
   }, [isVisible, isInIframe])
 
-  const createHotspotHandlers = useCallback((hotspot: HotspotArea) => {
-    const handleDragOver = (e: React.DragEvent) => {
-      e.preventDefault()
-
-      if (isNull(dragInfoRef.current) || !hotspotStates[hotspot.id]?.isContextValid) {
-        updateHotspotDragState(hotspot.id, 'inactive')
-        return
-      }
-
-      e.stopPropagation()
-      const isValid = isInfoValidForHotspot(hotspot.id)
-      updateHotspotDragState(hotspot.id, isValid ? 'valid' : 'error')
-    }
-
-    const handleDragLeave = (e: React.DragEvent) => {
-      e.preventDefault()
-
-      if (hotspotStates[hotspot.id]?.isContextValid) {
-        updateHotspotDragState(hotspot.id, !isNull(dragInfoRef.current) ? 'active' : 'inactive')
-      }
-    }
-
-    const handleDrop = (e: React.DragEvent): void => {
-      e.preventDefault()
-      updateHotspotDragState(hotspot.id, 'inactive')
-      if (isInfoValidForHotspot(hotspot.id)) {
-        hotspot.onDrop(dragInfoRef.current!)
-      }
-    }
-
-    return { handleDragOver, handleDragLeave, handleDrop }
-  }, [hotspotStates, updateHotspotDragState, isInfoValidForHotspot])
-
   // Create a memoized array of handlers for all hotspots
   const hotspotHandlers = useMemo(() => {
     return hotspots.map(hotspot => ({
       hotspot,
-      handlers: createHotspotHandlers(hotspot)
+      handlers: createHotspotHandlers(hotspot, hotspotStates, updateHotspotDragState, isInfoValidForHotspot, dragInfoRef)
     }))
-  }, [hotspots, createHotspotHandlers])
+  }, [hotspots, hotspotStates, updateHotspotDragState, isInfoValidForHotspot])
 
   // Set up drop class handlers for each hotspot - but we need to do this differently
   // to avoid calling hooks in a loop. Instead, we'll handle all drop classes in a single effect.
@@ -217,21 +164,21 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
       }
 
       const elements = Array.from(document.querySelectorAll(`.${hotspot.dropClass}`))
-      
+
       const mockEvent: React.DragEvent = { preventDefault: () => {}, stopPropagation: () => {} } as any as React.DragEvent
 
-      const handleDragOver = (e: DragEvent) => {
+      const handleDragOver = (e: DragEvent): void => {
         e.preventDefault()
         e.stopPropagation()
         handlers.handleDragOver(mockEvent)
       }
 
-      const handleDragLeave = (e: DragEvent) => {
+      const handleDragLeave = (e: DragEvent): void => {
         e.preventDefault()
         handlers.handleDragLeave(mockEvent)
       }
 
-      const handleDrop = (e: DragEvent) => {
+      const handleDrop = (e: DragEvent): void => {
         e.preventDefault()
         handlers.handleDrop(mockEvent)
       }
@@ -252,82 +199,54 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
     })
 
     return () => {
-      cleanupFunctions.forEach(cleanup => cleanup())
+      cleanupFunctions.forEach(cleanup => { cleanup() })
     }
   }, [hotspotHandlers, isVisible])
 
-  // Calculate aggregate state for main wrapper CSS classes
-  const aggregateState = useMemo(() => {
-    if (!isDragHappening) return 'inactive'
-    
-    const states = Object.values(hotspotStates)
-    const hasValidHotspot = states.some(state => state.dragState === 'valid')
-    const hasActiveHotspot = states.some(state => state.dragState === 'active')
-    const hasErrorHotspot = states.some(state => state.dragState === 'error')
-    
-    // Priority: valid > error > active > inactive
-    if (hasValidHotspot) return 'valid'
-    if (hasErrorHotspot) return 'error'
-    if (hasActiveHotspot) return 'active'
-    return 'inactive'
-  }, [isDragHappening, hotspotStates])
-
-  // Generate CSS classes for individual hotspot states
-  const hotspotSpecificClasses = useMemo(() => {
-    const classes: string[] = []
-    
-    Object.entries(hotspotStates).forEach(([hotspotId, state]) => {
-      if (state.dragState !== 'inactive') {
-        // Add CSS class for specific hotspot state: e.g., 'dnd--hotspot-zone1-active'
-        classes.push(`dnd--hotspot-${hotspotId}-${state.dragState}`)
-      }
-    })
-    
-    return classes
-  }, [hotspotStates])
+  const { aggregateState, hotspotSpecificClasses } = useHotspotAggregateState(isDragHappening, hotspotStates)
 
   return useMemo(() => (
     <div
       className={ cn(className,
         'hotspot-droppable', {
-        'hotspot-droppable--valid-over': isValidDragOver,
-        'dnd--drag-active': aggregateState === 'active',
-        'dnd--drag-valid': aggregateState === 'valid',
-        'dnd--drag-error': aggregateState === 'error'
-      }, hotspotSpecificClasses) }
+          'hotspot-droppable--valid-over': isValidDragOver,
+          'dnd--drag-active': aggregateState === 'active',
+          'dnd--drag-valid': aggregateState === 'valid',
+          'dnd--drag-error': aggregateState === 'error'
+        }, hotspotSpecificClasses) }
       ref={ wrapperRef }
       role="none"
       style={ { position: 'relative' } }
     >
-      <DroppableContextProvider value={ { 
+      <DroppableContextProvider value={ {
         isDragActive: isDragHappening,
         isOver: isValidDragOver,
         isValid: isValidDragOver,
         hasValidDrop
-      } }>
+      } }
+      >
         {children}
       </DroppableContextProvider>
       {hotspotHandlers.map(({ hotspot, handlers }) => {
         const hotspotState = hotspotStates[hotspot.id]
-        const isDragInactive = hotspotState?.dragState === 'inactive'
-        
+
         return (
           <div
-            key={hotspot.id}
             className={ cn(
-              hotspot.className,
+              hotspot.className
             ) }
+            key={ hotspot.id }
+            onDragLeave={ isVisible ? handlers.handleDragLeave : undefined }
+            onDragOver={ isVisible ? handlers.handleDragOver : undefined }
+            onDrop={ isVisible ? handlers.handleDrop : undefined }
+            ref={ (el) => { hotspotRefs.current[hotspot.id] = el } }
+            role="none"
             style={ {
               ...getHotspotStyles(hotspot.position),
               // Hide hotspot completely when no drag is happening to allow children to be clickable
               // Only show during drag operations
               display: isDragHappening ? 'block' : 'none'
             } }
-            onDragLeave={ isVisible ? handlers.handleDragLeave : undefined }
-            onDragOver={ isVisible ? handlers.handleDragOver : undefined }
-            onDrop={ isVisible ? handlers.handleDrop : undefined }
-            ref={ (el) => { hotspotRefs.current[hotspot.id] = el } }
-            role="none"
           >
             <div
               className={ cn({
@@ -335,19 +254,20 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
                 'dnd--drag-valid': hotspotState?.dragState === 'valid',
                 'dnd--drag-error': hotspotState?.dragState === 'error'
               }) }
-              style={{ 
-                width: '100%', 
+              style={ {
+                width: '100%',
                 height: '100%'
-              }}
+              } }
             >
-            <DroppableContextProvider value={ { 
-              isDragActive: hotspotState?.dragState !== 'inactive',
-              isOver: hotspotState?.dragState !== 'inactive' && hotspotState?.dragState !== 'active',
-              isValid: hotspotState?.dragState === 'valid',
-              hasValidDrop
-            } }>
-              {hotspot.children}
-            </DroppableContextProvider>
+              <DroppableContextProvider value={ {
+                isDragActive: hotspotState?.dragState !== 'inactive',
+                isOver: hotspotState?.dragState !== 'inactive' && hotspotState?.dragState !== 'active',
+                isValid: hotspotState?.dragState === 'valid',
+                hasValidDrop
+              } }
+              >
+                {hotspot.children}
+              </DroppableContextProvider>
             </div>
           </div>
         )

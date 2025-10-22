@@ -236,9 +236,9 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         }
       tabIndex={ -1 }
     >
-      <Flex 
-        className='tree-node__content-wrapper-outer w-full'
+      <Flex
         align="center"
+        className='tree-node__content-wrapper-outer w-full'
         gap="small"
         justify="center"
       >

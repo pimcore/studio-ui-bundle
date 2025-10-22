@@ -198,7 +198,7 @@ moduleSystem.registerModule({
       name: 'refreshTree',
       priority: config.priority.refreshTree,
       useMenuItem: (context: DataObjectTreeContextMenuProps) => {
-        const { sortingContextMenuItem } = useSorting('data-object');
+        const { sortingContextMenuItem } = useSorting('data-object')
         return sortingContextMenuItem(context.target)
       }
     })

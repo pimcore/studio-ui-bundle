@@ -25,15 +25,15 @@ export const useDroppable = (): DroppableHookReturn => {
       cssClasses.push('dnd--drag-active')
     }
 
-    if (isOver && isValid) {
+    if ((isOver) && (isValid)) {
       cssClasses.push('dnd--drag-valid')
     }
 
-    if (isOver && !isValid) {
+    if ((isOver) && (!isValid)) {
       cssClasses.push('dnd--drag-error')
     }
 
-    if (hasValidDrop) {
+    if (hasValidDrop === true) {
       cssClasses.push('dnd--has-valid-drop')
     }
 
