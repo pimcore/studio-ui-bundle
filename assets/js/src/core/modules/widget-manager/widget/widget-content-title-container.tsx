@@ -32,7 +32,6 @@ export const WidgetContentTitleContainer = ({
   icon,
   title
 }: WidgetContentTitleProps): React.JSX.Element => {
-
   return (
     <>
       {ContentTitleComponent !== undefined
