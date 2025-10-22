@@ -12,8 +12,8 @@
  * Enum for field filter types used in dynamic type field filters.
  * These types determine how the filtering logic is applied on the backend.
  */
-export enum FieldFilterFrontendType {
 
+export enum FieldFilterFrontendType {
   String = 'system.string',
   Fulltext = 'system.fulltext',
   Boolean = 'system.boolean',

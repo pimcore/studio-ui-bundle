@@ -9,9 +9,9 @@
  */
 
 import React, { type ReactElement } from 'react'
+import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
-import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()

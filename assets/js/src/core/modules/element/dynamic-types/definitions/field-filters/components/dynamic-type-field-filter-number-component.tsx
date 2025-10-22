@@ -16,23 +16,23 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 
-enum NumberFilterSettingValue {
+export enum NumberFilterSettingValue {
   IS = 'is',
   BETWEEN = 'between',
   LESS = 'less',
   MORE = 'more'
 }
 
+export interface NumberValue {
+  setting: NumberFilterSettingValue
+  from: number | null
+  to: number | null
+  is: number | null
+}
+
 export interface DynamicTypeFieldFilterNumberProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFilterNumberProps): React.JSX.Element => {
-  interface NumberValue {
-    setting: NumberFilterSettingValue
-    from: number | null
-    to: number | null
-    is: number | null
-  }
-
   const { data: rawData, setData } = useDynamicFilter()
 
   const data: NumberValue = rawData ?? {
