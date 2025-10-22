@@ -193,7 +193,7 @@ moduleSystem.registerModule({
       }
     })
 
-    // Refresh Tree
+    // Sorting
     contextMenuRegistry.registerToSlot(config.name, {
       name: 'refreshTree',
       priority: config.priority.refreshTree,
