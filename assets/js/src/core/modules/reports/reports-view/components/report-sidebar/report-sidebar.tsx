@@ -8,16 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ColumnsConfiguration } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
 import { ColumnsFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filters'
 import { ColumnsFiltersProvider } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const ReportSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const { reportDetailData } = useReportDataContext()
+
+  const filterableColumnConfigurations = useMemo(() => {
+    return reportDetailData?.columnConfigurations?.filter(item => !isEmptyValue(item.filterType))
+  }, [reportDetailData])
 
   const sidebarProps = {
     entries: [
@@ -26,18 +35,21 @@ export const ReportSidebar = (): React.JSX.Element => {
         key: 'reports-columns-configuration',
         icon: <Icon value="columns" />,
         tooltip: t('reports.grid-config.title-columns')
-      },
-      {
-        component: (
-          <ColumnsFiltersProvider>
-            <ColumnsFilters />
-          </ColumnsFiltersProvider>
-        ),
-        key: 'reports-field-filters',
-        icon: <Icon value="filter" />,
-        tooltip: t('reports.field-filters')
       }
     ]
+  }
+
+  if (!isEmpty(filterableColumnConfigurations)) {
+    sidebarProps.entries.push({
+      component: (
+        <ColumnsFiltersProvider>
+          <ColumnsFilters />
+        </ColumnsFiltersProvider>
+      ),
+      key: 'reports-field-filters',
+      icon: <Icon value="filter" />,
+      tooltip: t('reports.field-filters')
+    })
   }
 
   return (
