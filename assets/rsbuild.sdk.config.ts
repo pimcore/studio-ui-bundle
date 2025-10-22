@@ -134,6 +134,7 @@ export default defineConfig({
       './modules/data-object': './js/src/sdk/modules/data-object/index.ts',
       './modules/document': './js/src/sdk/modules/document/index.ts',
       './modules/element': './js/src/sdk/modules/element/index.ts',
+      './modules/auth': './js/src/sdk/modules/auth/index.ts',
       './modules/icon-library': './js/src/sdk/modules/icon-library/index.ts',
       './modules/reports': './js/src/sdk/modules/reports/index.ts',
       './modules/user': './js/src/sdk/modules/user/index.ts',
