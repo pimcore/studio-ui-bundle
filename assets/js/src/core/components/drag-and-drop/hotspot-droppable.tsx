@@ -35,12 +35,7 @@ export interface HotspotArea {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
-  /** Optional content to render within the hotspot area */
   children?: ReactNode
-  /**
-   * CSS class name to be applied to external DOM elements to make them droppable targets.
-   * When specified, all elements with this class will receive the same drag and drop functionality as this hotspot.
-   */
   dropClass?: string
 }
 
@@ -49,17 +44,7 @@ export interface HotspotDroppableProps {
   children: ReactNode
   hotspots: HotspotArea[]
   disabled?: boolean
-  /**
-   * If true, it does not update the drag state to 'active' when a drag operation starts. The active state is useful
-   * for visually indicating all eligible drop zones before an item is dragged over them. For performance reasons,
-   * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
-   */
   disableDndActiveIndicator?: boolean
-  /**
-   * Distance in pixels to trigger cursor proximity animations
-   * @default 100
-   */
-  proximityThreshold?: number
 }
 
 export const HotspotDroppable = (props: HotspotDroppableProps): React.JSX.Element | null => {

@@ -20,7 +20,7 @@ import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/component
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
-interface onSortingDropProps {
+interface OnSortingDropProps {
   info: DragAndDropInfo
   position?: 'top' | 'bottom'
 }
@@ -33,8 +33,6 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
-
-    console.log({ parentNode })
 
     if (hasParent) {
       sortingMode = parentNode.treeNodeProps?.metaData?.dataObject?.childrenSortBy ?? 'keyed'
@@ -69,7 +67,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       })
     }
 
-    const onSortingDrop = (props: onSortingDropProps): void => {
+    const onSortingDrop = (props: OnSortingDropProps): void => {
       const { info, position = 'top' } = props
       const sourceObject: DataObject = info.data
 
