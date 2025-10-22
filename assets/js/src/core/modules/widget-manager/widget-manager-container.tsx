@@ -14,7 +14,7 @@ import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectOuterModel, updateOuterModel } from './widget-manager-slice'
-import { TabTitleContainer } from './title/tab-title-container'
+import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 
 export const WidgetManagerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectOuterModel)
@@ -39,7 +39,7 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
   }
 
   function onRenderTab (node: TabNode, renderValues: ITabRenderValues): void {
-    renderValues.content = <TabTitleContainer node={ node } />
+    renderValues.content = <TabTitleOuterContainer node={ node } />
     renderValues.leading = <></>
   }
 
