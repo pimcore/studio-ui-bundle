@@ -68,8 +68,12 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
         }
 
         if (isUndefined(groupedOptions[item.group])) {
+          const elementWithGroupIcon = reportsTreeData.items
+            ?.filter(element => element.group === item.group)
+            .find(element => !isEmptyValue(element.groupIconClass))
+
           groupedOptions[item.group] = {
-            label: renderOptionLabel(item.groupIconClass, item.group),
+            label: renderOptionLabel(elementWithGroupIcon?.groupIconClass ?? '', item.group),
             title: item.group,
             options: []
           }

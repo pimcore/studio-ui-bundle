@@ -53,6 +53,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         ...(isCurrentItem && {
           dividerBottom: item.dividerBottom,
           icon: item.icon,
+          groupIcon: item.groupIcon,
           widgetConfig: item.widgetConfig,
           onClick: item.onClick,
           button: item.button,
@@ -65,6 +66,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
     } else if (index === levels.length - 1) {
       Object.assign(existingItem, {
         icon: item.icon,
+        groupIcon: item.groupIcon,
         order: item.order ?? 1000,
         className: item.className
       })

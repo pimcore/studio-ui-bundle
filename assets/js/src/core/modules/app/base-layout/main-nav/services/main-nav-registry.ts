@@ -17,6 +17,7 @@ export interface IMainNavItem {
   order?: number
   id?: string
   icon?: string
+  groupIcon?: string
   label?: string
   group?: string
   dividerBottom?: boolean
