@@ -619,6 +619,10 @@ element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
+element.tree.sorting: Sort Children By
+element.tree.sorting.keyed-ascending: A to Z (Key)
+element.tree.sorting.keyed-descending: Z to A (Key)
+element.tree.sorting.indexed: Index (Manual)
 element.tree.refresh: Refresh
 element.new-folder: New Folder
 element.new-folder.validation: 'Please enter a valid name'

@@ -19,19 +19,23 @@ interface DNDDemoDroppableContentProps {
 
 export const DNDDemoDroppableContent = forwardRef(function DNDDemoDroppableContent (props: DNDDemoDroppableContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { styles } = useStyle()
-  const { isOver, isValid, isDragActive } = useContext(droppableContext)
+  const { isOver, isValid, isDragActive, hasValidDrop } = useContext(droppableContext)
   const classes: string[] = [styles.content]
 
   if (isDragActive) {
     classes.push('dnd--drag-active')
   }
 
-  if (isOver && isValid) {
+  if ((isOver) && (isValid)) {
     classes.push('dnd--drag-valid')
   }
 
-  if (isOver && !isValid) {
+  if ((isOver) && (!isValid)) {
     classes.push('dnd--drag-error')
+  }
+
+  if (hasValidDrop === true) {
+    classes.push('dnd--has-valid-drop')
   }
 
   return (
@@ -41,6 +45,7 @@ export const DNDDemoDroppableContent = forwardRef(function DNDDemoDroppableConte
     >
       <h4>{props.title}</h4>
       <p>Value: {props.value}</p>
+      {(hasValidDrop === true) && <p>✓ Valid drop available</p>}
     </div>
   )
 })

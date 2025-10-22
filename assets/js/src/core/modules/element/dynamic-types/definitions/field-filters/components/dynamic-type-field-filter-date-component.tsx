@@ -18,7 +18,7 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 
-enum DatePickerSettingValue {
+export enum DatePickerSettingValue {
   ON = 'on',
   BETWEEN = 'between',
   BEFORE = 'before',
@@ -27,16 +27,16 @@ enum DatePickerSettingValue {
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 
+export interface DateValue {
+  setting: DatePickerSettingValue
+  from: string | null
+  to: string | null
+  on: string | null
+}
+
 export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
-  interface DateValue {
-    setting: DatePickerSettingValue
-    from: string | null
-    to: string | null
-    on: string | null
-  }
-
   const { data: rawData, setData } = useDynamicFilter()
 
   const data: DateValue = rawData ?? {
