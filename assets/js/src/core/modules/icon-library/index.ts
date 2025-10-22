@@ -155,6 +155,7 @@ import manualOrder from '@Pimcore/assets/icons/manual-order.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg?react'
+import menuShortcut from '@Pimcore/assets/icons/menu-shortcut.inline.svg?react'
 import menu from '@Pimcore/assets/icons/menu.inline.svg?react'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg?react'
 import minus from '@Pimcore/assets/icons/minus.inline.svg?react'
@@ -215,6 +216,7 @@ import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?rea
 import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
+import shareWithUsers from '@Pimcore/assets/icons/share-with-users.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
@@ -821,6 +823,10 @@ moduleSystem.registerModule({
       component: marketing
     })
     iconLibrary.register({
+      name: 'menu-shortcut',
+      component: menuShortcut
+    })
+    iconLibrary.register({
       name: 'menu',
       component: menu
     })
@@ -1059,6 +1065,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'settings',
       component: settings
+    })
+    iconLibrary.register({
+      name: 'share-with-users',
+      component: shareWithUsers
     })
     iconLibrary.register({
       name: 'share',
