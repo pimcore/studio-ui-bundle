@@ -46,9 +46,12 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
   })), [adapters])
 
   const handleSourceDefinitionTypeUpdate = (type: string): void => {
-    setCurrentSourceDefinition(type)
-
+    form.resetFields(['dataSourceConfig'])
     form.setFieldsValue({ dataSourceConfig: { type } })
+
+    updateFormData?.({ ...currentData, dataSourceConfig: { type } })
+
+    setCurrentSourceDefinition(type)
   }
 
   const renderAddButton = (): React.JSX.Element => {
@@ -93,6 +96,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
           >
             <Select
               fieldNames={ { label: 'label', value: 'key' } }
+              onChange={ (value: string) => { handleSourceDefinitionTypeUpdate(value) } }
               options={ sourceDefinitionOptions }
             />
           </Form.Item>

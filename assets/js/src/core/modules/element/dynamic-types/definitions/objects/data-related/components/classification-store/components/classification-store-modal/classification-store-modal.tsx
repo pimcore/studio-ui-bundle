@@ -20,15 +20,26 @@ import { CollectionTab } from './tabs/collection/collection-tab'
 import { GroupTab } from './tabs/group/group-tab'
 import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import { TabId } from '../../types'
 
-interface ClassificationStoreModalProps extends ClassificationStoreProps {
+export interface ClassificationStoreModalProps extends ClassificationStoreProps {
   objectId?: number
   classId: string
   fieldName: string
+  allowedTabs?: TabId[]
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
-  const { storeId, classId, fieldName } = props
+  const {
+    storeId,
+    classId,
+    fieldName,
+    allowedTabs = [
+      TabId.Collection,
+      TabId.Group,
+      TabId.GroupByKey
+    ]
+  } = props
 
   const { isOpenModal: isOpen, closeModal } = useClassificationStore()
   const { t } = useTranslation()
@@ -57,21 +68,29 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
   }
 
   const tabItems: ITabsProps['items'] = [
-    {
-      label: renderTabLabel({ iconValue: 'keyboard', titleKeyValue: 'collection' }),
-      key: 'collection',
-      children: <CollectionTab { ...tabProps } />
-    },
-    {
-      label: renderTabLabel({ iconValue: 'keys', titleKeyValue: 'group' }),
-      key: 'group',
-      children: <GroupTab { ...tabProps } />
-    },
-    {
-      label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
-      key: 'group-by-key',
-      children: <GroupByKeyTab { ...tabProps } />
-    }
+    ...allowedTabs.includes(TabId.Collection)
+      ? [{
+          label: renderTabLabel({ iconValue: 'keyboard', titleKeyValue: 'collection' }),
+          key: 'collection',
+          children: <CollectionTab { ...tabProps } />
+        }]
+      : [],
+
+    ...allowedTabs.includes(TabId.Group)
+      ? [{
+          label: renderTabLabel({ iconValue: 'keys', titleKeyValue: 'group' }),
+          key: 'group',
+          children: <GroupTab { ...tabProps } />
+        }]
+      : [],
+
+    ...allowedTabs.includes(TabId.GroupByKey)
+      ? [{
+          label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
+          key: 'group-by-key',
+          children: <GroupByKeyTab { ...tabProps } />
+        }]
+      : []
   ]
 
   return (

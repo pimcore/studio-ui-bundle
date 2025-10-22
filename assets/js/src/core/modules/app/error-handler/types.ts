@@ -11,3 +11,10 @@
 export interface IErrorGetContent {
   data: string | { errorKey: string, title?: string }
 }
+
+export interface IApiErrorDetails {
+  detail?: string
+  errorKey?: string
+  message?: string
+  error?: string
+}

@@ -126,6 +126,7 @@ const HotspotDroppableDemo = (): React.JSX.Element => {
       </div>
 
       <HotspotDroppable
+        proximityThreshold={120}
         hotspots={[
           {
             id: 'hotspot1',

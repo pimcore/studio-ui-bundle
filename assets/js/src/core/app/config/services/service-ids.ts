@@ -112,6 +112,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
   'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
+  'DynamicTypes/FieldFilter/ClassificationStore': 'DynamicTypes/FieldFilter/ClassificationStore',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -119,6 +120,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/Select': 'DynamicTypes/BatchEdit/Select',
   'DynamicTypes/BatchEdit/Checkbox': 'DynamicTypes/BatchEdit/Checkbox',
   'DynamicTypes/BatchEdit/ElementDropzone': 'DynamicTypes/BatchEdit/ElementDropzone',
+  'DynamicTypes/BatchEdit/ClassificationStore': 'DynamicTypes/BatchEdit/ClassificationStore',
   'DynamicTypes/BatchEdit/DataObjectAdapter': 'DynamicTypes/BatchEdit/DataObjectAdapter',
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
@@ -159,6 +161,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
   'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
   'DynamicTypes/GridCell/DataObjectAdapter': 'DynamicTypes/GridCell/DataObjectAdapter',
+  'DynamicTypes/GridCell/ClassificationStore': 'DynamicTypes/GridCell/ClassificationStore',
   'DynamicTypes/GridCell/DataObjectAdvanced': 'DynamicTypes/GridCell/DataObjectAdvanced',
   'DynamicTypes/GridCell/DataObjectObjectBrick': 'DynamicTypes/GridCell/DataObjectObjectBrick',
 

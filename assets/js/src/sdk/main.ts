@@ -32,3 +32,5 @@ declare module 'antd-style' {
 
 export const Pimcore = window.Pimcore
 export const container = window.Pimcore.container
+
+export * from '@Pimcore/lib/event-bus'

@@ -15,7 +15,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { type ElementGetIdByPathApiResponse } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type IApiErrorDetails } from '@Pimcore/modules/app/error-handler/types'
 
 interface OpenAssetHelperReturn {
   openElementByPathOrId: (value: string | number | undefined, elementType: ElementType) => Promise<void>

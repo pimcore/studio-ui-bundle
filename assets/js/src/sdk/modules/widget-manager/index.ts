@@ -15,3 +15,4 @@ if (module.hot !== undefined) {
 export * from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 export * from '@Pimcore/modules/widget-manager/services/widget-registry'
 export type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+export * from '@Pimcore/modules/widget-manager/events'

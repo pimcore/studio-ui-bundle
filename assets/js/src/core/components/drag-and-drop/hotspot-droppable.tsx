@@ -55,6 +55,11 @@ export interface HotspotDroppableProps {
    * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
    */
   disableDndActiveIndicator?: boolean
+  /**
+   * Distance in pixels to trigger cursor proximity animations
+   * @default 100
+   */
+  proximityThreshold?: number
 }
 
 export const HotspotDroppable = (props: HotspotDroppableProps): React.JSX.Element | null => {

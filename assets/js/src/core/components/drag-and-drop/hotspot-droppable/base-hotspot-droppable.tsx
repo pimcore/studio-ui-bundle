@@ -52,7 +52,6 @@ const getHotspotStyles = (position: HotspotPosition): React.CSSProperties => {
 }
 
 export const BaseHotspotDroppable = ({ children, className, hotspots, disableDndActiveIndicator = false }: BaseHotspotDroppableProps): React.JSX.Element | null => {
-  const { styles } = useStyle()
   const [hotspotStates, setHotspotStates] = useState<Record<string, HotspotState>>(() => 
     hotspots.reduce((acc, hotspot) => ({
       ...acc,
@@ -257,12 +256,45 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
     }
   }, [hotspotHandlers, isVisible])
 
+  // Calculate aggregate state for main wrapper CSS classes
+  const aggregateState = useMemo(() => {
+    if (!isDragHappening) return 'inactive'
+    
+    const states = Object.values(hotspotStates)
+    const hasValidHotspot = states.some(state => state.dragState === 'valid')
+    const hasActiveHotspot = states.some(state => state.dragState === 'active')
+    const hasErrorHotspot = states.some(state => state.dragState === 'error')
+    
+    // Priority: valid > error > active > inactive
+    if (hasValidHotspot) return 'valid'
+    if (hasErrorHotspot) return 'error'
+    if (hasActiveHotspot) return 'active'
+    return 'inactive'
+  }, [isDragHappening, hotspotStates])
+
+  // Generate CSS classes for individual hotspot states
+  const hotspotSpecificClasses = useMemo(() => {
+    const classes: string[] = []
+    
+    Object.entries(hotspotStates).forEach(([hotspotId, state]) => {
+      if (state.dragState !== 'inactive') {
+        // Add CSS class for specific hotspot state: e.g., 'dnd--hotspot-zone1-active'
+        classes.push(`dnd--hotspot-${hotspotId}-${state.dragState}`)
+      }
+    })
+    
+    return classes
+  }, [hotspotStates])
+
   return useMemo(() => (
     <div
       className={ cn(className,
         'hotspot-droppable', {
-        'dnd--container-valid-over': isValidDragOver
-      }) }
+        'hotspot-droppable--valid-over': isValidDragOver,
+        'dnd--drag-active': aggregateState === 'active',
+        'dnd--drag-valid': aggregateState === 'valid',
+        'dnd--drag-error': aggregateState === 'error'
+      }, hotspotSpecificClasses) }
       ref={ wrapperRef }
       role="none"
       style={ { position: 'relative' } }
@@ -284,8 +316,6 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
             key={hotspot.id}
             className={ cn(
               hotspot.className,
-              styles[hotspot.variant ?? 'default'],
-              hotspot.shape !== 'angular' ? styles.round : undefined
             ) }
             style={ {
               ...getHotspotStyles(hotspot.position),
@@ -323,5 +353,5 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
         )
       })}
     </div>
-  ), [hotspotStates, children, className, hotspotHandlers, isVisible, styles, isDragHappening, isValidDragOver])
+  ), [hotspotStates, children, className, hotspotHandlers, isVisible, isDragHappening, isValidDragOver, aggregateState, hotspotSpecificClasses])
 }

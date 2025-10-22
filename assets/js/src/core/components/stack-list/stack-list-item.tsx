@@ -25,6 +25,7 @@ export type StackListItemType = (typeof StackListItemTypes)[keyof typeof StackLi
 
 export interface StackListItemProps {
   id: UniqueIdentifier
+  key?: string
   type?: StackListItemType
   sortable?: boolean
   renderLeftToolbar?: React.ReactNode

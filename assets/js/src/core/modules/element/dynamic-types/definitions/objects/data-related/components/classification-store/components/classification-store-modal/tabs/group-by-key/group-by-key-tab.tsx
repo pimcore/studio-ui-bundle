@@ -18,6 +18,8 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ClassificationStoreDataTab } from '../../components/classification-store-data-tab/classification-store-data-tab'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { ClassificationStoreCallbackTab } from '../../components/classification-store-data-tab/classification-store-callback-tab'
+import { useClassificationStoreModalOptional } from '../../../../provider/classifcation-store-modal-provider'
 
 interface GroupByKeyTabProps {
   storeId: ClassificationStoreGetKeyGroupRelationsApiArg['storeId']
@@ -28,6 +30,7 @@ interface GroupByKeyTabProps {
 
 export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<ClassificationStoreKeyGroupRelation>()
+  const hasModalContext = useClassificationStoreModalOptional({}) !== undefined
   const { t } = useTranslation()
 
   const columns = [
@@ -44,16 +47,33 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
   ]
 
   return (
-    <ClassificationStoreDataTab
-      columns={ columns }
-      queryArgs={ {
-        storeId: props.storeId,
-        classId: props.classId,
-        objectId: props.objectId,
-        fieldName: props.fieldName
-      } }
-      queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
-      tabId={ TabId.GroupByKey }
-    />
+    <>
+      {hasModalContext && (
+        <ClassificationStoreCallbackTab
+          columns={ columns }
+          queryArgs={ {
+            storeId: props.storeId,
+            classId: props.classId,
+            fieldName: props.fieldName
+          } }
+          queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
+          tabId={ TabId.GroupByKey }
+        />
+      )}
+
+      {!hasModalContext && (
+        <ClassificationStoreDataTab
+          columns={ columns }
+          queryArgs={ {
+            storeId: props.storeId,
+            classId: props.classId,
+            objectId: props.objectId,
+            fieldName: props.fieldName
+          } }
+          queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
+          tabId={ TabId.GroupByKey }
+        />
+      )}
+    </>
   )
 }

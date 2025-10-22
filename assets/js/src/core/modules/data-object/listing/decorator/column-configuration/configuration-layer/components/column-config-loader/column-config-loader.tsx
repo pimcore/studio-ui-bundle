@@ -45,24 +45,22 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
 
     for (const column of initialConfigurationData.columns) {
-      if (column.key === 'filename') {
-        continue
-      }
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
       const currentColumn = column as AvailableColumn
-      const apiColumn = {
-        ...availableColumn,
-        __meta: {
-          advancedColumnConfig: currentColumn.config ?? {}
-        }
-      }
-
       if (availableColumn !== undefined) {
+        const apiColumn = {
+          ...availableColumn,
+          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
+          __meta: {
+            advancedColumnConfig: currentColumn.config ?? {}
+          }
+        }
+
         selectedColumns.push({
           key: column.key,
           locale: column.locale,
           type: availableColumn.type,
-          config: availableColumn.config,
+          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
           sortable: availableColumn.sortable,
           editable: availableColumn.editable,
           localizable: availableColumn.localizable,

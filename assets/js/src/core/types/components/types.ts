@@ -56,6 +56,7 @@ export interface GridProps {
   onSortingChange?: (sorting: SortingState) => void
   setRowId?: (originalRow: any, index: number, parent: any) => string
   autoWidth?: boolean
+  allowMultipleAutoWidthColumns?: boolean
   hideColumnHeaders?: boolean
   highlightActiveCell?: boolean
   onActiveCellChange?: (activeCell?: GridCellReference) => void

@@ -21,5 +21,7 @@ export const {
   useClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useClassificationStoreGetLayoutByGroupQuery,
-  useLazyClassificationStoreGetLayoutByGroupQuery
+  useLazyClassificationStoreGetLayoutByGroupQuery,
+  useClassificationStoreGetLayoutByKeyQuery,
+  useLazyClassificationStoreGetLayoutByKeyQuery
 } = api

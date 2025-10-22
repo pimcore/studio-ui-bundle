@@ -31,7 +31,7 @@ export interface TreeContainerProps {
   showRoot?: boolean
 }
 
-export const DataObjectTreeNode = withDroppableStyling(withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))
+export const DataObjectTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()

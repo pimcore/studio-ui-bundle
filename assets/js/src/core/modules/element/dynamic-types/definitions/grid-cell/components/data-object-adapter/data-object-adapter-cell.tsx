@@ -22,6 +22,7 @@ import { ColumnMetaCell } from './types/column-meta-cell'
 import { InheritanceLayer } from './inheritance-layer'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useEditMode } from '@Pimcore/components/grid/grid'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
 
@@ -31,6 +32,7 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const config = props.column.columnDef.meta?.config?.dataObjectConfig
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { isInEditMode } = useEditMode(props)
+  const currentLanguage = useLanguageSelection().currentLanguage
 
   if (config !== undefined && !isObject(config)) {
     throw new Error('Invalid data object config')
@@ -52,6 +54,20 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const apiColumns = props?.row?.original?.['__api-data']
 
   const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
+    if (column?.type === 'dataobject.classificationstore') {
+      const apiColumnKey = column.key!.split('.')[0]
+
+      if (column?.localizable) {
+        return column.key === apiColumnKey && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+      }
+
+      return column.key === apiColumnKey && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+    }
+
+    if (column?.localizable === true) {
+      return apiColumn.key === column?.key && (column.locale ?? currentLanguage) === apiColumn.locale
+    }
+
     return apiColumn.key === column?.key
   })
 

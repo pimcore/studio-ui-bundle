@@ -27,6 +27,60 @@ export const useStyle = createStyles(({ token, css }) => {
         background: ${token.colorErrorBg};
         border: 1px dashed ${token.colorErrorActive};
       }
+
+      & .dnd--cursor-near {
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+      }
+
+      & .dnd--cursor-near.dnd--drag-active {
+        background: ${token.colorBgContainer};
+        border-color: ${token.colorPrimary};
+        animation: pulse-active 1.5s ease-in-out infinite;
+      }
+
+      & .dnd--cursor-near.dnd--drag-valid {
+        border-color: ${token.colorSuccess};
+        animation: pulse-valid 1.5s ease-in-out infinite;
+      }
+
+      & .dnd--cursor-near.dnd--drag-error {
+        border-color: ${token.colorError};
+        animation: pulse-error 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse-active {
+        0%, 100% { 
+          opacity: 1; 
+        }
+        50% { 
+          opacity: 0.7; 
+        }
+      }
+
+      @keyframes pulse-valid {
+        0%, 100% { 
+          opacity: 1;
+          border-color: ${token.colorSuccess};
+        }
+        50% { 
+          opacity: 0.8;
+          border-color: ${token.colorSuccessActive};
+        }
+      }
+
+      @keyframes pulse-error {
+        0%, 100% { 
+          opacity: 1;
+          border-color: ${token.colorError};
+        }
+        50% { 
+          opacity: 0.8;
+          border-color: ${token.colorErrorActive};
+        }
+      }
     `,
     outline: css`
       & .dnd--drag-valid {
