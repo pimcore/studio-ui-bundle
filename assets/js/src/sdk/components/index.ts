@@ -153,10 +153,6 @@ export * from '@Pimcore/components/toolstrip/box/tool-strip-box'
 export * from '@Pimcore/components/tree-element/tree-element'
 export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
-export * from '@Pimcore/modules/auth/hooks/use-user'
-
-// @todo check if this component should really be branded to workflows or if we can find a mor re-usable name
-export * from '@Pimcore/modules/element/editor/shared-components/workflow/card/workflow-card'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
 // export * from '@Pimcore/components/upload/upload-modal/upload-modal'
