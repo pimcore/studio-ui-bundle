@@ -78,7 +78,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       moveByIndex({
         currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
         targetElement: { id: targetObject.id, parentId: targetObject.parentId },
-        newIndex: position === 'top' ? targetObject.index - 1 : targetObject.index
+        newIndex: position === 'top' ? targetObject.index : targetObject.index + 1
       }).catch(() => {
         trackError(new GeneralError('Item could not be moved'))
       })
