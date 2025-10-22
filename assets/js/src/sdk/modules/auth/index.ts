@@ -13,4 +13,3 @@ if (module.hot !== undefined) {
 }
 
 export * from '@Pimcore/modules/auth/hooks/use-user'
-
