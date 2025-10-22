@@ -49,7 +49,7 @@ export const WidgetContentTitleContainer = ({
           <TitleView
             className={ 'widget__title' }
             icon={ icon }
-            title={ t(title) }
+            title={ title }
           />
           )
       }
