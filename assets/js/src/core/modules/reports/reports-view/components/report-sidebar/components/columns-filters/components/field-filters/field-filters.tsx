@@ -92,9 +92,11 @@ export const FieldFilters = (): React.JSX.Element => {
   useEffect(() => {
     if (isEmpty(fullChartDetailData)) return
 
-    const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
+    const filterableColumnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => {
+      return item.display && !isEmptyValue(item.filterType)
+    })
 
-    const newAddColumnMenu = columnConfigurationsList
+    const newAddColumnMenu = filterableColumnConfigurationsList
       ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
       ?.map((column) => ({
         key: column.id as Key,
