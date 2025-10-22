@@ -16,6 +16,9 @@ import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { isNil } from 'lodash'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type WidgetRegistry } from '../services/widget-registry'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
@@ -123,6 +126,7 @@ const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): num
 
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
+  const widgetRegistry = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
   const hasDocumentPermission: boolean = isAllowed(UserPermission.Documents)
   const hasAssetPermission: boolean = isAllowed(UserPermission.Assets)
@@ -147,13 +151,21 @@ const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<st
     }
     usedIds.add(widgetId)
 
+    let config = { ...widget, id: widgetId }
+
+    // Apply transformConfig hook if available
+    const registeredWidget = widgetRegistry.getWidget(widget.widgetType)
+    if (registeredWidget?.transformConfig !== undefined) {
+      config = { ...config, ...registeredWidget.transformConfig(config) }
+    }
+
     result.push({
       id: widgetId,
       type: 'tab',
       name: widget.name,
       component: widget.widgetType,
       enableClose: false,
-      config: { ...widget, id: widgetId }
+      config
     })
   })
 

@@ -21,7 +21,11 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'element_tree',
-      component: TreeWidget
+      component: TreeWidget,
+      transformConfig: (config) => ({
+        ...config,
+        translationKey: config.name
+      })
     })
   }
 })

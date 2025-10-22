@@ -8,29 +8,30 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { Tooltip } from 'antd'
+import { type TabNode } from 'flexlayout-react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { TitleView } from './title/title-view'
 
-interface BorderTitleViewProps {
+export interface WidgetContentTitleViewProps {
+  node: TabNode
   icon: ElementIcon
   title: string
-  dataTestId?: string
 }
 
-export const BorderTitleView = ({ icon, title, dataTestId }: BorderTitleViewProps): React.JSX.Element => {
+/**
+ * Widget content title view component for SDK usage.
+ * Renders a TitleView with the provided title without translation.
+ */
+export const WidgetContentTitleView = ({
+  icon,
+  title
+}: WidgetContentTitleViewProps): React.JSX.Element => {
   return (
-    <Tooltip
-      placement={ 'right' }
+    <TitleView
+      className="widget__title"
+      icon={ icon }
       title={ title }
-    >
-      <div data-testid={ dataTestId }>
-        <Icon
-          options={ { width: 16, height: 16 } }
-          { ...icon }
-        />
-      </div>
-    </Tooltip>
+    />
   )
 }

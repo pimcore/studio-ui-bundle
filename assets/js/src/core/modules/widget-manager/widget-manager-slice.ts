@@ -30,6 +30,7 @@ export interface WidgetManagerState {
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
   config: {
     translationKey?: string
+    label?: string
     icon?: ElementIcon
     [key: string]: any
   }
