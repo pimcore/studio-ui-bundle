@@ -48,7 +48,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   if (props.disabled === true) {
     return (
       <div className={ cn(props.className) }>
-        <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false } }>
+        <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false, hasValidDrop: false } }>
           {props.children}
         </DroppableContextProvider>
       </div>

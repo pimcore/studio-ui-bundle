@@ -236,15 +236,22 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         }
       tabIndex={ -1 }
     >
-      {isRoot !== true && (
-      <TreeExpander
-        node={ treeNodeProps }
-        state={ [isExpanded, setExpanded] }
-      />
-      )}
-      <div className="tree-node__content-wrapper">
-        <RenderNodeContent node={ treeNodeProps } />
-      </div>
+      <Flex
+        align="center"
+        className='tree-node__content-wrapper-outer w-full'
+        gap="small"
+        justify="center"
+      >
+        {isRoot !== true && (
+        <TreeExpander
+          node={ treeNodeProps }
+          state={ [isExpanded, setExpanded] }
+        />
+        )}
+        <div className="tree-node__content-wrapper">
+          <RenderNodeContent node={ treeNodeProps } />
+        </div>
+      </Flex>
     </Flex>
   )
 

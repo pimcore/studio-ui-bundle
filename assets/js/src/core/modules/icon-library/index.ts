@@ -15,6 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
 
+import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -150,6 +151,7 @@ import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
 import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
+import manualOrder from '@Pimcore/assets/icons/manual-order.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg?react'
@@ -253,10 +255,15 @@ import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
 import wysiwygField from '@Pimcore/assets/icons/wysiwyg-field.inline.svg?react'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg?react'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
+import zToAOrder from '@Pimcore/assets/icons/z-to-a-order.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
     const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    iconLibrary.register({
+      name: 'a-to-z-order',
+      component: aToZOrder
+    })
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -798,6 +805,10 @@ moduleSystem.registerModule({
       component: mailAnswer
     })
     iconLibrary.register({
+      name: 'manual-order',
+      component: manualOrder
+    })
+    iconLibrary.register({
       name: 'many-to-many',
       component: manyToMany
     })
@@ -1208,6 +1219,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'z-to-a-order',
+      component: zToAOrder
     })
   }
 })
