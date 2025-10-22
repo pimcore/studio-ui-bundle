@@ -11,7 +11,6 @@
 import React, { type ComponentType } from 'react'
 import { type TabNode } from 'flexlayout-react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useTranslation } from 'react-i18next'
 import { TitleView } from './title/title-view'
 
 export interface WidgetContentTitleContainerProps {
@@ -33,7 +32,6 @@ export const WidgetContentTitleContainer = ({
   icon,
   title
 }: WidgetContentTitleProps): React.JSX.Element => {
-  const { t } = useTranslation()
 
   return (
     <>
