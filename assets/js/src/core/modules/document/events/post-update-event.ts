@@ -15,6 +15,7 @@ export interface DocumentPostUpdateEventPayload {
   id: number
   task?: SaveTaskType
   updatedData: Record<string, any>
+  responseData: Record<string, any>
 }
 
 export interface DocumentPostUpdateEvent extends AbstractEvent {

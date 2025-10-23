@@ -158,9 +158,11 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
           payload: {
             id,
             task,
-            updatedData
+            updatedData,
+            responseData: response.data
           }
         }
+        
         eventBus.publish(event)
 
         onFinish?.()

@@ -172,9 +172,11 @@ export class DocumentSaveTaskManager {
           payload: {
             id: this.documentId,
             task,
-            updatedData: result.data
+            updatedData: result.data,
+            responseData: result.data
           }
         }
+        
         eventBus.publish(event)
 
         onFinish?.()

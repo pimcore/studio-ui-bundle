@@ -176,7 +176,8 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
           },
           payload: {
             id,
-            updatedData: update
+            updatedData: update,
+            responseData: response.data
           }
         }
         eventBus.publish(event)

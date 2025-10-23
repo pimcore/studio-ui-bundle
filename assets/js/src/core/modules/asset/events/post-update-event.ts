@@ -13,6 +13,7 @@ import { type eventTypes, type AbstractEvent } from '@Pimcore/lib/event-bus'
 export interface AssetPostUpdateEventPayload {
   id: number
   updatedData: Record<string, any>
+  responseData: Record<string, any>
 }
 
 export interface AssetPostUpdateEvent extends AbstractEvent {
