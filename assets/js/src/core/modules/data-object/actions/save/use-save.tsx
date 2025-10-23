@@ -31,6 +31,9 @@ import {
   DataObjectSaveDataContext,
   type DataObjectSaveUpdateData
 } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type PostUpdateEvent } from '../../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -146,6 +149,22 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
         if (task === SaveTaskType.Publish) {
           dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: true }))
         }
+
+        const event: PostUpdateEvent = {
+          identifier: {
+            type: eventTypes['data-object:editor:post-update'],
+            id: String(id)
+          },
+          payload: {
+            id,
+            task,
+            updatedData,
+            responseData: response.data
+          }
+        }
+
+        eventBus.publish(event)
+
         onFinish?.()
       }
       setRunningTask(undefined)
