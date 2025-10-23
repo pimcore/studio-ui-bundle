@@ -9,6 +9,7 @@
  */
 
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
+import { camelCase } from 'lodash'
 
 export const isValidElementType = (type: string): boolean => {
   return allElementTypes.includes(type)
@@ -35,4 +36,8 @@ export const mapToElementType = (elementType: string): ElementType | null => {
     default:
       return null
   }
+}
+
+export const mapToMetadataKey = (elementType: ElementType): string => {
+  return camelCase(elementType)
 }
