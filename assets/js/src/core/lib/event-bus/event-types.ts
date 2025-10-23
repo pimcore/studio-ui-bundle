@@ -17,5 +17,8 @@
  * - action: The action that occurred (e.g., widget-closed, item-selected)
  */
 export const eventTypes = {
-  'widget-manager:inner:widget-closed': 'widget-manager:inner:widget-closed'
+  'widget-manager:inner:widget-closed': 'widget-manager:inner:widget-closed',
+  'data-object:editor:post-update': 'data-object:editor:post-update',
+  'document:editor:post-update': 'document:editor:post-update',
+  'asset:editor:post-update': 'asset:editor:post-update',
 }

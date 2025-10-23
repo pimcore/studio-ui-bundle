@@ -36,6 +36,9 @@ import {
   AssetSaveDataContext,
   type AssetSaveUpdateData
 } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -164,6 +167,21 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
           ...update
         }
       }
+    }).then((response) => {
+      if (response.error === undefined) {
+        const event: AssetPostUpdateEvent = {
+          identifier: {
+            type: eventTypes['asset:editor:post-update'],
+            id: String(id)
+          },
+          payload: {
+            id,
+            updatedData: update
+          }
+        }
+        eventBus.publish(event)
+      }
+      return response
     })
 
     const saveSchedulesPromise = saveSchedules()
