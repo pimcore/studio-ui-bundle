@@ -15,10 +15,9 @@ import { type ElementPermissions } from '@Pimcore/modules/element/element-api-sl
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { mapToMetadataKey } from '@Pimcore/modules/element/utils/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { isEqual, isUndefined, merge } from 'lodash'
+import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
 export interface TreeNode {
@@ -547,7 +546,7 @@ const slice = createSlice({
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
           updateNodeState(state, treeId, payload.nodeId, node => {
-            const metadataKey = mapToMetadataKey(payload.elementType)
+            const metadataKey = camelCase(payload.elementType)
             return {
               ...node,
               treeNodeProps: !isUndefined(node.treeNodeProps)

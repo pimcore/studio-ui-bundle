@@ -37,7 +37,3 @@ export const mapToElementType = (elementType: string): ElementType | null => {
       return null
   }
 }
-
-export const mapToMetadataKey = (elementType: ElementType): string => {
-  return camelCase(elementType)
-}
