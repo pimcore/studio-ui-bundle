@@ -535,6 +535,41 @@ const slice = createSlice({
         }
       })
     },
+    setNodeAdditionalAttributes: (
+      state,
+      { payload }: PayloadAction<{ 
+        nodeId: string, 
+        elementType: ElementType, 
+        additionalAttributes: Record<string, any> 
+      }>
+    ) => {
+      console.log('Element Tree: Setting node additional attributes', {
+        nodeId: payload.nodeId,
+        elementType: payload.elementType,
+        additionalAttributes: payload.additionalAttributes,
+        timestamp: new Date().toISOString()
+      })
+
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  metaData: {
+                    ...node.treeNodeProps.metaData,
+                    additionalAttributes: {
+                      ...node.treeNodeProps.metaData?.additionalAttributes,
+                      ...payload.additionalAttributes
+                    }
+                  }
+                }
+              : undefined
+          }))
+        }
+      })
+    },
     setRootNode: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, rootNode: TreeNode }>
@@ -697,7 +732,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
