@@ -113,6 +113,7 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
   return (
     <FormKit.Panel
       border
+      contentPadding={ { top: 'none', right: 'small', bottom: 'small', left: 'small' } }
       theme="fieldset"
       title="Sql"
     >

@@ -59,6 +59,7 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_PIE }>
         <FormKit.Panel
           border
+          contentPadding={ { top: 'none', right: 'small', bottom: 'small', left: 'small' } }
           theme="fieldset"
           title={ t('reports.editor.chart-settings.settings') }
         >
