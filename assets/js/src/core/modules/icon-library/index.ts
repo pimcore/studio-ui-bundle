@@ -190,6 +190,9 @@ import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
 import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
+import portalEngineCollections from '@Pimcore/assets/icons/portal-engine-collections.inline.svg?react'
+import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.svg?react'
+import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
@@ -961,6 +964,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'plus-square',
       component: plusSquare
+    })
+    iconLibrary.register({
+      name: 'portal-engine-collections',
+      component: portalEngineCollections
+    })
+    iconLibrary.register({
+      name: 'portal-engine-index',
+      component: portalEngineIndex
+    })
+    iconLibrary.register({
+      name: 'portal-engine-wizard',
+      component: portalEngineWizard
     })
     iconLibrary.register({
       name: 'presentation',
