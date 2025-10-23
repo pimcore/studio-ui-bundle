@@ -47,6 +47,7 @@ export * from '@Pimcore/components/dynamic-filter/dynamic-filter'
 export * from '@Pimcore/components/editable-empty-placeholder/editable-empty-placeholder'
 export * from '@Pimcore/components/element-tag/element-tag'
 export * from '@Pimcore/components/element-tree/element-tree'
+export * as elementTreeSlice from '@Pimcore/components/element-tree/element-tree-slice'
 // @todo check usage and naming of nodeState
 export { type NodeState, type UseElementTreeReturnType, useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
 export { type NodeState as xy, useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
