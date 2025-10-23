@@ -155,8 +155,6 @@ export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
 export type { TabpanelItem } from '@Pimcore/components/tabpanel/tabpanel'
 
-// @todo check if this component should really be branded to workflows or if we can find a mor re-usable name
-export * from '@Pimcore/modules/element/editor/shared-components/workflow/card/workflow-card'
 export * from '@Pimcore/modules/auth/hooks/use-user'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
