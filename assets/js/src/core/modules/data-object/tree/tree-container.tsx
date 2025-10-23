@@ -23,7 +23,6 @@ import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-sli
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
-import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 import { withContextMenu } from './node/with-context-menu'
 
 export interface TreeContainerProps {
@@ -31,7 +30,7 @@ export interface TreeContainerProps {
   showRoot?: boolean
 }
 
-export const DataObjectTreeNode = withDroppableStyling(withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))
+export const DataObjectTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()

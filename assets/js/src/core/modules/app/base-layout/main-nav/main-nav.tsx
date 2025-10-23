@@ -20,7 +20,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -60,7 +60,7 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
-    const hasChildren = item.children !== undefined && item.children.length > 0
+    const hasChildren = !isEmpty(item.children)
     const isOpen = openKeys.includes(index)
     const isNestedItem = index.includes('-')
 
@@ -68,14 +68,25 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
-    const isVisible = (item.children !== undefined && item.children.length > 0) ||
-            (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
+    const hasChildren = !isEmpty(item.children)
+    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.onClick) || !isUndefined(item.button)
 
-    const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
+    const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
     if (!isVisible || isHiddenInPerspective) {
       return <></>
     }
+
+    const renderIcon = (value: string): React.JSX.Element => (
+      <Icon
+        className={ openKeys.includes(index) ? undefined : 'plain-icon' }
+        options={ openKeys.includes(index) ? { width: 16, height: 16 } : undefined }
+        sphere={ openKeys.includes(index) }
+        value={ value }
+      />
+    )
+
+    const elementWithGroupIcon = hasChildren ? item.children?.find(child => !isEmpty(child.groupIcon)) : undefined
 
     return (
       <li
@@ -87,7 +98,7 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
-              { item.dividerBottom !== undefined && item.dividerBottom && (
+              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
               <Divider
                 className={ 'main-nav__list-item-divider' }
                 size={ 'mini' }
@@ -96,57 +107,49 @@ export const MainNav = (): React.JSX.Element => {
             </div>
             )
           : (
-            <><button
-              className={ 'main-nav__list-btn' }
-              data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-              onClick={ () => {
-                if (item.children !== undefined && item.children.length > 0) {
-                  handleOpenState(index)
-                } else if (item.onClick !== undefined) {
-                  item.onClick()
-                  setIsOpen(false)
-                } else if (item.widgetConfig !== undefined) {
-                  openMainWidget(item.widgetConfig)
-                  setIsOpen(false)
-                }
-              } }
+            <>
+              <button
+                className={ 'main-nav__list-btn' }
+                data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
+                onClick={ () => {
+                  if (hasChildren) {
+                    handleOpenState(index)
+                  } else if (!isUndefined(item.onClick)) {
+                    item.onClick()
+                    setIsOpen(false)
+                  } else if (!isUndefined(item.widgetConfig)) {
+                    openMainWidget(item.widgetConfig)
+                    setIsOpen(false)
+                  }
+                } }
               >
-              {item.icon !== undefined && (
-                openKeys.includes(index)
-                  ? (
-                    <Icon
-                      options={ { width: 16, height: 16 } }
-                      sphere
-                      value={ item.icon }
-                    />
-                    )
-                  : (
-                    <Icon
-                      className={ 'plain-icon' }
-                      value={ item.icon }
-                    />
-                    )
-              )}
-              <SanitizeHtml html={ t(`${item.label}`) } />
+                {!isUndefined(item.icon) && renderIcon(item.icon)}
 
-              {shouldShowChevron(item, index) && (
-                <Icon
-                  className={ 'main-nav__list-chevron-btn-icon' }
-                  options={ { height: 18, width: 18 } }
-                  value={ 'chevron-right' }
+                {!isUndefined(elementWithGroupIcon?.groupIcon) && isUndefined(item.icon) && (
+                  renderIcon(elementWithGroupIcon?.groupIcon)
+                )}
+
+                <SanitizeHtml html={ t(`${item.label}`) } />
+
+                {shouldShowChevron(item, index) && (
+                  <Icon
+                    className={ 'main-nav__list-chevron-btn-icon' }
+                    options={ { height: 18, width: 18 } }
+                    value={ 'chevron-right' }
+                  />
+                )}
+              </button>
+
+              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
+                <Divider
+                  className={ 'main-nav__list-item-divider' }
+                  size={ 'mini' }
                 />
-              )}
-            </button>
-              { item.dividerBottom !== undefined && item.dividerBottom && (
-              <Divider
-                className={ 'main-nav__list-item-divider' }
-                size={ 'mini' }
-              />
               )}
             </>
             )}
 
-        {item.children !== undefined && item.children.length > 0
+        {hasChildren
           ? (
             <div
               className={ 'main-nav__list-detail' }

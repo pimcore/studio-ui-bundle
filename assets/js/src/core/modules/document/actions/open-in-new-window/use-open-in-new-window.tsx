@@ -22,13 +22,12 @@ import { has, isNil, isString, isUndefined } from 'lodash'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { createPreviewUrl } from '@Pimcore/modules/document/utils/preview-url-helper'
 
 export interface UseOpenInNewWindowHookReturn {
-  openInNewWindow: (documentId: number, onFinish?: () => void, options?: { preview?: boolean }) => Promise<void>
+  openInNewWindow: (documentId: number, onFinish?: () => void) => Promise<void>
   openInNewWindowTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   openInNewWindowContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
-  openPreviewInNewWindowContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
+  openPreviewInNewWindowContextMenuItem: (document: Element, previewUrl: string, onFinish?: () => void) => ItemType
 }
 
 export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
@@ -39,10 +38,10 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
 
   const openInNewWindow = async (
     documentId: number,
-    onFinish?: () => void,
-    options?: { preview?: boolean }
+    onFinish?: () => void
   ): Promise<void> => {
     setIsLoading(true)
+
     const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
 
     if (!isUndefined(error)) {
@@ -50,14 +49,14 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       setIsLoading(false)
     }
 
-    // Use settingsData.url if available and not in preview mode
-    if ((isNil(options?.preview) || !options?.preview) && !isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
+    // Use settingsData.url if available, otherwise use fullPath
+    if (!isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
       const url: string = data.settingsData.url
       window.open(url)
       onFinish?.()
     } else if (!isNil(data?.fullPath)) {
-      // Use fullPath (for preview or if settingsData.url is not available)
-      window.open(createPreviewUrl(data.fullPath, Boolean(options?.preview)))
+      // Open document without preview parameters (just the plain URL)
+      window.open(data.fullPath)
       onFinish?.()
     } else {
       console.error('Failed to fetch document data', data)
@@ -107,16 +106,17 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
 
   const openPreviewInNewWindowContextMenuItem = (
     document: Element,
+    previewUrl: string,
     onFinish?: () => void
   ): ItemType => {
     return {
       label: t('document.open-preview-in-new-window'),
       key: ContextMenuActionName.openPreviewInNewWindow,
-      isLoading,
       icon: <Icon value={ 'eye' } />,
       hidden: isContextMenuEntryHidden(document, { preview: true }),
-      onClick: async () => {
-        await openInNewWindow(document.id, onFinish, { preview: true })
+      onClick: () => {
+        window.open(previewUrl)
+        onFinish?.()
       }
     }
   }

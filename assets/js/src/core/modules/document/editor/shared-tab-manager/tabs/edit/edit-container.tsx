@@ -10,12 +10,12 @@
 
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import React, { useContext, useRef, useMemo, useCallback } from 'react'
+import React, { useContext, useRef, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isNil } from 'lodash'
-import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
+import { useDocumentUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { getDocumentSidebarManager } from '../../../sidebar/sidebar-manager-helper'
@@ -48,9 +48,13 @@ export const EditContainer = (): React.JSX.Element => {
     }
   }, [id])
 
-  const iframeSrc = useMemo(() => {
-    return addCacheBusterToUrl(`${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}`)
-  }, [documentDraft?.fullPath, id])
+  const baseParameters = useMemo(() => ({
+    pimcore_editmode: 'true',
+    pimcore_studio: 'true',
+    documentId: id.toString()
+  }), [id])
+
+  const iframeSrc = useDocumentUrlProcessor(id, 'edit', documentDraft?.fullPath ?? '', baseParameters)
 
   // Cleanup on unmount
   React.useEffect(() => {

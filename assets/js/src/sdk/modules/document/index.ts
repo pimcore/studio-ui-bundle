@@ -24,6 +24,10 @@ export * from '@Pimcore/modules/document/hooks/use-document-helper'
 export * from '@Pimcore/modules/document/hooks/use-global-document-context'
 export * from '@Pimcore/modules/document/hooks/use-sites'
 
+// Document Processor Systems (for plugins to register custom processors)
+export * from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
+export * from '@Pimcore/modules/document/services/processors/document-save-data-processor-registry'
+
 export * from '@Pimcore/modules/document/editor/shared-tab-manager/tab-definitions'
 export * from '@Pimcore/modules/document/editor/types/email/tab-manager/email-tab-manager'
 export * from '@Pimcore/modules/document/editor/types/folder/tab-manager/folder-tab-manager'
@@ -31,6 +35,8 @@ export * from '@Pimcore/modules/document/editor/types/hardlink/tab-manager/hardl
 export * from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 export * from '@Pimcore/modules/document/editor/types/page/tab-manager/page-tab-manager'
 export * from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
+
+export * from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
 
 export * from '@Pimcore/modules/document/editor/widget'
 

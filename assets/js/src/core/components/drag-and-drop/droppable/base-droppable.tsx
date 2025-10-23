@@ -138,7 +138,13 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       ref={ wrapperRef }
       role="none"
     >
-      <DroppableContextProvider value={ { isDragActive: dragState !== 'inactive', isOver: dragState !== 'inactive' && dragState !== 'active', isValid: dragState === 'valid' } }>
+      <DroppableContextProvider value={ {
+        isDragActive: dragState !== 'inactive',
+        isOver: dragState !== 'inactive' && dragState !== 'active',
+        isValid: dragState === 'valid',
+        hasValidDrop: dragState === 'valid'
+      } }
+      >
         {children}
       </DroppableContextProvider>
     </div>

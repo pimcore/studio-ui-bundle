@@ -8,17 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { TitleView } from './title/title-view'
+import React, { type ComponentType } from 'react'
 import { useStyles } from './widget-view.styles'
-import { useTranslation } from 'react-i18next'
 import { useCssContainer, type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type TabNode } from 'flexlayout-react'
+import { type WidgetContentTitleContainerProps, WidgetContentTitleContainer } from './widget-content-title-container'
 
 interface WidgetViewProps {
   title: string
   showTitle?: boolean
   icon: ElementIcon
+  node: TabNode
+  contentTitleComponent?: ComponentType<WidgetContentTitleContainerProps>
   children: React.ReactNode
 }
 
@@ -31,16 +33,16 @@ export const WIDGET_CONTENT_CLASS = 'widget__content'
 const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   const { styleDefinition } = useCssContainer(cssContainerWidget)
   const { styles } = useStyles()
-  const { title, showTitle, icon, children } = props
-  const { t } = useTranslation()
+  const { title, showTitle, icon, node, contentTitleComponent, children } = props
 
   return (
     <div className={ ['widget', styles.Widget, styleDefinition.styles.container].join(' ') }>
       {showTitle === true && (
-        <TitleView
-          className={ 'widget__title' }
+        <WidgetContentTitleContainer
+          contentTitleComponent={ contentTitleComponent }
           icon={ icon }
-          title={ t(title) }
+          node={ node }
+          title={ title }
         />
       )}
 

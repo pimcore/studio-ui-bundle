@@ -17,6 +17,8 @@ export * from '@Pimcore/modules/asset/actions/download/use-download'
 export * from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 export * from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 
+export * from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
+
 export * from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 export * from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 

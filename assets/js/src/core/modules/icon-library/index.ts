@@ -15,6 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
 
+import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -150,9 +151,11 @@ import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
 import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
+import manualOrder from '@Pimcore/assets/icons/manual-order.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg?react'
+import menuShortcut from '@Pimcore/assets/icons/menu-shortcut.inline.svg?react'
 import menu from '@Pimcore/assets/icons/menu.inline.svg?react'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg?react'
 import minus from '@Pimcore/assets/icons/minus.inline.svg?react'
@@ -216,6 +219,7 @@ import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?rea
 import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
+import shareWithUsers from '@Pimcore/assets/icons/share-with-users.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
@@ -227,6 +231,7 @@ import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
+import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
@@ -255,10 +260,15 @@ import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
 import wysiwygField from '@Pimcore/assets/icons/wysiwyg-field.inline.svg?react'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg?react'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
+import zToAOrder from '@Pimcore/assets/icons/z-to-a-order.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
     const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    iconLibrary.register({
+      name: 'a-to-z-order',
+      component: aToZOrder
+    })
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -800,6 +810,10 @@ moduleSystem.registerModule({
       component: mailAnswer
     })
     iconLibrary.register({
+      name: 'manual-order',
+      component: manualOrder
+    })
+    iconLibrary.register({
       name: 'many-to-many',
       component: manyToMany
     })
@@ -810,6 +824,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'marketing',
       component: marketing
+    })
+    iconLibrary.register({
+      name: 'menu-shortcut',
+      component: menuShortcut
     })
     iconLibrary.register({
       name: 'menu',
@@ -1064,6 +1082,10 @@ moduleSystem.registerModule({
       component: settings
     })
     iconLibrary.register({
+      name: 'share-with-users',
+      component: shareWithUsers
+    })
+    iconLibrary.register({
       name: 'share',
       component: share
     })
@@ -1106,6 +1128,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tag',
       component: tag
+    })
+    iconLibrary.register({
+      name: 'target-group',
+      component: targetGroup
     })
     iconLibrary.register({
       name: 'target',
@@ -1218,6 +1244,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'z-to-a-order',
+      component: zToAOrder
     })
   }
 })

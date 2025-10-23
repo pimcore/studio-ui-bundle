@@ -11,7 +11,6 @@
 import { useContext, useEffect } from 'react'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import type { DataObjectUpdateByIdApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import type {
   DataProperty as DataPropertyApi
@@ -25,6 +24,13 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type DataObjectSaveDataProcessorRegistry,
+  DataObjectSaveDataContext,
+  type DataObjectSaveUpdateData
+} from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -84,7 +90,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     setRunningTask(task)
 
-    const updatedData: DataObjectUpdateByIdApiArg['body']['data'] = {}
+    const updatedData: DataObjectSaveUpdateData = {}
     if (dataObject.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
@@ -111,6 +117,18 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
     }
 
     updatedData.useDraftData = useDraftData
+
+    // Apply save data processors
+    try {
+      const saveDataProcessorRegistry = container.get<DataObjectSaveDataProcessorRegistry>(
+        serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']
+      )
+
+      const context = new DataObjectSaveDataContext(id, task, updatedData)
+      saveDataProcessorRegistry.executeProcessors(context)
+    } catch (error) {
+      console.warn(`Save data processors failed for data object ${id}:`, error)
+    }
 
     await saveDataObject({
       id,

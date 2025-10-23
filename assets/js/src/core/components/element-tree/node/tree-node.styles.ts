@@ -52,7 +52,12 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .tree-node__content-inner {
-        padding: 2px ${token.paddingSM}px 2px 0;
+        padding: 0 ${token.paddingSM}px 0 0;
+      }
+
+      .tree-node__content-wrapper-outer {
+        position: relative;
+        padding: 2px 0 2px 0;
       }
 
       &.tree-node--selected > .tree-node__content {

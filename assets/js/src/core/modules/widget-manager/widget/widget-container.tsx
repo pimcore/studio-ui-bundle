@@ -15,11 +15,14 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useAppSelector } from '@sdk/app'
 import { selectMainWidgetContext } from '../widget-manager-slice'
 import { useGlobalDefaultContextActions } from '@Pimcore/modules/element/hooks/use-global-default-context'
+import { type WidgetContentTitleContainerProps } from './widget-content-title-container'
+import { useWidgetTitle } from '../hooks/use-widget-title'
 
 interface WidgetContainerProps {
   node: TabNode
   component: ComponentType
   defaultGlobalContext: boolean
+  contentTitleComponent?: ComponentType<WidgetContentTitleContainerProps>
 }
 
 interface IWidgetContext {
@@ -29,11 +32,10 @@ interface IWidgetContext {
 export const WidgetContext = createContext<IWidgetContext>({ nodeId: null })
 
 const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
-  const { node, component: Component, defaultGlobalContext } = props
+  const { node, component: Component, defaultGlobalContext, contentTitleComponent: ContentTitleComponent } = props
   const [nodeId] = useState(node.getId())
   const isBorderNode = node.getParent() instanceof BorderNode
-  const config = node.getConfig()
-  const icon = config.icon ?? { value: 'widget-default', type: 'name' }
+  const { title, icon } = useWidgetTitle(node)
   const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const isWidgetActive = mainWidgetContext?.nodeId === nodeId
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
@@ -51,9 +53,11 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
     <ErrorBoundary>
       <WidgetContext.Provider value={ { nodeId } }>
         <WidgetView
+          contentTitleComponent={ ContentTitleComponent }
           icon={ icon }
+          node={ node }
           showTitle={ isBorderNode }
-          title={ node.getName() }
+          title={ title }
         >
           <Component { ...node.getConfig() } />
         </WidgetView>
