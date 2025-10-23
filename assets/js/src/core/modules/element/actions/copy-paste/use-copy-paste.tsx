@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { type CloneParameters, useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import {
   markNodeDeleting,
@@ -25,7 +25,7 @@ import {
   refreshTargetNode
 } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@sdk/app'
-import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
 import { ContextMenuActionName } from '..'
 import { useTreeCopyPasteContext } from './tree-copy-paste-context'
 import { useCloseContextMenu } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'

@@ -13,7 +13,7 @@ import { Input } from 'antd'
 import { isEmpty } from 'lodash'
 import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
-import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
+import { useTreeFilter } from '../../../../components/element-tree/provider/tree-filter-provider/use-tree-filter'
 
 const { Search } = Input
 

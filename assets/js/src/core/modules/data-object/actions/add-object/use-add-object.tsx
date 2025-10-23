@@ -19,7 +19,7 @@ import {
   type ClassDefinitionListItem
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil } from 'lodash'
 import React from 'react'

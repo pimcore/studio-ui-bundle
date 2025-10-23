@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { type TreePermission } from '../../../../perspectives/enums/tree-permission'
+import { type TreePermission } from '../../../../modules/perspectives/enums/tree-permission'
 import { type ITreePermissionContext, TreePermissionContext } from './tree-permission-provider'
 import { isNil } from 'lodash'
 

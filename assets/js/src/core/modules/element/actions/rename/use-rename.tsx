@@ -20,7 +20,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'

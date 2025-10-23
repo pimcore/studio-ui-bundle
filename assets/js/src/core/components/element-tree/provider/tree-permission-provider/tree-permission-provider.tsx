@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useMemo } from 'react'
-import { type TreePermission } from '../../../../perspectives/enums/tree-permission'
+import { type TreePermission } from '../../../../modules/perspectives/enums/tree-permission'
 
 export interface ITreePermissionContext {
   permissions: {

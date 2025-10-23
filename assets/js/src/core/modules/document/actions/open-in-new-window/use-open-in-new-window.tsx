@@ -20,7 +20,7 @@ import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { has, isNil, isString, isUndefined } from 'lodash'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseOpenInNewWindowHookReturn {

@@ -24,7 +24,7 @@ import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface TreeSearchProps {
