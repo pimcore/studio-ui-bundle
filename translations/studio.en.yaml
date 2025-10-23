@@ -1584,6 +1584,7 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Word Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
-forgot-password-form.username: Username
+forgot-password-form.username: Enter your username and Pimcore will send a login link to your email address
+forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset Password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
