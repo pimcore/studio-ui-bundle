@@ -543,13 +543,6 @@ const slice = createSlice({
         additionalAttributes: Record<string, any> 
       }>
     ) => {
-      console.log('Element Tree: Setting node additional attributes', {
-        nodeId: payload.nodeId,
-        elementType: payload.elementType,
-        additionalAttributes: payload.additionalAttributes,
-        timestamp: new Date().toISOString()
-      })
-
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
           updateNodeState(state, treeId, payload.nodeId, node => ({
@@ -559,9 +552,11 @@ const slice = createSlice({
                   ...node.treeNodeProps,
                   metaData: {
                     ...node.treeNodeProps.metaData,
-                    additionalAttributes: {
-                      ...node.treeNodeProps.metaData?.additionalAttributes,
-                      ...payload.additionalAttributes
+                    dataObject: {
+                      ...node.treeNodeProps.metaData?.dataObject,
+                      additionalAttributes: {
+                        ...payload.additionalAttributes
+                      }
                     }
                   }
                 }
