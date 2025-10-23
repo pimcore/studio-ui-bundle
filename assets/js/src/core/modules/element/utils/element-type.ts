@@ -9,7 +9,6 @@
  */
 
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
-import { camelCase } from 'lodash'
 
 export const isValidElementType = (type: string): boolean => {
   return allElementTypes.includes(type)
