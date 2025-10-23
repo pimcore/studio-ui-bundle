@@ -20,5 +20,5 @@ export const eventTypes = {
   'widget-manager:inner:widget-closed': 'widget-manager:inner:widget-closed',
   'data-object:editor:post-update': 'data-object:editor:post-update',
   'document:editor:post-update': 'document:editor:post-update',
-  'asset:editor:post-update': 'asset:editor:post-update',
+  'asset:editor:post-update': 'asset:editor:post-update'
 }

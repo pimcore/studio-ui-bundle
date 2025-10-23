@@ -38,7 +38,7 @@ import {
 } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
-import { AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
+import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()

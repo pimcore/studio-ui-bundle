@@ -33,7 +33,7 @@ import {
 } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
-import { PostUpdateEvent } from '../../events/post-update-event'
+import { type PostUpdateEvent } from '../../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -162,7 +162,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
             responseData: response.data
           }
         }
-        
+
         eventBus.publish(event)
 
         onFinish?.()
