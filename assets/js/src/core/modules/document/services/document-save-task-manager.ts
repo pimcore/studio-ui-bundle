@@ -31,7 +31,7 @@ import {
 } from './processors/document-save-data-processor-registry'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
-import { DocumentPostUpdateEvent } from '../events/post-update-event'
+import { type DocumentPostUpdateEvent } from '../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -176,7 +176,7 @@ export class DocumentSaveTaskManager {
             responseData: result.data
           }
         }
-        
+
         eventBus.publish(event)
 
         onFinish?.()

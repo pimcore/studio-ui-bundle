@@ -537,10 +537,10 @@ const slice = createSlice({
     },
     setNodeAdditionalAttributes: (
       state,
-      { payload }: PayloadAction<{ 
-        nodeId: string, 
-        elementType: ElementType, 
-        additionalAttributes: Record<string, any> 
+      { payload }: PayloadAction<{
+        nodeId: string
+        elementType: ElementType
+        additionalAttributes: Record<string, any>
       }>
     ) => {
       Object.keys(state).forEach(treeId => {
