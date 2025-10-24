@@ -84,3 +84,6 @@ export const ListingContainer = (): React.JSX.Element => {
     </DynamicTypeRegistryProvider>
   )
 }
+
+export { defaultProps as listingDefaultProps, useInlineEditApiUpdate, BaseListing, ActionColumnDecorator, SortingDecorator, PagingDecorator, ClassDefinitionSelectionDecorator, ColumnConfigurationDecorator, InlineEditDecorator, RowSelectionDecorator, ContextMenuDecorator, TagFilterDecorator, GeneralFiltersDecorator }
+export type { AbstractDecoratorProps, ClassDefinitionSelectionDecoratorConfig, IInlineEditDecoratorConfig, IRowSelectionDecoratorConfig }
