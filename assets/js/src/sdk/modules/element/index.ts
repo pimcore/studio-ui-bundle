@@ -241,3 +241,7 @@ export * from '@Pimcore/modules/element/hooks/use-global-element-context'
 export * from '@Pimcore/modules/element/permissions/permission-helper'
 
 export * from '@Pimcore/modules/element/utils/element-type'
+
+export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
+export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
