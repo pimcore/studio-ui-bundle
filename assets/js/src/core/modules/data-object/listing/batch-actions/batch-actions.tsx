@@ -31,10 +31,10 @@ import { elementTypes } from '@sdk/modules/data-object'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const { useElementId } = useSettings();
-  const { getId } = useElementId();
-  const id = getId();
-  const elementType = elementTypes.dataObject;
+  const { useElementId } = useSettings()
+  const { getId } = useElementId()
+  const id = getId()
+  const elementType = elementTypes.dataObject
   const { refreshGrid } = useRefreshGrid(elementType)
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
