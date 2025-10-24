@@ -21,6 +21,8 @@ export * from '@Pimcore/modules/app/error-handler/types'
 
 export * from '@Pimcore/modules/app/theme/theme-provider'
 
+export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
+
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export * from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'

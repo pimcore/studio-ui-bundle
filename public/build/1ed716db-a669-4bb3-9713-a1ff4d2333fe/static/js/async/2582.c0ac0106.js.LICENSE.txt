@@ -1,0 +1,139 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+
+/*!
+ * @antv/g
+ * @description A core module for rendering engine implements DOM API.
+ * @version 6.1.26
+ * @date 6/27/2025, 8:33:54 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-camera-api
+ * @description A simple implementation of Camera API.
+ * @version 2.0.39
+ * @date 6/27/2025, 8:32:05 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-canvas
+ * @description A renderer implemented by Canvas 2D API
+ * @version 2.0.45
+ * @date 6/27/2025, 8:35:41 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-dom-mutation-observer-api
+ * @description A simple implementation of DOM MutationObserver API.
+ * @version 2.0.36
+ * @date 6/27/2025, 8:32:19 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-lite
+ * @description A core module for rendering engine implements DOM API.
+ * @version 2.3.0
+ * @date 6/27/2025, 8:31:48 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-math
+ * @description Geometry util
+ * @version 3.0.1
+ * @date 5/9/2025, 8:18:51 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-canvas-path-generator
+ * @description A G plugin of path generator with Canvas2D API
+ * @version 2.1.20
+ * @date 6/27/2025, 8:32:52 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-canvas-picker
+ * @description A G plugin for picking in canvas
+ * @version 2.1.24
+ * @date 6/27/2025, 8:34:56 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-canvas-renderer
+ * @description A G plugin of renderer implementation with Canvas2D API
+ * @version 2.3.0
+ * @date 6/27/2025, 8:34:04 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-dom-interaction
+ * @description A G plugin
+ * @version 2.1.25
+ * @date 6/27/2025, 8:33:05 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-dragndrop
+ * @description A G plugin for Drag n Drop implemented with PointerEvents
+ * @version 2.0.36
+ * @date 6/27/2025, 8:33:07 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-html-renderer
+ * @description A G plugin for rendering HTML
+ * @version 2.1.25
+ * @date 6/27/2025, 8:33:14 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-plugin-image-loader
+ * @description A G plugin for loading image
+ * @version 2.1.24
+ * @date 6/27/2025, 8:33:18 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-web-animations-api
+ * @description A simple implementation of Web Animations API.
+ * @version 2.1.26
+ * @date 6/27/2025, 8:33:49 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
