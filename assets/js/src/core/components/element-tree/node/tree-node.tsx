@@ -217,7 +217,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const nodeContent = (
     <Flex
       align="center"
-      className={cn('tree-node__content-inner')}
+      className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
       onClick={ onClick }
@@ -265,7 +265,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
             props={ {
               node: treeNodeProps,
               children: (
-                <div className={cn('tree-node__content', { 'tree-node__content--selected': isSelected === true })}>
+                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
                   {wrapNode(nodeContent)}
                 </div>
               )
@@ -273,7 +273,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           />
           )
         : (
-          <div className={cn('tree-node__content', { 'tree-node__content--selected': isSelected === true })}>
+          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
             {wrapNode(nodeContent)}
           </div>
           )}
