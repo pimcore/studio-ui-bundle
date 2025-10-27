@@ -70,10 +70,10 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
     storedNodeRef.current = node
     storedElementTypeRef.current = elementType
     nodeTaskRef.current = 'copy'
-
     void messageApi.success(t('element.tree.copy-success-description', {
       elementType: t(elementType),
-      name: getNodeName(node)
+      name: getNodeName(node),
+      interpolation: { escapeValue: false }
     }))
   }, [messageApi, t])
 

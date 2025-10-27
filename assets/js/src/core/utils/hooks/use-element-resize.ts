@@ -21,7 +21,7 @@ const getElement = (element: Element): HTMLElement | null => {
   return element.current
 }
 
-const useElementResize = (element: Element, disable: boolean = false): { width: number, height: number } => {
+export const useElementResize = (element: Element, disable: boolean = false): { width: number, height: number } => {
   const [size, setSize] = useState({ width: 0, height: 0 })
   // Get initial width before the render phase
   useLayoutEffect(() => {

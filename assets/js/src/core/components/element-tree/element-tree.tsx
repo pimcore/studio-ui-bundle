@@ -24,7 +24,7 @@ import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface TreeSearchProps {
@@ -44,7 +44,7 @@ export interface TreeContextMenuProps {
 }
 
 export interface TreeProps {
-  nodeId: number
+  nodeId: number | string
   rootNode?: TreeNode
 
   renderNode: typeof TreeNodeComponent
@@ -71,7 +71,7 @@ export interface ITreeContext extends TreeProps {
   nodeOrder?: () => string[]
 }
 
-export const defaultProps: TreeProps = {
+export const defaultTreeProps: TreeProps = {
   nodeId: 1,
   renderNodeContent: TreeNodeContent,
   renderNode: TreeNodeComponent,
@@ -79,13 +79,13 @@ export const defaultProps: TreeProps = {
 }
 
 export const TreeContext = createContext<ITreeContext>({
-  ...defaultProps
+  ...defaultTreeProps
 })
 
 const ElementTree = (
   {
-    renderNode = defaultProps.renderNode,
-    renderNodeContent = defaultProps.renderNodeContent,
+    renderNode = defaultTreeProps.renderNode,
+    renderNodeContent = defaultTreeProps.renderNodeContent,
     contextMenu: ContextMenu,
     rootNode,
     ...props
@@ -152,17 +152,19 @@ const ElementTree = (
     </div>
   )
 
-  return (
-    <>
-      {isLoading === true && !hasRootNode && (
-        <Box padding={ { left: 'extra-small' } }>
-          <Skeleton />
-        </Box>
-      )}
+  if (isLoading === true && !hasRootNode) {
+    return (
+      <Box padding={ { left: 'extra-small' } }>
+        <Skeleton />
+      </Box>
+    )
+  }
 
-      {(items.length !== 0 || hasRootNode) && (treeContent)}
-    </>
-  )
+  if (items.length !== 0 || hasRootNode) {
+    return treeContent
+  }
+
+  return <></>
 }
 
 export { ElementTree }

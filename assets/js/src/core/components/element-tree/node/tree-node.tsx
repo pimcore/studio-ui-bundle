@@ -29,6 +29,7 @@ export interface TreeNodeProps {
   id: string
   icon: ElementIcon
   label: string
+  labelAddon?: string
   internalKey: string
   children?: TreeNodeProps[]
   level: number
@@ -58,6 +59,7 @@ export const defaultProps: TreeNodeProps = {
     value: 'folder'
   },
   label: '',
+  labelAddon: undefined,
   children: [],
   permissions: {
     list: false,

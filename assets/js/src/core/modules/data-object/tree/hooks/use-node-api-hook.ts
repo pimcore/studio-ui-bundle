@@ -13,7 +13,7 @@ import {
   type DataObjectGetTreeApiArg
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
-import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
+import { useTreeFilter } from '@Pimcore/components/element-tree/provider/tree-filter-provider/use-tree-filter'
 import { type DataTransformerSourceNode, type DataTransformerReturnType, type NodeApiHookReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'

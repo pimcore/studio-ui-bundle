@@ -27,9 +27,9 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '..'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void

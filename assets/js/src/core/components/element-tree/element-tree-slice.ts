@@ -27,6 +27,7 @@ export interface TreeNode {
   fullPath?: string
   icon: ElementIcon
   label: string
+  labelAddon?: string
   type?: string
 
   permissions: ElementPermissions

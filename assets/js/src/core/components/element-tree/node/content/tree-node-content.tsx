@@ -17,6 +17,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { Text } from '@sdk/components'
+import { isUndefined } from 'lodash'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
@@ -27,7 +29,7 @@ export interface TreeNodeContentMetaProps {
 }
 
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label, isPublished, elementType } = props.node
+  const { icon, label, labelAddon, isPublished, elementType } = props.node
   const { styles } = useStyles()
 
   const getMetaSlotName = (): string => {
@@ -66,7 +68,14 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         <span
           className="tree-node-content__label"
           data-testid={ `tree-node-label-${props.node.id}` }
-        >{label}</span>
+        >
+          {label}
+          {!isUndefined(labelAddon) && (
+            <Text type="secondary">
+              {` ${labelAddon}`}
+            </Text>
+          )}
+        </span>
       </Flex>
 
       <Flex

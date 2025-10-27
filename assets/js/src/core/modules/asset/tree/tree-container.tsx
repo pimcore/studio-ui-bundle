@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { defaultProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
+import { defaultTreeProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
 import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
-import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
+import { PagerContainer } from '@Pimcore/components/element-tree/pager/pager-container'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
@@ -63,7 +63,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
       renderNode={ AssetTreeNode }
-      renderNodeContent={ defaultProps.renderNodeContent }
+      renderNodeContent={ defaultTreeProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
       showRoot={ showRoot }

@@ -11,7 +11,7 @@
 import { isNil } from 'lodash'
 import { useState, useEffect, type RefObject } from 'react'
 
-const useElementVisible = (ref: RefObject<HTMLElement> | null | undefined, continueObserving: boolean = false, disable: boolean = false): boolean => {
+export const useElementVisible = (ref: RefObject<HTMLElement> | null | undefined, continueObserving: boolean = false, disable: boolean = false): boolean => {
   const [isVisible, setIsVisible] = useState(disable)
 
   useEffect(() => {
