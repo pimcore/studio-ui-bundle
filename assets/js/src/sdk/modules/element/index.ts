@@ -20,8 +20,10 @@ export * from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tre
 export * from '@Pimcore/modules/element/actions/lock/use-lock'
 export * from '@Pimcore/modules/element/actions/open/open'
 export * from '@Pimcore/modules/element/actions/publish/use-publish'
+export * from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 export * from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 export * from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+export * from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 export * from '@Pimcore/modules/element/actions/rename/use-rename'
 
 export * from '@Pimcore/modules/element/draft/hooks/use-draft-data'

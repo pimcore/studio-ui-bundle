@@ -39,3 +39,5 @@ export * from '@Pimcore/components/language-selection/provider/language-selectio
 export * from '@Pimcore/components/language-selection/provider/use-language-selection'
 
 export * from '@Pimcore/modules/data-object/editor/widget'
+
+export * from '@Pimcore/modules/data-object/tree/node/with-action-states'
