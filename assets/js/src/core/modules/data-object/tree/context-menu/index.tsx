@@ -195,7 +195,7 @@ moduleSystem.registerModule({
 
     // Sorting
     contextMenuRegistry.registerToSlot(config.name, {
-      name: 'refreshTree',
+      name: 'sorting',
       priority: config.priority.refreshTree,
       useMenuItem: (context: DataObjectTreeContextMenuProps) => {
         const { sortingContextMenuItem } = useSorting('data-object')
