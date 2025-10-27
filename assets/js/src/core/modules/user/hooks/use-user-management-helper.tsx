@@ -195,8 +195,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
         id,
         body: {
           password: user.password,
-          passwordConfirmation: user.password,
-          oldPassword: null
+          passwordConfirmation: user.password
         }
       }))
 
