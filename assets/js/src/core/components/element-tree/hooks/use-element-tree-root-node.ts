@@ -24,7 +24,7 @@ export interface UseElementTreeRootNodeResult {
   isLoading: boolean
 }
 
-export const useElementTreeRootNode = (id: number, showRoot: boolean): UseElementTreeRootNodeResult => {
+export const useElementTreeRootNode = (id: number | string, showRoot: boolean): UseElementTreeRootNodeResult => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const { treeId } = useTreeId()

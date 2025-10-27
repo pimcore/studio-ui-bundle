@@ -23,7 +23,7 @@ import { ContextMenuActionName } from '..'
 
 export interface UseRefreshTreeHookReturn {
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  refreshTree: (parentId: number) => void
+  refreshTree: (parentId: number | string) => void
 }
 
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
@@ -32,7 +32,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId(true)
 
-  const refreshTree = (parentId: number): void => {
+  const refreshTree = (parentId: number | string): void => {
     dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType }))
   }
 
@@ -43,7 +43,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
       icon: <Icon value={ 'refresh' } />,
       hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {
-        refreshTree(parseInt(node.id))
+        refreshTree(node.id)
         dispatch(setNodeExpanded({ treeId, nodeId: String(node.id), expanded: true }))
       }
     }
