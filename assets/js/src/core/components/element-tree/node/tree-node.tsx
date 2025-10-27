@@ -22,6 +22,7 @@ import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/util
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
+import cn from 'classnames'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
@@ -127,10 +128,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
 
-    if (isSelected) {
-      classes.push('tree-node--selected')
-    }
-
     if (danger) {
       classes.push('tree-node--danger')
     }
@@ -222,7 +219,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const nodeContent = (
     <Flex
       align="center"
-      className="tree-node__content-inner"
+      className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
       onClick={ onClick }
@@ -270,7 +267,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
             props={ {
               node: treeNodeProps,
               children: (
-                <div className="tree-node__content">
+                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
                   {wrapNode(nodeContent)}
                 </div>
               )
@@ -278,7 +275,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           />
           )
         : (
-          <div className="tree-node__content">
+          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
             {wrapNode(nodeContent)}
           </div>
           )}

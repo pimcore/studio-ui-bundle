@@ -21,7 +21,6 @@ export interface PanelProps {
   children: React.ReactNode
   theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
   name?: string
-  noteditable?: boolean
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
   contentPadding?: BoxProps['padding']
@@ -35,12 +34,32 @@ export const Panel = ({
   collapsible,
   title,
   theme = 'card-with-highlight',
-  noteditable,
   extra,
   extraPosition,
   contentPadding
 }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
+
+  const getContent = (): ReactNode => (
+    <BaseView
+      border={ border }
+      collapsed={ collapsed }
+      collapsible={ collapsible }
+      contentPadding={ contentPadding }
+      extra={ extra }
+      extraPosition={ extraPosition }
+      theme={ theme }
+      title={ title }
+    >
+      <Space
+        className='w-full'
+        direction='vertical'
+        size='extra-small'
+      >
+        {children}
+      </Space>
+    </BaseView>
+  )
 
   if (isMainPanel) {
     return (
@@ -55,27 +74,4 @@ export const Panel = ({
       {getContent()}
     </>
   )
-
-  function getContent (): ReactNode {
-    return (
-      <BaseView
-        border={ border }
-        collapsed={ collapsed }
-        collapsible={ collapsible }
-        contentPadding={ contentPadding }
-        extra={ extra }
-        extraPosition={ extraPosition }
-        theme={ theme }
-        title={ title }
-      >
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
-        >
-          {children}
-        </Space>
-      </BaseView>
-    )
-  }
 }

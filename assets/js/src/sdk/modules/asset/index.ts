@@ -16,6 +16,7 @@ export * from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbna
 export * from '@Pimcore/modules/asset/actions/download/use-download'
 export * from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 export * from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+export * from '@Pimcore/modules/asset/events/post-update-event'
 
 export * from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 

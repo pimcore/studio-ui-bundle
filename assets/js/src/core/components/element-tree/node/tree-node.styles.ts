@@ -60,7 +60,7 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: 2px 0 2px 0;
       }
 
-      &.tree-node--selected > .tree-node__content {
+      .tree-node__content--selected {
         background-color: ${token.controlItemBgActive};
       }
 

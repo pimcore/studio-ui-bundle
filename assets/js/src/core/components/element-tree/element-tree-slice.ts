@@ -17,7 +17,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { isEqual, isUndefined } from 'lodash'
+import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
 export interface TreeNode {
@@ -536,6 +536,41 @@ const slice = createSlice({
         }
       })
     },
+    setNodeAdditionalAttributes: (
+      state,
+      { payload }: PayloadAction<{
+        nodeId: string
+        elementType: ElementType
+        additionalAttributes: Record<string, any>
+      }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => {
+            const metadataKey = camelCase(payload.elementType)
+            return {
+              ...node,
+              treeNodeProps: !isUndefined(node.treeNodeProps)
+                ? {
+                    ...node.treeNodeProps,
+                    metaData: {
+                      ...node.treeNodeProps.metaData,
+                      [metadataKey]: {
+                        ...node.treeNodeProps.metaData?.[metadataKey],
+                        additionalAttributes: merge(
+                          {},
+                          node.treeNodeProps.metaData?.[metadataKey]?.additionalAttributes,
+                          payload.additionalAttributes
+                        )
+                      }
+                    }
+                  }
+                : undefined
+            }
+          })
+        }
+      })
+    },
     setRootNode: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, rootNode: TreeNode }>
@@ -698,7 +733,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
