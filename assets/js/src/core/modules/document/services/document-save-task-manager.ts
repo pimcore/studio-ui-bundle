@@ -29,6 +29,9 @@ import {
   DocumentSaveDataContext,
   type DocumentSaveUpdateData
 } from './processors/document-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type DocumentPostUpdateEvent } from '../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -160,6 +163,21 @@ export class DocumentSaveTaskManager {
             isPublished: true
           }))
         }
+
+        const event: DocumentPostUpdateEvent = {
+          identifier: {
+            type: eventTypes['document:editor:post-update'],
+            id: String(this.documentId)
+          },
+          payload: {
+            id: this.documentId,
+            task,
+            updatedData: result.data,
+            responseData: result.data
+          }
+        }
+
+        eventBus.publish(event)
 
         onFinish?.()
       } else {

@@ -16,7 +16,7 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import React, { useRef } from 'react'

@@ -10,12 +10,12 @@
 
 import React from 'react'
 import { type TabNode } from 'flexlayout-react'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { TitleView } from './title/title-view'
+import { type IconProps } from '@Pimcore/components/icon/icon'
 
 export interface WidgetContentTitleViewProps {
   node: TabNode
-  icon: ElementIcon
+  icon: IconProps
   title: string
 }
 

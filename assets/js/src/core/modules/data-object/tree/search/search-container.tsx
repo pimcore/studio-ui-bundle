@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { SearchContainer as BaseSearchContainer } from '@Pimcore/modules/element/tree/search/search-container'
+import { SearchContainer as BaseSearchContainer } from '@Pimcore/components/element-tree/search/search-container'
 import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { useTranslation } from 'react-i18next'
 

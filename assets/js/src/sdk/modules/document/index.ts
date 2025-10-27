@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 export * from '@Pimcore/modules/document/actions/save/use-save'
+export * from '@Pimcore/modules/document/events/post-update-event'
 
 export * from '@Pimcore/modules/document/document-draft-slice'
 export * from '@Pimcore/modules/document/draft/hooks/use-modified-editable-data'

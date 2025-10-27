@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/data-object/actions/add-object/use-add-object'
 export * from '@Pimcore/modules/data-object/actions/save/use-save'
+export * from '@Pimcore/modules/data-object/events/post-update-event'
 
 export * from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 
@@ -39,3 +40,8 @@ export * from '@Pimcore/components/language-selection/provider/language-selectio
 export * from '@Pimcore/components/language-selection/provider/use-language-selection'
 
 export * from '@Pimcore/modules/data-object/editor/widget'
+
+export * from '@Pimcore/modules/data-object/tree/node/with-action-states'
+
+export * from '@Pimcore/modules/data-object/listing/listing-container'
+export * from '@Pimcore/modules/data-object/data-object-provider'

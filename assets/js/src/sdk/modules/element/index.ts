@@ -20,8 +20,10 @@ export * from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tre
 export * from '@Pimcore/modules/element/actions/lock/use-lock'
 export * from '@Pimcore/modules/element/actions/open/open'
 export * from '@Pimcore/modules/element/actions/publish/use-publish'
+export * from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 export * from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 export * from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+export * from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 export * from '@Pimcore/modules/element/actions/rename/use-rename'
 
 export * from '@Pimcore/modules/element/draft/hooks/use-draft-data'
@@ -241,3 +243,7 @@ export * from '@Pimcore/modules/element/hooks/use-global-element-context'
 export * from '@Pimcore/modules/element/permissions/permission-helper'
 
 export * from '@Pimcore/modules/element/utils/element-type'
+
+export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
+export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'

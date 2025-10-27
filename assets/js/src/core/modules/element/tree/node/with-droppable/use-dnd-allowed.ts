@@ -10,7 +10,7 @@
 
 import { useStore } from 'react-redux'
 import { selectNodeState } from '@Pimcore/components/element-tree/element-tree-slice'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { isDndSourceAllowed, isDndTargetAllowed } from './permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 

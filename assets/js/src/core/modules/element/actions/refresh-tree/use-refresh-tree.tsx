@@ -13,17 +13,17 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { refreshNodeChildren, setNodeExpanded } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
 import { ContextMenuActionName } from '..'
 
 export interface UseRefreshTreeHookReturn {
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  refreshTree: (parentId: number) => void
+  refreshTree: (parentId: number | string) => void
 }
 
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
@@ -32,7 +32,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId(true)
 
-  const refreshTree = (parentId: number): void => {
+  const refreshTree = (parentId: number | string): void => {
     dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType }))
   }
 
@@ -43,7 +43,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
       icon: <Icon value={ 'refresh' } />,
       hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {
-        refreshTree(parseInt(node.id))
+        refreshTree(node.id)
         dispatch(setNodeExpanded({ treeId, nodeId: String(node.id), expanded: true }))
       }
     }
