@@ -535,18 +535,43 @@ const slice = createSlice({
         }
       })
     },
-    setNodeAdditionalAttributes: (
+    setNodeUpdateDataQualityScores: (
       state,
       { payload }: PayloadAction<{
         nodeId: string
         elementType: ElementType
-        additionalAttributes: Record<string, any>
+        dataQuality: Array<{
+          name: string
+          title: string
+          mark: string
+          score: number
+          rules: Array<{
+            title: string
+            suggestion: string
+            valid: boolean
+          }>
+          lastUpdated: number
+          additionalAttributes: any[]
+        }>
       }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
           updateNodeState(state, treeId, payload.nodeId, node => {
             const metadataKey = camelCase(payload.elementType)
+            const currentAdditionalAttributes = node.treeNodeProps?.metaData?.[metadataKey]?.additionalAttributes
+            const currentDataQuality = currentAdditionalAttributes?.dataQuality ?? {}
+
+            const updatedDataQuality = { ...currentDataQuality }
+            payload.dataQuality.forEach(item => {
+              if (currentDataQuality[item.name] !== undefined) {
+                updatedDataQuality[item.name] = {
+                  mark: item.mark,
+                  score: item.score
+                }
+              }
+            })
+
             return {
               ...node,
               treeNodeProps: !isUndefined(node.treeNodeProps)
@@ -556,11 +581,10 @@ const slice = createSlice({
                       ...node.treeNodeProps.metaData,
                       [metadataKey]: {
                         ...node.treeNodeProps.metaData?.[metadataKey],
-                        additionalAttributes: merge(
-                          {},
-                          node.treeNodeProps.metaData?.[metadataKey]?.additionalAttributes,
-                          payload.additionalAttributes
-                        )
+                        additionalAttributes: {
+                          ...currentAdditionalAttributes,
+                          dataQuality: updatedDataQuality
+                        }
                       }
                     }
                   }
@@ -724,6 +748,24 @@ const slice = createSlice({
           }))
         }
       })
+    },
+    updateEntireNode: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, updatedNode: Partial<TreeNode> }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  ...payload.updatedNode
+                }
+              : undefined
+          }))
+        }
+      })
     }
   }
 })
@@ -732,7 +774,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setNodeUpdateDataQualityScores, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, updateEntireNode } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
