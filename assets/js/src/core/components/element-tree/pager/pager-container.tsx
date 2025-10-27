@@ -12,7 +12,7 @@ import { type TreePagerProps } from '@Pimcore/components/element-tree/element-tr
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import React from 'react'
-import { useTreeFilter } from '../../../../components/element-tree/provider/tree-filter-provider/use-tree-filter'
+import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
 
 const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
   const { page, setPage } = useElementTreeNode(props.node.id)
