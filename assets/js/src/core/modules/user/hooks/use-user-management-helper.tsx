@@ -190,7 +190,9 @@ export const useUserManagementHelper = (): UseUserReturn => {
       updateUser
     }))
 
-    if (user.password !== undefined) {
+    if (user.password === undefined) {
+      handleNotification(t('user-management.save-user.success'), error)
+    } else {
       const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
         id,
         body: {
@@ -200,8 +202,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
       }))
 
       handleNotification(t('user-management.save-user.success'), passwordError)
-    } else {
-      handleNotification(t('user-management.save-user.success'), error)
     }
 
     const userDraft: UserDraft = {
