@@ -31,6 +31,7 @@ import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 interface UseAddObjectHookReturn {
   addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  addObject: (className: string, classId: string, parentId: number, onFinish?: (newName: string) => void) => void
 }
 
 export const useAddObject = (): UseAddObjectHookReturn => {
@@ -106,23 +107,32 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     }
   }
 
-  const createDataObject = (
-    classDefinition: ClassDefinitionListItem,
+  const addObject = (
+    className: string,
+    classId: string,
     parentId: number,
     onFinish?: (newName: string) => void
   ): void => {
     modal.input({
-      title: t('data-object.create-data-object', { className: classDefinition.name }),
+      title: t('data-object.create-data-object', { className }),
       label: t('form.label.new-item'),
       rule: {
         required: true,
         message: t('form.validation.required')
       },
       onOk: async (value: string) => {
-        await createDataObjectMutation(classDefinition.id, value, parentId)
+        await createDataObjectMutation(classId, value, parentId)
         onFinish?.(value)
       }
     })
+  }
+
+  const createDataObject = (
+    classDefinition: ClassDefinitionListItem,
+    parentId: number,
+    onFinish?: (newName: string) => void
+  ): void => {
+    addObject(classDefinition.name, classDefinition.id, parentId, onFinish)
   }
 
   const createDataObjectMutation = async (
@@ -172,6 +182,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   }
 
   return {
-    addObjectTreeContextMenuItem
+    addObjectTreeContextMenuItem,
+    addObject
   }
 }
