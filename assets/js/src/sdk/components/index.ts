@@ -55,7 +55,6 @@ export { type NodeState as xy, useElementTreeNode } from '@Pimcore/components/el
 export * from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 export * from '@Pimcore/components/element-tree/expander/tree-expander'
 export * from '@Pimcore/components/element-tree/list/tree-list'
-export * as elementTreeSlice from '@Pimcore/components/element-tree/element-tree-slice'
 export { TreeNode, type TreeNodeProps, defaultProps as treeNodeDefaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 export * from '@Pimcore/components/element-tree/node/content/tree-node-content'
 export * from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
