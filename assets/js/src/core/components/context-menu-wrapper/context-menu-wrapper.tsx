@@ -57,7 +57,10 @@ export const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperP
       open={ open }
       trigger={ ['contextMenu'] }
     >
-      <span role="none" onContextMenu={ handleContextMenu }>{children}</span>
+      <span
+        onContextMenu={ handleContextMenu }
+        role="none"
+      >{children}</span>
     </Dropdown>
   )
 }
