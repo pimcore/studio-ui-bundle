@@ -8,14 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useStyles } from './title-view.styles'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface TitleViewProps {
   title: string
-  icon: ElementIcon
+  icon: IconProps
   className?: string
 }
 
