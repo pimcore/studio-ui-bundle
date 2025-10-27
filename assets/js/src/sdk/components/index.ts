@@ -154,7 +154,7 @@ export * from '@Pimcore/components/toolstrip/box/tool-strip-box'
 export * from '@Pimcore/components/tree-element/tree-element'
 export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
-export * from '@Pimcore/modules/auth/hooks/use-user'
+export * from '@Pimcore/components/predefined-layouts/config/config-layout'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
 // export * from '@Pimcore/components/upload/upload-modal/upload-modal'
