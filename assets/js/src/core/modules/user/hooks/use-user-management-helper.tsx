@@ -200,10 +200,10 @@ export const useUserManagementHelper = (): UseUserReturn => {
         }
       }))
 
-      handleNotification(t('user-management.save-user.password.success'), passwordError)
+      handleNotification(t('user-management.save-user.success'), passwordError)
+    } else {
+      handleNotification(t('user-management.save-user.success'), error)
     }
-
-    handleNotification(t('user-management.save-user.success'), error)
 
     const userDraft: UserDraft = {
       ...data,
