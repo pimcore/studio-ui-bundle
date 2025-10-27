@@ -148,7 +148,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const tooltipTitle = (
     <>
       <div>{t('ID')}: {node.id}</div>
-      <div>{t('Type')}: {isObject && (node.type === 'object' || node.type === 'variant') ? t(node.metaData.dataObject.className) : t(node.type!)}</div>
+      <div>{t('Type')}: {isObject && (node.type === 'object' || node.type === 'variant') ? t(node.metaData.dataObject.className as string) : t(node.type!)}</div>
     </>
   )
 
