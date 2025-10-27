@@ -16,6 +16,10 @@ const defaultComponentConfig = {
     feedback: {
       type: ComponentType.SLOT,
       name: 'global.feedback'
+    },
+    modal: {
+      type: ComponentType.SLOT,
+      name: 'global.modal'
     }
   },
   asset: {

@@ -173,6 +173,9 @@ export const studioDefaultLightThemeConfig = {
         Warning: {
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
+        },
+        Primary: {
+          colorPrimaryText: '#22075e'
         }
       },
       Base: {
