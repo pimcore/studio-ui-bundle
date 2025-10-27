@@ -34,6 +34,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
 
   const element: Record<string, any> | undefined = node.metaData?.asset ?? node.metaData?.dataObject ?? node.metaData?.document
   const isAsset = node.metaData?.asset !== undefined
+  const isObject = node.metaData?.dataObject !== undefined
   const hasTooltip = element?.customAttributes?.tooltip !== null && element?.customAttributes?.tooltip !== undefined
 
   // Listen for global drag state changes
@@ -147,7 +148,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const tooltipTitle = (
     <>
       <div>{t('ID')}: {node.id}</div>
-      <div>{t('Type')}: {t(node.type!)}</div>
+      <div>{t('Type')}: {isObject && (node.type === 'object' || node.type === 'variant') ? t(node.metaData.dataObject.className) : t(node.type!)}</div>
     </>
   )
 
