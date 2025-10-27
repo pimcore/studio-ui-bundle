@@ -31,11 +31,15 @@ export interface ContextMenuWrapperProps {
   renderMenu: () => ReactElement
 }
 
-const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): React.JSX.Element => {
+export const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
 
   const closeMenu = (): void => {
     setOpen(false)
+  }
+
+  const handleContextMenu = (event: React.MouseEvent): void => {
+    event.stopPropagation()
   }
 
   const contextValue: ContextMenuContextType = {
@@ -53,7 +57,7 @@ const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): 
       open={ open }
       trigger={ ['contextMenu'] }
     >
-      <span>{children}</span>
+      <span onContextMenu={ handleContextMenu }>{children}</span>
     </Dropdown>
   )
 }
