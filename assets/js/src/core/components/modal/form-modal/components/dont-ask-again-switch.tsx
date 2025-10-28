@@ -18,7 +18,10 @@ export function DontAskAgainSwitch (props: { dontAskAgainRef: React.MutableRefOb
   const { t } = useTranslation()
 
   return (
-    <Flex align="center" gap="mini">
+    <Flex
+      align="center"
+      gap="mini"
+    >
       <Switch
         defaultChecked={ false }
         onChange={ (checked) => {
