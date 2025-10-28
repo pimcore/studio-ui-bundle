@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_modules__asset.6a8edc1c.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["840"],{42804:function(t,i,o){o.d(i,{C:()=>l});var e=o(47588),d=o(35715);let l=t=>({id:(0,d.K)(),action:t.action,type:"download",title:t.title,status:e.B.QUEUED,topics:t.topics,config:{downloadUrl:t.downloadUrl}})}}]);
