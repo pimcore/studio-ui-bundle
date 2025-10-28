@@ -317,6 +317,7 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
   'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
   'DynamicTypes/Grid/Transformers/Translate': 'DynamicTypes/Grid/Transformers/Translate',
+  'DynamicTypes/Grid/Transformers/PHPCode': 'DynamicTypes/Grid/Transformers/PHPCode',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
