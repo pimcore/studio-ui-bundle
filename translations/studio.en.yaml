@@ -806,6 +806,7 @@ key-bindings.robots: Robots
 key-bindings.httpErrorLog: HTTP Error Log
 key-bindings.seo: SEO
 key-bindings.redirects: Redirects
+key-bindings.bundles: Bundles
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
