@@ -11,13 +11,14 @@
 import React from 'react'
 import { Switch } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { Flex } from '@sdk/components'
 
 export function DontAskAgainSwitch (props: { dontAskAgainRef: React.MutableRefObject<boolean> }): React.JSX.Element {
   const { dontAskAgainRef } = props
   const { t } = useTranslation()
 
   return (
-    <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+    <Flex align="center" gap="mini">
       <Switch
         defaultChecked={ false }
         onChange={ (checked) => {
@@ -26,6 +27,6 @@ export function DontAskAgainSwitch (props: { dontAskAgainRef: React.MutableRefOb
         size="small"
       />
       <span>{t('dont-ask-again')}</span>
-    </div>
+    </Flex>
   )
 }
