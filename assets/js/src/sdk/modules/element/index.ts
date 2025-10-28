@@ -244,6 +244,8 @@ export * from '@Pimcore/modules/element/permissions/permission-helper'
 
 export * from '@Pimcore/modules/element/utils/element-type'
 
+export * from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
+
 export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
