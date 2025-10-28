@@ -164,20 +164,22 @@ export class DocumentSaveTaskManager {
           }))
         }
 
-        const event: DocumentPostUpdateEvent = {
-          identifier: {
-            type: eventTypes['document:editor:post-update'],
-            id: String(this.documentId)
-          },
-          payload: {
-            id: this.documentId,
-            task,
-            updatedData: result.data,
-            responseData: result.data
+        if (task !== SaveTaskType.AutoSave) {
+          const event: DocumentPostUpdateEvent = {
+            identifier: {
+              type: eventTypes['document:editor:post-update'],
+              id: String(this.documentId)
+            },
+            payload: {
+              id: this.documentId,
+              task,
+              updatedData: result.data,
+              responseData: result.data
+            }
           }
-        }
 
-        eventBus.publish(event)
+          eventBus.publish(event)
+        }
 
         onFinish?.()
       } else {

@@ -150,20 +150,22 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
           dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: true }))
         }
 
-        const event: PostUpdateEvent = {
-          identifier: {
-            type: eventTypes['data-object:editor:post-update'],
-            id: String(id)
-          },
-          payload: {
-            id,
-            task,
-            updatedData,
-            responseData: response.data
+        if (task !== SaveTaskType.AutoSave) {
+          const event: PostUpdateEvent = {
+            identifier: {
+              type: eventTypes['data-object:editor:post-update'],
+              id: String(id)
+            },
+            payload: {
+              id,
+              task,
+              updatedData,
+              responseData: response.data
+            }
           }
-        }
 
-        eventBus.publish(event)
+          eventBus.publish(event)
+        }
 
         onFinish?.()
       }
