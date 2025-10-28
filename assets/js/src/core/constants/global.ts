@@ -12,3 +12,5 @@ export enum ElementTypeName {
   ASSET = 'asset',
   DATA_OBJECT = 'data-object'
 }
+
+export const LOCAL_STORAGE_PREFIX = 'pimcore_studio_'
