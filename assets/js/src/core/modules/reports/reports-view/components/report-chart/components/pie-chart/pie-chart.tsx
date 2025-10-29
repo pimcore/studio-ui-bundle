@@ -114,7 +114,7 @@ export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): R
     ]
   }
 
-  const mergedConfig = chartConfig !== undefined ? merge({}, config, chartConfig) : config
+  const mergedConfig = chartConfig === undefined ? config : merge({}, config, chartConfig)
 
   return (
     <div>

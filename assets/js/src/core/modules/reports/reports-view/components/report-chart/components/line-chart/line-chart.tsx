@@ -127,7 +127,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap, chartConfig }:
     }
   }), [chartWidth])
 
-  const mergedConfig = chartConfig !== undefined ? merge({}, config, chartConfig) : config
+  const mergedConfig = chartConfig === undefined ? config : merge({}, config, chartConfig)
 
   return (
     <div className="m-t-mini">
