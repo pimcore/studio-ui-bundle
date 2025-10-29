@@ -21,6 +21,9 @@ export type { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 export type { ElementType } from '@Pimcore/types/enums/element/element-type'
 export * from '@Pimcore/modules/widget-manager/events'
 
+// Processor Registry for widget manipulation
+export * from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
+
 // Components for titleComponent (tab/button titles)
 export { TabTitleContainer } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 export { BorderTitleView } from '@Pimcore/modules/widget-manager/title/border-title-view'

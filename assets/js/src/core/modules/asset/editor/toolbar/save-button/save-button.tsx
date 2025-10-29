@@ -148,17 +148,12 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
       update.data = textData
     }
 
-    // Apply save data processors
-    try {
-      const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
-        serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
-      )
+    const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
+      serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
+    )
 
-      const context = new AssetSaveDataContext(id, update)
-      saveDataProcessorRegistry.executeProcessors(context)
-    } catch (error) {
-      console.warn(`Save data processors failed for asset ${id}:`, error)
-    }
+    const context = new AssetSaveDataContext(id, update)
+    saveDataProcessorRegistry.executeProcessors(context)
 
     const saveAssetPromise = saveAsset({
       id,

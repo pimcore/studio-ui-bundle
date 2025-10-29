@@ -261,6 +261,7 @@ import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services
 import { DocumentSaveDataProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-save-data-processor-registry'
 import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
+import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -273,6 +274,7 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
+container.bind(serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']).to(PerspectiveProcessorRegistry).inSingletonScope()
 
 // Form services
 container.bind(serviceIds.debouncedFormRegistry).to(DebouncedFormRegistry).inSingletonScope()

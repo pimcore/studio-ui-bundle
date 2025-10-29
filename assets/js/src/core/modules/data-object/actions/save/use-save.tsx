@@ -121,17 +121,12 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     updatedData.useDraftData = useDraftData
 
-    // Apply save data processors
-    try {
-      const saveDataProcessorRegistry = container.get<DataObjectSaveDataProcessorRegistry>(
-        serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']
-      )
+    const saveDataProcessorRegistry = container.get<DataObjectSaveDataProcessorRegistry>(
+      serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']
+    )
 
-      const context = new DataObjectSaveDataContext(id, task, updatedData)
-      saveDataProcessorRegistry.executeProcessors(context)
-    } catch (error) {
-      console.warn(`Save data processors failed for data object ${id}:`, error)
-    }
+    const context = new DataObjectSaveDataContext(id, task, updatedData)
+    saveDataProcessorRegistry.executeProcessors(context)
 
     await saveDataObject({
       id,
