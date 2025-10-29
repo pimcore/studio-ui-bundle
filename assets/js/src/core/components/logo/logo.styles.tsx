@@ -13,7 +13,10 @@ import { createStyles } from 'antd-style'
 export const useStlyes = createStyles(({ token, css }) => {
   return {
     logo: css`
-      padding: 13px 16px 0 16px;
+      padding: 4px 0 4px 0;
+      height: 32px;
+      width: 40px;
+      color: #5520A6;
     `
   }
 }, { hashPriority: 'low' })

@@ -164,6 +164,25 @@ const defaultComponentConfig = {
       ]
     }
   },
+  rightSidebar: {
+    slot: {
+      type: ComponentType.SLOT,
+      name: 'rightSidebar.slot',
+      defaultEntries: [
+        { name: 'logoContainer', priority: 100 },
+      ]
+    },
+    logo: {
+      image: {
+        type: ComponentType.SINGLE,
+        name: 'rightSidebar.logo.image',
+      },
+      subscriptionDetails: {
+        type: ComponentType.SINGLE,
+        name: 'rightSidebar.logo.subscriptionDetails',
+      }
+    },
+  },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
   }

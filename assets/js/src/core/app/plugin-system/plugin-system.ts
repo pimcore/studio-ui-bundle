@@ -20,6 +20,7 @@ export interface ILifeCycleEvents {
 
 export interface IAbstractPlugin extends ILifeCycleEvents {
   name: string
+  priority?: number
 }
 
 export class PluginSystem {
@@ -76,7 +77,12 @@ export class PluginSystem {
           continue
         }
 
-        this.registerPlugin(plugin)
+        const finalPlugin = {
+          priority: plugin.priority ??0,
+          ...plugin
+        }
+
+        this.registerPlugin(finalPlugin)
       }
     }
   }
@@ -85,8 +91,14 @@ export class PluginSystem {
     this.registry[plugin.name] = plugin
   }
 
+  getOrderedPlugins (): IAbstractPlugin[] { {
+    return Object.values(this.registry).sort((a, b) => {
+      return (a.priority ?? 0) - (b.priority ?? 0)
+    })
+  } }
+
   initPlugins (): void {
-    Object.values(this.registry).forEach(plugin => {
+    this.getOrderedPlugins().forEach(plugin => {
       if (plugin.onInit !== undefined) {
         plugin.onInit({ container })
       }
@@ -94,7 +106,7 @@ export class PluginSystem {
   }
 
   startupPlugins (): void {
-    Object.values(this.registry).forEach(plugin => {
+    this.getOrderedPlugins().forEach(plugin => {
       if (plugin.onStartup !== undefined) {
         plugin.onStartup({ moduleSystem })
       }

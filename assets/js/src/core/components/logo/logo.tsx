@@ -11,18 +11,17 @@
 import React from 'react'
 import PimcoreLogo from '@Pimcore/assets/images/pimcore.inline.svg?react'
 import { useStlyes } from './logo.styles'
+import {Flex} from '@Pimcore/components/flex/flex'
 
 export const Logo = (): React.JSX.Element => {
   const { styles } = useStlyes()
 
   return (
-    <div className={ ['logo', styles.logo].join(' ') }>
+    <Flex style={{ display: 'inline-flex' }} justify="center" align='center' className={ ['logo', styles.logo].join(' ') }>
       <PimcoreLogo
-        color='#333'
-        fill='#ff0000'
         height={ 24 }
         width={ 24 }
       />
-    </div>
+    </Flex>
   )
 }
