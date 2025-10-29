@@ -276,20 +276,14 @@ export class DocumentSaveTaskManager {
     updatedData.task = task
     updatedData.useDraftData = useDraftData
 
-    // Apply save data processors
-    try {
-      const saveDataProcessorRegistry = container.get<DocumentSaveDataProcessorRegistry>(
-        serviceIds['Document/ProcessorRegistry/SaveDataProcessor']
-      )
+    const saveDataProcessorRegistry = container.get<DocumentSaveDataProcessorRegistry>(
+      serviceIds['Document/ProcessorRegistry/SaveDataProcessor']
+    )
 
-      const context = new DocumentSaveDataContext(this.documentId, task, updatedData)
-      saveDataProcessorRegistry.executeProcessors(context)
+    const context = new DocumentSaveDataContext(this.documentId, task, updatedData)
+    saveDataProcessorRegistry.executeProcessors(context)
 
-      return context.updateData
-    } catch (error) {
-      console.warn(`Save data processors failed for document ${this.documentId}:`, error)
-      return updatedData
-    }
+    return context.updateData
   }
 
   /**

@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { injectable } from 'inversify'
+
 /**
  * Abstract Processor Registry
  *
@@ -26,6 +28,7 @@ export interface Processor<TContext> {
   execute: (context: TContext) => void
 }
 
+@injectable()
 export abstract class AbstractProcessorRegistry<TContext> {
   protected processors: Array<Processor<TContext>> = []
 
