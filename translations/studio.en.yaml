@@ -232,6 +232,9 @@ grid.advanced-column.advancedColumns.twigOperator: Twig Operator
 grid.advanced-column.advancedColumns.anonymizer: Anonymizer
 grid.advanced-column.advancedColumns.blur: Blur
 grid.advanced-column.advancedColumns.translate: Translate
+grid.advanced-column.advancedColumns.phpCode: PHP Code
+grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
+grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
