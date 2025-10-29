@@ -68,3 +68,5 @@ export const Flex = forwardRef(({ gap = 0, className, rootClassName, children, .
     </AntFlex>
   )
 })
+
+Flex.displayName = 'Flex'
