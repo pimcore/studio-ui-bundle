@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type LegacyRef } from 'react'
+import React, { forwardRef, type LegacyRef } from 'react'
 import { Flex as AntFlex, type FlexProps as AntFlexProps, theme } from 'antd'
 import cn from 'classnames'
 import { isString, isNumber, isObject } from 'lodash'
@@ -23,7 +23,7 @@ export interface FlexProps extends Omit<AntFlexProps, 'gap'> {
 
 const { useToken } = theme
 
-export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: FlexProps): React.JSX.Element => {
+export const Flex = forwardRef(({ gap = 0, className, rootClassName, children, ...props }: FlexProps, ref: LegacyRef<HTMLDivElement>): React.JSX.Element => {
   const { token } = useToken()
 
   const { x, y } = calculateGap(gap)
@@ -62,8 +62,11 @@ export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: 
     <AntFlex
       className={ flexClassNames }
       { ...props }
+      ref={ ref }
     >
       {children}
     </AntFlex>
   )
-}
+})
+
+Flex.displayName = 'Flex'

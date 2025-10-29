@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { forwardRef, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { type TreeNodeProps } from '../tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
@@ -31,6 +31,16 @@ export interface TreeNodeContentMetaProps {
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { icon, label, labelAddon, isPublished, elementType } = props.node
   const { styles } = useStyles()
+  const metaRef = useRef<HTMLDivElement>(null)
+  const [containerChildMinWidth, setContainerChildMinWidth] = useState(150)
+
+  useLayoutEffect(() => {
+    if (metaRef.current !== null) {
+      const metaWidth = metaRef.current.offsetWidth
+      const calculatedMinWidth = Math.max(0, 150 - metaWidth)
+      setContainerChildMinWidth(calculatedMinWidth)
+    }
+  }, [])
 
   const getMetaSlotName = (): string => {
     switch (elementType) {
@@ -57,6 +67,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         data-testid={ `tree-node-content-main-${props.node.id}` }
         gap={ 'small' }
         ref={ ref }
+        style={ { minWidth: `${containerChildMinWidth}px` } }
       >
         <Icon
           { ...icon }
@@ -81,7 +92,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
       <Flex
         align='center'
         data-testid={ `tree-node-content-meta-${props.node.id}` }
-        ref={ ref }
+        ref={ metaRef }
       >
         <SlotRenderer
           props={ { node: props.node } }

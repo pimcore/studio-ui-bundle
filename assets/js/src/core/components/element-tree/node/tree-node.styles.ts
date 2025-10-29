@@ -53,6 +53,17 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .tree-node__content-inner {
         padding: 0 ${token.paddingSM}px 0 0;
+
+        @media (hover: hover) {
+          &:hover {
+            background-color: ${token.controlItemBgActiveHover};
+          }
+        }
+
+        &:focus {
+          outline: none;
+          background-color: ${token.controlItemBgActiveHover};
+        }
       }
 
       .tree-node__content-wrapper-outer {
@@ -62,6 +73,11 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .tree-node__content--selected {
         background-color: ${token.controlItemBgActive};
+
+        &:hover,
+        & .tree-node__content-inner {
+          background-color: ${token.controlItemBgActive};
+        }
       }
 
       .tree-node-content__label {
