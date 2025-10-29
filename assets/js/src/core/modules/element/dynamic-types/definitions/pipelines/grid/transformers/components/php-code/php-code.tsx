@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 
 export const DynamicTypePipelineGridTransformersPhpCodeComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
@@ -27,14 +28,20 @@ export const DynamicTypePipelineGridTransformersPhpCodeComponent = (): React.JSX
   const phpCodeKeyOptions = transformerConfig.configOptions.phpCodeKey.options
 
   return (
-    <Form.Item
-      initialValue={ phpCodeKeyOptions[0]?.value }
-      label={ t('grid.advanced-column.advancedColumns.phpCodeKey') }
-      name={ 'phpCodeKey' }
-    >
-      <Select
-        options={ phpCodeKeyOptions }
-      />
-    </Form.Item>
+    <>
+      <Form.Item
+        initialValue={ phpCodeKeyOptions[0]?.value }
+        label={ t('grid.advanced-column.advancedColumns.phpCodeKey') }
+        name={ 'phpCodeKey' }
+      >
+        <Select options={ phpCodeKeyOptions } />
+      </Form.Item>
+      <Form.Item
+        label={ t('grid.advanced-column.advancedColumns.arguments') }
+        name={ 'arguments' }
+      >
+        <TextArea />
+      </Form.Item>
+    </>
   )
 }
