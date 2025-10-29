@@ -10,7 +10,7 @@
 
 import React, { useMemo, useRef, useState } from 'react'
 import { Column } from '@ant-design/plots'
-import { toNumber } from 'lodash'
+import { merge, toNumber } from 'lodash'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
@@ -24,7 +24,7 @@ const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_HEIGHT = 250
 
-export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
+export const BarChart = ({ chartData, reportData, chartLabelMap, chartConfig }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const chartRef = useRef<HTMLDivElement>(null)
@@ -128,13 +128,15 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
     }
   }), [chartWidth])
 
+  const mergedConfig = chartConfig !== undefined ? merge({}, config, chartConfig) : config
+
   return (
     <div className="m-t-mini">
       <div
         ref={ chartRef }
         style={ { overflowX: 'hidden' } }
       >
-        <Column { ...config } />
+        <Column { ...mergedConfig } />
       </div>
 
       <Flex
