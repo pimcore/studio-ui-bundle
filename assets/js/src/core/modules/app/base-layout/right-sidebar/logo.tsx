@@ -15,4 +15,3 @@ export const Logo = (): React.JSX.Element => {
     <ComponentRenderer component={componentConfig.rightSidebar.logo.subscriptionDetails.name} props={subscriptionDetailProps} />
   )
 }
-}
