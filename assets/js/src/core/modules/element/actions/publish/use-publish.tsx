@@ -33,9 +33,9 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
   const { executeElementTask } = useElementHelper()
 
   const isPublishHidden = (node: TreeNodeProps): boolean => {
-    return !checkElementPermission(node.permissions, 'publish') || 
-           !isTreeActionAllowed(TreePermission.Publish) || 
-           node.isLocked || 
+    return !checkElementPermission(node.permissions, 'publish') ||
+           !isTreeActionAllowed(TreePermission.Publish) ||
+           node.isLocked ||
            node.isPublished === true
   }
 
