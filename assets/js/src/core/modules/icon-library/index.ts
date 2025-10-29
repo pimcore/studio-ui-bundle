@@ -230,6 +230,8 @@ import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
+import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
+import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
@@ -1125,6 +1127,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'style',
       component: style
+    })
+    iconLibrary.register({
+      name: 'subscription-community',
+      component: subscriptionCommunity
+    })
+    iconLibrary.register({
+      name: 'subscription-enterprise',
+      component: subscriptionEnterprise
     })
     iconLibrary.register({
       name: 'tag-configuration',
