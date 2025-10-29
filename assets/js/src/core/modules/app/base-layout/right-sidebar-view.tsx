@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Logo } from '@Pimcore/components/logo/logo'
 import React from 'react'
 import { useStlyes } from './right-sidebar-view.styles'
 import { SlotRenderer } from '../component-registry/slot-renderer'
@@ -25,8 +24,6 @@ export const RightSidebarView = (): React.JSX.Element => {
 
   return (
     <div className={ styles.rightSidebar }>
-      {/*<Logo />*/}
-
       <ul className='right-sidebar__nav'>
         <SlotRenderer
           onRenderComponent={ (Component, context) => (
