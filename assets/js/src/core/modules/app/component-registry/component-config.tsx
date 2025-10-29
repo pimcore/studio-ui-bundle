@@ -169,19 +169,19 @@ const defaultComponentConfig = {
       type: ComponentType.SLOT,
       name: 'rightSidebar.slot',
       defaultEntries: [
-        { name: 'logoContainer', priority: 100 },
+        { name: 'logoContainer', priority: 100 }
       ]
     },
     logo: {
       image: {
         type: ComponentType.SINGLE,
-        name: 'rightSidebar.logo.image',
+        name: 'rightSidebar.logo.image'
       },
       subscriptionDetails: {
         type: ComponentType.SINGLE,
-        name: 'rightSidebar.logo.subscriptionDetails',
+        name: 'rightSidebar.logo.subscriptionDetails'
       }
-    },
+    }
   },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }

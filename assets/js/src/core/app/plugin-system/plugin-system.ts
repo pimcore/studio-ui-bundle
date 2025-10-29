@@ -78,7 +78,7 @@ export class PluginSystem {
         }
 
         const finalPlugin = {
-          priority: plugin.priority ??0,
+          priority: plugin.priority ?? 0,
           ...plugin
         }
 
@@ -91,7 +91,7 @@ export class PluginSystem {
     this.registry[plugin.name] = plugin
   }
 
-  getOrderedPlugins (): IAbstractPlugin[] { 
+  getOrderedPlugins (): IAbstractPlugin[] {
     return Object.values(this.registry).sort((a, b) => {
       return (a.priority ?? 0) - (b.priority ?? 0)
     })
