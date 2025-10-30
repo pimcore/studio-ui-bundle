@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
-import { DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
+import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
-import { HotspotDroppable, HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
+import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 
 interface OnSortingDropProps {
