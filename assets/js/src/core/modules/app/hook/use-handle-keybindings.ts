@@ -13,9 +13,11 @@ import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import type { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 // import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
-export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, alwaysActive = false): void => {
+export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, alwaysActive = false, permission?: UserPermission): void => {
   const isWidgetActive = useIsAcitveMainWidget()
   const { user } = useUserDraft()
   const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
@@ -36,10 +38,14 @@ export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, act
     const { keyCode, ctrlKey, altKey, shiftKey } = evt
 
     if (config?.key !== undefined && config.key === keyCode && config.ctrl === ctrlKey && config.shift === shiftKey && config.alt === altKey) {
+      // check permissions if provided
+      if (permission !== undefined && !isAllowed(permission)) {
+        return
+      }
       evt.preventDefault()
       callback(evt)
     }
-  }, [callback, actionName])
+  }, [callback, actionName, permission])
 
   useEffect(() => {
     document.removeEventListener('keydown', eventHandler)
