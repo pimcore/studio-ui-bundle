@@ -169,7 +169,6 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   )
 
   const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
-  console.log('---->>>> drillDownFields: ', reportDetailData?.columnConfigurations)
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
