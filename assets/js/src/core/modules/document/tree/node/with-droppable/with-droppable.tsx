@@ -10,7 +10,7 @@
 
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
-import { DragAndDropInfo, Droppable, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
+import { DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
