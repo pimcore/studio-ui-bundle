@@ -58,15 +58,8 @@ jobs:
     secrets:
       NPM_ACCESSTOKEN: ${{ secrets.NPM_ACCESSTOKEN }}
 
-  release-build:
+  release-determine-version:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    permissions:
-      contents: write
-    uses: ./.github/workflows/shared-frontend-build.yaml
-
-  release-extract-version:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    needs: release-build
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
@@ -117,10 +110,10 @@ jobs:
 
   publish-release:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    needs: release-extract-version
+    needs: release-determine-version
     uses: ./.github/workflows/shared-npm-publish.yaml
     with:
-      version: "${{ needs.release-extract-version.outputs.version }}"
-      tag: "${{ needs.release-extract-version.outputs.npm_tag }}"
+      version: "${{ needs.release-determine-version.outputs.version }}"
+      tag: "${{ needs.release-determine-version.outputs.npm_tag }}"
     secrets:
       NPM_ACCESSTOKEN: ${{ secrets.NPM_ACCESSTOKEN }}
