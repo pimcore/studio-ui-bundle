@@ -164,11 +164,12 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
-      ?.filter((item) => !isEmptyValue(item.filterDrilldown) && !isEmptyValue(item.filterType))
+      ?.filter((item) => !isEmptyValue(item.filterDrilldown))
       .map(item => item)
   )
 
   const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
+  console.log('---->>>> drillDownFields: ', reportDetailData?.columnConfigurations)
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
