@@ -164,7 +164,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
-      ?.filter((item) => !isNil(item.filterDrilldown) && !isNil(item.filterType))
+      ?.filter((item) => !isEmptyValue(item.filterDrilldown) && !isEmptyValue(item.filterType))
       .map(item => item)
   )
 
