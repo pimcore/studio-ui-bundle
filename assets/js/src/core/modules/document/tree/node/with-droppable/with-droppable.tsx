@@ -8,18 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
-import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
+import { DragAndDropInfo, Droppable, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { HotspotDroppable, HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
+import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
+
+interface OnSortingDropProps {
+  info: DragAndDropInfo
+  position?: 'top' | 'bottom'
+}
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('document')
+    const { move: moveByIndex } = useSorting('document')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
 
     if (props.metaData?.document === undefined) {
@@ -60,19 +68,72 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       return info.type === 'document' && isSourceAllowed(sourceDocument) && isTargetAllowed(targetDocument)
     }
 
+    const onSortingDrop = (props: OnSortingDropProps): void => {
+      const { info, position = 'top' } = props
+      const sourceDocument: Document = info.data
+
+      if (!isSourceAllowed(sourceDocument) || !isTargetAllowed(targetDocument)) {
+        return
+      }
+
+      moveByIndex({
+        currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
+        targetElement: { id: targetDocument.id, parentId: targetDocument.parentId },
+        newIndex: position === 'top' ? targetDocument.index : targetDocument.index + 1
+      }).catch(() => {
+        trackError(new GeneralError('Item could not be moved'))
+      })
+    }
+
+    let hotspots: HotspotDroppableProps['hotspots'] = [
+      {
+        id: 'drop-middle',
+        isValidContext: checkForValidContext,
+        isValidData: checkForValidData,
+        position: { x: '0', y: '0%', width: '100%', height: '100%' },
+        onDrop
+      }
+    ]
+
+    if (props.isRoot !== true) {
+      hotspots = [
+        {
+          id: 'sorting-top',
+          className: 'dnd__sorting dnd__sorting--top',
+          isValidContext: checkForValidContext,
+          isValidData: checkForValidData,
+          position: { x: 0, y: 0, width: '100%', height: '30%' },
+          onDrop: (info) => { onSortingDrop({ info, position: 'top' }) }
+        },
+        {
+          id: 'drop-middle',
+          isValidContext: checkForValidContext,
+          isValidData: checkForValidData,
+          position: { x: '0', y: '30%', width: '100%', height: '40%' },
+          onDrop
+        },
+        {
+          id: 'sorting-bottom',
+          className: 'dnd__sorting dnd__sorting--bottom',
+          isValidContext: checkForValidContext,
+          isValidData: checkForValidData,
+          position: { x: 0, y: '70%', width: '100%', height: '30%' },
+          onDrop: (info) => { onSortingDrop({ info, position: 'bottom' }) }
+        }
+      ]
+    }
+
     return (
       <Component
         { ...props }
         ref={ ref }
         wrapNode={ (children) => (
-          <Droppable
+          <HotspotDroppable
             disableDndActiveIndicator
-            isValidContext={ checkForValidContext }
-            isValidData={ checkForValidData }
-            onDrop={ onDrop }
+            hotspots={ hotspots }
           >
             {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
-          </Droppable>
+          </HotspotDroppable>
         ) }
       />
     )
