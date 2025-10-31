@@ -12,11 +12,14 @@ import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/compo
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import React from 'react'
 import { type SubscriptionDetailsProps } from './logo/subscription-details'
+import { useTranslation } from 'react-i18next'
 
 export const Logo = (): React.JSX.Element => {
+  const { t } = useTranslation();
+
   const subscriptionDetailProps: SubscriptionDetailsProps = {
     icon: 'subscription-community',
-    tooltip: 'Learn more about Pimcore Editions',
+    tooltip: t('subscription-details.community-edition'),
     link: 'https://pimcore.com/en/products/edition/overview',
     children: <ComponentRenderer component={ componentConfig.rightSidebar.logo.image.name } />
   }
