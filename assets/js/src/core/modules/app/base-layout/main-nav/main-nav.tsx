@@ -36,7 +36,7 @@ import { ROLES_WIDGET, USERS_WIDGET } from '@Pimcore/modules/user'
 import { CUSTOM_REPORTS_WIDGET, REPORTS_WIDGET } from '@Pimcore/modules/reports'
 import { REDIRECTS_WIDGET } from '@Pimcore/modules/redirects'
 import { TAG_CONFIGURATION_WIDGET } from '@Pimcore/modules/tags'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission';
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
