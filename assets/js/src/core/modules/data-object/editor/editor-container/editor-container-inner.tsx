@@ -23,7 +23,7 @@ import { InheritanceStateProvider } from '@Pimcore/modules/data-object/editor/ty
 import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { getDataObjectContext } from '@Pimcore/utils/global-context'
+import { getBaseDataObjectContext } from '@Pimcore/utils/global-context'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -43,7 +43,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, context: getDataObjectContext(dataObject) })
+      setContext({ id, context: getBaseDataObjectContext(dataObject) })
     }
 
     return () => {
