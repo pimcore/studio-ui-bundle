@@ -1599,3 +1599,4 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Word Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
+subscription-details.community-edition: Learn more about Pimcore Editions
