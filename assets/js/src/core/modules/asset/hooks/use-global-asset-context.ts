@@ -14,7 +14,8 @@ import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobal
 export interface GlobalAssetContext extends GlobalContext {
   type: 'asset'
   config: {
-    id: number
+    id?: number
+    context: string[]
   }
 }
 
