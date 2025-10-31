@@ -256,12 +256,8 @@ failed-to-assign-tag-to-element: Failed to assign tag to element
 failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
 workflow-modal.cancel: Cancel
-workflow-modal.log-time: Log Time
-workflow-modal.timeSpent: Time spent
 workflow-modal.notes: Notes
-workflow-modal.timeSpent-required: Please enter the duration of time spent
 workflow-modal.notes-required: Please enter your notes
-workflow-transitions.log-time: Log Time
 workflow-transitions.start-workflow: Start Workflow
 workflow-transitions.finish-review: Finish Review
 workflow-transitions.restart-review: Restart Review

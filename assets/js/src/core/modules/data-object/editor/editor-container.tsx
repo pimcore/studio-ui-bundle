@@ -23,10 +23,13 @@ export interface EditorContainerProps extends EditorContainerInnerProps {}
 const EditorContainer = ({ id }: EditorContainerInnerProps): React.JSX.Element => {
   const { getDefaultLayoutId, isLoading } = useCustomLayouts(id)
 
+  const defaultLayoutId = getDefaultLayoutId()
+
   return (
     <LayoutSelectionProvider
-      defaultLayout={ getDefaultLayoutId() }
+      defaultLayout={ defaultLayoutId }
       isLoading={ isLoading }
+      key={ defaultLayoutId }
     >
       <EditorContainerInner
         id={ id }

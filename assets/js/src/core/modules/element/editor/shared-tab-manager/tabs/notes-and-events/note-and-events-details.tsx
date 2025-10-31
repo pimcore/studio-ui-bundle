@@ -16,7 +16,7 @@ import type {
   Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { isNull, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
@@ -85,8 +85,14 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
         }
         return JSON.stringify(value)
       case 'date':
-        return <FormattedDate timestamp={ value } />
+        return (
+          <FormattedDate
+            showTime
+            timestamp={ value }
+          />
+        )
       default:
+        if (isNil(value)) return ''
         if (typeof value === 'string') return respectLineBreak(value, false)
         else return JSON.stringify(value)
     }

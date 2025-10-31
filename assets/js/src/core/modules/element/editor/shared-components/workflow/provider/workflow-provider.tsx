@@ -9,27 +9,22 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { type TransitionType } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
+import { type WorkflowAction } from '../types/workflow-types'
 
-export interface WorkflowDetails {
-  workflowName: string
-  action: string
-  transition: TransitionType
-}
 export interface IWorkflowContext {
   isModalOpen: boolean
-  openModal: (workflowDetails: WorkflowDetails) => void
+  openModal: () => void
   closeModal: () => void
-  contextWorkflowDetails: WorkflowDetails | null
-  setContextWorkflowDetails: (details: WorkflowDetails | null) => void
+  triggeredWorkflowAction: WorkflowAction | null
+  setTriggeredWorkflowAction: (details: WorkflowAction | null) => void
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
   isModalOpen: false,
   openModal: () => {},
   closeModal: () => {},
-  contextWorkflowDetails: null,
-  setContextWorkflowDetails: () => {}
+  triggeredWorkflowAction: null,
+  setTriggeredWorkflowAction: () => {}
 })
 
 export interface WorkFlowProviderProps {
@@ -38,10 +33,9 @@ export interface WorkFlowProviderProps {
 
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
-  const [contextWorkflowDetails, setContextWorkflowDetails] = useState<WorkflowDetails | null>(null)
+  const [triggeredWorkflowAction, setTriggeredWorkflowAction] = useState<WorkflowAction | null>(null)
 
-  const openModal = (workflowDetails: WorkflowDetails): void => {
-    setContextWorkflowDetails(workflowDetails)
+  const openModal = (): void => {
     setModalOpen(true)
   }
   const closeModal = (): void => {
@@ -49,8 +43,8 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
   }
 
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, contextWorkflowDetails, setContextWorkflowDetails } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, triggeredWorkflowAction, setTriggeredWorkflowAction } }>
       {children}
     </WorkflowContext.Provider>
-  ), [isModalOpen, children, contextWorkflowDetails])
+  ), [isModalOpen, children, triggeredWorkflowAction])
 }

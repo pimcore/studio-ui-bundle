@@ -12,7 +12,7 @@ import { useContext } from 'react'
 import {
   type IWorkflowContext,
   WorkflowContext
-} from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-provider'
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
 import {
   useWorkflowGetDetailsQuery, type WorkflowGetDetailsApiResponse
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
@@ -25,10 +25,8 @@ interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkf
   isFetchingWorkflowDetails: boolean
 }
 
-export type TransitionType = 'transition' | 'global'
-
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails } = useContext(WorkflowContext)
+  const { openModal, closeModal, isModalOpen, triggeredWorkflowAction, setTriggeredWorkflowAction } = useContext(WorkflowContext)
   const { id, elementType } = useElementContext()
 
   const { element } = useElementDraft(id, elementType)
@@ -37,6 +35,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType, elementId: id }, { skip: !hasWorkflowAvailable })
 
   return {
-    openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails, workflowDetailsData, isFetchingWorkflowDetails
+    openModal, closeModal, isModalOpen, triggeredWorkflowAction, setTriggeredWorkflowAction, workflowDetailsData, isFetchingWorkflowDetails
   }
 }
