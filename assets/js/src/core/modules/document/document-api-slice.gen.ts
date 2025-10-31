@@ -308,6 +308,7 @@ export type DocumentUpdateByIdApiArg = {
             editableData?: object | null;
             settingsData?: object | null;
             missingRequiredEditable?: boolean | null;
+            appendEditables?: boolean | null;
             properties?: UpdateDataProperty[] | null;
         };
     };
