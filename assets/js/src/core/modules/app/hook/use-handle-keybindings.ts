@@ -38,7 +38,6 @@ export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, act
     const { keyCode, ctrlKey, altKey, shiftKey } = evt
 
     if (config?.key !== undefined && config.key === keyCode && config.ctrl === ctrlKey && config.shift === shiftKey && config.alt === altKey) {
-      // check permissions if provided
       if (permission !== undefined && !isAllowed(permission)) {
         return
       }
