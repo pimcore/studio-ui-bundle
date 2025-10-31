@@ -9,14 +9,14 @@
  */
 
 import { useEffect, useMemo } from 'react'
-import { find, get, isNil } from 'lodash'
+import { find, get, isEmpty, isNil, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 
 export const useGlobalContext = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
-  const { setContext: setGlobalDataObjectContext, context: globalDataObjectContext } = useGlobalDataObjectContext()
+  const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
 
   const selectedIds = useMemo(
     () => (!isNil(selectedRows) ? Object.keys(selectedRows).map(Number) : []),
@@ -24,29 +24,49 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
   )
 
   useEffect(() => {
-    if (isEmptyValue(data) || isEmptyValue(selectedIds)) return
+    if (isEmptyValue(data)) return
 
-    selectedIds.forEach((id): void => {
-      const rowData = data?.find((row: any) => row.id === id)
+    switch (elementType) {
+      case 'data-object': {
+        const currentContext = globalDataObjectContext?.config?.context ?? []
+        const baseContext = currentContext.filter(item => !item.includes('_selection'))
 
-      switch (elementType) {
-        case 'data-object': {
-          const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
+        if (isEmpty(selectedIds) && (currentContext.length > baseContext.length)) {
+          setGlobalDataObjectContext({
+            context: baseContext
+          })
 
-          if (!isEmptyValue(className)) {
-            const newContextValue = `object_${className}_selection`.toLowerCase()
+          break
+        }
 
-            if (globalDataObjectContext?.config.context.includes(newContextValue) === false) {
+        if (!isEmpty(selectedIds)) {
+          const newContextValues: string[] = []
+
+          selectedIds.forEach((id): void => {
+            const rowData = data?.find((row: any) => row.id === id)
+            const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
+
+            if (!isEmptyValue(className)) {
+              const newContextValue = `object_${className}_selection`.toLowerCase()
+
+              newContextValues.push(newContextValue)
+            }
+          })
+
+          if (newContextValues.length > 0) {
+            const filteredContext = (globalDataObjectContext?.config?.context ?? []).filter(
+              (context) => !context.endsWith('_selection')
+            )
+            const updatedContext = uniq([...filteredContext, ...newContextValues])
+
+            if (JSON.stringify(globalDataObjectContext?.config?.context) !== JSON.stringify(updatedContext)) {
               setGlobalDataObjectContext({
-                context: [newContextValue]
+                context: updatedContext
               })
             }
           }
-          break
         }
-        default:
-          break
       }
-    })
+    }
   }, [data, selectedIds, elementType, setGlobalDataObjectContext])
 }

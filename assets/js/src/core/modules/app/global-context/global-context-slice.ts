@@ -10,7 +10,6 @@
 
 import { type RootState, injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { isNull } from 'lodash'
 
 export interface GlobalContext {
   type: string
@@ -32,22 +31,7 @@ const globalContextSlice = createSlice({
   name: 'global-context',
   initialState: initialState as GlobalContextState,
   reducers: {
-    addGlobalContext: (state: GlobalContextState, action: PayloadAction<GlobalContext>) => {
-      const { config } = action.payload
-
-      if (!isNull(state) && 'config' in state) {
-        return {
-          ...state,
-          config: {
-            ...state.config,
-            context: Array.from(new Set([
-              ...((state.config.context ?? []) as string[]),
-              ...((config.context ?? []) as string[])
-            ]))
-          }
-        }
-      }
-
+    addGlobalContext: (state, action: PayloadAction<GlobalContext>) => {
       return action.payload
     },
 

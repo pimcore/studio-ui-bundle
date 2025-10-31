@@ -33,7 +33,9 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
   const { id } = props
   const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
-  const { setContext, removeContext } = useGlobalDataObjectContext()
+  const { context, setContext, removeContext } = useGlobalDataObjectContext()
+
+  console.log('----- context: ', context)
 
   useEffect(() => {
     return () => {
