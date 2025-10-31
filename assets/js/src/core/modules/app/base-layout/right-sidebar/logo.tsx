@@ -15,7 +15,7 @@ import { type SubscriptionDetailsProps } from './logo/subscription-details'
 import { useTranslation } from 'react-i18next'
 
 export const Logo = (): React.JSX.Element => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const subscriptionDetailProps: SubscriptionDetailsProps = {
     icon: 'subscription-community',
