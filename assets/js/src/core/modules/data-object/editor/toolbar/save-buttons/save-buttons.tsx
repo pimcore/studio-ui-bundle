@@ -93,7 +93,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
     const secondaryButtons: ReactElement[] = []
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
-    
+
     if (checkElementPermission(dataObject?.permissions, 'save')) {
       if (dataObject?.published === true) {
         secondaryButtons.push(
@@ -178,7 +178,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           {t('toolbar.save')}
         </Button>
       )
-      
+
       return primaryButtons
     }
 

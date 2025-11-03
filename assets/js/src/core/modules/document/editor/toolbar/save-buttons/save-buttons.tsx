@@ -201,7 +201,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           {t('toolbar.save')}
         </Button>
       )
-      
+
       return primaryButtons
     }
 
