@@ -10,7 +10,7 @@
 
 import { injectable, inject } from 'inversify'
 import { AbstractProcessorRegistry, type Processor } from '@Pimcore/modules/app/processor-registry/abstract-processor-registry'
-import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { type IJsonTabNode } from 'flexlayout-react'
 import { uuid } from '@Pimcore/utils/uuid'
 import { isUndefined, isNil } from 'lodash'

@@ -20,7 +20,7 @@ import {
   api,
   type PerspectiveConfigDetail,
   type PerspectiveConfig, type PerspectiveGetConfigCollectionApiResponse
-} from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+} from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import trackError, { ApiError, GeneralError } from '../../app/error-handler'
 import { isPlainObject, isUndefined } from 'lodash'
 import { App } from 'antd'

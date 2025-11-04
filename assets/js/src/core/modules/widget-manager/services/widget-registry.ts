@@ -16,7 +16,7 @@ import { type WidgetContentTitleContainerProps } from '../widget/widget-content-
 import { type TabNode } from 'flexlayout-react'
 import { type GlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
 import { type WidgetManagerTabConfig } from '../widget-manager-slice'
-import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
 export interface Widget {
   name: string

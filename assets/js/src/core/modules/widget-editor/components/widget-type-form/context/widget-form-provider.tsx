@@ -9,8 +9,12 @@
  */
 
 import { Form } from '@Pimcore/components/form/form'
-import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { type WidgetConfig as BaseWidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import React, { createContext, useMemo } from 'react'
+
+type WidgetConfig = BaseWidgetConfig & {
+  isWriteable?: boolean
+}
 
 interface WidgetFormProviderProps {
   children: React.ReactNode

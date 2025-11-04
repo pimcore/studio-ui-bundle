@@ -24,6 +24,7 @@ interface UsePerspectiveEditorReturn {
   getPerspectiveById: (id: string) => Promise<PerspectiveConfigDetail | undefined>
   updatePerspective: (id: string, config: CreatePerspectiveConfig, onFinish?: () => void) => Promise<void>
   removeWithConfirmation: (id: string, onFinish?: () => void) => void
+  isLoading: boolean
 }
 
 export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
@@ -31,9 +32,9 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const { success } = useMessage()
-  const [perspectiveCreateMutation] = usePerspectiveCreateMutation()
-  const [perspectiveUpdateMutation] = usePerspectiveUpdateConfigByIdMutation()
-  const [perspectiveDeleteMutation] = usePerspectiveDeleteMutation()
+  const [perspectiveCreateMutation, { isLoading: isCreateLoading }] = usePerspectiveCreateMutation()
+  const [perspectiveUpdateMutation, { isLoading: isUpdateLoading }] = usePerspectiveUpdateConfigByIdMutation()
+  const [perspectiveDeleteMutation, { isLoading: isDeleteLoading }] = usePerspectiveDeleteMutation()
 
   const createPerspective = (
     onFinish?: (newName: string) => void
@@ -83,7 +84,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
 
   const getPerspectiveById = async (id: string): Promise<PerspectiveConfigDetail | undefined> => {
     try {
-      const { data, isError, error } = await dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId: id }))
+      const { data, isError, error } = await dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId: id }, { forceRefetch: true }))
 
       if (!isUndefined(data) && isError) {
         trackError(new ApiError(error))
@@ -158,10 +159,13 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
     }
   }
 
+  const isLoading = isCreateLoading || isUpdateLoading || isDeleteLoading
+
   return {
     createPerspective,
     getPerspectiveById,
     updatePerspective,
-    removeWithConfirmation
+    removeWithConfirmation,
+    isLoading
   }
 }

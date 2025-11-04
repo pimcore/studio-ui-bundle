@@ -22,6 +22,7 @@ interface UseWidgetEditorReturn {
   getWidgetById: (widgetId: string, widgetType: string) => Promise<WidgetConfig | undefined>
   updateWidget: (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void) => Promise<void>
   removeWithConfirmation: (widgetId: string, widgetType: string, onFinish?: () => void) => void
+  isLoading: boolean
 }
 
 export const useWidgetEditor = (): UseWidgetEditorReturn => {
@@ -29,9 +30,9 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const { success } = useMessage()
-  const [widgetCreateMutation] = usePerspectiveWidgetCreateMutation()
-  const [widgetDeleteMutation] = usePerspectiveWidgetDeleteMutation()
-  const [widgetUpdateMutation] = usePerspectiveWidgetUpdateConfigByIdMutation()
+  const [widgetCreateMutation, { isLoading: isCreateLoading }] = usePerspectiveWidgetCreateMutation()
+  const [widgetDeleteMutation, { isLoading: isDeleteLoading }] = usePerspectiveWidgetDeleteMutation()
+  const [widgetUpdateMutation, { isLoading: isUpdateLoading }] = usePerspectiveWidgetUpdateConfigByIdMutation()
 
   const createWidget = async (name: string, widgetType: string, onFinish?: (name: string) => void): Promise<void> => {
     const widgetCreateTask = widgetCreateMutation({
@@ -62,7 +63,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       const { data, isError, error } = await dispatch(api.endpoints.perspectiveWidgetGetConfigById.initiate({
         widgetId,
         widgetType
-      }))
+      }, { forceRefetch: true }))
 
       if (!isUndefined(data) && isError) {
         trackError(new ApiError(error))
@@ -82,7 +83,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       body: {
         data: {
           ...config,
-          rootFolder: config.rootFolder.fullPath ?? '/'
+          rootFolder: config.rootFolder?.fullPath ?? '/'
         }
       }
     })
@@ -97,6 +98,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       }
 
       onFinish?.(config)
+      void success(t('widget-editor.update.success'))
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
       onFinish?.(config)
@@ -137,10 +139,13 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
     }
   }
 
+  const isLoading = isCreateLoading || isDeleteLoading || isUpdateLoading
+
   return {
     createWidget,
     getWidgetById,
     updateWidget,
-    removeWithConfirmation
+    removeWithConfirmation,
+    isLoading
   }
 }

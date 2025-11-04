@@ -11,7 +11,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { type PerspectiveConfigDetail } from './perspectives-slice.gen'
+import { type PerspectiveConfigDetail } from './perspectives-slice.enhanced'
 
 const slice = createSlice({
   name: 'activePerspective',

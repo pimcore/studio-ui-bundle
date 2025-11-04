@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './perspectives-slice.gen'
+import { isNil } from 'lodash'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [
@@ -21,16 +22,18 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     perspectiveGetConfigCollection: {
       providesTags: (result): Tag[] => {
-        const tags: Tag[] = []
-
-        result?.items.forEach((perspective) => {
-          tags.push(...providingTags.PERSPECTIVE_DETAIL(perspective.id))
-        })
-
-        return [...tags, ...providingTags.PERSPECTIVES()]
+        return providingTags.PERSPECTIVES()
       }
     },
-    perspectiveCreate: {
+    perspectiveGetConfigById: {
+      providesTags: (result): Tag[] => {
+        if (isNil(result?.id)) {
+          return []
+        }
+        return providingTags.PERSPECTIVE_DETAIL(result?.id)
+      }
+    },
+    perspectiveUpdateConfigById: {
       invalidatesTags: () => []
     },
     perspectiveDelete: {
@@ -38,24 +41,22 @@ const api = baseApi.enhanceEndpoints({
     },
     perspectiveWidgetGetConfigCollection: {
       providesTags: (result): Tag[] => {
-        const tags: Tag[] = []
-
-        result?.items.forEach((widget) => {
-          tags.push(...providingTags.WIDGET_DETAIL(widget.id))
-        })
-
-        return [...tags, ...providingTags.WIDGETS()]
+        return providingTags.WIDGETS()
       }
     },
+    perspectiveWidgetGetConfigById: {
+      providesTags: (result, error, args): Tag[] => {
+        return providingTags.WIDGET_DETAIL(args.widgetId, args.widgetType)
+      }
+    },
+    perspectiveWidgetUpdateConfigById: {
+      invalidatesTags: () => []
+    },
     perspectiveWidgetCreate: {
-      invalidatesTags: () => [
-        ...invalidatingTags.WIDGETS()
-      ]
+      invalidatesTags: () => []
     },
     perspectiveWidgetDelete: {
-      invalidatesTags: () => [
-        ...invalidatingTags.WIDGETS()
-      ]
+      invalidatesTags: () => []
     }
   }
 })
