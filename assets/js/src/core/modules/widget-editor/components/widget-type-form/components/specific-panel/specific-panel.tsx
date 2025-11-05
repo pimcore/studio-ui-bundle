@@ -32,7 +32,7 @@ export const SpecificPanel = (): React.JSX.Element => {
     if (!isNil(previousElementType)) {
       form.setFieldValue('rootFolder', null)
     }
-  }, [previousElementType, form])
+  }, [elementType, form])
 
   return (
     <FormKit.Panel
