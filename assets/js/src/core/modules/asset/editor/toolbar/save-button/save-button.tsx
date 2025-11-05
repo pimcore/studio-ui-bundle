@@ -86,7 +86,7 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t(asset?.type === 'folder' ? 'toolbar.save' : 'toolbar.save-and-publish')}
       </Button>
       ) }
     </>
