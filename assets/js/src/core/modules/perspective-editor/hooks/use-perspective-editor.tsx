@@ -70,12 +70,6 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
 
       onFinish?.(value)
 
-      dispatch(
-        api.util.invalidateTags(
-          invalidatingTags.PERSPECTIVES()
-        )
-      )
-
       void success(t('perspective-editor.create.success'))
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))

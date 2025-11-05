@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './perspectives-slice.gen'
-import { isNil } from 'lodash'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [
@@ -26,23 +25,21 @@ const api = baseApi.enhanceEndpoints({
       }
     },
     perspectiveGetConfigById: {
-      providesTags: (result): Tag[] => {
-        if (isNil(result?.id)) {
-          return []
-        }
-        return providingTags.PERSPECTIVE_DETAIL(result?.id)
+      providesTags: (result, error, args): Tag[] => {
+         return providingTags.PERSPECTIVE_DETAIL(args.perspectiveId)
       }
     },
     perspectiveUpdateConfigById: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
     },
     perspectiveDelete: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
+    },
+    perspectiveCreate: {
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
     },
     perspectiveWidgetGetConfigCollection: {
-      providesTags: (result): Tag[] => {
-        return providingTags.WIDGETS()
-      }
+      providesTags: (result, error, args): Tag[] => providingTags.WIDGETS()
     },
     perspectiveWidgetGetConfigById: {
       providesTags: (result, error, args): Tag[] => {
@@ -50,13 +47,13 @@ const api = baseApi.enhanceEndpoints({
       }
     },
     perspectiveWidgetUpdateConfigById: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     },
     perspectiveWidgetCreate: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     },
     perspectiveWidgetDelete: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.WIDGETS(),
     }
   }
 })
