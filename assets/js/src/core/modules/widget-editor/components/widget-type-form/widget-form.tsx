@@ -14,16 +14,29 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { type ElementTreeWidget } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { isArray, isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
 import { useWidgetEditor } from '../../hooks/use-widget-editor'
 import { GeneralTab } from './components/general-tab/general-tab'
 import { useWidgetFormContext } from './context/hooks/use-widget-form-context'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 interface WidgetFormProps {
   form: React.ComponentType
+}
+
+const convertClassesArrayToObject = (classes: object | undefined): Record<string, boolean> => {
+  if (isUndefined(classes) || !isArray(classes)) {
+    return {}
+  }
+
+  return classes.reduce((acc: Record<string, boolean>, classId: string) => {
+    acc[classId] = true
+    return acc
+  }, {})
 }
 
 export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.JSX.Element => {
@@ -33,13 +46,16 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
   const { removeWithConfirmation, updateWidget, isLoading } = useWidgetEditor()
   const isWriteable = widget.isWriteable !== false
 
+  const elementTreeWidget = widget as ElementTreeWidget
+
   return (
     <FormKit
       formProps={ {
         form,
         layout: 'vertical',
         initialValues: {
-          ...widget
+          ...elementTreeWidget,
+          classes: convertClassesArrayToObject(elementTreeWidget.classes)
         },
         onFinish: async (values: any) => {
           await updateWidget(widget.id, widget.widgetType, values)

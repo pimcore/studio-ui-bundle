@@ -77,13 +77,15 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
   }
 
   const updateWidget = async (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void): Promise<void> => {
+    const classes: object | undefined = config.classes ?? undefined
     const widgetUpdateTask = widgetUpdateMutation({
       widgetId,
       widgetType,
       body: {
         data: {
           ...config,
-          rootFolder: config.rootFolder?.fullPath ?? '/'
+          rootFolder: config.rootFolder?.fullPath ?? '/',
+          classes: !isUndefined(classes) ? Object.keys(classes).filter(key => classes[key] === true) : undefined
         }
       }
     })
