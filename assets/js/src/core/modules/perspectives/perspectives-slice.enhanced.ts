@@ -26,7 +26,7 @@ const api = baseApi.enhanceEndpoints({
     },
     perspectiveGetConfigById: {
       providesTags: (result, error, args): Tag[] => {
-         return providingTags.PERSPECTIVE_DETAIL(args.perspectiveId)
+        return providingTags.PERSPECTIVE_DETAIL(args.perspectiveId)
       }
     },
     perspectiveUpdateConfigById: {
@@ -53,7 +53,7 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => invalidatingTags.WIDGETS()
     },
     perspectiveWidgetDelete: {
-      invalidatesTags: () => invalidatingTags.WIDGETS(),
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     }
   }
 })
