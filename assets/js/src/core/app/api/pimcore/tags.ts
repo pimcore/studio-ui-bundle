@@ -128,7 +128,7 @@ export const providingTags = {
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
   PERSPECTIVE_DETAIL: (id: string) => [{ type: tagNames.PERSPECTIVE_DETAIL, id }],
   WIDGETS: () => [tagNames.WIDGETS],
-  WIDGET_DETAIL: (id: string) => [{ type: tagNames.WIDGET_DETAIL, id }]
+  WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }]
 }
 
 export const invalidatingTags = {

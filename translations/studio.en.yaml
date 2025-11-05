@@ -1445,6 +1445,7 @@ widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.update.success: Widget updated successfully
 widget-editor.widget-form.general.title: General
 widget-editor.widget-form.general.name: Name
 widget-editor.widget-form.general.icon: Icon
@@ -1596,3 +1597,4 @@ user-management.permissions.routes: Routes
 user-management.permissions.word_export: Word Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
 subscription-details.community-edition: Learn more about Pimcore Editions
+config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.

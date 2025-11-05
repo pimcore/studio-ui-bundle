@@ -10,7 +10,7 @@
 
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { isNil, isUndefined } from 'lodash'

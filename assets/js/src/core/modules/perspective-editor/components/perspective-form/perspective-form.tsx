@@ -24,9 +24,10 @@ import { AllowedMenuEntriesPanel } from './components/allowed-menu-entries-panel
 import { GeneralPanel } from './components/general-panel/general-panel'
 import { SpecificPanel } from './components/specific-panel/specific-panel'
 import { type ExtendedWidgetConfig } from './components/widget-configurator/context/widget-configurator-provider'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
-interface PerspectiveFormProps {
-  perspective: PerspectiveConfigDetail
+export interface PerspectiveFormProps {
+  perspective: PerspectiveConfigDetail & { writeable: boolean }
 }
 
 interface OptimizedPerspectiveConfigDetail extends Omit<PerspectiveConfigDetail, 'widgetsLeft' | 'widgetsRight' | 'widgetsBottom'> {
@@ -37,8 +38,8 @@ interface OptimizedPerspectiveConfigDetail extends Omit<PerspectiveConfigDetail,
 
 export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
-  const { isLoading, setIsLoading, setPerspectives, closePerspective } = usePerspectiveEditorContext()
+  const { updatePerspective, removeWithConfirmation, isLoading } = usePerspectiveEditor()
+  const { setPerspectives, closePerspective } = usePerspectiveEditorContext()
   const [form] = Form.useForm<OptimizedPerspectiveConfigDetail>()
   const initialValues = {
     ...perspective,
@@ -54,6 +55,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       widgets: perspective.widgetsBottom
     }
   }
+  const isWriteable = perspective.writeable
 
   return (
     <FormKit
@@ -61,8 +63,6 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         form,
         initialValues,
         onFinish: async (values: OptimizedPerspectiveConfigDetail) => {
-          setIsLoading(true)
-
           const { widgetsLeft, widgetsRight, widgetsBottom, ...rest } = values
 
           const formattedValues: CreatePerspectiveConfig = {
@@ -74,9 +74,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
             widgetsBottom: Object.fromEntries(widgetsBottom.widgets.map(w => [w.id, w.widgetType]))
           }
 
-          await updatePerspective(perspective.id, formattedValues, () => {
-            setIsLoading(false)
-          })
+          await updatePerspective(perspective.id, formattedValues)
         }
       } }
     >
@@ -109,26 +107,31 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
               title={ t('refresh') }
             />
 
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                removeWithConfirmation(perspective.id, () => {
-                  closePerspective(perspective.id)
-                  setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
-                })
-              } }
-              title={ t('delete') }
-            />
+            <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+              <IconButton
+                disabled={ isLoading || !isWriteable }
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  removeWithConfirmation(perspective.id, () => {
+                    closePerspective(perspective.id)
+                    setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
+                  })
+                } }
+                title={ t('delete') }
+              />
+            </Tooltip>
           </div>
 
-          <Button
-            htmlType='submit'
-            loading={ isLoading }
-            type='primary'
-          >
-            {t('save')}
-          </Button>
+          <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+            <Button
+              disabled={ !isWriteable }
+              htmlType='submit'
+              loading={ isLoading }
+              type='primary'
+            >
+              {t('save')}
+            </Button>
+          </Tooltip>
         </Toolbar>
       </Flex>
     </FormKit>

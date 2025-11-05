@@ -20,6 +20,7 @@ import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-co
 import { useWidgetEditor } from '../../hooks/use-widget-editor'
 import { GeneralTab } from './components/general-tab/general-tab'
 import { useWidgetFormContext } from './context/hooks/use-widget-form-context'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 interface WidgetFormProps {
   form: React.ComponentType
@@ -28,8 +29,9 @@ interface WidgetFormProps {
 export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { form, widget } = useWidgetFormContext()
-  const { isLoading, setWidgets, setIsLoading, closeWidget } = useWidgetEditorContext()
-  const { removeWithConfirmation, updateWidget } = useWidgetEditor()
+  const { setWidgets, closeWidget } = useWidgetEditorContext()
+  const { removeWithConfirmation, updateWidget, isLoading } = useWidgetEditor()
+  const isWriteable = widget.isWriteable !== false
 
   return (
     <FormKit
@@ -40,10 +42,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
           ...widget
         },
         onFinish: async (values: any) => {
-          setIsLoading(true)
-          await updateWidget(widget.id, widget.widgetType, values, () => {
-            setIsLoading(false)
-          })
+          await updateWidget(widget.id, widget.widgetType, values)
         }
       } }
     >
@@ -74,26 +73,31 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
               title={ t('refresh') }
             />
 
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                removeWithConfirmation(widget.id, widget.widgetType, () => {
-                  closeWidget(widget.id)
-                  setWidgets((prev) => prev.filter((w) => w.id !== widget.id))
-                })
-              } }
-              title={ t('delete') }
-            />
+            <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+              <IconButton
+                disabled={ isLoading || !isWriteable }
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  removeWithConfirmation(widget.id, widget.widgetType, () => {
+                    closeWidget(widget.id)
+                    setWidgets((prev) => prev.filter((w) => w.id !== widget.id))
+                  })
+                } }
+                title={ t('delete') }
+              />
+            </Tooltip>
           </div>
 
-          <Button
-            htmlType='submit'
-            loading={ isLoading }
-            type='primary'
-          >
-            {t('save')}
-          </Button>
+          <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+            <Button
+              disabled={ !isWriteable }
+              htmlType='submit'
+              loading={ isLoading }
+              type='primary'
+            >
+              {t('save')}
+            </Button>
+          </Tooltip>
         </Toolbar>
       </Flex>
     </FormKit>
