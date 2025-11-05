@@ -14,6 +14,7 @@ import { isNil } from 'lodash'
 
 interface UseOptimisticUpdateProps {
   updateNotificationReadStateById: (id: number, read: boolean) => void
+  removeNotificationFromCollectionById: (id: number) => void
 }
 
 export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
@@ -54,7 +55,41 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
     })
   }
 
+  const removeNotificationFromCollectionById = (id: number): void => {
+    // Access the store to get all cached queries for this endpoint
+    dispatch((dispatch, getState) => {
+      const state = getState()
+      const queries = state.api?.queries ?? {}
+
+      // Find all notificationGetCollection queries in the cache
+      for (const [queryKey, queryState] of Object.entries(queries as Record<string, unknown>)) {
+        if (
+          queryKey.startsWith('notificationGetCollection(') &&
+          !isNil(queryState) &&
+          typeof queryState === 'object' &&
+          'originalArgs' in queryState &&
+          !isNil(queryState.originalArgs)
+        ) {
+          try {
+            dispatch(
+              api.util.updateQueryData(
+                'notificationGetCollection',
+                queryState.originalArgs as NotificationGetCollectionApiArg,
+                (draft): NotificationGetCollectionApiResponse => {
+                  draft.items = draft.items?.filter((note) => note.id !== id) ?? []
+                  draft.totalItems = (draft.totalItems ?? 1) - 1
+                  return draft
+                }
+              )
+            )
+          } catch { }
+        }
+      }
+    })
+  }
+
   return {
-    updateNotificationReadStateById
+    updateNotificationReadStateById,
+    removeNotificationFromCollectionById
   }
 }
