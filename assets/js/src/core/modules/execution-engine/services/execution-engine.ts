@@ -11,6 +11,7 @@
 import { injectable, inject } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus'
+import { type GlobalMessageBusProcess } from '@Pimcore/modules/background-processor'
 import { type JobInterface } from '../jobs/job-interface'
 
 /**
@@ -20,7 +21,8 @@ import { type JobInterface } from '../jobs/job-interface'
 @injectable()
 export class ExecutionEngine {
   constructor (
-    @inject(serviceIds.globalMessageBus) private readonly messageBus: GlobalMessageBus
+    @inject(serviceIds.globalMessageBus) private readonly messageBus: GlobalMessageBus,
+    @inject(serviceIds.globalMessageBusProcess) private readonly globalProcess: GlobalMessageBusProcess
   ) {}
 
   /**
@@ -28,6 +30,10 @@ export class ExecutionEngine {
    * Delegates all logic to the job itself
    */
   async runJob (job: JobInterface): Promise<void> {
+    if (!this.globalProcess.isConnected()) {
+      this.globalProcess.start()
+    }
+    
     await job.run({ messageBus: this.messageBus })
   }
 }
