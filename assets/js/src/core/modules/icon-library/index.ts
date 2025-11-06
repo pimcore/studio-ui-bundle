@@ -37,6 +37,9 @@ import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?rea
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
+import bookmarkListAssetFolder from '@Pimcore/assets/icons/bookmark-list-asset-folder.inline.svg?react'
+import bookmarkListDocumentFolder from '@Pimcore/assets/icons/bookmark-list-document-folder.inline.svg?react'
+import bookmarkListObjectFolder from '@Pimcore/assets/icons/bookmark-list-object-folder.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -355,6 +358,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'book-open-01',
       component: bookOpen01
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-asset-folder',
+      component: bookmarkListAssetFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-document-folder',
+      component: bookmarkListDocumentFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-object-folder',
+      component: bookmarkListObjectFolder
     })
     iconLibrary.register({
       name: 'bookmark',
