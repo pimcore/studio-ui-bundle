@@ -33,7 +33,7 @@ export class ExecutionEngine {
     if (!this.globalProcess.isConnected()) {
       this.globalProcess.start()
     }
-    
+
     await job.run({ messageBus: this.messageBus })
   }
 }
