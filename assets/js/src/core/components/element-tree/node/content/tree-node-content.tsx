@@ -96,12 +96,14 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         data-testid={ `tree-node-content-meta-${props.node.id}` }
         ref={ metaRef }
       >
-        {isNull(metaSlotName) ? null : (
-          <SlotRenderer
-            props={ { node: props.node } }
-            slot={ metaSlotName }
-          />
-        )}
+        {isNull(metaSlotName)
+          ? null
+          : (
+            <SlotRenderer
+              props={ { node: props.node } }
+              slot={ metaSlotName }
+            />
+            )}
       </Flex>
     </Flex>
   )
