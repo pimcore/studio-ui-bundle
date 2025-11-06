@@ -18,7 +18,7 @@ import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-rende
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { Text } from '@sdk/components'
-import { isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
@@ -42,7 +42,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
     }
   }, [])
 
-  const getMetaSlotName = (): string => {
+  const getMetaSlotName = (): string | null => {
     switch (elementType) {
       case elementTypes.asset:
         return componentConfig.asset.tree.node.meta.name
@@ -51,8 +51,10 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
       case elementTypes.dataObject:
         return componentConfig.dataObject.tree.node.meta.name
     }
-    throw new Error(`Unknown element type: ${elementType}`)
+    return null
   }
+
+  const metaSlotName = getMetaSlotName()
 
   return (
     <Flex
@@ -94,10 +96,12 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         data-testid={ `tree-node-content-meta-${props.node.id}` }
         ref={ metaRef }
       >
-        <SlotRenderer
-          props={ { node: props.node } }
-          slot={ getMetaSlotName() }
-        />
+        {isNull(metaSlotName) ? null : (
+          <SlotRenderer
+            props={ { node: props.node } }
+            slot={ metaSlotName }
+          />
+        )}
       </Flex>
     </Flex>
   )

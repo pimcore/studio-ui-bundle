@@ -42,3 +42,5 @@ export * from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager
 export * from '@Pimcore/modules/document/editor/widget'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/inheritance-overlay/inheritance-overlay'
+
+export * from '@Pimcore/modules/document/tree/utils/transform-api-data-to-node'
