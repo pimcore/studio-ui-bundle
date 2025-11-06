@@ -119,7 +119,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
         // Handle cases where the column name contains special characters like `.` and is interpreted as a path
-        const safeColumnId = columnId.replace(/[^a-zA-Z0-9_]/g, '_')
+          const safeColumnId = columnId.replace(/\W/g, '_')
 
         if (item.displayType !== 'hide') {
           list.push(
