@@ -17,8 +17,12 @@ export interface AbstractMercureMessage extends AbstractMessage {
 
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   protected eventSource?: EventSource
+  protected storageKey: string
 
-  protected abstract getTopics (): string[]
+  constructor () {
+    super()
+    this.storageKey = `mercure_last_event_id_${this.constructor.name}`
+  }
 
   public start (): void {
     if (this.eventSource !== undefined) {
@@ -31,10 +35,19 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       url.searchParams.append('topic', topic)
     })
 
+    if (this.lastEventId !== undefined) {
+      url.searchParams.append('lastEventID', this.lastEventId)
+    }
+
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
 
     this.eventSource.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data as unknown as string)
+
+      if (event.lastEventId !== '') {
+        this.lastEventId = event.lastEventId
+      }
+
       this.sendMessage({
         type: 'update',
         payload: data,
@@ -43,14 +56,17 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     }
 
     this.eventSource.onerror = (error: Event) => {
-      this.sendMessage({
-        type: 'error',
-        payload: error,
-        event: new MessageEvent('error', { data: error })
-      })
-      this.cancel()
+      const target = error.target as EventSource
+      if (target?.readyState === EventSource.CLOSED) {
+        this.sendMessage({
+          type: 'error',
+          payload: error,
+          event: new MessageEvent('error', { data: error })
+        })
+        this.start()
+      }
     }
-  };
+  }
 
   public cancel (): void {
     if (this.eventSource !== undefined) {
@@ -58,12 +74,33 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
       this.eventSource = undefined
     }
 
+    this.lastEventId = undefined
+
     this.sendMessage({
       type: 'cancel',
       payload: null,
       event: new MessageEvent('cancel')
     })
-  };
+  }
+
+  public isConnected (): boolean {
+    return this.eventSource?.readyState === EventSource.OPEN
+  }
+
+  protected abstract getTopics (): string[]
+
+  protected get lastEventId (): string | undefined {
+    const value = sessionStorage.getItem(this.storageKey)
+    return value ?? undefined
+  }
+
+  protected set lastEventId (value: string | undefined) {
+    if (value !== undefined) {
+      sessionStorage.setItem(this.storageKey, value)
+    } else {
+      sessionStorage.removeItem(this.storageKey)
+    }
+  }
 
   protected sendMessage (message: AbstractMercureMessage): void {
     super.sendMessage(message)
