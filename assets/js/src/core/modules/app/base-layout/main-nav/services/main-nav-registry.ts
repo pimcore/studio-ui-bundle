@@ -37,7 +37,7 @@ export class MainNavRegistry {
 
   registerMainNavItem (item: IMainNavItem): void {
     const existingIndex = this.items.findIndex((existingItem) => existingItem.path === item.path)
-    
+
     if (existingIndex !== -1) {
       this.items[existingIndex] = item
     } else {
