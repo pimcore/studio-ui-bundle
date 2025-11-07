@@ -15,6 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp;
 
 use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\CspOriginFileParserInterface;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -39,7 +40,8 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
     public const PRIORITY = 100;
 
     public function __construct(
-        private readonly CspOriginFileParserInterface $cspOriginFileParser
+        private readonly CspOriginFileParserInterface $cspOriginFileParser,
+        private readonly WebpackEntryPointManager $webpackEntryPointManager
     ) {
         $this->logger = new NullLogger();
     }
@@ -53,9 +55,27 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
 
     public function onCspEvent(CspEvent $event): void
     {
-        $exposeRemoteFiles = glob(__DIR__ . '/../../../public/build/*/exposeRemote.js') ?: [];
+        $exposeRemoteFiles = [];
 
-        $this->logger->debug('Scanning for exposeRemote.js files', ['files_found' => count($exposeRemoteFiles)]);
+        foreach ($this->webpackEntryPointManager->getProviders() as $provider) {
+            foreach ($provider->getEntryPointsJsonLocations() as $entryPointLocation) {
+                $directory = dirname($entryPointLocation);
+                $exposeRemoteFile = $directory . '/exposeRemote.js';
+
+                if (file_exists($exposeRemoteFile)) {
+                    $exposeRemoteFiles[] = $exposeRemoteFile;
+                    $this->logger->debug('Found exposeRemote.js', ['file' => $exposeRemoteFile]);
+                }
+            }
+        }
+
+        if (empty($exposeRemoteFiles)) {
+            $this->logger->debug('No exposeRemote.js files found');
+
+            return;
+        }
+
+        $this->logger->debug('Scanning exposeRemote.js files', ['files_found' => count($exposeRemoteFiles)]);
 
         $origins = $this->cspOriginFileParser->extractOriginsFromFiles($exposeRemoteFiles);
 

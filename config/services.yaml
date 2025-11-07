@@ -72,6 +72,8 @@ services:
             - [setLogger, ['@logger']]
 
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\BuildRemoteEntryCspSubscriber:
+        arguments:
+            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.default'
         calls:
             - [setLogger, ['@logger']]
 
