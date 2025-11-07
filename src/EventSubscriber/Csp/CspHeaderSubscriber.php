@@ -106,6 +106,7 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
         $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
+        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FONT_OPT, $allOrigins);
 
         $this->contentSecurityPolicyHandler->addAllowedUrls(
             ContentSecurityPolicyHandlerInterface::CONNECT_OPT,
