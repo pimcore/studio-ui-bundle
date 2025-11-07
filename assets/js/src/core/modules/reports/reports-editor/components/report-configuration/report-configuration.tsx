@@ -9,9 +9,12 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { isNull, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { type BundleCustomReportsConfigurationTreeNode, type BundleCustomReportUpdate, useCustomReportsReportQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import {
+  type BundleCustomReportsConfigurationTreeNode,
+  type BundleCustomReportsDetails, type BundleCustomReportUpdate, useCustomReportsReportQuery
+} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -30,6 +33,7 @@ import {
   normalizeColumnConfigurations,
   normalizeDataSourceConfig
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
+import { Form } from '@Pimcore/components/form/form'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -48,6 +52,9 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
   const { updateReport } = useReportActions()
+
+  const [form] = Form.useForm()
+  const watchedValues: Partial<BundleCustomReportsDetails> = Form.useWatch([], form)
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
   const dataSourceConfig: IDataSourceConfig | null | undefined = currentData?.dataSourceConfig
@@ -68,8 +75,28 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
     }
   }, [isDirty])
 
+  useEffect(() => {
+    if (!isNil(watchedValues)) {
+      console.log('======= <<< START >>> ======')
+      console.log('----->>>>> 000 currentData: ', currentData)
+      console.log('----->>>>> 111 watchedValues: ', watchedValues)
+      const activeFields = Object.keys(form.getFieldsValue() as object).filter(
+        key => form.getFieldInstance(key) !== undefined
+      )
+      const currentFields = form.getFieldsValue()
+      const filteredValues = Object.fromEntries(
+        Object.entries(watchedValues).filter(([key]) => key in currentFields)
+      )
+      console.log('----->>>>> 222 currentFields: ', currentFields)
+      console.log('----->>>>> 333 filteredValues: ', filteredValues)
+      console.log('----->>>>> 444 activeFields: ', activeFields)
+      console.log('======= <<< END >>> ======')
+      updateFormData?.({ ...currentData, ...filteredValues })
+    }
+  }, [watchedValues])
+
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    updateFormData({ ...currentData, ...allValues })
+    console.log('----->>>>> onValuesChange: ', allValues)
   }
 
   const handleSave = (): void => {
@@ -128,6 +155,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
       {!isNull(currentData) && (
       <FormKit
         formProps={ {
+          form,
           initialValues: currentData,
           onValuesChange
         } }
@@ -136,6 +164,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
         <GeneralSettings />
         <SourceDefinition
           currentData={ currentData }
+          form={ form }
           updateFormData={ updateFormData }
         />
         <ColumnConfiguration
