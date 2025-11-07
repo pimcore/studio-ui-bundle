@@ -5,7 +5,7 @@ services:
         public: false
         bind:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
-            $studioUrlUrlPath: '%pimcore_studio_ui.url_path%'
+            $studioUrlPath: '%pimcore_studio_ui.url_path%'
 
     Pimcore\Bundle\StudioUiBundle\Controller\DefaultController:
         public: true
@@ -57,10 +57,37 @@ services:
         calls:
             - [ setLogger, [ '@logger' ] ]
 
+    Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface:
+        class: Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler
+
+    Pimcore\Bundle\StudioUiBundle\Security\Csp\CspOriginValidator: ~
+
+    Pimcore\Bundle\StudioUiBundle\Security\Csp\CspOriginFileParserInterface:
+        class: Pimcore\Bundle\StudioUiBundle\Security\Csp\CspOriginFileParser
+
+    Pimcore\Bundle\StudioUiBundle\Request\StudioRequestMatcher: ~
+
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\CspHeaderSubscriber:
+        calls:
+            - [setLogger, ['@logger']]
+
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\BuildRemoteEntryCspSubscriber:
+        calls:
+            - [setLogger, ['@logger']]
+
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\BuildEntryPointCspSubscriber:
+        arguments:
+            $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.default'
+        calls:
+            - [setLogger, ['@logger']]
+
     Pimcore\Bundle\StudioUiBundle\Installer:
         public: true
         arguments:
             $bundle: "@=service('kernel').getBundle('PimcoreStudioUiBundle')"
+
+    Pimcore\Bundle\StudioUiBundle\Twig\SecurityExtension:
+        tags: ['twig.extension']
 
 # add more services, or override services that need manual wiring
 #    Pimcore\Bundle\StudioUiBundle\ExampleClass:
