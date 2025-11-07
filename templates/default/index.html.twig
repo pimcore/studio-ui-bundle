@@ -15,7 +15,7 @@
         <!-- Dynamic favicon based on theme -->
         <link rel="icon" id="favicon" href="/bundles/pimcorestudioui/img/favicon.svg" type="image/svg+xml">
         
-        <script>
+        <script {{ pimcore_studio_csp.getNonceHtmlAttribute()|raw }}>
             // Set favicon based on theme preference
             (function() {
                 const favicon = document.getElementById('favicon');

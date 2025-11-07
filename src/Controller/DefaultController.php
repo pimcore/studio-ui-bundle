@@ -32,7 +32,7 @@ final class DefaultController extends FrontendController
     #[Route('/login')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
-        string $studioUrlUrlPath,
+        string $studioUrlPath,
         array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
@@ -42,7 +42,7 @@ final class DefaultController extends FrontendController
             'bundleJsFiles' => $this->staticResourcesResolver->getBundleJsFiles(),
             'additionalCssFiles' => $this->staticResourcesResolver->getAdditionalCssFiles(),
             'additionalJsFiles' => $this->staticResourcesResolver->getAdditionalJsFiles(),
-            'baseUrl' => $studioUrlUrlPath,
+            'baseUrl' => $studioUrlPath,
             'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
         ]);

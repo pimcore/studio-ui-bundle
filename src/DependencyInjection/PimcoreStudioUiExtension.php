@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
 use Exception;
+use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -51,5 +52,18 @@ class PimcoreStudioUiExtension extends Extension
             ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['editmode']['js']));
 
         $container->setParameter('pimcore_studio_ui.wysiwyg_configuration', $config['wysiwyg']);
+
+        $container->setParameter('pimcore_studio_ui.csp_header.enabled', $config['csp_header']['enabled']);
+
+        $cspHandlerDefinition = $container->getDefinition(ContentSecurityPolicyHandlerInterface::class);
+        $cspHandlerDefinition->setArgument('$cspEnabled', $config['csp_header']['enabled']);
+        foreach ($config['csp_header']['additional_urls'] as $additionalUrlsKey => $additionalUrlsArr) {
+            $cspHandlerDefinition->addMethodCall('addAllowedUrls', [$additionalUrlsKey, $additionalUrlsArr]);
+        }
+
+        $cspSubscriberDefinition = $container->getDefinition('Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\CspHeaderSubscriber');
+        $cspSubscriberDefinition
+            ->setArgument('$cspEnabled', $config['csp_header']['enabled'])
+            ->setArgument('$excludePaths', $config['csp_header']['exclude_paths']);
     }
 }
