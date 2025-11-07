@@ -125,6 +125,6 @@ Alternatively, the `ContentSecurityPolicyHandlerInterface` can be injected direc
 ## Troubleshooting
 
 - **CSP violations**: Ensure inline scripts have nonce attributes and external origins are registered
-- **Dev servers**: Development server origins (e.g., `http://localhost:3030`, `http://localhost:3031`) are automatically detected from entry point JSON files. Additional bundle-specific dev servers can be added via `CspEvent` subscriber (e.g., by scanning `exposeRemote.js` files or manually specifying origins)
+- **Dev servers**: Development server origins (e.g., `http://localhost:3030`, `http://localhost:3031`) are automatically detected from entry point JSON files. Additional bundle-specific dev servers can be added via `CspEvent` subscriber (e.g., by scanning additional files or manually specifying origins)
 - **Production**: Configure additional resources in `additional_urls` (e.g., CDN origins)
 
