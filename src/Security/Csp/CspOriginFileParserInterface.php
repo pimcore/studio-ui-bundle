@@ -22,16 +22,18 @@ interface CspOriginFileParserInterface
 {
     /**
      * Extract origins from a list of file paths.
-     * 
+     *
      * @param string[] $filePaths Absolute paths to files to scan
+     *
      * @return string[] Array of unique origins found (e.g., ['http://localhost:3030', 'https://cdn.example.com'])
      */
     public function extractOriginsFromFiles(array $filePaths): array;
 
     /**
      * Extract origins from text content.
-     * 
+     *
      * @param string $content Content to scan for URLs
+     *
      * @return string[] Array of unique origins found
      */
     public function extractOriginsFromContent(string $content): array;

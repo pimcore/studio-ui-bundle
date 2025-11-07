@@ -15,7 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Security\Csp;
 
 /**
  * Service for managing Content Security Policy headers and nonces.
- * 
+ *
  * This interface provides methods to generate CSP headers, manage allowed URLs
  * for different CSP directives, and handle nonce generation for inline scripts.
  */

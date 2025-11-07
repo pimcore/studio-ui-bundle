@@ -44,7 +44,7 @@ final class CspEvent extends Event
     /**
      * Add additional build origins that should be allowed in CSP directives.
      * These origins will be automatically added to script-src, style-src, and connect-src.
-     * 
+     *
      * @param string[] $origins Array of origins (e.g., ['http://localhost:3030'])
      */
     public function addBuildOrigins(array $origins): void
@@ -54,7 +54,7 @@ final class CspEvent extends Event
 
     /**
      * Get all additional build origins that have been added by event listeners.
-     * 
+     *
      * @return string[]
      */
     public function getAdditionalBuildOrigins(): array

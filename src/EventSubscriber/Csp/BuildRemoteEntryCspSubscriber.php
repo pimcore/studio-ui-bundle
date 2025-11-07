@@ -23,15 +23,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Adds origins from webpack module federation remote entry files (exposeRemote.js)
  * to CSP directives.
- * 
+ *
  * Priority: 100 (runs early to ensure remote entry origins are added first)
- * 
+ *
  * @internal
  */
 final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
-    
+
     /**
      * Priority for this subscriber.
      * Higher values run earlier. Extensions can use lower priorities to run after core subscribers.
@@ -54,11 +54,11 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
     public function onCspEvent(CspEvent $event): void
     {
         $exposeRemoteFiles = glob(__DIR__ . '/../../../public/build/*/exposeRemote.js') ?: [];
-        
+
         $this->logger->debug('Scanning for exposeRemote.js files', ['files_found' => count($exposeRemoteFiles)]);
-        
+
         $origins = $this->cspOriginFileParser->extractOriginsFromFiles($exposeRemoteFiles);
-        
+
         if (!empty($origins)) {
             $this->logger->debug('Extracted origins from exposeRemote.js files', ['origins' => $origins]);
             $event->addBuildOrigins($origins);

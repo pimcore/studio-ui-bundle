@@ -71,6 +71,7 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
             foreach ($this->excludePaths as $path) {
                 if (@preg_match($path, $requestUri)) {
                     $this->logger->debug('CSP excluded for path', ['path' => $requestUri, 'pattern' => $path]);
+
                     return;
                 }
             }
@@ -80,9 +81,9 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $response = $event->getResponse();
         $cspHeader = $this->contentSecurityPolicyHandler->getCspHeader();
-        
+
         $response->headers->set('Content-Security-Policy', $cspHeader);
-        
+
         $this->logger->debug('CSP header set', ['header' => $cspHeader]);
     }
 
@@ -90,11 +91,12 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
     {
         $cspEvent = new CspEvent($request, $this->contentSecurityPolicyHandler);
         $this->eventDispatcher->dispatch($cspEvent);
-        
+
         $allOrigins = $cspEvent->getAdditionalBuildOrigins();
-        
+
         if (empty($allOrigins)) {
             $this->logger->debug('No additional CSP origins added by subscribers');
+
             return;
         }
 
@@ -104,12 +106,12 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
         $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
-        
+
         $this->contentSecurityPolicyHandler->addAllowedUrls(
-            ContentSecurityPolicyHandlerInterface::CONNECT_OPT, 
+            ContentSecurityPolicyHandlerInterface::CONNECT_OPT,
             array_merge($allOrigins, $webSocketOrigins)
         );
-        
+
         if (!empty($webSocketOrigins)) {
             $this->logger->debug('Generated WebSocket origins for HMR', ['websocket_origins' => $webSocketOrigins]);
         }
@@ -117,14 +119,15 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
     /**
      * Generate WebSocket origins from HTTP origins for HMR support
-     * 
+     *
      * @param string[] $httpOrigins
+     *
      * @return string[]
      */
     private function generateWebSocketOrigins(array $httpOrigins): array
     {
         $webSocketOrigins = [];
-        
+
         foreach ($httpOrigins as $origin) {
             if (str_starts_with($origin, 'http://')) {
                 $webSocketOrigins[] = str_replace('http://', 'ws://', $origin);
@@ -132,7 +135,7 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
                 $webSocketOrigins[] = str_replace('https://', 'wss://', $origin);
             }
         }
-        
+
         return $webSocketOrigins;
     }
 }
