@@ -24,15 +24,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Adds origins from webpack entry points (static CSS/JS resources)
  * to CSP directives.
- * 
+ *
  * Priority: 50 (runs after BuildRemoteEntryCspSubscriber)
- * 
+ *
  * @internal
  */
 final class BuildEntryPointCspSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
-    
+
     /**
      * Priority for this subscriber.
      * Lower than BuildRemoteEntryCspSubscriber to ensure remote entries are processed first.
@@ -57,7 +57,7 @@ final class BuildEntryPointCspSubscriber implements EventSubscriberInterface, Lo
     {
         try {
             $origins = $this->extractOriginsFromStaticResources();
-            
+
             if (!empty($origins)) {
                 $this->logger->debug('Extracted origins from static resources', ['origins' => $origins]);
                 $event->addBuildOrigins($origins);
@@ -84,6 +84,7 @@ final class BuildEntryPointCspSubscriber implements EventSubscriberInterface, Lo
 
         // Use CspOriginFileParser to extract origins from URLs
         $urlsContent = implode("\n", $allFiles);
+
         return $this->cspOriginFileParser->extractOriginsFromContent($urlsContent);
     }
 }

@@ -26,21 +26,21 @@ final readonly class CspOriginFileParser implements CspOriginFileParserInterface
     public function extractOriginsFromFiles(array $filePaths): array
     {
         $origins = [];
-        
+
         foreach ($filePaths as $filePath) {
             $fileOrigins = $this->extractOriginsFromFile($filePath);
             $origins = array_merge($origins, $fileOrigins);
         }
-        
+
         return array_unique($this->validator->validateOrigins($origins));
     }
 
     public function extractOriginsFromContent(string $content): array
     {
         $origins = [];
-        
+
         $pattern = '/([a-z][a-z0-9+.-]*):\/\/([^\/\'"?#\s]+)/i';
-        
+
         if (preg_match_all($pattern, $content, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $protocol = $match[1];
@@ -48,7 +48,7 @@ final readonly class CspOriginFileParser implements CspOriginFileParserInterface
                 $origins[] = $protocol . '://' . $host;
             }
         }
-        
+
         return array_unique($this->validator->validateOrigins($origins));
     }
 

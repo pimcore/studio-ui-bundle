@@ -20,13 +20,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 /**
  * Event dispatched before CSP headers are set, allowing listeners to add additional
  * build origins or modify CSP directives.
- * 
+ *
  * Extension developers can subscribe to this event to add their own origins:
- * 
+ *
  * ```php
  * use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
  * use Symfony\Component\EventDispatcher\EventSubscriberInterface;
- * 
+ *
  * final class MyExtensionCspSubscriber implements EventSubscriberInterface
  * {
  *     public static function getSubscribedEvents(): array
@@ -37,11 +37,11 @@ use Symfony\Contracts\EventDispatcher\Event;
  *             CspEvent::class => ['onCspEvent', 0],
  *         ];
  *     }
- *     
+ *
  *     public function onCspEvent(CspEvent $event): void
  *     {
  *         $event->addBuildOrigins(['https://my-cdn.example.com']);
- *         
+ *
  *         // Or modify CSP handler directly
  *         $event->getCspHandler()->addAllowedUrls(
  *             ContentSecurityPolicyHandlerInterface::FONT_OPT,
@@ -50,7 +50,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  *     }
  * }
  * ```
- * 
+ *
  * Core subscriber priorities:
  * - BuildRemoteEntryCspSubscriber: 100 (remote entry files)
  * - BuildEntryPointCspSubscriber: 50 (static resources)
@@ -79,7 +79,7 @@ final class CspEvent extends Event
     /**
      * Add additional build origins that should be allowed in CSP directives.
      * These origins will be automatically added to script-src, style-src, and connect-src.
-     * 
+     *
      * @param string[] $origins Array of origins (e.g., ['http://localhost:3030'])
      */
     public function addBuildOrigins(array $origins): void
@@ -89,7 +89,7 @@ final class CspEvent extends Event
 
     /**
      * Get all additional build origins that have been added by event listeners.
-     * 
+     *
      * @return string[]
      */
     public function getAdditionalBuildOrigins(): array
