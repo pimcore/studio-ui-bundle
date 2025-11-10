@@ -9,11 +9,12 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { isNil, isNull, isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
   type BundleCustomReportsConfigurationTreeNode,
-  type BundleCustomReportsDetails, type BundleCustomReportUpdate, useCustomReportsReportQuery
+  type BundleCustomReportUpdate,
+  useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
@@ -54,7 +55,6 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   const { updateReport } = useReportActions()
 
   const [form] = Form.useForm()
-  const watchedValues: Partial<BundleCustomReportsDetails> = Form.useWatch([], form)
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
   const dataSourceConfig: IDataSourceConfig | null | undefined = currentData?.dataSourceConfig
@@ -75,28 +75,8 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
     }
   }, [isDirty])
 
-  useEffect(() => {
-    if (!isNil(watchedValues)) {
-      console.log('======= <<< START >>> ======')
-      console.log('----->>>>> 000 currentData: ', currentData)
-      console.log('----->>>>> 111 watchedValues: ', watchedValues)
-      const activeFields = Object.keys(form.getFieldsValue() as object).filter(
-        key => form.getFieldInstance(key) !== undefined
-      )
-      const currentFields = form.getFieldsValue()
-      const filteredValues = Object.fromEntries(
-        Object.entries(watchedValues).filter(([key]) => key in currentFields)
-      )
-      console.log('----->>>>> 222 currentFields: ', currentFields)
-      console.log('----->>>>> 333 filteredValues: ', filteredValues)
-      console.log('----->>>>> 444 activeFields: ', activeFields)
-      console.log('======= <<< END >>> ======')
-      updateFormData?.({ ...currentData, ...filteredValues })
-    }
-  }, [watchedValues])
-
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    console.log('----->>>>> onValuesChange: ', allValues)
+    updateFormData?.({ ...currentData, ...allValues })
   }
 
   const handleSave = (): void => {
