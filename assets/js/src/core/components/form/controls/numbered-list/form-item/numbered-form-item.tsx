@@ -15,7 +15,12 @@ import { VirtualItem } from '../../../item/virtual-item'
 
 export interface NumberedFormItemProps {
   Component: typeof Form.Item
-  componentProps: FormItemProps
+  componentProps: FormItemProps & {
+    tooltip?: {
+      title?: string | React.JSX.Element,
+      icon?: React.JSX.Element
+    }
+  }
 }
 
 const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps): React.JSX.Element => {
