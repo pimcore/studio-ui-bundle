@@ -12,7 +12,7 @@ import { WithAvailableColumnsContext } from '@Pimcore/modules/asset/listing/deco
 import { withAdvancedColumnConfig } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/with-advanced-column-config'
 import { type AbstractDecorator } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { WithColumnConfiguration } from './configuration-layer/with-column-configuration'
-import { withConfigurationSidebarEntry } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/hooks/with-configuration-sidebar-entry'
+import { withConfigurationSidebarEntry } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/hooks/with-configuration-sidebar-entry'
 
 export const ColumnConfigurationDecorator: AbstractDecorator = (props) => {
   const { ConfigurationComponent, ContextComponent, useGridOptions, useSidebarOptions, ...baseProps } = props

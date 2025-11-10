@@ -12,13 +12,21 @@ import React from 'react'
 import { GridConfigProvider } from './grid-config-provider'
 import { GridConfigInner } from './grid-config-inner'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { Settings } from '../../hooks/with-configuration-sidebar-entry'
+import { SettingsProvider } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/settings-provider'
 
-export const GridConfig = (): React.JSX.Element => {
+export interface GridConfigProps {
+  settings?: Settings
+}
+
+export const GridConfig = ({ settings }: GridConfigProps): React.JSX.Element => {
   return (
-    <GridConfigProvider>
-      <ClassificationStoreModalProvider>
-        <GridConfigInner />
-      </ClassificationStoreModalProvider>
-    </GridConfigProvider>
+    <SettingsProvider settings={ settings }>
+      <GridConfigProvider>
+        <ClassificationStoreModalProvider>
+          <GridConfigInner />
+        </ClassificationStoreModalProvider>
+      </GridConfigProvider>
+    </SettingsProvider>
   )
 }
