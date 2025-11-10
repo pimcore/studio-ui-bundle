@@ -31,6 +31,7 @@ import { type DynamicTypeFieldFilterAbstract, type AbstractFieldFilterDefinition
 import { type DynamicTypeFieldFilterRegistry } from '@sdk/modules/element'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -109,7 +110,15 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
-      tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? respectLineBreak(props.tooltip, false) : undefined
+      tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0
+        ? {
+            title: respectLineBreak(props.tooltip, false),
+            icon: <Icon
+              options={ { width: 14, height: 14 } }
+              value="help-circle"
+                  />
+          }
+        : undefined
     }
   }
 
