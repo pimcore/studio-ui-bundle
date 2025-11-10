@@ -21,6 +21,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { Panel } from '@Pimcore/components/panel/panel'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -80,13 +81,15 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         theme='border-highlight'
         title={ groupLayout?.name }
       >
-        {(groupLayout?.keys)?.map((item) => (
-          <ObjectComponent
-            key={ item.id }
-            { ...item.definition }
-            name={ item.id }
-          />
-        ))}
+        <Panel>
+          {(groupLayout?.keys)?.map((item) => (
+            <ObjectComponent
+              key={ item.id }
+              { ...item.definition }
+              name={ item.id }
+            />
+          ))}
+        </Panel>
       </BaseView>
     )
   }, [groupLayout, id, fieldName, currentLayoutData])
