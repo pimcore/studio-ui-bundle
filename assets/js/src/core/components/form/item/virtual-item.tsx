@@ -50,7 +50,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
 
                   {props.tooltip !== undefined && (
                     <Tooltip className='virtual-item__tooltip' title={ props.tooltip.title } >
-                      {props.tooltip.icon ?? <Icon value="info-circle" />}
+                      {props.tooltip.icon ?? <Icon options={{ width: 14, height: 14 }} value="info-circle" />}
                     </Tooltip>
                   )}
                 </Space>                

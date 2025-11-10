@@ -112,7 +112,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       hidden: props.invisible === true,
       tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? {
         title: respectLineBreak(props.tooltip, false),
-        icon: <Icon value="help-circle" />
+        icon: <Icon options={{width: 14, height: 14}} value="help-circle" />
       } : undefined
     }
   }
