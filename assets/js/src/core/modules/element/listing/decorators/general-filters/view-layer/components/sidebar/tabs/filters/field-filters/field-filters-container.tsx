@@ -37,27 +37,32 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const { openModal } = useClassificationStoreModal({ onUpdate: onAddClassificationStoreColumn })
   const classDefinitionContext = useClassDefinitionSelectionOptional()
 
-  const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
-    // @todo find a way to map columns that are not depending on the key
-    const currentColumn = availableColumns.find((column) => column.key === filter.key)
+  const initialFilters: FieldFiltersProps['data'] = useMemo(() => {
+    const _initialFilters: FieldFiltersProps['data'] = []
 
-    if (currentColumn === undefined) {
-      throw new Error(`Could not find column configuration for field filter with key ${filter.key}`)
+    for (const filter of fieldFilters) {
+      const currentColumn = availableColumns.find((column) => column.key === filter.key)
+
+      if (currentColumn === undefined) {
+        continue;
+      }
+
+      _initialFilters.push({
+        id: `${filter.key}`,
+        translationKey: filter.meta?.translationKey ?? filter.key,
+        data: filter.filterValue,
+        type: filter.type,
+        filterType: filter?.filterType,
+        frontendType: currentColumn?.frontendType,
+        localizable: currentColumn?.localizable,
+        locale: filter?.locale,
+        config: filter.meta ?? currentColumn?.config,
+        nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
+      })
     }
 
-    return {
-      id: `${filter.key}`,
-      translationKey: filter.meta?.translationKey ?? filter.key,
-      data: filter.filterValue,
-      type: filter.type,
-      filterType: filter?.filterType,
-      frontendType: currentColumn?.frontendType,
-      localizable: currentColumn?.localizable,
-      locale: filter?.locale,
-      config: filter.meta ?? currentColumn?.config,
-      nameTooltip: currentColumn?.group !== undefined ? Array.isArray(currentColumn.group) ? currentColumn.group.join('/') : undefined : undefined
-    }
-  }), [fieldFilters, availableColumns])
+    return _initialFilters
+  }, [fieldFilters, availableColumns])
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
 
