@@ -81,7 +81,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
 
   const prepareClassificationStoreApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
     const { update } = event
-    const locale = update.column.locale ?? (update.column.localizable ? currentLanguage === null ? 'default' : currentLanguage : 'default')
+    const locale = update.column.locale ?? (update.column.localizable ? currentLanguage ?? 'default' : 'default')
     const columnKey = update.column.key!
     const columnConfig = update.column.config!
 

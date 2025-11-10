@@ -40,9 +40,9 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
   const { name: classificationStoreName, localized, value } = props
   const { hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
-  
+
   useEffect(() => {
-    if (localized === true && !hasLocalizedFields) setHasLocalizedFields(true)
+    if (localized && !hasLocalizedFields) setHasLocalizedFields(true)
   }, [])
 
   const valueRef = useRef(value)

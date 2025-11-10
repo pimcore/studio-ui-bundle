@@ -44,7 +44,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       const currentColumn = availableColumns.find((column) => column.key === filter.key)
 
       if (currentColumn === undefined) {
-        continue;
+        continue
       }
 
       _initialFilters.push({

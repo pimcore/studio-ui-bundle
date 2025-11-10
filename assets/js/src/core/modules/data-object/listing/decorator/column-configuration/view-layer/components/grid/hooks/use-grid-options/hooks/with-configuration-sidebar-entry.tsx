@@ -31,7 +31,7 @@ export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProp
         entries: [
           ...baseProps.entries,
           {
-            component: <GridConfig settings={settings} />,
+            component: <GridConfig settings={ settings } />,
             key: 'configuration',
             icon: <Icon value="settings" />,
             tooltip: t('sidebar.grid_config')

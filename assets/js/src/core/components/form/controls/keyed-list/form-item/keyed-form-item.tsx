@@ -15,12 +15,7 @@ import { VirtualItem } from '../../../item/virtual-item'
 
 export interface KeyedFormItemProps {
   Component: typeof Form.Item
-  componentProps: FormItemProps & {
-    tooltip?: {
-      title?: string | React.JSX.Element,
-      icon?: React.JSX.Element
-    }
-  }
+  componentProps: FormItemProps
 }
 
 const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React.JSX.Element => {

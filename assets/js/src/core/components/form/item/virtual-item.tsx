@@ -17,11 +17,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface VirtualItemProps extends FormItemProps {
-  children?: React.ReactNode,
-  tooltip?: {
-    title?: string | React.JSX.Element,
-    icon?: React.JSX.Element
-  }
+  children?: React.ReactNode
 }
 
 export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX.Element => {
@@ -48,12 +44,22 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
                 <Space size="extra-small">
                   {label}
 
-                  {props.tooltip !== undefined && (
-                    <Tooltip className='virtual-item__tooltip' title={ props.tooltip.title } >
-                      {props.tooltip.icon ?? <Icon options={{ width: 14, height: 14 }} value="info-circle" />}
+                  {props.tooltip !== undefined && props.tooltip !== null && (
+                    <Tooltip
+                      className='virtual-item__tooltip'
+                      title={ typeof props.tooltip === 'object' && 'title' in props.tooltip ? props.tooltip.title : undefined }
+                    >
+                      {typeof props.tooltip === 'object' && 'icon' in props.tooltip
+                        ? props.tooltip.icon
+                        : (
+                          <Icon
+                            options={ { width: 14, height: 14 } }
+                            value="info-circle"
+                          />
+                          )}
                     </Tooltip>
                   )}
-                </Space>                
+                </Space>
               </label>
               {isRequired && <span className="required-indicator">*</span>}
             </Space>

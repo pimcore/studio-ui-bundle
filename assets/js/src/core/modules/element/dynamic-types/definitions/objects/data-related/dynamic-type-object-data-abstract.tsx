@@ -110,10 +110,15 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
-      tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? {
-        title: respectLineBreak(props.tooltip, false),
-        icon: <Icon options={{width: 14, height: 14}} value="help-circle" />
-      } : undefined
+      tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0
+        ? {
+            title: respectLineBreak(props.tooltip, false),
+            icon: <Icon
+              options={ { width: 14, height: 14 } }
+              value="help-circle"
+                  />
+          }
+        : undefined
     }
   }
 
