@@ -53,12 +53,12 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
 
   const { isLoading, isFetching, data } = useDataObjectListSavedGridConfigurationsQuery({
-    classId: selectedClassDefinition?.id || ''
+    classId: selectedClassDefinition?.id ?? ''
   }, { skip: selectedClassDefinition === undefined })
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
   const { isFetching: gridConfigIsLoading } = useDataObjectGetGridConfigurationQuery({
-    classId: selectedClassDefinition?.id || '',
+    classId: selectedClassDefinition?.id ?? '',
     folderId: getId(),
     configurationId: selectedGridConfigId
   }, { skip: selectedClassDefinition === undefined })

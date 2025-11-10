@@ -17,7 +17,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/input-quantity-value/input-quantity-value'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _, { isEmpty, isNull } from 'lodash'
+import _, { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
 
 export type InputQuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
