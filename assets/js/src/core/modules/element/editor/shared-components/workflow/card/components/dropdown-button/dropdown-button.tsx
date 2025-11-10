@@ -12,36 +12,26 @@ import React, { type ReactNode, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Button } from '@Pimcore/components/button/button'
-import { useSubmitWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-submit-workflow'
-import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
 import { type IWorkflowCardProps } from '../../types'
+import { getWorkflowActions } from '../../../types/workflow-types'
+import { useWorkflowAction } from '../../../hooks/use-workflow-action'
 
 export const DropdownButton = ({ workflow }: IWorkflowCardProps): ReactNode => {
   const [items, setItems] = useState<DropdownMenuProps['items']>([])
   const { t } = useTranslation()
+  const workflowActions = getWorkflowActions(workflow)
 
-  const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
-  const { openModal } = useWorkflow()
+  const { triggerAction, submissionLoading } = useWorkflowAction()
 
   const setWorkflowData = (): void => {
     const items: DropdownMenuProps['items'] = []
 
-    workflow.allowedTransitions?.forEach((status) => {
+    workflowActions.forEach((action) => {
       items.push({
-        key: Number(items.length + 1).toString(),
-        label: t(`${status.label}`),
+        key: action.actionType + '-' + action.transitionId,
+        label: t(action.label),
         onClick: () => {
-          submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
-        }
-      })
-    })
-
-    workflow.globalActions?.forEach((status) => {
-      items.push({
-        key: Number(items.length + 1).toString(),
-        label: t(`${status.label}`),
-        onClick: () => {
-          openModal({ transition: 'global', action: status.name, workflowName: workflow.workflowName })
+          triggerAction(action)
         }
       })
     })

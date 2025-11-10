@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePerspectiveGetConfigByIdQuery, type AssetContextPermissions, type DataObjectContextPermissions, type DocumentContextPermissions } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { usePerspectiveGetConfigByIdQuery, type AssetContextPermissions, type DataObjectContextPermissions, type DocumentContextPermissions } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isEmpty } from 'lodash'
 import { useMemo } from 'react'
 

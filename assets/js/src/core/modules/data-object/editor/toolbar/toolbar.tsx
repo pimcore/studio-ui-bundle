@@ -12,8 +12,8 @@ import React from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 
 import { Flex } from '@Pimcore/components/flex/flex'
-import { WorkflowLogModal } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-log-modal'
-import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-provider'
+import { WorkflowModal } from '@Pimcore/modules/element/editor/shared-components/workflow/modal/workflow-modal'
+import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
@@ -37,7 +37,7 @@ export const Toolbar = (): React.JSX.Element => {
             slot={ componentConfig.dataObject.editor.toolbar.slots.right.name }
           />
         </Flex>
-        <WorkflowLogModal />
+        <WorkflowModal />
       </WorkFlowProvider>
     </ToolbarView>
   )

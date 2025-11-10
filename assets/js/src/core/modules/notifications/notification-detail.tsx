@@ -29,6 +29,8 @@ export interface NotificationDetailProps {
 }
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
   const {
     isExpanded,
     setIsExpanded,
@@ -37,10 +39,6 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteNotification,
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
-
-  const { styles } = useStyles()
-
-  const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
 
   useEffect(() => {
     if (notificationDetail !== undefined) {
@@ -140,10 +138,10 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   return (
     <Collapse
       activeKeys={
-      isExpanded
-        ? [notification.id.toString()]
-        : []
-    }
+        isExpanded
+          ? [notification.id.toString()]
+          : []
+      }
       items={ [item] }
       onChange={ (expandedKeys) => {
         if (expandedKeys.length > 0) {

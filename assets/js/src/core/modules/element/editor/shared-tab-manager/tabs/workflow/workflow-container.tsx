@@ -14,9 +14,9 @@ import { WorkflowCard } from '@Pimcore/modules/element/editor/shared-components/
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { Space } from 'antd'
-import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-provider'
-import { WorkflowLogModal } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/workflow-log-modal'
-import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
+import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
+import { WorkflowModal } from '@Pimcore/modules/element/editor/shared-components/workflow/modal/workflow-modal'
+import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -46,7 +46,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
               />
             ))
           )}
-          <WorkflowLogModal />
+          <WorkflowModal />
         </WorkFlowProvider>
       </Space>
     </Content>

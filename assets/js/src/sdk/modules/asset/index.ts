@@ -42,3 +42,5 @@ export * from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 export * as AssetApiSlice from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 export * from '@Pimcore/modules/asset/asset-draft-slice'
 export * from '@Pimcore/modules/asset/asset-provider'
+
+export * from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'

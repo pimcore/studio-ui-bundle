@@ -14,7 +14,7 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type 
 import { Select } from '@Pimcore/components/select/select'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _ from 'lodash'
+import _, { isNil } from 'lodash'
 import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
@@ -24,7 +24,7 @@ import i18n from '@Pimcore/app/i18n'
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
   allowClear?: boolean
-  options: Array<{ key: string, value: string | number }> | null
+  options?: Array<{ key: string, value: string | number }> | null
   multiSelect?: boolean
   maxItems?: number | null
   width?: number | string | null
@@ -61,8 +61,8 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number | null }> | undefined {
-    if (options === null) {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number | null }> | undefined {
+    if (isNil(options)) {
       return
     }
     return options.map(option => ({ label: i18n.t(option.key), value: option.value }))

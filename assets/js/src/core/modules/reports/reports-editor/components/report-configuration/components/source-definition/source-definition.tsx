@@ -24,11 +24,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
-export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const SourceDefinition = ({ form, currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-
-  const form = Form.useFormInstance()
 
   const [currentSourceDefinition, setCurrentSourceDefinition] = useState<string | undefined>(
     (currentData.dataSourceConfig as ISourceDefinition)?.type
@@ -46,8 +44,8 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
   })), [adapters])
 
   const handleSourceDefinitionTypeUpdate = (type: string): void => {
-    form.resetFields(['dataSourceConfig'])
-    form.setFieldsValue({ dataSourceConfig: { type } })
+    form?.resetFields(['dataSourceConfig'])
+    form?.setFieldsValue({ dataSourceConfig: { type } })
 
     updateFormData?.({ ...currentData, dataSourceConfig: { type } })
 
@@ -100,7 +98,7 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
               options={ sourceDefinitionOptions }
             />
           </Form.Item>
-          {currentAdapter?.getCustomReportData({ currentData, updateFormData })}
+          {currentAdapter?.getCustomReportData({ currentData, updateFormData, form })}
         </Form.Group>
       </Flex>
       )}

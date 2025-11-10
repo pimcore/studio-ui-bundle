@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isNil } from 'lodash'
 import React, { createContext, useMemo, useState, type Dispatch, type SetStateAction } from 'react'
 import { usePerspectiveEditor } from '../hooks/use-perspective-editor'
@@ -24,8 +24,6 @@ export interface PerspectiveEditorContextProps {
   setPerspectives: Dispatch<SetStateAction<PerspectiveConfigDetail[]>>
   openPerspective: (id: string) => Promise<void>
   closePerspective: (id: string) => void
-  isLoading: boolean
-  setIsLoading: (loading: boolean) => void
 }
 
 export const PerspectiveEditorContext = createContext<PerspectiveEditorContextProps | undefined>(undefined)
@@ -34,11 +32,10 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
   const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
   const [perspectives, setPerspectives] = useState<PerspectiveConfigDetail[]>([])
   const { getPerspectiveById } = usePerspectiveEditor()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const openPerspective = async (id: string): Promise<void> => {
     const perspective = await getPerspectiveById(id)
-
+    console.log('opening perspective', id, perspective)
     if (!isNil(perspective)) {
       setPerspectives((prev) => {
         const existingIndex = prev.findIndex(p => p.id === perspective.id)
@@ -78,10 +75,8 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
     perspectives,
     setPerspectives,
     openPerspective,
-    closePerspective,
-    isLoading,
-    setIsLoading
-  }), [activeTabId, perspectives, isLoading])
+    closePerspective
+  }), [activeTabId, perspectives])
 
   return (
     <PerspectiveEditorContext.Provider value={ contextValue }>

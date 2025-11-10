@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
+import { isFunction } from 'lodash'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { type BlockProps } from './block'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
@@ -56,7 +57,9 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
               itemValue={ value }
             >
               <Form.Group name={ index }>
-                {props.children}
+                {isFunction(props.children)
+                  ? props.children({ blockIndex: index })
+                  : props.children}
               </Form.Group>
             </BlockItem>
           </div>

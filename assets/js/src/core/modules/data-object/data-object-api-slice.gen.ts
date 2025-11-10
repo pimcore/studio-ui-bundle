@@ -147,6 +147,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
+            dataObjectGetPhpcodeTransformers: build.query<
+                DataObjectGetPhpcodeTransformersApiResponse,
+                DataObjectGetPhpcodeTransformersApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/data-objects/grid/transformers/services/phpcode` }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout`,
@@ -411,6 +418,11 @@ export type DataObjectGetGridApiArg = {
         filters?: GridFilter;
     };
 };
+export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of available PHPCode transformers */ {
+    totalItems: number;
+    items: SimplePhpCodeTransformer[];
+};
+export type DataObjectGetPhpcodeTransformersApiArg = void;
 export type DataObjectGetLayoutByIdApiResponse =
     /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
 export type DataObjectGetLayoutByIdApiArg = {
@@ -845,6 +857,16 @@ export type GridColumnConfiguration = {
     /** Config */
     config: object;
 };
+export type SimplePhpCodeTransformer = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Unique key of the transformer */
+    key: string;
+    /** Label of the transformer */
+    label: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -929,6 +951,7 @@ export const {
     useDataObjectGetAvailableGridColumnsQuery,
     useDataObjectGetAvailableGridColumnsForRelationQuery,
     useDataObjectGetGridQuery,
+    useDataObjectGetPhpcodeTransformersQuery,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectPatchFolderByIdMutation,

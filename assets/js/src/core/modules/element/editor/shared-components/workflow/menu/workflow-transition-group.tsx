@@ -10,46 +10,36 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  type TransitionType,
-  useWorkflow
-} from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
+import { getWorkflowActions, type WorkflowAction } from '../types/workflow-types'
 import { Button } from '@Pimcore/components/button/button'
-import { useSubmitWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-submit-workflow'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group.styles'
 import cn from 'classnames'
 import type {
   WorkflowDetails
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
+import { useWorkflowAction } from '../hooks/use-workflow-action'
 
 interface WorkflowItemProps {
   workflow: WorkflowDetails
 }
 
 export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.JSX.Element => {
-  const { openModal } = useWorkflow()
-  const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
+  const { triggerAction, submissionLoading } = useWorkflowAction()
+  const workflowActions = getWorkflowActions(workflow)
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const onClick = (actionType: string, transition: TransitionType, workflowName: string): void => {
-    if (transition === 'global') openModal({ action: actionType, transition, workflowName })
-    else if (transition === 'transition') {
-      submitWorkflowAction(actionType, transition, workflowName, {})
-    }
-  }
-
   const isFirst = true
-  const renderButton = (actionType: string, transition: TransitionType): React.JSX.Element => {
+  const renderButton = (action: WorkflowAction): React.JSX.Element => {
     return (
       <Button
         className={ isFirst ? `${styles.button}` : cn(`${styles.button}`, `${styles['not-first']}`) }
         onClick={ () => {
-          onClick(actionType, transition, workflow.workflowName)
+          triggerAction(action)
         } }
         type='text'
       >
-        {t(`${actionType}`)}
+        {t(action.label)}
       </Button>
     )
   }
@@ -64,8 +54,7 @@ export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.
   } else {
     return (
       <div>
-        {workflow.allowedTransitions?.map((status) => renderButton(status.label, 'transition'))}
-        {workflow.globalActions?.map((status) => renderButton(status.label, 'global'))}
+        {workflowActions.map((action) => renderButton(action))}
       </div>
     )
   }

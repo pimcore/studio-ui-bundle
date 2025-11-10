@@ -21,41 +21,39 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     perspectiveGetConfigCollection: {
       providesTags: (result): Tag[] => {
-        const tags: Tag[] = []
-
-        result?.items.forEach((perspective) => {
-          tags.push(...providingTags.PERSPECTIVE_DETAIL(perspective.id))
-        })
-
-        return [...tags, ...providingTags.PERSPECTIVES()]
+        return providingTags.PERSPECTIVES()
       }
     },
-    perspectiveCreate: {
-      invalidatesTags: () => []
+    perspectiveGetConfigById: {
+      providesTags: (result, error, args): Tag[] => {
+        return providingTags.PERSPECTIVE_DETAIL(args.perspectiveId)
+      }
+    },
+    perspectiveUpdateConfigById: {
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
     },
     perspectiveDelete: {
-      invalidatesTags: () => []
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
+    },
+    perspectiveCreate: {
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
     },
     perspectiveWidgetGetConfigCollection: {
-      providesTags: (result): Tag[] => {
-        const tags: Tag[] = []
-
-        result?.items.forEach((widget) => {
-          tags.push(...providingTags.WIDGET_DETAIL(widget.id))
-        })
-
-        return [...tags, ...providingTags.WIDGETS()]
+      providesTags: (result, error, args): Tag[] => providingTags.WIDGETS()
+    },
+    perspectiveWidgetGetConfigById: {
+      providesTags: (result, error, args): Tag[] => {
+        return providingTags.WIDGET_DETAIL(args.widgetId, args.widgetType)
       }
     },
+    perspectiveWidgetUpdateConfigById: {
+      invalidatesTags: () => invalidatingTags.WIDGETS()
+    },
     perspectiveWidgetCreate: {
-      invalidatesTags: () => [
-        ...invalidatingTags.WIDGETS()
-      ]
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     },
     perspectiveWidgetDelete: {
-      invalidatesTags: () => [
-        ...invalidatingTags.WIDGETS()
-      ]
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     }
   }
 })

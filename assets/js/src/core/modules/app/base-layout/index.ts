@@ -35,7 +35,7 @@ moduleSystem.registerModule({
     })
 
     componentRegistry.registerToSlot(componentConfig.rightSidebar.slot.name, {
-      name: 'logo',
+      name: 'logoContainer',
       priority: 100,
       component: Logo
     })

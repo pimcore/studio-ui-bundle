@@ -9,16 +9,20 @@
  */
 
 import React from 'react'
-import { formatDate } from '@Pimcore/utils/date-time'
+import { formatDate, formatDateTime } from '@Pimcore/utils/date-time'
 
 interface FormattedDateProps {
   timestamp: number
+  showTime?: boolean
 }
 
 const FormattedDate = (props: FormattedDateProps): React.JSX.Element => {
   return (
     <>
-      {formatDate(props.timestamp)}
+      {props.showTime === true
+        ? formatDateTime({ timestamp: props.timestamp, dateStyle: 'short', timeStyle: 'short' })
+        : formatDate(props.timestamp)
+      }
     </>
   )
 }

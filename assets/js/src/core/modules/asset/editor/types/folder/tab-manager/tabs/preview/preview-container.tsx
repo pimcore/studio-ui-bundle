@@ -18,6 +18,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from './pagination/pagination'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { PreviewCardContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/card/preview-card-container'
+import { IconButton, Split } from '@sdk/components'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -26,13 +27,13 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
 
-  const { data, isLoading } = useAssetGetTreeQuery({
+  const { data, isFetching, refetch } = useAssetGetTreeQuery({
     pathIncludeDescendants: true,
     page: currentPage,
     pageSize,
     excludeFolders: true,
     path: asset?.fullPath
-  })
+  }, { refetchOnMountOrArgChange: true })
 
   const total = data?.totalItems ?? 0
 
@@ -48,17 +49,24 @@ const PreviewContainer = (): React.JSX.Element => {
           justify={ 'flex-end' }
           theme='secondary'
         >
-          <Pagination
-            current={ currentPage }
-            defaultPageSize={ pageSize }
-            onChange={ onPagerChange }
-            total={ total }
-          />
+          <Split size='extra-small'>
+            <IconButton
+              icon={ { value: 'refresh' } }
+              loading={ isFetching }
+              onClick={ async () => await refetch() }
+            />
+            <Pagination
+              current={ currentPage }
+              defaultPageSize={ pageSize }
+              onChange={ onPagerChange }
+              total={ total }
+            />
+          </Split>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading }
+        loading={ isFetching }
         padded
       >
         {data?.items !== undefined && data.items.length > 0 && (
@@ -76,7 +84,7 @@ const PreviewContainer = (): React.JSX.Element => {
         )}
       </Content>
     </ContentLayout >
-  ), [currentPage, pageSize, data, isLoading])
+  ), [currentPage, pageSize, data, isFetching])
 }
 
 export { PreviewContainer }

@@ -31,7 +31,7 @@ export const usePropertiesInitialization = (options?: UsePropertiesInitializatio
   const { elementType, id } = useElementContext()
   const { element, setProperties } = useElementDraft(id, elementType)
 
-  const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
+  const { data, isLoading, isFetching } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   }, {
@@ -46,10 +46,10 @@ export const usePropertiesInitialization = (options?: UsePropertiesInitializatio
   }
 
   useEffect(() => {
-    if (data !== undefined && element?.changes?.properties === undefined && Array.isArray(data.items)) {
+    if (data !== undefined && !isFetching && element?.changes?.properties === undefined && Array.isArray(data.items)) {
       setProperties(enrichProperties(data.items))
     }
-  }, [data, element?.changes?.properties])
+  }, [data, element?.changes?.properties, isFetching])
 
   return { data, isLoading }
 }
