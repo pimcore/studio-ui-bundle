@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { DataObjectProvider } from '../../data-object-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
@@ -33,7 +33,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
   const { id } = props
 
   const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
 
   useEffect(() => {

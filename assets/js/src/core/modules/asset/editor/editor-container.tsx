@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '@sdk/modules/asset'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,7 +28,7 @@ export interface EditorContainerProps {
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, asset, editorType } = useAssetDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
   useEffect(() => {

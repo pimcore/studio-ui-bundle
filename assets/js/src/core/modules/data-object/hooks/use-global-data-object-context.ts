@@ -14,7 +14,7 @@ import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobal
 export interface GlobalDataObjectContext extends GlobalContext {
   type: 'data-object'
   config: {
-    id?: number
+    id: number
     context: string[]
   }
 }

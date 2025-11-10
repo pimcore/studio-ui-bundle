@@ -14,7 +14,7 @@ import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobal
 export interface GlobalDocumentContext extends GlobalContext {
   type: 'document'
   config: {
-    id?: number
+    id: number
     context: string[]
   }
 }

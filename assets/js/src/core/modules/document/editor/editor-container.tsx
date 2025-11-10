@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalDocumentContext } from '@Pimcore/modules/document/hooks/use-global-document-context'
 import { DocumentProvider } from '../document-provider'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,7 +28,7 @@ export interface EditorContainerProps {
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, document, editorType } = useDocumentDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDocumentContext()
 
   useEffect(() => {

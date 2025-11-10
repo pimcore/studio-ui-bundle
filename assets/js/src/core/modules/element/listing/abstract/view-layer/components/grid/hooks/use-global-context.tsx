@@ -29,17 +29,17 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
     [selectedRows]
   )
 
-  const getContextByType = (): { context?: GlobalElementContext, setContext: (config: GlobalElementContext['config']) => void } => {
+  const getContextByType = (): { context: GlobalElementContext, setContext: (config: GlobalElementContext['config']) => void } => {
     switch (elementType) {
       case elementTypes.dataObject:
-        return { context: globalDataObjectContext, setContext: setGlobalDataObjectContext }
+        return { context: globalDataObjectContext!, setContext: setGlobalDataObjectContext }
       case elementTypes.asset:
-        return { context: globalAssetContext, setContext: setGlobalAssetContext }
+        return { context: globalAssetContext!, setContext: setGlobalAssetContext }
       case elementTypes.document:
-        return { context: globalDocumentContext, setContext: setGlobalDocumentContext }
+        return { context: globalDocumentContext!, setContext: setGlobalDocumentContext }
 
       default:
-        return { context: globalDataObjectContext, setContext: setGlobalDataObjectContext }
+        return { context: globalDataObjectContext!, setContext: setGlobalDataObjectContext }
     }
   }
 
@@ -68,7 +68,7 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
     const baseContext = currentContext.filter(item => !item.includes('_selection'))
 
     if (isEmpty(selectedIds) && currentContext.length > baseContext.length) {
-      setContext({ context: baseContext })
+      setContext({ id: context.config.id, context: baseContext })
 
       return
     }
@@ -92,7 +92,7 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
           updatedContext.every((value, index) => value === currentContext[index])
 
         if (!isSame) {
-          setContext({ context: updatedContext })
+          setContext({ id: context.config.id, context: updatedContext })
         }
       }
     }
