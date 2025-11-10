@@ -30,6 +30,7 @@ export * from '@Pimcore/modules/document/services/processors/document-url-proces
 export * from '@Pimcore/modules/document/services/processors/document-save-data-processor-registry'
 
 export * from '@Pimcore/modules/document/editor/shared-tab-manager/tab-definitions'
+export * from '@Pimcore/modules/document/editor/shared-tab-manager/sidebar-definitions'
 export * from '@Pimcore/modules/document/editor/types/email/tab-manager/email-tab-manager'
 export * from '@Pimcore/modules/document/editor/types/folder/tab-manager/folder-tab-manager'
 export * from '@Pimcore/modules/document/editor/types/hardlink/tab-manager/hardlink-tab-manager'
