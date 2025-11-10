@@ -31,11 +31,10 @@ export interface EditorContainerInnerProps {
 
 const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
   const { id } = props
+
   const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
-  const { context, setContext, removeContext } = useGlobalDataObjectContext()
-
-  console.log('----- context: ', context)
+  const { setContext, removeContext } = useGlobalDataObjectContext()
 
   useEffect(() => {
     return () => {

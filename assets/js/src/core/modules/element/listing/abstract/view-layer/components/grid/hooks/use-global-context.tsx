@@ -11,7 +11,7 @@
 import { useEffect, useMemo } from 'react'
 import { find, get, isEmpty, isNil, isNull, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -31,11 +31,11 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
 
   const getContextByType = (): { context?: GlobalElementContext, setContext: (config: GlobalElementContext['config']) => void } => {
     switch (elementType) {
-      case 'data-object':
+      case elementTypes.dataObject:
         return { context: globalDataObjectContext, setContext: setGlobalDataObjectContext }
-      case 'asset':
+      case elementTypes.asset:
         return { context: globalAssetContext, setContext: setGlobalAssetContext }
-      case 'document':
+      case elementTypes.document:
         return { context: globalDocumentContext, setContext: setGlobalDocumentContext }
 
       default:
@@ -48,11 +48,11 @@ export const useGlobalContext = ({ data, selectedRows, elementType }: { data: an
     const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
 
     switch (elementType) {
-      case 'data-object':
+      case elementTypes.dataObject:
         return !isEmptyValue(className) ? `${OBJECT_CONTEXT_PREFIX}_${className}_selection`.toLowerCase() : null
-      case 'asset':
+      case elementTypes.asset:
         return !isEmptyValue(type) ? `${ASSET_CONTEXT_PREFIX}_${type}_selection`.toLowerCase() : null
-      case 'document':
+      case elementTypes.document:
         return !isEmptyValue(type) ? `${DOCUMENT_CONTEXT_PREFIX}_${type}_selection`.toLowerCase() : null
       default:
         return null
