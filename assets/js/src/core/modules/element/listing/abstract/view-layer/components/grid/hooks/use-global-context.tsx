@@ -9,64 +9,92 @@
  */
 
 import { useEffect, useMemo } from 'react'
-import { find, get, isEmpty, isNil, uniq } from 'lodash'
+import { find, get, isEmpty, isNil, isNull, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { useGlobalDocumentContext } from '@Pimcore/modules/document/hooks/use-global-document-context'
+import { type GlobalElementContext } from '@Pimcore/modules/element/hooks/use-global-element-context'
+import { ASSET_CONTEXT_PREFIX, DOCUMENT_CONTEXT_PREFIX, OBJECT_CONTEXT_PREFIX } from '@Pimcore/utils/global-context'
 
 export const useGlobalContext = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
   const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
+  const { context: globalAssetContext, setContext: setGlobalAssetContext } = useGlobalAssetContext()
+  const { context: globalDocumentContext, setContext: setGlobalDocumentContext } = useGlobalDocumentContext()
 
   const selectedIds = useMemo(
     () => (!isNil(selectedRows) ? Object.keys(selectedRows).map(Number) : []),
     [selectedRows]
   )
 
+  const getContextByType = (): { context?: GlobalElementContext, setContext: (config: GlobalElementContext['config']) => void } => {
+    switch (elementType) {
+      case 'data-object':
+        return { context: globalDataObjectContext, setContext: setGlobalDataObjectContext }
+      case 'asset':
+        return { context: globalAssetContext, setContext: setGlobalAssetContext }
+      case 'document':
+        return { context: globalDocumentContext, setContext: setGlobalDocumentContext }
+
+      default:
+        return { context: globalDataObjectContext, setContext: setGlobalDataObjectContext }
+    }
+  }
+
+  const getSelectionContextKey = (rowData: any): string | null => {
+    const type = get(find(rowData?.columns, { key: 'type' }), 'value')
+    const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
+
+    switch (elementType) {
+      case 'data-object':
+        return !isEmptyValue(className) ? `${OBJECT_CONTEXT_PREFIX}_${className}_selection`.toLowerCase() : null
+      case 'asset':
+        return !isEmptyValue(type) ? `${ASSET_CONTEXT_PREFIX}_${type}_selection`.toLowerCase() : null
+      case 'document':
+        return !isEmptyValue(type) ? `${DOCUMENT_CONTEXT_PREFIX}_${type}_selection`.toLowerCase() : null
+      default:
+        return null
+    }
+  }
+
   useEffect(() => {
     if (isEmptyValue(data)) return
 
-    switch (elementType) {
-      case 'data-object': {
-        const currentContext = globalDataObjectContext?.config?.context ?? []
-        const baseContext = currentContext.filter(item => !item.includes('_selection'))
+    const { context, setContext } = getContextByType()
 
-        if (isEmpty(selectedIds) && (currentContext.length > baseContext.length)) {
-          setGlobalDataObjectContext({
-            context: baseContext
-          })
+    const currentContext = context?.config?.context ?? []
+    const baseContext = currentContext.filter(item => !item.includes('_selection'))
 
-          break
-        }
+    if (isEmpty(selectedIds) && currentContext.length > baseContext.length) {
+      setContext({ context: baseContext })
 
-        if (!isEmpty(selectedIds)) {
-          const newContextValues: string[] = []
+      return
+    }
 
-          selectedIds.forEach((id): void => {
-            const rowData = data?.find((row: any) => row.id === id)
-            const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
+    if (!isEmpty(selectedIds)) {
+      const newContextValues: string[] = []
 
-            if (!isEmptyValue(className)) {
-              const newContextValue = `object_${className}_selection`.toLowerCase()
+      selectedIds.forEach((id) => {
+        const rowData = data?.find((row: any) => row.id === id)
+        const key = getSelectionContextKey(rowData)
 
-              newContextValues.push(newContextValue)
-            }
-          })
+        if (!isNull(key)) newContextValues.push(key)
+      })
 
-          if (newContextValues.length > 0) {
-            const filteredContext = (globalDataObjectContext?.config?.context ?? []).filter(
-              (context) => !context.endsWith('_selection')
-            )
-            const updatedContext = uniq([...filteredContext, ...newContextValues])
+      if (newContextValues.length > 0) {
+        const filteredContext = currentContext.filter((context) => !context.endsWith('_selection'))
+        const updatedContext = uniq([...filteredContext, ...newContextValues])
 
-            if (JSON.stringify(globalDataObjectContext?.config?.context) !== JSON.stringify(updatedContext)) {
-              setGlobalDataObjectContext({
-                context: updatedContext
-              })
-            }
-          }
+        const isSame =
+          updatedContext.length === currentContext.length &&
+          updatedContext.every((value, index) => value === currentContext[index])
+
+        if (!isSame) {
+          setContext({ context: updatedContext })
         }
       }
     }
-  }, [data, selectedIds, elementType, setGlobalDataObjectContext])
+  }, [data, selectedIds, elementType])
 }

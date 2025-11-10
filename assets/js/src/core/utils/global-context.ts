@@ -10,9 +10,9 @@
 
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
-const OBJECT_CONTEXT_PREFIX = 'object'
-const ASSET_CONTEXT_PREFIX = 'asset'
-const DOCUMENT_CONTEXT_PREFIX = 'document'
+export const OBJECT_CONTEXT_PREFIX = 'object'
+export const ASSET_CONTEXT_PREFIX = 'asset'
+export const DOCUMENT_CONTEXT_PREFIX = 'document'
 
 export const getBaseDataObjectContext = (objectData: any): string[] => {
   const context = [OBJECT_CONTEXT_PREFIX]
