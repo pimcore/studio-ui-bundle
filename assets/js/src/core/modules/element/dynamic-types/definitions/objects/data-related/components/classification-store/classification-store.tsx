@@ -21,6 +21,7 @@ import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-va
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { ClassificationStoreProvider } from './provider'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   storeId: number
@@ -37,7 +38,12 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 }
 
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
-  const { name: classificationStoreName, value } = props
+  const { name: classificationStoreName, localized, value } = props
+  const { hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
+  
+  useEffect(() => {
+    if (localized === true && !hasLocalizedFields) setHasLocalizedFields(true)
+  }, [])
 
   const valueRef = useRef(value)
   const deletedGroupsRef = useRef(new Set<string>())
