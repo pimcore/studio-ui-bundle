@@ -20,7 +20,7 @@ export const LanguageSelection = (): React.JSX.Element => {
   const { editorType } = useDataObjectDraft(id)
 
   if (hasLocalizedFields || editorType?.name === 'folder') {
-    return <PermissionBasedLanguageSelection />
+    return <PermissionBasedLanguageSelection isNullable={editorType?.name === 'folder'} />
   }
 
   return <></>
