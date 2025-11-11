@@ -19,7 +19,6 @@ import { injectSliceWithState, type RootState } from '@sdk/app'
 import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
-
 export interface TreeNode {
   id: string
   elementType?: string
