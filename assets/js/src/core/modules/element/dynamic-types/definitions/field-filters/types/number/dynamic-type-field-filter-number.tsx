@@ -13,6 +13,7 @@ import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import { FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
 export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract {
@@ -28,7 +29,9 @@ export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract
     )
   }
 
-  shouldApply (value: any): boolean {
+  shouldApply (filter: FieldFilter): boolean {
+    const value = filter.filterValue;
+
     if (value == null || typeof value !== 'object') {
       return false
     }

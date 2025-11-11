@@ -29,7 +29,9 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     return ''
   }
 
-  shouldApply (value: any): boolean {
+  shouldApply (filter: FieldFilter): boolean {
+    const value = filter.filterValue;
+
     if (isNil(value) || value === '') {
       return false
     }
