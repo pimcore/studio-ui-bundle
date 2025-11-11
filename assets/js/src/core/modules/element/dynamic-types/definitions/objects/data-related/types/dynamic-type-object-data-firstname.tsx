@@ -18,7 +18,7 @@ import { container } from '@Pimcore/app/depency-injection'
 export class DynamicTypeObjectDataFirstname extends DynamicTypeObjectDataAbstractInput {
   id: string = 'firstname'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getDefaultGridColumnWidth (): number | undefined {
     return 200

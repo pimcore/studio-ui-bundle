@@ -62,7 +62,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
 
         if (column.type === 'dataobject.classificationstore') {
           frontendType = column.type
-        } 
+        }
 
         let type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
 

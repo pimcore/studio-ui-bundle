@@ -15,10 +15,9 @@ import {
   DynamicTypeFieldFilterObjectAdapterComponent,
   type DynamicTypeFieldFilterObjectAdapterProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
-import { FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { container, serviceIds } from '@sdk/app'
-import { DynamicTypeObjectRegistry } from '../../../objects/dynamic-type-object-registry'
-import { DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
+import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
 
 @injectable()
 export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldFilterAbstract {
@@ -34,13 +33,12 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     )
   }
 
-  shouldApply(filter: FieldFilter): boolean {
-    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry']);
+  shouldApply (filter: FieldFilter): boolean {
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
-    console.log({objectRegistry, filter});
-    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype)
-    
-    return objectType.dynamicTypeFieldFilterType.shouldApply(filter);
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+
+    return objectType.dynamicTypeFieldFilterType.shouldApply(filter)
   }
 
   transformFilterToApiResponse (filter: FieldFilter): any {
@@ -50,10 +48,10 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     splittedType[0] = 'classificationstore'
     filter.filterType = splittedType.join('.')
 
-    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry']);
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
-    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype)
-    const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiResponse(filter);
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiResponse(filter)
 
     return {
       ...filter,

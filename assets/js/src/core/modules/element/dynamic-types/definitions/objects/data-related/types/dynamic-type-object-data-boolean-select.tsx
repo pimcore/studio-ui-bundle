@@ -29,7 +29,7 @@ import { isNil } from 'lodash'
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
 
   convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number }> | undefined {
     if (isNil(options)) {
