@@ -19,7 +19,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Toolbar } from './toolbar/toolbar'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { getBaseDocumentContext } from '@Pimcore/utils/global-context'
+import { getBaseDocumentContextIdentifiers } from '@Pimcore/utils/global-context'
 
 export interface EditorContainerProps {
   id: number
@@ -39,7 +39,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, context: getBaseDocumentContext(document) })
+      setContext({ id, contextIdentifiers: getBaseDocumentContextIdentifiers(document) })
     }
 
     return () => {

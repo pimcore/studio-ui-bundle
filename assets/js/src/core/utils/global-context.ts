@@ -10,37 +10,37 @@
 
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
-export const OBJECT_CONTEXT_PREFIX = 'object'
-export const ASSET_CONTEXT_PREFIX = 'asset'
-export const DOCUMENT_CONTEXT_PREFIX = 'document'
+export const OBJECT_CONTEXT_IDENTIFIER_PREFIX = 'object'
+export const ASSET_CONTEXT_IDENTIFIER_PREFIX = 'asset'
+export const DOCUMENT_CONTEXT_IDENTIFIER_PREFIX = 'document'
 
-export const getBaseDataObjectContext = (objectData: any): string[] => {
-  const context = [OBJECT_CONTEXT_PREFIX]
+export const getBaseDataObjectContextIdentifiers = (objectData: any): string[] => {
+  const context = [OBJECT_CONTEXT_IDENTIFIER_PREFIX]
 
   if (!isEmptyValue(objectData?.className)) {
-    context.push(`${OBJECT_CONTEXT_PREFIX}_${objectData?.className.toLowerCase()}`)
+    context.push(`${OBJECT_CONTEXT_IDENTIFIER_PREFIX}_${objectData?.className.toLowerCase()}`)
   } else if (objectData?.type === 'folder') {
-    context.push(`${OBJECT_CONTEXT_PREFIX}_folder`)
+    context.push(`${OBJECT_CONTEXT_IDENTIFIER_PREFIX}_folder`)
   }
 
   return context
 }
 
-export const getBaseAssetContext = (assetData: any): string[] => {
-  const context = [ASSET_CONTEXT_PREFIX]
+export const getBaseAssetContextIdentifiers = (assetData: any): string[] => {
+  const context = [ASSET_CONTEXT_IDENTIFIER_PREFIX]
 
   if (!isEmptyValue(assetData?.type)) {
-    context.push(`${ASSET_CONTEXT_PREFIX}_${assetData?.type.toLowerCase()}`)
+    context.push(`${ASSET_CONTEXT_IDENTIFIER_PREFIX}_${assetData?.type.toLowerCase()}`)
   }
 
   return context
 }
 
-export const getBaseDocumentContext = (documentData: any): string[] => {
-  const context = [DOCUMENT_CONTEXT_PREFIX]
+export const getBaseDocumentContextIdentifiers = (documentData: any): string[] => {
+  const context = [DOCUMENT_CONTEXT_IDENTIFIER_PREFIX]
 
   if (!isEmptyValue(documentData?.type)) {
-    context.push(`${DOCUMENT_CONTEXT_PREFIX}_${documentData?.type.toLowerCase()}`)
+    context.push(`${DOCUMENT_CONTEXT_IDENTIFIER_PREFIX}_${documentData?.type.toLowerCase()}`)
   }
 
   return context

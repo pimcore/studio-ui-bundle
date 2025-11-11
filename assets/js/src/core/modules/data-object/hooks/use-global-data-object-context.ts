@@ -15,7 +15,7 @@ export interface GlobalDataObjectContext extends GlobalContext {
   type: 'data-object'
   config: {
     id: number
-    context: string[]
+    contextIdentifiers: string[]
   }
 }
 
