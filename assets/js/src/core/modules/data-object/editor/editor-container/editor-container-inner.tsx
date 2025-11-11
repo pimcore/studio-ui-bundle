@@ -23,7 +23,7 @@ import { InheritanceStateProvider } from '@Pimcore/modules/data-object/editor/ty
 import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context'
+import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 
 export interface EditorContainerInnerProps {
   id: number

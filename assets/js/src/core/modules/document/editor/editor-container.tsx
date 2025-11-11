@@ -19,7 +19,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Toolbar } from './toolbar/toolbar'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { getBaseDocumentContextIdentifiers } from '@Pimcore/utils/global-context'
+import { getBaseDocumentContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 
 export interface EditorContainerProps {
   id: number

@@ -21,7 +21,7 @@ import {
   ASSET_CONTEXT_IDENTIFIER_PREFIX,
   DOCUMENT_CONTEXT_IDENTIFIER_PREFIX,
   OBJECT_CONTEXT_IDENTIFIER_PREFIX
-} from '@Pimcore/utils/global-context'
+} from '@Pimcore/utils/global-context-identifiers'
 
 export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
   const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
