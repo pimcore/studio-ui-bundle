@@ -15,6 +15,7 @@ export interface GlobalDocumentContext extends GlobalContext {
   type: 'document'
   config: {
     id: number
+    contextIdentifiers: string[]
   }
 }
 

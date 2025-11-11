@@ -15,6 +15,7 @@ export interface GlobalDataObjectContext extends GlobalContext {
   type: 'data-object'
   config: {
     id: number
+    contextIdentifiers: string[]
   }
 }
 
@@ -25,18 +26,18 @@ interface UseGlobalDataObjectContext {
 }
 
 export const useGlobalDataObjectContext = (): UseGlobalDataObjectContext => {
-  const disptach = useAppDispatch()
+  const dispatch = useAppDispatch()
   const context = useAppSelector(state => selectContextByType(state, 'data-object')) as GlobalDataObjectContext | undefined
 
   const setContext = function (config: GlobalDataObjectContext['config']): void {
-    disptach(addGlobalContext({
+    dispatch(addGlobalContext({
       type: 'data-object',
       config
     }))
   }
 
   const removeContext = function (): void {
-    disptach(removeGlobalContext('data-object'))
+    dispatch(removeGlobalContext('data-object'))
   }
 
   return {

@@ -16,7 +16,7 @@ import { KeyBindingsContainer } from '@Pimcore/modules/user/management/detail/ta
 import { ReferenceContainer } from '@Pimcore/modules/user/management/detail/tabs/references/references-container'
 import { useTranslation } from 'react-i18next'
 import { UserManagementProvider } from '@Pimcore/modules/user/user-management-provider'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-management-context'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { Content } from '@Pimcore/components/content/content'
@@ -27,7 +27,7 @@ interface IUserDetailTabProps {
 
 const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
   const { user, isLoading, isError, removeUserFromState } = useUserManagementDraft(id)
 

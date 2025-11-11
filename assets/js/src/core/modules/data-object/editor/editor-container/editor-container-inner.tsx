@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { DataObjectProvider } from '../../data-object-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
@@ -18,17 +18,12 @@ import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manage
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
-import {
-  EditFormProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import {
-  InheritanceStateProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
-import {
-  SaveProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
+import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { InheritanceStateProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
+import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -36,8 +31,9 @@ export interface EditorContainerInnerProps {
 
 const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
   const { id } = props
+
   const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
 
   useEffect(() => {
@@ -48,7 +44,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id })
+      setContext({ id, contextIdentifiers: getBaseDataObjectContextIdentifiers(dataObject) })
     }
 
     return () => {

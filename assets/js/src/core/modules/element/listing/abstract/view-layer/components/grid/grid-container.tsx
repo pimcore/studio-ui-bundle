@@ -14,6 +14,8 @@ import { useData } from '../../../data-layer/provider/data/use-data'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useSettings } from '../../../settings/use-settings'
+import { useGlobalContextIdentifiers } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-global-context-identifiers'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const GridContainer = (): React.JSX.Element => {
   const { dataQueryResult, dataLoadingState } = useData()
@@ -22,6 +24,11 @@ export const GridContainer = (): React.JSX.Element => {
   const { useGridOptions } = useSettings()
   const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
+  const { elementType } = useElementContext()
+
+  const gridProps = useMemo(() => getGridProps(), [getGridProps])
+
+  useGlobalContextIdentifiers({ data: data?.items, selectedRows: gridProps.selectedRows, elementType })
 
   const gridColumnDefinition = useMemo(() => {
     const columns: Array<AccessorKeyColumnDef<unknown, never>> = []
