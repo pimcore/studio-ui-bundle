@@ -80,7 +80,7 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  protected readonly dynamicTypeFieldFilterType: InstanceType<typeof DynamicTypeFieldFilterAbstract> = container.get(serviceIds['DynamicTypes/FieldFilter/None'])
+  readonly dynamicTypeFieldFilterType: InstanceType<typeof DynamicTypeFieldFilterAbstract> = container.get(serviceIds['DynamicTypes/FieldFilter/None'])
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
   supportsBatchAppendModes: boolean = false

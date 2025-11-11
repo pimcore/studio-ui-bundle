@@ -15,6 +15,9 @@ import {
   DynamicTypeFieldFilterObjectAdapterComponent,
   type DynamicTypeFieldFilterObjectAdapterProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { container, serviceIds } from '@sdk/app'
+import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
 
 @injectable()
 export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldFilterAbstract {
@@ -30,17 +33,30 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     )
   }
 
-  transformFilterToApiResponse (filter: any): any {
+  shouldApply (filter: FieldFilter): boolean {
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+
+    return objectType.dynamicTypeFieldFilterType.shouldApply(filter)
+  }
+
+  transformFilterToApiResponse (filter: FieldFilter): any {
     const { filterType } = filter
 
-    const splittedType = filterType.split('.')
+    const splittedType = filterType!.split('.')
     splittedType[0] = 'classificationstore'
     filter.filterType = splittedType.join('.')
+
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiResponse(filter)
 
     return {
       ...filter,
       filterValue: {
-        value: filter.filterValue,
+        value: subTypeFilter.filterValue,
         keyId: filter.meta.keyId,
         groupId: filter.meta.groupId
       }

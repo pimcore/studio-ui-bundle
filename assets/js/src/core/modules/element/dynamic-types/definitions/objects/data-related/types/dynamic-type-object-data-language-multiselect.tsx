@@ -18,5 +18,5 @@ import { container } from '@Pimcore/app/depency-injection'
 export class DynamicTypeObjectDataLanguageMultiSelect extends DynamicTypeObjectDataAbstractMultiSelect {
   id: string = 'languagemultiselect'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
 }

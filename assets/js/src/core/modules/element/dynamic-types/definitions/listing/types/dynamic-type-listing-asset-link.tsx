@@ -19,5 +19,5 @@ export class DynamicTypeListingAssetLink extends DynamicTypeListingAbstract {
   readonly id = 'asset-link'
 
   @inject(serviceIds['DynamicTypes/GridCell/AssetLink']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
-  @inject(serviceIds['DynamicTypes/FieldFilter/String']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
+  @inject(serviceIds['DynamicTypes/FieldFilter/String']) dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 }
