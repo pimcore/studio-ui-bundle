@@ -17,7 +17,6 @@ import { useTreePermission } from '../../../../components/element-tree/provider/
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { refreshNodeChildren, setNodeExpanded } from '@Pimcore/components/element-tree/element-tree-slice'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
 import { ContextMenuActionName } from '..'
 
@@ -26,7 +25,7 @@ export interface UseRefreshTreeHookReturn {
   refreshTree: (parentId: number | string) => void
 }
 
-export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
+export const useRefreshTree = (elementType: string): UseRefreshTreeHookReturn => {
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
