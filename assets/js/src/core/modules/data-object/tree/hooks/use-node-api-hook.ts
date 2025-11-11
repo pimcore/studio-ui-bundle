@@ -27,7 +27,9 @@ export const useNodeApiHook = (): NodeApiHookReturnType => {
   const { createFallbackRootNode } = useElementTreeFallbackRootNode()
 
   async function fetchRoot (id: number): Promise<DataTransformerReturnType | undefined> {
-    const nodes = { nodes: [], total: 0 }// await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
+    const node: DataTransformerSourceNode = { id: '0', internalKey: '0' }
+    const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
+    const nodes = await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
     if (!isUndefined(nodes?.nodes) && nodes?.nodes.length > 0) {
       return nodes
     }
