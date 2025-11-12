@@ -13,7 +13,7 @@ import { type IInlineEditDecoratorConfig, type IInlineEditDecoratorProps } from 
 import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { checkElementPermission, ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOptions'], config: IInlineEditDecoratorConfig): IInlineEditDecoratorProps['useGridOptions'] => {
   const useInlineEditExtension: IInlineEditDecoratorProps['useGridOptions'] = () => {
@@ -85,7 +85,7 @@ export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOp
         meta: {
           ...baseColumn.meta,
           editable: (row) => {
-            return checkElementPermission(row.permissions, 'publish') && column.editable === true
+            return checkElementPermission(row.permissions as ElementPermissions, 'publish') && column.editable === true
           }
         }
       }
