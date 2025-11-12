@@ -166,6 +166,7 @@ export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
 export * from '@Pimcore/components/predefined-layouts/config/config-layout'
 export * from '@Pimcore/components/tabpanel/tabpanel'
+export * from '@Pimcore/components/operational-grid/operational-grid'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
 // export * from '@Pimcore/components/upload/upload-modal/upload-modal'

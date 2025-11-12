@@ -23,7 +23,7 @@ import { withNumberedItemContext } from './item/with-numbered-item-context'
 import { useStyles } from './form.styles'
 import { Conditional } from './conditional/conditional'
 
-export interface FormProps extends Omit<AntFormProps, 'children'> {
+export interface FormProps extends Omit<AntFormProps, 'children' | 'defaultValue'> {
   children?: React.ReactNode
 }
 
