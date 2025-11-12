@@ -51,7 +51,7 @@ import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from 
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
-  editable?: boolean
+  editable?: boolean | ((row: any) => boolean)
   clearable?: boolean
   showPublishedState?: boolean
   autoWidth?: boolean

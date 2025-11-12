@@ -27,7 +27,8 @@ export interface DefaultCellProps extends ExtendedCellContext {}
 export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { column, table, row } = props
-  const [isEditable, setIsEditable] = useState(column.columnDef.meta?.editable ?? false)
+  const editable = useMemo(() => typeof column.columnDef.meta?.editable === 'function' ? column.columnDef.meta?.editable(row.original) : column.columnDef.meta?.editable ?? false, [column, row])
+  const [isEditable, setIsEditable] = useState(editable)
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
@@ -40,8 +41,8 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   const oldInEditMode = usePrevious(isInEditMode)
 
   useEffect(() => {
-    setIsEditable(column.columnDef.meta?.editable ?? false)
-  }, [column])
+    setIsEditable(typeof column.columnDef.meta?.editable === 'function' ? column.columnDef.meta?.editable(row.original) : column.columnDef.meta?.editable ?? false)
+  }, [column, row])
 
   useEffect(() => {
     if (oldInEditMode !== undefined && oldInEditMode !== isInEditMode && !isInEditMode) {
