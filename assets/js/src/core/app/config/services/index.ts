@@ -262,6 +262,7 @@ import { DocumentSaveDataProcessorRegistry } from '@Pimcore/modules/document/ser
 import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
+import { ElementIconProcessorRegistry } from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -317,6 +318,9 @@ container.bind(serviceIds['Document/RequiredFieldsValidationService']).to(Docume
 // Document Processor Registries
 container.bind(serviceIds['Document/ProcessorRegistry/UrlProcessor']).to(DocumentUrlProcessorRegistry).inSingletonScope()
 container.bind(serviceIds['Document/ProcessorRegistry/SaveDataProcessor']).to(DocumentSaveDataProcessorRegistry).inSingletonScope()
+
+// Element Processor Registries
+container.bind(serviceIds['Element/ProcessorRegistry/IconProcessor']).to(ElementIconProcessorRegistry).inSingletonScope()
 
 // Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()

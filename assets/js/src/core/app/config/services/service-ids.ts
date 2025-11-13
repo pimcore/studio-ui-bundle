@@ -342,5 +342,6 @@ export const serviceIds = {
   'Document/ProcessorRegistry/SaveDataProcessor': 'Document/ProcessorRegistry/SaveDataProcessor',
   'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
   'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor',
+  'Element/ProcessorRegistry/IconProcessor': 'Element/ProcessorRegistry/IconProcessor',
   'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor'
 }

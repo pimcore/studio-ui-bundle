@@ -15,10 +15,29 @@ import type { ElementType } from '../../types/enums/element/element-type'
 import { type DragAndDropInfo } from '@sdk/components'
 import { isBoolean } from 'lodash'
 import { baseUrl } from '@Pimcore/app/router/router'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  ElementIconContext,
+  type ElementIconProcessorRegistry
+} from './services/processors/element-icon-processor-registry'
 
 export type Element = Asset | DataObject | Document
 
 export const getElementIcon = (element: Element, defaultIcon: ElementIcon): ElementIcon => {
+  const icon = determineElementIcon(element, defaultIcon)
+
+  // Execute processors to allow extensions to customize the icon
+  const context = new ElementIconContext(element, defaultIcon, icon)
+  const processorRegistry = container.get<ElementIconProcessorRegistry>(
+    serviceIds['Element/ProcessorRegistry/IconProcessor']
+  )
+  processorRegistry.executeProcessors(context)
+
+  return context.getIcon() ?? defaultIcon
+}
+
+const determineElementIcon = (element: Element, defaultIcon: ElementIcon): ElementIcon => {
   if (
     element.customAttributes?.icon !== undefined &&
     element.customAttributes?.icon !== null
