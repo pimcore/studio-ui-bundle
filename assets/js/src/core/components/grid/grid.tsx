@@ -161,12 +161,12 @@ export const Grid = ({
       if (isNumber(column.size)) {
         return
       }
-      const columnType = isFunction(column.meta.type)
+      const columnType = column.meta.type
       // If type is a function, we can't determine width at this point, skip
-      if (isFunction(columnType) {
+      if (isFunction(columnType)) {
         return
       }
-      
+
       const dynamicType = gridCellRegistry.getDynamicType(columnType, false)
       if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
         column.size = dynamicType.getDefaultGridColumnWidth(column.meta)
