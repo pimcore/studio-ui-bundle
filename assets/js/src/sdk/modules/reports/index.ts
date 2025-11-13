@@ -12,6 +12,7 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export * from '@Pimcore/modules/reports'
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
 
