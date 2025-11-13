@@ -35,7 +35,7 @@ import {
 } from '@tanstack/react-table'
 import { Checkbox, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber } from 'lodash'
+import { isEmpty, isNumber, isFunction } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -57,7 +57,7 @@ export interface ColumnMetaType {
   autoWidth?: boolean
   type?: string | ((rowData: any) => string)
   columnKey?: string
-  config?: Record<string, any> | ((rowData: Record<string, any>) => Record<string, any>)
+  config?: any | ((rowData: any) => any)
   callback?: boolean
   editCallback?: (row: any, columnId: string, currentValue: string) => Promise<string>
 }
@@ -161,7 +161,13 @@ export const Grid = ({
       if (isNumber(column.size)) {
         return
       }
-      const dynamicType = gridCellRegistry.getDynamicType(column.meta.type, false)
+      const columnType = isFunction(column.meta.type)
+      // If type is a function, we can't determine width at this point, skip
+      if (isFunction(columnType) {
+        return
+      }
+      
+      const dynamicType = gridCellRegistry.getDynamicType(columnType, false)
       if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
         column.size = dynamicType.getDefaultGridColumnWidth(column.meta)
       }
