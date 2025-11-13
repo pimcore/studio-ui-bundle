@@ -16,14 +16,16 @@ To get started, create a assets root folder for your application (e.g. `/assets`
 [Pimcore Studio UI npm package](https://www.npmjs.com/package/@pimcore/studio-ui-bundle?activeTab=readme), which offers full TypeScript support for the Pimcore SDK.
 
 ```
-npm install @pimcore/studio-ui-bundle
+npm install @pimcore/studio-ui-bundle react@18.3.x react-dom@18.3.x
 ```
 
 💡 Want to adapt early to new features? There's also a canary release that includes typings for the most recent .x-branch updates:
 
 ```
-npm install @pimcore/studio-ui-bundle@canary
+npm install @pimcore/studio-ui-bundle@canary react@18.3.x react-dom@18.3.x
 ```
+
+Make sure the react version matches the react version studio is using. 
 
 With our dependency in place we should now setup our bundling process. We recommend [Rsbuild](https://rsbuild.rs/). Of course you also can choose your preferred custom bundling process,
 or add additional steps like linting etc. to the bundling process. 
