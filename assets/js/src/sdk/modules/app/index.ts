@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/app/component-registry/component-registry'
 export * from '@Pimcore/modules/app/context-menu-registry'
+export * from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
 export { default as trackError, ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
