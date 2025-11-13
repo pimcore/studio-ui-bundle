@@ -594,6 +594,8 @@ export type Element = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
+    /** elementType */
+    elementType: string;
 };
 export type CustomAttributes = {
     /** Custom Icon */
