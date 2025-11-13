@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 export * from '@Pimcore/modules/document/actions/save/use-save'
+export * from '@Pimcore/modules/document/actions/add-page/use-add-document'
 export * from '@Pimcore/modules/document/events/post-update-event'
 
 export * from '@Pimcore/modules/document/document-draft-slice'
@@ -39,6 +40,7 @@ export * from '@Pimcore/modules/document/editor/types/page/tab-manager/page-tab-
 export * from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 
 export * from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
+export * from '@Pimcore/modules/document/editor/sidebar/tabs/content-settings/content-settings-sidebar'
 
 export * from '@Pimcore/modules/document/editor/widget'
 
