@@ -47,13 +47,15 @@ interface ContentSettingsFormProps {
   }
   hasPropertiesPermission?: boolean
   hasSavePermission?: boolean
+  allowedContentMainDocumentTypes?: string[]
 }
 
 export const ContentSettingsForm = ({
   documentId,
   initialValues,
   hasPropertiesPermission = true,
-  hasSavePermission = true
+  hasSavePermission = true,
+  allowedContentMainDocumentTypes
 }: ContentSettingsFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
@@ -262,7 +264,7 @@ export const ContentSettingsForm = ({
         </Form.Item>
       )}
 
-      {(document?.type === 'page' || document?.type === 'snippet') && (
+      {(!isUndefined(allowedContentMainDocumentTypes) || document?.type === 'page' || document?.type === 'snippet') && (
         <Form.Item
           label={
             <SidebarHeadline
@@ -290,7 +292,7 @@ export const ContentSettingsForm = ({
                 : null
             }
             allowToClearRelation
-            allowedDocumentTypes={ ['page', 'snippet'] }
+            allowedDocumentTypes={ allowedContentMainDocumentTypes ?? ['page', 'snippet'] }
             disabled={ !canEdit }
             documentsAllowed
             vertical
