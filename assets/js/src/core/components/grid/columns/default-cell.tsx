@@ -27,15 +27,15 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export interface DefaultCellProps extends ExtendedCellContext {}
 
-export const DefaultCell = ({...originalProps}: DefaultCellProps): React.JSX.Element => {
+export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
-  
+
   // Evaluate meta properties (edit, type and config) if they are functions
   const props = useMemo(() => {
     const { column, row } = originalProps
     const meta = column.columnDef.meta
     const metaUpdates: Record<string, any> = {}
-    
+
     if (isFunction(meta?.editable)) {
       metaUpdates.type = meta.editable(row.original) ?? false
     }
@@ -43,14 +43,14 @@ export const DefaultCell = ({...originalProps}: DefaultCellProps): React.JSX.Ele
     if (isFunction(meta?.type)) {
       metaUpdates.type = meta.type(row.original) ?? 'text'
     }
-     
+
     if (isFunction(meta?.config)) {
       metaUpdates.config = meta.config(row.original)
     }
-    
+
     return Object.keys(metaUpdates).length > 0 ? addColumnMeta(originalProps, metaUpdates) : originalProps
   }, [originalProps])
-  
+
   const { column, table, row } = props
   const [isEditable, setIsEditable] = useState(isBoolean(column.columnDef.meta?.editable) ? column.columnDef.meta?.editable : false)
   const cellType = useMemo(() => isNonEmptyString(column.columnDef.meta?.type) ? column.columnDef.meta?.type : 'text', [column.columnDef.meta?.type])
