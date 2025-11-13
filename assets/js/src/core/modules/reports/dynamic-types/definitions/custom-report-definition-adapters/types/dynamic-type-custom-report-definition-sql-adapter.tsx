@@ -16,7 +16,10 @@ import { SqlAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/c
 @injectable()
 export class DynamicTypeCustomReportDefinitionSqlAdapter extends DynamicTypeCustomReportDefinitionAbstract {
   id = 'sql'
-  label = 'Sql'
+
+  getLabel (): ReactElement {
+    return <>Sql</>
+  }
 
   getCustomReportData (props: any): ReactElement {
     return <SqlAdapter { ...props } />
