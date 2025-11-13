@@ -67,4 +67,5 @@ export interface GridProps {
   onRowDoubleClick?: (row: any) => void
   enableRowDrag?: boolean
   handleDragEnd?: (event: DragEndEvent) => void
+  size?: 'normal' | 'small'
 }

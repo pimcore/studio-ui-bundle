@@ -10,11 +10,8 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyle = createStyles(({ css }) => {
   return {
-    'checkbox-cell': css`
-      padding: 4px;
-    `,
     'align-center': css`
       justify-content: center;
       display: flex;

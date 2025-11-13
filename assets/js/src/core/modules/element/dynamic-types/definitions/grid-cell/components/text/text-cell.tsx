@@ -9,7 +9,6 @@
  */
 
 import React, { useEffect, useRef } from 'react'
-import { useStyle } from './text-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Input } from '@sdk/components'
@@ -19,7 +18,6 @@ export interface TextCellProps extends DefaultCellProps {}
 
 export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
-  const { styles } = useStyle()
   const element = useRef<InputRef>(null)
 
   useEffect(() => {
@@ -64,7 +62,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ [styles['text-cell'], 'default-cell__content'].join(' ') }>
+    <div className="default-cell__content default-cell__content--padded">
       { getCellContent() }
     </div>
   )

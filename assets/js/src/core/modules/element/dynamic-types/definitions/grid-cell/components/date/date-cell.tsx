@@ -14,9 +14,7 @@ import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import type { PickerRef } from 'rc-picker'
 import { DatePicker } from 'antd'
 import type { Dayjs } from 'dayjs'
-
 import dayjs from 'dayjs'
-import { useStyle } from './date-cell.styles'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
@@ -28,7 +26,6 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const datePickerRef = useRef<PickerRef>(null)
-  const { styles } = useStyle()
   const { column } = props
   const config: DateCellConfig | undefined = column.columnDef.meta?.config as DateCellConfig | undefined
   const showTime = config?.showTime ?? false
@@ -82,7 +79,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ [styles['date-cell'], 'default-cell__content'].join(' ') }>
+    <div className="default-cell__content default-cell__content--padded">
       {getCellContent()}
     </div>
   )
