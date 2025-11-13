@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
 // import { useInjection } from '@Pimcore/app/depency-injection'
@@ -24,11 +24,13 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isBoolean, isFunction } from 'lodash'
 import { addColumnMeta } from './helpers'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { GridContext } from '../grid-context'
 
 export interface DefaultCellProps extends ExtendedCellContext {}
 
 export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.Element => {
-  const { styles } = useStyle()
+  const { size } = useContext(GridContext)
+  const { styles } = useStyle({ size })
 
   // Evaluate meta properties (edit, type and config) if they are functions
   const props = useMemo(() => {
@@ -37,7 +39,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
     const metaUpdates: Record<string, any> = {}
 
     if (isFunction(meta?.editable)) {
-      metaUpdates.type = meta.editable(row.original) ?? false
+      metaUpdates.editable = meta.editable(row.original) ?? false
     }
 
     if (isFunction(meta?.type)) {

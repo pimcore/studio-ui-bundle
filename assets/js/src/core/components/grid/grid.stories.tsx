@@ -124,3 +124,11 @@ export const SortableColumns = {
     enableSorting: true
   }
 }
+
+export const SmallSize = {
+  args: {
+    data,
+    columns,
+    size: 'small'
+  }
+}

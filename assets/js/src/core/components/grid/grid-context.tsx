@@ -9,23 +9,26 @@
  */
 
 import React, { type RefObject, createContext, useMemo } from 'react'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 export interface IGridContext {
   table: RefObject<HTMLTableElement> | null
+  size?: GridProps['size']
 }
 
 export const GridContext = createContext<IGridContext>({
-  table: null
+  table: null,
+  size: 'normal'
 })
 
 export interface GridContextProviderProps extends IGridContext {
   children: React.ReactNode
 }
 
-export const GridContextProvider = ({ table, children }: GridContextProviderProps): React.JSX.Element => {
+export const GridContextProvider = ({ table, size = 'normal', children }: GridContextProviderProps): React.JSX.Element => {
   return useMemo(() => (
-    <GridContext.Provider value={ { table } }>
+    <GridContext.Provider value={ { table, size } }>
       {children}
     </GridContext.Provider>
-  ), [table, children])
+  ), [table, size, children])
 }

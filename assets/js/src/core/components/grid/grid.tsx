@@ -33,7 +33,7 @@ import {
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
-import { Checkbox, Skeleton } from 'antd'
+import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNumber, isFunction } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -104,11 +104,12 @@ export const Grid = ({
   allowMultipleAutoWidthColumns = false,
   enableRowDrag,
   handleDragEnd,
+  size = 'normal',
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash()
-  const { styles } = useStyles()
+  const { styles } = useStyles({ size })
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
@@ -291,31 +292,33 @@ export const Grid = ({
         onFocusCell={ onFocusCell }
         onRowDoubleClick={ props.onRowDoubleClick }
         row={ row }
+        size={ size }
         tableElement={ tableElement }
       />
     ))
   }
 
   return useMemo(() => (
-    <div className={ cn(
-      'ant-table-wrapper',
-      hashId,
-      styles.grid,
-      props.className,
-      { [styles.disabledGrid]: disabled },
-      docked ? 'grid--docked' : ''
-    ) }
-    >
-      <div className="ant-table ant-table-small">
-        <div className='ant-table-container'>
-          <div className='ant-table-content'>
-            <table
-              className={ cn({ withoutHeader: hideColumnHeaders }) }
-              data-testid={ props.dataTestId }
-              ref={ tableElement }
-              style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
-            >
-              {!hideColumnHeaders && (
+    <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
+      <div className={ cn(
+        'ant-table-wrapper',
+        hashId,
+        styles.grid,
+        props.className,
+        { [styles.disabledGrid]: disabled },
+        docked ? 'grid--docked' : ''
+      ) }
+      >
+        <div className="ant-table ant-table-small">
+          <div className='ant-table-container'>
+            <div className='ant-table-content'>
+              <table
+                className={ cn({ withoutHeader: hideColumnHeaders }) }
+                data-testid={ props.dataTestId }
+                ref={ tableElement }
+                style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
+              >
+                {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={ headerGroup.id }>
@@ -359,9 +362,9 @@ export const Grid = ({
                     </tr>
                   ))}
                 </thead>
-              )}
-              <tbody className="ant-table-tbody">
-                {table.getRowModel().rows.length === 0 && (
+                )}
+                <tbody className="ant-table-tbody">
+                  {table.getRowModel().rows.length === 0 && (
                   <tr className={ 'ant-table-row' }>
                     <td
                       className='ant-table-cell ant-table-cell__no-data'
@@ -370,33 +373,34 @@ export const Grid = ({
                       {t('no-data-available-yet')}
                     </td>
                   </tr>
-                )}
-                {enableRowDrag === true
-                  ? (
-                    <DndContext
-                      autoScroll={ false }
-                      collisionDetection={ closestCenter }
-                      modifiers={ [restrictToVerticalAxis] }
-                      onDragEnd={ handleDragEnd }
-                      sensors={ sensors }
-                    >
-                      <SortableContext
-                        items={ table.getRowModel().rows.map(item => item.id) }
-                        strategy={ verticalListSortingStrategy }
+                  )}
+                  {enableRowDrag === true
+                    ? (
+                      <DndContext
+                        autoScroll={ false }
+                        collisionDetection={ closestCenter }
+                        modifiers={ [restrictToVerticalAxis] }
+                        onDragEnd={ handleDragEnd }
+                        sensors={ sensors }
                       >
-                        {renderRows()}
-                      </SortableContext>
-                    </DndContext>
-                    )
-                  : renderRows()
+                        <SortableContext
+                          items={ table.getRowModel().rows.map(item => item.id) }
+                          strategy={ verticalListSortingStrategy }
+                        >
+                          {renderRows()}
+                        </SortableContext>
+                      </DndContext>
+                      )
+                    : renderRows()
                 }
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
+    </ConfigProvider>
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []
