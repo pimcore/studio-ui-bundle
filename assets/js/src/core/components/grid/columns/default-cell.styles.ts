@@ -17,7 +17,7 @@ export interface UseStyleProps {
 
 export const useStyle = createStyles(({ token, css }, { size = 'normal' }: UseStyleProps) => {
   const gridCellPaddingVertical = size === 'small' ? 2 : 4
-  const gridCellPaddingHorizontal = size === 'small' ? 4 : 4
+  const gridCellPaddingHorizontal = 4
 
   return {
     'default-cell': css`
