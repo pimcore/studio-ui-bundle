@@ -24,11 +24,9 @@ import {
 
 export type Element = Asset | DataObject | Document
 
-
-
 export const getElementIcon = (element: Element, defaultIcon: ElementIcon): ElementIcon => {
   const icon = determineElementIcon(element, defaultIcon)
-  
+
   // Execute processors to allow extensions to customize the icon
   const context = new ElementIconContext(element, defaultIcon, icon)
   const processorRegistry = container.get<ElementIconProcessorRegistry>(
