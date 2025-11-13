@@ -57,10 +57,10 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
         $resolver->setDefaults([
             self::DEFAULT_OPT => self::SELF,
             self::IMG_OPT => '* data: blob:',
-            self::MEDIA_OPT => self::SELF . ' data:',
+            self::MEDIA_OPT => self::SELF . ' data: blob:',
             self::SCRIPT_OPT => self::SELF . " 'nonce-" . $this->getNonce() . "' 'unsafe-eval'",
             self::STYLE_OPT => self::SELF . " 'unsafe-inline'",
-            self::FRAME_OPT => self::SELF . ' data:',
+            self::FRAME_OPT => self::SELF . ' data: blob:',
             self::FRAME_ANCHESTORS => self::SELF,
             self::CONNECT_OPT => self::SELF . ' blob:',
             self::FONT_OPT => self::SELF,
