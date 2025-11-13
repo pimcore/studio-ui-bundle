@@ -57,7 +57,7 @@ export interface ColumnMetaType {
   autoWidth?: boolean
   type?: string | ((rowData: any) => string)
   columnKey?: string
-  config?: Record<string, any> | ((rowData: Record<string, any>) => any)
+  config?: Record<string, any> | ((rowData: Record<string, any>) => Record<string, any>)
   callback?: boolean
   editCallback?: (row: any, columnId: string, currentValue: string) => Promise<string>
 }
