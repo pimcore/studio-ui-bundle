@@ -55,9 +55,9 @@ export interface ColumnMetaType {
   clearable?: boolean
   showPublishedState?: boolean
   autoWidth?: boolean
-  type?: string
+  type?: string | ((rowData: any) => string)
   columnKey?: string
-  config?: any
+  config?: any | ((rowData: any) => any)
   callback?: boolean
   editCallback?: (row: any, columnId: string, currentValue: string) => Promise<string>
 }
