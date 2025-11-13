@@ -40,7 +40,7 @@ export const SourceDefinition = ({ form, currentData, updateFormData }: IReportC
 
   const sourceDefinitionOptions = useMemo(() => adapters.map(adapter => ({
     key: adapter.id,
-    label: adapter.label
+    label: adapter.getLabel()
   })), [adapters])
 
   const handleSourceDefinitionTypeUpdate = (type: string): void => {
