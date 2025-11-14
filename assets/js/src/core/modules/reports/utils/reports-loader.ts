@@ -32,7 +32,7 @@ export const loadReportsMenuItems = async (): Promise<void> => {
 
       if (!isUndefined(reportsData?.items)) {
         reportsData.items.forEach((report, index) => {
-          if (report.menuShortcut) {
+          if (report.menuShortcut && report.hasDataSourceConfig) {
             const reportId = report.name
             const reportName = !isEmptyValue(report.niceName) ? report.niceName : reportId
             const path = !isEmptyValue(report.group)
