@@ -9,5 +9,7 @@ This section contains various examples to help you get started with plugin devel
 - [How to Use the Tab Manager](./05_Use_the_Tab_Manager.md)  
 - [How to Add Custom Icons](./06_Adding_custom_icons.md)  
 - [How to Use Dynamic Types](./07_Use_Dynamic_Types.md)  
+- [How to Use API Data](./08_Use_Api_data.md)  
+- [How to Customize Context Menus](./09_Customize_Context_Menus.md)  
 
 All these examples are part of the Pimcore Studio Example Bundle, which you can find on GitHub: [Pimcore Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/). Feel free to explore the repository for more insights and code samples.
