@@ -113,3 +113,7 @@ contextMenuRegistry.updateSlotProvider(
   })
 )
 ```
+
+## Full Example
+
+For a complete working example, refer to the [Customize Context Menus Example](../05_Examples/09_Customize_Context_Menus.md).
