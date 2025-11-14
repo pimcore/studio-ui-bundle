@@ -28,7 +28,7 @@ Use the `registerToSlot` method to register custom menu items:
 ```typescript
 import { container } from '@pimcore/studio-ui-bundle'
 import { serviceIds } from '@pimcore/studio-ui-bundle/app'
-import { contextMenuConfig, type ContextMenuRegistryInterface } from '@pimcore/studio-ui-bundle/modules/app'
+import { contextMenuConfig, type ContextMenuRegistryInterface, type DataObjectTreeContextMenuProps } from '@pimcore/studio-ui-bundle/modules/app'
 
 const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(
   serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']
@@ -37,7 +37,7 @@ const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(
 contextMenuRegistry.registerToSlot(contextMenuConfig.dataObjectTree.name, {
   name: 'customAction',
   priority: contextMenuConfig.dataObjectTree.priority.addObject + 1,
-  useMenuItem: (context) => {
+  useMenuItem: (context: DataObjectTreeContextMenuProps) => {
     const { t } = useTranslation()
 
 
@@ -67,3 +67,49 @@ contextMenuRegistry.registerToSlot(contextMenuConfig.assetListGrid.name, {
 ```
 
 The [Context Menu Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/modules/app/context-menu-registry/context-menu-config.ts) contains all available slot names and their priority configurations for consistent referencing.
+
+## Modifying Existing Context Menu Items
+
+### Override a Provider Completely
+
+Use `overrideSlotProvider` to completely replace an existing context menu provider:
+
+```typescript
+contextMenuRegistry.overrideSlotProvider(contextMenuConfig.dataObjectTree.name, {
+  name: 'delete', // Must match existing provider name
+  priority: 100,
+  useMenuItem: (context: DataObjectTreeContextMenuProps) => {
+    return {
+      label: 'Custom Delete',
+      key: 'delete',
+      icon: <Icon value='trash' />,
+      onClick: () => {
+        // Custom delete logic
+      }
+    }
+  }
+})
+```
+
+### Update a Provider Partially
+
+Use `updateSlotProvider` to modify specific properties of an existing provider using a closure:
+
+```typescript
+// Modify the menu item based on existing provider
+contextMenuRegistry.updateSlotProvider(
+  contextMenuConfig.dataObjectTree.name,
+  'delete',
+  (provider) => ({
+    ...provider,
+    useMenuItem: (context: DataObjectTreeContextMenuProps) => {
+      const originalItem = provider.useMenuItem(context)
+      
+      return originalItem === null ? null : {
+        ...originalItem,
+        label: 'Custom Delete Label'
+      }
+    }
+  })
+)
+```
