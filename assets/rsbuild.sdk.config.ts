@@ -142,6 +142,7 @@ export default defineConfig({
       './modules/widget-manager': './js/src/sdk/modules/widget-manager/index.ts',
       './modules/wysiwyg': './js/src/sdk/modules/wysiwyg/index.ts',
       './modules/notifications': './js/src/sdk/modules/notifications/index.ts',
+      './modules/perspectives': './js/src/sdk/modules/perspectives/index.ts',
       './utils': './js/src/sdk/utils/index.ts',
       },
       dts: false,
