@@ -16,7 +16,7 @@ import { useOperations } from './hooks/use-operations'
 import { type ColumnDef } from '@tanstack/react-table'
 
 export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdateCellData'> {
-  value: GridProps['data']
+  value?: GridProps['data']
   onChange?: (value: GridProps['data']) => void
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   children: React.ReactNode
@@ -24,7 +24,7 @@ export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdate
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value, onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
+  const { value = [], onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
 
   const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event

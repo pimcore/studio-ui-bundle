@@ -12,4 +12,6 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export * from '@Pimcore/modules/auth/enums/user-permission'
+export * from '@Pimcore/modules/auth/permission-helper'
 export * from '@Pimcore/modules/auth/hooks/use-user'

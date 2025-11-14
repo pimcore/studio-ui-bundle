@@ -256,12 +256,8 @@ failed-to-assign-tag-to-element: Failed to assign tag to element
 failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
 workflow-modal.cancel: Cancel
-workflow-modal.log-time: Log Time
-workflow-modal.timeSpent: Time spent
 workflow-modal.notes: Notes
-workflow-modal.timeSpent-required: Please enter the duration of time spent
 workflow-modal.notes-required: Please enter your notes
-workflow-transitions.log-time: Log Time
 workflow-transitions.start-workflow: Start Workflow
 workflow-transitions.finish-review: Finish Review
 workflow-transitions.restart-review: Restart Review
@@ -1449,6 +1445,7 @@ widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.update.success: Widget updated successfully
 widget-editor.widget-form.general.title: General
 widget-editor.widget-form.general.name: Name
 widget-editor.widget-form.general.icon: Icon
@@ -1599,3 +1596,5 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Word Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
+subscription-details.community-edition: Learn more about Pimcore Editions
+config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.

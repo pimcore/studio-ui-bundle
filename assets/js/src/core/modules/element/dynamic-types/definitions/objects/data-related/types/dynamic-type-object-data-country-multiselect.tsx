@@ -18,5 +18,5 @@ import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dyna
 export class DynamicTypeObjectDataCountryMultiSelect extends DynamicTypeObjectDataAbstractMultiSelect {
   id: string = 'countrymultiselect'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
 }

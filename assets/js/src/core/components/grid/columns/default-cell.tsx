@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
 // import { useInjection } from '@Pimcore/app/depency-injection'
@@ -21,14 +21,41 @@ import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isBoolean, isFunction } from 'lodash'
+import { addColumnMeta } from './helpers'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { GridContext } from '../grid-context'
 
 export interface DefaultCellProps extends ExtendedCellContext {}
 
-export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element => {
-  const { styles } = useStyle()
+export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.Element => {
+  const { size } = useContext(GridContext)
+  const { styles } = useStyle({ size })
+
+  // Evaluate meta properties (edit, type and config) if they are functions
+  const props = useMemo(() => {
+    const { column, row } = originalProps
+    const meta = column.columnDef.meta
+    const metaUpdates: Record<string, any> = {}
+
+    if (isFunction(meta?.editable)) {
+      metaUpdates.editable = meta.editable(row.original) ?? false
+    }
+
+    if (isFunction(meta?.type)) {
+      metaUpdates.type = meta.type(row.original) ?? 'text'
+    }
+
+    if (isFunction(meta?.config)) {
+      metaUpdates.config = meta.config(row.original)
+    }
+
+    return Object.keys(metaUpdates).length > 0 ? addColumnMeta(originalProps, metaUpdates) : originalProps
+  }, [originalProps])
+
   const { column, table, row } = props
-  const [isEditable, setIsEditable] = useState(column.columnDef.meta?.editable ?? false)
-  const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
+  const [isEditable, setIsEditable] = useState(isBoolean(column.columnDef.meta?.editable) ? column.columnDef.meta?.editable : false)
+  const cellType = useMemo(() => isNonEmptyString(column.columnDef.meta?.type) ? column.columnDef.meta?.type : 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
   const [columnWrapperWidth, setColumnWrapperWidth] = useState<number | undefined>(undefined)
@@ -40,7 +67,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   const oldInEditMode = usePrevious(isInEditMode)
 
   useEffect(() => {
-    setIsEditable(column.columnDef.meta?.editable ?? false)
+    setIsEditable(isBoolean(column.columnDef.meta?.editable) ? column.columnDef.meta?.editable : false)
   }, [column])
 
   useEffect(() => {

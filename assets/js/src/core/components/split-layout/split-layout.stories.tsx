@@ -92,3 +92,23 @@ export const LayoutLeft25Right75WithDividerAndResizer = {
     }
   }
 }
+
+export const LayoutRightFullWidth = {
+  args: {
+    withDivider: true,
+    resizeAble: true,
+    rightItemFullWidth: true,
+    leftItem: {
+      id: '1',
+      size: 25,
+      minSize: 200,
+      children: <Content none />
+    },
+    rightItem: {
+      id: '2',
+      size: 75,
+      minSize: 600,
+      children: <Content none />
+    }
+  }
+}

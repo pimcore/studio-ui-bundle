@@ -72,11 +72,8 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
       })
     }
 
-    currentLevel.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
     currentLevel = existingItem.children ?? []
   })
-
-  items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
 }
 
 export const useMainNav = (): IUseMainNavReturn => {
@@ -91,7 +88,16 @@ export const useMainNav = (): IUseMainNavReturn => {
       return items
     }
 
-    mainNavRegistryService.getMainNavItems().forEach(item => {
+    const sortedItems = [...mainNavRegistryService.getMainNavItems()].sort((a, b) => {
+      const aDepth = a.path.split('/').length
+      const bDepth = b.path.split('/').length
+      if (aDepth !== bDepth) {
+        return aDepth - bDepth
+      }
+      return (a.order ?? 1000) - (b.order ?? 1000)
+    })
+
+    sortedItems.forEach(item => {
       if (item.permission !== undefined && !isAllowed(item.permission)) {
         return
       }

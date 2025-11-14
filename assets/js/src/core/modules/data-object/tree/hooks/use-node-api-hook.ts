@@ -18,16 +18,23 @@ import { type DataTransformerSourceNode, type DataTransformerReturnType, type No
 import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useElementTreeFallbackRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-fallback-root-node'
 import { isUndefined } from 'lodash'
 
 export const useNodeApiHook = (): NodeApiHookReturnType => {
   const { pageSize, treeFilterArgs } = useTreeFilter()
   const dispatch = useAppDispatch()
+  const { createFallbackRootNode } = useElementTreeFallbackRootNode()
 
   async function fetchRoot (id: number): Promise<DataTransformerReturnType | undefined> {
     const node: DataTransformerSourceNode = { id: '0', internalKey: '0' }
     const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
-    return await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
+    const nodes = await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
+    if (!isUndefined(nodes?.nodes) && nodes?.nodes.length > 0) {
+      return nodes
+    }
+
+    return await Promise.resolve(createFallbackRootNode(id, 'data-object'))
   }
 
   async function fetchChildren (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {

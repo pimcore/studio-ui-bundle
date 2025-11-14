@@ -12,16 +12,9 @@ on:
         required: false
         type: string
         default: "latest"
-    secrets:
-      NPM_ACCESSTOKEN:
-        description: "NPM Authentication token"
-        required: true
 
 env:
- BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-
-permissions:
-  contents: read
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   install:
@@ -36,7 +29,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Cache npm dependencies
         uses: actions/cache@v4
@@ -53,6 +47,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: install
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -79,20 +76,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Set package version
         working-directory: ./assets
-        env:
-          VERSION: ${{ inputs.version }}
-        run: npm version "$VERSION" --no-git-tag-version --allow-same-version
+        run: npm version ${{ inputs.version }} --no-git-tag-version --allow-same-version
 
-      - name: Set auth token
+      - name: Publish package to npm with OIDC
         working-directory: ./assets
-        run: npm set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESSTOKEN }}
-
-      - name: Publish package to npm
-        working-directory: ./assets
-        env:
-          TAG: ${{ inputs.tag }}
-        run: npm publish --tag "$TAG" --access public
+        run: npx npm@latest publish --tag ${{ inputs.tag }} --access public

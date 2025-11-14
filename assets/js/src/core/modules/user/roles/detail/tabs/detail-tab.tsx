@@ -14,7 +14,7 @@ import { SettingsContainer } from '@Pimcore/modules/user/roles/detail/tabs/setti
 import { WorkspacesContainer } from '@Pimcore/modules/user/roles/detail/tabs/workspaces/workspaces-container'
 import { useTranslation } from 'react-i18next'
 import { RoleProvider } from '@Pimcore/modules/user/roles/role-provider'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-management-context'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Content } from '@Pimcore/components/content/content'
@@ -25,7 +25,7 @@ interface IDetailTabProps {
 
 const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
   const { role, isLoading, isError, removeRoleFromState } = useRoleDraft(id)
 

@@ -18,7 +18,7 @@ import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/log-modal/hooks/use-workflow'
+import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,9 +36,9 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         })
 
         return {
-          key: t(`${workflow.workflowName}`),
+          key: workflow.workflowName,
           type: 'group',
-          label: t(`${workflow.workflowLabel}`).toUpperCase(),
+          label: t(workflow.workflowLabel),
           children: result
         }
       })

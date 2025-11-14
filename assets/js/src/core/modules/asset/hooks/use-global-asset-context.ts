@@ -15,6 +15,7 @@ export interface GlobalAssetContext extends GlobalContext {
   type: 'asset'
   config: {
     id: number
+    contextIdentifiers: string[]
   }
 }
 

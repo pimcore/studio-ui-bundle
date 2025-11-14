@@ -22,8 +22,16 @@ export const useStlyes = createStyles(({
       bottom: 0;
       z-index: 2;
       pointer-events: none;
+      width: 56px;
 
-      .logo 
+      .right-sidebar__nav {
+        list-style: none;
+        padding: ${token.paddingXXS}px 0;
+        margin: ${token.marginXS}px 0;
+        position: relative;
+        pointer-events: auto;
+        text-align: center;
+      }
     `
   }
 }, { hashPriority: 'low' })

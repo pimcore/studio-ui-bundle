@@ -10,24 +10,39 @@
 
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
-import { isNil } from 'lodash'
-import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { isNil, isUndefined } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WidgetRegistry } from '../services/widget-registry'
+import {
+  type PerspectiveProcessorRegistry,
+  type PerspectiveWidgetPosition,
+  type PerspectiveWidgetItem,
+  type PerspectiveWidgetContextData
+} from '../services/processors/perspective-processor-registry'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
-
   const usedIds = new Set<string>()
 
-  const widgetsLeft = getWidgetsLeft(activePerspective, usedIds)
-  const widgetsRight = getWidgetsRight(activePerspective, usedIds)
-  const widgetsBottom = getWidgetsBottom(activePerspective, usedIds)
+  const widgetsLeftInitial = getWidgetsLeft(activePerspective, usedIds)
+  const widgetsRightInitial = getWidgetsRight(activePerspective, usedIds)
+  const widgetsBottomInitial = getWidgetsBottom(activePerspective, usedIds)
+
+  const initialWidgets = {
+    left: widgetsLeftInitial,
+    right: widgetsRightInitial,
+    bottom: widgetsBottomInitial
+  }
+
+  const processedResult = applyPerspectiveProcessors(initialWidgets, usedIds, activePerspective)
+
+  const widgetsLeft = processedResult.widgets.left
+  const widgetsRight = processedResult.widgets.right
+  const widgetsBottom = processedResult.widgets.bottom
 
   return {
     global: {
@@ -77,7 +92,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft),
+        selected: getWidgetIndex(widgetsLeft, processedResult.expandedLeft),
         children: widgetsLeft
       },
 
@@ -85,10 +100,71 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight),
+        selected: getWidgetIndex(widgetsRight, processedResult.expandedRight),
         children: widgetsRight
       }
     ]
+  }
+}
+
+interface ProcessorResult {
+  widgets: Record<PerspectiveWidgetPosition, IJsonTabNode[]>
+  expandedLeft?: string | null
+  expandedRight?: string | null
+}
+
+const applyPerspectiveProcessors = (
+  widgets: Record<PerspectiveWidgetPosition, IJsonTabNode[]>,
+  usedIds: Set<string>,
+  activePerspective: PerspectiveConfigDetail | null
+): ProcessorResult => {
+  if (isNil(activePerspective)) {
+    return {
+      widgets,
+      expandedLeft: null,
+      expandedRight: null
+    }
+  }
+
+  const processorRegistry = container.get<PerspectiveProcessorRegistry>(
+    serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']
+  )
+
+  const contextData: PerspectiveWidgetContextData = {
+    left: widgets.left.map((tabNode): PerspectiveWidgetItem => ({
+      widget: tabNode.config,
+      position: 'left',
+      tabNode
+    })),
+    right: widgets.right.map((tabNode): PerspectiveWidgetItem => ({
+      widget: tabNode.config,
+      position: 'right',
+      tabNode
+    })),
+    bottom: widgets.bottom.map((tabNode): PerspectiveWidgetItem => ({
+      widget: tabNode.config,
+      position: 'bottom',
+      tabNode
+    }))
+  }
+
+  const context = processorRegistry.createContext(
+    contextData,
+    usedIds,
+    activePerspective,
+    activePerspective?.expandedLeft ?? null,
+    activePerspective?.expandedRight ?? null
+  )
+  processorRegistry.executeProcessors(context)
+
+  return {
+    widgets: {
+      left: context.getWidgets('left').map(item => item.tabNode),
+      right: context.getWidgets('right').map(item => item.tabNode),
+      bottom: context.getWidgets('bottom').map(item => item.tabNode)
+    },
+    expandedLeft: context.getExpandedLeft(),
+    expandedRight: context.getExpandedRight()
   }
 }
 
@@ -128,20 +204,9 @@ const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<st
   const result: IJsonTabNode[] = []
   const widgetRegistry = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
-  const hasDocumentPermission: boolean = isAllowed(UserPermission.Documents)
-  const hasAssetPermission: boolean = isAllowed(UserPermission.Assets)
-  const hasObjectPermission: boolean = isAllowed(UserPermission.Objects)
-
   widgets?.forEach((widget) => {
-    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document' && !hasDocumentPermission) {
-      return
-    }
-
-    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'asset' && !hasAssetPermission) {
-      return
-    }
-
-    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'data-object' && !hasObjectPermission) {
+    const registeredWidget = widgetRegistry.getWidget(widget.widgetType)
+    if (!isUndefined(registeredWidget?.isVisible) && !registeredWidget.isVisible(widget)) {
       return
     }
 
@@ -153,8 +218,6 @@ const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<st
 
     let config = { ...widget, id: widgetId }
 
-    // Apply transformConfig hook if available
-    const registeredWidget = widgetRegistry.getWidget(widget.widgetType)
     if (registeredWidget?.transformConfig !== undefined) {
       config = { ...config, ...registeredWidget.transformConfig(config) }
     }

@@ -37,6 +37,9 @@ import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?rea
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
+import bookmarkListAssetFolder from '@Pimcore/assets/icons/bookmark-list-asset-folder.inline.svg?react'
+import bookmarkListDocumentFolder from '@Pimcore/assets/icons/bookmark-list-document-folder.inline.svg?react'
+import bookmarkListObjectFolder from '@Pimcore/assets/icons/bookmark-list-object-folder.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -196,6 +199,7 @@ import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.
 import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
@@ -230,6 +234,8 @@ import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
+import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
+import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
@@ -353,6 +359,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'book-open-01',
       component: bookOpen01
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-asset-folder',
+      component: bookmarkListAssetFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-document-folder',
+      component: bookmarkListDocumentFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-object-folder',
+      component: bookmarkListObjectFolder
     })
     iconLibrary.register({
       name: 'bookmark',
@@ -991,6 +1009,10 @@ moduleSystem.registerModule({
       component: preview
     })
     iconLibrary.register({
+      name: 'printpage',
+      component: printpage
+    })
+    iconLibrary.register({
       name: 'properties',
       component: properties
     })
@@ -1125,6 +1147,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'style',
       component: style
+    })
+    iconLibrary.register({
+      name: 'subscription-community',
+      component: subscriptionCommunity
+    })
+    iconLibrary.register({
+      name: 'subscription-enterprise',
+      component: subscriptionEnterprise
     })
     iconLibrary.register({
       name: 'tag-configuration',

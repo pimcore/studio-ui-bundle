@@ -26,6 +26,8 @@ export * from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 export * from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 export * from '@Pimcore/modules/element/actions/rename/use-rename'
 
+export * from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
+
 export * from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 export * from '@Pimcore/modules/element/draft/hooks/use-properties'
 export * from '@Pimcore/modules/element/draft/hooks/use-published'

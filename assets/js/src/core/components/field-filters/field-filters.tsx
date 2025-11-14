@@ -39,14 +39,24 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   }, [data])
 
   const onFilterChange = (filter: IDynamicFilter, data: any): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], data }
     setData(updatedData)
   }
 
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], locale }
     setData(updatedData)

@@ -16,14 +16,12 @@ import dayjs from 'dayjs'
 import type { PickerRef } from 'rc-picker'
 import { FormattedTime } from '@Pimcore/components/formatted-time/formatted-time'
 import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
-import { useStyle } from './time-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
 export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const timePickerRef = useRef<PickerRef>(null)
-  const { styles } = useStyle()
 
   useClickOutside(timePickerRef, () => {
     disableEditMode()
@@ -72,7 +70,7 @@ export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ [styles['time-cell'], 'default-cell__content'].join(' ') }>
+    <div className="default-cell__content default-cell__content--padded">
       {getCellContent()}
     </div>
   )

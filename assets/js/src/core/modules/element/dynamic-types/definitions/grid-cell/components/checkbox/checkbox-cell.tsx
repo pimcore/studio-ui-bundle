@@ -13,6 +13,7 @@ import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { Checkbox, type CheckboxRef } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyle } from './checkbox-cell.styles'
+import cn from 'classnames'
 
 export interface CheckboxCellConfig {
   align: 'left' | 'center' | 'right'
@@ -44,8 +45,10 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
     )
   }
 
+  const alignClass = config.align !== 'left' ? styles[`align-${config.align}`] : undefined
+
   return (
-    <div className={ [styles['checkbox-cell'], styles['align-' + config.align] ?? '', 'default-cell__content'].join(' ') }>
+    <div className={ cn('default-cell__content', 'default-cell__content--padded', alignClass) }>
       {getCellContent()}
     </div>
   )

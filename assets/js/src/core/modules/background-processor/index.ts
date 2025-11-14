@@ -35,5 +35,18 @@ moduleSystem.registerModule({
     // Register the global message process
     const backgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     backgroundProcessor.registerProcess(globalProcess)
+
+    // Setup visibility change handler for reconnection
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && !globalProcess.isConnected()) {
+        globalProcess.start()
+      }
+    })
+
+    // Setup online event handler for network reconnection
+    // Always reconnect on network change as the connection is likely stale
+    window.addEventListener('online', () => {
+      globalProcess.start()
+    })
   }
 })

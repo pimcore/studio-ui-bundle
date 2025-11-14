@@ -68,14 +68,14 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   if (!isInEditMode) {
     return (
-      <div className={ [styles['multi-select-cell'], 'default-cell__content'].join(' ') }>
+      <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
         { displayValue }
       </div>
     )
   }
 
   return (
-    <div className={ cn(styles['multi-select-cell'], 'default-cell__content') }>
+    <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
       <Select
         mode="multiple"
         onBlur={ disableEditMode }

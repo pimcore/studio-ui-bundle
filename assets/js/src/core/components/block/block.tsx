@@ -13,7 +13,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { BlockContent } from './block-content'
 
 export interface BlockProps {
-  children?: React.ReactNode
+  children: ((params: { blockIndex: number }) => React.ReactNode) | React.ReactNode
   collapsed?: boolean
   collapsible?: boolean
   disallowReorder?: boolean

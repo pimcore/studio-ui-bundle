@@ -52,9 +52,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const prepareFilters = (filters: FieldFilter[]): FieldFilter[] => {
       const preparedFilters: FieldFilter[] = []
 
-      console.log({ filters })
       filters.forEach((filter) => {
-        console.log({ filter })
         const column = availableColumns.find(col => col.key === filter.key)
         let frontendType = column?.frontendType ?? filter.type ?? 'string'
 
@@ -76,10 +74,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
           type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
         }
 
-        const transformedFilter = type.transformFilterToApiResponse(filter)
-
-        if (type.shouldApply(transformedFilter.filterValue)) {
-          preparedFilters.push(transformedFilter)
+        if (type.shouldApply(filter)) {
+          preparedFilters.push(type.transformFilterToApiResponse(filter))
         }
       })
 

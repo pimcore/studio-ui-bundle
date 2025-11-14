@@ -31,6 +31,7 @@ export interface GridRowProps {
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
   enableRowDrag?: boolean
+  size?: GridProps['size']
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: GridRowProps): React.JSX.Element => {
@@ -116,6 +117,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
                 isModified={ isModifiedCell(cell.column.id) }
                 onFocusCell={ props.onFocusCell }
                 rowIndex={ row.index }
+                size={ props.size }
                 tableElement={ props.tableElement }
               />
               )}

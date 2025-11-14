@@ -11,7 +11,11 @@
 import React, { useEffect, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { type BundleCustomReportsConfigurationTreeNode, type BundleCustomReportUpdate, useCustomReportsReportQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import {
+  type BundleCustomReportsConfigurationTreeNode,
+  type BundleCustomReportUpdate,
+  useCustomReportsReportQuery
+} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -30,6 +34,7 @@ import {
   normalizeColumnConfigurations,
   normalizeDataSourceConfig
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
+import { Form } from '@Pimcore/components/form/form'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -48,6 +53,8 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
   const { updateReport } = useReportActions()
+
+  const [form] = Form.useForm()
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
   const dataSourceConfig: IDataSourceConfig | null | undefined = currentData?.dataSourceConfig
@@ -69,7 +76,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   }, [isDirty])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    updateFormData({ ...currentData, ...allValues })
+    updateFormData?.({ ...currentData, ...allValues })
   }
 
   const handleSave = (): void => {
@@ -128,6 +135,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
       {!isNull(currentData) && (
       <FormKit
         formProps={ {
+          form,
           initialValues: currentData,
           onValuesChange
         } }
@@ -136,6 +144,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
         <GeneralSettings />
         <SourceDefinition
           currentData={ currentData }
+          form={ form }
           updateFormData={ updateFormData }
         />
         <ColumnConfiguration

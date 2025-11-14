@@ -11,14 +11,14 @@
 import { useCallback, useEffect } from 'react'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import type { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 // import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, alwaysActive = false, permission?: UserPermission): void => {
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { user } = useUserDraft()
   const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
 

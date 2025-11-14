@@ -118,10 +118,12 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
+        // Handle cases where the column name contains special characters like `.` and is interpreted as a path
+        const safeColumnId = columnId.replaceAll(/\W/g, '_')
 
         if (item.displayType !== 'hide') {
           list.push(
-            columnHelper.accessor(columnId, {
+            columnHelper.accessor(safeColumnId, {
               header: !isEmptyValue(item.label) ? item.label : item.name,
               enableSorting: item.order,
               ...(!isNull(item.width) && { size: item.width }),
@@ -164,7 +166,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
-      ?.filter((item) => !isNil(item.filterDrilldown) && !isNil(item.filterType))
+      ?.filter((item) => !isEmptyValue(item.filterDrilldown))
       .map(item => item)
   )
 

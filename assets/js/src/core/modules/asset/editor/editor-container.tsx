@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '@sdk/modules/asset'
 import { Content } from '@Pimcore/components/content/content'
@@ -19,6 +19,7 @@ import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { getBaseAssetContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 
 export interface EditorContainerProps {
   id: number
@@ -27,7 +28,7 @@ export interface EditorContainerProps {
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, asset, editorType } = useAssetDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id })
+      setContext({ id, contextIdentifiers: getBaseAssetContextIdentifiers(asset) })
     }
 
     return () => {

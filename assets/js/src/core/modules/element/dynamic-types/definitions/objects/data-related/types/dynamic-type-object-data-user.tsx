@@ -18,5 +18,5 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export class DynamicTypeObjectDataUser extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'user'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
 }

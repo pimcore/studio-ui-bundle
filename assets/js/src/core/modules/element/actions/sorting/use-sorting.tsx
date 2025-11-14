@@ -23,6 +23,10 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { ContextMenuActionName } from '..'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import React from 'react'
 
 type ElementPartial = Pick<Element, 'id' | 'parentId'>
@@ -52,6 +56,25 @@ export const useSorting = (elementType: ElementType): UseSortingHookReturn => {
   const { elementPatch } = useElementApi(elementType)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const user = useUser()
+  const { isTreeActionAllowed } = useTreePermission()
+
+  const isSortingHidden = (node: TreeNodeProps): boolean => {
+    if (node.hasChildren !== true) {
+      return true
+    }
+
+    if (user.isAdmin) {
+      return false
+    }
+
+    if (node.isLocked) {
+      return true
+    }
+
+    return !checkElementPermission(node.permissions, 'settings') ||
+           !isTreeActionAllowed(TreePermission.ChangeChildrenSortBy)
+  }
 
   const move = async (props: MoveProps): Promise<void> => {
     const { currentElement, targetElement } = props
@@ -109,7 +132,7 @@ export const useSorting = (elementType: ElementType): UseSortingHookReturn => {
       label: t('element.tree.sorting'),
       key: ContextMenuActionName.sorting,
       icon: <Icon value={ 'folder' } />,
-      hidden: node.hasChildren !== true,
+      hidden: isSortingHidden(node),
       children: [
         {
           label: t('element.tree.sorting.keyed-ascending'),

@@ -20,6 +20,7 @@ import { useElementHelper } from '../../hooks/use-element-helper'
 import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { ContextMenuActionName } from '..'
+import { checkElementPermission } from '@sdk/modules/element'
 
 export interface PublishHookReturn {
   publishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -32,7 +33,10 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
   const { executeElementTask } = useElementHelper()
 
   const isPublishHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Publish) || node.isLocked || node.isPublished === true
+    return !checkElementPermission(node.permissions, 'publish') ||
+           !isTreeActionAllowed(TreePermission.Publish) ||
+           node.isLocked ||
+           node.isPublished === true
   }
 
   const publishNode = (node: TreeNodeProps | Element): void => {

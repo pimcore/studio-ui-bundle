@@ -19,7 +19,6 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 import cn from 'classnames'
@@ -36,7 +35,7 @@ export interface TreeNodeProps {
   permissions: ElementPermissions
   locked: string | null
   isLocked: boolean
-  elementType?: ElementType
+  elementType?: string
   hasChildren?: boolean
   fullPath?: string
   metaData?: any

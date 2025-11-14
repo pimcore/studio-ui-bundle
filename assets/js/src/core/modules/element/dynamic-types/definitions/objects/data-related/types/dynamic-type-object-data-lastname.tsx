@@ -18,7 +18,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export class DynamicTypeObjectDataLastname extends DynamicTypeObjectDataAbstractInput {
   id: string = 'lastname'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getDefaultGridColumnWidth (): number | undefined {
     return 200

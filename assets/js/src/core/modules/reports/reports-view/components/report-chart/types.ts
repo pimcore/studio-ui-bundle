@@ -19,4 +19,5 @@ export interface IChartProps {
   chartData: object[]
   reportData: IReportDetailData
   chartLabelMap: Record<string, string>
+  chartConfig?: object
 }

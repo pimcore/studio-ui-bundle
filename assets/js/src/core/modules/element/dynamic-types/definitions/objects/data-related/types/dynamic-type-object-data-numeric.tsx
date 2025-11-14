@@ -21,7 +21,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'numeric'
   gridCellEditMode: EditMode = 'edit-modal'
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Number'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Number'])
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value = props.cellProps.getValue()

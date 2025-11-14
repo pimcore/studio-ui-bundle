@@ -46,6 +46,7 @@ export interface ComponentRegistryInterface {
   get: (name: string) => ComponentRegistryEntry<any>['component']
   has: (name: string) => boolean
   override: (component: ComponentRegistryEntry<any>) => void
+  overrideSlotComponent: (slotName: string, component: ComponentRegistryEntry<any>) => void
   registerToSlot: (slotName: string, component: ComponentRegistryEntry<any>) => void
   getSlotComponents: (slotName: string) => Array<ComponentRegistryEntry<any>>
   getComponentConfig: (name: string) => ComponentRegistryConfigEntry
@@ -118,6 +119,17 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     this.registry[component.name] = component
   }
 
+  overrideSlotComponent (slotName: string, component: ComponentRegistryEntry<any>): void {
+    const slotComponents = this.getSlotComponents(slotName)
+    const index = slotComponents.findIndex(c => c.name === component.name)
+
+    if (index === -1) {
+      trackError(new GeneralError(`No component named "${component.name}" found in slot "${slotName}" to override`))
+    }
+
+    slotComponents[index] = component
+  }
+
   registerToSlot (slotName: string, component: ComponentRegistryEntry<any>): void {
     const componentConfig = this.getComponentConfig(slotName)
     if (componentConfig.type !== ComponentType.SLOT) {
@@ -127,6 +139,11 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     if (isUndefined(this.slots[slotName])) {
       this.slots[slotName] = []
     }
+
+    if (this.slots[slotName].find(c => c.name === component.name) !== undefined) {
+      trackError(new GeneralError(`Component with the name "${component.name}" already exists in slot "${slotName}". Use the overrideSlotComponent method to override it`))
+    }
+
     this.slots[slotName].push(component)
     this.slots[slotName].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
   }

@@ -25,7 +25,7 @@ export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract {
   id: string = 'textarea'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getObjectDataComponent (props: TextareaObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

@@ -9,10 +9,17 @@
  */
 
 import { createStyles, type SerializedStyles } from 'antd-style'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 const BORDER_WIDTH = 1
 
-export const useStyles = createStyles(({ token, css }) => {
+export interface UseStylesProps {
+  size?: GridProps['size']
+}
+
+export const useStyles = createStyles(({ token, css }, { size = 'normal' }: UseStylesProps) => {
+  const rowHeight = size === 'small' ? 32 : 41
+
   const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
     content: '';
     display: block;
@@ -180,7 +187,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-table-row {
-        height: 41px;
+        height: ${rowHeight}px;
       }
 
       .ant-table-content {

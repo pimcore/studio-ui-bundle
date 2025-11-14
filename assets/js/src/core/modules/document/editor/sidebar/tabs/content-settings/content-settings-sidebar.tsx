@@ -22,7 +22,13 @@ import { checkDocumentPermission } from '../../visibility/document-permission-he
 import { ContentSettingsForm } from './content-settings-form'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
-export const ContentSettingsSidebar = (): React.JSX.Element => {
+export interface ContentSettingsSidebarProps {
+  allowedContentMainDocumentTypes?: string[]
+}
+
+export const ContentSettingsSidebar = ({
+  allowedContentMainDocumentTypes
+}: ContentSettingsSidebarProps = {}): React.JSX.Element => {
   const { t } = useTranslation()
   const context = useContext(DocumentContext)
   const { id } = context
@@ -73,6 +79,7 @@ export const ContentSettingsSidebar = (): React.JSX.Element => {
 
       <Box padding={ { x: 'extra-small', bottom: 'small' } }>
         <ContentSettingsForm
+          allowedContentMainDocumentTypes={ allowedContentMainDocumentTypes }
           documentId={ id }
           hasPropertiesPermission={ hasPropertiesPermission }
           hasSavePermission={ hasSavePermission }

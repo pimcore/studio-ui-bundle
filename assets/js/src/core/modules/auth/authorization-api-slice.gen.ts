@@ -26,107 +26,15 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type LoginApiResponse = /** status 200 Login successful. */ UserInformation;
+export type LoginApiResponse = unknown;
 export type LoginApiArg = {
     credentials: Credentials;
 };
 export type LogoutApiResponse = unknown;
 export type LogoutApiArg = void;
-export type LoginTokenApiResponse = /** status 200 Login successful. */ UserInformation;
+export type LoginTokenApiResponse = unknown;
 export type LoginTokenApiArg = {
     authenticationToken: AuthenticationToken;
-};
-export type KeyBindingForAUser = {
-    /** ASCII Code for a key on the Keyboard */
-    key: number;
-    /** The action the key binding should execute */
-    action: string;
-    /** If CTRL key should be pressed */
-    ctrl: boolean;
-    /** If ALT key should be pressed */
-    alt: boolean;
-    /** If SHIFT key should be pressed */
-    shift: boolean;
-};
-export type TwoFactorAuthenticationData = {
-    /** Required */
-    required: boolean;
-    /** Enabled */
-    enabled: boolean;
-    /** Type */
-    type: string;
-    /** Active */
-    active: boolean;
-};
-export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
-};
-export type PerspectiveConfig = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Perspective ID */
-    id: string;
-    /** Name */
-    name: string;
-    /** Icon */
-    icon: ElementIcon;
-    /** Is Writeable */
-    isWriteable: boolean;
-};
-export type UserInformation = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** User ID */
-    id: number;
-    /** Username */
-    username: string;
-    /** Email */
-    email: string | null;
-    /** Firstname */
-    firstname: string | null;
-    /** Lastname */
-    lastname: string | null;
-    /** Permissions */
-    permissions: string[];
-    /** If user is an admin user */
-    isAdmin: boolean;
-    /** Allowed classes to create */
-    classes: string[];
-    /** Allowed doc types to create */
-    docTypes: string[];
-    /** User Language */
-    language: string;
-    /** Locale for dateTime */
-    dateTimeLocale: string | null;
-    /** Welcome Screen */
-    welcomeScreen: boolean;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** Allow Dirty Close */
-    allowDirtyClose: boolean;
-    /** Has Image */
-    hasImage: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** List of valid website Languages to edit. */
-    allowedLanguagesForEditingWebsiteTranslations: string[];
-    /** List of valid website Languages to view. */
-    allowedLanguagesForViewingWebsiteTranslations: string[];
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData;
-    /** Active studio perspective ID */
-    activePerspective: string | null;
-    /** Allowed studio perspectives */
-    perspectives: PerspectiveConfig[];
 };
 export type InvalidCredentials = {
     /** Error */
