@@ -48,7 +48,7 @@ export const useElementHelper = (): UseElementReturn => {
     return targetType ?? undefined
   }
 
-  const mapToLegacyElementType = (elementType: string): string => {    
+  const mapToLegacyElementType = (elementType: string): string => {
     return elementType === 'data-object' ? 'object' : elementType
   }
 
