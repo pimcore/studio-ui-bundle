@@ -20,12 +20,17 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
+import { uniq } from 'lodash'
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getRoleTree } = useRoleHelper()
 
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+
+  const updateExpandedKeys = (keys: any[]): void => {
+    setExpandedKeys(uniq([...keys, 0]))
+  }
 
   const treeParentItem = {
     title: t('roles.tree.all'),
@@ -74,7 +79,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
 
         if (items.length === 0) {
           parentNode.isLeaf = true
-          setExpandedKeys(expandedKeys.filter((k) => k !== key))
+          updateExpandedKeys(expandedKeys.filter((k) => k !== key))
         } else {
           parentNode.isLeaf = false
         }
@@ -137,7 +142,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
           }
         } }
         onSetExpandedKeys={ (keys) => {
-          setExpandedKeys(keys)
+          updateExpandedKeys(keys)
         } }
         onUpdateTreeData={ updateTreeData }
         treeData={ treeData }
