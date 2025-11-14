@@ -52,7 +52,7 @@ export const useElementHelper = (): UseElementReturn => {
     return elementType === 'data-object' ? 'object' : elementType
   }
 
-  const executeElementTask = (elementType: string, id: number, task: SaveTaskType, onFinish?: () => void): void => {
+  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void): void => {
     if (elementType === 'data-object') {
       void executeDataObjectTask(id, task, onFinish)
       return
