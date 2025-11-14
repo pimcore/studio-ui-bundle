@@ -36,6 +36,7 @@ import { ROLES_WIDGET, USERS_WIDGET } from '@Pimcore/modules/user'
 import { CUSTOM_REPORTS_WIDGET, REPORTS_WIDGET } from '@Pimcore/modules/reports'
 import { REDIRECTS_WIDGET } from '@Pimcore/modules/redirects'
 import { TAG_CONFIGURATION_WIDGET } from '@Pimcore/modules/tags'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -213,24 +214,24 @@ export const MainNav = (): React.JSX.Element => {
     })
   }
 
-  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true)
-  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true)
-  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true)
+  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true, UserPermission.Objects)
+  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true, UserPermission.Documents)
+  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true, UserPermission.Assets)
 
-  useHandleKeyBindings(() => { openMainWidget(TRANSLATIONS_WIDGET) }, 'sharedTranslations', true)
-  useHandleKeyBindings(() => { openMainWidget(RECYCLE_BIN_WIDGET) }, 'recycleBin', true)
-  useHandleKeyBindings(() => { openMainWidget(NOTES_AND_EVENTS_WIDGET) }, 'notesEvents', true)
+  useHandleKeyBindings(() => { openMainWidget(TRANSLATIONS_WIDGET) }, 'sharedTranslations', true, UserPermission.Translations)
+  useHandleKeyBindings(() => { openMainWidget(RECYCLE_BIN_WIDGET) }, 'recycleBin', true, UserPermission.RecycleBin)
+  useHandleKeyBindings(() => { openMainWidget(NOTES_AND_EVENTS_WIDGET) }, 'notesEvents', true, UserPermission.NotesAndEvents)
 
-  useHandleKeyBindings(() => { openMainWidget(USERS_WIDGET) }, 'users', true)
-  useHandleKeyBindings(() => { openMainWidget(ROLES_WIDGET) }, 'roles', true)
+  useHandleKeyBindings(() => { openMainWidget(USERS_WIDGET) }, 'users', true, UserPermission.Users)
+  useHandleKeyBindings(() => { openMainWidget(ROLES_WIDGET) }, 'roles', true, UserPermission.Users)
 
-  useHandleKeyBindings(() => { openMainWidget(REPORTS_WIDGET) }, 'reports', true)
-  useHandleKeyBindings(() => { openMainWidget(CUSTOM_REPORTS_WIDGET) }, 'customReports', true)
+  useHandleKeyBindings(() => { openMainWidget(REPORTS_WIDGET) }, 'reports', true, UserPermission.Reports)
+  useHandleKeyBindings(() => { openMainWidget(CUSTOM_REPORTS_WIDGET) }, 'customReports', true, UserPermission.ReportsConfig)
 
-  useHandleKeyBindings(() => { openMainWidget(APPLICATION_LOGGER_WIDGET) }, 'applicationLogger', true)
+  useHandleKeyBindings(() => { openMainWidget(APPLICATION_LOGGER_WIDGET) }, 'applicationLogger', true, UserPermission.ApplicationLogger)
 
-  useHandleKeyBindings(() => { openMainWidget(REDIRECTS_WIDGET) }, 'redirects', true)
-  useHandleKeyBindings(() => { openMainWidget(TAG_CONFIGURATION_WIDGET) }, 'tagConfiguration', true)
+  useHandleKeyBindings(() => { openMainWidget(REDIRECTS_WIDGET) }, 'redirects', true, UserPermission.Redirects)
+  useHandleKeyBindings(() => { openMainWidget(TAG_CONFIGURATION_WIDGET) }, 'tagConfiguration', true, UserPermission.TagsConfiguration)
 
   return (
     <div ref={ elRef }>

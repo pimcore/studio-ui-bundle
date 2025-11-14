@@ -27,8 +27,13 @@ import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
-import { isNull } from 'lodash'
+import { has, isNull } from 'lodash'
 import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import {
+  useTreePermission
+} from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -41,6 +46,7 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
   const { unpublishTreeNode } = useUnpublish(elementType)
   const { refreshElement } = useElementRefresh(elementType)
   const { locateInTree } = useLocateInTree(elementType)
+  const { isTreeActionAllowed } = useTreePermission()
 
   const preparedTabs = tabs.map((tab, index) => {
     const baseTab = {
@@ -57,9 +63,9 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
     return baseTab
   })
 
-  useHandleKeyBindings(() => { if (element != null) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
-  useHandleKeyBindings(() => { if (element != null) publishNode(element as unknown as Element) }, 'publish')
-  useHandleKeyBindings(() => { if (element != null && !isNull(elementType) && elementType !== 'asset') unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
+  useHandleKeyBindings(() => { if (element != null && checkElementPermission(element.permissions, 'rename') && !(element as unknown as Element).isLocked) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
+  useHandleKeyBindings(() => { if (element != null && isTreeActionAllowed(TreePermission.Publish) && !(element as unknown as Element).isLocked && (has(element, 'published') && element.published === false)) publishNode(element as unknown as Element) }, 'publish')
+  useHandleKeyBindings(() => { if (element != null && !isNull(elementType) && elementType !== 'asset' && checkElementPermission(element.permissions, 'unpublish') && !(element as unknown as Element).isLocked) unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
   useHandleKeyBindings(() => { if (element != null) refreshElement(element.id) }, 'refresh')
   useHandleKeyBindings(() => { if (element != null) locateInTree(element.id) }, 'openInTree')
 

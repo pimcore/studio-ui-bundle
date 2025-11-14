@@ -23,6 +23,7 @@ import {
   GENERAL_FIELDS,
   NAVIGATION_FIELDS,
   SEARCH_FIELDS,
+  SEO_FIELDS,
   SYSTEM_FIELDS
 } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/constants'
 
@@ -124,7 +125,7 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
     getAccordionItem('navigation', NAVIGATION_FIELDS),
     getAccordionItem('search', SEARCH_FIELDS),
     getAccordionItem('system', SYSTEM_FIELDS),
-    getAccordionItem('seo', SEARCH_FIELDS),
+    getAccordionItem('seo', SEO_FIELDS),
     ...(!isEmpty(bundleFields) ? [getAccordionItem(BUNDLES, bundleFields!)] : [])
   ]
 
