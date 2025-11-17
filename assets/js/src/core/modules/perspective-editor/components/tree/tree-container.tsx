@@ -30,7 +30,7 @@ export const TreeContainer = (): React.JSX.Element => {
       .map((item: PerspectiveConfig) => ({
         title: item.name,
         key: item.id,
-        icon: <Icon value={ item.icon.value } />
+        icon: <Icon type={ item.icon.type } value={ item.icon.value } />
       }))
   }
 
