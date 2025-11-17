@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { type AccessorKeyColumnDef, type CellContext, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { COLUMN_KEYS } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
@@ -23,7 +23,7 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
     addColumnMeta(cellData, { editable })
   )
 
-  return [
+  return useMemo(() => [
     columnHelper.accessor(COLUMN_KEYS.ROW_DRAG, { header: '', size: 40 }),
     columnHelper.accessor(COLUMN_KEYS.NAME, {
       header: t('reports.editor.manage-column-configuration.name'),
@@ -130,5 +130,5 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
         }
       }
     })
-  ]
+  ], [t])
 }

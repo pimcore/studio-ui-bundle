@@ -14,7 +14,9 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     grid: css`
       width: 100%;
+      max-height: 500px;
       overflow-y: scroll;
+      overflow-x: scroll;
     `,
 
     permissionLabel: css`

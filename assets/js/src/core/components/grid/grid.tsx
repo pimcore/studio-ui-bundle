@@ -33,6 +33,7 @@ import {
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNumber, isFunction } from 'lodash'
@@ -175,7 +176,7 @@ export const Grid = ({
     }
   })
 
-  useMemo(() => {
+  useEffect(() => {
     updateRowSelectionColumn()
   }, [columns, isRowSelectionEnabled, selectedRows])
 
@@ -279,24 +280,38 @@ export const Grid = ({
     </div>
   )
 
-  const renderRows = (): React.JSX.Element[] => {
-    return table.getRowModel().rows.map(row => (
-      <GridRow
-        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-        columns={ columns }
-        contextMenu={ props.contextMenu }
-        enableRowDrag={ enableRowDrag }
-        isSelected={ row.getIsSelected() }
-        key={ row.id }
-        modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-        onFocusCell={ onFocusCell }
-        onRowDoubleClick={ props.onRowDoubleClick }
-        row={ row }
-        size={ size }
-        tableElement={ tableElement }
-      />
-    ))
-  }
+  const rowVirtualizer = useVirtualizer({
+    count: table.getRowModel().rows.length,
+    getScrollElement: () => tableElement.current,
+    estimateSize: () => 40
+  })
+  const virtualRows = rowVirtualizer.getVirtualItems()
+  const rowIds = useMemo(
+    () => table.getRowModel().rows.map(r => r.id),
+    [table.getRowModel().rows]
+  )
+  const renderRows = (): React.JSX.Element[] => (
+    virtualRows.map(vRow => {
+      const row = table.getRowModel().rows[vRow.index]
+
+      return (
+        <GridRow
+          activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+          columns={ columns }
+          contextMenu={ props.contextMenu }
+          enableRowDrag={ enableRowDrag }
+          isSelected={ row.getIsSelected() }
+          key={ row.id }
+          modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+          onFocusCell={ onFocusCell }
+          onRowDoubleClick={ props.onRowDoubleClick }
+          row={ row }
+          size={ size }
+          tableElement={ tableElement }
+        />
+      )
+    })
+  )
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
@@ -384,7 +399,7 @@ export const Grid = ({
                         sensors={ sensors }
                       >
                         <SortableContext
-                          items={ table.getRowModel().rows.map(item => item.id) }
+                          items={ rowIds }
                           strategy={ verticalListSortingStrategy }
                         >
                           {renderRows()}
