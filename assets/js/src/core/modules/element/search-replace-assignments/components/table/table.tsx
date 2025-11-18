@@ -15,7 +15,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ElementUsageItem } from '../../usage-api-slice.gen'
 import { type ElementInfo } from '@sdk/modules/element'
-import { useSearchReplace } from '../../providers/search-replace/search-replace-provider'
+import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 
 interface ElementInfoProps {
   row: {
@@ -30,7 +30,7 @@ export const Table = (): React.JSX.Element => {
     isFetching,
     selectedRows,
     setSelectedRows
-  } = useSearchReplace()
+  } = useSearchReplaceAssignments()
 
   const columnHelper = createColumnHelper<ElementUsageItem>()
 

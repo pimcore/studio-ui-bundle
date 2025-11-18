@@ -17,7 +17,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
 import { Split } from '@Pimcore/components/split/split'
-import { useSearchReplace } from '../../providers/search-replace/search-replace-provider'
+import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const {
@@ -33,7 +33,7 @@ export const Toolbar = (): React.JSX.Element => {
     isFormValid,
     isFetching,
     isLoading
-  } = useSearchReplace()
+  } = useSearchReplaceAssignments()
   return (
     <BaseToolbar
       justify="space-between"

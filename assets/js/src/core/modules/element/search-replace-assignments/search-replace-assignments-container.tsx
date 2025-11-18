@@ -15,7 +15,7 @@ import { Box, Divider } from '@sdk/components'
 import { SearchReplaceForm } from './components/search-replace-form/search-replace-form'
 import { Toolbar } from './components/toolbar/toolbar'
 import { Table } from './components/table/table'
-import { SearchReplaceProvider } from './providers/search-replace/search-replace-provider'
+import { SearchReplaceAssignmentsProvider } from './providers/search-replace-assignments/search-replace-assignments-provider'
 
 const SearchReplaceAssignmentsContent = (): React.JSX.Element => {
   // Context provides all necessary data and handlers through child components
@@ -53,8 +53,8 @@ const SearchReplaceAssignmentsContent = (): React.JSX.Element => {
 
 export const SearchReplaceAssignmentsContainer = (): React.JSX.Element => {
   return (
-    <SearchReplaceProvider>
+    <SearchReplaceAssignmentsProvider>
       <SearchReplaceAssignmentsContent />
-    </SearchReplaceProvider>
+    </SearchReplaceAssignmentsProvider>
   )
 }

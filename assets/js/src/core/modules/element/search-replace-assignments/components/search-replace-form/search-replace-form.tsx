@@ -18,7 +18,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Form } from 'antd'
 import { Box } from '@sdk/components'
 import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation/many-to-one-relation-input'
-import { useSearchReplace } from '../../providers/search-replace/search-replace-provider'
+import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 
 export const SearchReplaceForm = (): React.JSX.Element => {
   const {
@@ -28,7 +28,7 @@ export const SearchReplaceForm = (): React.JSX.Element => {
     handleReplaceWithChange,
     handleApplyToAll,
     isFormValid
-  } = useSearchReplace()
+  } = useSearchReplaceAssignments()
   const [form] = Form.useForm()
 
   return (

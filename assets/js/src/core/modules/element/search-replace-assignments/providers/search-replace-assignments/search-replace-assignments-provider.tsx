@@ -9,20 +9,21 @@
  */
 
 import React, { createContext, useContext, type ReactNode, useState, useEffect, useMemo } from 'react'
-import { type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
+import { type ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { type RowSelectionState } from '@tanstack/react-table'
-import { api } from '../../usage-api-slice.gen'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { api, type ElementUsageItem } from '../../usage-api-slice.gen'
 
-interface SearchReplaceContextValue {
+interface SearchReplaceAssignmentsContextValue {
   // State
-  searchFor: ManyToOneRelationValueType
-  replaceWith: ManyToOneRelationValueType
+  searchFor: ManyToOneRelationValue | null
+  replaceWith: ManyToOneRelationValue | null
   currentPage: number
   pageSize: number
   selectedRows: RowSelectionState
   defaultPageSize: number
   totalItems: number
-  usageItems: any[]
+  usageItems: ElementUsageItem[]
   isFetching: boolean
   isLoading: boolean
   isFormValid: boolean
@@ -30,8 +31,8 @@ interface SearchReplaceContextValue {
   hasSelection: boolean
 
   // Handlers
-  handleSearchForChange: (value: ManyToOneRelationValueType) => void
-  handleReplaceWithChange: (value: ManyToOneRelationValueType) => void
+  handleSearchForChange: (value: ManyToOneRelationValue | null) => void
+  handleReplaceWithChange: (value: ManyToOneRelationValue | null) => void
   handlePageChange: (page: number, size: number) => void
   handleApplyToAll: () => void
   handleApplyToSelection: () => void
@@ -40,16 +41,16 @@ interface SearchReplaceContextValue {
   setSelectedRows: (selection: RowSelectionState) => void
 }
 
-const SearchReplaceContext = createContext<SearchReplaceContextValue | undefined>(undefined)
+const SearchReplaceAssignmentsContext = createContext<SearchReplaceAssignmentsContextValue | undefined>(undefined)
 
-interface SearchReplaceProviderProps {
+interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
 }
 
-export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps): React.JSX.Element => {
+export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
   const defaultPageSize = 50
-  const [searchFor, setSearchFor] = useState<ManyToOneRelationValueType>(null)
-  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValueType>(null)
+  const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(null)
+  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(null)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
@@ -57,11 +58,10 @@ export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps):
   const [trigger, { data, isFetching, isLoading }] = api.useLazyElementGetUsageQuery()
 
   useEffect(() => {
-    if (searchFor !== null && 'id' in searchFor && searchFor.id !== undefined) {
-      const elementType = 'type' in searchFor ? searchFor.type : 'data-object'
+    if (searchFor !== null) {
       void trigger({
         id: searchFor.id,
-        elementType: elementType as 'data-object' | 'asset' | 'document',
+        elementType: searchFor.type as ElementType,
         page: currentPage,
         pageSize,
         sortBy: 'id' as const,
@@ -73,13 +73,13 @@ export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps):
   const totalItems = data?.totalCount ?? 0
   const usageItems = data?.data ?? []
 
-  const handleSearchForChange = (value: ManyToOneRelationValueType): void => {
+  const handleSearchForChange = (value: ManyToOneRelationValue | null): void => {
     setSearchFor(value)
     setCurrentPage(1)
     setSelectedRows({})
   }
 
-  const handleReplaceWithChange = (value: ManyToOneRelationValueType): void => {
+  const handleReplaceWithChange = (value: ManyToOneRelationValue | null): void => {
     setReplaceWith(value)
   }
 
@@ -99,11 +99,10 @@ export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps):
   }
 
   const handleRefresh = (): void => {
-    if (searchFor !== null && 'id' in searchFor && searchFor.id !== undefined) {
-      const elementType = 'type' in searchFor ? searchFor.type : 'data-object'
+    if (searchFor !== null) {
       void trigger({
         id: searchFor.id,
-        elementType: elementType as 'data-object' | 'asset' | 'document',
+        elementType: searchFor.type as ElementType,
         page: currentPage,
         pageSize,
         sortBy: 'id' as const,
@@ -120,7 +119,7 @@ export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps):
   const selectedRowsCount = Object.keys(selectedRows).length
   const hasSelection = selectedRowsCount > 0
 
-  const contextValue: SearchReplaceContextValue = useMemo(() => ({
+  const contextValue: SearchReplaceAssignmentsContextValue = useMemo(() => ({
     // State
     searchFor,
     replaceWith,
@@ -170,17 +169,17 @@ export const SearchReplaceProvider = ({ children }: SearchReplaceProviderProps):
   ])
 
   return (
-    <SearchReplaceContext.Provider value={ contextValue }>
+    <SearchReplaceAssignmentsContext.Provider value={ contextValue }>
       {children}
-    </SearchReplaceContext.Provider>
+    </SearchReplaceAssignmentsContext.Provider>
   )
 }
 
-export const useSearchReplace = (): SearchReplaceContextValue => {
-  const context = useContext(SearchReplaceContext)
+export const useSearchReplaceAssignments = (): SearchReplaceAssignmentsContextValue => {
+  const context = useContext(SearchReplaceAssignmentsContext)
 
   if (context === undefined) {
-    throw new Error('useSearchReplace must be used within a SearchReplaceProvider')
+    throw new Error('useSearchReplaceAssignments must be used within a SearchReplaceAssignmentsProvider')
   }
 
   return context
