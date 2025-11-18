@@ -115,6 +115,7 @@ export const Grid = ({
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
   const tableElement = useRef<HTMLTableElement>(null)
+  const scrollElementRef = useRef<HTMLDivElement>(null)
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
@@ -280,16 +281,34 @@ export const Grid = ({
     </div>
   )
 
+  const rows = table.getRowModel().rows
+
   const rowVirtualizer = useVirtualizer({
     count: table.getRowModel().rows.length,
-    getScrollElement: () => tableElement.current,
-    estimateSize: () => 40
+    getScrollElement: () => scrollElementRef.current,
+    estimateSize: () => 40,
+    overscan: 5
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
-  const rowIds = useMemo(
-    () => table.getRowModel().rows.map(r => r.id),
-    [table.getRowModel().rows]
-  )
+  console.log('---->>>> all data: ', table.getRowModel().rows.length)
+  console.log('---->>>> virtualRows: ', virtualRows)
+  const visibleRowIds = useMemo(() => {
+    return virtualRows.map(v => rows[v.index].id)
+  }, [virtualRows, rows])
+
+  const collisionDetection = useCallback((args) => {
+    const { droppableContainers } = args
+
+    const visibleDroppables = droppableContainers.filter((container) =>
+      visibleRowIds.includes(container.id)
+    )
+
+    return closestCenter({
+      ...args,
+      droppableContainers: visibleDroppables
+    })
+  }, [visibleRowIds])
+
   const renderRows = (): React.JSX.Element[] => (
     virtualRows.map(vRow => {
       const row = table.getRowModel().rows[vRow.index]
@@ -315,23 +334,44 @@ export const Grid = ({
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
-      <div className={ cn(
-        'ant-table-wrapper',
-        hashId,
-        styles.grid,
-        props.className,
-        { [styles.disabledGrid]: disabled },
-        docked ? 'grid--docked' : ''
-      ) }
+      <div
+        className={ cn(
+          'ant-table-wrapper',
+          hashId,
+          styles.grid,
+          props.className,
+          { [styles.disabledGrid]: disabled },
+          docked ? 'grid--docked' : ''
+        ) }
+        ref={ scrollElementRef }
       >
         <div className="ant-table ant-table-small">
-          <div className='ant-table-container'>
-            <div className='ant-table-content'>
+          <div
+            className='ant-table-container'
+            style={ {
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              position: 'relative',
+              width: '100%'
+            } }
+          >
+            <div
+              className='ant-table-content'
+              style={ {
+                position: 'absolute',
+                transform: `translateY(${virtualRows[0]?.start ?? 0}px)`,
+                top: 0,
+                left: 0,
+                right: 0
+              } }
+            >
               <table
                 className={ cn({ withoutHeader: hideColumnHeaders }) }
                 data-testid={ props.dataTestId }
                 ref={ tableElement }
-                style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
+                style={ {
+                  width: tableAutoWidth ? '100%' : calculateTableWidth(),
+                  minWidth: table.getCenterTotalSize()
+                } }
               >
                 {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
@@ -393,13 +433,13 @@ export const Grid = ({
                     ? (
                       <DndContext
                         autoScroll={ false }
-                        collisionDetection={ closestCenter }
+                        collisionDetection={ collisionDetection }
                         modifiers={ [restrictToVerticalAxis] }
                         onDragEnd={ handleDragEnd }
                         sensors={ sensors }
                       >
                         <SortableContext
-                          items={ rowIds }
+                          items={ visibleRowIds }
                           strategy={ verticalListSortingStrategy }
                         >
                           {renderRows()}
@@ -415,7 +455,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size])
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []
