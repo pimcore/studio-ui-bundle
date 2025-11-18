@@ -298,6 +298,20 @@ export const Grid = ({
     return virtualRows.map(v => rows[v.index].id)
   }, [virtualRows, rows])
 
+  const onDragEndInternal = (event: DragEndEvent): void => {
+    handleDragEnd?.(event)
+
+    requestAnimationFrame(() => {
+      if (!tableElement.current) return
+
+      const tableRows = tableElement.current.querySelectorAll<HTMLElement>('tbody > tr')
+
+      tableRows.forEach(rowNode => {
+        rowVirtualizer.measureElement(rowNode)
+      })
+    })
+  }
+
   const renderRows = (): React.JSX.Element[] => (
     virtualRows.map(vRow => {
       const row = table.getRowModel().rows[vRow.index]
@@ -318,10 +332,7 @@ export const Grid = ({
           size={ size }
           styleProp={ {
             position: 'absolute',
-            // transform: `translateY(${vRow?.start ?? 0}px)`
             top: `${vRow?.start ?? 0}px`
-            // left: 0,
-            // right: 0
           } }
           tableElement={ tableElement }
           virtualIndex={ vRow.index }
@@ -424,7 +435,7 @@ export const Grid = ({
                         autoScroll={ false }
                         collisionDetection={ closestCenter }
                         modifiers={ [restrictToVerticalAxis] }
-                        onDragEnd={ handleDragEnd }
+                        onDragEnd={ onDragEndInternal }
                         sensors={ sensors }
                       >
                         <SortableContext
