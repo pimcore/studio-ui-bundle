@@ -187,7 +187,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal' }: UseS
       }
 
       .ant-table-row {
-        height: ${rowHeight}px;
+        //height: ${rowHeight}px;
       }
 
       .ant-table-content {

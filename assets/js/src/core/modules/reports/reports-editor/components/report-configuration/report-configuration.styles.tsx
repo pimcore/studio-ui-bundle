@@ -13,10 +13,10 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     grid: css`
+      position: relative;
       width: 100%;
       max-height: 500px;
-      overflow-y: scroll;
-      overflow-x: scroll;
+      overflow: auto;
     `,
 
     permissionLabel: css`

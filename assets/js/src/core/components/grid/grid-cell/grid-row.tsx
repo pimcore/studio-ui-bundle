@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type CSSProperties, useMemo } from 'react'
+import React, { type CSSProperties, useCallback, useLayoutEffect, useMemo, useRef } from 'react'
 import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -19,6 +19,7 @@ import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { createTableRowTestId } from '@Pimcore/utils/test-id-generator'
+import { isNull } from 'lodash'
 
 export interface GridRowProps {
   row: Row<any>
@@ -32,19 +33,36 @@ export interface GridRowProps {
   onRowDoubleClick?: GridProps['onRowDoubleClick']
   enableRowDrag?: boolean
   size?: GridProps['size']
+  styleProp?: CSSProperties
+  measureElement: (node: HTMLElement | null) => void
+  virtualIndex?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, styleProp, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
+
+  const internalNodeRef = useRef<HTMLElement | null>(null)
+
+  const combinedRef = useCallback((node: HTMLElement | null): void => {
+    internalNodeRef.current = node
+    setNodeRef(node)
+  }, [setNodeRef])
+
+  useLayoutEffect(() => {
+    if (isDragging || isNull(internalNodeRef.current)) return
+
+    props.measureElement(internalNodeRef.current)
+  }, [isDragging, props.measureElement])
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
-    position: 'relative'
+    position: 'relative',
+    ...styleProp
   }
 
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
@@ -88,9 +106,10 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
         row.getIsSelected() ? 'ant-table-row-selected' : '',
         props.onRowDoubleClick !== undefined ? 'hover' : ''
       ].join(' ') }
+      data-index={ props?.virtualIndex }
       data-testid={ createTableRowTestId(row.index) }
       onDoubleClick={ onRowDoubleClick }
-      ref={ setNodeRef }
+      ref={ combinedRef }
       style={ style }
     >
       {row.getVisibleCells().map((cell, index) => (

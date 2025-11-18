@@ -44,6 +44,7 @@ import { DefaultCell } from './columns/default-cell'
 import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
+import type { DragEndEvent } from '@dnd-kit/core'
 import {
   SortableContext,
   verticalListSortingStrategy
@@ -286,8 +287,9 @@ export const Grid = ({
   const rowVirtualizer = useVirtualizer({
     count: table.getRowModel().rows.length,
     getScrollElement: () => scrollElementRef.current,
-    estimateSize: () => 40,
-    overscan: 5
+    estimateSize: () => 33,
+    overscan: 5,
+    measureElement: (el) => el.getBoundingClientRect().height
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
   console.log('---->>>> all data: ', table.getRowModel().rows.length)
@@ -295,19 +297,6 @@ export const Grid = ({
   const visibleRowIds = useMemo(() => {
     return virtualRows.map(v => rows[v.index].id)
   }, [virtualRows, rows])
-
-  const collisionDetection = useCallback((args) => {
-    const { droppableContainers } = args
-
-    const visibleDroppables = droppableContainers.filter((container) =>
-      visibleRowIds.includes(container.id)
-    )
-
-    return closestCenter({
-      ...args,
-      droppableContainers: visibleDroppables
-    })
-  }, [visibleRowIds])
 
   const renderRows = (): React.JSX.Element[] => (
     virtualRows.map(vRow => {
@@ -321,12 +310,21 @@ export const Grid = ({
           enableRowDrag={ enableRowDrag }
           isSelected={ row.getIsSelected() }
           key={ row.id }
+          measureElement={ rowVirtualizer.measureElement }
           modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
           onFocusCell={ onFocusCell }
           onRowDoubleClick={ props.onRowDoubleClick }
           row={ row }
           size={ size }
+          styleProp={ {
+            position: 'absolute',
+            // transform: `translateY(${vRow?.start ?? 0}px)`
+            top: `${vRow?.start ?? 0}px`
+            // left: 0,
+            // right: 0
+          } }
           tableElement={ tableElement }
+          virtualIndex={ vRow.index }
         />
       )
     })
@@ -346,24 +344,8 @@ export const Grid = ({
         ref={ scrollElementRef }
       >
         <div className="ant-table ant-table-small">
-          <div
-            className='ant-table-container'
-            style={ {
-              height: `${rowVirtualizer.getTotalSize()}px`,
-              position: 'relative',
-              width: '100%'
-            } }
-          >
-            <div
-              className='ant-table-content'
-              style={ {
-                position: 'absolute',
-                transform: `translateY(${virtualRows[0]?.start ?? 0}px)`,
-                top: 0,
-                left: 0,
-                right: 0
-              } }
-            >
+          <div className='ant-table-container'>
+            <div className='ant-table-content'>
               <table
                 className={ cn({ withoutHeader: hideColumnHeaders }) }
                 data-testid={ props.dataTestId }
@@ -418,7 +400,14 @@ export const Grid = ({
                   ))}
                 </thead>
                 )}
-                <tbody className="ant-table-tbody">
+                <tbody
+                  className="ant-table-tbody"
+                  style={ {
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    position: 'relative',
+                    width: '100%'
+                  } }
+                >
                   {table.getRowModel().rows.length === 0 && (
                   <tr className={ 'ant-table-row' }>
                     <td
@@ -433,7 +422,7 @@ export const Grid = ({
                     ? (
                       <DndContext
                         autoScroll={ false }
-                        collisionDetection={ collisionDetection }
+                        collisionDetection={ closestCenter }
                         modifiers={ [restrictToVerticalAxis] }
                         onDragEnd={ handleDragEnd }
                         sensors={ sensors }
