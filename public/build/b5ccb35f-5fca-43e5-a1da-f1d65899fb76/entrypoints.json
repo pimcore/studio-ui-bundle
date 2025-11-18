@@ -1,0 +1,24 @@
+{
+  "entrypoints": {
+    "documentEditorIframe": {
+      "js": [
+        "/bundles/pimcorestudioui/build/b5ccb35f-5fca-43e5-a1da-f1d65899fb76/static/js/772.a5df2f14.js",
+        "/bundles/pimcorestudioui/build/b5ccb35f-5fca-43e5-a1da-f1d65899fb76/static/js/documentEditorIframe.55de854a.js"
+      ],
+      "css": []
+    },
+    "main": {
+      "js": [
+        "/bundles/pimcorestudioui/build/b5ccb35f-5fca-43e5-a1da-f1d65899fb76/static/js/772.a5df2f14.js",
+        "/bundles/pimcorestudioui/build/b5ccb35f-5fca-43e5-a1da-f1d65899fb76/static/js/main.a2d1135e.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/b5ccb35f-5fca-43e5-a1da-f1d65899fb76/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}
