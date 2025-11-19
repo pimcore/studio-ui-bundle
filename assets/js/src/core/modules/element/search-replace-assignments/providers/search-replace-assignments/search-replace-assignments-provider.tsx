@@ -12,7 +12,13 @@ import React, { createContext, useContext, type ReactNode, useState, useEffect, 
 import { type ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { api, type ElementUsageItem } from '../../usage-api-slice.gen'
+import { api, type ElementUsageItem, type ElementUsageBaseItem } from '../../usage-api-slice-enhanced'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
+import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
+import { useTranslation } from 'react-i18next'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -33,6 +39,7 @@ interface SearchReplaceAssignmentsContextValue {
   // Handlers
   handleSearchForChange: (value: ManyToOneRelationValue | null) => void
   handleReplaceWithChange: (value: ManyToOneRelationValue | null) => void
+  handleSearch: () => void
   handlePageChange: (page: number, size: number) => void
   handleApplyToAll: () => void
   handleApplyToSelection: () => void
@@ -48,6 +55,7 @@ interface SearchReplaceAssignmentsProviderProps {
 }
 
 export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const defaultPageSize = 50
   const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(null)
   const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(null)
@@ -55,6 +63,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const [trigger, { data, isFetching, isLoading }] = api.useLazyElementGetUsageQuery()
 
   useEffect(() => {
@@ -68,19 +77,32 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         sortOrder: 'ASC' as const
       })
     }
-  }, [searchFor, currentPage, pageSize, trigger])
+  }, [currentPage, pageSize, trigger])
 
   const totalItems = data?.totalCount ?? 0
   const usageItems = data?.data ?? []
 
   const handleSearchForChange = (value: ManyToOneRelationValue | null): void => {
     setSearchFor(value)
-    setCurrentPage(1)
-    setSelectedRows({})
   }
 
   const handleReplaceWithChange = (value: ManyToOneRelationValue | null): void => {
     setReplaceWith(value)
+  }
+
+  const handleSearch = (): void => {
+    if (searchFor !== null) {
+      setCurrentPage(1)
+      setSelectedRows({})
+      void trigger({
+        id: searchFor.id,
+        elementType: searchFor.type as ElementType,
+        page: 1,
+        pageSize,
+        sortBy: 'id' as const,
+        sortOrder: 'ASC' as const
+      })
+    }
   }
 
   const handlePageChange = (page: number, size: number): void => {
@@ -88,14 +110,62 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
     setPageSize(size)
   }
 
-  const handleApplyToAll = (): void => {
-    // TODO: Implement apply replacement to all
-    console.log('Apply to all', { searchFor, replaceWith })
+  const handleApplyToAll = async (): Promise<void> => {
+    if (searchFor === null || replaceWith === null) {
+      return
+    }
+
+    try {
+      const job = new SearchReplaceAssignmentsJob({
+        sourceElementType: searchFor.type as ElementType,
+        sourceElementId: searchFor.id,
+        targetElementType: replaceWith.type as ElementType,
+        targetElementId: replaceWith.id,
+        title: t('search-replace-assignments.job.title-all'),
+        onFinish: () => {
+          // handleRefresh()
+          setSelectedRows({})
+        }
+      })
+
+      await executionEngine.runJob(job)
+    } catch (error) {
+      trackError(new GeneralError('Failed to apply replacement to all items'))
+    }
   }
 
-  const handleApplyToSelection = (): void => {
-    // TODO: Implement apply replacement to selection
-    console.log('Apply to selection', { searchFor, replaceWith, selectedRows })
+  const handleApplyToSelection = async (): Promise<void> => {
+    if (searchFor === null || replaceWith === null) {
+      return
+    }
+
+    try {
+      const selectedIndices = Object.keys(selectedRows).map(Number)
+      const selectedElements: ElementUsageBaseItem[] = selectedIndices.map(index => {
+        const item = usageItems[index]
+        return {
+          id: item.id,
+          type: (item.type === 'data-object' ? 'object' : item.type) as 'data-object' | 'object' | 'asset' | 'document'
+        }
+      })
+
+      const job = new SearchReplaceAssignmentsJob({
+        sourceElementType: searchFor.type as ElementType,
+        sourceElementId: searchFor.id,
+        targetElementType: replaceWith.type as ElementType,
+        targetElementId: replaceWith.id,
+        elements: selectedElements,
+        title: t('search-replace-assignments.job.title-selection', { count: selectedElements.length }),
+        onFinish: () => {
+          // handleRefresh()
+          setSelectedRows({})
+        }
+      })
+
+      await executionEngine.runJob(job)
+    } catch (error) {
+      trackError(new GeneralError('Failed to apply replacement to selected items'))
+    }
   }
 
   const handleRefresh = (): void => {
@@ -138,6 +208,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
     // Handlers
     handleSearchForChange,
     handleReplaceWithChange,
+    handleSearch,
     handlePageChange,
     handleApplyToAll,
     handleApplyToSelection,
@@ -150,22 +221,13 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
     currentPage,
     pageSize,
     selectedRows,
-    defaultPageSize,
     totalItems,
     usageItems,
     isFetching,
     isLoading,
     isFormValid,
     selectedRowsCount,
-    hasSelection,
-    handleSearchForChange,
-    handleReplaceWithChange,
-    handlePageChange,
-    handleApplyToAll,
-    handleApplyToSelection,
-    handleRefresh,
-    handleClearSelection,
-    setSelectedRows
+    hasSelection
   ])
 
   return (

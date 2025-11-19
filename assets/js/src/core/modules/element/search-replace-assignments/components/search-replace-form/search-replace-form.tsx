@@ -15,10 +15,11 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
-import { Form } from 'antd'
-import { Box } from '@sdk/components'
+import { Form, Popconfirm } from 'antd'
+import { Box, Tooltip } from '@sdk/components'
 import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation/many-to-one-relation-input'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export const SearchReplaceForm = (): React.JSX.Element => {
   const {
@@ -26,6 +27,7 @@ export const SearchReplaceForm = (): React.JSX.Element => {
     replaceWith,
     handleSearchForChange,
     handleReplaceWithChange,
+    handleSearch,
     handleApplyToAll,
     isFormValid
   } = useSearchReplaceAssignments()
@@ -45,55 +47,75 @@ export const SearchReplaceForm = (): React.JSX.Element => {
       </Toolbar>
       <Content>
         <Box margin={ { x: 'small', bottom: 'small' } }>
-          <Flex
-            align="end"
-            gap="small"
-            justify="flex-start"
+
+          <Form
+            colon={ false }
+            form={ form }
+            labelAlign="left"
+            labelCol={ { style: { width: '150px' } } }
+            layout="horizontal"
+            style={ { marginBottom: 0 } }
           >
-            <Form
-              colon={ false }
-              form={ form }
-              labelAlign="left"
-              labelCol={ { style: { width: '150px' } } }
-              layout="horizontal"
+            <Form.Item
+              label={ <Title>{t('search-replace-assignments.search-for')}</Title> }
+              name="searchFor"
+            >
+              <Flex gap="extra-small">
+                <div style={ { width: '600px' } }>
+                  <ManyToOneRelationInput
+                    assetsAllowed
+                    dataObjectsAllowed
+                    documentsAllowed
+                    enableSearch
+                    onChange={ handleSearchForChange }
+                    value={ searchFor }
+                  />
+                </div>
+
+                <Tooltip title={ t('search-replace-assignments.search') }>
+                  <IconButton
+                    disabled={ searchFor === null }
+                    icon={ { value: 'folder-search' } }
+                    onClick={ handleSearch }
+                    type="default"
+                  />
+                </Tooltip>
+              </Flex>
+            </Form.Item>
+            <Form.Item
+              label={ <Title>{t('search-replace-assignments.replace-with')}</Title> }
+              name="replaceWith"
               style={ { marginBottom: 0 } }
             >
-              <Form.Item
-                label={ <Title>{t('search-replace-assignments.search-for')}</Title> }
-                name="searchFor"
-              >
-                <ManyToOneRelationInput
-                  assetsAllowed
-                  dataObjectsAllowed
-                  documentsAllowed
-                  enableSearch
-                  onChange={ handleSearchForChange }
-                  value={ searchFor }
-                />
-              </Form.Item>
-              <Form.Item
-                label={ <Title>{t('search-replace-assignments.replace-with')}</Title> }
-                name="replaceWith"
-                style={ { marginBottom: 0, width: '600px' } }
-              >
-                <ManyToOneRelationInput
-                  assetsAllowed
-                  dataObjectsAllowed
-                  documentsAllowed
-                  enableSearch
-                  onChange={ handleReplaceWithChange }
-                  value={ replaceWith }
-                />
-              </Form.Item>
-            </Form>
-            <Button
-              disabled={ !isFormValid }
-              onClick={ handleApplyToAll }
-              type="primary"
-            >
-              {t('search-replace-assignments.apply-to-all')}
-            </Button>
-          </Flex>
+              <Flex gap="extra-small">
+                <div style={ { width: '600px' } }>
+                  <ManyToOneRelationInput
+                    assetsAllowed
+                    dataObjectsAllowed
+                    documentsAllowed
+                    enableSearch
+                    onChange={ handleReplaceWithChange }
+                    value={ replaceWith }
+                  />
+                </div>
+                <Popconfirm
+                  cancelText={ t('cancel') }
+                  description={ t('search-replace-assignments.confirm.description') }
+                  okText={ t('button.confirm') }
+                  onConfirm={ handleApplyToAll }
+                  overlayStyle={ { maxWidth: '350px' } }
+                  title={ t('search-replace-assignments.confirm.title') }
+                >
+                  <Button
+                    disabled={ !isFormValid }
+                    type="primary"
+                  >
+                    {t('search-replace-assignments.apply-to-all')}
+                  </Button>
+                </Popconfirm>
+              </Flex>
+            </Form.Item>
+          </Form>
         </Box>
       </Content>
     </>

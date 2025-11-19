@@ -18,6 +18,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
 import { Split } from '@Pimcore/components/split/split'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
+import { Popconfirm } from 'antd'
 
 export const Toolbar = (): React.JSX.Element => {
   const {
@@ -53,13 +54,21 @@ export const Toolbar = (): React.JSX.Element => {
           >
             {t('listing.selection.total', { total: selectedRowsCount })}
           </Checkbox>
-          <Button
-            disabled={ !isFormValid }
-            onClick={ handleApplyToSelection }
-            type="primary"
+          <Popconfirm
+            cancelText={ t('cancel') }
+            description={ t('search-replace-assignments.confirm.description') }
+            okText={ t('button.confirm') }
+            onConfirm={ handleApplyToSelection }
+            overlayStyle={ { maxWidth: '350px' } }
+            title={ t('search-replace-assignments.confirm.title') }
           >
-            {t('search-replace-assignments.apply-to-selection')}
-          </Button>
+            <Button
+              disabled={ !isFormValid }
+              type="primary"
+            >
+              {t('search-replace-assignments.apply-to-selection')}
+            </Button>
+          </Popconfirm>
         </Flex>
       )}
       {!hasSelection && <div />}

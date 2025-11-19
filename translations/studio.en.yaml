@@ -1003,11 +1003,16 @@ widget.user-management: Users
 search-replace-assignments.search-for: Search for
 search-replace-assignments.replace-with: Replace with
 search-replace-assignments.select-element: Select target element
+search-replace-assignments.search: Search
 search-replace-assignments.apply-to-all: Apply replacement to all
 search-replace-assignments.apply-to-selection: Apply replacement to selection
+search-replace-assignments.confirm.title: Confirm the replacement
+search-replace-assignments.confirm.description: Restoring replaced assignments can be a time-intensive process. Are you sure you want to apply it to all?
 search-replace-assignments.columns.id: ID
 search-replace-assignments.columns.type: Type
 search-replace-assignments.columns.path: Path
+search-replace-assignments.job.title-all: Replace all assignments
+search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here

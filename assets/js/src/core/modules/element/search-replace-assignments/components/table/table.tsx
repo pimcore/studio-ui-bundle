@@ -9,13 +9,14 @@
  */
 
 import React from 'react'
-import { Box } from '@sdk/components'
+import { Box, Flex, Tooltip } from '@sdk/components'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ElementUsageItem } from '../../usage-api-slice.gen'
 import { type ElementInfo } from '@sdk/modules/element'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface ElementInfoProps {
   row: {
@@ -34,14 +35,43 @@ export const Table = (): React.JSX.Element => {
 
   const columnHelper = createColumnHelper<ElementUsageItem>()
 
+  const getIconForType = (type: string): string => {
+    switch (type) {
+      case 'data-object':
+        return 'data-object'
+      case 'document':
+        return 'document'
+      case 'asset':
+        return 'asset'
+      default:
+        return 'file-05'
+    }
+  }
+
   const columns = [
     columnHelper.accessor('id', {
       header: t('search-replace-assignments.columns.id'),
-      size: 100
+      size: 150
     }),
     columnHelper.accessor('type', {
       header: t('search-replace-assignments.columns.type'),
-      size: 120
+      size: 70,
+      cell: ({ row }): React.JSX.Element => {
+        const type = row.original.type
+
+        return (
+          <Flex
+            align="center"
+            justify="center"
+          >
+            <Tooltip title={ t(type) }>
+              <Icon
+                value={ getIconForType(type) }
+              />
+            </Tooltip>
+          </Flex>
+        )
+      }
     }),
     columnHelper.accessor('path', {
       header: t('search-replace-assignments.columns.path'),
