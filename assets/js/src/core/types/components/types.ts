@@ -67,6 +67,6 @@ export interface GridProps {
   onRowDoubleClick?: (row: any) => void
   enableRowDrag?: boolean
   handleDragEnd?: (event: DragEndEvent) => void
-  enableVirtualizer?: boolean
+  enableRowVirtualizer?: boolean
   size?: 'normal' | 'small'
 }

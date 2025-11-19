@@ -106,13 +106,13 @@ export const Grid = ({
   allowMultipleAutoWidthColumns = false,
   enableRowDrag,
   handleDragEnd,
-  enableVirtualizer = false,
+  enableRowVirtualizer = false,
   size = 'normal',
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash()
-  const { styles } = useStyles({ size, enableVirtualizer })
+  const { styles } = useStyles({ size, enableVirtualizer: enableRowVirtualizer })
 
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
@@ -294,14 +294,14 @@ export const Grid = ({
     estimateSize: () => 33,
     overscan: 5,
     measureElement: (el) => el.getBoundingClientRect().height,
-    enabled: enableVirtualizer
+    enabled: enableRowVirtualizer
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
   const visibleRowIds = useMemo(() => {
-    if (!enableVirtualizer) return rowsList.map(row => row.id)
+    if (!enableRowVirtualizer) return rowsList.map(row => row.id)
 
     return virtualRows.map(v => rowsList[v.index].id)
-  }, [virtualRows, rowsList, enableVirtualizer])
+  }, [virtualRows, rowsList, enableRowVirtualizer])
 
   const onDragEndInternal = (event: DragEndEvent): void => {
     handleDragEnd?.(event)
@@ -318,7 +318,7 @@ export const Grid = ({
   }
 
   const renderRows = (): React.JSX.Element[] => {
-    const rowsData = enableVirtualizer
+    const rowsData = enableRowVirtualizer
       ? virtualRows.map(vRow => ({
         row: rowsList[vRow.index],
         virtualIndex: vRow.index,
@@ -425,7 +425,7 @@ export const Grid = ({
                 )}
                 <tbody
                   className="ant-table-tbody"
-                  style={ { height: enableVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : 'initial' } }
+                  style={ { height: enableRowVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : 'initial' } }
                 >
                   {rowsList.length === 0 && (
                   <tr className={ 'ant-table-row' }>
