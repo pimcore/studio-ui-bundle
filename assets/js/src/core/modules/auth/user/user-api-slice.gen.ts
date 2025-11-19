@@ -102,6 +102,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userTokenLinkGet: build.mutation<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.tokenLink,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userUpdateActivePerspective: build.mutation<
                 UserUpdateActivePerspectiveApiResponse,
                 UserUpdateActivePerspectiveApiArg
@@ -240,6 +248,15 @@ export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users
 export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
+};
+export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
+    /** Token link URL including the generated token as parameter. */
+    link: string;
+};
+export type UserTokenLinkGetApiArg = {
+    /** Id of the user */
+    id: number;
+    tokenLink: TokenLink;
 };
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
@@ -470,6 +487,8 @@ export type User = {
     admin: boolean;
     /** Classes the user is allows to see */
     classes: object;
+    /** Allowed doc types to create */
+    docTypes: string[];
     /** Show close warning */
     closeWarning: boolean;
     /** Allow Dirty Close */
@@ -526,6 +545,8 @@ export type User2 = {
     active: boolean;
     /** Classes the user is allows to see */
     classes: object;
+    /** Allowed Document types to create */
+    docTypes: object;
     /** Show Close Warning */
     closeWarning: boolean;
     /** Allow Dirty Close */
@@ -589,6 +610,10 @@ export type ResetPassword = {
     /** Reset password URL */
     resetPasswordUrl: string;
 };
+export type TokenLink = {
+    /** Token login URL */
+    tokenLoginUrl: string;
+};
 export type UserProfile = {
     /** Firstname of the User */
     firstname: string | null;
@@ -626,6 +651,7 @@ export const {
     useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
+    useUserTokenLinkGetMutation,
     useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUpdateProfileMutation,
