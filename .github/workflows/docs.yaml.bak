@@ -1,6 +1,10 @@
+Original docs workflow disabled in favor of new-docs.yml
+This file is kept only for reference. The active workflow is .github/workflows/new-docs.yml
+Backup of the original content: .github/workflows/docs.yaml.bak
 
+ 
 name: "Documentation"
-
+ 
 on:
     pull_request_target:
         branches:
@@ -19,10 +23,10 @@ on:
             - 'doc/**'
             - '.github/workflows/docs.yaml'
             - 'README.md'
-
+ 
 permissions:
   contents: read
-
+ 
 jobs:
     docs:
         name: "Generate docs Pimcore Docs Generator"
@@ -33,7 +37,7 @@ jobs:
               with:
                 ref: ${{ github.event.pull_request.head.ref }}
                 repository: ${{ github.event.pull_request.head.repo.full_name }}
-
+ 
             - name: "Checkout Docs Generator"
               uses: "actions/checkout@v4"
               with:
@@ -41,27 +45,27 @@ jobs:
                   ref: "main"
                   path: "./docs-generator"
                   token: ${{ secrets.DOCS_GENERATOR_ACCESS_TOKEN }}
-
+ 
             - name: "Install Node"
               uses: actions/setup-node@v4
               with:
                   node-version: 22.x
                   registry-url: 'https://registry.npmjs.org'
-
+ 
             - name: Prepare Docs
               working-directory: "./docs-generator"
               run: |
                   mkdir docs
-                  # copy docs to working directory
+                  copy docs to working directory
                   cp -r ../doc ./docs/
                   
-                  # copy readme to working directory
+                  copy readme to working directory
                   cp -r ../README.md ./docs/
                   
-                  # copy index page
+                  copy index page
                   cp bin/resources/00_index_empty.md  ./docs/00_index.md
                   
-                  # use special docusaurus config (to exclude search plugin) and check for broken links
+                  use special docusaurus config (to exclude search plugin) and check for broken links
                   mv docusaurus.config.js.repos-tests docusaurus.config.js
                   
             - name: Build Docs

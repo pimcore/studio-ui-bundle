@@ -24,7 +24,6 @@ export type ObjectListingBuilderConfig = ListingBuilderConfig & {
   'generalFilters'?: ListingBuilderConfigEntry
   'globalContext'?: ListingBuilderConfigEntry
 }
-
 export interface ObjectListingBuilderOptions extends ListingBuilderBuildOptions {
   config?: ObjectListingBuilderConfig
 }
