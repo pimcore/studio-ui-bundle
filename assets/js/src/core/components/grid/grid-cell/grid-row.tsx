@@ -43,6 +43,10 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, ...p
     id: row.id
   })
 
+  // Since dnd-kit does not allow assigning multiple refs directly,
+  // we need a separate ref for the virtualizer.
+  // The logic below combines both refs so that the node can be used
+  // for drag-and-drop and also measured by the virtualizer.
   const internalNodeRef = useRef<HTMLElement | null>(null)
 
   const combinedRef = useCallback((node: HTMLElement | null): void => {
@@ -53,6 +57,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, ...p
   useLayoutEffect(() => {
     if (isDragging || isNull(internalNodeRef.current)) return
 
+    // measure dynamic row
     props?.measureElement?.(internalNodeRef.current)
   }, [isDragging, props.measureElement])
 
@@ -106,7 +111,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, ...p
         row.getIsSelected() ? 'ant-table-row-selected' : '',
         props.onRowDoubleClick !== undefined ? 'hover' : ''
       ].join(' ') }
-      data-index={ props?.virtualIndex }
+      data-index={ props?.virtualIndex } // needed for dynamic row height measurement
       data-testid={ createTableRowTestId(row.index) }
       onDoubleClick={ onRowDoubleClick }
       ref={ combinedRef }

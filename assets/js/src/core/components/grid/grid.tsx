@@ -119,7 +119,7 @@ export const Grid = ({
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
 
   const tableElement = useRef<HTMLTableElement>(null)
-  const scrollElementRef = useRef<HTMLDivElement>(null)
+  const scrollElementRef = useRef<HTMLDivElement>(null) // The row virtualizer will need a reference to the scrollable container element
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
 
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
@@ -291,9 +291,9 @@ export const Grid = ({
   const rowVirtualizer = useVirtualizer({
     count: rowsList.length,
     getScrollElement: () => scrollElementRef.current,
-    estimateSize: () => 33,
+    estimateSize: () => 33, // estimate row height for accurate scrollbar dragging
     overscan: 5,
-    measureElement: (el) => el.getBoundingClientRect().height,
+    measureElement: (el) => el.getBoundingClientRect().height, // measure dynamic row height
     enabled: enableRowVirtualizer
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
@@ -311,6 +311,8 @@ export const Grid = ({
 
       const tableRows = tableElement.current.querySelectorAll<HTMLElement>('tbody > tr')
 
+      // Measure each row using the virtualizer so it can correctly calculate
+      // positions and heights for virtualization
       tableRows.forEach(rowNode => {
         rowVirtualizer.measureElement(rowNode)
       })
