@@ -18,7 +18,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
 import { useTranslation } from 'react-i18next'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -130,7 +129,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
 
       await executionEngine.runJob(job)
     } catch (error) {
-      trackError(new GeneralError('Failed to apply replacement to all items'))
+      console.error('Failed to apply replacement to all items', error)
     }
   }
 
@@ -164,7 +163,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
 
       await executionEngine.runJob(job)
     } catch (error) {
-      trackError(new GeneralError('Failed to apply replacement to selected items'))
+      console.error('Failed to apply replacement to all items', error)
     }
   }
 
