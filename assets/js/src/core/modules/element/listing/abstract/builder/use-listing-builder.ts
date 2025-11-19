@@ -1,5 +1,15 @@
-import { ListingBuilder } from "@Pimcore/modules/element/listing/abstract/builder/listing-builder";
-import { useEffect, useState } from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
+import { useEffect, useState } from 'react'
 
 export interface UseListingBuilderProps {
   listingBuilder: ListingBuilder
@@ -15,11 +25,11 @@ export interface UseListingBuilderReturn {
 }
 
 export const useListingBuilder = ({ listingBuilder }: UseListingBuilderProps): UseListingBuilderReturn => {
-  const [listingBuilderInstance, setListingBuilderInstance] = useState<ListingBuilder>(listingBuilder.copy());
+  const [listingBuilderInstance, setListingBuilderInstance] = useState<ListingBuilder>(listingBuilder.copy())
 
   useEffect(() => {
-    setListingBuilderInstance(listingBuilder.copy());
-  }, [listingBuilder]);
+    setListingBuilderInstance(listingBuilder.copy())
+  }, [listingBuilder])
 
   return {
     listingBuilder: listingBuilderInstance,
@@ -30,4 +40,3 @@ export const useListingBuilder = ({ listingBuilder }: UseListingBuilderProps): U
     build: listingBuilderInstance.build.bind(listingBuilderInstance)
   }
 }
-

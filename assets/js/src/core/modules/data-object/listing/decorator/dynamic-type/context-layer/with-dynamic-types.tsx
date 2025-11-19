@@ -14,7 +14,6 @@ import React from 'react'
 
 export const withDynamicTypes = (Component: AbstractDecoratorProps['ContextComponent']): AbstractDecoratorProps['ContextComponent'] => {
   const DynamicTypesContextComponent = (): React.JSX.Element => {
-
     return (
       <DynamicTypeRegistryProvider
         serviceIds={ [

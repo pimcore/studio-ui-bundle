@@ -252,5 +252,5 @@ export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provi
 export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
-export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder';
-export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder';
+export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
+export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'

@@ -1,4 +1,14 @@
-import { AbstractDecorator, AbstractDecoratorConfig, AbstractDecoratorProps } from "@sdk/modules/element"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type AbstractDecorator, type AbstractDecoratorConfig, type AbstractDecoratorProps } from '@sdk/modules/element'
 
 export interface ListingBuilderDecorator {
   name: string
@@ -16,9 +26,7 @@ export interface ListingBuilderConfigEntry<T = AbstractDecoratorConfig> {
   config?: T
 }
 
-export interface ListingBuilderConfig {
-  [name: string]: ListingBuilderConfigEntry
-}
+export type ListingBuilderConfig = Record<string, ListingBuilderConfigEntry>
 
 export interface ListingBuilderBuildOptions {
   props: AbstractDecoratorProps
@@ -26,19 +34,19 @@ export interface ListingBuilderBuildOptions {
 }
 
 export interface IListingBuilder {
-  addDecorator(decorator: ListingBuilderDecorator): this
-  overrideDecorator(decorator: ListingBuilderDecoratorOverride): this
-  removeDecorator(name: string): this
-  getDecorator(name: string): ListingBuilderDecorator | undefined
-  getDecorators(): ListingBuilderDecorator[]
-  build(options: ListingBuilderBuildOptions): AbstractDecoratorProps
-  copy(): ListingBuilder
+  addDecorator: (decorator: ListingBuilderDecorator) => this
+  overrideDecorator: (decorator: ListingBuilderDecoratorOverride) => this
+  removeDecorator: (name: string) => this
+  getDecorator: (name: string) => ListingBuilderDecorator | undefined
+  getDecorators: () => ListingBuilderDecorator[]
+  build: (options: ListingBuilderBuildOptions) => AbstractDecoratorProps
+  copy: () => ListingBuilder
 }
 
 export class ListingBuilder<T extends IListingBuilder = IListingBuilder> {
   private decorators: ListingBuilderDecorator[] = []
 
-  public addDecorator: T['addDecorator'] = (decorator) => {    
+  public addDecorator: T['addDecorator'] = (decorator) => {
     const newDecorator = {
       priority: 0,
       ...decorator

@@ -75,7 +75,7 @@ const defaultComponentConfig = {
           type: ComponentType.SLOT,
           name: 'dataObject.listing.toolbar.right',
           defaultEntries: [
-            { name: 'pagination', priority: 100 },
+            { name: 'pagination', priority: 100 }
           ]
         }
       }
