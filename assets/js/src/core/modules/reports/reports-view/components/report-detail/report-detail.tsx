@@ -129,7 +129,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 enableSorting: item.order,
                 ...(!isNull(item.width) && { size: item.width }),
                 meta: {
-                  type: item.displayType ?? 'text',
+                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
                   ...(item.displayType === 'date' && { config: { showTime: true } }),
                   ...(isNull(item.width) && { autoWidth: true })
                 }
