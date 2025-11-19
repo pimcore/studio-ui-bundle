@@ -9,6 +9,7 @@
  */
 
 import '@Pimcore/modules/data-object/editor'
+import '@Pimcore/modules/data-object/listing'
 import '@Pimcore/modules/data-object/tree'
 import '@Pimcore/modules/data-object/listing/decorator/context-menu'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'

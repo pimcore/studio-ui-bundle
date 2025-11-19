@@ -66,12 +66,14 @@ export const serviceIds = {
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
   'Asset/ThumbnailService': 'Asset/ThumbnailService',
+  'Asset/Listing/Builder': 'Asset/Listing/Builder',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/VariantTabManager': 'DataObject/Editor/VariantTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
+  'DataObject/Listing/Builder': 'DataObject/Listing/Builder',
 
   // Documents
   'Document/Editor/TypeRegistry': 'Document/Editor/TypeRegistry',

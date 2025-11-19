@@ -14,9 +14,7 @@ import { useDataQueryHelper } from './data-layer/hooks/use-data-query-helper'
 import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
-import React, { useEffect } from 'react'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
-import { compose } from '@Pimcore/utils/compose'
+import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
@@ -29,7 +27,8 @@ import { ActionColumnDecorator } from './decorator/action-column/action-column-d
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 import { useDataObjectColumnMapper } from './column-mapper/use-column-mapper'
-import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { serviceIds, useInjection } from '@sdk/app'
+import { type ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -46,42 +45,15 @@ const defaultProps = {
   useColumnMapper: useDataObjectColumnMapper
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-const props = compose<AbstractDecoratorProps>(
-  ActionColumnDecorator,
-  SortingDecorator,
-  PagingDecorator,
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
-  ColumnConfigurationDecorator,
-  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
-  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  ContextMenuDecorator,
-  TagFilterDecorator,
-  GeneralFiltersDecorator
-)(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
-
 export const ListingContainer = (): React.JSX.Element => {
-  const { setHasLocalizedFields } = useLanguageSelection()
-
-  useEffect(() => {
-    setHasLocalizedFields(true)
-  }, [])
+  const listingBuilder = useInjection<ListingBuilder>(serviceIds['DataObject/Listing/Builder'])
 
   return (
-    <DynamicTypeRegistryProvider
-      serviceIds={ [
-        'DynamicTypes/ObjectDataRegistry',
-        'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry',
-        'DynamicTypes/BatchEditRegistry',
-        'DynamicTypes/FieldFilterRegistry'
-      ] }
-    >
-      <BaseListing
-        { ...props }
-      />
-    </DynamicTypeRegistryProvider>
+    <BaseListing
+      { ...listingBuilder.build({
+        props: defaultProps
+      }) }
+    />
   )
 }
 

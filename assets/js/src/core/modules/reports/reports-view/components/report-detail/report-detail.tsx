@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isNil, isNull, isUndefined } from 'lodash'
-import { type AccessorKeyColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
+import { type AccessorFnColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
@@ -110,45 +110,51 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     </Flex>
   )
 
-  const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
-    const list: Array<AccessorKeyColumnDef<unknown, never>> = []
+  const getColumns = (): Array<AccessorFnColumnDef<unknown, never>> | undefined => {
+    const list: Array<AccessorFnColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
       const isShowColumn = item.display && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
-        const columnId = item?.name ?? `id-${index}`
-        // Handle cases where the column name contains special characters like `.` and is interpreted as a path
-        const safeColumnId = columnId.replaceAll(/\W/g, '_')
+        const columnId = !isEmptyValue(item?.name) ? item.name : `id-${index}`
 
         if (item.displayType !== 'hide') {
           list.push(
-            columnHelper.accessor(safeColumnId, {
-              header: !isEmptyValue(item.label) ? item.label : item.name,
-              enableSorting: item.order,
-              ...(!isNull(item.width) && { size: item.width }),
-              meta: {
-                type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-                ...(item.displayType === 'date' && { config: { showTime: true } }),
-                ...(isNull(item.width) && { autoWidth: true })
+            columnHelper.accessor(
+              row => row?.[columnId],
+              {
+                id: columnId,
+                header: !isEmptyValue(item.label) ? item.label : item.name,
+                enableSorting: item.order,
+                ...(!isNull(item.width) && { size: item.width }),
+                meta: {
+                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
+                  ...(item.displayType === 'date' && { config: { showTime: true } }),
+                  ...(isNull(item.width) && { autoWidth: true })
+                }
               }
-            })
+            )
           )
         }
 
         if (!isEmptyValue(item.action)) {
           list.push(
-            columnHelper.accessor(`${columnId}-action`, {
-              header: t('actions.open'),
-              enableSorting: false,
-              size: 50,
-              cell: (info) => {
-                const rowData = info.row.original as object
-                const id = rowData[columnId]
+            columnHelper.accessor(
+              row => row?.[columnId],
+              {
+                id: `${columnId}-action`,
+                header: t('actions.open'),
+                enableSorting: false,
+                size: 50,
+                cell: (info) => {
+                  const rowData = info.row.original as object
+                  const id = rowData[columnId]
 
-                return renderColumnActionCell({ id, actionType: item.action as ReportActionType | undefined })
+                  return renderColumnActionCell({ id, actionType: item.action as ReportActionType | undefined })
+                }
               }
-            })
+            )
           )
         }
       }

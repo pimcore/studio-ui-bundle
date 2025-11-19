@@ -8,26 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Toolbar as BaseToolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/pagination/pagination'
 import React, { useMemo } from 'react'
-import { Split } from '@Pimcore/components/split/split'
-import { RowSelectionTotal } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/row-selection-total/row-reselection-total'
-import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
-import { BatchActions } from '../batch-actions/batch-actions'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
+import { useSettings } from '@sdk/modules/element'
 
 export const Toolbar = (): React.JSX.Element => {
-  return useMemo(() => (
-    <BaseToolbar theme='secondary'>
-      <Split size="mini">
-        <RowSelectionTotal />
-        <BatchActions />
-      </Split>
+  const { toolbarSlotName } = useSettings()
 
-      <Split size='extra-small'>
-        <Refetch />
-        <Pagination />
-      </Split>
-    </BaseToolbar>
+  return useMemo(() => (
+    <ComponentRenderer component={ toolbarSlotName ?? componentConfig.asset.listing.toolbar.component.name } />
   ), [])
 }

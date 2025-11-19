@@ -10,6 +10,7 @@
 
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import '@Pimcore/modules/asset/editor'
+import '@Pimcore/modules/asset/listing'
 import { TreeContainer } from './tree/tree-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'

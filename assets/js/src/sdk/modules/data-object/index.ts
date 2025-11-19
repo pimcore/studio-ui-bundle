@@ -45,4 +45,6 @@ export * from '@Pimcore/modules/data-object/tree/node/with-action-states'
 export * from '@Pimcore/modules/data-object/tree/utils/transform-api-data-to-node'
 
 export * from '@Pimcore/modules/data-object/listing/listing-container'
+export * from '@Pimcore/modules/data-object/listing/builder/object-listing-builder'
+export * from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 export * from '@Pimcore/modules/data-object/data-object-provider'

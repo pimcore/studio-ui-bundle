@@ -47,7 +47,8 @@ export const ListingContainer = ({
   useColumnMapper = defaultProps.useColumnMapper,
   useDataQueryHelper,
   useDataQuery,
-  useElementId
+  useElementId,
+  toolbarSlotName
 }: ListingContainerProps): React.JSX.Element => {
   const settings = {
     ContextComponent,
@@ -59,7 +60,8 @@ export const ListingContainer = ({
     useColumnMapper,
     useDataQueryHelper,
     useDataQuery,
-    useElementId
+    useElementId,
+    toolbarSlotName
   }
 
   return (

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -24,7 +24,7 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
   const { styles } = useStyles()
 
   const tableColumns = useColumns()
-  const columnConfigurationsData = currentData?.columnConfigurations
+  const columnConfigurationsData = useMemo(() => currentData?.columnConfigurations ?? [], [currentData])
 
   const handleUpdateCellData = ({ rowIndex, columnId, value }): void => {
     const updatedColumnConfigurations = columnConfigurationsData?.map((item, index) => {
@@ -67,6 +67,7 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
         columns={ tableColumns }
         data={ columnConfigurationsData }
         enableRowDrag
+        enableRowVirtualizer
         handleDragEnd={ handleDragEnd }
         onUpdateCellData={ handleUpdateCellData }
         resizable
