@@ -30,6 +30,10 @@ import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 import { useDataObjectColumnMapper } from './column-mapper/use-column-mapper'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
+import { serviceIds, useInjection } from '@sdk/app'
+import { ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
+import { useListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -46,42 +50,15 @@ const defaultProps = {
   useColumnMapper: useDataObjectColumnMapper
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-const props = compose<AbstractDecoratorProps>(
-  ActionColumnDecorator,
-  SortingDecorator,
-  PagingDecorator,
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
-  ColumnConfigurationDecorator,
-  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
-  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  ContextMenuDecorator,
-  TagFilterDecorator,
-  GeneralFiltersDecorator
-)(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
-
 export const ListingContainer = (): React.JSX.Element => {
-  const { setHasLocalizedFields } = useLanguageSelection()
-
-  useEffect(() => {
-    setHasLocalizedFields(true)
-  }, [])
+  const listingBuilder = useInjection<ListingBuilder>(serviceIds['DataObject/Listing/Builder']);
 
   return (
-    <DynamicTypeRegistryProvider
-      serviceIds={ [
-        'DynamicTypes/ObjectDataRegistry',
-        'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry',
-        'DynamicTypes/BatchEditRegistry',
-        'DynamicTypes/FieldFilterRegistry'
-      ] }
-    >
-      <BaseListing
-        { ...props }
-      />
-    </DynamicTypeRegistryProvider>
+    <BaseListing 
+      { ...listingBuilder.build({
+          props: defaultProps,
+      })} 
+    />
   )
 }
 

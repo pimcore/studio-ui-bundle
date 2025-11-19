@@ -263,6 +263,7 @@ import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-objec
 import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
 import { ElementIconProcessorRegistry } from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
+import { ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -299,6 +300,7 @@ container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).in
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/VariantTabManager']).to(VariantTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+container.bind(serviceIds['DataObject/Listing/Builder']).to(ListingBuilder).inSingletonScope()
 
 // Data Object Processor Registries
 container.bind(serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']).to(DataObjectSaveDataProcessorRegistry).inSingletonScope()

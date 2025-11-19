@@ -12,5 +12,7 @@ import { type SettingsContextProps } from '../abstract/settings/settings-provide
 
 export interface AbstractDecoratorProps extends SettingsContextProps {};
 
-export type AbstractDecorator<T = unknown> = (props: AbstractDecoratorProps, config?: T) => AbstractDecoratorProps
-export type AbstractDecoratorWithRequiredConfig<T = unknown> = (props: AbstractDecoratorProps, config: T) => AbstractDecoratorProps
+export interface AbstractDecoratorConfig {};
+
+export type AbstractDecorator<T = AbstractDecoratorConfig> = (props: AbstractDecoratorProps, config?: T) => AbstractDecoratorProps
+export type AbstractDecoratorWithRequiredConfig<T = AbstractDecoratorConfig> = (props: AbstractDecoratorProps, config: T) => AbstractDecoratorProps

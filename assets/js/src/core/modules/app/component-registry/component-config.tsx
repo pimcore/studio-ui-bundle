@@ -65,6 +65,21 @@ const defaultComponentConfig = {
     }
   },
   dataObject: {
+    listing: {
+      component: {
+        type: ComponentType.SINGLE,
+        name: 'dataObject.listing'
+      },
+      toolbar: {
+        right: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.listing.toolbar.right',
+          defaultEntries: [
+            { name: 'pagination', priority: 100 },
+          ]
+        }
+      }
+    },
     editor: {
       toolbar: {
         slots: {

@@ -71,7 +71,7 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
     const currentContext = context?.config?.contextIdentifiers ?? []
     const baseContext = currentContext.filter(item => !item.includes('_selection'))
 
-    if (isEmpty(selectedIds) && currentContext.length > baseContext.length) {
+    if (isEmpty(selectedIds) && currentContext.length > baseContext.length && !isNil(context)) {
       setContext({ id: context.config.id, contextIdentifiers: baseContext })
 
       return
@@ -95,7 +95,7 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
           updatedContext.length === currentContext.length &&
           updatedContext.every((value, index) => value === currentContext[index])
 
-        if (!isSame) {
+        if (!isSame && !isNil(context)) {
           setContext({ id: context.config.id, contextIdentifiers: updatedContext })
         }
       }
