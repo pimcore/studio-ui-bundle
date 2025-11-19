@@ -22,6 +22,7 @@ export type ObjectListingBuilderConfig = ListingBuilderConfig & {
   'contextMenu'?: ListingBuilderConfigEntry
   'tagFilter'?: ListingBuilderConfigEntry
   'generalFilters'?: ListingBuilderConfigEntry
+  'globalContext'?: ListingBuilderConfigEntry
 }
 
 export interface ObjectListingBuilderOptions extends ListingBuilderBuildOptions {
