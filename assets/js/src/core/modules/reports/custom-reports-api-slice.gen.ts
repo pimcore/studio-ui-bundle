@@ -463,8 +463,6 @@ export type BundleCustomReportsTreeNode = {
     menuShortcut: boolean;
     /** report class */
     reportClass: string;
-    /** Whether the report has a data source configuration. */
-    hasDataSourceConfig: boolean;
 };
 export const {
     useCustomReportsListDrillDownOptionsQuery,
