@@ -263,12 +263,8 @@ import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-objec
 import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
 import { ElementIconProcessorRegistry } from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
-<<<<<<< HEAD
 import { ObjectListingBuilder } from '@sdk/modules/data-object'
 import { AssetListingBuilder } from '@Pimcore/modules/asset/listing/builder/asset-listing-builder'
-=======
-import { ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
->>>>>>> 6cfd31080ec898b5df200e0fb7bfb03d02960b39
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
