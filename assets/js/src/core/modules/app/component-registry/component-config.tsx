@@ -23,6 +23,28 @@ const defaultComponentConfig = {
     }
   },
   asset: {
+    listing: {
+      toolbar: {
+        component: {
+          type: ComponentType.SINGLE,
+          name: 'asset.listing.toolbar'
+        },
+        left: {
+          type: ComponentType.SLOT,
+          name: 'asset.listing.toolbar.left',
+          defaultEntries: [
+            { name: 'batch-actions', priority: 100 }
+          ]
+        },
+        right: {
+          type: ComponentType.SLOT,
+          name: 'asset.listing.toolbar.right',
+          defaultEntries: [
+            { name: 'pagination', priority: 100 }
+          ]
+        }
+      }
+    },
     editor: {
       container: { type: ComponentType.SINGLE, name: 'asset.editor.container' },
       tab: {
@@ -66,11 +88,18 @@ const defaultComponentConfig = {
   },
   dataObject: {
     listing: {
-      component: {
-        type: ComponentType.SINGLE,
-        name: 'dataObject.listing'
-      },
       toolbar: {
+        component: {
+          type: ComponentType.SINGLE,
+          name: 'dataObject.listing.toolbar'
+        },
+        left: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.listing.toolbar.left',
+          defaultEntries: [
+            { name: 'batch-actions', priority: 100 }
+          ]
+        },
         right: {
           type: ComponentType.SLOT,
           name: 'dataObject.listing.toolbar.right',
