@@ -11,13 +11,13 @@
 import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import {
   type ManyToOneRelationValueType
 } from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import cn from 'classnames'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
 import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
@@ -25,6 +25,7 @@ import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-objec
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { useStyles } from './path-target.styles'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -34,6 +35,7 @@ export interface PathTargetProps {
   inherited?: boolean
   combinedFieldName?: string
   pathFormatterClass?: string
+  onSearch?: () => void
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -42,7 +44,8 @@ export const PathTarget = forwardRef(function PathTarget (
 ): React.JSX.Element {
   const { t } = useTranslation()
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
-  const { getStateClasses } = useDroppable()
+  const { isDragActive, isOver, isValid } = useDroppable()
+  const { styles } = useStyles({ isDragActive, isOver, isValid, hasSearch: props.onSearch !== undefined })
   const { mapToElementType } = useElementHelper()
   const { formatPath } = useFormatPath()
   const { id: dataObjectId } = useDataObject()
@@ -122,6 +125,14 @@ export const PathTarget = forwardRef(function PathTarget (
     }
   }
 
+  const InputComponent = isUndefined(props.onSearch) ? Input : SearchInput
+  const searchProps = isUndefined(props.onSearch)
+    ? {}
+    : {
+        onSearch: props.onSearch,
+        maxWidth: '100%'
+      }
+
   return (
     <div
       ref={ ref }
@@ -131,9 +142,9 @@ export const PathTarget = forwardRef(function PathTarget (
         ? (
           <Flex
             align="center"
-            className={ cn(...getStateClasses()) }
           >
-            <Input
+            <InputComponent
+              className={ styles.input }
               disabled={ props.disabled }
               inherited={ props.inherited }
               prefix={
@@ -150,12 +161,13 @@ export const PathTarget = forwardRef(function PathTarget (
                 />
               }
               readOnly
+              { ...searchProps }
             />
           </Flex>
           )
         : (
-          <Input
-            className={ cn(...getStateClasses()) }
+          <InputComponent
+            className={ styles.input }
             disabled={ props.disabled }
             inherited={ props.inherited }
             onChange={ (e) => {
@@ -171,6 +183,7 @@ export const PathTarget = forwardRef(function PathTarget (
             prefix={ inputPrefix }
             readOnly={ props.allowPathTextInput !== true }
             value={ showElementTagPrefix ? undefined : displayText }
+            { ...searchProps }
           />
           )}
     </div>

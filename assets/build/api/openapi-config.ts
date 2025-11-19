@@ -186,6 +186,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
     },
+    '../../js/src/core/modules/element/search-replace-assignments/usage-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/elements\/usage\/?/i)
+    },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
     },

@@ -13,8 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { isEmpty, isEqual, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
-import type { DragAndDropInfo } from '@sdk/components'
-import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
@@ -22,16 +20,13 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import {
   createElementSelectorAreas,
   createElementSelectorConfig,
-  dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { PathTarget } from './path-target'
+import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
-import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
@@ -118,27 +113,11 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       } }
       vertical={ props.vertical }
     >
-      <div className={ styles.droppableWrapper }>
-        <Droppable
-          isValidContext={ (info: DragAndDropInfo) => isEnabled && isValidElementType(info.type) }
-          isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
-          onDrop={ (info: DragAndDropInfo) => {
-            const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
-
-            setValue(newValue ?? null)
-          } }
-        >
-          <PathTarget
-            allowPathTextInput={ props.allowPathTextInput }
-            combinedFieldName={ props.combinedFieldName }
-            disabled={ props.disabled }
-            inherited={ props.inherited }
-            onChange={ setValue }
-            pathFormatterClass={ props.pathFormatterClass }
-            value={ value }
-          />
-        </Droppable>
-      </div>
+      <ManyToOneRelationInput
+        { ...props }
+        onChange={ setValue }
+        value={ value }
+      />
       <Flex
         gap="extra-small"
         justify={ props.vertical === true ? 'start' : undefined }

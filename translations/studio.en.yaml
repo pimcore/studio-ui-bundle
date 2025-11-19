@@ -934,6 +934,7 @@ navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
+navigation.search-replace-assignments: Search & Replace Assignments
 navigation.sidebar-title: Navigation
 navigation.name: Name
 navigation.exclude: Exclude from Navigation
@@ -994,10 +995,25 @@ widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
+widget.search-replace-assignments: Search & Replace Assignments
 widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+search-replace-assignments.search-for: Search for
+search-replace-assignments.replace-with: Replace with
+search-replace-assignments.select-element: Select target element
+search-replace-assignments.search: Search
+search-replace-assignments.apply-to-all: Apply replacement to all
+search-replace-assignments.apply-to-selection: Apply replacement to selection
+search-replace-assignments.confirm.title: Confirm the replacement
+search-replace-assignments.confirm.description: Restoring replaced assignments can be a time-intensive process. Are you sure you want to apply it to all?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Type
+search-replace-assignments.columns.path: Path
+search-replace-assignments.job.title-all: Replace all assignments
+search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
+hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here
