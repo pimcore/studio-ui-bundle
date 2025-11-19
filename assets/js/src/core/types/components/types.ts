@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
+import type { AccessorFnColumnDef, ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
 import { type GridCellReference, type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { type ElementType } from 'react'
 import type React from 'react'
@@ -39,7 +39,7 @@ export type ListGridContextMenuComponents = ElementType<ListGridContextMenuProps
 
 export interface GridProps {
   data: any[]
-  columns: Array<ColumnDef<any>>
+  columns: Array<ColumnDef<any> | AccessorFnColumnDef<any>>
   resizable?: boolean
   docked?: boolean
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void

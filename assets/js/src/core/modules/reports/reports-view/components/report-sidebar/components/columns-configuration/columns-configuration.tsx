@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type AccessorKeyColumnDef } from '@tanstack/react-table'
+import { type AccessorFnColumnDef } from '@tanstack/react-table'
 import { Empty } from 'antd'
 import { isEmpty } from 'lodash'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
@@ -30,7 +30,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Title } from '@Pimcore/components/title/title'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
-type Column = AccessorKeyColumnDef<unknown, any>
+type Column = AccessorFnColumnDef<unknown, any>
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: Column
@@ -63,9 +63,9 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
 
   useEffect(() => {
     const newAddColumnMenu = initialColumns
-      ?.filter((initialColumn) => !columns.some((column) => initialColumn.accessorKey === column.accessorKey))
+      ?.filter((initialColumn) => !columns.some((column) => initialColumn.id === column.id))
       ?.map((column) => ({
-        key: column.accessorKey,
+        key: column.id ?? uuid(),
         label: column.header as string,
         onClick: () => { addColumn(column) }
       }))
