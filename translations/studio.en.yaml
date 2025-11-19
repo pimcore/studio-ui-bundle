@@ -1013,6 +1013,7 @@ search-replace-assignments.columns.type: Type
 search-replace-assignments.columns.path: Path
 search-replace-assignments.job.title-all: Replace all assignments
 search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
+hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here

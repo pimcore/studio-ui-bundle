@@ -34,6 +34,7 @@ interface SearchReplaceAssignmentsContextValue {
   isFormValid: boolean
   selectedRowsCount: number
   hasSelection: boolean
+  hasHidden: boolean
 
   // Handlers
   handleSearchForChange: (value: ManyToOneRelationValue | null) => void
@@ -80,6 +81,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
 
   const totalItems = data?.totalCount ?? 0
   const usageItems = data?.data ?? []
+  const hasHidden = data?.hasHidden ?? false
 
   const handleSearchForChange = (value: ManyToOneRelationValue | null): void => {
     setSearchFor(value)
@@ -203,6 +205,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
     isFormValid,
     selectedRowsCount,
     hasSelection,
+    hasHidden,
 
     // Handlers
     handleSearchForChange,
@@ -226,7 +229,8 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
     isLoading,
     isFormValid,
     selectedRowsCount,
-    hasSelection
+    hasSelection,
+    hasHidden
   ])
 
   return (

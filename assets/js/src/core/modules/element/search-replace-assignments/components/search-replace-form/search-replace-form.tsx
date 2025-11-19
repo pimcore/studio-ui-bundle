@@ -20,6 +20,7 @@ import { Box, Tooltip } from '@sdk/components'
 import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation/many-to-one-relation-input'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Alert } from '@Pimcore/components/alert/alert'
 
 export const SearchReplaceForm = (): React.JSX.Element => {
   const {
@@ -29,7 +30,8 @@ export const SearchReplaceForm = (): React.JSX.Element => {
     handleReplaceWithChange,
     handleSearch,
     handleApplyToAll,
-    isFormValid
+    isFormValid,
+    hasHidden
   } = useSearchReplaceAssignments()
   const [form] = Form.useForm()
 
@@ -116,6 +118,16 @@ export const SearchReplaceForm = (): React.JSX.Element => {
               </Flex>
             </Form.Item>
           </Form>
+
+          {hasHidden && (
+            <Box margin={ { top: 'small' } }>
+              <Alert
+                banner
+                message={ t('hidden-dependencies-warning') }
+                type="warning"
+              />
+            </Box>
+          )}
         </Box>
       </Content>
     </>
