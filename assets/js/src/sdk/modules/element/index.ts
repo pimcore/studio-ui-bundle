@@ -251,3 +251,6 @@ export * from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-
 export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+
+export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
+export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'

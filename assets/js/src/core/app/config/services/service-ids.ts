@@ -72,6 +72,7 @@ export const serviceIds = {
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/VariantTabManager': 'DataObject/Editor/VariantTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
+  'DataObject/Listing/Builder': 'DataObject/Listing/Builder',
 
   // Documents
   'Document/Editor/TypeRegistry': 'Document/Editor/TypeRegistry',
