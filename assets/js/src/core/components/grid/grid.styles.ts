@@ -21,6 +21,7 @@ export interface UseStylesProps {
 export const useStyles = createStyles(({ token, css }, { size = 'normal', enableVirtualizer = false }: UseStylesProps) => {
   const rowHeight = size === 'small' ? 32 : 41
   const rowHeightValue = enableVirtualizer ? 'auto' : `${rowHeight}px`
+  const paddingValue = size !== 'small' && enableVirtualizer ? `${token.paddingXXS}px 0 !important` : 0
 
   const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
     content: '';
@@ -190,6 +191,10 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
 
       .ant-table-row {
         height: ${rowHeightValue};
+          
+        .ant-table-cell {
+          padding: ${paddingValue};
+        }
       }
 
       .ant-table-content {
