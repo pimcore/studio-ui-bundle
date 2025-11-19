@@ -36,7 +36,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber, isFunction } from 'lodash'
+import { isEmpty, isNumber, isFunction, isNull } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -106,21 +106,25 @@ export const Grid = ({
   allowMultipleAutoWidthColumns = false,
   enableRowDrag,
   handleDragEnd,
+  enableVirtualizer = false,
   size = 'normal',
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash()
-  const { styles } = useStyles({ size })
+  const { styles } = useStyles({ size, enableVirtualizer })
+
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
+
   const tableElement = useRef<HTMLTableElement>(null)
   const scrollElementRef = useRef<HTMLDivElement>(null)
+  const autoColumnRef = useRef<HTMLTableCellElement>(null)
+
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
-  const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 
   const sensors = useSensors(useSensor(PointerSensor))
@@ -282,27 +286,28 @@ export const Grid = ({
     </div>
   )
 
-  const rows = table.getRowModel().rows
+  const rowsList = table.getRowModel().rows
 
   const rowVirtualizer = useVirtualizer({
-    count: table.getRowModel().rows.length,
+    count: rowsList.length,
     getScrollElement: () => scrollElementRef.current,
     estimateSize: () => 33,
     overscan: 5,
-    measureElement: (el) => el.getBoundingClientRect().height
+    measureElement: (el) => el.getBoundingClientRect().height,
+    enabled: enableVirtualizer
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
-  console.log('---->>>> all data: ', table.getRowModel().rows.length)
-  console.log('---->>>> virtualRows: ', virtualRows)
   const visibleRowIds = useMemo(() => {
-    return virtualRows.map(v => rows[v.index].id)
-  }, [virtualRows, rows])
+    if (!enableVirtualizer) return rowsList.map(row => row.id)
+
+    return virtualRows.map(v => rowsList[v.index].id)
+  }, [virtualRows, rowsList, enableVirtualizer])
 
   const onDragEndInternal = (event: DragEndEvent): void => {
     handleDragEnd?.(event)
 
     requestAnimationFrame(() => {
-      if (!tableElement.current) return
+      if (isNull(tableElement.current)) return
 
       const tableRows = tableElement.current.querySelectorAll<HTMLElement>('tbody > tr')
 
@@ -312,34 +317,41 @@ export const Grid = ({
     })
   }
 
-  const renderRows = (): React.JSX.Element[] => (
-    virtualRows.map(vRow => {
-      const row = table.getRowModel().rows[vRow.index]
+  const renderRows = (): React.JSX.Element[] => {
+    const rowsData = enableVirtualizer
+      ? virtualRows.map(vRow => ({
+        row: rowsList[vRow.index],
+        virtualIndex: vRow.index,
+        rowStyle: { position: 'absolute', top: `${vRow.start}px` },
+        measureElement: rowVirtualizer.measureElement
+      }))
+      : rowsList.map(row => ({
+        row,
+        virtualIndex: undefined,
+        rowStyle: {},
+        measureElement: undefined
+      }))
 
-      return (
-        <GridRow
-          activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-          columns={ columns }
-          contextMenu={ props.contextMenu }
-          enableRowDrag={ enableRowDrag }
-          isSelected={ row.getIsSelected() }
-          key={ row.id }
-          measureElement={ rowVirtualizer.measureElement }
-          modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-          onFocusCell={ onFocusCell }
-          onRowDoubleClick={ props.onRowDoubleClick }
-          row={ row }
-          size={ size }
-          styleProp={ {
-            position: 'absolute',
-            top: `${vRow?.start ?? 0}px`
-          } }
-          tableElement={ tableElement }
-          virtualIndex={ vRow.index }
-        />
-      )
-    })
-  )
+    return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
+      <GridRow
+        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
+        columns={ columns }
+        contextMenu={ props.contextMenu }
+        enableRowDrag={ enableRowDrag }
+        isSelected={ row.getIsSelected() }
+        key={ row.id }
+        measureElement={ measureElement }
+        modifiedCells={ JSON.stringify(getModifiedRow(`${row.id}`)) }
+        onFocusCell={ onFocusCell }
+        onRowDoubleClick={ props.onRowDoubleClick }
+        row={ row }
+        rowStyle={ rowStyle }
+        size={ size }
+        tableElement={ tableElement }
+        virtualIndex={ virtualIndex }
+      />
+    ))
+  }
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
@@ -413,13 +425,9 @@ export const Grid = ({
                 )}
                 <tbody
                   className="ant-table-tbody"
-                  style={ {
-                    height: `${rowVirtualizer.getTotalSize()}px`,
-                    position: 'relative',
-                    width: '100%'
-                  } }
+                  style={ { height: enableVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : 'initial' } }
                 >
-                  {table.getRowModel().rows.length === 0 && (
+                  {rowsList.length === 0 && (
                   <tr className={ 'ant-table-row' }>
                     <td
                       className='ant-table-cell ant-table-cell__no-data'

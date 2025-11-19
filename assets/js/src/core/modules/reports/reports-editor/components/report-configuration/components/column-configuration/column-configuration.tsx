@@ -66,6 +66,7 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
         className={ styles.grid }
         columns={ tableColumns }
         data={ columnConfigurationsData }
+        enableVirtualizer
         enableRowDrag
         handleDragEnd={ handleDragEnd }
         onUpdateCellData={ handleUpdateCellData }

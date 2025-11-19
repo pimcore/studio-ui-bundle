@@ -12,6 +12,7 @@ import React, { type CSSProperties, useCallback, useLayoutEffect, useMemo, useRe
 import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { isNull } from 'lodash'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
@@ -19,7 +20,6 @@ import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { createTableRowTestId } from '@Pimcore/utils/test-id-generator'
-import { isNull } from 'lodash'
 
 export interface GridRowProps {
   row: Row<any>
@@ -33,12 +33,12 @@ export interface GridRowProps {
   onRowDoubleClick?: GridProps['onRowDoubleClick']
   enableRowDrag?: boolean
   size?: GridProps['size']
-  styleProp?: CSSProperties
-  measureElement: (node: HTMLElement | null) => void
+  rowStyle?: CSSProperties
+  measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, styleProp, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -53,7 +53,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, styleProp, ...
   useLayoutEffect(() => {
     if (isDragging || isNull(internalNodeRef.current)) return
 
-    props.measureElement(internalNodeRef.current)
+    props?.measureElement?.(internalNodeRef.current)
   }, [isDragging, props.measureElement])
 
   const style: CSSProperties = {
@@ -62,7 +62,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, styleProp, ...
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
     position: 'relative',
-    ...styleProp
+    ...rowStyle
   }
 
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])

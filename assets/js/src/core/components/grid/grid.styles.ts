@@ -15,10 +15,12 @@ const BORDER_WIDTH = 1
 
 export interface UseStylesProps {
   size?: GridProps['size']
+  enableVirtualizer?: boolean
 }
 
-export const useStyles = createStyles(({ token, css }, { size = 'normal' }: UseStylesProps) => {
+export const useStyles = createStyles(({ token, css }, { size = 'normal', enableVirtualizer = false }: UseStylesProps) => {
   const rowHeight = size === 'small' ? 32 : 41
+  const rowHeightValue = enableVirtualizer ? 'auto' : `${rowHeight}px`
 
   const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
     content: '';
@@ -187,7 +189,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal' }: UseS
       }
 
       .ant-table-row {
-        //height: ${rowHeight}px;
+        height: ${rowHeightValue};
       }
 
       .ant-table-content {
@@ -197,6 +199,9 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal' }: UseS
         }
           
           .ant-table-tbody {
+            position: relative;
+            width: 100%;
+              
             .ant-table-row:last-of-type {
               .ant-table-cell:first-of-type {
                 border-bottom-left-radius: 8px;
