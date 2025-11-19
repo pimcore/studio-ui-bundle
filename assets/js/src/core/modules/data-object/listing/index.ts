@@ -7,6 +7,7 @@ import { ListingBuilder } from "@Pimcore/modules/element/listing/abstract/builde
 import { ActionColumnDecorator, ClassDefinitionSelectionDecorator, ClassDefinitionSelectionDecoratorConfig, ColumnConfigurationDecorator, ContextMenuDecorator, GeneralFiltersDecorator, InlineEditDecorator, IRowSelectionDecoratorConfig, PagingDecorator, RowSelectionDecorator, SortingDecorator, TagFilterDecorator, useInlineEditApiUpdate } from "@sdk/modules/data-object";
 import { IInlineEditDecoratorConfig, IInlineEditDecoratorProps } from "@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator";
 import { DynamicTypeDecorator } from "@Pimcore/modules/data-object/listing/decorator/dynamic-type/dynamic-type-decorator";
+import { GlobalContextDecorator } from "@Pimcore/modules/element/listing/decorators/global-context/global-context-decorator";
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -22,6 +23,11 @@ moduleSystem.registerModule({
     listingBuilder.addDecorator({
       name: 'actionColumn',
       decorator: ActionColumnDecorator,
+    })
+
+    listingBuilder.addDecorator({
+      name: 'globalContext',
+      decorator: GlobalContextDecorator,
     })
 
     listingBuilder.addDecorator({
