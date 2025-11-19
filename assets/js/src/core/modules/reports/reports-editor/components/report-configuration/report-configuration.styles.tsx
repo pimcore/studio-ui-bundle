@@ -17,6 +17,12 @@ export const useStyles = createStyles(({ css, token }) => {
       width: 100%;
       max-height: 500px;
       overflow: auto;
+        
+      tbody {
+        .default-cell__content {
+          height: 32px;
+        }
+      }
     `,
 
     permissionLabel: css`
