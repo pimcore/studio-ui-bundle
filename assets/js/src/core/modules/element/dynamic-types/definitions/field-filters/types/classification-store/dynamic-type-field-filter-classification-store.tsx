@@ -46,9 +46,9 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
 
     const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
     const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiRequest(filter)
-    const filterType = objectType.dynamicTypeFieldFilterType.getFieldFilterType();
+    const filterType = objectType.dynamicTypeFieldFilterType.getFieldFilterType()
 
-    const splittedType = filterType!.split('.')
+    const splittedType = filterType.split('.')
     splittedType[0] = 'classificationstore'
     filter.type = splittedType.join('.')
 

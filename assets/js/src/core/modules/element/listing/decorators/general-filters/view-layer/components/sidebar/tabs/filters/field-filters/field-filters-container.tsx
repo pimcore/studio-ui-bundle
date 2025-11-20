@@ -15,7 +15,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { filter, isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
@@ -105,7 +105,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
           keyId: item.id,
           translationKey: fieldDefinition.title
         },
-        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
       }
     })
 
@@ -149,7 +149,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         localizable: column.localizable,
         locale: column.locale,
         config: column.config,
-        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
+        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
       }
     ])
   }
@@ -169,7 +169,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       return false
     }
 
-    if ((dynamicType instanceof DynamicTypeFieldFilterAbstract) === false) {
+    if (!(dynamicType instanceof DynamicTypeFieldFilterAbstract)) {
       if ('dynamicTypeFieldFilterType' in dynamicType) {
         dynamicType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
       } else {
@@ -177,7 +177,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       }
     }
 
-    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null);
+    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null)
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {

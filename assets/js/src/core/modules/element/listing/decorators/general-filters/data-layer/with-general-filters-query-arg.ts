@@ -60,7 +60,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
           return
         }
 
-        if (type instanceof DynamicTypeFieldFilterAbstract === false) {
+        if (!(type instanceof DynamicTypeFieldFilterAbstract)) {
           if ('dynamicTypeFieldFilterType' in type) {
             type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
           } else {

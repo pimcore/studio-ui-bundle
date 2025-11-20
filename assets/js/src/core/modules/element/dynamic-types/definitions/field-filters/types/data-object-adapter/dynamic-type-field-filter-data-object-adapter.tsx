@@ -15,9 +15,9 @@ import {
   DynamicTypeFieldFilterObjectAdapterComponent,
   type DynamicTypeFieldFilterObjectAdapterProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
-import { FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { container, serviceIds } from '@sdk/app'
-import { DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
+import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
 
 @injectable()
 export class DynamicTypeFieldFilterObjectAdapter extends DynamicTypeFieldFilterAbstract {
@@ -27,9 +27,9 @@ export class DynamicTypeFieldFilterObjectAdapter extends DynamicTypeFieldFilterA
     return true
   }
 
-  isFilterAvailable(subtype: string | null): boolean {
+  isFilterAvailable (subtype: string | null): boolean {
     if (subtype === null) {
-      return false;
+      return false
     }
 
     const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
