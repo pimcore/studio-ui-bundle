@@ -41,7 +41,7 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
       const jobRunId = await this.executeDeleteRequest()
 
       if (isNil(jobRunId)) {
-        await this.handleCompletion()
+        await this.handleJobFailure(new Error('No jobRunId returned from delete request'))
         return
       }
 
