@@ -73,7 +73,7 @@ export const SearchReplaceForm = (): React.JSX.Element => {
                   />
                 </div>
                 <Button
-                  disabled={ searchFor === null } 
+                  disabled={ searchFor === null }
                   onClick={ handleSearch }
                   type="default"
                 >{t('search-replace-assignments.search')}
