@@ -21,6 +21,7 @@ dayjs.extend(timezone)
 
 interface UseDateConverterResult {
   convertToTimestamp: (dateString: string, asMilliseconds?: boolean, respectServerTimezone?: boolean) => number | null
+  convertToDateString: ({ timestamp, asMilliseconds, respectServerTimezone, format }: { timestamp: number, asMilliseconds?: boolean, respectServerTimezone?: boolean, format: string }) => string | null
 }
 
 export const useDateConverter = (): UseDateConverterResult => {
@@ -46,7 +47,26 @@ export const useDateConverter = (): UseDateConverterResult => {
     }
   }, [timezone])
 
+  const convertToDateString = useCallback(({ timestamp, asMilliseconds = true, respectServerTimezone = true, format = '' }: { timestamp: number, asMilliseconds?: boolean, respectServerTimezone?: boolean, format?: string }): string | null => {
+    try {
+      const normalizedTimestamp = asMilliseconds ? timestamp : timestamp * 1000
+
+      let date = dayjs(normalizedTimestamp)
+
+      if (respectServerTimezone && isNonEmptyString(timezone)) {
+        date = date.tz(timezone)
+      }
+
+      return isNonEmptyString(format) ? date.format(format) : date.toISOString()
+    } catch (error) {
+      console.error('Failed to convert timestamp to date:', error)
+      return null
+    }
+  },
+  [timezone])
+
   return {
-    convertToTimestamp
+    convertToTimestamp,
+    convertToDateString
   }
 }
