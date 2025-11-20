@@ -55,6 +55,8 @@ export const useDateConverter = (): UseDateConverterResult => {
 
       if (respectServerTimezone && isNonEmptyString(timezone)) {
         date = date.tz(timezone)
+      } else {
+        date = dayjs(normalizedTimestamp)
       }
 
       return isNonEmptyString(format) ? date.format(format) : date.toISOString()
