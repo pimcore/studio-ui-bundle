@@ -43,7 +43,20 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     return true
   }
 
-  transformFilterToApiResponse (filter: FieldFilter): FieldFilter {
-    return filter
+  isFilterAvailable (subtype: string | null): boolean {
+    return true
+  }
+
+  transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    const isMetadataFilter = filter.type.startsWith('metadata.')
+
+    if (isMetadataFilter) {
+      return filter
+    }
+
+    return {
+      ...filter,
+      type: this.getFieldFilterType()
+    }
   }
 }

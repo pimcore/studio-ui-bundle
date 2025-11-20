@@ -23,12 +23,13 @@ export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbs
     return FieldFilterFrontendType.Select
   }
 
-  transformFilterToApiResponse (filter: FieldFilter): FieldFilter {
+  transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
     const transformedFilter = { ...filter }
     if (Array.isArray(filter.filterValue)) {
       transformedFilter.filterValue = filter.filterValue.map(String)
     }
-    return transformedFilter
+
+    return super.transformFilterToApiRequest(transformedFilter)
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
