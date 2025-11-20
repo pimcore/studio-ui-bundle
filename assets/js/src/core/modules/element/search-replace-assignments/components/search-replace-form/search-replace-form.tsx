@@ -73,15 +73,12 @@ export const SearchReplaceForm = (): React.JSX.Element => {
                     value={ searchFor }
                   />
                 </div>
-
-                <Tooltip title={ t('search-replace-assignments.search') }>
-                  <IconButton
-                    disabled={ searchFor === null }
-                    icon={ { value: 'folder-search' } }
-                    onClick={ handleSearch }
-                    type="default"
-                  />
-                </Tooltip>
+                <Button
+                  disabled={ searchFor === null } 
+                  onClick={ handleSearch }
+                  type="default"
+                >{t('search-replace-assignments.search')}
+                </Button>
               </Flex>
             </Form.Item>
             <Form.Item
