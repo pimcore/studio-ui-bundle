@@ -20,7 +20,7 @@ import { useStyles } from './job-view.styles'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 
-interface ButtonAction {
+export interface ButtonAction {
   label: string
   handler: () => void | Promise<void>
 }

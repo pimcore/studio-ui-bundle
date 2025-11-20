@@ -29,6 +29,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   protected readonly config: TConfig
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
+  protected readonly onRetry?: () => void | Promise<void>
 
   private lastProgressValue: number = -1
 
@@ -44,6 +45,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
 
     this.jobType = options.jobType ?? 'default-message-bus'
     this.onJobCompletion = options.onJobCompletion
+    this.onRetry = options.onRetry
   }
 
   /**
@@ -90,7 +92,8 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
       config: {
         ...this.config,
         progress: this.config.progress ?? 0
-      }
+      },
+      onRetry: this.onRetry
     }
   }
 
@@ -217,4 +220,5 @@ export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
   config: TConfig
   jobType?: string
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
+  onRetry?: () => void | Promise<void>
 }

@@ -9,10 +9,11 @@
  */
 
 import React from 'react'
-import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-view'
+import { JobView, type ButtonAction } from '@Pimcore/modules/execution-engine/notification/job/job-view'
 import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
 
 export interface MessageBusJobProps extends JobProps {
@@ -23,14 +24,26 @@ export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.E
   const { removeJob } = useJobs()
   const { t } = useTranslation()
 
+  const failureButtonActions: ButtonAction[] = []
+
+  if (!isUndefined(props.onRetry)) {
+    failureButtonActions.push({
+      label: t('jobs.job.button-retry'),
+      handler: () => {
+        void props.onRetry?.()
+        removeJob(props.id)
+      }
+    })
+  }
+
+  failureButtonActions.push({
+    label: t('jobs.job.button-hide'),
+    handler: () => { removeJob(props.id) }
+  })
+
   return (
     <JobView
-      failureButtonActions={ [
-        {
-          label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(props.id) }
-        }
-      ] }
+      failureButtonActions={ failureButtonActions }
 
       finishedWithErrorsButtonActions={ [
         {

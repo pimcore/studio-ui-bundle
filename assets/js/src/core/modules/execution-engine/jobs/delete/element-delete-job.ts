@@ -15,7 +15,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { type BaseJobConfig, type JobCompletionData } from '../../message-handlers/default-job-handler'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 
 export interface DeleteJobConfig extends BaseJobConfig {
@@ -74,12 +74,19 @@ export class DeleteJob implements JobInterface {
       const handler = new StepBasedProgressJobHandler({
         jobRunId,
         config: this.getJobConfig(),
-        onJobCompletion: async (data: any) => {
-          try {
-            await this.handleCompletion()
-          } catch (error) {
-            await this.handleJobFailure(error)
+        onJobCompletion: async (data: JobCompletionData) => {
+          if (data.isFinished) {
+            try {
+              await this.handleCompletion()
+            } catch (error) {
+              await this.handleJobFailure(error)
+            }
+          } else {
+            await this.handleJobFailure(new Error(`Job failed with status: ${data.status}`))
           }
+        },
+        onRetry: async () => {
+          await this.run(options)
         }
       })
 

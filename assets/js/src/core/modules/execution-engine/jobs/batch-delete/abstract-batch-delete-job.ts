@@ -58,6 +58,9 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
           } else {
             await this.handleJobFailure(new Error(`Job failed with status: ${data.status}`))
           }
+        },
+        onRetry: async () => {
+          await this.run(options)
         }
       })
 
