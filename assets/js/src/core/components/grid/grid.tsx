@@ -182,7 +182,7 @@ export const Grid = ({
     }
   })
 
-  useEffect(() => {
+  useMemo(() => {
     updateRowSelectionColumn()
   }, [columns, isRowSelectionEnabled, selectedRows])
 
