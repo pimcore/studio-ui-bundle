@@ -8,15 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import {
-  type TagBatchOperationToElementsByTypeAndIdApiArg,
-  useTagBatchOperationToElementsByTypeAndIdMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
+import { TagAssignJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/tag-assign-job'
+import { useTranslation } from 'react-i18next'
 
 interface UseShortcutActionsReturn {
   removeAndApplyTagsToChildren: () => Promise<void>
@@ -25,44 +22,29 @@ interface UseShortcutActionsReturn {
 
 export const useShortcutActions = (): UseShortcutActionsReturn => {
   const { id, elementType } = useElementContext()
-  const [tagBatchMutation] = useTagBatchOperationToElementsByTypeAndIdMutation()
-  const { addJob } = useJobs()
-
-  const assignTags = async (operation: TagBatchOperationToElementsByTypeAndIdApiArg['operation']): Promise<number> => {
-    const assignTask = tagBatchMutation({
-      elementType,
-      id,
-      operation
-    })
-
-    assignTask.catch(() => {
-      console.log('Failed to apply tags to children')
-    })
-
-    const response = await assignTask
-
-    if (response.error !== undefined) {
-      trackError(new ApiError(response.error))
-    }
-
-    const data = response.data!
-    return data.jobRunId
-  }
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
+  const { t } = useTranslation()
 
   const applyTagsToChildren = async (): Promise<void> => {
-    addJob(createJob({
-      title: 'Assign tags to children',
-      topics: [topics['tag-assignment-finished'], ...defaultTopics],
-      action: async () => await assignTags('assign')
-    }))
+    const job = new TagAssignJob({
+      elementType,
+      elementId: id,
+      operation: 'assign',
+      title: t('tags.apply-tags-to-children')
+    })
+
+    await executionEngine.runJob(job)
   }
 
   const removeAndApplyTagsToChildren = async (): Promise<void> => {
-    addJob(createJob({
-      title: 'Replace and assign tags to children',
-      topics: [topics['tag-replacement-finished'], ...defaultTopics],
-      action: async () => await assignTags('replace')
-    }))
+    const job = new TagAssignJob({
+      elementType,
+      elementId: id,
+      operation: 'replace',
+      title: t('tags.remove-and-apply-tags-to-children')
+    })
+
+    await executionEngine.runJob(job)
   }
 
   return {

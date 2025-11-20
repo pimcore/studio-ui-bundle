@@ -33,12 +33,12 @@ export interface DeleteJobOptions {
 }
 
 export class DeleteJob implements JobInterface {
-  protected readonly elementId: number
-  protected readonly elementType: ElementType
-  protected readonly title: string
-  protected readonly treeId?: string
-  protected readonly nodeId?: string
-  protected readonly parentFolderId?: number
+  private readonly elementId: number
+  private readonly elementType: ElementType
+  private readonly title: string
+  private readonly treeId?: string
+  private readonly nodeId?: string
+  private readonly parentFolderId?: number
 
   constructor (options: DeleteJobOptions) {
     this.elementId = options.elementId
@@ -90,7 +90,7 @@ export class DeleteJob implements JobInterface {
     }
   }
 
-  protected async executeDeleteRequest (): Promise<string | number | null> {
+  private async executeDeleteRequest (): Promise<string | number | null> {
     const response = await store.dispatch(
       elementApi.endpoints.elementDelete.initiate({
         id: this.elementId,
@@ -106,7 +106,7 @@ export class DeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  protected getJobConfig (): DeleteJobConfig {
+  private getJobConfig (): DeleteJobConfig {
     return {
       title: this.title,
       progress: 0,
@@ -115,7 +115,7 @@ export class DeleteJob implements JobInterface {
     }
   }
 
-  protected async handleCompletion (): Promise<void> {
+  private async handleCompletion (): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
@@ -134,7 +134,7 @@ export class DeleteJob implements JobInterface {
     }
   }
 
-  protected async handleJobFailure (error: any): Promise<void> {
+  private async handleJobFailure (error: any): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }

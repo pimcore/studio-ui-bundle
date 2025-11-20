@@ -14,54 +14,46 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { DefaultJobHandler, type BaseJobConfig } from '../../message-handlers/default-job-handler'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { api } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
+import { api, type TagBatchOperationToElementsByTypeAndIdApiArg } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 
-export interface RecycleBinDeleteJobConfig extends BaseJobConfig {
-  elementTypes: ElementType[]
+export interface TagAssignJobConfig extends BaseJobConfig {
+  elementType: ElementType
+  elementId: number
 }
 
-export interface RecycleBinDeleteJobOptions {
-  itemIds: number[]
-  elementTypes: ElementType[]
+export interface TagAssignJobOptions {
+  elementType: ElementType
+  elementId: number
+  operation: TagBatchOperationToElementsByTypeAndIdApiArg['operation']
   title: string
-  onFinish?: () => void
 }
 
-export class RecycleBinDeleteJob implements JobInterface {
-  private readonly itemIds: number[]
-  private readonly elementTypes: ElementType[]
+export class TagAssignJob implements JobInterface {
+  private readonly elementType: ElementType
+  private readonly elementId: number
+  private readonly operation: TagBatchOperationToElementsByTypeAndIdApiArg['operation']
   private readonly title: string
-  private readonly onFinish?: () => void
 
-  constructor (options: RecycleBinDeleteJobOptions) {
-    this.itemIds = options.itemIds
-    this.elementTypes = options.elementTypes
+  constructor (options: TagAssignJobOptions) {
+    this.elementType = options.elementType
+    this.elementId = options.elementId
+    this.operation = options.operation
     this.title = options.title
-    this.onFinish = options.onFinish
   }
 
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
 
     try {
-      const jobRunId = await this.executeDeleteRequest()
+      const jobRunId = await this.executeRequest()
 
       if (isNil(jobRunId)) {
-        await this.handleCompletion()
         return
       }
 
       const handler = new DefaultJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
-        onJobCompletion: async (data: any) => {
-          try {
-            await this.handleCompletion()
-          } catch (error) {
-            await this.handleJobFailure(error)
-          }
-        }
+        config: this.getJobConfig()
       })
 
       messageBus.registerHandler(handler)
@@ -71,12 +63,12 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  private async executeDeleteRequest (): Promise<string | number | null> {
+  private async executeRequest (): Promise<string | number | null> {
     const response = await store.dispatch(
-      api.endpoints.recycleBinDeleteItems.initiate({
-        body: {
-          items: this.itemIds
-        }
+      api.endpoints.tagBatchOperationToElementsByTypeAndId.initiate({
+        elementType: this.elementType,
+        id: this.elementId,
+        operation: this.operation
       })
     )
 
@@ -88,26 +80,16 @@ export class RecycleBinDeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  private getJobConfig (): RecycleBinDeleteJobConfig {
+  private getJobConfig (): TagAssignJobConfig {
     return {
       title: this.title,
       progress: 0,
-      elementTypes: this.elementTypes
+      elementType: this.elementType,
+      elementId: this.elementId
     }
   }
 
-  private async handleCompletion (): Promise<void> {
-    // Refresh the recycle bin data
-    store.dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.RECYCLING_BIN()
-      )
-    )
-
-    this.onFinish?.()
-  }
-
   private async handleJobFailure (error: any): Promise<void> {
-    console.error('Recycle bin delete job failed:', error)
+    console.error('Tag assign job failed:', error)
   }
 }
