@@ -24,14 +24,10 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
-import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { elementTypes } from '@sdk/modules/data-object'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const { useElementId } = useSettings()
-  const { getId } = useElementId()
-  const id = getId()
   const elementType = elementTypes.dataObject
   const { refreshGrid } = useRefreshGrid(elementType)
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)

@@ -10,7 +10,6 @@
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useEffect, useState } from 'react'
-import { isUndefined } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
   useAssetGetByIdQuery
