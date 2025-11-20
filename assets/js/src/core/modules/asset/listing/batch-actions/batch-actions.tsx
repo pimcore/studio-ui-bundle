@@ -10,11 +10,9 @@
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useEffect, useState } from 'react'
-import { isUndefined } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
-  useAssetGetByIdQuery,
-  useAssetBatchDeleteMutation
+  useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -25,10 +23,10 @@ import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
 import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-modal/csv-modal'
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { AssetBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/asset-batch-delete-job'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
@@ -37,12 +35,11 @@ export const BatchActions = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const { addJob } = useJobs()
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const { refreshGrid } = useRefreshGrid(elementType)
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
-  const [batchDelete] = useAssetBatchDeleteMutation()
   const { data } = useAssetGetByIdQuery({ id })
 
   const [jobTitle, setJobTitle] = useState<string>('Asset')
@@ -62,32 +59,22 @@ export const BatchActions = (): React.JSX.Element => {
     return <></>
   }
 
-  const { selectedRows } = rowSelection
+  const { selectedRows, setSelectedRows } = rowSelection
 
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
-  const handleBatchDelete = (): void => {
-    addJob(createJob({
+  const handleBatchDelete = async (): Promise<void> => {
+    const job = new AssetBatchDeleteJob({
+      itemIds: numberedSelectedRows,
       title: t('batch-delete.job-title'),
-      topics: [topics['batch-deletion-finished'], ...defaultTopics],
-      action: async () => {
-        const response = await batchDelete({
-          body: {
-            ids: numberedSelectedRows
-          }
-        })
+      onFinish: async () => {
+        await refreshGrid()
+        setSelectedRows({})
+      }
+    })
 
-        if (isUndefined(response.data?.jobRunId)) {
-          trackError(new GeneralError('JobRunId is undefined'))
-          throw new Error('JobRunId is undefined')
-        }
-
-        return response.data?.jobRunId
-      },
-      refreshGrid,
-      assetContextId: id
-    }))
+    await executionEngine.runJob(job)
   }
 
   const menu: DropdownMenuProps = {

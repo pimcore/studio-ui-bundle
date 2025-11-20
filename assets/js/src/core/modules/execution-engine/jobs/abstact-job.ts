@@ -27,4 +27,5 @@ export interface AbstractJob {
   status: JobStatus
   topics: NonEmptyArray<(typeof topics)[string]>
   config: unknown
+  onRetry?: () => void | Promise<void>
 }
