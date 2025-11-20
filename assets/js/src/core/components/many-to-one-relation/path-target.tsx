@@ -130,6 +130,7 @@ export const PathTarget = forwardRef(function PathTarget (
     ? {}
     : {
         onSearch: props.onSearch,
+        searchButtonIcon: 'folder-search',
         maxWidth: '100%'
       }
 
