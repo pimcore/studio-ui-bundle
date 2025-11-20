@@ -41,17 +41,16 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     return objectType.dynamicTypeFieldFilterType.shouldApply(filter)
   }
 
-  transformFilterToApiResponse (filter: FieldFilter): any {
-    const { filterType } = filter
-
-    const splittedType = filterType!.split('.')
-    splittedType[0] = 'classificationstore'
-    filter.filterType = splittedType.join('.')
-
+  transformFilterToApiRequest (filter: FieldFilter): any {
     const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
     const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
-    const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiResponse(filter)
+    const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiRequest(filter)
+    const filterType = objectType.dynamicTypeFieldFilterType.getFieldFilterType();
+
+    const splittedType = filterType!.split('.')
+    splittedType[0] = 'classificationstore'
+    filter.type = splittedType.join('.')
 
     return {
       ...filter,

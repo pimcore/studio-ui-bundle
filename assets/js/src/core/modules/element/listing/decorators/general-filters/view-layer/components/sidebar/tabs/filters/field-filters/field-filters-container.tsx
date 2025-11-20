@@ -15,19 +15,17 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { isEmpty, isNil } from 'lodash'
+import { filter, isEmpty, isNil } from 'lodash'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useFilter } from '../provider/filter-provider/use-filter'
-import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
-
-const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -52,7 +50,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         translationKey: filter.meta?.translationKey ?? filter.key,
         data: filter.filterValue,
         type: filter.type,
-        filterType: filter?.filterType,
         frontendType: currentColumn?.frontendType,
         localizable: currentColumn?.localizable,
         locale: filter?.locale,
@@ -70,7 +67,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     setFilters(data)
     setFieldFilters(data.map((filter) => ({
       key: filter.id,
-      filterType: filter?.filterType,
       filterValue: filter.data,
       type: filter.type,
       locale: filter.locale,
@@ -95,16 +91,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     const newFilters = data.data.map((item) => {
       const fieldDefinition = item.definition
 
-      const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [fieldDefinition.fieldtype!] })
-
-      let inferredFilterType: DynamicTypeFieldFilterAbstract | null = null
-
-      if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
-        inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-      } else if (objectDataByFrontendType !== null) {
-        inferredFilterType = objectDataByFrontendType as DynamicTypeFieldFilterAbstract
-      }
-
       return {
         data: undefined,
         id: column.key,
@@ -120,7 +106,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
           translationKey: fieldDefinition.title
         },
         nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
-        ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     })
 
@@ -148,19 +133,9 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }
 
   const handleColumnClick = (column: AvailableColumn): void => {
-    const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
-
     if (column.type === 'dataobject.classificationstore' && classDefinitionContext !== undefined) {
       handleClassificationStoreClick(column)
       return
-    }
-
-    let inferredFilterType: DynamicTypeFieldFilterAbstract | null = null
-
-    if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
-      inferredFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-    } else if (objectDataByFrontendType !== null) {
-      inferredFilterType = objectDataByFrontendType as DynamicTypeFieldFilterAbstract
     }
 
     setFilters((prevFilters) => [
@@ -175,29 +150,34 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         locale: column.locale,
         config: column.config,
         nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined,
-        ...(inferredFilterType !== null && { filterType: inferredFilterType.getFieldFilterType() })
       }
     ])
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
+    let dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] })
 
     if (column.type === 'dataobject.classificationstore' && classDefinitionContext !== undefined) {
       return true
     }
 
-    let isNoneType = false
-
-    if (dynamicType !== null && 'dynamicTypeFieldFilterType' in dynamicType) {
-      const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-      isNoneType = fieldFilterType.id === 'none'
+    if (filters.some((filter) => filter.id === column.key)) {
+      return false
     }
 
-    const hasDynamicType = dynamicType !== null
-    const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
+    if (dynamicType === null) {
+      return false
+    }
 
-    return hasDynamicType && !isIgnoredField && !isNoneType && !filters.some((filter) => filter.id === column.key)
+    if ((dynamicType instanceof DynamicTypeFieldFilterAbstract) === false) {
+      if ('dynamicTypeFieldFilterType' in dynamicType) {
+        dynamicType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      } else {
+        return false
+      }
+    }
+
+    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null);
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {

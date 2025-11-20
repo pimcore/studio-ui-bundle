@@ -15,6 +15,9 @@ import {
   DynamicTypeFieldFilterObjectAdapterComponent,
   type DynamicTypeFieldFilterObjectAdapterProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
+import { FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { container, serviceIds } from '@sdk/app'
+import { DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
 
 @injectable()
 export class DynamicTypeFieldFilterObjectAdapter extends DynamicTypeFieldFilterAbstract {
@@ -24,9 +27,27 @@ export class DynamicTypeFieldFilterObjectAdapter extends DynamicTypeFieldFilterA
     return true
   }
 
+  isFilterAvailable(subtype: string | null): boolean {
+    if (subtype === null) {
+      return false;
+    }
+
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(subtype)
+    return objectType.dynamicTypeFieldFilterType.isFilterAvailable(null)
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectAdapterProps): ReactElement<DynamicTypeFieldFilterObjectAdapterProps> {
     return (
       <DynamicTypeFieldFilterObjectAdapterComponent { ...props } />
     )
+  }
+
+  transformFilterToApiRequest (filter: FieldFilter): any {
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    return objectType.dynamicTypeFieldFilterType.transformFilterToApiRequest(filter)
   }
 }

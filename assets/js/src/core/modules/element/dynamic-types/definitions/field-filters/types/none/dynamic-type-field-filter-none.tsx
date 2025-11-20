@@ -12,6 +12,7 @@ import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
 import { type DynamicTypeFieldFilterTextAreaProps } from '../../components/dynamic-type-field-filter-text-area-component'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
 export class DynamicTypeFieldFilterNone extends DynamicTypeFieldFilterAbstract {
@@ -19,6 +20,10 @@ export class DynamicTypeFieldFilterNone extends DynamicTypeFieldFilterAbstract {
 
   getFieldFilterType (): string {
     return ''
+  }
+
+  isFilterAvailable (): boolean {
+    return false
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterTextAreaProps): ReactElement<DynamicTypeFieldFilterTextAreaProps> {

@@ -17,7 +17,7 @@ import { usePqlFilter } from '../context-layer/provider/pql-filter/use-pql-filte
 import { useFieldFilters } from '../context-layer/provider/field-filters/use-field-filters'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
@@ -37,14 +37,9 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       return column?.localizable === true ? (providedLocale ?? currentLanguage) : null
     }
 
-    const getFilterType = (filterType?: string, type?: string): string | undefined => {
-      return filterType ?? type
-    }
-
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-      return columnFilters.map(({ filterType, type, ...rest }) => ({
+      return columnFilters.map(({ ...rest }) => ({
         ...rest,
-        type: getFilterType(filterType as string | undefined, type as string | undefined),
         locale: getColumnLocale(rest.key as string, rest.locale as string | undefined)
       }))
     }
@@ -54,28 +49,29 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
 
       filters.forEach((filter) => {
         const column = availableColumns.find(col => col.key === filter.key)
-        let frontendType = column?.frontendType ?? filter.type ?? 'string'
 
         if (column === undefined) {
           return
         }
 
-        if (column.type === 'dataobject.classificationstore') {
-          frontendType = column.type
-        }
-
-        let type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
+        let type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] })
 
         if (type === null) {
           return
         }
 
-        if ('dynamicTypeFieldFilterType' in type) {
-          type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+        if (type instanceof DynamicTypeFieldFilterAbstract === false) {
+          if ('dynamicTypeFieldFilterType' in type) {
+            type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+          } else {
+            return
+          }
         }
 
-        if (type.shouldApply(filter)) {
-          preparedFilters.push(type.transformFilterToApiResponse(filter))
+        const dynamicTypeFieldFilter = type as DynamicTypeFieldFilterAbstract
+
+        if (dynamicTypeFieldFilter.shouldApply(filter)) {
+          preparedFilters.push(dynamicTypeFieldFilter.transformFilterToApiRequest(filter))
         }
       })
 
