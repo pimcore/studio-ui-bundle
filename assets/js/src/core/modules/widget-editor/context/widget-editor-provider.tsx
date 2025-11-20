@@ -28,8 +28,6 @@ export interface WidgetEditorContextProps {
   openWidget: (id: string, type: string) => Promise<void>
   closeWidget: (id: string) => void
   createWidget: () => Promise<void>
-  isLoading: boolean
-  setIsLoading: (loading: boolean) => void
 }
 
 export const WidgetEditorContext = createContext<WidgetEditorContextProps | undefined>(undefined)
@@ -39,10 +37,9 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   const [widgets, setWidgets] = useState<WidgetConfig[]>([])
   const { getWidgetById } = useWidgetEditor()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const { createWidget: createWidgetHook } = useWidgetEditor()
+  const { createWidget: createWidgetHook, isLoading } = useWidgetEditor()
   const { t } = useTranslation()
   const [tmpForm] = Form.useForm()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const inputRef = React.useRef<InputRef>(null)
 
   useEffect(() => {
@@ -94,7 +91,6 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   const submit = async (): Promise<any> => {
     await tmpForm.validateFields()
       .then(async () => {
-        setIsLoading(true)
         const values = tmpForm.getFieldsValue()
         const { name, widgetType } = values as WidgetForm
 
@@ -103,8 +99,6 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
 
           tmpForm.resetFields()
         })
-
-        setIsLoading(false)
       })
   }
 
@@ -115,10 +109,8 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
     setWidgets,
     openWidget,
     closeWidget,
-    createWidget,
-    isLoading,
-    setIsLoading
-  }), [activeTabId, widgets, isLoading])
+    createWidget
+  }), [activeTabId, widgets])
 
   return (
     <WidgetEditorContext.Provider value={ contextValue }>

@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { selectDocumentById, setDraftData } from '@Pimcore/modules/document/document-draft-slice'
@@ -23,6 +24,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
+import {
+  type DocumentSaveDataProcessorRegistry,
+  DocumentSaveDataContext,
+  type DocumentSaveUpdateData
+} from './processors/document-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type DocumentPostUpdateEvent } from '../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -155,6 +164,21 @@ export class DocumentSaveTaskManager {
           }))
         }
 
+        const event: DocumentPostUpdateEvent = {
+          identifier: {
+            type: eventTypes['document:editor:post-update'],
+            id: String(this.documentId)
+          },
+          payload: {
+            id: this.documentId,
+            task,
+            updatedData: result.data,
+            responseData: result.data
+          }
+        }
+
+        eventBus.publish(event)
+
         onFinish?.()
       } else {
         throw result.error
@@ -212,7 +236,7 @@ export class DocumentSaveTaskManager {
   private buildUpdateData (
     task: SaveTaskType = SaveTaskType.AutoSave,
     useDraftData: boolean = true
-  ): any {
+  ): DocumentSaveUpdateData {
     const state = store.getState()
     const document = selectDocumentById(state, this.documentId)
 
@@ -220,7 +244,7 @@ export class DocumentSaveTaskManager {
       throw new Error(`Document ${this.documentId} not found in state`)
     }
 
-    const updatedData: any = {}
+    const updatedData: DocumentSaveUpdateData = {}
 
     // Handle properties if they exist and have changes
     if (document.changes?.properties) {
@@ -250,10 +274,16 @@ export class DocumentSaveTaskManager {
     }
 
     updatedData.task = task
-
     updatedData.useDraftData = useDraftData
 
-    return updatedData
+    const saveDataProcessorRegistry = container.get<DocumentSaveDataProcessorRegistry>(
+      serviceIds['Document/ProcessorRegistry/SaveDataProcessor']
+    )
+
+    const context = new DocumentSaveDataContext(this.documentId, task, updatedData)
+    saveDataProcessorRegistry.executeProcessors(context)
+
+    return context.updateData
   }
 
   /**

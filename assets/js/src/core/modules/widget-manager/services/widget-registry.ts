@@ -12,16 +12,22 @@ import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
 import type React from 'react'
 import { type TabTitleOuterContainerProps } from '../title/tab-title-outer-container'
+import { type WidgetContentTitleContainerProps } from '../widget/widget-content-title-container'
 import { type TabNode } from 'flexlayout-react'
 import { type GlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
+import { type WidgetManagerTabConfig } from '../widget-manager-slice'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
 export interface Widget {
   name: string
   component: ComponentType
   titleComponent?: ComponentType<TabTitleOuterContainerProps>
+  contentTitleComponent?: ComponentType<WidgetContentTitleContainerProps>
   isModified?: (tabNode: TabNode) => boolean
   getContextProvider?: (context: GlobalContext, children: React.ReactNode) => React.JSX.Element
   defaultGlobalContext?: boolean
+  transformConfig?: (config: WidgetManagerTabConfig['config']) => WidgetManagerTabConfig['config']
+  isVisible?: (widget: WidgetConfig) => boolean
 }
 
 @injectable()

@@ -29,6 +29,7 @@ import { useAddVariant } from '../../actions/add-variant/use-add-variant'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -189,6 +190,16 @@ moduleSystem.registerModule({
             }
           ]
         }
+      }
+    })
+
+    // Sorting
+    contextMenuRegistry.registerToSlot(config.name, {
+      name: 'sorting',
+      priority: config.priority.refreshTree,
+      useMenuItem: (context: DataObjectTreeContextMenuProps) => {
+        const { sortingContextMenuItem } = useSorting('data-object')
+        return sortingContextMenuItem(context.target)
       }
     })
 

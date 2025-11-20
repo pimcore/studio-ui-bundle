@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalDocumentContext } from '@Pimcore/modules/document/hooks/use-global-document-context'
 import { DocumentProvider } from '../document-provider'
 import { Content } from '@Pimcore/components/content/content'
@@ -19,6 +19,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Toolbar } from './toolbar/toolbar'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { getBaseDocumentContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 
 export interface EditorContainerProps {
   id: number
@@ -27,7 +28,7 @@ export interface EditorContainerProps {
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, document, editorType } = useDocumentDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDocumentContext()
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id })
+      setContext({ id, contextIdentifiers: getBaseDocumentContextIdentifiers(document) })
     }
 
     return () => {

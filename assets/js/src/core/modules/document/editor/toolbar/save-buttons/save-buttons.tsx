@@ -111,6 +111,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }
 
   const getSecondaryButtons = (): ReactElement[] => {
+    if (document?.type === 'folder') {
+      return []
+    }
     const secondaryButtons: ReactElement[] = []
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
@@ -184,6 +187,23 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     const primaryButtons: ReactElement[] = []
 
     const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+
+    if (document?.type === 'folder') {
+      primaryButtons.push(
+        <Button
+          disabled={ saveDisabled }
+          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
+          onClick={ async () => {
+            await handleSaveClick(SaveTaskType.Save)
+          } }
+          type="primary"
+        >
+          {t('toolbar.save')}
+        </Button>
+      )
+
+      return primaryButtons
+    }
 
     if (document?.published === true && checkElementPermission(document?.permissions, 'publish')) {
       primaryButtons.push(

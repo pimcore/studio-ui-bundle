@@ -180,6 +180,8 @@ import { type DynamicTypePipelineGridTransformersBlur } from './definitions/pipe
 import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
 import { type DynamicTypePipelineGridTransformersExplode } from './definitions/pipelines/grid/transformers/types/explode/explode'
 import { type DynamicTypePipelineGridTransformersTrim } from './definitions/pipelines/grid/transformers/types/trim/trim'
+import { type DynamicTypePipelineGridTransformersTranslate } from './definitions/pipelines/grid/transformers/types/translate/translate'
+import { type DynamicTypePipelineGridTransformersPhpCode } from './definitions/pipelines/grid/transformers/types/php-code/php-code'
 import { type DynamicTypePipelineGridTransformersStringReplace } from './definitions/pipelines/grid/transformers/types/string-replace/string-replace'
 import { type DynamicTypePipelineGridTransformersSubstring } from './definitions/pipelines/grid/transformers/types/substring/substring'
 import { type DynamicTypePipelineGridTransformersElementCounter } from './definitions/pipelines/grid/transformers/types/element-counter/element-counter'
@@ -213,6 +215,9 @@ import { type DynamicTypeDocumentLink } from './definitions/document/types/dynam
 import { type DynamicTypeDocumentNewsletter } from './definitions/document/types/dynamic-type-document-newsletter'
 import { type DynamicTypeDocumentSnippet } from './definitions/document/types/dynamic-type-document-snippet'
 import { type DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
+import { type DynamicTypeGridCellClassificationStore } from './definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
+import { type DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
+import { type DynamicTypeBatchEditClassificationStore } from './definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 
 moduleSystem.registerModule({
   onInit () {
@@ -231,6 +236,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterConsent>(serviceIds['DynamicTypes/FieldFilter/Consent']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterClassificationStore>(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 
@@ -240,6 +246,7 @@ moduleSystem.registerModule({
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditCheckbox>(serviceIds['DynamicTypes/BatchEdit/Checkbox']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditElementDropzone>(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditClassificationStore>(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
@@ -283,6 +290,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellClassificationStore>(serviceIds['DynamicTypes/GridCell/ClassificationStore']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdvanced>(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
 
@@ -449,5 +457,7 @@ moduleSystem.registerModule({
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersStringReplace>(serviceIds['DynamicTypes/Grid/Transformers/StringReplace']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersSubstring>(serviceIds['DynamicTypes/Grid/Transformers/Substring']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTrim>(serviceIds['DynamicTypes/Grid/Transformers/Trim']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersTranslate>(serviceIds['DynamicTypes/Grid/Transformers/Translate']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersPhpCode>(serviceIds['DynamicTypes/Grid/Transformers/PHPCode']))
   }
 })

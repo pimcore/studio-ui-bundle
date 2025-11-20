@@ -17,6 +17,8 @@ import { VideoModalProvider } from '../element/components/video-modal/provider/v
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
 import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
 import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 export interface ModalsProviderProps {
   children: React.ReactNode
@@ -36,6 +38,7 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
               <VideoModalProvider>
                 <SendTestEmailProvider>
                   <SiteModalProvider>
+                    <SlotRenderer slot={ componentConfig.global.modal.name } />
                     {children}
                   </SiteModalProvider>
                 </SendTestEmailProvider>

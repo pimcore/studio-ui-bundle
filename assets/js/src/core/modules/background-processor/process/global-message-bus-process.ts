@@ -28,14 +28,6 @@ export class GlobalMessageBusProcess extends AbstractMercureProcess {
     return this.messageBus.getRegisteredTopics()
   }
 
-  public start (): void {
-    super.start()
-  }
-
-  public cancel (): void {
-    super.cancel()
-  }
-
   protected sendMessage (message: AbstractMercureMessage): void {
     void this.messageBus.routeMessage(message)
   }

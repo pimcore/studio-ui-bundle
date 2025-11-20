@@ -22,7 +22,7 @@ export const AddWidgetDropdown = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { onAdd } = useWidgetConfiguratorContext()
   const dynamicType = container.get<DynamicTypeWidgetTypeRegistry>(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry'])
-  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery()
+  const { data: widgets, isFetching } = usePerspectiveWidgetGetConfigCollectionQuery({ skipWrapperWidgets: false })
 
   const handleWidgetClick = (widget: WidgetConfig): void => {
     onAdd?.(widget)

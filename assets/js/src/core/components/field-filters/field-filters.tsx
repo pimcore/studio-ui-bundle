@@ -39,30 +39,51 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   }, [data])
 
   const onFilterChange = (filter: IDynamicFilter, data: any): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], data }
     setData(updatedData)
   }
 
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], locale }
     setData(updatedData)
   }
 
   const onRemoveClick = (filter: IDynamicFilter): void => {
+    if (filter.type === 'dataobject.classificationstore') {
+      setData(_data.filter((f) => !(f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)))
+      return
+    }
+
     setData(_data.filter((f) => f.id !== filter.id))
   }
 
   const items: StackListProps['items'] = _data.map((filter) => {
+    let key = filter.id
+
+    if (filter.type === 'dataobject.classificationstore') {
+      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
+    }
+
     return {
       id: filter.id,
-      key: filter.id,
+      key,
       title: filter.id,
       children: <Tooltip title={ filter.nameTooltip }>
-        <Tag>{filter.id}</Tag>
+        <Tag>{filter.translationKey}</Tag>
       </Tooltip>,
       body: (
         <DynamicFilter

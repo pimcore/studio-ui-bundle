@@ -22,6 +22,7 @@ export const useStyles = createStyles(({
       bottom: 0;
       z-index: 1000;
       pointer-events: none;
+      width: 56px;
 
       .left-sidebar__avatar {
         margin: 8px 15px 0 15px;

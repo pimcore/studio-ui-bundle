@@ -17,6 +17,7 @@ export interface IMainNavItem {
   order?: number
   id?: string
   icon?: string
+  groupIcon?: string
   label?: string
   group?: string
   dividerBottom?: boolean
@@ -35,7 +36,13 @@ export class MainNavRegistry {
   private readonly items: IMainNavItem[] = []
 
   registerMainNavItem (item: IMainNavItem): void {
-    this.items.push(item)
+    const existingIndex = this.items.findIndex((existingItem) => existingItem.path === item.path)
+
+    if (existingIndex !== -1) {
+      this.items[existingIndex] = item
+    } else {
+      this.items.push(item)
+    }
   }
 
   getMainNavItem (path: string): IMainNavItem | undefined {

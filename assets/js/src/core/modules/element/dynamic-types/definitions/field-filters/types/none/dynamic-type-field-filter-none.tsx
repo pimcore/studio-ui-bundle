@@ -21,6 +21,10 @@ export class DynamicTypeFieldFilterNone extends DynamicTypeFieldFilterAbstract {
     return ''
   }
 
+  isFilterAvailable (): boolean {
+    return false
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterTextAreaProps): ReactElement<DynamicTypeFieldFilterTextAreaProps> {
     return (
       <></>

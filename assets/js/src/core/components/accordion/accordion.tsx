@@ -51,7 +51,11 @@ export const Accordion = ({
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 
   useEffect(() => {
-    setExpandedIds([String(activeKey)])
+    if (Array.isArray(activeKey)) {
+      setExpandedIds(activeKey.map(String))
+    } else if (activeKey != null) {
+      setExpandedIds([String(activeKey)])
+    }
   }, [activeKey])
 
   const onClickChevron = (id: string): void => {

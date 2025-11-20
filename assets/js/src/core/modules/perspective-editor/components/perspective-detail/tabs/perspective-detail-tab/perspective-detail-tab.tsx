@@ -10,7 +10,7 @@
 
 import { usePerspectiveEditorContext } from '@Pimcore/modules/perspective-editor/context/hooks/use-perspective-editor-context'
 import React from 'react'
-import { PerspectiveForm } from '../../../perspective-form/perspective-form'
+import { PerspectiveForm, type PerspectiveFormProps } from '../../../perspective-form/perspective-form'
 
 interface PerspectiveDetailTabProps {
   id: string | undefined
@@ -25,6 +25,6 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   }
 
   return (
-    <PerspectiveForm perspective={ perspective } />
+    <PerspectiveForm perspective={ perspective as PerspectiveFormProps['perspective'] } />
   )
 }

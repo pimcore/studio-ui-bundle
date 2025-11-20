@@ -16,6 +16,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { useCustomReportsListDrillDownOptionsQuery, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IDrillDownSelectListProps {
   reportName: string
@@ -44,12 +45,14 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
     })
   }
 
+  const selectLabel = !isEmptyValue(field.label) ? field.label : field.name
+
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
-      <Text className={ styles.drillDownSelectLabel }>{field.label}</Text>
+      <Text className={ styles.drillDownSelectLabel }>{selectLabel}</Text>
       <Select
         className='min-w-200'
         loading={ isLoading }

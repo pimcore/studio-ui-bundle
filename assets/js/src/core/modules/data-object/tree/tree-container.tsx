@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { defaultProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
+import { defaultTreeProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
 import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
-import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
+import { PagerContainer } from '@Pimcore/components/element-tree/pager/pager-container'
 import { Box } from '@Pimcore/components/box/box'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { withDroppable } from './node/with-droppable/with-droppable'
@@ -23,7 +23,6 @@ import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-sli
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
-import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 import { withContextMenu } from './node/with-context-menu'
 
 export interface TreeContainerProps {
@@ -31,7 +30,7 @@ export interface TreeContainerProps {
   showRoot?: boolean
 }
 
-export const DataObjectTreeNode = withDroppableStyling(withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))
+export const DataObjectTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
@@ -62,7 +61,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
       renderNode={ DataObjectTreeNode }
-      renderNodeContent={ defaultProps.renderNodeContent }
+      renderNodeContent={ defaultTreeProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
       showRoot={ showRoot }

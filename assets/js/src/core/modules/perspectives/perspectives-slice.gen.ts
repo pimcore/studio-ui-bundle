@@ -57,7 +57,12 @@ const injectedRtkApi = api
                 PerspectiveWidgetGetConfigCollectionApiResponse,
                 PerspectiveWidgetGetConfigCollectionApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/perspectives/widgets/configurations` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/perspectives/widgets/configurations`,
+                    params: {
+                        skipWrapperWidgets: queryArg.skipWrapperWidgets,
+                    },
+                }),
                 providesTags: ["Perspectives"],
             }),
             perspectiveWidgetGetConfigById: build.query<
@@ -138,7 +143,10 @@ export type PerspectiveWidgetGetConfigCollectionApiResponse = /** status 200 Lis
     totalItems: number;
     items: WidgetConfig[];
 };
-export type PerspectiveWidgetGetConfigCollectionApiArg = void;
+export type PerspectiveWidgetGetConfigCollectionApiArg = {
+    /** Skip wrapper widget configurations */
+    skipWrapperWidgets?: boolean;
+};
 export type PerspectiveWidgetGetConfigByIdApiResponse = /** status 200 Widget configuration data as JSON */ {
     /** Data of the widget configuration */
     data: string;
@@ -219,6 +227,8 @@ export type WidgetConfig = {
     widgetType: string;
     /** Icon */
     icon: ElementIcon;
+    /** If widget is only wrapper of another configuration */
+    onlyWrapper: boolean;
 };
 export type SaveAssetContextPermissions = {
     /** Hide Add Menu */

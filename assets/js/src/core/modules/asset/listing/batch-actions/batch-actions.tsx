@@ -133,6 +133,7 @@ export const BatchActions = (): React.JSX.Element => {
       },
       {
         key: '4',
+        hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDelete

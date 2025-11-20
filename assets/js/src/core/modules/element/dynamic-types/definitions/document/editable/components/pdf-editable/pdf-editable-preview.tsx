@@ -48,8 +48,7 @@ export const PdfEditablePreview = ({
       height,
       containerWidth,
       thumbnailSettings,
-      thumbnailConfig,
-      fallbackSrc: undefined
+      thumbnailConfig
     })
   }, [assetId, width, height, containerWidth, thumbnailSettings, thumbnailConfig])
 

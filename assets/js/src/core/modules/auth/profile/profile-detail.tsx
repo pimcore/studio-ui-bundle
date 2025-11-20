@@ -46,6 +46,8 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
   const { updateUserImageInState } = useUserHelper()
 
+  const [passwordType, setPasswordType] = useState<'text' | 'password'>('password')
+
   const validLocalesOptions = [{ value: '', label: '(system)' },
     ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
       value: key,
@@ -214,16 +216,19 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
                     rules={ [{ min: 10 }] }
                   >
                     <Input
+                      onKeyDown={ () => { setPasswordType('password') } }
                       suffix={ <IconButton
                         icon={ { value: 'locked' } }
                         onClick={ () => {
                           const newPassword = generatePassword()
                           form.setFieldValue('password', newPassword)
                           setModifiedCells({ password: newPassword })
+                          setPasswordType('text')
                         } }
                         title={ t('user-management.generate-password') }
                         variant={ 'minimal' }
                                /> }
+                      type={ passwordType }
                     />
                   </Form.Item>
                   <Form.Item

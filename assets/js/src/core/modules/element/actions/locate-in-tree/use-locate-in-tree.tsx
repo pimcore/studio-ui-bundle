@@ -18,6 +18,7 @@ import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { isNil, isNull } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,6 +27,7 @@ import { ContextMenuActionName } from '..'
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
   locateInTreeGridContextMenuItem: (row: any, onFinish?: () => void) => ItemType | undefined
+  locateInTreeContextMenuItem: (data: TreeNodeProps, onFinish?: () => void) => ItemType
 }
 
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
@@ -82,8 +84,25 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
     }
   }
 
+  const locateInTreeContextMenuItem = (data: TreeNodeProps, onFinish?: () => void): ItemType => {
+    return {
+      label: t('element.locate-in-tree'),
+      key: ContextMenuActionName.locateInTree,
+      isLoading,
+      icon: <Icon value={ 'target' } />,
+      onClick: async () => {
+        setIsLoading(true)
+        locateInTree(Number(data.id), () => {
+          onFinish?.()
+          setIsLoading(false)
+        })
+      }
+    }
+  }
+
   return {
     locateInTree,
-    locateInTreeGridContextMenuItem
+    locateInTreeGridContextMenuItem,
+    locateInTreeContextMenuItem
   }
 }

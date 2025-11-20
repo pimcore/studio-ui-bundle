@@ -308,6 +308,7 @@ export type DocumentUpdateByIdApiArg = {
             editableData?: object | null;
             settingsData?: object | null;
             missingRequiredEditable?: boolean | null;
+            appendEditables?: boolean | null;
             properties?: UpdateDataProperty[] | null;
         };
     };
@@ -586,6 +587,8 @@ export type Element = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
+    /** elementType */
+    elementType: string;
 };
 export type CustomAttributes = {
     /** Custom Icon */

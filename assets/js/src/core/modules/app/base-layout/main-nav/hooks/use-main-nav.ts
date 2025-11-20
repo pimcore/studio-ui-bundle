@@ -53,6 +53,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         ...(isCurrentItem && {
           dividerBottom: item.dividerBottom,
           icon: item.icon,
+          groupIcon: item.groupIcon,
           widgetConfig: item.widgetConfig,
           onClick: item.onClick,
           button: item.button,
@@ -65,16 +66,14 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
     } else if (index === levels.length - 1) {
       Object.assign(existingItem, {
         icon: item.icon,
+        groupIcon: item.groupIcon,
         order: item.order ?? 1000,
         className: item.className
       })
     }
 
-    currentLevel.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
     currentLevel = existingItem.children ?? []
   })
-
-  items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
 }
 
 export const useMainNav = (): IUseMainNavReturn => {
@@ -89,7 +88,16 @@ export const useMainNav = (): IUseMainNavReturn => {
       return items
     }
 
-    mainNavRegistryService.getMainNavItems().forEach(item => {
+    const sortedItems = [...mainNavRegistryService.getMainNavItems()].sort((a, b) => {
+      const aDepth = a.path.split('/').length
+      const bDepth = b.path.split('/').length
+      if (aDepth !== bDepth) {
+        return aDepth - bDepth
+      }
+      return (a.order ?? 1000) - (b.order ?? 1000)
+    })
+
+    sortedItems.forEach(item => {
       if (item.permission !== undefined && !isAllowed(item.permission)) {
         return
       }

@@ -22,6 +22,9 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         & > .ant-tree-treenode {
           .ant-tree-switcher {
             width: ${props.hasRoot === true ? '24px' : '0'};
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
 

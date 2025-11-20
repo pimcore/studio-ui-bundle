@@ -32,7 +32,6 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
       collapsed={ collapsed }
       collapsible={ collapsible }
       name={ name }
-      noteditable={ isParentNotEditable }
       theme={ theme }
       title={ title }
     >

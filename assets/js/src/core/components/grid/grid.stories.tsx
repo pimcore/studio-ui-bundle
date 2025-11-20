@@ -98,7 +98,7 @@ const editableColumns = [
   columnHelper.accessor('lastname', {
     cell: info => <b><DefaultCell { ...info } /></b>,
     meta: {
-      editable: true
+      editable: (row) => row.lastname === 'Doe'
     }
   }),
   columnHelper.accessor('age', {
@@ -122,5 +122,13 @@ export const SortableColumns = {
     data,
     columns: editableColumns,
     enableSorting: true
+  }
+}
+
+export const SmallSize = {
+  args: {
+    data,
+    columns,
+    size: 'small'
   }
 }

@@ -8,32 +8,33 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type PerspectiveConfig, usePerspectiveGetConfigCollectionQuery } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type PerspectiveConfig, usePerspectiveGetConfigCollectionQuery } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { Content, ContentLayout, Icon, IconButton, IconTextButton, SearchInput, Toolbar, type TreeDataItem, TreeElement } from '@sdk/components'
 import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '../../hooks/use-perspective-editor'
-import { useAppDispatch } from '@sdk/app'
-import { api } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openPerspective, isLoading, setIsLoading } = usePerspectiveEditorContext()
+  const { openPerspective } = usePerspectiveEditorContext()
   const { createPerspective } = usePerspectiveEditor()
-  const { data: perspectives, isFetching } = usePerspectiveGetConfigCollectionQuery()
-  const dispatch = useAppDispatch()
+  const { data: perspectives, isLoading, isFetching, refetch } = usePerspectiveGetConfigCollectionQuery()
 
   const generateTreeStructure = (perspectives: PerspectiveConfig[]): TreeDataItem[] => {
-    return perspectives.map((item: PerspectiveConfig) => ({
-      title: item.name,
-      key: item.id,
-      icon: <Icon value={ item.icon.value } />
-    }))
+    return [...perspectives]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((item: PerspectiveConfig) => ({
+        title: item.name,
+        key: item.id,
+        icon: <Icon
+          type={ item.icon.type }
+          value={ item.icon.value }
+              />
+      }))
   }
 
   useEffect(() => {
@@ -82,15 +83,7 @@ export const TreeContainer = (): React.JSX.Element => {
             icon={ { value: 'refresh' } }
             loading={ isLoading || isFetching }
             onClick={ async () => {
-              setIsLoading(true)
-
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.PERSPECTIVES()
-                )
-              )
-
-              setIsLoading(false)
+              await refetch()
             } }
             title={ t('refresh') }
           />

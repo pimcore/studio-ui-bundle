@@ -22,6 +22,7 @@ interface ImageEditablePreviewProps {
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  dropClass?: string
   thumbnailSettings?: ImageThumbnailSettings
   thumbnailConfig?: string | object
   imgAttributes?: Record<string, string>
@@ -57,7 +58,7 @@ export const ImageEditablePreview = ({
       return undefined
     }
 
-    const needsContainerWidth = isNil(thumbnailSettings) && isNil(thumbnailConfig)
+    const needsContainerWidth = isNil(thumbnailConfig) && isNil(width) && isNil(height)
     if (needsContainerWidth && containerWidth <= 0) {
       return undefined
     }

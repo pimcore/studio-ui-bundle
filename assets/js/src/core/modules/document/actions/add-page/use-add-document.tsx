@@ -16,9 +16,9 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { isEmpty, isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
@@ -30,6 +30,7 @@ import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { uuid } from '@sdk/utils'
 
 export enum AddDocumentFormType {
   FULL = 'full', // title, navigationName, key
@@ -140,7 +141,15 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Full form component (3 inputs: title, navigationName, key)
-  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef> }> = ({ form, firstInputRef }) => {
+  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, buttonId: string }> = ({ form, firstInputRef, buttonId }) => {
+    const handleEnterPress = (): void => {
+      // Click the OK button using the unique ID
+      const okButton = document.getElementById(buttonId) as HTMLButtonElement
+      if (!isNull(okButton) && !okButton.disabled) {
+        okButton.click()
+      }
+    }
+
     return (
       <Form
         form={ form }
@@ -160,6 +169,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
                 key: value
               })
             } }
+            onPressEnter={ handleEnterPress }
             ref={ firstInputRef }
           />
         </Form.Item>
@@ -167,14 +177,14 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
           label={ t('add-document-form.label.navigation') }
           name="navigationName"
         >
-          <Input />
+          <Input onPressEnter={ handleEnterPress } />
         </Form.Item>
         <Form.Item
           label={ t('add-document-form.label.key') }
           name="key"
           rules={ [{ required: true, message: t('form.validation.required') }] }
         >
-          <Input />
+          <Input onPressEnter={ handleEnterPress } />
         </Form.Item>
       </Form>
     )
@@ -216,11 +226,14 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
           })
       }
 
+      const buttonId = uuid()
+
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       modal.confirm({
         icon: null,
         title: modalTitle,
         content: <FullFormContent
+          buttonId={ buttonId }
           firstInputRef={ firstInputRef }
           form={ form }
                  />,
@@ -229,6 +242,9 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
             firstInputRef.current.focus()
           }
           return node
+        },
+        okButtonProps: {
+          id: buttonId
         },
         onOk: async () => {
           await submitForm()

@@ -33,6 +33,11 @@ export enum ContextMenuActionName {
   pasteAsChild = 'pasteAsChild',
   pasteOnlyContents = 'pasteOnlyContents',
 
+  sorting = 'sorting',
+  sortingAscending = 'sortingAscending',
+  sortingDescending = 'sortingDescending',
+  sortingIndexed = 'sortingIndexed',
+
   openInNewWindow = 'openInNewWindow',
   openPreviewInNewWindow = 'openPreviewInNewWindow',
 

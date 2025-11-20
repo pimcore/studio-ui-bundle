@@ -24,7 +24,9 @@ export const topics: Record<string, string> = {
   'tag-assignment-finished': 'tag-assignment-finished',
   'tag-replacement-finished': 'tag-replacement-finished',
   'recycle-bin-restore-finished': 'recycle-bin-restore-finished',
-  'recycle-bin-delete-finished': 'recycle-bin-delete-finished'
+  'recycle-bin-delete-finished': 'recycle-bin-delete-finished',
+  'replace-assignment-finished': 'replace-assignment-finished',
+  'studio-backend-default': 'studio-backend-default'
 }
 
 export const defaultTopics: string[] = [

@@ -24,11 +24,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
-export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const SourceDefinition = ({ form, currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-
-  const form = Form.useFormInstance()
 
   const [currentSourceDefinition, setCurrentSourceDefinition] = useState<string | undefined>(
     (currentData.dataSourceConfig as ISourceDefinition)?.type
@@ -42,13 +40,16 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
 
   const sourceDefinitionOptions = useMemo(() => adapters.map(adapter => ({
     key: adapter.id,
-    label: adapter.label
+    label: adapter.getLabel()
   })), [adapters])
 
   const handleSourceDefinitionTypeUpdate = (type: string): void => {
-    setCurrentSourceDefinition(type)
+    form?.resetFields(['dataSourceConfig'])
+    form?.setFieldsValue({ dataSourceConfig: { type } })
 
-    form.setFieldsValue({ dataSourceConfig: { type } })
+    updateFormData?.({ ...currentData, dataSourceConfig: { type } })
+
+    setCurrentSourceDefinition(type)
   }
 
   const renderAddButton = (): React.JSX.Element => {
@@ -93,10 +94,11 @@ export const SourceDefinition = ({ currentData, updateFormData }: IReportConfigu
           >
             <Select
               fieldNames={ { label: 'label', value: 'key' } }
+              onChange={ (value: string) => { handleSourceDefinitionTypeUpdate(value) } }
               options={ sourceDefinitionOptions }
             />
           </Form.Item>
-          {currentAdapter?.getCustomReportData({ currentData, updateFormData })}
+          {currentAdapter?.getCustomReportData({ currentData, updateFormData, form })}
         </Form.Group>
       </Flex>
       )}

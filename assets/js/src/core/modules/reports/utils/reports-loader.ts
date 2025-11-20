@@ -32,12 +32,15 @@ export const loadReportsMenuItems = async (): Promise<void> => {
 
       if (!isUndefined(reportsData?.items)) {
         reportsData.items.forEach((report, index) => {
-          if (report.menuShortcut) {
+          if (report.menuShortcut && report.hasDataSourceConfig) {
             const reportId = report.name
             const reportName = !isEmptyValue(report.niceName) ? report.niceName : reportId
             const path = !isEmptyValue(report.group)
               ? `${REPORTS_SECTION_NAME}/${report.group}/${reportId}`
               : `${REPORTS_SECTION_NAME}/${reportId}`
+
+            const reportIconClass = report.iconClass
+            const reportGroupIconClass = report.groupIconClass
 
             mainNavRegistryService.registerMainNavItem({
               id: `${reportId}-${index}`,
@@ -47,6 +50,8 @@ export const loadReportsMenuItems = async (): Promise<void> => {
               order: 300 + index,
               permission: UserPermission.Reports,
               perspectivePermission: NavPermission.Reports,
+              ...(!isEmptyValue(reportIconClass) && { icon: reportIconClass }),
+              ...(!isEmptyValue(reportGroupIconClass) && { groupIcon: reportGroupIconClass }),
               widgetConfig: {
                 component: 'dynamic-report',
                 config: {

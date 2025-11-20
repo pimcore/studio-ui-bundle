@@ -34,7 +34,6 @@ export const tagNames = {
   DOCUMENT_TREE: 'DOCUMENT_TREE',
   DOCUMENT_TYPES: 'DOCUMENT_TYPES',
   DOCUMENT_SITE: 'DOCUMENT_SITE',
-  WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
   SCHEDULES: 'SCHEDULES',
@@ -99,7 +98,7 @@ export const providingTags = {
   DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
-  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
+  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
@@ -111,7 +110,7 @@ export const providingTags = {
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
-  NOTIFICATION: (id: number) => [{ type: tagNames.NOTIFICATIONS, id }],
+  NOTIFICATIONS: () => [tagNames.NOTIFICATIONS],
   NOTIFICATION_DETAIL: (id: number) => [{ type: tagNames.NOTIFICATION_DETAILS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
@@ -129,7 +128,7 @@ export const providingTags = {
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
   PERSPECTIVE_DETAIL: (id: string) => [{ type: tagNames.PERSPECTIVE_DETAIL, id }],
   WIDGETS: () => [tagNames.WIDGETS],
-  WIDGET_DETAIL: (id: string) => [{ type: tagNames.WIDGET_DETAIL, id }]
+  WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }]
 }
 
 export const invalidatingTags = {
@@ -159,7 +158,7 @@ export const invalidatingTags = {
   DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [{ type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
-  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
+  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [], // No invalidation on workflow actions as we reload the editor anyways
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
@@ -170,7 +169,7 @@ export const invalidatingTags = {
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
-  NOTIFICATION: (id: number) => [{ type: tagNames.NOTIFICATIONS, id }],
+  NOTIFICATION_DETAIL: (id: number) => [{ type: tagNames.NOTIFICATION_DETAILS, id }],
   NOTIFICATIONS: () => [tagNames.NOTIFICATIONS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],

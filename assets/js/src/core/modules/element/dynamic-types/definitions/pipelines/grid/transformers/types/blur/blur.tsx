@@ -16,6 +16,7 @@ import { DynamicTypePipelineGridTransformersBlurComponent } from '@Pimcore/modul
 @injectable()
 export class DynamicTypePipelineGridTransformersBlur extends DynamicTypePipelineAbstract {
   readonly id = 'blur'
+  readonly group = 'string'
 
   getComponent (): ReactElement {
     return (

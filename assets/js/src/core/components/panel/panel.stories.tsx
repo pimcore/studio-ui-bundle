@@ -39,9 +39,6 @@ const meta: Meta<typeof Panel> = {
     name: {
       control: 'text'
     },
-    noteditable: {
-      control: 'boolean'
-    },
     extraPosition: {
       control: 'radio',
       options: ['start', 'end']

@@ -22,3 +22,7 @@ export function useClassDefinitionSelection (silent?: true): ClassDefinitionSele
 
   return context
 }
+
+export const useClassDefinitionSelectionOptional = (): ClassDefinitionSelectionData | undefined => {
+  return useClassDefinitionSelection(true)
+}

@@ -14,12 +14,14 @@ export interface IDroppableContext {
   isOver: boolean
   isValid: boolean
   isDragActive: boolean
+  hasValidDrop?: boolean
 }
 
 export const droppableContext = createContext<IDroppableContext>({
   isOver: false,
   isValid: false,
-  isDragActive: false
+  isDragActive: false,
+  hasValidDrop: false
 })
 
 export const DroppableContextProvider = droppableContext.Provider

@@ -31,9 +31,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     // @todo infer selected language from grid config when available
     const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
 
+    const batchEditTitle = 'fieldDefinition' in batchEdit.config ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
+    const key = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
+
     return ({
-      id: batchEdit.key,
-      children: <Tag>{t(`${batchEdit.key}`)}</Tag>,
+      id: `${batchEdit.key}`,
+      key,
+      children: <Tag>{t(`${batchEditTitle}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [
@@ -41,7 +45,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
               key="language-selection"
               languages={ languages }
               onSelectLanguage={ (language) => {
-                updateLocale(batchEdit.key, transformLanguage(language))
+                updateLocale(batchEdit, transformLanguage(language))
               } }
               selectedLanguage={ selectedLanguage }
             />
@@ -51,7 +55,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
-              removeBatchEdit(batchEdit.key)
+              removeBatchEdit(batchEdit)
             } }
           />
         ]

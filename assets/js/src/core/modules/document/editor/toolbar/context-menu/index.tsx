@@ -18,6 +18,7 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
+import { useDocumentPreviewUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import { useTranslations } from '@Pimcore/modules/document/actions/translations/use-translations'
 
 moduleSystem.registerModule({
@@ -75,7 +76,8 @@ moduleSystem.registerModule({
       priority: config.priority.openPreviewInNewWindow,
       useMenuItem: (context: DocumentEditorContextMenuProps) => {
         const { openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
-        return openPreviewInNewWindowContextMenuItem(context.target)
+        const previewUrl = useDocumentPreviewUrlProcessor(context.target.id, context.target.fullPath ?? '')
+        return openPreviewInNewWindowContextMenuItem(context.target, previewUrl)
       }
     })
   }

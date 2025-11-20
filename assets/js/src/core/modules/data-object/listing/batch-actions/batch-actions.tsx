@@ -24,12 +24,17 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useDataObjectBatchDeleteMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { elementTypes } from '@sdk/modules/data-object'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const { id, elementType } = useElementContext()
+  const { useElementId } = useSettings()
+  const { getId } = useElementId()
+  const id = getId()
+  const elementType = elementTypes.dataObject
   const { refreshGrid } = useRefreshGrid(elementType)
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
@@ -108,6 +113,7 @@ export const BatchActions = (): React.JSX.Element => {
       },
       {
         key: '3',
+        hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDelete
@@ -133,12 +139,14 @@ export const BatchActions = (): React.JSX.Element => {
         setOpen={ setXlsxModalOpen }
       />
 
-      <BatchEditProvider>
-        <BatchEditModal
-          batchEditModalOpen={ batchEditModalOpen }
-          setBatchEditModalOpen={ setBatchEditModalOpen }
-        />
-      </BatchEditProvider>
+      <ClassificationStoreModalProvider>
+        <BatchEditProvider>
+          <BatchEditModal
+            batchEditModalOpen={ batchEditModalOpen }
+            setBatchEditModalOpen={ setBatchEditModalOpen }
+          />
+        </BatchEditProvider>
+      </ClassificationStoreModalProvider>
     </>
   )
 }

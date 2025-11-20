@@ -16,7 +16,7 @@ import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/
 @injectable()
 export abstract class DynamicTypeCustomReportDefinitionAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  abstract readonly label: string
 
-  abstract getCustomReportData ({ currentData, updateFormData }: IReportConfigurationSectionProps): ReactElement
+  abstract getLabel (): ReactElement
+  abstract getCustomReportData ({ currentData, updateFormData, form }: IReportConfigurationSectionProps): ReactElement
 }

@@ -11,9 +11,12 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { MainNav } from '@Pimcore/modules/app/base-layout/main-nav/main-nav'
 import { Search } from '@Pimcore/modules/search/search'
+import { Logo as LogoImage } from '@Pimcore/components/logo/logo'
+import { Logo } from './right-sidebar/logo'
+import { SubscriptionDetails } from './right-sidebar/logo/subscription-details'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,6 +32,22 @@ moduleSystem.registerModule({
       name: 'search',
       priority: 200,
       component: Search
+    })
+
+    componentRegistry.registerToSlot(componentConfig.rightSidebar.slot.name, {
+      name: 'logoContainer',
+      priority: 100,
+      component: Logo
+    })
+
+    componentRegistry.register({
+      name: componentConfig.rightSidebar.logo.image.name,
+      component: LogoImage
+    })
+
+    componentRegistry.register({
+      name: componentConfig.rightSidebar.logo.subscriptionDetails.name,
+      component: SubscriptionDetails
     })
   }
 })

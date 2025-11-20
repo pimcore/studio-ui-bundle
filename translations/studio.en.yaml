@@ -2,6 +2,7 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+dont-ask-again: "Don't ask again"
 widget.missing-context.title: "Missing Context"
 widget.missing-context.description: "No related element found"
 widget.missing-tab-context.description: "This feature is not supported for the related element"
@@ -189,6 +190,10 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.advancedColumns.group.boolean: Boolean
+grid.advanced-column.advancedColumns.group.date: Date
+grid.advanced-column.advancedColumns.group.string: String
+grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
 grid.advanced-column.advancedColumns: Source field
 grid.advanced-column.advancedColumns.add: Add a Source field
@@ -210,6 +215,7 @@ grid.advanced-column.delimiter: Delimiter
 grid.advanced-column.twigTemplate: Twig Template
 grid.advanced-column.blurringRule: Blurring Rule
 grid.advanced-column.anonymizationRule: Anonymization Rule
+grid.advanced-column.translationPrefix: Translation Prefix
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
 grid.advanced-column.advancedColumns.staticText: Static text
@@ -225,6 +231,10 @@ grid.advanced-column.advancedColumns.trim: Trim
 grid.advanced-column.advancedColumns.twigOperator: Twig Operator
 grid.advanced-column.advancedColumns.anonymizer: Anonymizer
 grid.advanced-column.advancedColumns.blur: Blur
+grid.advanced-column.advancedColumns.translate: Translate
+grid.advanced-column.advancedColumns.phpCode: PHP Code
+grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
+grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -246,12 +256,8 @@ failed-to-assign-tag-to-element: Failed to assign tag to element
 failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
 workflow-modal.cancel: Cancel
-workflow-modal.log-time: Log Time
-workflow-modal.timeSpent: Time spent
 workflow-modal.notes: Notes
-workflow-modal.timeSpent-required: Please enter the duration of time spent
 workflow-modal.notes-required: Please enter your notes
-workflow-transitions.log-time: Log Time
 workflow-transitions.start-workflow: Start Workflow
 workflow-transitions.finish-review: Finish Review
 workflow-transitions.restart-review: Restart Review
@@ -613,6 +619,10 @@ element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
+element.tree.sorting: Sort Children By
+element.tree.sorting.keyed-ascending: A to Z (Key)
+element.tree.sorting.keyed-descending: Z to A (Key)
+element.tree.sorting.indexed: Index (Manual)
 element.tree.refresh: Refresh
 element.new-folder: New Folder
 element.new-folder.validation: 'Please enter a valid name'
@@ -796,6 +806,7 @@ key-bindings.robots: Robots
 key-bindings.httpErrorLog: HTTP Error Log
 key-bindings.seo: SEO
 key-bindings.redirects: Redirects
+key-bindings.bundles: Bundles
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
@@ -923,6 +934,7 @@ navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
+navigation.search-replace-assignments: Search & Replace Assignments
 navigation.sidebar-title: Navigation
 navigation.name: Name
 navigation.exclude: Exclude from Navigation
@@ -983,10 +995,25 @@ widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
+widget.search-replace-assignments: Search & Replace Assignments
 widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+search-replace-assignments.search-for: Search for
+search-replace-assignments.replace-with: Replace with
+search-replace-assignments.select-element: Select target element
+search-replace-assignments.search: Search usages
+search-replace-assignments.apply-to-all: Apply replacement to all
+search-replace-assignments.apply-to-selection: Apply replacement to selection
+search-replace-assignments.confirm.title: Confirm the replacement
+search-replace-assignments.confirm.description: Restoring replaced assignments can be a time-intensive process. Are you sure you want to apply it to all?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Type
+search-replace-assignments.columns.path: Path
+search-replace-assignments.job.title-all: Replace all assignments
+search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
+hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here
@@ -1046,9 +1073,9 @@ hotspots.edit: Edit marker and hotspots
 hotspots.show: Show marker and hotspots
 hotspots.new-marker: New Marker
 hotspots.new-hotspot: New Hotspot
-hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
+hotspots.clear-data: Clear all hotspots and markers
 hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
-hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
+hotspots.data-cleared: Hotspots and Markers Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
 classification-store.collection: Collection
 classification-store.group: Group
@@ -1352,8 +1379,8 @@ perspective-editor.form.name.placeholder: Enter perspective name
 perspective-editor.form.general.title: General
 perspective-editor.form.general.name: Name
 perspective-editor.form.general.icon: Icon
-perspective-editor.form.general.widget-congfiguration: Widget areas
-perspective-editor.form.allowed-context-menu.title: Allowed Context Menu Actions
+perspective-editor.form.general.widget-configuration: Widget areas
+perspective-editor.form.allowed-context-menu.title: Allowed context menu actions
 perspective-editor.form.allowed-context-menu.category.extras: Extras
 perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
 perspective-editor.form.allowed-context-menu.extras.emails: E-Mails
@@ -1434,6 +1461,7 @@ widget-editor.create-form.widgetTypeGroup.system-widgets: System Widgets
 widget-editor.form.name.placeholder: Enter widget name
 widget-editor.create.success: Widget created successfully
 widget-editor.delete.success: Widget deleted successfully
+widget-editor.update.success: Widget updated successfully
 widget-editor.widget-form.general.title: General
 widget-editor.widget-form.general.name: Name
 widget-editor.widget-form.general.icon: Icon
@@ -1588,3 +1616,5 @@ forgot-password-form.username: Enter your username and Pimcore will send a login
 forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset Password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
+subscription-details.community-edition: Learn more about Pimcore Editions
+config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.

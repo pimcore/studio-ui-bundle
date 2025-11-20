@@ -34,7 +34,10 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
       label={ t('field') }
       name={ 'field' }
     >
-      <Select options={ sourceFieldOptions } />
+      <Select
+        options={ sourceFieldOptions }
+        showSearch
+      />
     </Form.Item>
   )
 }

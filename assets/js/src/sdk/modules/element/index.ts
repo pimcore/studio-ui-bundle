@@ -20,9 +20,13 @@ export * from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tre
 export * from '@Pimcore/modules/element/actions/lock/use-lock'
 export * from '@Pimcore/modules/element/actions/open/open'
 export * from '@Pimcore/modules/element/actions/publish/use-publish'
+export * from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 export * from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 export * from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+export * from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 export * from '@Pimcore/modules/element/actions/rename/use-rename'
+
+export * from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
 
 export * from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 export * from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -241,3 +245,20 @@ export * from '@Pimcore/modules/element/hooks/use-global-element-context'
 export * from '@Pimcore/modules/element/permissions/permission-helper'
 
 export * from '@Pimcore/modules/element/utils/element-type'
+
+export * from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
+
+export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
+export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+
+export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
+export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'
+export * from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
+export * from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
+export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
+export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'

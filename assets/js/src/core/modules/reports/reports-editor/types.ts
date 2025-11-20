@@ -9,10 +9,12 @@
  */
 
 import type { ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { type FormInstance } from 'antd'
 
 export interface IReportConfigurationSectionProps {
   currentData: ReportFormData
   updateFormData?: (data: ReportFormData) => void
+  form?: FormInstance<any>
 }
 
 interface ISourceDefinitionCommon {

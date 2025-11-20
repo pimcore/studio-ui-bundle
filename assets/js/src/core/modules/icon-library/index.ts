@@ -15,6 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
 
+import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -23,6 +24,7 @@ import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
+import alternativeElementTree from '@Pimcore/assets/icons/alternative-element-tree.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
 import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
@@ -35,6 +37,9 @@ import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?rea
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
+import bookmarkListAssetFolder from '@Pimcore/assets/icons/bookmark-list-asset-folder.inline.svg?react'
+import bookmarkListDocumentFolder from '@Pimcore/assets/icons/bookmark-list-document-folder.inline.svg?react'
+import bookmarkListObjectFolder from '@Pimcore/assets/icons/bookmark-list-object-folder.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -150,9 +155,11 @@ import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
 import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
+import manualOrder from '@Pimcore/assets/icons/manual-order.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg?react'
+import menuShortcut from '@Pimcore/assets/icons/menu-shortcut.inline.svg?react'
 import menu from '@Pimcore/assets/icons/menu.inline.svg?react'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg?react'
 import minus from '@Pimcore/assets/icons/minus.inline.svg?react'
@@ -187,8 +194,12 @@ import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
 import pined from '@Pimcore/assets/icons/pined.inline.svg?react'
 import plusCircle from '@Pimcore/assets/icons/plus-circle.inline.svg?react'
 import plusSquare from '@Pimcore/assets/icons/plus-square.inline.svg?react'
+import portalEngineCollections from '@Pimcore/assets/icons/portal-engine-collections.inline.svg?react'
+import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.svg?react'
+import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
@@ -213,6 +224,7 @@ import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?rea
 import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
+import shareWithUsers from '@Pimcore/assets/icons/share-with-users.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
@@ -222,8 +234,11 @@ import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
+import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
+import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
+import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
@@ -252,10 +267,15 @@ import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
 import wysiwygField from '@Pimcore/assets/icons/wysiwyg-field.inline.svg?react'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg?react'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
+import zToAOrder from '@Pimcore/assets/icons/z-to-a-order.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
     const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    iconLibrary.register({
+      name: 'a-to-z-order',
+      component: aToZOrder
+    })
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -287,6 +307,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alert',
       component: alert
+    })
+    iconLibrary.register({
+      name: 'alternative-element-tree',
+      component: alternativeElementTree
     })
     iconLibrary.register({
       name: 'application-logger',
@@ -335,6 +359,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'book-open-01',
       component: bookOpen01
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-asset-folder',
+      component: bookmarkListAssetFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-document-folder',
+      component: bookmarkListDocumentFolder
+    })
+    iconLibrary.register({
+      name: 'bookmark-list-object-folder',
+      component: bookmarkListObjectFolder
     })
     iconLibrary.register({
       name: 'bookmark',
@@ -797,6 +833,10 @@ moduleSystem.registerModule({
       component: mailAnswer
     })
     iconLibrary.register({
+      name: 'manual-order',
+      component: manualOrder
+    })
+    iconLibrary.register({
       name: 'many-to-many',
       component: manyToMany
     })
@@ -807,6 +847,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'marketing',
       component: marketing
+    })
+    iconLibrary.register({
+      name: 'menu-shortcut',
+      component: menuShortcut
     })
     iconLibrary.register({
       name: 'menu',
@@ -945,12 +989,28 @@ moduleSystem.registerModule({
       component: plusSquare
     })
     iconLibrary.register({
+      name: 'portal-engine-collections',
+      component: portalEngineCollections
+    })
+    iconLibrary.register({
+      name: 'portal-engine-index',
+      component: portalEngineIndex
+    })
+    iconLibrary.register({
+      name: 'portal-engine-wizard',
+      component: portalEngineWizard
+    })
+    iconLibrary.register({
       name: 'presentation',
       component: presentation
     })
     iconLibrary.register({
       name: 'preview',
       component: preview
+    })
+    iconLibrary.register({
+      name: 'printpage',
+      component: printpage
     })
     iconLibrary.register({
       name: 'properties',
@@ -1049,6 +1109,10 @@ moduleSystem.registerModule({
       component: settings
     })
     iconLibrary.register({
+      name: 'share-with-users',
+      component: shareWithUsers
+    })
+    iconLibrary.register({
       name: 'share',
       component: share
     })
@@ -1085,12 +1149,24 @@ moduleSystem.registerModule({
       component: style
     })
     iconLibrary.register({
+      name: 'subscription-community',
+      component: subscriptionCommunity
+    })
+    iconLibrary.register({
+      name: 'subscription-enterprise',
+      component: subscriptionEnterprise
+    })
+    iconLibrary.register({
       name: 'tag-configuration',
       component: tagConfiguration
     })
     iconLibrary.register({
       name: 'tag',
       component: tag
+    })
+    iconLibrary.register({
+      name: 'target-group',
+      component: targetGroup
     })
     iconLibrary.register({
       name: 'target',
@@ -1203,6 +1279,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'z-to-a-order',
+      component: zToAOrder
     })
   }
 })

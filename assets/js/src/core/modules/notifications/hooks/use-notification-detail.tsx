@@ -10,7 +10,7 @@
 
 import { useEffect, useState } from 'react'
 import { type Notification, useNotificationDeleteByIdMutation, useNotificationGetByIdQuery } from '../notifications-slice-enhanced'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useOptimisticUpdate } from './use-optimistic-update'
 import { isNil } from 'lodash'
@@ -30,15 +30,31 @@ interface UseNotificationsReturn {
 
 export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNotificationsReturn => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
-  const { updateNotificationReadStateById } = useOptimisticUpdate()
+  const { updateNotificationReadStateById, removeNotificationFromCollectionById } = useOptimisticUpdate()
+  const [deleteNotificationMutation, { isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
 
-  const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
-    (isExpanded) ? { id } : skipToken)
+  const {
+    data: notificationDetail,
+    isLoading: detailLoading,
+    isError: isDetailError,
+    error: detailError
+  } = useNotificationGetByIdQuery((isExpanded) ? { id } : skipToken)
 
-  const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
+  const deleteNotification = async (): Promise<void> => {
+    const deleteTask = deleteNotificationMutation({ id })
 
-  const deleteNotificationDetail = async (): Promise<void> => {
-    await deleteNotification({ id })
+    try {
+      const response = await deleteTask
+
+      if (response.error !== undefined) {
+        trackError(new ApiError(response.error))
+        return
+      }
+
+      removeNotificationFromCollectionById(id)
+    } catch {
+      trackError(new GeneralError('An error occurred while deleting the notification.'))
+    }
   }
 
   useEffect(() => {
@@ -53,18 +69,12 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
     }
   }, [isDetailError])
 
-  useEffect(() => {
-    if (isDeleteError) {
-      trackError(new ApiError(deleteError))
-    }
-  }, [isDeleteError])
-
   return {
     notificationDetail,
     detailLoading,
     isExpanded,
     setIsExpanded,
-    deleteNotification: deleteNotificationDetail,
+    deleteNotification,
     deleteLoading
   }
 }

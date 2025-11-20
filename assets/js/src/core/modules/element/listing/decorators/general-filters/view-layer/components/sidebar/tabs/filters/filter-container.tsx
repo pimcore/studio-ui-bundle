@@ -12,6 +12,7 @@ import React from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { FilterContainerInner } from './filter-container-inner'
 import { FilterProvider } from './provider/filter-provider/filter-provider'
+import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 
 interface IFilterContainerProps {
   errorData?: FetchBaseQueryError
@@ -20,7 +21,9 @@ interface IFilterContainerProps {
 export const FilterContainer = ({ errorData }: IFilterContainerProps): React.JSX.Element => {
   return (
     <FilterProvider>
-      <FilterContainerInner />
+      <ClassificationStoreModalProvider>
+        <FilterContainerInner />
+      </ClassificationStoreModalProvider>
     </FilterProvider>
   )
 }

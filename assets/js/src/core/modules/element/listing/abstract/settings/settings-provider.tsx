@@ -31,6 +31,7 @@ export interface SettingsContextProps {
   ConfigurationComponent: ElementType
   DataComponent: ElementType
   ViewComponent: ElementType
+  toolbarSlotName?: string
   useDataQueryHelper: () => UseQueryHelperReturn
   useDataQuery: (...props: unknown[]) => TypedUseQueryHookResult<any, unknown, BaseQueryFn>
   useGridOptions: typeof useGridOptions

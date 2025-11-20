@@ -13,24 +13,23 @@ import React, { useState } from 'react'
 import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
-import { useTranslation } from 'react-i18next'
-import { isString } from 'lodash'
 import { createTabTitleTestId, createBorderTestId } from '@Pimcore/utils/test-id-generator'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useWidgetTitle } from '../hooks/use-widget-title'
 
 export interface TabTitleContainerProps {
   node: TabNode
   modified?: boolean
+  title?: string
+  icon?: ElementIcon
 }
 
-export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): React.JSX.Element => {
-  const { t } = useTranslation()
+export const TabTitleContainer = ({ node, modified, title: titleProp, icon: iconProp }: TabTitleContainerProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
-  const config = node.getConfig()
-  const icon = config.icon ?? { value: 'widget-default', type: 'name' }
-  const title = isString(config.translationKey)
-    ? t(config.translationKey as string)
-    : node.getName()
   const { closeWidget } = useWidgetManager()
+  const { title, icon } = useWidgetTitle(node, { titleOverride: titleProp, iconOverride: iconProp })
+  const config = node.getConfig()
+
   const isCloseable = node.isEnableClose()
 
   const onClose = (): void => {
@@ -56,7 +55,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
       <BorderTitleView
         dataTestId={ dataTestId }
         icon={ icon }
-        title={ t(`${nodeName}`) }
+        title={ title }
       />
     )
   }

@@ -36,7 +36,7 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   const layouts = data !== undefined ? data.items : undefined
   const hasWorkflowAvailable = isWorkflowAvailable(dataObject, 'data-object')
 
-  const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType: 'data-object', elementId: id }, { skip: !hasWorkflowAvailable })
+  const { data: workflowDetailsData, isLoading: isLoadingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType: 'data-object', elementId: id }, { skip: !hasWorkflowAvailable })
 
   const getDefaultLayoutId = (currentLayout?: string | null): string | null => {
     if (isUndefined(layouts)) {
@@ -51,7 +51,7 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
 
     return defaultLayout?.id ?? null
   }
-  const isLoading = isDraftLoading || isFetchingWorkflowDetails || (isCustomLayoutLoading && dataObject?.type !== 'folder')
+  const isLoading = isDraftLoading || isLoadingWorkflowDetails || (isCustomLayoutLoading && dataObject?.type !== 'folder')
   return {
     layouts,
     getDefaultLayoutId,

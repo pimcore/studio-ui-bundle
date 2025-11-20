@@ -19,7 +19,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { checkElementPermission } from '../../permissions/permission-helper'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { ContextMenuActionName } from '..'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 

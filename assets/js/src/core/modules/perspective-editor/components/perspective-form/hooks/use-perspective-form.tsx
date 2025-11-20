@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePerspectiveGetConfigByIdQuery } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { usePerspectiveGetConfigByIdQuery } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { useMemo } from 'react'
 
 type MenuEntriesSection = Record<string, boolean>

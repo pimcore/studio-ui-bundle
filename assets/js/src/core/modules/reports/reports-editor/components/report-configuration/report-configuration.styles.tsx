@@ -13,8 +13,16 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     grid: css`
+      position: relative;
       width: 100%;
-      overflow-y: scroll;
+      max-height: 500px;
+      overflow: auto;
+        
+      tbody {
+        .default-cell__content {
+          height: 32px;
+        }
+      }
     `,
 
     permissionLabel: css`

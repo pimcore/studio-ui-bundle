@@ -8,13 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type RefObject } from 'react'
-import { type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
+import React from 'react'
+import { type FormInstance, type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { isDontAskAgainEnabled, setDontAskAgain } from '@Pimcore/utils/local-storage'
+import { DontAskAgainSwitch } from '@Pimcore/components/modal/form-modal/components/dont-ask-again-switch'
+import { TextareaForm } from '@Pimcore/components/modal/form-modal/components/textarea-form'
+import { InputForm } from '@Pimcore/components/modal/form-modal/components/input-form'
+import { UploadForm } from '@Pimcore/components/modal/form-modal/components/upload-form'
+import { noop } from 'lodash'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { Flex } from '@sdk/components'
 
 let form: FormInstance<any> | null = null
 
@@ -32,15 +40,19 @@ export type TextareaFormModalProps = Omit<ModalFuncProps, 'content'> & {
   placeholder?: string
 }
 
-interface UploadFormProps extends Omit<InputFormModalProps, 'initialValues'> {
+interface UploadFormModalProps extends Omit<InputFormModalProps, 'initialValues'> {
   accept?: string
+}
+
+export type ConfirmFormModalProps = ModalFuncProps & {
+  dontAskAgainKey?: string
 }
 
 export interface UseFormModalHookResponse {
   input: (props: InputFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   textarea: (props: TextareaFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  confirm: (props: ModalFuncProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  upload: (props: UploadFormProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  confirm: (props: ConfirmFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  upload: (props: UploadFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
 export function useFormModal (): UseFormModalHookResponse {
@@ -49,31 +61,34 @@ export function useFormModal (): UseFormModalHookResponse {
   const [tmpForm] = Form.useForm()
   form = tmpForm
 
+  const dontAskAgainRef = React.useRef<boolean>(false)
+
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
       input: (props) => {
         const modalResult = localModal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
-        // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
       textarea: (props) => {
         const modalResult = localModal.confirm(withTextarea(props))
-        // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
-      confirm: (props) => modal.confirm(withConfirm(props)),
+      confirm: (props) => {
+        if (isNonEmptyString(props.dontAskAgainKey) && isDontAskAgainEnabled(props.dontAskAgainKey)) {
+          props.onOk?.()
+          return { destroy: noop, update: noop }
+        }
+
+        dontAskAgainRef.current = false
+
+        return modal.confirm(withConfirm(props, dontAskAgainRef))
+      },
       upload: (props) => localModal.confirm(withUpload(props))
     }),
     [modal, localModal]
   )
-}
-
-interface InputFormProps {
-  form: FormInstance<any>
-  initialValues: object
-  fieldName: string
 }
 
 export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetModalLoading): ModalFuncProps {
@@ -109,25 +124,6 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     })
   }
 
-  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
-    return (
-      <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
-        onSubmitCapture={ async () => { await submit(props.fieldName) } }
-      >
-        <Form.Item
-          label={ label }
-          name={ props.fieldName }
-          rules={ formattedRule }
-        >
-          <Input ref={ ref } />
-        </Form.Item>
-      </Form>
-    )
-  })
-
   return {
     ...modalProps,
     type: props.type ?? 'confirm',
@@ -146,16 +142,12 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
       form={ form! }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
+      label={ label }
+      onSubmitCapture={ async () => { await submit(fieldName) } }
       ref={ inputRef }
+      rules={ formattedRule }
              />
   }
-}
-
-interface TextareaFormProps {
-  form: FormInstance<any>
-  initialValues: object
-  fieldName: string
-  placeholder?: string
 }
 
 export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
@@ -167,27 +159,6 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     initialValue = '',
     ...modalProps
   } = props
-
-  const TextareaForm = forwardRef(function InputForm (props: TextareaFormProps, ref: RefObject<InputRef>): React.JSX.Element {
-    return (
-      <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
-      >
-        <Form.Item
-          label={ label }
-          name={ props.fieldName }
-        >
-          <Input.TextArea
-            autoSize={ { minRows: 10, maxRows: 20 } }
-            placeholder={ props.placeholder }
-            ref={ ref }
-          />
-        </Form.Item>
-      </Form>
-    )
-  })
 
   return {
     ...modalProps,
@@ -209,22 +180,52 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
       form={ form! }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'textarea-form' }
+      label={ label }
       placeholder={ props.placeholder }
       ref={ textareaRef }
              />
   }
 }
 
-export function withConfirm (props: ModalFuncProps): ModalFuncProps {
-  return {
-    ...props,
+export function withConfirm (props: ConfirmFormModalProps, dontAskAgainRef: React.MutableRefObject<boolean>): ModalFuncProps {
+  const { dontAskAgainKey, ...modalProps } = props
+
+  const baseModalConfig = {
+    ...modalProps,
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
     cancelText: props.cancelText ?? i18n.t('no')
   }
+
+  if (!isNonEmptyString(dontAskAgainKey)) {
+    return baseModalConfig
+  }
+
+  const handleOk = async (): Promise<void> => {
+    if (dontAskAgainRef.current) {
+      setDontAskAgain(dontAskAgainKey, true)
+    }
+    return props.onOk?.()
+  }
+
+  return {
+    ...baseModalConfig,
+    onOk: handleOk,
+    footer: (originNode: React.ReactNode) => {
+      return (
+        <Flex
+          align="center"
+          justify="space-between"
+        >
+          <DontAskAgainSwitch dontAskAgainRef={ dontAskAgainRef } />
+          <div>{originNode}</div>
+        </Flex>
+      )
+    }
+  }
 }
 
-export function withUpload (props: UploadFormProps): ModalFuncProps {
+export function withUpload (props: UploadFormModalProps): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `upload-${uuid}`
@@ -239,28 +240,6 @@ export function withUpload (props: UploadFormProps): ModalFuncProps {
   if (rule !== undefined) {
     formattedRule = [rule]
   }
-
-  const UploadForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
-    return (
-      <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
-      >
-        <Form.Item
-          label={ label }
-          name={ props.fieldName }
-          rules={ formattedRule }
-        >
-          <Input
-            accept={ accept }
-            ref={ ref }
-            type="file"
-          />
-        </Form.Item>
-      </Form>
-    )
-  })
 
   return {
     ...modalProps,
@@ -281,11 +260,14 @@ export function withUpload (props: UploadFormProps): ModalFuncProps {
       })
     },
     content: <UploadForm
+      accept={ accept }
       fieldName={ fieldName }
       form={ form! }
       initialValues={ {} }
       key={ 'upload-form' }
+      label={ label }
       ref={ inputRef }
+      rules={ formattedRule }
              />
   }
 }

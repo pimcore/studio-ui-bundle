@@ -9,10 +9,11 @@
  */
 
 import React, { type ReactElement } from 'react'
+import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterMultiselectComponent } from '../../components/dynamic-type-field-filter-multiselect-component'
-import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
 export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbstract {
@@ -20,6 +21,15 @@ export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbs
 
   getFieldFilterType (): string {
     return FieldFilterFrontendType.Select
+  }
+
+  transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    const transformedFilter = { ...filter }
+    if (Array.isArray(filter.filterValue)) {
+      transformedFilter.filterValue = filter.filterValue.map(String)
+    }
+
+    return super.transformFilterToApiRequest(transformedFilter)
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {

@@ -12,8 +12,12 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import '@Pimcore/modules/element/editor'
+import '@Pimcore/modules/element/search-replace-assignments'
 import { TreeWidget } from './tree/tree-widget'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { has } from 'lodash'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -21,7 +25,26 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'element_tree',
-      component: TreeWidget
+      component: TreeWidget,
+      transformConfig: (config) => ({
+        ...config,
+        translationKey: config.name
+      }),
+      isVisible: (widget) => {
+        if (has(widget, 'elementType')) {
+          switch (widget.elementType) {
+            case 'document':
+              return isAllowed(UserPermission.Documents)
+            case 'asset':
+              return isAllowed(UserPermission.Assets)
+            case 'data-object':
+              return isAllowed(UserPermission.Objects)
+            default:
+              return true
+          }
+        }
+        return true
+      }
     })
   }
 })

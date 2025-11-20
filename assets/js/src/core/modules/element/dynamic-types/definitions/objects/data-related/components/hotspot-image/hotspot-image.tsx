@@ -33,7 +33,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/image-preview'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import {
-  hasValueData
+  hasHotspotsOrMarkers
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
 import _, { isNil } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -107,7 +107,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const height = toCssDimension(props.height, 150)
 
   const replaceImage = (newImage: ImageValue): void => {
-    if (hasValueData(imageValue)) {
+    if (hasHotspotsOrMarkers(imageValue)) {
       confirm({
         title: t('hotspots.clear-data'),
         content: t('hotspots.clear-data.dnd-message'),
@@ -125,15 +125,14 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     }
   }
 
-  const setImage = (image: ImageValue, replaceValueData: boolean): void => {
+  const setImage = (image: ImageValue, replaceHotspotsMarkers: boolean): void => {
     let newValue: HotspotImageValue = imageValue === null ? { image: null, hotspots: [], marker: [], crop: {} } : { ...imageValue }
 
-    if (replaceValueData) {
+    if (replaceHotspotsMarkers) {
       newValue = { image, hotspots: [], marker: [], crop: {} }
     } else {
-      newValue = { ...newValue, image }
+      newValue = { ...newValue, crop: {}, image }
     }
-
     handleChange(newValue)
   }
 

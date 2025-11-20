@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../../hooks/use-asset-draft'
-import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../../asset-api-slice-enhanced'
+import { useAssetUpdateByIdMutation } from '../../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type DataProperty as DataPropertyApi
@@ -29,6 +29,16 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type AssetSaveDataProcessorRegistry,
+  AssetSaveDataContext,
+  type AssetSaveUpdateData
+} from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -76,7 +86,7 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t(asset?.type === 'folder' ? 'toolbar.save' : 'toolbar.save-and-publish')}
       </Button>
       ) }
     </>
@@ -85,7 +95,7 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const update: AssetUpdateByIdApiArg['body']['data'] = {}
+    const update: AssetSaveUpdateData = {}
 
     if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
@@ -138,6 +148,13 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
       update.data = textData
     }
 
+    const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
+      serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
+    )
+
+    const context = new AssetSaveDataContext(id, update)
+    saveDataProcessorRegistry.executeProcessors(context)
+
     const saveAssetPromise = saveAsset({
       id,
       body: {
@@ -145,6 +162,22 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
           ...update
         }
       }
+    }).then((response) => {
+      if (response.error === undefined) {
+        const event: AssetPostUpdateEvent = {
+          identifier: {
+            type: eventTypes['asset:editor:post-update'],
+            id: String(id)
+          },
+          payload: {
+            id,
+            updatedData: update,
+            responseData: response.data
+          }
+        }
+        eventBus.publish(event)
+      }
+      return response
     })
 
     const saveSchedulesPromise = saveSchedules()

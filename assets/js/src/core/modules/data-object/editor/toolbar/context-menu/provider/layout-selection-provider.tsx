@@ -13,7 +13,7 @@ import { Content } from '@Pimcore/components/content/content'
 
 export interface ILayoutSelectionContext {
   currentLayout: string | null
-  setCurrentLayout: (layoutId: string) => void
+  setCurrentLayout: (layoutId: string | null) => void
 }
 
 export const LayoutSelectionContext = createContext<ILayoutSelectionContext>({

@@ -22,9 +22,10 @@ import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/module
 interface IReportsChartProps {
   chartData?: object[]
   reportData?: BundleCustomReportsDetails
+  chartConfig?: object[]
 }
 
-export const ReportChart = ({ chartData, reportData }: IReportsChartProps): React.JSX.Element => {
+export const ReportChart = ({ chartData, reportData, chartConfig }: IReportsChartProps): React.JSX.Element => {
   if (isUndefined(reportData) || isUndefined(chartData)) {
     return <Content loading />
   }
@@ -40,7 +41,8 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
   const commonProps = {
     reportData,
     chartData,
-    chartLabelMap
+    chartLabelMap,
+    chartConfig
   }
 
   if (isEmptyValue(chartData)) {

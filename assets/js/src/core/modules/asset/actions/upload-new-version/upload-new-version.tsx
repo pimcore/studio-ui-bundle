@@ -18,7 +18,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 

@@ -66,12 +66,14 @@ export const serviceIds = {
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
   'Asset/ThumbnailService': 'Asset/ThumbnailService',
+  'Asset/Listing/Builder': 'Asset/Listing/Builder',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/VariantTabManager': 'DataObject/Editor/VariantTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
+  'DataObject/Listing/Builder': 'DataObject/Listing/Builder',
 
   // Documents
   'Document/Editor/TypeRegistry': 'Document/Editor/TypeRegistry',
@@ -112,6 +114,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
   'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
+  'DynamicTypes/FieldFilter/ClassificationStore': 'DynamicTypes/FieldFilter/ClassificationStore',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -119,6 +122,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/Select': 'DynamicTypes/BatchEdit/Select',
   'DynamicTypes/BatchEdit/Checkbox': 'DynamicTypes/BatchEdit/Checkbox',
   'DynamicTypes/BatchEdit/ElementDropzone': 'DynamicTypes/BatchEdit/ElementDropzone',
+  'DynamicTypes/BatchEdit/ClassificationStore': 'DynamicTypes/BatchEdit/ClassificationStore',
   'DynamicTypes/BatchEdit/DataObjectAdapter': 'DynamicTypes/BatchEdit/DataObjectAdapter',
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
@@ -159,6 +163,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
   'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
   'DynamicTypes/GridCell/DataObjectAdapter': 'DynamicTypes/GridCell/DataObjectAdapter',
+  'DynamicTypes/GridCell/ClassificationStore': 'DynamicTypes/GridCell/ClassificationStore',
   'DynamicTypes/GridCell/DataObjectAdvanced': 'DynamicTypes/GridCell/DataObjectAdvanced',
   'DynamicTypes/GridCell/DataObjectObjectBrick': 'DynamicTypes/GridCell/DataObjectObjectBrick',
 
@@ -313,6 +318,8 @@ export const serviceIds = {
   'DynamicTypes/Grid/Transformers/StringReplace': 'DynamicTypes/Grid/Transformers/StringReplace',
   'DynamicTypes/Grid/Transformers/Substring': 'DynamicTypes/Grid/Transformers/Substring',
   'DynamicTypes/Grid/Transformers/Trim': 'DynamicTypes/Grid/Transformers/Trim',
+  'DynamicTypes/Grid/Transformers/Translate': 'DynamicTypes/Grid/Transformers/Translate',
+  'DynamicTypes/Grid/Transformers/PHPCode': 'DynamicTypes/Grid/Transformers/PHPCode',
 
   // Widget Editor types
   'DynamicTypes/WidgetEditor/ElementTree': 'DynamicTypes/WidgetEditor/ElementTree',
@@ -330,5 +337,13 @@ export const serviceIds = {
   'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry',
 
   // Document required fields validation service
-  'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService'
+  'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService',
+
+  // Processor registries
+  'Document/ProcessorRegistry/UrlProcessor': 'Document/ProcessorRegistry/UrlProcessor',
+  'Document/ProcessorRegistry/SaveDataProcessor': 'Document/ProcessorRegistry/SaveDataProcessor',
+  'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
+  'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor',
+  'Element/ProcessorRegistry/IconProcessor': 'Element/ProcessorRegistry/IconProcessor',
+  'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor'
 }
