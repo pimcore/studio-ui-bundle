@@ -16,10 +16,9 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { Form, Popconfirm } from 'antd'
-import { Box, Tooltip } from '@sdk/components'
+import { Box } from '@sdk/components'
 import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation/many-to-one-relation-input'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Alert } from '@Pimcore/components/alert/alert'
 
 export const SearchReplaceForm = (): React.JSX.Element => {
