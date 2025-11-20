@@ -28,7 +28,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   protected job: AbstractJob | null = null
   protected readonly config: TConfig
   protected readonly jobType: string
-  protected readonly onJobCompletion?: (data: any) => void | Promise<void>
+  protected readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
 
   private lastProgressValue: number = -1
 
@@ -59,7 +59,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     return null
   }
 
-  protected async handleJobCompletion (data: any): Promise<void> {
+  protected async handleJobCompletion (data: JobCompletionData): Promise<void> {
     if (this.onJobCompletion !== undefined) {
       await this.onJobCompletion(data)
     }
@@ -125,9 +125,6 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
 
     if (isComplete) {
-      const success = data.status === 'finished'
-      await this.handleJobCompletion(success)
-
       let jobStatus: JobStatus
       switch (data.status) {
         case 'finished':
@@ -142,6 +139,16 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
         default:
           jobStatus = JobStatus.FAILED
       }
+
+      const completionData: JobCompletionData = {
+        isSuccessful: String(data.status) === 'finished',
+        isFinished: ['finished', 'finished_with_errors'].includes(String(data.status)),
+        isFailed: String(data.status) === 'failed',
+        status: jobStatus,
+        payload: data
+      }
+
+      await this.handleJobCompletion(completionData)
 
       store.dispatch(jobUpdated({
         id: this.getJob().id,
@@ -197,9 +204,17 @@ export interface BaseJobConfig {
   progress?: number
 }
 
+export interface JobCompletionData {
+  isSuccessful: boolean
+  isFinished: boolean
+  isFailed: boolean
+  status: JobStatus
+  payload: any
+}
+
 export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
   jobRunId: string | number
   config: TConfig
   jobType?: string
-  onJobCompletion?: (data: any) => void | Promise<void>
+  onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
 }
