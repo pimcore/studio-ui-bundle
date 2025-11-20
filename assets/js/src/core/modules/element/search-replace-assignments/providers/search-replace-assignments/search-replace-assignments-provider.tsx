@@ -124,7 +124,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         targetElementId: replaceWith.id,
         title: t('search-replace-assignments.job.title-all'),
         onFinish: () => {
-          // handleRefresh()
+          handleRefresh()
           setSelectedRows({})
         }
       })
@@ -158,7 +158,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         elements: selectedElements,
         title: t('search-replace-assignments.job.title-selection', { count: selectedElements.length }),
         onFinish: () => {
-          // handleRefresh()
+          handleRefresh()
           setSelectedRows({})
         }
       })
