@@ -30,10 +30,10 @@ export interface RecycleBinRestoreJobOptions {
 }
 
 export class RecycleBinRestoreJob implements JobInterface {
-  protected readonly itemIds: number[]
-  protected readonly elementTypes: ElementType[]
-  protected readonly title: string
-  protected readonly onFinish?: () => void
+  private readonly itemIds: number[]
+  private readonly elementTypes: ElementType[]
+  private readonly title: string
+  private readonly onFinish?: () => void
 
   constructor (options: RecycleBinRestoreJobOptions) {
     this.itemIds = options.itemIds
@@ -72,7 +72,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
   }
 
-  protected async executeRestoreRequest (): Promise<string | number | null> {
+  private async executeRestoreRequest (): Promise<string | number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinRestoreItems.initiate({
         body: {
@@ -89,7 +89,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  protected getJobConfig (): RecycleBinRestoreJobConfig {
+  private getJobConfig (): RecycleBinRestoreJobConfig {
     return {
       title: this.title,
       progress: 0,
@@ -97,7 +97,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
   }
 
-  protected async handleCompletion (): Promise<void> {
+  private async handleCompletion (): Promise<void> {
     // Refresh the tree for all affected element types since items are being restored to their original locations
     store.dispatch(refreshTreeByElementType({
       elementTypes: this.elementTypes
@@ -113,7 +113,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     this.onFinish?.()
   }
 
-  protected async handleJobFailure (error: any): Promise<void> {
+  private async handleJobFailure (error: any): Promise<void> {
     console.error('Recycle bin restore job failed:', error)
   }
 }

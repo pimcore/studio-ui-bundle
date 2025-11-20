@@ -32,13 +32,13 @@ export interface SearchReplaceAssignmentsJobOptions {
 }
 
 export class SearchReplaceAssignmentsJob implements JobInterface {
-  protected readonly sourceElementType: ElementType
-  protected readonly sourceElementId: number
-  protected readonly targetElementType: ElementType
-  protected readonly targetElementId: number
-  protected readonly elements?: ElementUsageBaseItem[]
-  protected readonly title: string
-  protected readonly onFinish?: () => void
+  private readonly sourceElementType: ElementType
+  private readonly sourceElementId: number
+  private readonly targetElementType: ElementType
+  private readonly targetElementId: number
+  private readonly elements?: ElementUsageBaseItem[]
+  private readonly title: string
+  private readonly onFinish?: () => void
 
   constructor (options: SearchReplaceAssignmentsJobOptions) {
     this.sourceElementType = options.sourceElementType
@@ -80,7 +80,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     }
   }
 
-  protected async executeReplaceRequest (): Promise<string | number | null> {
+  private async executeReplaceRequest (): Promise<string | number | null> {
     const response = await store.dispatch(
       api.endpoints.elementUsageReplace.initiate({
         elementType: this.sourceElementType,
@@ -101,7 +101,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  protected getJobConfig (): SearchReplaceAssignmentsJobConfig {
+  private getJobConfig (): SearchReplaceAssignmentsJobConfig {
     return {
       title: this.title,
       progress: 0,
@@ -110,15 +110,11 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     }
   }
 
-  protected async handleCompletion (): Promise<void> {
-    store.dispatch(
-      api.util.invalidateTags(['Elements'])
-    )
-
+  private async handleCompletion (): Promise<void> {
     this.onFinish?.()
   }
 
-  protected async handleJobFailure (error: any): Promise<void> {
+  private async handleJobFailure (error: any): Promise<void> {
     console.error('Search replace assignments job failed:', error)
   }
 }

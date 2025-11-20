@@ -29,10 +29,10 @@ export interface RecycleBinDeleteJobOptions {
 }
 
 export class RecycleBinDeleteJob implements JobInterface {
-  protected readonly itemIds: number[]
-  protected readonly elementTypes: ElementType[]
-  protected readonly title: string
-  protected readonly onFinish?: () => void
+  private readonly itemIds: number[]
+  private readonly elementTypes: ElementType[]
+  private readonly title: string
+  private readonly onFinish?: () => void
 
   constructor (options: RecycleBinDeleteJobOptions) {
     this.itemIds = options.itemIds
@@ -71,7 +71,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  protected async executeDeleteRequest (): Promise<string | number | null> {
+  private async executeDeleteRequest (): Promise<string | number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinDeleteItems.initiate({
         body: {
@@ -88,7 +88,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  protected getJobConfig (): RecycleBinDeleteJobConfig {
+  private getJobConfig (): RecycleBinDeleteJobConfig {
     return {
       title: this.title,
       progress: 0,
@@ -96,7 +96,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  protected async handleCompletion (): Promise<void> {
+  private async handleCompletion (): Promise<void> {
     // Refresh the recycle bin data
     store.dispatch(
       api.util.invalidateTags(
@@ -107,7 +107,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     this.onFinish?.()
   }
 
-  protected async handleJobFailure (error: any): Promise<void> {
+  private async handleJobFailure (error: any): Promise<void> {
     console.error('Recycle bin delete job failed:', error)
   }
 }

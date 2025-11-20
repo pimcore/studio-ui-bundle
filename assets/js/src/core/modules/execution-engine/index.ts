@@ -18,7 +18,6 @@ import { NotificationJobContainer as DownloadJobContainer } from './jobs/downloa
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'
 import { NotificationJobContainer as BatchEditJobContainer } from './jobs/batch-edit/notification-job-container'
 import { NotificationJobContainer as BatchDeleteJobContainer } from './jobs/batch-delete/notification-job-container'
-import { NotificationJobContainer as TagAssignJobContainer } from './jobs/tag-assign/notification-job-container'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
@@ -30,7 +29,6 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('batch-edit', BatchEditJobContainer)
     jobComponentRegistry.registerComponent('batch-delete', BatchDeleteJobContainer)
     jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
-    jobComponentRegistry.registerComponent('tag-assign', TagAssignJobContainer)
   }
 }
 
