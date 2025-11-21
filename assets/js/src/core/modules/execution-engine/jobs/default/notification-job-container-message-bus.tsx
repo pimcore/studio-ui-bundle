@@ -24,10 +24,17 @@ export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.E
   const { removeJob } = useJobs()
   const { t } = useTranslation()
 
-  const failureButtonActions: ButtonAction[] = []
+  const hideButtonAction: ButtonAction = {
+    label: t('jobs.job.button-hide'),
+    handler: () => { removeJob(props.id) }
+  }
+
+  const successButtonActions: ButtonAction[] = [hideButtonAction]
+  const finishedWithErrorsButtonActions: ButtonAction[] = [hideButtonAction]
+  const failureButtonActions: ButtonAction[] = [hideButtonAction]
 
   if (!isUndefined(props.onRetry)) {
-    failureButtonActions.push({
+    failureButtonActions.unshift({
       label: t('jobs.job.button-retry'),
       handler: () => {
         void props.onRetry?.()
@@ -36,32 +43,13 @@ export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.E
     })
   }
 
-  failureButtonActions.push({
-    label: t('jobs.job.button-hide'),
-    handler: () => { removeJob(props.id) }
-  })
-
   return (
     <JobView
       failureButtonActions={ failureButtonActions }
 
-      finishedWithErrorsButtonActions={ [
-        {
-          label: t('jobs.job.button-hide'),
-          handler: () => {
-            removeJob(props.id)
-          }
-        }
-      ] }
+      finishedWithErrorsButtonActions={ finishedWithErrorsButtonActions }
 
-      successButtonActions={ [
-        {
-          label: t('jobs.job.button-hide'),
-          handler: () => {
-            removeJob(props.id)
-          }
-        }
-      ] }
+      successButtonActions={ successButtonActions }
 
       { ...props }
       progress={ props.config.progress ?? 0 }

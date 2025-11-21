@@ -16,7 +16,6 @@ import { NotificationJobContainer as DefaultJobContainer } from './jobs/default/
 import { NotificationJobContainer as MessageBusJobContainer } from './jobs/default/notification-job-container-message-bus'
 import { NotificationJobContainer as DownloadJobContainer } from './jobs/download/notification-job-container'
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'
-import { NotificationJobContainer as BatchEditJobContainer } from './jobs/batch-edit/notification-job-container'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
@@ -25,7 +24,6 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('default', DefaultJobContainer)
     jobComponentRegistry.registerComponent('default-message-bus', MessageBusJobContainer)
     jobComponentRegistry.registerComponent('download', DownloadJobContainer)
-    jobComponentRegistry.registerComponent('batch-edit', BatchEditJobContainer)
     jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
   }
 }
