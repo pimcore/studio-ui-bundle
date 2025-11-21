@@ -24,6 +24,7 @@ export * from '@Pimcore/modules/app/theme/theme-provider'
 export * from '@Pimcore/modules/app/theme/utils/themes/theme-tokens'
 
 export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
+export * from '@Pimcore/modules/app/hook/use-date-converter'
 
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 
