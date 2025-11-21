@@ -25,6 +25,12 @@ export interface ButtonAction {
   handler: () => void | Promise<void>
 }
 
+export interface JobViewCustomizationContext {
+  addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
+}
+
 export interface JobViewProps extends JobProps {
   successButtonActions?: ButtonAction[]
   failureButtonActions?: ButtonAction[]
@@ -34,9 +40,30 @@ export interface JobViewProps extends JobProps {
   totalSteps?: number
 }
 
+const addButton = (list: ButtonAction[], action: ButtonAction, position: 'start' | 'end' = 'start'): void => {
+  if (position === 'start') {
+    list.unshift(action)
+  } else {
+    list.push(action)
+  }
+}
+
 export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  const successButtonActions = [...(props.successButtonActions ?? [])]
+  const failureButtonActions = [...(props.failureButtonActions ?? [])]
+  const finishedWithErrorsButtonActions = [...(props.finishedWithErrorsButtonActions ?? [])]
+
+  if (!isUndefined(props.onCustomizeJobView)) {
+    const context: JobViewCustomizationContext = {
+      addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
+      addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
+      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }
+    }
+    props.onCustomizeJobView(context)
+  }
 
   const progress = Math.min(props.progress, 100)
 
@@ -89,7 +116,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
-                { props.successButtonActions?.map((action, index) => (
+                { successButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
@@ -114,7 +141,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
-                { props.finishedWithErrorsButtonActions?.map((action, index) => (
+                { finishedWithErrorsButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
@@ -138,7 +165,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 <Icon value='x-circle' /><span>{ t('jobs.job.failed', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
-                { props.failureButtonActions?.map((action, index) => (
+                { failureButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }

@@ -10,6 +10,7 @@
 
 import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { type topics } from '../topics'
+import { type JobViewCustomizationContext } from '../notification/job/job-view'
 
 export enum JobStatus {
   QUEUED = 'queued',
@@ -28,4 +29,5 @@ export interface AbstractJob {
   topics: NonEmptyArray<(typeof topics)[string]>
   config: unknown
   onRetry?: () => void | Promise<void>
+  onCustomizeJobView?: (context: JobViewCustomizationContext) => void
 }

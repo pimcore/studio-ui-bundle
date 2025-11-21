@@ -18,6 +18,7 @@ import { isNil, throttle } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
+import { type JobViewCustomizationContext } from '@Pimcore/modules/execution-engine/notification/job/job-view'
 
 /**
  * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
@@ -30,6 +31,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
   protected readonly jobType: string
   protected readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   protected readonly onRetry?: () => void | Promise<void>
+  protected readonly onCustomizeJobView?: (context: JobViewCustomizationContext) => void
 
   private lastProgressValue: number = -1
 
@@ -46,6 +48,7 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
     this.jobType = options.jobType ?? 'default-message-bus'
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
+    this.onCustomizeJobView = options.onCustomizeJobView
   }
 
   /**
@@ -93,7 +96,8 @@ export class DefaultJobHandler<TConfig extends BaseJobConfig> extends AbstractMe
         ...this.config,
         progress: this.config.progress ?? 0
       },
-      onRetry: this.onRetry
+      onRetry: this.onRetry,
+      onCustomizeJobView: this.onCustomizeJobView
     }
   }
 
@@ -221,4 +225,5 @@ export interface DefaultJobHandlerOptions<TConfig extends BaseJobConfig> {
   jobType?: string
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   onRetry?: () => void | Promise<void>
+  onCustomizeJobView?: (context: JobViewCustomizationContext) => void
 }
