@@ -109,6 +109,7 @@ export const SplitLayout = ({
         <SplitLayoutItem
           ref={ leftItemRef }
           { ...internalLeftItemSizing }
+          size={ leftItemFullWidth ? 100 : internalLeftItemSizing.size }
         >
           { leftItemChildren }
         </SplitLayoutItem>
@@ -126,6 +127,7 @@ export const SplitLayout = ({
         <SplitLayoutItem
           ref={ rightItemRef }
           { ...internalRightItemSizing }
+          size={ rightItemFullWidth ? 100 : internalRightItemSizing.size }
         >
           { rightItemChildren }
         </SplitLayoutItem>
