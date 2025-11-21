@@ -51,10 +51,10 @@ export const useDateConverter = (): UseDateConverterResult => {
     try {
       const normalizedTimestamp = asMilliseconds ? timestamp : timestamp * 1000
 
-      let date = dayjs(normalizedTimestamp)
+      let date: dayjs.Dayjs
 
       if (respectServerTimezone && isNonEmptyString(timezone)) {
-        date = date.tz(timezone)
+        date = dayjs.tz(normalizedTimestamp, timezone)
       } else {
         date = dayjs(normalizedTimestamp)
       }
