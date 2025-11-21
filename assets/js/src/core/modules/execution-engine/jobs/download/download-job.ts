@@ -37,6 +37,7 @@ export class DownloadJob implements JobInterface {
     try {
       return await this.options.action()
     } catch (e) {
+      console.error(e)
       return null
     }
   }
