@@ -18,11 +18,11 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useCustomReportExportCsvMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob as createDownloadCSVJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
+import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 interface IReportToolbarProps {
   currentReport: string | null
@@ -36,23 +36,23 @@ interface IReportToolbarProps {
 export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
   const [fetchExportCSV, { isError, error }] = useCustomReportExportCsvMutation()
 
-  const { addJob } = useJobs()
+  const executionEngine = useExecutionEngine()
   const { filters } = useGridFilterContext()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
 
   const handleExportCSV = ({ includeHeaders }: { includeHeaders: boolean }): void => {
-    addJob(createDownloadCSVJob({
+    const job = new DownloadJob({
       title: t('jobs.csv-job.title', { title: currentReport }),
-      topics: [topics['csv-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/export/download/csv/{jobRunId}',
+      downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
       action: async (): Promise<number> => {
         const response = await fetchExportCSV({ body: { name: currentReport, filters, includeHeaders } }).unwrap()
 
         return response as unknown as number
       }
-    }))
+    })
+    void executionEngine.runJob(job)
   }
 
   useEffect(() => {
