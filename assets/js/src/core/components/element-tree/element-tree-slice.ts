@@ -517,7 +517,6 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ nodeId: string, elementType: string, isDeleting: boolean }>
     ) => {
-      console.log('Object.keys(state)', Object.keys(state))
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
           updateNodeState(state, treeId, payload.nodeId, node => ({
