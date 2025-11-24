@@ -13,6 +13,7 @@ import React from 'react'
 import { useStyles } from './title-view.styles'
 import { Button } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
+import { isNil } from 'lodash'
 
 interface TitleViewProps {
   title: string
@@ -38,7 +39,7 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
 
       <span>{title}</span>
       
-      {onClose && showCloseButton && (
+      {!isNil(onClose) && showCloseButton && (
         <Button
           type="text"
           size="small"
