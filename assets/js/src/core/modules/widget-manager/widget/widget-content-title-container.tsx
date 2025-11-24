@@ -53,9 +53,9 @@ export const WidgetContentTitleContainer = ({
         : (
           <TitleView
             className={ 'widget__title' }
-            title={ title }
             icon={ icon }
             onClose={ isCloseable ? onClose : undefined }
+            title={ title }
           />
           )
       }
