@@ -16,6 +16,7 @@ import {
   openMainWidget as openMainWidgetAction,
   openRightWidget as openRightWidgetAction,
   selectInnerModel,
+  selectOuterModel,
   setActiveWidgetById,
   type widgetManagerSliceName,
   type WidgetManagerState,
@@ -24,7 +25,12 @@ import {
 import { Model, TabNode } from 'flexlayout-react'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
-import { type CloseMainWidgetEvent, type CloseMainWidgetEventPayload } from '../events'
+import { 
+  type CloseMainWidgetEvent, 
+  type CloseMainWidgetEventPayload,
+  type CloseOuterWidgetEvent,
+  type CloseOuterWidgetEventPayload
+} from '../events'
 import { isNull, isUndefined } from 'lodash'
 
 interface useWidgetManagerReturn {
@@ -62,23 +68,37 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   }
 
   function closeWidget (id: string): void {
-    const widgetData = getMainWidgetData(id)
-
+    const innerWidgetData = getInnerWidgetData(id)
+    const outerWidgetData = getOuterWidgetData(id)
+    
     dispatch(closeWidgetAction(id))
 
-    if (!isNull(widgetData)) {
+    if (!isNull(innerWidgetData)) {
       const event: CloseMainWidgetEvent = {
         identifier: {
           type: eventTypes['widget-manager:inner:widget-closed'],
           id
         },
-        payload: widgetData
+        payload: innerWidgetData
+      }
+      eventBus.publish(event)
+    }
+
+    if (!isNull(outerWidgetData)) {
+      console.log("OUTER WIDGET DATA:", outerWidgetData);
+      
+      const event: CloseOuterWidgetEvent = {
+        identifier: {
+          type: eventTypes['widget-manager:outer:widget-closed'],
+          id
+        },
+        payload: outerWidgetData
       }
       eventBus.publish(event)
     }
   }
 
-  function getMainWidgetData (id: string): CloseMainWidgetEventPayload | null {
+  function getInnerWidgetData (id: string): CloseMainWidgetEventPayload | null {
     try {
       const innerModel = getInnerModel()
       const node = innerModel.getNodeById(id)
@@ -90,7 +110,25 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
         }
       }
     } catch (error) {
-      console.warn('Could not retrieve main widget data for event:', error)
+      console.warn('Could not retrieve inner widget data for event:', error)
+    }
+
+    return null
+  }
+
+  function getOuterWidgetData (id: string): CloseOuterWidgetEventPayload | null {
+    try {
+      const outerModel = getOuterModel()
+      const node = outerModel.getNodeById(id)
+
+      if (!isUndefined(node) && node instanceof TabNode) {
+        return {
+          widgetId: id,
+          node
+        }
+      }
+    } catch (error) {
+      console.warn('Could not retrieve outer widget data for event:', error)
     }
 
     return null
@@ -99,6 +137,12 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   function getInnerModel (): Model {
     const state = store.getState()
     const modelJson = selectInnerModel(state as { [widgetManagerSliceName]: WidgetManagerState })
+    return Model.fromJson(modelJson)
+  }
+
+  function getOuterModel (): Model {
+    const state = store.getState()
+    const modelJson = selectOuterModel(state as { [widgetManagerSliceName]: WidgetManagerState })
     return Model.fromJson(modelJson)
   }
 
