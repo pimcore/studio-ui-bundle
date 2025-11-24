@@ -40,11 +40,11 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
       
       {!isNil(onClose) && (
         <Button
-          type="text"
+          className={ styles.CloseButton }
+          icon={ <CloseOutlined /> }
+          onClick={ onClose }
           size="small"
-          icon={<CloseOutlined />}
-          onClick={onClose}
-          className={styles.CloseButton}
+          type="text"
         />
       )}
     </div>
