@@ -90,7 +90,6 @@ export class PerspectiveProcessorContext {
       position,
       tabNode
     }
-    
     if (isUndefined(this.widgets[position])) {
       this.widgets[position] = []
     }
