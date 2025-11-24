@@ -37,7 +37,7 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
       />
 
       <span>{title}</span>
-      
+
       {!isNil(onClose) && (
         <Button
           className={ styles.CloseButton }
