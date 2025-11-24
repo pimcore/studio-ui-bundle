@@ -31,7 +31,7 @@ export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
     this.filters = options.filters
   }
 
-  protected async executeEditRequest (): Promise<string | number | null> {
+  protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchAssetsInFolder({
       body: {
         data: [
