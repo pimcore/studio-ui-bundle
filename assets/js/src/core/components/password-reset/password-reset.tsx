@@ -9,15 +9,29 @@
  */
 
 import { routes } from '@Pimcore/app/router/router'
+import { useAuthentication } from '@Pimcore/modules/auth/hooks/use-authentication'
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 export const PasswordReset = (): React.JSX.Element => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const token: string | null = searchParams.get('token');
+  const { loginWithToken } = useAuthentication()
 
   useEffect(() => {
-    navigate(routes.root, { state: { resetPassword: true } })
-  }, [])
+    if (token) {
+      void loginWithToken(
+        token,
+        () => {
+          navigate(routes.root, { state: { resetPassword: true } })
+        },
+        () => {
+          navigate(routes.login)
+        }
+      )
+    }
+  }, [token])
 
   return <></>
 }

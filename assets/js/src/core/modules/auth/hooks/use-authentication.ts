@@ -11,19 +11,30 @@
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useUserResetPasswordMutation } from '../user/user-api-slice.gen'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { generatePath } from 'react-router-dom'
+import { currentDomain, routes } from '@sdk/app'
+import { useLoginTokenMutation } from '../authorization-api-slice.gen'
 
 interface UseAuthenticationReturn {
-  resetPassword: (username: string, resetPasswordUrl?: string, onFinish?: () => void, onSuccess?: () => void) => Promise<void>
+  resetPassword: (username: string, onFinish?: () => void, onSuccess?: () => void) => Promise<void>
+  loginWithToken: (token: string, onSuccess?: () => void, onError?: () => void) => Promise<void>
 }
 
 export const useAuthentication = (): UseAuthenticationReturn => {
   const [resetPasswordMutation] = useUserResetPasswordMutation()
+  const [loginWithTokenMutation] = useLoginTokenMutation()
 
-  const resetPassword = async (username: string, resetPasswordUrl: string = '', onFinish?: () => void, onSuccess?: () => void): Promise<void> => {
+  const resetPassword = async (username: string, onFinish?: () => void, onSuccess?: () => void): Promise<void> => {
+    const generateResetPasswordUrl = (): string => {
+      const path = generatePath(routes.passwordReset)
+
+      return `${currentDomain}${path}`
+    }
+
     const resetPasswordTask = resetPasswordMutation({
       resetPassword: {
         username,
-        resetPasswordUrl
+        resetPasswordUrl: generateResetPasswordUrl()
       }
     })
 
@@ -44,7 +55,31 @@ export const useAuthentication = (): UseAuthenticationReturn => {
     }
   }
 
+  const loginWithToken = async (token: string, onSuccess?: () => void, onError?: () => void): Promise<void> => {
+    const tokenLoginTask = loginWithTokenMutation({
+      authenticationToken: {
+        token
+      }
+    })
+
+    try {
+      const response = (await tokenLoginTask) as any
+
+      if (response.error !== undefined) {
+        trackError(new ApiError(response.error as ApiErrorData))
+        onError?.()
+        return
+      }
+
+      onSuccess?.()
+    } catch {
+      trackError(new GeneralError('Error using token for authorization'))
+      onError?.()
+    }
+  }
+
   return {
-    resetPassword
+    resetPassword,
+    loginWithToken
   }
 }

@@ -41,8 +41,8 @@ const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): Reac
       {isAuthenticated === true && children}
       {isAuthenticated === false && (
         <Navigate
-          state={ { from: location } }
-          to={ routes.login }
+          state={{ from: location }}
+          to={routes.login}
         />
       )}
     </>
@@ -68,8 +68,6 @@ export const router = createBrowserRouter([
   },
   {
     path: routes.passwordReset,
-    element: <AuthenticatedRoute>
-      <PasswordReset />
-    </AuthenticatedRoute>
+    element: <PasswordReset />
   }
 ])
