@@ -23,8 +23,6 @@ export interface JobErrorModalProps {
 
 export const JobErrorModal = ({ open, onClose, messages }: JobErrorModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const settings = useSettings()
-  const isDev = settings?.environment === 'dev'
 
   return (
     <Modal
@@ -38,7 +36,7 @@ export const JobErrorModal = ({ open, onClose, messages }: JobErrorModalProps): 
       <ul>
         { messages.map((message, index) => {
           const text = isString(message) ? message : JSON.stringify(message) ?? ''
-          return <li key={ index }>{ isDev ? text : removePhpStackTrace(text) }</li>
+          return <li key={ index }>{ text }</li>
         }) }
       </ul>
     </Modal>
