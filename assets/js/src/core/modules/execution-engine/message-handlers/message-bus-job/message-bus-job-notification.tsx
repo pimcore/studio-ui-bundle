@@ -15,6 +15,11 @@ import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty } from 'lodash'
 import { type MessageBusJob } from './message-bus-job-handler'
 import { JobErrorModal } from './job-error-modal'
+import { useExecutionEngineAbortJobRunByIdMutation } from '@Pimcore/modules/execution-engine/execution-engine-api-slice-enhanced'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface JobButtonCustomizationContext {
   addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
@@ -22,12 +27,28 @@ export interface JobButtonCustomizationContext {
   addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
 }
 
-export interface MessageBusJobProps extends MessageBusJob {}
+export interface MessageBusJobProps extends MessageBusJob {
+}
 
 export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.Element => {
   const { removeJob } = useJobs()
   const { t } = useTranslation()
   const [showErrorModal, setShowErrorModal] = useState(false)
+  const [abortJobRun] = useExecutionEngineAbortJobRunByIdMutation()
+
+  const handleAbort = async (): Promise<void> => {
+    const { error } = await abortJobRun({ jobRunId: Number(props.jobRunId) })
+
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+      return
+    }
+
+    const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
+    messageBus.unregisterHandler(props.jobRunId)
+
+    removeJob(props.id)
+  }
 
   const hideButtonAction: ButtonAction = {
     label: t('jobs.job.button-hide'),
@@ -83,6 +104,8 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
         failureButtonActions={ failureButtonActions }
 
         finishedWithErrorsButtonActions={ finishedWithErrorsButtonActions }
+
+        onAbort={ handleAbort }
 
         successButtonActions={ successButtonActions }
 

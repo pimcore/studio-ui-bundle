@@ -68,7 +68,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
   }
 
-  private async executeRestoreRequest (): Promise<string | number | null> {
+  private async executeRestoreRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinRestoreItems.initiate({
         body: {

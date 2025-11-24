@@ -83,7 +83,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
     }
   }
 
-  protected abstract executeEditRequest (): Promise<string | number | null>
+  protected abstract executeEditRequest (): Promise<number | null>
 
   protected async handleCompletion (): Promise<void> {
     if (this.onFinish !== undefined) {

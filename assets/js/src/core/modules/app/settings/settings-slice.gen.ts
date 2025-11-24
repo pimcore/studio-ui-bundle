@@ -14,6 +14,10 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/settings/active-bundles` }),
                 providesTags: ["Settings"],
             }),
+            pingAction: build.query<PingActionApiResponse, PingActionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/settings/ping` }),
+                providesTags: ["Settings"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -27,6 +31,8 @@ export type ActiveBundlesGetApiResponse = /** status 200 List of active bundles 
     bundles: ActiveBundle[];
 };
 export type ActiveBundlesGetApiArg = void;
+export type PingActionApiResponse = unknown;
+export type PingActionApiArg = void;
 export type Error = {
     /** Message */
     message: string;
@@ -45,4 +51,4 @@ export type ActiveBundle = {
     /** Bundle name */
     name: string;
 };
-export const { useSystemSettingsGetQuery, useActiveBundlesGetQuery } = injectedRtkApi;
+export const { useSystemSettingsGetQuery, useActiveBundlesGetQuery, usePingActionQuery } = injectedRtkApi;

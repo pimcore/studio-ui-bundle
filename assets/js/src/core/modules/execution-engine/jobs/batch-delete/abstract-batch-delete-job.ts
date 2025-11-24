@@ -67,7 +67,7 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
     }
   }
 
-  protected abstract executeDeleteRequest (): Promise<string | number | null>
+  protected abstract executeDeleteRequest (): Promise<number | null>
 
   protected async handleCompletion (): Promise<void> {
     if (this.onFinish !== undefined) {

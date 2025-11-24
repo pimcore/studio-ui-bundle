@@ -67,7 +67,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
   }
 
-  private async executeDeleteRequest (): Promise<string | number | null> {
+  private async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinDeleteItems.initiate({
         body: {

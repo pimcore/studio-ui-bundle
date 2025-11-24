@@ -83,7 +83,7 @@ export abstract class AbstractCloneJob implements JobInterface {
     }
   }
 
-  protected abstract executeCloneRequest (): Promise<string | number | null>
+  protected abstract executeCloneRequest (): Promise<number | null>
 
   protected async handleCompletion (): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {

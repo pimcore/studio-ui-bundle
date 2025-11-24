@@ -10,6 +10,7 @@
 
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { AbstractBackgroundProcess, type AbstractMessage } from './abstract-background-process'
+import { ExponentialBackoff } from '@Pimcore/utils/exponential-backoff'
 
 export interface AbstractMercureMessage extends AbstractMessage {
   event: MessageEvent
@@ -18,13 +19,21 @@ export interface AbstractMercureMessage extends AbstractMessage {
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   protected eventSource?: EventSource
   protected storageKey: string
+  private readonly reconnectBackoff: ExponentialBackoff
 
   constructor () {
     super()
     this.storageKey = `mercure_last_event_id_${this.constructor.name}`
+    this.reconnectBackoff = new ExponentialBackoff({
+      initialDelay: 2000,
+      maxDelay: 300000,
+      multiplier: 2
+    })
   }
 
   public start (): void {
+    this.reconnectBackoff.clear()
+
     if (this.eventSource !== undefined) {
       this.eventSource.close()
     }
@@ -40,6 +49,10 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     }
 
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
+
+    this.eventSource.onopen = () => {
+      this.reconnectBackoff.reset()
+    }
 
     this.eventSource.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data as unknown as string)
@@ -63,18 +76,23 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
           payload: error,
           event: new MessageEvent('error', { data: error })
         })
-        this.start()
+        this.reconnectBackoff.schedule(() => {
+          this.start()
+        })
       }
     }
   }
 
   public cancel (): void {
+    this.reconnectBackoff.clear()
+
     if (this.eventSource !== undefined) {
       this.eventSource.close()
       this.eventSource = undefined
     }
 
     this.lastEventId = undefined
+    this.reconnectBackoff.reset()
 
     this.sendMessage({
       type: 'cancel',

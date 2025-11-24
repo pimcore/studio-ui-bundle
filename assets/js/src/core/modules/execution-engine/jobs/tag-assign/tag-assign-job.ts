@@ -58,7 +58,7 @@ export class TagAssignJob implements JobInterface {
     }
   }
 
-  private async executeRequest (): Promise<string | number | null> {
+  private async executeRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.tagBatchOperationToElementsByTypeAndId.initiate({
         elementType: this.elementType,
