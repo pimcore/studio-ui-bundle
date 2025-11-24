@@ -25,51 +25,42 @@ export interface ButtonAction {
   handler: () => void | Promise<void>
 }
 
-export interface JobViewCustomizationContext {
-  addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
-  addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
-  addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
-}
-
 export interface JobViewProps extends JobProps {
   successButtonActions?: ButtonAction[]
   failureButtonActions?: ButtonAction[]
   finishedWithErrorsButtonActions?: ButtonAction[]
   progress: number
-  step?: number
+  currentStep?: number
   totalSteps?: number
-}
-
-const addButton = (list: ButtonAction[], action: ButtonAction, position: 'start' | 'end' = 'start'): void => {
-  if (position === 'start') {
-    list.unshift(action)
-  } else {
-    list.push(action)
-  }
 }
 
 export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const successButtonActions = [...(props.successButtonActions ?? [])]
-  const failureButtonActions = [...(props.failureButtonActions ?? [])]
-  const finishedWithErrorsButtonActions = [...(props.finishedWithErrorsButtonActions ?? [])]
-
-  if (!isUndefined(props.onCustomizeJobView)) {
-    const context: JobViewCustomizationContext = {
-      addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
-      addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
-      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }
-    }
-    props.onCustomizeJobView(context)
-  }
+  const successButtonActions = props.successButtonActions ?? []
+  const failureButtonActions = props.failureButtonActions ?? []
+  const finishedWithErrorsButtonActions = props.finishedWithErrorsButtonActions ?? []
 
   const progress = Math.min(props.progress, 100)
 
-  const StepHint = !isUndefined(props.step) && !isUndefined(props.totalSteps)
-    ? <strong>{ t('jobs.job.step_hint', { step: props.step, total: props.totalSteps }) }: </strong>
-    : undefined
+  const getStepHint = (): React.ReactNode => {
+    if (isUndefined(props.currentStep)) {
+      return null
+    }
+
+    if (!isUndefined(props.totalSteps)) {
+      return <strong>{ t('jobs.job.step_hint', { step: props.currentStep, total: props.totalSteps }) }: </strong>
+    }
+
+    if (props.currentStep > 1) {
+      return <strong>{ t('jobs.job.step_hint_single', { step: props.currentStep }) }: </strong>
+    }
+
+    return null
+  }
+
+  const stepHint = getStepHint()
 
   return (
     <div>
@@ -97,7 +88,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
 
           { props.status === JobStatus.RUNNING && (
             <Progressbar
-              description={ <>{StepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
+              description={ <>{stepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
               percent={ progress }
               progressStatus={ t('jobs.job.progress', { progress }) }
             />

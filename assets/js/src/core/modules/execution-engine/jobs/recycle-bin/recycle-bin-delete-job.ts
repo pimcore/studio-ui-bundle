@@ -13,13 +13,9 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { DefaultJobHandler, type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
-
-export interface RecycleBinDeleteJobConfig extends BaseJobConfig {
-  elementTypes: ElementType[]
-}
 
 export interface RecycleBinDeleteJobOptions {
   itemIds: number[]
@@ -52,9 +48,9 @@ export class RecycleBinDeleteJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()
@@ -86,14 +82,6 @@ export class RecycleBinDeleteJob implements JobInterface {
     }
 
     return response.data?.jobRunId ?? null
-  }
-
-  private getJobConfig (): RecycleBinDeleteJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      elementTypes: this.elementTypes
-    }
   }
 
   private async handleCompletion (): Promise<void> {

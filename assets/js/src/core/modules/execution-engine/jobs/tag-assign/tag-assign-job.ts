@@ -13,13 +13,8 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { DefaultJobHandler, type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { api, type TagBatchOperationToElementsByTypeAndIdApiArg } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-
-export interface TagAssignJobConfig extends BaseJobConfig {
-  elementType: ElementType
-  elementId: number
-}
 
 export interface TagAssignJobOptions {
   elementType: ElementType
@@ -51,9 +46,9 @@ export class TagAssignJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig()
+        title: this.title
       })
 
       messageBus.registerHandler(handler)
@@ -78,15 +73,6 @@ export class TagAssignJob implements JobInterface {
     }
 
     return response.data?.jobRunId ?? null
-  }
-
-  private getJobConfig (): TagAssignJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      elementType: this.elementType,
-      elementId: this.elementId
-    }
   }
 
   private async handleJobFailure (error: any): Promise<void> {

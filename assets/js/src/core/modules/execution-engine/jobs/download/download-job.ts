@@ -9,8 +9,9 @@
  */
 
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { DefaultJobHandler } from '../../message-handlers/default-job-handler'
-import { type JobViewCustomizationContext } from '../../notification/job/job-view'
+import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
 import { isNull } from 'lodash'
 
@@ -38,20 +39,21 @@ export class DownloadJob implements JobInterface {
       return await this.options.action()
     } catch (e) {
       console.error(e)
+      trackError(new GeneralError(t('jobs.job.download-error')))
       return null
     }
   }
 
-  private createHandler (jobRunId: number, options: JobRunOptions): DefaultJobHandler<any> {
+  private createHandler (jobRunId: number, options: JobRunOptions): MessageBusJobHandler {
     const { title, downloadUrl } = this.options
 
-    return new DefaultJobHandler({
+    return new MessageBusJobHandler({
       jobRunId,
-      config: { title },
+      title,
       onRetry: async () => {
         await this.run(options)
       },
-      onCustomizeJobView: (context: JobViewCustomizationContext) => {
+      onCustomizeButtons: (context: JobButtonCustomizationContext) => {
         context.addSuccessButton({
           label: t('jobs.job.button-download'),
           handler: () => {
