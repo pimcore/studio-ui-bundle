@@ -14,11 +14,15 @@
  */
 
 export enum FieldFilterFrontendType {
-  String = 'system.string',
-  Fulltext = 'system.fulltext',
   Boolean = 'system.boolean',
-  Number = 'system.number',
   DateTime = 'system.datetime',
+  InputQuantityValue = 'system.input_quantity_value',
+  Number = 'system.number',
+  QuantityValue = 'system.quantity_value',
+  Rgba = 'system.rgba',
   Select = 'system.select',
+  String = 'system.string',
+  Time = 'system.time',
+
   Consent = 'crm.consent'
 }
