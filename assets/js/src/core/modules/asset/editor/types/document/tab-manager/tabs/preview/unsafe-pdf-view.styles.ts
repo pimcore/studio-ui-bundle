@@ -16,7 +16,7 @@ export const useStyle = createStyles(({ token, css }) => {
       height: 100%;
       padding: ${token.padding}px;
     `,
-    
+
     innerContainer: css``,
 
     thumbnailContainer: css`

@@ -50,9 +50,9 @@ const UnsafePdfView = (props: UnsafePdfViewProps): React.JSX.Element => {
           <Image
             alt=""
             className={ styles.thumbnail }
+            placeholder={ <Spin /> }
             preview={ false }
             src={ thumbnailUrl }
-            placeholder={ <Spin /> }
           />
         </Box>
 
