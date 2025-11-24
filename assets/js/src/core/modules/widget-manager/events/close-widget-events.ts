@@ -23,3 +23,16 @@ export interface CloseMainWidgetEvent extends AbstractEvent {
   }
   payload: CloseMainWidgetEventPayload
 }
+
+export interface CloseOuterWidgetEventPayload {
+  widgetId: string
+  node: TabNode
+}
+
+export interface CloseOuterWidgetEvent extends AbstractEvent {
+  identifier: {
+    type: typeof eventTypes['widget-manager:outer:widget-closed']
+    id?: string
+  }
+  payload: CloseOuterWidgetEventPayload
+}
