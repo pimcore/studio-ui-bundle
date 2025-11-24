@@ -11,8 +11,6 @@
 import React from 'react'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { useTranslation } from 'react-i18next'
-import { removePhpStackTrace } from '@Pimcore/utils/stack-trace'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { isString } from 'lodash'
 
 export interface JobErrorModalProps {
