@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { JobView, type ButtonAction } from '@Pimcore/modules/execution-engine/notification/job/job-view'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
-import { isUndefined } from 'lodash'
+import { isUndefined, isEmpty } from 'lodash'
 import { type MessageBusJob } from './message-bus-job-handler'
+import { JobErrorModal } from './job-error-modal'
 
 export interface JobButtonCustomizationContext {
   addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
@@ -26,6 +27,7 @@ export interface MessageBusJobProps extends MessageBusJob {}
 export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.Element => {
   const { removeJob } = useJobs()
   const { t } = useTranslation()
+  const [showErrorModal, setShowErrorModal] = useState(false)
 
   const hideButtonAction: ButtonAction = {
     label: t('jobs.job.button-hide'),
@@ -63,16 +65,35 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
     })
   }
 
+  if (!isUndefined(props.messages) && !isEmpty(props.messages)) {
+    const showErrorsAction: ButtonAction = {
+      label: t('jobs.job.button-show-errors'),
+      handler: () => {
+        setShowErrorModal(true)
+      }
+    }
+
+    addButton(finishedWithErrorsButtonActions, showErrorsAction, 'start')
+    addButton(failureButtonActions, showErrorsAction, 'start')
+  }
+
   return (
-    <JobView
-      failureButtonActions={ failureButtonActions }
+    <>
+      <JobView
+        failureButtonActions={ failureButtonActions }
 
-      finishedWithErrorsButtonActions={ finishedWithErrorsButtonActions }
+        finishedWithErrorsButtonActions={ finishedWithErrorsButtonActions }
 
-      successButtonActions={ successButtonActions }
+        successButtonActions={ successButtonActions }
 
-      { ...props }
-      progress={ props.progress ?? 0 }
-    />
+        { ...props }
+        progress={ props.progress ?? 0 }
+      />
+      <JobErrorModal
+        messages={ props.messages ?? [] }
+        onClose={ () => { setShowErrorModal(false) } }
+        open={ showErrorModal }
+      />
+    </>
   )
 }
