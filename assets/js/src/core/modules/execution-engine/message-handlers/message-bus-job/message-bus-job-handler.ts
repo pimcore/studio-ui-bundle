@@ -218,7 +218,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
       await this.handleJobCompletion(completionData)
 
-      this.updateJob({ status: jobStatus })
+      this.updateJob({ status: jobStatus, messages: data.messages })
 
       const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
       messageBus.unregisterHandler(this.jobRunId)
@@ -252,6 +252,7 @@ export interface MessageBusJob extends AbstractJob {
   totalSteps?: number
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
+  messages?: string[]
 }
 
 export interface JobCompletionData {
