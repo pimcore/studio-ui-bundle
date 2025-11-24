@@ -11,16 +11,20 @@
 import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useStyles } from './title-view.styles'
+import { Button } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
 
 interface TitleViewProps {
   title: string
   icon: IconProps
   className?: string
+  onClose?: () => void
+  showCloseButton?: boolean
 }
 
 const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { title, icon, className } = props
+  const { title, icon, className, onClose, showCloseButton = false } = props
 
   return (
     <div className={ [styles.WidgetTitle, className, 'foobar'].join(' ') }>
@@ -33,6 +37,16 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
       />
 
       <span>{title}</span>
+      
+      {onClose && showCloseButton && (
+        <Button
+          type="text"
+          size="small"
+          icon={<CloseOutlined />}
+          onClick={onClose}
+          className={styles.CloseButton}
+        />
+      )}
     </div>
   )
 }
