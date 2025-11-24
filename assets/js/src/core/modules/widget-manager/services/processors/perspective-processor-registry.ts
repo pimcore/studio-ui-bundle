@@ -81,7 +81,7 @@ export class PerspectiveProcessorContext {
       type: 'tab',
       name: widget.name,
       component: widget.widgetType,
-      enableClose: Boolean(widget.additionalAttributes?.enableClose) || false,
+      enableClose: Boolean(widget.additionalAttributes?.enableClose) === true,
       config
     }
 

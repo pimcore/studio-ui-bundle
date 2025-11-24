@@ -56,7 +56,6 @@ export const WidgetContentTitleContainer = ({
             icon={ icon }
             title={ title }
             onClose={ isCloseable ? onClose : undefined }
-            showCloseButton={ true }
           />
           )
       }

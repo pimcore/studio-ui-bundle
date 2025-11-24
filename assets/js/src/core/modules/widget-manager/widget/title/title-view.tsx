@@ -20,12 +20,11 @@ interface TitleViewProps {
   icon: IconProps
   className?: string
   onClose?: () => void
-  showCloseButton?: boolean
 }
 
 const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { title, icon, className, onClose, showCloseButton = false } = props
+  const { title, icon, className, onClose } = props
 
   return (
     <div className={ [styles.WidgetTitle, className, 'foobar'].join(' ') }>
@@ -39,7 +38,7 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
 
       <span>{title}</span>
       
-      {!isNil(onClose) && showCloseButton && (
+      {!isNil(onClose) && (
         <Button
           type="text"
           size="small"
