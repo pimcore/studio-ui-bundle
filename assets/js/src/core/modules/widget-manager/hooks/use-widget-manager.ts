@@ -84,9 +84,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
       eventBus.publish(event)
     }
 
-    if (!isNull(outerWidgetData)) {
-      console.log("OUTER WIDGET DATA:", outerWidgetData);
-      
+    if (!isNull(outerWidgetData)) {      
       const event: CloseOuterWidgetEvent = {
         identifier: {
           type: eventTypes['widget-manager:outer:widget-closed'],
