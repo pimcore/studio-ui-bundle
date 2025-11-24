@@ -10,17 +10,20 @@
 
 import React from 'react'
 import { JobView, type ButtonAction } from '@Pimcore/modules/execution-engine/notification/job/job-view'
-import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
-import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { type MessageBusJob } from './message-bus-job-handler'
 
-export interface MessageBusJobProps extends JobProps {
-  config: BaseJobConfig
+export interface JobButtonCustomizationContext {
+  addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
 }
 
-export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.Element => {
+export interface MessageBusJobProps extends MessageBusJob {}
+
+export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.Element => {
   const { removeJob } = useJobs()
   const { t } = useTranslation()
 
@@ -32,6 +35,23 @@ export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.E
   const successButtonActions: ButtonAction[] = [hideButtonAction]
   const finishedWithErrorsButtonActions: ButtonAction[] = [hideButtonAction]
   const failureButtonActions: ButtonAction[] = [hideButtonAction]
+
+  const addButton = (list: ButtonAction[], action: ButtonAction, position: 'start' | 'end' = 'start'): void => {
+    if (position === 'start') {
+      list.unshift(action)
+    } else {
+      list.push(action)
+    }
+  }
+
+  if (!isUndefined(props.onCustomizeButtons)) {
+    const context: JobButtonCustomizationContext = {
+      addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
+      addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
+      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }
+    }
+    props.onCustomizeButtons(context)
+  }
 
   if (!isUndefined(props.onRetry)) {
     failureButtonActions.unshift({
@@ -52,7 +72,7 @@ export const NotificationJobContainer = (props: MessageBusJobProps): React.JSX.E
       successButtonActions={ successButtonActions }
 
       { ...props }
-      progress={ props.config.progress ?? 0 }
+      progress={ props.progress ?? 0 }
     />
   )
 }

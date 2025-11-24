@@ -12,15 +12,11 @@ import { isNil, isString } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
+import { MessageBusJobHandler, type MessageBusJob } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type BaseJobConfig } from '../../message-handlers/default-job-handler'
-
-export interface AbstractCloneJobConfig extends BaseJobConfig {
-  parentFolderId: number
-  parentFolderType: ElementType
-}
+import { JobStatus } from '../abstact-job'
+import { t } from 'i18next'
 
 export interface AbstractCloneJobOptions {
   sourceId: number
@@ -63,9 +59,14 @@ export abstract class AbstractCloneJob implements JobInterface {
         return
       }
 
-      const handler = new StepBasedProgressJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: (job: MessageBusJob) => {
+          if (job.status === JobStatus.RUNNING && job.currentStep === 2) {
+            return t('jobs.clone-job.step2.title')
+          }
+          return this.title
+        },
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()
@@ -83,15 +84,6 @@ export abstract class AbstractCloneJob implements JobInterface {
   }
 
   protected abstract executeCloneRequest (): Promise<string | number | null>
-
-  protected getJobConfig (): AbstractCloneJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      parentFolderId: this.targetId,
-      parentFolderType: this.elementType
-    }
-  }
 
   protected async handleCompletion (): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {

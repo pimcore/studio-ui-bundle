@@ -26,6 +26,7 @@ export const topics: Record<string, string> = {
   'recycle-bin-restore-finished': 'recycle-bin-restore-finished',
   'recycle-bin-delete-finished': 'recycle-bin-delete-finished',
   'replace-assignment-finished': 'replace-assignment-finished',
+  'rewrite-references-finished': 'rewrite-references-finished',
   'studio-backend-default': 'studio-backend-default'
 }
 
