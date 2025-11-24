@@ -25,8 +25,8 @@ import {
 import { Model, TabNode } from 'flexlayout-react'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
-import { 
-  type CloseMainWidgetEvent, 
+import {
+  type CloseMainWidgetEvent,
   type CloseMainWidgetEventPayload,
   type CloseOuterWidgetEvent,
   type CloseOuterWidgetEventPayload
@@ -70,7 +70,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   function closeWidget (id: string): void {
     const innerWidgetData = getInnerWidgetData(id)
     const outerWidgetData = getOuterWidgetData(id)
-    
+
     dispatch(closeWidgetAction(id))
 
     if (!isNull(innerWidgetData)) {
@@ -84,7 +84,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
       eventBus.publish(event)
     }
 
-    if (!isNull(outerWidgetData)) {      
+    if (!isNull(outerWidgetData)) {
       const event: CloseOuterWidgetEvent = {
         identifier: {
           type: eventTypes['widget-manager:outer:widget-closed'],
