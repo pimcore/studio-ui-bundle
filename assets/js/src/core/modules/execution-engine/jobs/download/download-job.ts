@@ -38,6 +38,7 @@ export class DownloadJob implements JobInterface {
     try {
       return await this.options.action()
     } catch (e) {
+      console.error(e)
       trackError(new GeneralError(t('jobs.job.download-error')))
       return null
     }
