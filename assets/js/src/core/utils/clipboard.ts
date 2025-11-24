@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
+import { isNil, isNull } from 'lodash'
 
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   if (!isNil(navigator.clipboard) && !isNil(navigator.clipboard.writeText)) {
@@ -58,5 +58,30 @@ export const copyToClipboardWithFeedback = async (
     onSuccess?.()
   } else {
     onError?.('Failed to copy to clipboard')
+  }
+}
+
+export const pasteFromClipboard = async (): Promise<string | null> => {
+  if (!isNil(navigator.clipboard) && !isNil(navigator.clipboard.readText)) {
+    try {
+      return await navigator.clipboard.readText()
+    } catch (error) {
+      console.warn('Clipboard API read failed:', error)
+    }
+  }
+
+  return null
+}
+
+export const pasteFromClipboardWithFeedback = async (
+  onSuccess?: () => void,
+  onError?: (error: string) => void
+): Promise<void> => {
+  const text = await pasteFromClipboard()
+
+  if (!isNull(text)) {
+    onSuccess?.()
+  } else {
+    onError?.('Failed to paste from clipboard')
   }
 }
