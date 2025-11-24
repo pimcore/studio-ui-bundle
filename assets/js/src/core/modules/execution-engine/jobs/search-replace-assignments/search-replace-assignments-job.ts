@@ -75,7 +75,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     }
   }
 
-  private async executeReplaceRequest (): Promise<string | number | null> {
+  private async executeReplaceRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.elementUsageReplace.initiate({
         elementType: this.sourceElementType,

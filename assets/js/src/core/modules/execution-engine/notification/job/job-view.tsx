@@ -19,6 +19,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-view.styles'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
+import { Popconfirm } from '@Pimcore/components/modal/popconfirm/popconfirm'
 
 export interface ButtonAction {
   label: string
@@ -29,6 +30,7 @@ export interface JobViewProps extends JobProps {
   successButtonActions?: ButtonAction[]
   failureButtonActions?: ButtonAction[]
   finishedWithErrorsButtonActions?: ButtonAction[]
+  onAbort?: () => void | Promise<void>
   progress: number
   currentStep?: number
   totalSteps?: number
@@ -62,6 +64,25 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
 
   const stepHint = getStepHint()
 
+  const renderAbortButton = (): React.ReactNode => {
+    if (isUndefined(props.onAbort)) {
+      return null
+    }
+
+    return (
+      <Popconfirm
+        onConfirm={ () => { void props.onAbort?.() } }
+        title={ t('jobs.job.abort-confirm') }
+        zIndex={ 10000 }
+      >
+        <Button
+          className={ styles.buttonStyle }
+          type='link'
+        >{t('jobs.job.button-abort')}</Button>
+      </Popconfirm>
+    )
+  }
+
   return (
     <div>
       <AnimatePresence>
@@ -83,12 +104,14 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               >
                 <Spin type="classic" /><span>{ t('jobs.job.queued', { title: props.title }) }</span>
               </Flex>
+              { renderAbortButton() }
             </Flex>
           ) }
 
           { props.status === JobStatus.RUNNING && (
             <Progressbar
               description={ <>{stepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
+              descriptionAction={ renderAbortButton() }
               percent={ progress }
               progressStatus={ t('jobs.job.progress', { progress }) }
             />

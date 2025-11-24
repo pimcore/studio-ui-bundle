@@ -34,7 +34,7 @@ export class DocumentCloneJob extends AbstractCloneJob {
     this.parameters = options.parameters
   }
 
-  protected async executeCloneRequest (): Promise<string | number | null> {
+  protected async executeCloneRequest (): Promise<number | null> {
     const cloneParams: DocumentCloneApiArg = {
       id: this.sourceId,
       parentId: this.targetId,

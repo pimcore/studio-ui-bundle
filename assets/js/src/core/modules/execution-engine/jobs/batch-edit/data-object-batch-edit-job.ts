@@ -28,7 +28,7 @@ export class DataObjectBatchEditJob extends AbstractBatchEditJob {
     this.values = options.values
   }
 
-  protected async executeEditRequest (): Promise<string | number | null> {
+  protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchObjectsByIds({
       body: {
         data: this.selectedRowsIds.map((rowId) => ({

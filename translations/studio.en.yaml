@@ -544,6 +544,8 @@ jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
+jobs.job.button-abort: Abort Job
+jobs.job.abort-confirm: Do you really want to abort this job run?
 jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.job.step_hint_single: "Step {{step}}"
 jobs.job.download-error: "Download failed"

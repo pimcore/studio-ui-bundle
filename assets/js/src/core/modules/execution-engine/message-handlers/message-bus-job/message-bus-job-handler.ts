@@ -19,13 +19,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
+import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
 
 /**
  * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
  * Can be used directly or extended by specific job handlers
  */
 export class MessageBusJobHandler extends AbstractMessageHandler {
-  private jobRunId: string | number
+  private jobRunId: number
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
@@ -35,6 +36,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly totalSteps?: number
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
+  private readonly polling: JobRunPolling
 
   private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -50,6 +52,11 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
     this.onCustomizeButtons = options.onCustomizeButtons
+
+    this.polling = new JobRunPolling(this.jobRunId, {
+      onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
+      onError: (error) => { console.error('Job run polling error:', error) }
+    })
   }
 
   public shouldHandle (message: AbstractMercureMessage): boolean {
@@ -57,7 +64,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return !isNil(messageJobRunId) && String(messageJobRunId) === String(this.jobRunId)
   }
 
-  public getId (): string | number {
+  public getId (): number {
     return this.jobRunId
   }
 
@@ -74,14 +81,9 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
           return
         }
 
-        if (!isNil(data?.status)) {
-          await this.handleStatusUpdate(data)
-        }
+        this.polling.notifyUpdate()
 
-        const progress = this.calculateProgress(data)
-        if (!isNil(progress)) {
-          this.handleProgressUpdate(progress, data)
-        }
+        await this.processUpdate(data)
       }
     } catch (error) {
       console.error('Error in message handling: ', error)
@@ -90,6 +92,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   public onUnregister (): void {
     this.throttledProgressUpdate.cancel()
+    this.polling.destroy()
   }
 
   private getTitle (job: MessageBusJob): string {
@@ -105,7 +108,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
    */
   private calculateProgress (data: any): number | null {
     if (!isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1) {
-      return Math.round(((data.currentStep - 1) / data.totalSteps) * 100)
+      return Math.max(0, Math.round(((data.currentStep - 1) / data.totalSteps) * 100))
     }
 
     if (!isNil(data?.progress)) {
@@ -136,7 +139,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       currentStep: this.currentStep,
       totalSteps: this.totalSteps,
       onRetry: this.onRetry,
-      onCustomizeButtons: this.onCustomizeButtons
+      onCustomizeButtons: this.onCustomizeButtons,
+      jobRunId: this.jobRunId
     }
 
     job.title = this.getTitle(job)
@@ -162,7 +166,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }))
   }
 
-  private transitionToChildJob (newJobRunId: string | number): void {
+  private transitionToChildJob (newJobRunId: number): void {
     const oldJobRunId = this.jobRunId
 
     this.jobRunId = newJobRunId
@@ -186,7 +190,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   private async handleStatusUpdate (data: any): Promise<void> {
     if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
-      this.transitionToChildJob(data.messages.jobRunChildId as string | number)
+      this.transitionToChildJob(Number(data.messages.jobRunChildId))
       return
     }
 
@@ -244,6 +248,28 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       progress
     })
   }
+
+  private async handlePolledStatusUpdate (data: JobStatusUpdateData): Promise<void> {
+    const polledData = {
+      status: data.status,
+      currentStep: data.currentStep,
+      totalSteps: data.totalSteps,
+      messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined
+    }
+
+    await this.processUpdate(polledData)
+  }
+
+  private async processUpdate (data: any): Promise<void> {
+    if (!isNil(data?.status)) {
+      await this.handleStatusUpdate(data)
+    }
+
+    const progress = this.calculateProgress(data)
+    if (!isNil(progress)) {
+      this.handleProgressUpdate(progress, data)
+    }
+  }
 }
 
 export interface MessageBusJob extends AbstractJob {
@@ -253,6 +279,7 @@ export interface MessageBusJob extends AbstractJob {
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
   messages?: string[]
+  jobRunId: number
 }
 
 export interface JobCompletionData {
@@ -264,7 +291,7 @@ export interface JobCompletionData {
 }
 
 export interface MessageBusJobHandlerOptions {
-  jobRunId: string | number
+  jobRunId: number
   title: string | ((job: MessageBusJob) => string)
   totalSteps?: number
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
