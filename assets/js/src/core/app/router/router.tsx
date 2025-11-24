@@ -41,8 +41,8 @@ const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): Reac
       {isAuthenticated === true && children}
       {isAuthenticated === false && (
         <Navigate
-          state={{ from: location }}
-          to={routes.login}
+          state={ { from: location } }
+          to={ routes.login }
         />
       )}
     </>
