@@ -11,13 +11,9 @@
 import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { DefaultJobHandler, type BaseJobConfig, type JobCompletionData } from '../../message-handlers/default-job-handler'
-import { type JobViewCustomizationContext } from '../../notification/job/job-view'
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 import { t } from 'i18next'
-
-export interface AbstractBatchEditJobConfig extends BaseJobConfig {
-  assetContextId: number
-}
 
 export interface AbstractBatchEditJobOptions {
   title: string
@@ -50,9 +46,9 @@ export abstract class AbstractBatchEditJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -67,7 +63,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
         onRetry: async () => {
           await this.run(options)
         },
-        onCustomizeJobView: (context: JobViewCustomizationContext) => {
+        onCustomizeButtons: (context: JobButtonCustomizationContext) => {
           const reloadAction = {
             label: t('jobs.job.button-reload'),
             handler: async () => {
@@ -87,15 +83,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
     }
   }
 
-  protected abstract executeEditRequest (): Promise<string | number | null>
-
-  protected getJobConfig (): AbstractBatchEditJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      assetContextId: this.assetContextId
-    }
-  }
+  protected abstract executeEditRequest (): Promise<number | null>
 
   protected async handleCompletion (): Promise<void> {
     if (this.onFinish !== undefined) {

@@ -17,7 +17,7 @@ import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 export interface AssetBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
 
 export class AssetBatchDeleteJob extends AbstractBatchDeleteJob {
-  protected async executeDeleteRequest (): Promise<string | number | null> {
+  protected async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.assetBatchDelete.initiate({
         body: {

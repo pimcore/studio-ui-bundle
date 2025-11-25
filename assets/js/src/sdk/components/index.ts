@@ -106,6 +106,7 @@ export * from '@Pimcore/components/input-password/input-password'
 export * from '@Pimcore/components/language-selection/language-selection'
 export * from '@Pimcore/components/logo/logo'
 export * from '@Pimcore/components/menu/menu'
+export * from '@Pimcore/components/menu/item/menu-item'
 export * from '@Pimcore/components/message/useMessage'
 export * from '@Pimcore/components/modal/modal'
 export * from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
@@ -189,7 +190,7 @@ export * from '@Pimcore/components/modal/useModal/index'
 export * from '@Pimcore/components/modal/file-list/file-list'
 
 // @todo check if this should really located under the components folder
-export * from '@Pimcore/components/login-form/login-form'
+export * from '@Pimcore/modules/auth/components/login-form/login-form-container'
 
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'

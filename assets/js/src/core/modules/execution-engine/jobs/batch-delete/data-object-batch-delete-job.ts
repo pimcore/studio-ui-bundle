@@ -17,7 +17,7 @@ import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced
 export interface DataObjectBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
 
 export class DataObjectBatchDeleteJob extends AbstractBatchDeleteJob {
-  protected async executeDeleteRequest (): Promise<string | number | null> {
+  protected async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.dataObjectBatchDelete.initiate({
         body: {

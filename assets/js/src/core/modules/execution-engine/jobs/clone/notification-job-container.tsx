@@ -13,13 +13,8 @@ import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-
 import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useTranslation } from 'react-i18next'
-import { type AbstractCloneJobConfig } from './abstract-clone-job'
 
-export interface CloneJobProps extends JobProps {
-  config: AbstractCloneJobConfig
-}
-
-export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Element => {
+export const NotificationJobContainer = (props: JobProps): React.JSX.Element => {
   const { removeJob } = useJobs()
   const { t } = useTranslation()
 
@@ -51,7 +46,7 @@ export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Elemen
       ] }
 
       { ...props }
-      progress={ props.config.progress ?? 0 }
+      progress={ (props as any).progress ?? 0 }
     />
   )
 }

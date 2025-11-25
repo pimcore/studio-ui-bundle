@@ -11,11 +11,7 @@
 import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { DefaultJobHandler, type BaseJobConfig, type JobCompletionData } from '../../message-handlers/default-job-handler'
-
-export interface AbstractBatchDeleteJobConfig extends BaseJobConfig {
-  itemIds: number[]
-}
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 
 export interface AbstractBatchDeleteJobOptions {
   itemIds: number[]
@@ -45,9 +41,9 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -71,15 +67,7 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
     }
   }
 
-  protected abstract executeDeleteRequest (): Promise<string | number | null>
-
-  protected getJobConfig (): AbstractBatchDeleteJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      itemIds: this.itemIds
-    }
-  }
+  protected abstract executeDeleteRequest (): Promise<number | null>
 
   protected async handleCompletion (): Promise<void> {
     if (this.onFinish !== undefined) {

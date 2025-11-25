@@ -12,16 +12,10 @@ import { isNil, isString, isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren, markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { StepBasedProgressJobHandler } from '../../message-handlers/step-based-progress-job-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type BaseJobConfig, type JobCompletionData } from '../../message-handlers/default-job-handler'
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-
-export interface DeleteJobConfig extends BaseJobConfig {
-  elementType: ElementType
-  parentFolderId?: number
-}
 
 export interface DeleteJobOptions {
   elementId: number
@@ -71,9 +65,9 @@ export class DeleteJob implements JobInterface {
         return
       }
 
-      const handler = new StepBasedProgressJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -97,7 +91,7 @@ export class DeleteJob implements JobInterface {
     }
   }
 
-  private async executeDeleteRequest (): Promise<string | number | null> {
+  private async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       elementApi.endpoints.elementDelete.initiate({
         id: this.elementId,
@@ -111,15 +105,6 @@ export class DeleteJob implements JobInterface {
     }
 
     return response.data?.jobRunId ?? null
-  }
-
-  private getJobConfig (): DeleteJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      elementType: this.elementType,
-      parentFolderId: this.parentFolderId
-    }
   }
 
   private async handleCompletion (): Promise<void> {

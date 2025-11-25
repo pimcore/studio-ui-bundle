@@ -81,7 +81,7 @@ export class PerspectiveProcessorContext {
       type: 'tab',
       name: widget.name,
       component: widget.widgetType,
-      enableClose: false,
+      enableClose: Boolean(widget.additionalAttributes?.enableClose),
       config
     }
 
@@ -90,7 +90,6 @@ export class PerspectiveProcessorContext {
       position,
       tabNode
     }
-
     if (isUndefined(this.widgets[position])) {
       this.widgets[position] = []
     }

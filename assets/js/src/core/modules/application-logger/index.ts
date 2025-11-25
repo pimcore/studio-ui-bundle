@@ -39,7 +39,7 @@ moduleSystem.registerModule({
       path: 'System/Application Logger',
       label: 'navigation.application-logger',
       dividerBottom: true,
-      order: 400,
+      order: 500,
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,
       widgetConfig: APPLICATION_LOGGER_WIDGET

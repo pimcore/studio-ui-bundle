@@ -51,9 +51,11 @@ export const WidgetConfiguratorProvider = ({ children, formChange, value }: Widg
     }
 
     const newWidgets = [...widgetConfigs, widget]
+    const newExpandedWidget = widgetConfigs.length === 0 ? widget.id : expandedWidget
 
     setWidgetConfigs(newWidgets)
-    triggerFormUpdate(newWidgets, expandedWidget)
+    setExpandedWidget(newExpandedWidget)
+    triggerFormUpdate(newWidgets, newExpandedWidget)
   }
 
   const onRemove = (widgetId: string): void => {

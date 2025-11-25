@@ -28,7 +28,7 @@ export class AssetBatchEditJob extends AbstractBatchEditJob {
     this.patches = options.patches
   }
 
-  protected async executeEditRequest (): Promise<string | number | null> {
+  protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchAssets({
       body: {
         data: this.selectedRowsIds.map((rowId) => ({

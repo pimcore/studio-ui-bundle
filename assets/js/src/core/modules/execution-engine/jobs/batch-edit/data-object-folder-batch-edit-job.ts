@@ -34,7 +34,7 @@ export class DataObjectFolderBatchEditJob extends AbstractBatchEditJob {
     this.classId = options.classId
   }
 
-  protected async executeEditRequest (): Promise<string | number | null> {
+  protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchObjectsInFolder({
       body: {
         data: [
