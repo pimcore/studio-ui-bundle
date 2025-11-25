@@ -14,13 +14,9 @@ import { WidgetManagerContainer } from '@Pimcore/modules/widget-manager/widget-m
 import { RightSidebarView } from './right-sidebar-view'
 import { useStlyes } from './base-layout-view.styles'
 import { Notification as ExecutionEngineNotification } from '@Pimcore/modules/execution-engine/notification/notification'
-import { useGlobalElementContext } from '@Pimcore/modules/element/hooks/use-global-element-context'
 
 export const BaseLayoutView = (): React.JSX.Element => {
   const { styles } = useStlyes()
-  const { context } = useGlobalElementContext()
-
-  console.log('----- CONTEXT: ', context)
 
   return (
     <div

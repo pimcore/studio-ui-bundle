@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useLayoutEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { find, get, isEmpty, isEqual, isNil, isNull, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -63,7 +63,7 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isEmptyValue(data)) return
 
     const { context, setContext } = getContextByType()

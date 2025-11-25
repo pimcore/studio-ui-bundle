@@ -17,8 +17,11 @@ export const OBJECT_CONTEXT_IDENTIFIER_PREFIX = 'object'
 export const ASSET_CONTEXT_IDENTIFIER_PREFIX = 'asset'
 export const DOCUMENT_CONTEXT_IDENTIFIER_PREFIX = 'document'
 
-export const getBaseDataObjectContextIdentifiers = (objectData: any): GlobalDataObjectContext['config']['contextIdentifiers'] => {
-  const tags = [OBJECT_CONTEXT_IDENTIFIER_PREFIX]
+export const getBaseDataObjectContextIdentifiers = (objectData: any, isGrid: boolean): GlobalDataObjectContext['config']['contextIdentifiers'] => {
+  const tags = [
+    OBJECT_CONTEXT_IDENTIFIER_PREFIX,
+    ...(isGrid ? [`${OBJECT_CONTEXT_IDENTIFIER_PREFIX}_grid`] : [])
+  ]
   const isFolderType = objectData?.type === 'folder'
 
   if (!isEmptyValue(objectData?.className)) {
@@ -34,8 +37,11 @@ export const getBaseDataObjectContextIdentifiers = (objectData: any): GlobalData
   }
 }
 
-export const getBaseAssetContextIdentifiers = (assetData: any): GlobalAssetContext['config']['contextIdentifiers'] => {
-  const tags = [ASSET_CONTEXT_IDENTIFIER_PREFIX]
+export const getBaseAssetContextIdentifiers = (assetData: any, isGrid: boolean): GlobalAssetContext['config']['contextIdentifiers'] => {
+  const tags = [
+    ASSET_CONTEXT_IDENTIFIER_PREFIX,
+    ...(isGrid ? [`${ASSET_CONTEXT_IDENTIFIER_PREFIX}_grid`] : [])
+  ]
 
   if (!isEmptyValue(assetData?.type)) {
     tags.push(`${ASSET_CONTEXT_IDENTIFIER_PREFIX}_${assetData?.type.toLowerCase()}`)
