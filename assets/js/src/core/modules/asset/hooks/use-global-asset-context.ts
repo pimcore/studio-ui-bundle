@@ -15,13 +15,15 @@ export interface GlobalAssetContext extends GlobalContext {
   type: 'asset'
   config: {
     id: number
-    type: 'asset'
-    subType: string
-    contextIdentifiers: string[]
-    selectedElements?: Array<{
-      id: number
-      type: 'asset'
-    }>
+    contextIdentifiers: {
+      type: string
+      subType: string
+      tags: string[]
+      selectedElements?: Array<{
+        id: number
+        type: string
+      }>
+    }
   }
 }
 

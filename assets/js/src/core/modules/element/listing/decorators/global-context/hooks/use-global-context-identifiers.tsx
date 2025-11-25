@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useMemo } from 'react'
-import { find, get, isEmpty, isNil, isNull, uniq } from 'lodash'
+import { useLayoutEffect, useMemo } from 'react'
+import { find, get, isEmpty, isEqual, isNil, isNull, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -22,8 +22,6 @@ import {
   DOCUMENT_CONTEXT_IDENTIFIER_PREFIX,
   OBJECT_CONTEXT_IDENTIFIER_PREFIX
 } from '@Pimcore/utils/global-context-identifiers'
-
-type ElementTypeList = 'object' | 'asset' | 'document'
 
 export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
   const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
@@ -49,16 +47,6 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
     }
   }
 
-  const getTypeByElementType = (): ElementTypeList => {
-    const map: Record<typeof elementType, ElementTypeList> = {
-      [elementTypes.dataObject]: OBJECT_CONTEXT_IDENTIFIER_PREFIX,
-      [elementTypes.asset]: ASSET_CONTEXT_IDENTIFIER_PREFIX,
-      [elementTypes.document]: DOCUMENT_CONTEXT_IDENTIFIER_PREFIX
-    }
-
-    return map[elementType] ?? 'object'
-  }
-
   const getSelectionContextKey = (rowData: any): string | null => {
     const type = get(find(rowData?.columns, { key: 'type' }), 'value')
     const className = get(find(rowData?.columns, { key: 'classname' }), 'value')
@@ -75,49 +63,58 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isEmptyValue(data)) return
 
     const { context, setContext } = getContextByType()
 
-    const currentContext = context?.config?.contextIdentifiers ?? []
-    const baseContext = currentContext.filter(item => !item.includes('_selection'))
+    const currentContext = context?.config?.contextIdentifiers ?? {}
 
-    if (isEmpty(selectedIds) && currentContext.length > baseContext.length && !isNil(context)) {
+    const allTags = currentContext?.tags ?? []
+    const baseTags = currentContext?.tags.filter(item => !item.includes('_selection'))
+
+    if (isEmpty(selectedIds) && !isNil(context) && allTags.length > baseTags.length) {
       setContext({
         id: context.config.id,
-        type: getTypeByElementType(),
-        subType: '',
-        contextIdentifiers: baseContext
+        contextIdentifiers: {
+          ...currentContext,
+          tags: baseTags
+        }
       })
 
       return
     }
 
     if (!isEmpty(selectedIds)) {
-      const newContextValues: string[] = []
+      const newSelectedElementsContext: Array<{ id: number, type: string }> = []
+      const newTagContext: string[] = []
 
       selectedIds.forEach((id) => {
         const rowData = data?.find((row: any) => row.id === id)
         const key = getSelectionContextKey(rowData)
 
-        if (!isNull(key)) newContextValues.push(key)
+        newSelectedElementsContext.push({ id, type: currentContext?.type })
+
+        if (!isNull(key)) newTagContext.push(key)
       })
 
-      if (newContextValues.length > 0) {
-        const filteredContext = currentContext.filter((context) => !context.endsWith('_selection'))
-        const updatedContext = uniq([...filteredContext, ...newContextValues])
+      if (newTagContext.length > 0) {
+        const filteredTagContext = currentContext?.tags.filter((context) => !context.endsWith('_selection'))
+        const updatedTagContext = uniq([...filteredTagContext, ...newTagContext])
 
-        const isSame =
-          updatedContext.length === currentContext.length &&
-          updatedContext.every((value, index) => value === currentContext[index])
+        const isSameTags = isEqual(currentContext.tags, newTagContext)
+        const isSameSelected = isEqual(currentContext.selectedElements, newSelectedElementsContext)
+
+        const isSame = isSameTags || isSameSelected
 
         if (!isSame && !isNil(context)) {
           setContext({
             id: context.config.id,
-            type: getTypeByElementType(),
-            subType: '',
-            contextIdentifiers: updatedContext
+            contextIdentifiers: {
+              ...currentContext,
+              tags: updatedTagContext,
+              selectedElements: newSelectedElementsContext
+            }
           })
         }
       }
