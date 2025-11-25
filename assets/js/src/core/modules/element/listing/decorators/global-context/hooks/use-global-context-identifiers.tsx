@@ -23,6 +23,8 @@ import {
   OBJECT_CONTEXT_IDENTIFIER_PREFIX
 } from '@Pimcore/utils/global-context-identifiers'
 
+type ElementTypeList = 'object' | 'asset' | 'document'
+
 export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
   const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
   const { context: globalAssetContext, setContext: setGlobalAssetContext } = useGlobalAssetContext()
@@ -45,6 +47,16 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
       default:
         return { context: globalDataObjectContext!, setContext: setGlobalDataObjectContext }
     }
+  }
+
+  const getTypeByElementType = (): ElementTypeList => {
+    const map: Record<typeof elementType, ElementTypeList> = {
+      [elementTypes.dataObject]: OBJECT_CONTEXT_IDENTIFIER_PREFIX,
+      [elementTypes.asset]: ASSET_CONTEXT_IDENTIFIER_PREFIX,
+      [elementTypes.document]: DOCUMENT_CONTEXT_IDENTIFIER_PREFIX
+    }
+
+    return map[elementType] ?? 'object'
   }
 
   const getSelectionContextKey = (rowData: any): string | null => {
@@ -72,7 +84,12 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
     const baseContext = currentContext.filter(item => !item.includes('_selection'))
 
     if (isEmpty(selectedIds) && currentContext.length > baseContext.length && !isNil(context)) {
-      setContext({ id: context.config.id, contextIdentifiers: baseContext })
+      setContext({
+        id: context.config.id,
+        type: getTypeByElementType(),
+        subType: '',
+        contextIdentifiers: baseContext
+      })
 
       return
     }
@@ -96,7 +113,12 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
           updatedContext.every((value, index) => value === currentContext[index])
 
         if (!isSame && !isNil(context)) {
-          setContext({ id: context.config.id, contextIdentifiers: updatedContext })
+          setContext({
+            id: context.config.id,
+            type: getTypeByElementType(),
+            subType: '',
+            contextIdentifiers: updatedContext
+          })
         }
       }
     }

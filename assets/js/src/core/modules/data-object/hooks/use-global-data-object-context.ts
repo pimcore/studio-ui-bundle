@@ -15,7 +15,13 @@ export interface GlobalDataObjectContext extends GlobalContext {
   type: 'data-object'
   config: {
     id: number
+    type: 'object'
+    subType: string
     contextIdentifiers: string[]
+    selectedElements?: Array<{
+      id: number
+      type: 'object'
+    }>
   }
 }
 

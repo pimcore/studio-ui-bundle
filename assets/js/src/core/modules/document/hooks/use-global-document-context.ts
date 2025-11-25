@@ -15,7 +15,13 @@ export interface GlobalDocumentContext extends GlobalContext {
   type: 'document'
   config: {
     id: number
+    type: 'document'
+    subType: string
     contextIdentifiers: string[]
+    selectedElements?: Array<{
+      id: number
+      type: 'document'
+    }>
   }
 }
 
