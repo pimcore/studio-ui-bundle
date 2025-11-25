@@ -24,6 +24,7 @@ import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/t
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
+import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -32,7 +33,7 @@ export interface EditorContainerInnerProps {
 const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
   const { id } = props
 
-  const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
+  const { isLoading, isError, dataObject, editorType, activeTab } = useDataObjectDraft(id)
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
 
@@ -44,7 +45,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, contextIdentifiers: getBaseDataObjectContextIdentifiers(dataObject) })
+      setContext({ id, contextIdentifiers: getBaseDataObjectContextIdentifiers(dataObject, activeTab === TAB_LISTING.key) })
     }
 
     return () => {
@@ -52,7 +53,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
         removeContext()
       }
     }
-  }, [isWidgetActive])
+  }, [isWidgetActive, activeTab])
 
   if (isLoading) {
     return <Content loading />

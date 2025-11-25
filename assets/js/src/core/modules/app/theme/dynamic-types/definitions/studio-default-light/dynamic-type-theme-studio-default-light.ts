@@ -170,6 +170,10 @@ export const studioDefaultLightThemeConfig = {
         }
       },
       Brand: {
+        Success: {
+          colorSuccessBg: '#f6ffed',
+          colorSuccessBorder: '#b7eb8f'
+        },
         Warning: {
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
