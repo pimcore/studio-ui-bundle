@@ -11,9 +11,7 @@
 import { Alert, Modal, Space, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateXLSXForm, type XLSXFormValues } from './create-xlsx-form/create-xlsx-form'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
@@ -26,6 +24,7 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
+import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 
 export interface XlsxModalProps {
   open: boolean
@@ -34,7 +33,7 @@ export interface XlsxModalProps {
 
 export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
-  const { addJob } = useJobs()
+  const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
   const [jobTitle, setJobTitle] = useState<string>('Element')
@@ -108,12 +107,12 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   )
 
   function onFinish (values: XLSXFormValues): void {
-    addJob(createDownloadJob({
+    const job = new DownloadJob({
       title: t('jobs.xlsx-job.title', { title: jobTitle }),
-      topics: [topics['xlsx-download-ready'], ...defaultTopics],
       downloadUrl: `${getPrefix()}/export/download/xlsx/{jobRunId}`,
       action: async () => await getDownloadAction(values.header)
-    }))
+    })
+    void executionEngine.runJob(job)
 
     props.setOpen(false)
   }

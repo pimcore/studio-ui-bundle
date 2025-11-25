@@ -13,13 +13,8 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { DefaultJobHandler, type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { api, type ElementUsageBaseItem } from '@Pimcore/modules/element/search-replace-assignments/usage-api-slice-enhanced'
-
-export interface SearchReplaceAssignmentsJobConfig extends BaseJobConfig {
-  sourceElementType: ElementType
-  sourceElementId: number
-}
 
 export interface SearchReplaceAssignmentsJobOptions {
   sourceElementType: ElementType
@@ -61,9 +56,9 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()
@@ -80,7 +75,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     }
   }
 
-  private async executeReplaceRequest (): Promise<string | number | null> {
+  private async executeReplaceRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.elementUsageReplace.initiate({
         elementType: this.sourceElementType,
@@ -99,15 +94,6 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     }
 
     return response.data?.jobRunId ?? null
-  }
-
-  private getJobConfig (): SearchReplaceAssignmentsJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      sourceElementType: this.sourceElementType,
-      sourceElementId: this.sourceElementId
-    }
   }
 
   private async handleCompletion (): Promise<void> {

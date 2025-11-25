@@ -62,6 +62,7 @@ import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
+import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
@@ -459,6 +460,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'cms',
       component: cms
+    })
+    iconLibrary.register({
+      name: 'collapse',
+      component: collapse
     })
     iconLibrary.register({
       name: 'collection',

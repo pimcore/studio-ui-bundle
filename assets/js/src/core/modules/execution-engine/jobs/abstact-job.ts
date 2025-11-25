@@ -8,9 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
-import { type topics } from '../topics'
-
 export enum JobStatus {
   QUEUED = 'queued',
   RUNNING = 'running',
@@ -21,10 +18,7 @@ export enum JobStatus {
 
 export interface AbstractJob {
   id: number
-  action: () => Promise<number>
   type: string
   title: string
   status: JobStatus
-  topics: NonEmptyArray<(typeof topics)[string]>
-  config: unknown
 }

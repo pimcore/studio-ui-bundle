@@ -12,6 +12,7 @@ import React, { type ComponentType } from 'react'
 import { type TabNode } from 'flexlayout-react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { TitleView } from './title/title-view'
+import { useWidgetManager } from '../hooks/use-widget-manager'
 
 export interface WidgetContentTitleContainerProps {
   node: TabNode
@@ -32,6 +33,13 @@ export const WidgetContentTitleContainer = ({
   icon,
   title
 }: WidgetContentTitleProps): React.JSX.Element => {
+  const { closeWidget } = useWidgetManager()
+  const isCloseable = node.isEnableClose()
+
+  const onClose = (): void => {
+    closeWidget(node.getId())
+  }
+
   return (
     <>
       {ContentTitleComponent !== undefined
@@ -46,6 +54,7 @@ export const WidgetContentTitleContainer = ({
           <TitleView
             className={ 'widget__title' }
             icon={ icon }
+            onClose={ isCloseable ? onClose : undefined }
             title={ title }
           />
           )

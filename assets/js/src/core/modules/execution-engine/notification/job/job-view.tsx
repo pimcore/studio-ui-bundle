@@ -19,8 +19,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-view.styles'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
+import { Popconfirm } from '@Pimcore/components/modal/popconfirm/popconfirm'
 
-interface ButtonAction {
+export interface ButtonAction {
   label: string
   handler: () => void | Promise<void>
 }
@@ -29,8 +30,9 @@ export interface JobViewProps extends JobProps {
   successButtonActions?: ButtonAction[]
   failureButtonActions?: ButtonAction[]
   finishedWithErrorsButtonActions?: ButtonAction[]
+  onAbort?: () => void | Promise<void>
   progress: number
-  step?: number
+  currentStep?: number
   totalSteps?: number
 }
 
@@ -38,11 +40,48 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
+  const successButtonActions = props.successButtonActions ?? []
+  const failureButtonActions = props.failureButtonActions ?? []
+  const finishedWithErrorsButtonActions = props.finishedWithErrorsButtonActions ?? []
+
   const progress = Math.min(props.progress, 100)
 
-  const StepHint = !isUndefined(props.step) && !isUndefined(props.totalSteps)
-    ? <strong>{ t('jobs.job.step_hint', { step: props.step, total: props.totalSteps }) }: </strong>
-    : undefined
+  const getStepHint = (): React.ReactNode => {
+    if (isUndefined(props.currentStep)) {
+      return null
+    }
+
+    if (!isUndefined(props.totalSteps)) {
+      return <strong>{ t('jobs.job.step_hint', { step: props.currentStep, total: props.totalSteps }) }: </strong>
+    }
+
+    if (props.currentStep > 1) {
+      return <strong>{ t('jobs.job.step_hint_single', { step: props.currentStep }) }: </strong>
+    }
+
+    return null
+  }
+
+  const stepHint = getStepHint()
+
+  const renderAbortButton = (): React.ReactNode => {
+    if (isUndefined(props.onAbort)) {
+      return null
+    }
+
+    return (
+      <Popconfirm
+        onConfirm={ () => { void props.onAbort?.() } }
+        title={ t('jobs.job.abort-confirm') }
+        zIndex={ 10000 }
+      >
+        <Button
+          className={ styles.buttonStyle }
+          type='link'
+        >{t('jobs.job.button-abort')}</Button>
+      </Popconfirm>
+    )
+  }
 
   return (
     <div>
@@ -65,12 +104,14 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               >
                 <Spin type="classic" /><span>{ t('jobs.job.queued', { title: props.title }) }</span>
               </Flex>
+              { renderAbortButton() }
             </Flex>
           ) }
 
           { props.status === JobStatus.RUNNING && (
             <Progressbar
-              description={ <>{StepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
+              description={ <>{stepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
+              descriptionAction={ renderAbortButton() }
               percent={ progress }
               progressStatus={ t('jobs.job.progress', { progress }) }
             />
@@ -89,7 +130,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
-                { props.successButtonActions?.map((action, index) => (
+                { successButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
@@ -114,7 +155,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
-                { props.finishedWithErrorsButtonActions?.map((action, index) => (
+                { finishedWithErrorsButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
@@ -138,7 +179,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 <Icon value='x-circle' /><span>{ t('jobs.job.failed', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
-                { props.failureButtonActions?.map((action, index) => (
+                { failureButtonActions.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }

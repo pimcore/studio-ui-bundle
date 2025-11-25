@@ -240,6 +240,7 @@ component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
 asset.asset-editor-tabs.embedded-metadata.columns.value: Value
+asset.asset-editor-tabs.preview.open-in-new-window: Open in New Window
 login-form.remember-me: Remember me
 login-form.forgot-password: Forgot password
 login-form.login: Login
@@ -545,6 +546,10 @@ jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
+jobs.job.step_hint_single: "Step {{step}}"
+jobs.job.download-error: "Download failed"
+jobs.job.button-show-errors: "Show errors"
+jobs.job.error-modal.title: "Job Errors"
 jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV download of {{title}}"
@@ -673,6 +678,7 @@ set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
 clone: Clone
+jobs.clone-job.step2.title: Updating references
 jobs.asset-clone-job.title: Cloning assets
 jobs.document-clone-job.title: Cloning documents
 jobs.data-object-clone-job.title: Cloning data objects
@@ -706,6 +712,7 @@ video: Video
 processing: Processing
 upload: Upload
 close: Close
+paste: Paste
 upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?

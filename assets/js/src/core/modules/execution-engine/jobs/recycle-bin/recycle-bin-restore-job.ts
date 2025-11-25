@@ -13,14 +13,10 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { DefaultJobHandler, type BaseJobConfig } from '../../message-handlers/default-job-handler'
+import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
 import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
-
-export interface RecycleBinRestoreJobConfig extends BaseJobConfig {
-  elementTypes: ElementType[]
-}
 
 export interface RecycleBinRestoreJobOptions {
   itemIds: number[]
@@ -53,9 +49,9 @@ export class RecycleBinRestoreJob implements JobInterface {
         return
       }
 
-      const handler = new DefaultJobHandler({
+      const handler = new MessageBusJobHandler({
         jobRunId,
-        config: this.getJobConfig(),
+        title: this.title,
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()
@@ -72,7 +68,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
   }
 
-  private async executeRestoreRequest (): Promise<string | number | null> {
+  private async executeRestoreRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinRestoreItems.initiate({
         body: {
@@ -87,14 +83,6 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
 
     return response.data?.jobRunId ?? null
-  }
-
-  private getJobConfig (): RecycleBinRestoreJobConfig {
-    return {
-      title: this.title,
-      progress: 0,
-      elementTypes: this.elementTypes
-    }
   }
 
   private async handleCompletion (): Promise<void> {

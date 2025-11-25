@@ -1,0 +1,36 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { isUndefined } from 'lodash'
+import { store } from '@Pimcore/app/store'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { AbstractBatchDeleteJob, type AbstractBatchDeleteJobOptions } from './abstract-batch-delete-job'
+import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+
+export interface DataObjectBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
+
+export class DataObjectBatchDeleteJob extends AbstractBatchDeleteJob {
+  protected async executeDeleteRequest (): Promise<number | null> {
+    const response = await store.dispatch(
+      api.endpoints.dataObjectBatchDelete.initiate({
+        body: {
+          ids: this.itemIds
+        }
+      })
+    )
+
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return null
+    }
+
+    return response.data?.jobRunId ?? null
+  }
+}

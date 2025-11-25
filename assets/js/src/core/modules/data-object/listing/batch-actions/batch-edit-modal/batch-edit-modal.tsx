@@ -30,12 +30,9 @@ import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@sdk/app'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
@@ -44,6 +41,11 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { DataObjectBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-batch-edit-job'
+import { DataObjectFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-folder-batch-edit-job'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -61,7 +63,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
-  const { addJob } = useJobs()
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
   const { hasType, getType } = useDynamicTypeResolver()
@@ -162,40 +164,21 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     if (selectedRowsCount === 0) {
-      addJob(createJob({
+      const filters = getArgs()?.body?.filters ?? {}
+      delete filters.page
+      delete filters.pageSize
+
+      const job = new DataObjectFolderBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const filters = getArgs()?.body?.filters ?? {}
-          delete filters.page
-          delete filters.pageSize
-
-          const response = await patchObjectsInFolder({
-            body: {
-              data: [
-                {
-                  folderId: id,
-                  editableData: values
-                }
-              ],
-              filters: {
-                ...filters
-              },
-              classId: String(selectedClassDefinition?.id)
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchObjectsInFolder,
+        folderId: id,
+        values,
+        filters,
+        classId: String(selectedClassDefinition?.id),
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
       await patchObjectsByIds({
         body: {
@@ -208,30 +191,15 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         }
       })
     } else {
-      addJob(createJob({
+      const job = new DataObjectBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const response = await patchObjectsByIds({
-            body: {
-              data: selectedRowsIds.map((rowId) => ({
-                id: parseInt(rowId),
-                editableData: values
-              }))
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchObjectsByIds,
+        selectedRowsIds: selectedRowsIds.map(Number),
+        values,
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     }
 
     resetModal()

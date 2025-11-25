@@ -96,6 +96,10 @@ const config: ConfigFile = {
     {
       pattern: 'documentPageSnippetAreaBlockRender',
       type: 'query'
+    },
+    {
+      pattern: 'executionEngineListJobs',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -194,6 +198,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
+    },
+    '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)
     }
   },
   exportName: 'api',

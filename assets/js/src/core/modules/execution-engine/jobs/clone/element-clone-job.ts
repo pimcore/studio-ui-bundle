@@ -13,7 +13,7 @@ import { AbstractCloneJob, type AbstractCloneJobOptions } from './abstract-clone
 
 export interface ElementCloneJobOptions extends AbstractCloneJobOptions {
   parameters: CloneParameters
-  elementClone: (params: { id: number, parentId: number, cloneParameters: CloneParameters }) => Promise<{ success: boolean, jobRunId?: string | number }>
+  elementClone: (params: { id: number, parentId: number, cloneParameters: CloneParameters }) => Promise<{ success: boolean, jobRunId?: number }>
 }
 
 export class ElementCloneJob extends AbstractCloneJob {
@@ -33,7 +33,7 @@ export class ElementCloneJob extends AbstractCloneJob {
     this.elementClone = options.elementClone
   }
 
-  protected async executeCloneRequest (): Promise<string | number | null> {
+  protected async executeCloneRequest (): Promise<number | null> {
     const result = await this.elementClone({
       id: this.sourceId,
       parentId: this.targetId,
