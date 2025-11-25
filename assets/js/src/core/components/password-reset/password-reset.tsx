@@ -9,6 +9,8 @@
  */
 
 import { routes } from '@Pimcore/app/router/router'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
 import { useAuthentication } from '@Pimcore/modules/auth/hooks/use-authentication'
 import { isNil } from 'lodash'
 import React, { useEffect } from 'react'
@@ -19,13 +21,15 @@ export const PasswordReset = (): React.JSX.Element => {
   const [searchParams] = useSearchParams()
   const token: string | null = searchParams.get('token')
   const { loginWithToken } = useAuthentication()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (!isNil(token)) {
       void loginWithToken(
         token,
-        () => {
+        async () => {
           navigate(routes.root, { state: { resetPassword: true } })
+          dispatch(setAuthState(true))
         },
         () => {
           navigate(routes.login)

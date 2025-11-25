@@ -50,7 +50,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadAvailableLocales } = useLanguageLoader()
   const { loadPerspective } = usePerspectives()
 
-  async function initActivePerspective (): Promise<any> {
+  async function initActivePerspective(): Promise<any> {
     const user = selectCurrentUser(store.getState())
     const perspectiveId = String(user?.activePerspective ?? 'studio_default_perspective')
     return await loadPerspective(perspectiveId)

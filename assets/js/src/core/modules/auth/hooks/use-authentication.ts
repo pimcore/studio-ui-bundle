@@ -72,7 +72,8 @@ export const useAuthentication = (): UseAuthenticationReturn => {
       }
 
       onSuccess?.()
-    } catch {
+    } catch (error) {
+      console.log('error', error)
       trackError(new GeneralError('Error using token for authorization'))
       onError?.()
     }
