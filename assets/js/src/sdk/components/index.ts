@@ -190,7 +190,7 @@ export * from '@Pimcore/components/modal/useModal/index'
 export * from '@Pimcore/components/modal/file-list/file-list'
 
 // @todo check if this should really located under the components folder
-export * from '@Pimcore/components/login-form/login-form'
+export * from '@Pimcore/modules/auth/components/login-form/login-form-container'
 
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'
