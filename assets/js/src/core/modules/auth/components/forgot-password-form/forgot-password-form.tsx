@@ -33,12 +33,12 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
 
   return (
     <Flex
-      gap={"normal"}
+      gap={ 'normal' }
       vertical
     >
       {showSuccessMessage && (
         <Alert
-          description={t('forgot-password-form.success-message')}
+          description={ t('forgot-password-form.success-message') }
           showIcon
           type="success"
         />
@@ -47,7 +47,7 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
       {
         !showSuccessMessage && (
           <FormKit
-            formProps={{
+            formProps={ {
               form,
               onFinish: async (values: ForgetPasswordForm) => {
                 setIsLoading(true)
@@ -62,24 +62,24 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
                   }
                 )
               }
-            }}
+            } }
           >
             <Form.Item
-              label={t('forgot-password-form.username')}
+              label={ t('forgot-password-form.username') }
               name="username"
             >
               <Input
                 autoComplete="username"
-                name={'username'}
-                placeholder={t('forgot-password-form.username.placeholder')}
-                prefix={<Icon value="user" />}
+                name={ 'username' }
+                placeholder={ t('forgot-password-form.username.placeholder') }
+                prefix={ <Icon value="user" /> }
               />
             </Form.Item>
 
             <Button
               className="w-full"
               htmlType='submit'
-              loading={isLoading}
+              loading={ isLoading }
               type='primary'
             >
               {t('forgot-password-form.reset-password')}
@@ -90,7 +90,7 @@ export const ForgotPasswordForm = ({ onGetBack }: ForgotPasswordFormProps): Reac
 
       <Flex justify="center">
         <Button
-          onClick={onGetBack}
+          onClick={ onGetBack }
           type="link"
         >
           {t('forgot-password-form.back')}
