@@ -33,9 +33,10 @@ import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-key
 
 interface IProfileDetail {
   id: number
+  resetPassword?: boolean
 }
 
-const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
+const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { availableAdminLanguages, validLocales } = useSettings()
@@ -119,7 +120,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             items={ [
               {
                 key: '1',
-                title: <>{ t('user-management.general') }</>,
+                title: <>{t('user-management.general')}</>,
                 children: <>
                   <Form.Item
                     label={ t('user-management.firstname') }
@@ -181,7 +182,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                 </>
               }
             ]
-                        }
+            }
             size={ 'small' }
           />
         </Col>
@@ -198,14 +199,16 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             items={ [
               {
                 key: '2',
-                title: <>{ t('user-profile.change-password') }</>,
+                title: <>{t('user-profile.change-password')}</>,
                 children: <>
-                  <Form.Item
-                    label={ t('user-profile.password-old') }
-                    name={ 'oldPassword' }
-                  >
-                    <Input.Password />
-                  </Form.Item>
+                  {!resetPassword && (
+                    <Form.Item
+                      label={ t('user-profile.password-old') }
+                      name={ 'oldPassword' }
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                  )}
 
                   <Form.Item
                     label={ t('user-profile.password-new') }
@@ -246,7 +249,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                 </>
               }
             ]
-                        }
+            }
             size={ 'small' }
           />
         </Col>
