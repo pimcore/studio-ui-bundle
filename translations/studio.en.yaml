@@ -7,7 +7,7 @@ widget.missing-context.title: "Missing Context"
 widget.missing-context.description: "No related element found"
 widget.missing-tab-context.description: "This feature is not supported for the related element"
 block: Block
-error.error_something_generic_went_wrong: Element not found
+error.error_something_generic_went_wrong: Something went wrong
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument
@@ -62,6 +62,12 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+asset.upload.file-exists.title: File already exists
+asset.upload.file-exists.message: 'The file "{{fileName}}" already exists in this folder. Do you want to overwrite it?'
+asset.upload.overwrite: Overwrite
+asset.upload.keep-both: Keep both
+asset.upload.skip: Skip
+asset.upload.apply-to-all: Apply to all
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
 upload.error.upload-failed: 'Upload failed'

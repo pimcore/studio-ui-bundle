@@ -902,10 +902,7 @@ export type AssetAddApiArg = {
     };
 };
 export type AssetUploadInfoApiResponse =
-    /** status 200 Returns true if asset with the same name and in the same path already exists, false otherwise */ {
-        /** True if asset exists, false otherwise */
-        exists: boolean;
-    };
+    /** status 200 Returns true and existing asset ID, if asset with the same name and in the same path already exists, false otherwise */ AssetUploadInfo;
 export type AssetUploadInfoApiArg = {
     /** ParentId of the asset */
     parentId: number;
@@ -1324,6 +1321,12 @@ export type PatchCustomMetadata = {
     type: string;
     /** Data */
     data: string | null;
+};
+export type AssetUploadInfo = {
+    /** True if asset exists */
+    exists: boolean;
+    /** Id of existing asset */
+    assetId: number | null;
 };
 export type CustomMetadata = {
     /** AdditionalAttributes */
