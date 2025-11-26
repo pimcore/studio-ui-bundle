@@ -14,12 +14,14 @@ import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-sl
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { isString } from 'lodash'
+import { isString, isNil } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useTranslation } from 'react-i18next'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
+import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -60,20 +62,36 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, fileList } = useUploadModalContext()
   const dispatch = useAppDispatch()
   const settings = useSettings()
+  const { t } = useTranslation()
 
-  // Use shared hook to resolve targetFolderId
-  const { targetFolderId } = useTargetFolderId({
+  const { targetFolderId: resolvedTargetFolderId } = useTargetFolderId({
     targetFolderId: props.targetFolderId,
     targetFolderPath: props.targetFolderPath
   })
+  const targetFolderId = resolvedTargetFolderId ?? 1
+
+  const {
+    resolveConflicts,
+    shouldSkipFile,
+    hasCheckError,
+    getReplaceId,
+    reset,
+    cleanupProcessedFiles
+  } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
-    action: (): string => {
+    action: (file): string => {
       if (isString(props.action)) {
         return props.action
       }
-      const baseUrl = `${getPrefix()}/assets/add/`
-      return baseUrl + (targetFolderId ?? 1)
+
+      const replaceId = getReplaceId(file)
+
+      if (!isNil(replaceId)) {
+        return `${getPrefix()}/assets/${replaceId}/replace`
+      }
+
+      return `${getPrefix()}/assets/add/${targetFolderId}`
     },
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
@@ -82,40 +100,77 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     maxCount: props.maxItems,
     openFileDialogOnClick: props.openFileDialogOnClick,
     fileList,
-    beforeUpload: async (file: RcFile & UploadFile, fileList) => {
+    beforeUpload: async (file: RcFile, fileList) => {
       const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)
       if (!isFileSizeValid) {
-        file.status = 'error'
-        file.error = { status: 413 }
         return false
       }
+
       await props.beforeUpload?.(file, fileList)
+
+      if (file.uid === fileList[0].uid) {
+        reset()
+      }
+
+      await resolveConflicts(fileList)
+
+      if (hasCheckError(file)) {
+        return false
+      }
+
+      if (shouldSkipFile(file)) {
+        return AntUpload.LIST_IGNORE
+      }
+
+      return true
     },
     onChange: async (info) => {
-      setFileList(info.fileList)
+      const updatedFileList = info.fileList.map(file => {
+        if (hasCheckError(file as RcFile)) {
+          const errorFile: UploadFile = {
+            ...file,
+            status: 'error',
+            response: t('error.error_something_generic_went_wrong')
+          }
+          return errorFile
+        }
+        return file
+      })
+
+      setFileList(updatedFileList)
       setIsModalOpen(true)
-      props.onChange?.(info)
-      const allFilesDone = info.fileList.every(file => file.status === 'done')
-      const uploadFinished = info.fileList.every(file => file.status === 'done' || file.status === 'error')
-      const uploadDone = info.fileList.every(file => file.status === 'done' || file.status === 'error' || file.percent === 100)
+      props.onChange?.({ ...info, fileList: updatedFileList })
+      const allFilesDone = updatedFileList.every(file => file.status === 'done')
+      const uploadFinished = updatedFileList.every(file => file.status === 'done' || file.status === 'error')
+      const uploadDone = updatedFileList.every(file => file.status === 'done' || file.status === 'error' || file.percent === 100)
 
       if (uploadDone) {
         setShowProcessing(true)
       }
       if (uploadFinished) {
-        const doneFiles = info.fileList.filter(file => file.status === 'done')
+        const doneFiles = updatedFileList.filter(file => file.status === 'done')
+
+        // Resolve IDs before cleanup to handle replaced assets correctly
+        const assetIds = doneFiles.map(file => {
+          const replaceId = getReplaceId(file)
+          return replaceId ?? (file.response?.id as number)
+        })
+
+        cleanupProcessedFiles(doneFiles)
+
         if (props.action === undefined && props.skipAssetFetch !== true) {
-          const assetFetchPromises = doneFiles
-            .map(async file =>
-              await dispatch(assetApi.endpoints.assetGetById.initiate({ id: file.response.id as number }))
+          const assetFetchPromises = assetIds
+            .map(async id => {
+              if (isNil(id)) return undefined
+              return await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
                 .then(({ data }) => data as Asset | undefined)
-            )
+            })
           const assets = (await Promise.all(assetFetchPromises)).filter(asset => asset !== undefined)
           if (assets.length > 0) {
             await props.onSuccess?.(assets)
           }
         } else if (doneFiles.length > 0) {
-          await props.onSuccess?.(info.fileList)
+          await props.onSuccess?.(updatedFileList)
         }
 
         setShowProcessing(false)
@@ -133,6 +188,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     setFileList([])
     setShowUploadError(false)
     setShowProcessing(false)
+    reset()
   }
 
   const UploadComponent = props.uploadComponent ?? AntUpload
