@@ -51,4 +51,4 @@ export type ActiveBundle = {
     /** Bundle name */
     name: string;
 };
-export const { useSystemSettingsGetQuery, useActiveBundlesGetQuery, usePingActionQuery, useLazyPingActionQuery } = injectedRtkApi;
+export const { useSystemSettingsGetQuery, useActiveBundlesGetQuery, usePingActionQuery } = injectedRtkApi;
