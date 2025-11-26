@@ -15,9 +15,11 @@ import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-de
 import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
 import { SlotRenderer } from './component-registry/slot-renderer'
+import { useSessionPing } from './app-loader/loader/session/use-session-ping'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
+  useSessionPing()
 
   const preventDrop = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault()
