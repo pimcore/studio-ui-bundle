@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import type React from 'react'
 import { useSessionPing } from './use-session-ping'
 
 export const SessionPinger = (): React.JSX.Element | null => {
