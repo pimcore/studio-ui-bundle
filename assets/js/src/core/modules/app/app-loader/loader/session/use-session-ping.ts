@@ -10,7 +10,7 @@
 
 import { useEffect } from 'react'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { useLazyPingActionQuery } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useLazyPingActionQuery } from '@Pimcore/modules/app/settings/settings-slice-enhanced'
 
 import { isNil } from 'lodash'
 
