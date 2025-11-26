@@ -1,11 +1,21 @@
-import { Button, Flex, IWindowModalProps, WindowModal } from "@sdk/components"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { useStyle } from "./about-dialog.styles"
-import { useSettings } from "@sdk/modules/app"
-import { isNil } from "lodash"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
-interface AboutDialogProps extends Omit<IWindowModalProps, "children"> { }
+import { Button, Flex, type IWindowModalProps, WindowModal } from '@sdk/components'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useStyle } from './about-dialog.styles'
+import { useSettings } from '@sdk/modules/app'
+import { isNil } from 'lodash'
+
+interface AboutDialogProps extends Omit<IWindowModalProps, 'children'> { }
 
 export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -14,12 +24,12 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
 
   return (
     <WindowModal
-      {...props}
-      footer={<></>}
-      title={t('about.title')}
-      width={520}
-      height={281}
-      className={styles.modal}
+      { ...props }
+      className={ styles.modal }
+      footer={ <></> }
+      height={ 281 }
+      title={ t('about.title') }
+      width={ 520 }
     >
       <div className="video-container">
         <video
@@ -27,55 +37,68 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
           loop
           muted
           playsInline
-          style={{
+          src="/bundles/pimcorestudioui/videos/about-bg.mp4"
+          style={ {
             position: 'absolute',
             width: '100%',
             height: '100%',
             objectFit: 'cover',
             zIndex: 0,
             minHeight: '281px'
-          }}
-          src="/bundles/pimcorestudioui/videos/about-bg.mp4"
+          } }
         />
         <div className="content-container">
-          <Flex vertical align="center" gap={'small'}>
-            <Flex vertical align="center" gap={'mini'}>
+          <Flex
+            align="center"
+            gap={ 'small' }
+            vertical
+          >
+            <Flex
+              align="center"
+              gap={ 'mini' }
+              vertical
+            >
               {!isNil(platformVersion) && (
                 <span>{t('about.platform-version', { version: platformVersion })}</span>
               )}
-              <Flex align="center" gap={'mini'}>
+              <Flex
+                align="center"
+                gap={ 'mini' }
+              >
                 <span>
                   {t('about.copyright')}
                 </span>
 
                 <span>
-                  (<Button
-                    variant="text"
-                    type="link"
+                  (
+                  <Button
+                    className={ styles.pimcoreBtn }
                     href="https://pimcore.com/"
                     target="_blank"
-                    className={styles.pimcoreBtn}
+                    type="link"
+                    variant="text"
                   >
                     pimcore.com
-                  </Button>)
+                  </Button>
+                  )
                 </span>
               </Flex>
             </Flex>
-            <Flex gap={'normal'}>
+            <Flex gap={ 'normal' }>
               <Button
-                variant="text"
-                type="link"
                 href="https://github.com/pimcore/pimcore/blob/12.x/LICENSE.md"
                 target="_blank"
+                type="link"
+                variant="text"
               >
                 {t('about.buttons.license')}
               </Button>
 
               <Button
-                variant="text"
-                type="link"
                 href="https://pimcore.com/en/contact-us"
                 target="_blank"
+                type="link"
+                variant="text"
               >
                 {t('about.buttons.contact')}
               </Button>

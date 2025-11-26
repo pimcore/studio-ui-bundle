@@ -1,8 +1,17 @@
-import { useEffect, useState } from "react"
-import { AboutDialog } from "./about-dialog"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { useModalHolder } from "@Pimcore/modules/app/modal-holder/use-modal-holder"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useEffect, useState } from 'react'
+import { AboutDialog } from './about-dialog'
+import { useTranslation } from 'react-i18next'
+import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 
 export const AboutDialogContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -11,27 +20,27 @@ export const AboutDialogContainer = (): React.JSX.Element => {
   const modalId = 'about-dialog-modal'
 
   const closeModal = (): void => {
-    if (isOpen === true) {
+    if (isOpen) {
       setIsOpen(false)
       removeModal(modalId)
     }
   }
 
   const openModal = (): void => {
-    if (isOpen === false) {
+    if (!isOpen) {
       setIsOpen(true)
     }
   }
 
   useEffect(() => {
-    if (isOpen === true) {
+    if (isOpen) {
       addModal(
         modalId,
         <AboutDialog
-          open={isOpen}
-          onClose={closeModal}
-          onCancel={closeModal}
-          onOk={closeModal}
+          onCancel={ closeModal }
+          onClose={ closeModal }
+          onOk={ closeModal }
+          open={ isOpen }
         />
       )
     }
@@ -40,8 +49,8 @@ export const AboutDialogContainer = (): React.JSX.Element => {
   return (
     <>
       <button
-        className={'main-nav__list-btn'}
-        onClick={() => openModal()}
+        className={ 'main-nav__list-btn' }
+        onClick={ () => { openModal() } }
       >
         {t('navigation.about')}
       </button>

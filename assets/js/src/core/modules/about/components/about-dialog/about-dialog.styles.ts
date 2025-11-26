@@ -12,7 +12,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    'modal': css`
+    modal: css`
       .ant-modal-content {
         .ant-modal-close {
           color: ${token.colorWhite};
