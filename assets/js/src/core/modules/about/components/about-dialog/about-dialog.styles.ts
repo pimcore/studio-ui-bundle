@@ -28,8 +28,30 @@ export const useStyle = createStyles(({ token, css }) => {
           .ant-btn {
             color: #B37FEB;
           }
+
+          .video-container {
+            position: absolute;
+            width: 100%; 
+            height: 100%; 
+            left: 0; 
+            top: 0;
+
+            .content-container {
+              position: relative; 
+              z-index: 1; 
+              color: ${token.colorWhite}; 
+              height: 100%;
+
+              > .ant-flex {
+                margin-top: 175px;
+              }
+            }
+          }
         }
       }
+    `,
+    pimcoreBtn: css`
+      padding: 0 !important;
     `
   }
 }, { hashPriority: 'low' })

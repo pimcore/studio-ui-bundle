@@ -2,12 +2,15 @@ import { Button, Flex, IWindowModalProps, WindowModal } from "@sdk/components"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { useStyle } from "./about-dialog.styles"
+import { useSettings } from "@sdk/modules/app"
+import { isNil } from "lodash"
 
 interface AboutDialogProps extends Omit<IWindowModalProps, "children"> { }
 
 export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
+  const { platformVersion } = useSettings()
 
   return (
     <WindowModal
@@ -18,7 +21,7 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
       height={281}
       className={styles.modal}
     >
-      <div style={{ position: 'absolute', width: '100%', height: '100%', left: 0, top: 0 }}>
+      <div className="video-container">
         <video
           autoPlay
           loop
@@ -34,15 +37,48 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
           }}
           src="/bundles/pimcorestudioui/videos/about-bg.mp4"
         />
-        <div style={{ position: 'relative', zIndex: 1, color: 'white', height: '100%' }}>
-          <Flex vertical align="center" gap={'small'} style={{ marginTop: '175px' }}>
+        <div className="content-container">
+          <Flex vertical align="center" gap={'small'}>
             <Flex vertical align="center" gap={'mini'}>
-              <span>Platform Version: v2024.3</span>
-              <span>© by Pimcore GmbH (pimcore.com)</span>
+              {!isNil(platformVersion) && (
+                <span>{t('about.platform-version', { version: platformVersion })}</span>
+              )}
+              <Flex align="center" gap={'mini'}>
+                <span>
+                  {t('about.copyright')}
+                </span>
+
+                <span>
+                  (<Button
+                    variant="text"
+                    type="link"
+                    href="https://pimcore.com/"
+                    target="_blank"
+                    className={styles.pimcoreBtn}
+                  >
+                    pimcore.com
+                  </Button>)
+                </span>
+              </Flex>
             </Flex>
             <Flex gap={'normal'}>
-              <Button variant="text" type="link" href="https://google.com">License</Button>
-              <Button variant="text" type="link" href="https://google.com">Contact</Button>
+              <Button
+                variant="text"
+                type="link"
+                href="https://github.com/pimcore/pimcore/blob/12.x/LICENSE.md"
+                target="_blank"
+              >
+                {t('about.buttons.license')}
+              </Button>
+
+              <Button
+                variant="text"
+                type="link"
+                href="https://pimcore.com/en/contact-us"
+                target="_blank"
+              >
+                {t('about.buttons.contact')}
+              </Button>
             </Flex>
           </Flex>
         </div>
