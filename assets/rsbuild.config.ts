@@ -31,7 +31,7 @@ export default defineConfig({
     port: 3031,
   },
   dev: {
-    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
+    assetPrefix: (isDevServer ? '' : '') + '/bundles/pimcorestudioui/build/' + buildId,
     writeToDisk: !isDevServer,
   },
   source: {

@@ -118,7 +118,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         openTranslationItems.push({
           label: `${getDisplayName(translation.language)} [${translation.language}]`,
           key: `translation-${translation.language}`,
-          icon: <FlagIcon value={ translation.language } />,
+          icon: <FlagIcon value={translation.language} />,
           onClick: async (): Promise<void> => {
             await openDocument({
               config: {
@@ -148,7 +148,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         unlinkTranslationItems.push({
           label: `${getDisplayName(translation.language)} [${translation.language}]`,
           key: `unlink-translation-${translation.language}`,
-          icon: <FlagIcon value={ translation.language } />,
+          icon: <FlagIcon value={translation.language} />,
           onClick: async (): Promise<void> => {
             await deleteTranslation({
               id: Number(document.id),
@@ -275,11 +275,11 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (isLinkModalOpen && !isNull(currentDocument)) {
       addModal(LINK_MODAL_ID, (
         <LinkTranslationModal
-          isOpen={ isLinkModalOpen }
-          onClose={ handleModalClose }
-          onSelectedDocumentChange={ setSelectedDocument }
-          onSubmit={ handleLinkDocument }
-          selectedDocument={ selectedDocument }
+          isOpen={isLinkModalOpen}
+          onClose={handleModalClose}
+          onSelectedDocumentChange={setSelectedDocument}
+          onSubmit={handleLinkDocument}
+          selectedDocument={selectedDocument}
         />
       ))
     } else {
@@ -295,11 +295,11 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (isNewTranslationModalOpen) {
       addModal(NEW_MODAL_ID, (
         <NewTranslationModal
-          currentDocument={ currentDocument }
-          isOpen={ isNewTranslationModalOpen }
-          onClose={ handleModalClose }
-          onSubmit={ handleNewTranslationSubmit }
-          useInheritance={ useInheritance }
+          currentDocument={currentDocument}
+          isOpen={isNewTranslationModalOpen}
+          onClose={handleModalClose}
+          onSubmit={handleNewTranslationSubmit}
+          useInheritance={useInheritance}
         />
       ))
     } else {
