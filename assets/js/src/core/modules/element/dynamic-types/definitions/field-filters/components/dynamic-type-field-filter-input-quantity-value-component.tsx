@@ -21,9 +21,9 @@ export interface DynamicTypeFieldFilterInputQuantityValueProps extends AbstractF
 export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.Element => {
   const { data, setData, config } = useDynamicFilter()
   const [value, setValue] = React.useState<any>(data)
-  const debouncedValue = useDebounce(value, 300);
+  const debouncedValue = useDebounce(value, 300)
   const { getSelectOptions } = useQuantityValueUnits()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   useEffect(() => {
     setValue(data)
@@ -34,29 +34,29 @@ export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.E
   }, [debouncedValue])
 
   return (
-    <Flex gap={'extra-small'}>
-      <Input 
-        value={value?.value ?? ''}
-        onChange={(e) => {
+    <Flex gap={ 'extra-small' }>
+      <Input
+        onChange={ (e) => {
           const newValue = e.target.value
           setValue({
             ...value,
             value: newValue === '' ? null : newValue
           })
-        }} 
+        } }
+        value={ value?.value ?? '' }
       />
 
       <Select
-        style={{ minWidth: 120 }}
-        value={value?.unitId ?? undefined}
-        placeholder={ '(' + t('empty') + ')' }
-        options={getSelectOptions(config?.validUnits)}
-        onChange={(unitId) => {
+        onChange={ (unitId) => {
           setValue({
             ...value,
             unitId
           })
-        }}
+        } }
+        options={ getSelectOptions(config?.validUnits as string[]) }
+        placeholder={ '(' + t('empty') + ')' }
+        style={ { minWidth: 120 } }
+        value={ value?.unitId ?? undefined }
       />
     </Flex>
   )

@@ -16,11 +16,10 @@ import {
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
-import { TimePicker as OriginalTimePicker, TimeRangePickerProps as antTimeRangePickerProps } from 'antd'
+import { TimePicker as OriginalTimePicker, type TimeRangePickerProps as antTimeRangePickerProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
-
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -34,7 +33,7 @@ export type TimeRangePickerProps = Omit<antTimeRangePickerProps, 'value'> & {
 }
 
 const valueToDayJs = (value?: DateRangeTargetValue | null, outputFormat?: string): DateRange | null => {
-  console.log({value, outputFormat});
+  console.log({ value, outputFormat })
 
   if (Array.isArray(value)) {
     return [

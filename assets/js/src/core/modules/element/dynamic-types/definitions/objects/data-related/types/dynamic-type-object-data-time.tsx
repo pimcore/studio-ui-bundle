@@ -18,7 +18,7 @@ import {
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { container, serviceIds } from '@sdk/app'
 
 export type TimeObjectDataDefinition = AbstractObjectDataDefinition

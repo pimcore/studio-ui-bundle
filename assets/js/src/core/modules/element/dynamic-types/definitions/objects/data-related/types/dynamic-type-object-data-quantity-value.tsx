@@ -20,7 +20,7 @@ import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { container } from '@sdk/app'
 
 export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {

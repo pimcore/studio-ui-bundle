@@ -19,7 +19,7 @@ import React from 'react'
 import { type EditMode, type AbstractObjectDataDefinition, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 import cn from 'classnames'
 import { Numeric } from '../../grid-cell-preview/numeric/numeric'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { container, serviceIds } from '@sdk/app'
 
 export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {

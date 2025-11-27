@@ -26,7 +26,7 @@ import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-p
 import { Flex } from 'antd'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { isEmpty, isNil } from 'lodash'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { container, serviceIds } from '@sdk/app'
 
 export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {

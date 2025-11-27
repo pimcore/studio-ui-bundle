@@ -9,7 +9,6 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/frontendTypes'
 
 export interface SearchTermFilter {
   type: 'system.fulltext'

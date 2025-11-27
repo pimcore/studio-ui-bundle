@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { TimeRangePicker, type TimeRangePickerProps, type DateRangeTargetValue } from './time-range-picker'
 import { Form } from '@Pimcore/components/form/form'
-import { formatDatePickerDate, type DatePickerValueType } from '@Pimcore/components/date-picker/utils/date-picker-utils'
+import { formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
@@ -38,7 +38,7 @@ const ExampleForm = (props: TimeRangePickerProps): React.JSX.Element => {
       return 'null'
     }
     const [start, end] = range
-    return `[${formatDatePickerDate(start as DatePickerValueType)}, ${formatDatePickerDate(end as DatePickerValueType)}]`
+    return `[${formatDatePickerDate(start)}, ${formatDatePickerDate(end)}]`
   }
 
   return (

@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import dayjs from 'dayjs'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
@@ -39,7 +38,7 @@ export interface DynamicTypeFieldFilterTimeProps extends AbstractFieldFilterDefi
 export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilterTimeProps): React.JSX.Element => {
   const { data: rawData, setData } = useDynamicFilter()
 
-  console.log({data: rawData});
+  console.log({ data: rawData })
 
   const data: DateValue = rawData ?? {
     setting: TimePickerSettingValue.ON,

@@ -12,7 +12,7 @@ import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { FieldFilterFrontendType } from '../../frontendTypes'
-import { DynamicTypeFieldFilterColorComponent, DynamicTypeFieldFilterColorProps } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-color-component'
+import { DynamicTypeFieldFilterColorComponent, type DynamicTypeFieldFilterColorProps } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-color-component'
 
 @injectable()
 export class DynamicTypeFieldFilterColor extends DynamicTypeFieldFilterAbstract {

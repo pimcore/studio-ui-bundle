@@ -16,9 +16,9 @@ import { type Color } from 'antd/es/color-picker'
 import { t } from 'i18next'
 import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 import { RgbaColor } from '../../grid-cell-preview/rgba-color/rgba-color'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { container, serviceIds } from '@sdk/app'
-import { DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
+import { type DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 
 export type RgbaColorObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -39,7 +39,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
   id: string = 'rgbaColor'
   gridCellEditMode: EditMode = 'edit-modal'
 
-  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get<DynamicTypeFieldFilterColor>(serviceIds['DynamicTypes/FieldFilter/Color']);
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get<DynamicTypeFieldFilterColor>(serviceIds['DynamicTypes/FieldFilter/Color'])
 
   getObjectDataComponent (props: RgbaColorObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

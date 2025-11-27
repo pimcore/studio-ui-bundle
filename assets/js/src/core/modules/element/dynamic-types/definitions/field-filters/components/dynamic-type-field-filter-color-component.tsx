@@ -19,11 +19,11 @@ export const DynamicTypeFieldFilterColorComponent = (props: DynamicTypeFieldFilt
   const { data, setData } = useDynamicFilter()
 
   return (
-    <ColorPicker 
-      value={data}
-      format='hex'
+    <ColorPicker
       disabledFormat
-      onChange={(value) => {setData(value.toRgb())}}
+      format='hex'
+      onChange={ (value) => { setData(value.toRgb()) } }
+      value={ data }
     />
   )
 }

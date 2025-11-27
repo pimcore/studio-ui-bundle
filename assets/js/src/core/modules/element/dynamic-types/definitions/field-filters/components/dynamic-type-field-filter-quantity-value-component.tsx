@@ -167,16 +167,16 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
       )}
 
       <Select
-        value={data?.unitId ?? undefined}
-        minWidth={80}
-        options={getSelectOptions(config?.validUnits)}
-        placeholder={ '(' + t('empty') + ')' }
-        onChange={(unitId) => {
+        minWidth={ 80 }
+        onChange={ (unitId) => {
           setData({
             ...data,
             unitId
           })
-        }}
+        } }
+        options={ getSelectOptions(config?.validUnits as string[]) }
+        placeholder={ '(' + t('empty') + ')' }
+        value={ data?.unitId ?? undefined }
       />
     </Flex>
   )
