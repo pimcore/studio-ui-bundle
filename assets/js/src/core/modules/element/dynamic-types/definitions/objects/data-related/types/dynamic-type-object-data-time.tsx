@@ -18,12 +18,15 @@ import {
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container, serviceIds } from '@sdk/app'
 
 export type TimeObjectDataDefinition = AbstractObjectDataDefinition
 
 export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
   id: string = 'time'
   gridCellEditMode: EditMode = 'edit-modal'
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Time'])
 
   getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

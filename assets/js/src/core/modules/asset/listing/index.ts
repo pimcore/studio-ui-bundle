@@ -51,6 +51,11 @@ moduleSystem.registerModule({
     const listingBuilder = container.get<AssetListingBuilder>(serviceIds['Asset/Listing/Builder'])
 
     listingBuilder.addDecorator({
+      name: 'dynamicType',
+      decorator: DynamicTypeDecorator
+    })
+
+    listingBuilder.addDecorator({
       name: 'actionColumn',
       decorator: ActionColumnDecorator
     })
@@ -108,11 +113,6 @@ moduleSystem.registerModule({
     listingBuilder.addDecorator({
       name: 'generalFilters',
       decorator: GeneralFiltersDecorator
-    })
-
-    listingBuilder.addDecorator({
-      name: 'dynamicType',
-      decorator: DynamicTypeDecorator
     })
   }
 })

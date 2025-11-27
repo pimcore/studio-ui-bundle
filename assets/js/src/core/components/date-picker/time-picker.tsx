@@ -16,14 +16,14 @@ import {
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
-import { DatePicker } from 'antd'
+import { TimePicker as OriginalTimePicker } from 'antd'
 import { type GenericTimePickerProps } from 'antd/es/date-picker/generatePicker/interface'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type TimePickerProps = GenericTimePickerProps & {
-  value?: DatePickerValueType
+  value?: DatePickerValueType | null
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
@@ -46,8 +46,6 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const handleChange = (date: Dayjs | null): void => {
     props.onChange?.(fromDayJs(date, props.outputType, outputFormat))
   }
-
-  const OriginalTimePicker = DatePicker.TimePicker
 
   return (
     <OriginalTimePicker

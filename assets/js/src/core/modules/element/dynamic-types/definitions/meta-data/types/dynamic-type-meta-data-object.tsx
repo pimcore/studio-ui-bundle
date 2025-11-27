@@ -29,7 +29,7 @@ export class DynamicTypeMetaDataObject extends DynamicTypeMetadataAbstract {
   visibleInTypeSelection: boolean = true
 
   @inject(serviceIds['DynamicTypes/GridCell/ObjectLink']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
-  @inject(serviceIds['DynamicTypes/FieldFilter/String']) dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
+  @inject(serviceIds['DynamicTypes/FieldFilter/None']) dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
   getVersionPreviewComponent (data: ManyToOneRelationValue | null): JSX.Element {
     if (isNil(data?.fullPath)) {

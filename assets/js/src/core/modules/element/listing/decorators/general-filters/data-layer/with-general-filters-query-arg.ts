@@ -34,7 +34,9 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
 
     const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
       const column = availableColumns.find(col => col.key === columnKey)
-      return column?.localizable === true ? (providedLocale ?? currentLanguage) : null
+      const isDataObject = 'classId' in baseGetArgs()
+
+      return column?.localizable === true ? (providedLocale ?? (isDataObject ? currentLanguage : null)) : null
     }
 
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {

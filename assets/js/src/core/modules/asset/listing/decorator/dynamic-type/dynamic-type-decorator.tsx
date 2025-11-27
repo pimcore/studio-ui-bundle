@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { withDynamicTypes } from '@Pimcore/modules/data-object/listing/decorator/dynamic-type/context-layer/with-dynamic-types'
+import { withDynamicTypes } from '@Pimcore/modules/asset/listing/decorator/dynamic-type/context-layer/with-dynamic-types'
 import { type AbstractDecorator } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 
 export const DynamicTypeDecorator: AbstractDecorator = (props) => {
