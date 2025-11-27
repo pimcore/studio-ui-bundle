@@ -30,6 +30,6 @@ export const DocumentEditorIframeGlobalStyles = createGlobalStyle`
   }
 
   .ant-dropdown-menu-submenu-popup {
-    box-shadow: ${ props => props.theme.boxShadowSecondary };
+    box-shadow: ${props => props.theme.boxShadowSecondary};
   }
 `

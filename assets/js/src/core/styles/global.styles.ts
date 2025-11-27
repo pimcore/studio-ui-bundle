@@ -52,7 +52,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .ant-dropdown-menu-submenu-popup {
-    box-shadow: ${ props => props.theme.boxShadowSecondary };
+    box-shadow: ${props => props.theme.boxShadowSecondary};
   }
 
   .active {
