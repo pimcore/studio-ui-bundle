@@ -133,12 +133,12 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
       {currentSetting === TimePickerSettingValue.BETWEEN && (
         <TimeRangePicker
           format={ DATE_FORMAT }
-          outputFormat={DATE_FORMAT}
           onChange={ (value: unknown) => {
             const [newFrom, newTo] = value as [string | null, string | null]
 
             handleTimeRangeChange(newFrom, newTo)
           } }
+          outputFormat={ DATE_FORMAT }
           outputType="dateString"
           value={ [data?.from ?? null, data?.to ?? null] }
         />
@@ -147,7 +147,6 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
       {currentSetting !== TimePickerSettingValue.BETWEEN && (
       <TimePicker
         format={ DATE_FORMAT }
-        outputFormat={DATE_FORMAT}
         onChange={ (value: string | null) => {
           if (currentSetting === TimePickerSettingValue.ON) {
             handleTimeChange('on', value)
@@ -157,6 +156,7 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
             handleTimeChange('from', value)
           }
         } }
+        outputFormat={ DATE_FORMAT }
         outputType="dateString"
         value={ getTimePickerValue() }
 
