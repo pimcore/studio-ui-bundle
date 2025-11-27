@@ -33,8 +33,6 @@ export type TimeRangePickerProps = Omit<antTimeRangePickerProps, 'value'> & {
 }
 
 const valueToDayJs = (value?: DateRangeTargetValue | null, outputFormat?: string): DateRange | null => {
-  console.log({ value, outputFormat })
-
   if (Array.isArray(value)) {
     return [
       toDayJs(value[0], outputFormat),

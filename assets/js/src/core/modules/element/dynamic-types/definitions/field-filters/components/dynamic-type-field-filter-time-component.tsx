@@ -38,8 +38,6 @@ export interface DynamicTypeFieldFilterTimeProps extends AbstractFieldFilterDefi
 export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilterTimeProps): React.JSX.Element => {
   const { data: rawData, setData } = useDynamicFilter()
 
-  console.log({ data: rawData })
-
   const data: DateValue = rawData ?? {
     setting: TimePickerSettingValue.ON,
     from: null,
@@ -135,6 +133,7 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
       {currentSetting === TimePickerSettingValue.BETWEEN && (
         <TimeRangePicker
           format={ DATE_FORMAT }
+          outputFormat={DATE_FORMAT}
           onChange={ (value: unknown) => {
             const [newFrom, newTo] = value as [string | null, string | null]
 
@@ -148,6 +147,7 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
       {currentSetting !== TimePickerSettingValue.BETWEEN && (
       <TimePicker
         format={ DATE_FORMAT }
+        outputFormat={DATE_FORMAT}
         onChange={ (value: string | null) => {
           if (currentSetting === TimePickerSettingValue.ON) {
             handleTimeChange('on', value)
