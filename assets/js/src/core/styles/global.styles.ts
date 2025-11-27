@@ -45,6 +45,16 @@ export const GlobalStyles = createGlobalStyle`
     animation-direction: reverse;
   }
 
+  .ant-dropdown-menu,
+  .ant-dropdown-menu-sub {
+    overflow: auto;
+    max-height: 48vh;
+  }
+
+  .ant-dropdown-menu-submenu-popup {
+    box-shadow: ${ props => props.theme.boxShadowSecondary };
+  }
+
   .active {
     cursor: pointer;
     background: ${props => props.theme.itemHoverColor};

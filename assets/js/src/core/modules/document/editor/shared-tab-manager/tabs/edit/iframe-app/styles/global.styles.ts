@@ -22,4 +22,14 @@ export const DocumentEditorIframeGlobalStyles = createGlobalStyle`
     outline: 2px dashed ${props => props.theme.colorError} !important;
     outline-offset: 5px !important;
   }
+
+  .ant-dropdown-menu,
+  .ant-dropdown-menu-sub {
+    overflow: auto;
+    max-height: 48vh;
+  }
+
+  .ant-dropdown-menu-submenu-popup {
+    box-shadow: ${ props => props.theme.boxShadowSecondary };
+  }
 `
