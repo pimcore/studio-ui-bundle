@@ -14,14 +14,16 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { useDebounce } from '@sdk/utils'
 import { useQuantityValueUnits } from '@sdk/modules/data-object'
 import { Flex, Input, Select } from '@sdk/components'
+import { useTranslation } from 'react-i18next'
 
-export interface DynamicTypeFieldFilterQuantityValueProps extends AbstractFieldFilterDefinition {}
+export interface DynamicTypeFieldFilterInputQuantityValueProps extends AbstractFieldFilterDefinition {}
 
-export const DynamicTypeFieldFilterQuantityValueComponent = (): React.JSX.Element => {
+export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.Element => {
   const { data, setData, config } = useDynamicFilter()
   const [value, setValue] = React.useState<any>(data)
   const debouncedValue = useDebounce(value, 300);
   const { getSelectOptions } = useQuantityValueUnits()
+  const { t } = useTranslation();
 
   useEffect(() => {
     setValue(data)
@@ -47,6 +49,7 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (): React.JSX.Elemen
       <Select
         style={{ minWidth: 120 }}
         value={value?.unitId ?? undefined}
+        placeholder={ '(' + t('empty') + ')' }
         options={getSelectOptions(config?.validUnits)}
         onChange={(unitId) => {
           setValue({
@@ -57,8 +60,4 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (): React.JSX.Elemen
       />
     </Flex>
   )
-
-  function onChange(value: any): void {
-    setValue(value)
-  }
 }

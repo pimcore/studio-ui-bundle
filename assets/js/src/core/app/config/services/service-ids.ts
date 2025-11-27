@@ -115,6 +115,9 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/ClassificationStore': 'DynamicTypes/FieldFilter/ClassificationStore',
   'DynamicTypes/FieldFilter/InputQuantityValue': 'DynamicTypes/FieldFilter/InputQuantityValue',
   'DynamicTypes/FieldFilter/QuantityValue': 'DynamicTypes/FieldFilter/QuantityValue',
+  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
+  'DynamicTypes/FieldFilter/Time': 'DynamicTypes/FieldFilter/Time',
+  'DynamicTypes/FieldFilter/Color': 'DynamicTypes/FieldFilter/Color',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',

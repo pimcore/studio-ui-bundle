@@ -11,28 +11,55 @@
 import React from 'react'
 import { type Dayjs } from 'dayjs'
 import {
-  type DatePickerValueType,
   toDayJs,
+  type DatePickerValueType,
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
-import { TimePicker as OriginalTimePicker } from 'antd'
-import { type GenericTimePickerProps } from 'antd/es/date-picker/generatePicker/interface'
+import { TimePicker as OriginalTimePicker, TimeRangePickerProps as antTimeRangePickerProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
-export type TimePickerProps = GenericTimePickerProps & {
-  value?: DatePickerValueType | null
-  onChange?: (date: DatePickerValueType) => void
+
+export type DateRange = [start: Dayjs | null, end: Dayjs | null]
+export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
+
+export type TimeRangePickerProps = Omit<antTimeRangePickerProps, 'value'> & {
+  value?: DateRangeTargetValue | null
+  onChange?: (dates: DateRangeTargetValue | null) => void
   outputType?: OutputType
   outputFormat?: string
   inherited?: boolean
 }
 
-export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
+const valueToDayJs = (value?: DateRangeTargetValue | null, outputFormat?: string): DateRange | null => {
+  console.log({value, outputFormat});
+
+  if (Array.isArray(value)) {
+    return [
+      toDayJs(value[0], outputFormat),
+      toDayJs(value[1], outputFormat)
+    ]
+  }
+
+  return null
+}
+
+const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, outputFormat?: string): DateRangeTargetValue | null => {
+  if (value === null) {
+    return null
+  }
+
+  return [
+    fromDayJs(value[0], outputType, outputFormat),
+    fromDayJs(value[1], outputType, outputFormat)
+  ]
+}
+
+export const TimeRangePicker = (props: TimeRangePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat ?? 'HH:mm:ss'
-  const value = toDayJs(props.value, outputFormat)
+  const value = valueToDayJs(props.value, outputFormat)
   const fieldWidths = useFieldWidthOptional()
 
   const { styles } = useStyles()
@@ -43,12 +70,12 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
     ...props.style
   }
 
-  const handleChange = (date: Dayjs | null): void => {
-    props.onChange?.(fromDayJs(date, props.outputType, outputFormat))
+  const handleChange = (dates: DateRange | null): void => {
+    props.onChange?.(valueFromDayJs(dates, props.outputType, outputFormat))
   }
 
   return (
-    <OriginalTimePicker
+    <OriginalTimePicker.RangePicker
       { ...props }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }

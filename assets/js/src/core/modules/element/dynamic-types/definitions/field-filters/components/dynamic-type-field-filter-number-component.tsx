@@ -43,10 +43,10 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
   }
 
   const SETTING_OPTIONS = [
-    { label: t('grid.filter.number.is'), value: NumberFilterSettingValue.IS },
-    { label: t('grid.filter.number.between'), value: NumberFilterSettingValue.BETWEEN },
-    { label: t('grid.filter.number.less'), value: NumberFilterSettingValue.LESS },
-    { label: t('grid.filter.number.more'), value: NumberFilterSettingValue.MORE }
+    { label: t('grid.filter.is'), value: NumberFilterSettingValue.IS },
+    { label: t('grid.filter.between'), value: NumberFilterSettingValue.BETWEEN },
+    { label: t('grid.filter.less'), value: NumberFilterSettingValue.LESS },
+    { label: t('grid.filter.more'), value: NumberFilterSettingValue.MORE }
   ]
 
   const currentSetting = data?.setting ?? NumberFilterSettingValue.IS
@@ -131,14 +131,14 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
             onChange={ (value: number | null) => {
               handleNumberRangeChange('from', value)
             } }
-            placeholder={ t('grid.filter.number.from') }
+            placeholder={ t('grid.filter.from') }
             value={ data?.from ?? null }
           />
           <InputNumber
             onChange={ (value: number | null) => {
               handleNumberRangeChange('to', value)
             } }
-            placeholder={ t('grid.filter.number.to') }
+            placeholder={ t('grid.filter.to') }
             value={ data?.to ?? null }
           />
         </>

@@ -20,6 +20,7 @@ export const toDayJs = (value?: DatePickerValueType | unknown, format?: string):
     return dayjs.unix(value)
   }
   if (typeof value === 'string') {
+    console.log({value, format, date: dayjs(value, format)})
     return dayjs(value, format)
   }
   return null

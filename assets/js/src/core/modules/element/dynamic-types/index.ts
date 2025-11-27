@@ -217,6 +217,10 @@ import { type DynamicTypeGridCellClassificationStore } from './definitions/grid-
 import { type DynamicTypeFieldFilterClassificationStore } from './definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 import { type DynamicTypeBatchEditClassificationStore } from './definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 import { DynamicTypeFieldFilterInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input-quantity-value/dynamic-type-field-filter-input-quantity-value'
+import { DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/quantity-value/dynamic-type-field-filter-quantity-value'
+import { DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
+import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
 
 moduleSystem.registerModule({
   onInit () {
@@ -236,6 +240,9 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterClassificationStore>(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterInputQuantityValue>(serviceIds['DynamicTypes/FieldFilter/InputQuantityValue']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterQuantityValue>(serviceIds['DynamicTypes/FieldFilter/QuantityValue']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterColor>(serviceIds['DynamicTypes/FieldFilter/Color']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterTime>(serviceIds['DynamicTypes/FieldFilter/Time']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 

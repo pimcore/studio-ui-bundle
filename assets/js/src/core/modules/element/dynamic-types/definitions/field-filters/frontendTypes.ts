@@ -16,6 +16,7 @@
 export enum FieldFilterFrontendType {
   Boolean = 'system.boolean',
   DateTime = 'system.datetime',
+  Date = 'system.date',
   InputQuantityValue = 'system.input_quantity_value',
   Number = 'system.number',
   QuantityValue = 'system.quantity_value',

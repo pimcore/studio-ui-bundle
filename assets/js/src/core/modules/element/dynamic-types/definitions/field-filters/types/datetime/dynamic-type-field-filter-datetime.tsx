@@ -16,11 +16,11 @@ import { FieldFilterFrontendType } from '../../frontendTypes'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
-export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
-  id = 'date'
+export class DynamicTypeFieldFilterDatetime extends DynamicTypeFieldFilterAbstract {
+  id = 'datetime'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.Date
+    return FieldFilterFrontendType.DateTime
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterDateProps): ReactElement<DynamicTypeFieldFilterDateProps> {

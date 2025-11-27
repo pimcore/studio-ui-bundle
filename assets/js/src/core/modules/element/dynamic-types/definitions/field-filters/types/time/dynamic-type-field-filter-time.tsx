@@ -14,18 +14,19 @@ import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-
 import { DynamicTypeFieldFilterDateComponent, type DynamicTypeFieldFilterDateProps } from '../../components/dynamic-type-field-filter-date-component'
 import { FieldFilterFrontendType } from '../../frontendTypes'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { DynamicTypeFieldFilterTimeComponent, DynamicTypeFieldFilterTimeProps } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-time-component'
 
 @injectable()
-export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
-  id = 'date'
+export class DynamicTypeFieldFilterTime extends DynamicTypeFieldFilterAbstract {
+  id = 'time'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.Date
+    return FieldFilterFrontendType.Time
   }
 
-  getFieldFilterComponent (props: DynamicTypeFieldFilterDateProps): ReactElement<DynamicTypeFieldFilterDateProps> {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterTimeProps): ReactElement<DynamicTypeFieldFilterTimeProps> {
     return (
-      <DynamicTypeFieldFilterDateComponent { ...props } />
+      <DynamicTypeFieldFilterTimeComponent { ...props } />
     )
   }
 
