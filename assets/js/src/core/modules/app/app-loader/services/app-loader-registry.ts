@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-
 export interface Loader {
   readonly name: string
   onLoad: () => Promise<void>
@@ -17,7 +16,7 @@ export interface Loader {
 export class AppLoaderRegistry {
   protected readonly loaders = new Map<string, Loader>()
 
-  registerLoader(loader: Loader): void {
+  registerLoader (loader: Loader): void {
     if (this.loaders.has(loader.name)) {
       throw new Error(`Loader with name "${loader.name}" already exists`)
     }
@@ -25,7 +24,7 @@ export class AppLoaderRegistry {
     this.loaders.set(loader.name, loader)
   }
 
-  getLoader(name: string, throwException: boolean = true): Loader {
+  getLoader (name: string, throwException: boolean = true): Loader {
     const loader = this.loaders.get(name)
 
     if (loader === undefined && throwException) {
@@ -35,11 +34,11 @@ export class AppLoaderRegistry {
     return loader!
   }
 
-  getLoaders(): Loader[] {
+  getLoaders (): Loader[] {
     return Array.from(this.loaders.values())
   }
 
-  async loadAll(): Promise<void> {
+  async loadAll (): Promise<void> {
     for (const loader of this.loaders.values()) {
       try {
         await loader.onLoad()
@@ -49,11 +48,11 @@ export class AppLoaderRegistry {
     }
   }
 
-  hasLoader(name: string): boolean {
+  hasLoader (name: string): boolean {
     return this.loaders.has(name)
   }
 
-  overrideLoader(loader: Loader): void {
+  overrideLoader (loader: Loader): void {
     if (!this.loaders.has(loader.name)) {
       throw new Error(`Loader with name "${loader.name}" not found`)
     }

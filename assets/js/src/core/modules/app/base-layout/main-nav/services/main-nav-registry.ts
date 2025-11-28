@@ -36,7 +36,7 @@ export interface IMainNavItem {
 export class MainNavRegistry {
   private readonly items: IMainNavItem[] = []
 
-  registerMainNavItem(item: IMainNavItem): void {
+  registerMainNavItem (item: IMainNavItem): void {
     const existingIndex = this.items.findIndex((existingItem) => existingItem.path === item.path)
 
     if (existingIndex !== -1) {
@@ -46,11 +46,11 @@ export class MainNavRegistry {
     }
   }
 
-  getMainNavItem(path: string): IMainNavItem | undefined {
+  getMainNavItem (path: string): IMainNavItem | undefined {
     return this.items.find((item) => item.path === path)
   }
 
-  getMainNavItems(): IMainNavItem[] {
+  getMainNavItems (): IMainNavItem[] {
     return this.items
   }
 }
