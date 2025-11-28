@@ -31,3 +31,5 @@ export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 export * from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 export * from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 export * from '@Pimcore/modules/app/base-layout/right-sidebar/logo/subscription-details'
+
+export * from '@Pimcore/modules/app/app-loader/services/app-loader-registry'

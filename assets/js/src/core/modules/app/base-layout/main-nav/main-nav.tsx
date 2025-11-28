@@ -74,16 +74,18 @@ export const MainNav = (): React.JSX.Element => {
 
     const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
-    if (!isVisible || isHiddenInPerspective) {
+    const isHidden = !isUndefined(item.hidden) && item.hidden()
+
+    if (!isVisible || isHiddenInPerspective || isHidden) {
       return <></>
     }
 
     const renderIcon = (value: string): React.JSX.Element => (
       <Icon
-        className={ openKeys.includes(index) ? undefined : 'plain-icon' }
-        options={ openKeys.includes(index) ? { width: 16, height: 16 } : undefined }
-        sphere={ openKeys.includes(index) }
-        value={ value }
+        className={openKeys.includes(index) ? undefined : 'plain-icon'}
+        options={openKeys.includes(index) ? { width: 16, height: 16 } : undefined}
+        sphere={openKeys.includes(index)}
+        value={value}
       />
     )
 
@@ -91,28 +93,28 @@ export const MainNav = (): React.JSX.Element => {
 
     return (
       <li
-        className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
-        data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
-        key={ item.path }
+        className={`main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}`}
+        data-testid={`nav-item-${createSafeTestIdString(item.path)}`}
+        key={item.path}
       >
         {!isUndefined(item.button)
           ? (
             <div>
               {item.button()}
-              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
-              <Divider
-                className={ 'main-nav__list-item-divider' }
-                size={ 'mini' }
-              />
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                <Divider
+                  className={'main-nav__list-item-divider'}
+                  size={'mini'}
+                />
               )}
             </div>
-            )
+          )
           : (
             <>
               <button
-                className={ 'main-nav__list-btn' }
-                data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-                onClick={ () => {
+                className={'main-nav__list-btn'}
+                data-testid={`nav-button-${createSafeTestIdString(item.path)}`}
+                onClick={() => {
                   if (hasChildren) {
                     handleOpenState(index)
                   } else if (!isUndefined(item.onClick)) {
@@ -122,7 +124,7 @@ export const MainNav = (): React.JSX.Element => {
                     openMainWidget(item.widgetConfig)
                     setIsOpen(false)
                   }
-                } }
+                }}
               >
                 {!isUndefined(item.icon) && renderIcon(item.icon)}
 
@@ -130,45 +132,45 @@ export const MainNav = (): React.JSX.Element => {
                   renderIcon(elementWithGroupIcon?.groupIcon)
                 )}
 
-                <SanitizeHtml html={ t(`${item.label}`) } />
+                <SanitizeHtml html={t(`${item.label}`)} />
 
                 {shouldShowChevron(item, index) && (
                   <Icon
-                    className={ 'main-nav__list-chevron-btn-icon' }
-                    options={ { height: 18, width: 18 } }
-                    value={ 'chevron-right' }
+                    className={'main-nav__list-chevron-btn-icon'}
+                    options={{ height: 18, width: 18 }}
+                    value={'chevron-right'}
                   />
                 )}
               </button>
 
-              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
                 <Divider
-                  className={ 'main-nav__list-item-divider' }
-                  size={ 'mini' }
+                  className={'main-nav__list-item-divider'}
+                  size={'mini'}
                 />
               )}
             </>
-            )}
+          )}
 
         {hasChildren
           ? (
             <div
-              className={ 'main-nav__list-detail' }
-              data-testid={ `nav-submenu-${createSafeTestIdString(item.path)}` }
+              className={'main-nav__list-detail'}
+              data-testid={`nav-submenu-${createSafeTestIdString(item.path)}`}
             >
-              <div className={ 'main-nav__list-detail-scroll-container' }>
-                <div className={ 'main-nav__list-detail-scroll' }>
+              <div className={'main-nav__list-detail-scroll-container'}>
+                <div className={'main-nav__list-detail-scroll'}>
                   <ul
-                    className={ `main-nav__list main-nav__list--level-${level + 1}` }
-                    data-testid={ `nav-list-level-${level + 1}` }
+                    className={`main-nav__list main-nav__list--level-${level + 1}`}
+                    data-testid={`nav-list-level-${level + 1}`}
                   >
-                    {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
+                    {item.path === 'QuickAccess' && <div className={['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ')}>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>
               </div>
             </div>
-            )
+          )
           : null}
       </li>
     )
@@ -234,45 +236,45 @@ export const MainNav = (): React.JSX.Element => {
   useHandleKeyBindings(() => { openMainWidget(TAG_CONFIGURATION_WIDGET) }, 'tagConfiguration', true, UserPermission.TagsConfiguration)
 
   return (
-    <div ref={ elRef }>
+    <div ref={elRef}>
       <IconButton
         data-testid="main-nav-trigger"
-        icon={ { value: 'menu' } }
-        onClick={ () => {
+        icon={{ value: 'menu' }}
+        onClick={() => {
           setIsOpen(!isOpen)
-        } }
-        type={ 'text' }
+        }}
+        type={'text'}
       />
 
       <AnimatePresence>
         <motion.div
-          animate={ { opacity: 1 } }
-          exit={ { opacity: 0 } }
-          initial={ { opacity: isOpen ? 0 : 1 } }
-          key={ isOpen ? 'open' : 'closed' }
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          initial={{ opacity: isOpen ? 0 : 1 }}
+          key={isOpen ? 'open' : 'closed'}
         >
           {isOpen
             ? (
               <div
-                className={ ['main-nav', styles.mainNav].join(' ') }
+                className={['main-nav', styles.mainNav].join(' ')}
                 data-testid="main-nav-menu"
               >
 
                 <ul
-                  className={ 'main-nav__list main-nav__list--level-0' }
+                  className={'main-nav__list main-nav__list--level-0'}
                   data-testid="nav-list-main"
-                  ref={ navRef }
+                  ref={navRef}
                 >
                   {navItems.map((item, index) => (
                     renderNavItem(item, `${index}`)
                   ))}
                 </ul>
 
-                <Divider className={ 'main-nav__divider' } />
+                <Divider className={'main-nav__divider'} />
 
-                <PerspectiveSwitch setIsOpen={ setIsOpen } />
+                <PerspectiveSwitch setIsOpen={setIsOpen} />
               </div>
-              )
+            )
             : null}
         </motion.div>
       </AnimatePresence>

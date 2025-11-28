@@ -268,6 +268,7 @@ import { DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/element/dy
 import { DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
+import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -610,3 +611,6 @@ container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSet
 // Perspective Ediotor & Widget Editor
 container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/WidgetEditor/ElementTree']).to(DynamicTypeWidgetTypeElementTree).inSingletonScope()
+
+// App Loader
+container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSingletonScope()
