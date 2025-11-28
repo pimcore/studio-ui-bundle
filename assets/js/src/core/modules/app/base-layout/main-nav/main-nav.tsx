@@ -74,7 +74,9 @@ export const MainNav = (): React.JSX.Element => {
 
     const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
-    if (!isVisible || isHiddenInPerspective) {
+    const isHidden = !isUndefined(item.hidden) && item.hidden()
+
+    if (!isVisible || isHiddenInPerspective || isHidden) {
       return <></>
     }
 
@@ -99,11 +101,11 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
-              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
-              <Divider
-                className={ 'main-nav__list-item-divider' }
-                size={ 'mini' }
-              />
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                <Divider
+                  className={ 'main-nav__list-item-divider' }
+                  size={ 'mini' }
+                />
               )}
             </div>
             )
@@ -141,7 +143,7 @@ export const MainNav = (): React.JSX.Element => {
                 )}
               </button>
 
-              { !isUndefined(item.dividerBottom) && item.dividerBottom && (
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
                 <Divider
                   className={ 'main-nav__list-item-divider' }
                   size={ 'mini' }

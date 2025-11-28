@@ -348,5 +348,8 @@ export const serviceIds = {
   'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
   'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor',
   'Element/ProcessorRegistry/IconProcessor': 'Element/ProcessorRegistry/IconProcessor',
-  'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor'
+  'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor',
+
+  // AppLoader Registry
+  'AppLoader/Registry': 'AppLoader/Registry'
 }
