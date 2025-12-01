@@ -50,7 +50,7 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
       key: ContextMenuActionName.publish,
       icon: <Icon value='eye' />,
       hidden: isPublishHidden(node),
-      onClick: () => publishNode(node, onFinish)
+      onClick: () => { publishNode(node, onFinish) }
     }
   }
 
