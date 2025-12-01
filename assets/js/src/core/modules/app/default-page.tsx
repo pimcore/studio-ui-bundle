@@ -16,6 +16,7 @@ import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
 import { SlotRenderer } from './component-registry/slot-renderer'
 import { SessionPinger } from './app-loader/loader/session/session-pinger'
+import { WidgetRestorer } from '../widget-manager/components/widget-restorer'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
@@ -29,16 +30,18 @@ export const DefaultPage = (): React.JSX.Element => {
       onDragOver={ preventDrop }
       onDrop={ preventDrop }
     >
-      <Background />
-      <ClassDefinitionsProvider>
-        <ElementSelectorProvider>
-          <BaseLayoutView />
-        </ElementSelectorProvider>
-      </ClassDefinitionsProvider>
+      <WidgetRestorer>
+        <Background />
+        <ClassDefinitionsProvider>
+          <ElementSelectorProvider>
+            <BaseLayoutView />
+          </ElementSelectorProvider>
+        </ClassDefinitionsProvider>
 
-      <SlotRenderer slot="global.feedback" />
-      <div id="global-overlay-container" />
-      <SessionPinger />
+        <SlotRenderer slot="global.feedback" />
+        <div id="global-overlay-container" />
+        <SessionPinger />
+      </WidgetRestorer>
     </div>
   )
 }

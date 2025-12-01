@@ -19,6 +19,8 @@ import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 import { UserProfileWidget } from '@Pimcore/modules/auth/profile/widget'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
+import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
 
 export const USERS_WIDGET: WidgetManagerTabConfig = {
   name: 'Users',
@@ -90,5 +92,7 @@ moduleSystem.registerModule({
     })
 
     widgetRegistryService.registerWidget(UserProfileWidget)
+
+    staticWidgetRestorer.registerStaticWidget(USERPROFILE)
   }
 })

@@ -15,6 +15,7 @@ import {
   openLeftWidget as openLeftWidgetAction,
   openMainWidget as openMainWidgetAction,
   openRightWidget as openRightWidgetAction,
+  updateWidget as updateWidgetAction,
   selectInnerModel,
   selectOuterModel,
   setActiveWidgetById,
@@ -35,6 +36,7 @@ import { isNull, isUndefined } from 'lodash'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
+  updateWidget: (tabConfig: WidgetManagerTabConfig) => void
   openBottomWidget: (tabConfig: WidgetManagerTabConfig) => void
   openLeftWidget: (tabConfig: WidgetManagerTabConfig) => void
   openRightWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -49,6 +51,10 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
 
   function openMainWidget (tabConfig: WidgetManagerTabConfig): void {
     dispatch(openMainWidgetAction(tabConfig))
+  }
+
+  function updateWidget (tabConfig: WidgetManagerTabConfig): void {
+    dispatch(updateWidgetAction(tabConfig))
   }
 
   function openBottomWidget (tabConfig: WidgetManagerTabConfig): void {
@@ -154,6 +160,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
 
   return {
     openMainWidget,
+    updateWidget,
     openBottomWidget,
     openLeftWidget,
     openRightWidget,

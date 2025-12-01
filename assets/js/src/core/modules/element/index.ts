@@ -18,10 +18,15 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { has } from 'lodash'
+import { type WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
+import { elementWidgetRestorer } from './services/element-widget-restorer'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+    const widgetRestorerRegistry = container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry)
+
+    widgetRestorerRegistry.register(elementWidgetRestorer)
 
     widgetRegistryService.registerWidget({
       name: 'element_tree',
