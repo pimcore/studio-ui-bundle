@@ -36,6 +36,9 @@ export interface TabpanelProps {
   contentPadding?: BoxProps['padding']
   onClose?: (tabKey: string) => void
   size?: ITabsProps['size']
+  defaultActiveKey?: ITabsProps['defaultActiveKey']
+  activeKey?: ITabsProps['activeKey']
+  onChange?: ITabsProps['onChange']
 }
 
 export const Tabpanel = ({
@@ -51,6 +54,9 @@ export const Tabpanel = ({
   extraPosition,
   onClose,
   size = 'small',
+  defaultActiveKey,
+  activeKey,
+  onChange,
   ...props
 }: TabpanelProps): React.JSX.Element => {
   const tabItems: ITabsProps['items'] = items.map((item, index) => ({
@@ -59,7 +65,7 @@ export const Tabpanel = ({
     forceRender: true,
     closable: item.closable,
     ...item,
-    children: <Box padding={ border === true ? 'small' : { x: 'none', y: 'small' } }>
+    children: <Box padding={border === true ? 'small' : { x: 'none', y: 'small' }}>
       {item.children}
     </Box>
   }))
@@ -72,22 +78,25 @@ export const Tabpanel = ({
 
   return (
     <BaseView
-      border={ border }
-      collapsed={ collapsed }
-      collapsible={ collapsible }
-      contentPadding={ contentPadding }
-      extra={ extra }
-      extraPosition={ extraPosition }
-      theme={ theme }
-      title={ title }
+      border={border}
+      collapsed={collapsed}
+      collapsible={collapsible}
+      contentPadding={contentPadding}
+      extra={extra}
+      extraPosition={extraPosition}
+      theme={theme}
+      title={title}
     >
       <Tabs
-        hasStickyHeader={ hasStickyHeader }
-        items={ tabItems }
+        hasStickyHeader={hasStickyHeader}
+        items={tabItems}
         noTabBarMargin
-        onClose={ onClose !== undefined ? handleClose : undefined }
-        size={ size }
-        tabPosition={ props.tabPosition }
+        onClose={onClose !== undefined ? handleClose : undefined}
+        size={size}
+        tabPosition={props.tabPosition}
+        defaultActiveKey={defaultActiveKey}
+        activeKey={activeKey}
+        onChange={onChange}
       />
     </BaseView>
   )

@@ -21,7 +21,7 @@ export interface ITabsProps extends TabsProps {
   fullHeight?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
 
   const classNames = cn(
@@ -66,8 +66,8 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
     ...item,
     label: (
       <button
-        onMouseDown={ handleMiddleClick(item.key) }
-        style={ { border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' } }
+        onMouseDown={handleMiddleClick(item.key)}
+        style={{ border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' }}
         type="button"
       >
         {item.label}
@@ -77,14 +77,13 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
 
   return (
     <AntdTabs
-      activeKey={ activeKey }
-      className={ classNames }
+      activeKey={activeKey}
+      className={classNames}
       hideAdd
-      items={ enhancedItems }
-      onChange={ onChange }
-      onEdit={ onEdit }
-      type={ tabType }
-      { ...props }
+      items={enhancedItems}
+      onEdit={onEdit}
+      type={tabType}
+      {...props}
     />
   )
 }
