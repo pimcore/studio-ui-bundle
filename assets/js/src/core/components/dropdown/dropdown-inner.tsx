@@ -32,7 +32,6 @@ export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props 
   return (
     <AntdDropdown
       { ...props }
-      overlayClassName='someOtherDropdown'
       dropdownRender={ renderMenuComponent }
     >
       {props.children}
