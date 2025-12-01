@@ -65,7 +65,7 @@ export const Tabpanel = ({
     forceRender: true,
     closable: item.closable,
     ...item,
-    children: <Box padding={border === true ? 'small' : { x: 'none', y: 'small' }}>
+    children: <Box padding={ border === true ? 'small' : { x: 'none', y: 'small' } }>
       {item.children}
     </Box>
   }))
@@ -78,25 +78,25 @@ export const Tabpanel = ({
 
   return (
     <BaseView
-      border={border}
-      collapsed={collapsed}
-      collapsible={collapsible}
-      contentPadding={contentPadding}
-      extra={extra}
-      extraPosition={extraPosition}
-      theme={theme}
-      title={title}
+      border={ border }
+      collapsed={ collapsed }
+      collapsible={ collapsible }
+      contentPadding={ contentPadding }
+      extra={ extra }
+      extraPosition={ extraPosition }
+      theme={ theme }
+      title={ title }
     >
       <Tabs
-        hasStickyHeader={hasStickyHeader}
-        items={tabItems}
+        activeKey={ activeKey }
+        defaultActiveKey={ defaultActiveKey }
+        hasStickyHeader={ hasStickyHeader }
+        items={ tabItems }
         noTabBarMargin
-        onClose={onClose !== undefined ? handleClose : undefined}
-        size={size}
-        tabPosition={props.tabPosition}
-        defaultActiveKey={defaultActiveKey}
-        activeKey={activeKey}
-        onChange={onChange}
+        onChange={ onChange }
+        onClose={ onClose !== undefined ? handleClose : undefined }
+        size={ size }
+        tabPosition={ props.tabPosition }
       />
     </BaseView>
   )

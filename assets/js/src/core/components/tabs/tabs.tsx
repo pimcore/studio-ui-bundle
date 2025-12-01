@@ -66,8 +66,8 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
     ...item,
     label: (
       <button
-        onMouseDown={handleMiddleClick(item.key)}
-        style={{ border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' }}
+        onMouseDown={ handleMiddleClick(item.key) }
+        style={ { border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' } }
         type="button"
       >
         {item.label}
@@ -77,13 +77,13 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
 
   return (
     <AntdTabs
-      activeKey={activeKey}
-      className={classNames}
+      activeKey={ activeKey }
+      className={ classNames }
       hideAdd
-      items={enhancedItems}
-      onEdit={onEdit}
-      type={tabType}
-      {...props}
+      items={ enhancedItems }
+      onEdit={ onEdit }
+      type={ tabType }
+      { ...props }
     />
   )
 }
