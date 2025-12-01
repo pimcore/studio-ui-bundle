@@ -20,6 +20,8 @@ import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container } from '@sdk/app'
 
 export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
@@ -34,6 +36,8 @@ export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbstract {
   id: string = 'quantityValue'
   gridCellEditMode: EditMode = 'edit-modal'
+
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get<DynamicTypeFieldFilterAbstract>('DynamicTypes/FieldFilter/QuantityValue')
 
   getObjectDataComponent (props: QuantityValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

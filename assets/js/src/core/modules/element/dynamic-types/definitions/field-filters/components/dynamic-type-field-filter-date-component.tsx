@@ -47,10 +47,10 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
   }
 
   const SETTING_OPTIONS = [
-    { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
-    { label: t('grid.filter.datetime.between'), value: DatePickerSettingValue.BETWEEN },
-    { label: t('grid.filter.datetime.before'), value: DatePickerSettingValue.BEFORE },
-    { label: t('grid.filter.datetime.after'), value: DatePickerSettingValue.AFTER }
+    { label: t('grid.filter.on'), value: DatePickerSettingValue.ON },
+    { label: t('grid.filter.between'), value: DatePickerSettingValue.BETWEEN },
+    { label: t('grid.filter.before'), value: DatePickerSettingValue.BEFORE },
+    { label: t('grid.filter.after'), value: DatePickerSettingValue.AFTER }
   ]
 
   const currentSetting = data?.setting ?? DatePickerSettingValue.ON

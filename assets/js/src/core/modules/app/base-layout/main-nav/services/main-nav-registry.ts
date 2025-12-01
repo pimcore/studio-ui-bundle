@@ -30,6 +30,7 @@ export interface IMainNavItem {
   button?: () => React.JSX.Element
   widgetConfig?: WidgetManagerTabConfig
   className?: string
+  hidden?: () => boolean
 }
 
 @injectable()
