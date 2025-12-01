@@ -13,6 +13,12 @@ import { useSorting } from '../context-layer/provider/sorting-provider/use-sorti
 import { useSelectedColumns } from '../../../abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 
+export interface SortingFilter {
+  key: string,
+  locale?: string,
+  direction: 'asc' | 'desc'
+}
+
 export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperSortingExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
@@ -24,19 +30,21 @@ export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['use
       const baseArgs = baseGetArgs()
       const isDataObject = 'classId' in baseArgs;
 
-      const sortingFilter = sorting?.map((sort) => {
+      const sortingFilter: SortingFilter[] = []; 
+
+      for (const sort of sorting ?? []) {
         const selectedColumn = decodeColumnIdentifier(sort.id)
 
         if (selectedColumn === undefined) {
-          return;
+          continue;
         }
 
-        return {
+        sortingFilter.push({
           key: selectedColumn?.config?.filters?.key ?? selectedColumn.key,
           locale: selectedColumn.localizable ? selectedColumn.locale ?? (isDataObject ? currentLanguage : undefined) : undefined,
           direction: sort.desc ? 'desc' : 'asc'
-        }
-      })[0]
+        })
+      }
 
       return {
         ...baseArgs,
@@ -44,7 +52,7 @@ export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['use
           ...baseArgs.body,
           filters: {
             ...baseArgs.body.filters,
-            ...(sortingFilter !== undefined ? { sortFilter: sortingFilter } : {})
+            ...(sortingFilter.length > 0 ? { sortFilter: sortingFilter[0] } : {})
           }
         }
       }
