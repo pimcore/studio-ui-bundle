@@ -13,7 +13,7 @@ export interface DropdownHeightProviderProps {
 export const DropdownHeightProvider = ({ children }: DropdownHeightProviderProps): React.JSX.Element => {
   const [height, setHeight] = useState<number>(0);
 
-  const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onContextMenu = (e: React.MouseEvent<HTMLDivElement>): void => {
     const viewportHeight = window.innerHeight;
     const triggerLocation = e.clientY;
     const offset = 16;
