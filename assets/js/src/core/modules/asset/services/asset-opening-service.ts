@@ -10,11 +10,10 @@
 
 import { store } from '@Pimcore/app/store'
 import { api } from '../asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
-import { openMainWidget, setActiveWidgetById } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
 import { assetReceived } from '../asset-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
@@ -65,21 +64,10 @@ export class AssetOpeningService {
     }
   }
 
-  async openAsset (config: AssetConfig): Promise<void> {
-    const { id } = config
-    const widgetId = getWidgetId('asset', id)
-
-    // If widget is already open, just switch to it
-    if (this.isWidgetOpen(widgetId)) {
-      this.switchToWidget(widgetId)
-      return
-    }
-
-    // Invalidate cache and fetch fresh data
-    store.dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id)))
+  async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
 
-    if (isError) {
+    if (isError && !silent) {
       trackError(new ApiError(error))
     }
 
@@ -90,8 +78,9 @@ export class AssetOpeningService {
     // Store draft data for the element editor
     await this.fetchAndStoreAssetDraft(id)
 
-    // Open the widget
-    store.dispatch(openMainWidget({
+    const widgetId = getWidgetId('asset', id)
+
+    return {
       name: data?.filename,
       id: widgetId,
       component: 'asset-editor',
@@ -100,7 +89,22 @@ export class AssetOpeningService {
         elementType: 'asset',
         icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
-    }))
+    }
+  }
+
+  async openAsset (config: AssetConfig): Promise<void> {
+    const { id } = config
+    const widgetId = getWidgetId('asset', id)
+
+    if (this.isWidgetOpen(widgetId)) {
+      this.switchToWidget(widgetId)
+      return
+    }
+
+    const widgetConfig = await this.getWidgetConfig(id)
+    if (!isNil(widgetConfig)) {
+      store.dispatch(openMainWidget(widgetConfig))
+    }
   }
 }
 

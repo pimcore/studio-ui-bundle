@@ -39,6 +39,7 @@ export const serviceIds = {
 
   // Widget manager
   widgetManager: 'WidgetManagerService',
+  widgetRestorerRegistry: 'WidgetRestorerRegistry',
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',

@@ -10,6 +10,7 @@
 
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { injectable } from 'inversify'
+import { isNil } from 'lodash'
 import type React from 'react'
 
 export interface IMainNavItem {
@@ -37,6 +38,13 @@ export class MainNavRegistry {
   private readonly items: IMainNavItem[] = []
 
   registerMainNavItem (item: IMainNavItem): void {
+    if (!isNil(item.widgetConfig)) {
+      if (isNil(item.widgetConfig.config)) {
+        item.widgetConfig.config = {}
+      }
+      item.widgetConfig.config.mainNavPath = item.path
+    }
+
     const existingIndex = this.items.findIndex((existingItem) => existingItem.path === item.path)
 
     if (existingIndex !== -1) {
