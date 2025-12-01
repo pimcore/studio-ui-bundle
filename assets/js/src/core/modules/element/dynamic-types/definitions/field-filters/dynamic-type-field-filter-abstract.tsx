@@ -50,6 +50,7 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
   transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
     return {
       ...filter,
+      key: filter.meta?.filters?.key ?? filter.key,
       type: this.getFieldFilterType()
     }
   }
