@@ -1,2 +1,0 @@
-/*! For license information please see 9195.9ef1b664.js.LICENSE.txt */
-"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["9195"],{14887:function(e,u,i){i.r(u),i.d(u,{PimcoreDocumentEditor:()=>t});let t={documentEditable:i(19476).f}}}]);
