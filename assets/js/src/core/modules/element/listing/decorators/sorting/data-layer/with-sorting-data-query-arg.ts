@@ -11,21 +11,29 @@
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useSorting } from '../context-layer/provider/sorting-provider/use-sorting'
 import { useSelectedColumns } from '../../../abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 
 export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperSortingExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
     const { sorting } = useSorting()
-    const { decodeColumnIdentifier } = useSelectedColumns()
+    const { decodeColumnIdentifier } = useSelectedColumns() 
+    const { currentLanguage } = useLanguageSelection();
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
+      const isDataObject = 'classId' in baseArgs;
+
       const sortingFilter = sorting?.map((sort) => {
         const selectedColumn = decodeColumnIdentifier(sort.id)
 
+        if (selectedColumn === undefined) {
+          return;
+        }
+
         return {
-          key: selectedColumn!.key,
-          locale: selectedColumn!.locale,
+          key: selectedColumn?.config?.filters?.key ?? selectedColumn.key,
+          locale: selectedColumn.localizable ? selectedColumn.locale ?? (isDataObject ? currentLanguage : undefined) : undefined,
           direction: sort.desc ? 'desc' : 'asc'
         }
       })[0]
