@@ -15,7 +15,7 @@ import { type WidgetManagerTabConfig, type WidgetManagerState } from './widget-m
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WidgetRestorerRegistry } from './services/widget-restorer-registry'
-import { Model, Actions, type TabNode, type IJsonModel } from 'flexlayout-react'
+import { Model, Actions, type TabNode } from 'flexlayout-react'
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
@@ -38,7 +38,7 @@ export const createWidgetManagerPersistedReducer = (reducer: Reducer<WidgetManag
     },
     (state: WidgetManagerState) => {
       const widgetRestorerRegistry = container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry)
-      const model = Model.fromJson(state.innerModel as IJsonModel)
+      const model = Model.fromJson(state.innerModel)
       const unsupportedTabIds: string[] = []
       const supportedTabs: Array<{ id: string, config: WidgetManagerTabConfig }> = []
 
