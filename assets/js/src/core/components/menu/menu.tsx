@@ -16,6 +16,8 @@ import {
 
 } from 'antd/es/menu/interface'
 import { MenuItem } from './item/menu-item'
+import { useDropdownHeightOptional } from '@Pimcore/components/dropdown/dropdown-height-provider'
+import classNames from 'classnames'
 
 type OldItemType = Extract<MenuProps['items'], any[]>[0]
 type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
@@ -51,6 +53,7 @@ export interface IMenuProps extends Omit<MenuProps, 'items' > {
 
 export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Element => {
   const { dataTestId, ...restProps } = props
+  const dropdownHeight = useDropdownHeightOptional();
 
   const filteredItems = props.items?.filter(function filterItems (item: ItemType) {
     // @ts-expect-error - the prop exists trust me bro ;)
@@ -76,7 +79,14 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
       { ...restProps }
       data-testid={ dataTestId }
       items={ undefined }
+      className={classNames(
+        { 'menu--is-calculated-height': dropdownHeight?.height !== undefined }
+      )}
       ref={ ref }
+      style={{
+        ...restProps.style,
+        maxHeight: `min(${dropdownHeight?.height}px, 65vh)`
+      }}
     >
       {filteredItems?.map((item: ItemType) => (
         MenuItem({ item })
