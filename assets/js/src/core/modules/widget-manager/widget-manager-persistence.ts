@@ -45,7 +45,7 @@ export const createWidgetManagerPersistedReducer = (reducer: Reducer<WidgetManag
       model.visitNodes((node) => {
         if (node.getType() === 'tab') {
           const config = (node as TabNode).toJson() as WidgetManagerTabConfig
-          if (widgetRestorerRegistry.supports(config) === true) {
+          if (widgetRestorerRegistry.supports(config)) {
             supportedTabs.push({
               id: node.getId(),
               config: widgetRestorerRegistry.cleanConfig(config)
