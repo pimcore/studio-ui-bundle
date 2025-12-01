@@ -45,7 +45,7 @@ export const GlobalStyles = createGlobalStyle`
     animation-direction: reverse;
   }
 
-  .ant-dropdown-menu,
+  :not(.menu--is-calculated-height).ant-dropdown-menu,
   .ant-dropdown-menu-sub {
     overflow: auto;
     max-height: 48vh;
