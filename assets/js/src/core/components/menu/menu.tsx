@@ -53,7 +53,7 @@ export interface IMenuProps extends Omit<MenuProps, 'items' > {
 
 export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Element => {
   const { dataTestId, ...restProps } = props
-  const dropdownHeight = useDropdownHeightOptional();
+  const dropdownHeight = useDropdownHeightOptional()
 
   const filteredItems = props.items?.filter(function filterItems (item: ItemType) {
     // @ts-expect-error - the prop exists trust me bro ;)
@@ -77,16 +77,16 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
   return (
     <AntMenu
       { ...restProps }
+      className={ classNames(
+        { 'menu--is-calculated-height': dropdownHeight?.height !== undefined }
+      ) }
       data-testid={ dataTestId }
       items={ undefined }
-      className={classNames(
-        { 'menu--is-calculated-height': dropdownHeight?.height !== undefined }
-      )}
       ref={ ref }
-      style={{
+      style={ {
         ...restProps.style,
         maxHeight: `min(${dropdownHeight?.height}px, 65vh)`
-      }}
+      } }
     >
       {filteredItems?.map((item: ItemType) => (
         MenuItem({ item })
