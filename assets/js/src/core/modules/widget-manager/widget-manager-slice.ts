@@ -225,6 +225,39 @@ export const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
+        const currentTabset = model.getActiveTabset()
+        let hasValidNode = false
+
+        if (currentTabset !== undefined) {
+          const currentNode = currentTabset.getChildren()?.[0]
+
+          if (currentNode !== undefined) {
+            model.doAction(Actions.selectTab(currentNode.getId()))
+            hasValidNode = true
+          }
+        }
+
+        if (!hasValidNode) {
+          const firstTabset = model.getFirstTabSet()
+          const parent = firstTabset.getParent()
+
+          const tabsets = parent!.getChildren()
+          let validChildNode: Node | undefined
+
+          for (const tabset of tabsets) {
+            const childNodes = tabset.getChildren()
+
+            if (childNodes.length > 0) {
+              validChildNode = childNodes[0]
+              break
+            };
+          }
+
+          if (validChildNode !== undefined) {
+            model.doAction(Actions.selectTab(validChildNode.getId()))
+          }
+        }
+
         state.innerModel = { ...model.toJson() }
       }
     }
