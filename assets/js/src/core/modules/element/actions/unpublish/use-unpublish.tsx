@@ -26,7 +26,7 @@ import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 type Element = DataObject | Document
 
 export interface UseUnpublishHookReturn {
-  unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  unpublishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
   unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   unpublishTreeNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
 }
@@ -65,14 +65,14 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
     }
   }
 
-  const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const unpublishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unpublish'),
       key: ContextMenuActionName.unpublish,
       isLoading,
       icon: <Icon value='eye-off' />,
       hidden: node.isPublished === false || !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
-      onClick: () => { unpublishTreeNode(node) }
+      onClick: () => { unpublishTreeNode(node, onFinish) }
     }
   }
 
