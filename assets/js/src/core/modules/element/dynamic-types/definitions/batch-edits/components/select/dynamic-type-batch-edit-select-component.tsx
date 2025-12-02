@@ -17,7 +17,7 @@ export interface DynamicTypeBatchEditSelectProps extends AbstractBatchEditDefini
 
 export const DynamicTypeBatchEditSelectComponent = ({ batchEdit }: DynamicTypeBatchEditSelectProps): React.JSX.Element => {
   const { key, config } = batchEdit
-  const currentConfig: any = config;
+  const currentConfig: any = config
   const hasDefinitionOptions = 'definition' in currentConfig && isArray(currentConfig?.definition?.options)
 
   let options = currentConfig?.options?.map((option: string) => ({
@@ -26,7 +26,7 @@ export const DynamicTypeBatchEditSelectComponent = ({ batchEdit }: DynamicTypeBa
   }))
 
   if (hasDefinitionOptions) {
-    options = currentConfig.definition.options.map((option: { key: string; value: string }) => ({
+    options = currentConfig.definition.options.map((option: { key: string, value: string }) => ({
       value: option.value,
       label: option.key
     }))
