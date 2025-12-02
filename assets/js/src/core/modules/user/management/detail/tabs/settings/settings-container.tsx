@@ -68,7 +68,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
     }
-  }, [openedUser, isLoading])
+  }, [openedUser, isLoading, permissions])
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
