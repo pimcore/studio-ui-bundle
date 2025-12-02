@@ -9,7 +9,7 @@
  */
 
 import { injectSliceWithState } from '@sdk/app'
-import { type PayloadAction, createSlice, current } from '@reduxjs/toolkit'
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
@@ -243,8 +243,6 @@ export const slice = createSlice({
 
           const tabsets = parent!.getChildren();
           let validChildNode: Node | undefined = undefined;
-
-          console.log(parent, currentTabset, firstTabset);
           
           for (const tabset of tabsets) {
             const childNodes = tabset.getChildren();
