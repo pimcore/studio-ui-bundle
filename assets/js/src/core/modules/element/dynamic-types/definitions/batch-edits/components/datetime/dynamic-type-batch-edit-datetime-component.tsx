@@ -19,7 +19,7 @@ export const DynamicTypeBatchEditDatetimeComponent = ({ batchEdit }: DynamicType
 
   return (
     <Form.Item name={ key }>
-      <DatePicker />
+      <DatePicker outputType='timestamp' />
     </Form.Item>
   )
 }
