@@ -1630,6 +1630,7 @@ forgot-password-form.username: Enter your username and Pimcore will send a login
 forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset Password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
+forgot-password-form.back: Back to login
 subscription-details.community-edition: Learn more about Pimcore Editions
 config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.
 navigation.about: About
