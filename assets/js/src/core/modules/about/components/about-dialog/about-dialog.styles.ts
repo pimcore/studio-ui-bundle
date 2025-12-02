@@ -9,7 +9,7 @@
  */
 
 import { createStyles } from 'antd-style'
-import { FastColor } from '@ant-design/fast-color';
+import { FastColor } from '@ant-design/fast-color'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {

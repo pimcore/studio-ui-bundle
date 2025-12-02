@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button, Flex, type IWindowModalProps, Modal, WindowModal } from '@sdk/components'
+import { Button, Flex, type IWindowModalProps, Modal } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './about-dialog.styles'

@@ -233,7 +233,7 @@ export const studioDefaultLightThemeConfig = {
 export class DynamicTypeThemeStudioDefaultLight extends DynamicTypeThemeAbstract {
   id: string = studioThemeIds.light
 
-  getThemeConfig(): PimcoreThemeConfig {
+  getThemeConfig (): PimcoreThemeConfig {
     return studioDefaultLightThemeConfig
   }
 }
