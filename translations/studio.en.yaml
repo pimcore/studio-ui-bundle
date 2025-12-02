@@ -1632,3 +1632,9 @@ forgot-password-form.reset-password: Reset Password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
 subscription-details.community-edition: Learn more about Pimcore Editions
 config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.
+navigation.about: About
+about.title: About
+about.platform-version: "Platform Version: {{version}}"
+about.copyright: "© by Pimcore GmbH"
+about.buttons.license: License
+about.buttons.contact: Contact
