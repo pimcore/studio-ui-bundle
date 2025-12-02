@@ -13,15 +13,39 @@ import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Switch } from '@Pimcore/components/switch/switch'
-import React from 'react'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { usePerspectiveForm } from '../../hooks/use-perspective-form'
 import { useStyles } from './allowed-menu-entries-panel.styles'
+import { type PerspectivePermissionProviderRegistry } from '../../../../registry/perspective-permission-provider-registry'
 
 export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { menuEntries, isLoading } = usePerspectiveForm()
   const { styles } = useStyles()
+
+  const sortedMenuEntries = useMemo(() => {
+    const registry = container.get<PerspectivePermissionProviderRegistry>(serviceIds.perspectivePermissionProviderRegistry)
+    const permissionCategories = registry.getPermissions()
+
+    return permissionCategories
+      .map(category => {
+        const permissions = category.permissions
+          .filter(permission => {
+            const categoryEntries = menuEntries[category.key]
+            if (isNil(categoryEntries) || !(permission.key in categoryEntries)) {
+              console.error(`Permission ${category.key}.${permission.key} is hidden because it is not in the menuEntries list.`)
+              return false
+            }
+            return true
+          })
+        return { ...category, permissions }
+      })
+      .filter(category => category.permissions.length > 0)
+  }, [menuEntries])
 
   if (isLoading) {
     return (
@@ -48,35 +72,29 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
         gap={ 8 }
         vertical
       >
-        {Object.entries(menuEntries).map(([categoryName, permissions]) => (
+        {sortedMenuEntries.map((category) => (
           <FormKit.Panel
             collapsed={ false }
             collapsible
-            key={ categoryName }
+            key={ category.key }
             theme='fieldset'
-            title={ t(`perspective-editor.form.allowed-context-menu.category.${categoryName}`) }
+            title={ t(`perspective-editor.form.allowed-context-menu.category.${category.key}`) }
           >
             <Flex
               gap={ 4 }
               vertical
             >
-              {Object.entries(permissions)
-                .sort(([keyA], [keyB]) => {
-                  if (keyA === 'hidden') return -1
-                  if (keyB === 'hidden') return 1
-                  return 0
-                })
-                .map(([permissionKey, permissionValue]) => (
-                  <Form.Item
-                    key={ `${categoryName}.${permissionKey}` }
-                    name={ ['contextPermissions', categoryName, permissionKey] }
-                  >
-                    <Switch
-                      labelRight={ t(`perspective-editor.form.allowed-context-menu.${categoryName}.${permissionKey}`) }
-                      size='small'
-                    />
-                  </Form.Item>
-                ))}
+              {category.permissions.map((permission) => (
+                <Form.Item
+                  key={ `${category.key}.${permission.key}` }
+                  name={ ['contextPermissions', category.key, permission.key] }
+                >
+                  <Switch
+                    labelRight={ t(`perspective-editor.form.allowed-context-menu.${category.key}.${permission.key}`) }
+                    size='small'
+                  />
+                </Form.Item>
+              ))}
             </Flex>
           </FormKit.Panel>
         ))}

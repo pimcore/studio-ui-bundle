@@ -27,7 +27,7 @@ import { type ExtendedWidgetConfig } from './components/widget-configurator/cont
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface PerspectiveFormProps {
-  perspective: PerspectiveConfigDetail & { writeable: boolean }
+  perspective: PerspectiveConfigDetail
 }
 
 interface OptimizedPerspectiveConfigDetail extends Omit<PerspectiveConfigDetail, 'widgetsLeft' | 'widgetsRight' | 'widgetsBottom'> {
@@ -55,7 +55,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       widgets: perspective.widgetsBottom
     }
   }
-  const isWriteable = perspective.writeable
+  const isWriteable = perspective.isWriteable
 
   return (
     <FormKit

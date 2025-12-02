@@ -8,12 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import React from 'react'
-import { SearchButton } from './triggers/button/search-button'
 import { SearchModal } from './modal/search-modal'
 import { SearchProvider } from './provider/search-provider'
+import { SearchButton } from './triggers/button/search-button'
 
-export const Search = (): React.JSX.Element => {
+export const Search = (): React.JSX.Element | null => {
+  if (isAllowedInPerspective(NavPermission.SearchHidden)) {
+    return null
+  }
+
   return (
     <SearchProvider>
       <SearchButton />

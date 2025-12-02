@@ -10,7 +10,7 @@
 
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { injectable } from 'inversify'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import type React from 'react'
 
 export interface IMainNavItem {
@@ -60,5 +60,90 @@ export class MainNavRegistry {
 
   getMainNavItems (): IMainNavItem[] {
     return this.items
+  }
+
+  getMainNavTree (): IMainNavItem[] {
+    const tree: IMainNavItem[] = []
+
+    this.items.forEach(item => {
+      this.addNavItemToItemList(tree, item)
+    })
+
+    this.sortTree(tree)
+
+    return tree
+  }
+
+  private addNavItemToItemList (items: IMainNavItem[], item: IMainNavItem): void {
+    const levels = item.path.split('/')
+    if (levels.length > 4) {
+      console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', item)
+      return
+    }
+
+    let currentLevel = items
+    levels.forEach((level: string, index) => {
+      let existingItem = currentLevel.find(i => i.id === level)
+      const isCurrentItem = index === levels.length - 1
+
+      if (isUndefined(existingItem)) {
+        let levelLabel = level
+
+        if (!isCurrentItem && !isUndefined(item.group) && level === item.group) {
+          levelLabel = item.group
+        } else if (isCurrentItem) {
+          levelLabel = item.label ?? level
+        }
+
+        existingItem = {
+          order: isCurrentItem ? item.order : 1000,
+          id: level,
+          label: levelLabel,
+          path: levels.slice(0, index + 1).join('/'),
+          children: [],
+          ...(isCurrentItem && {
+            dividerBottom: item.dividerBottom,
+            icon: item.icon,
+            groupIcon: item.groupIcon,
+            widgetConfig: item.widgetConfig,
+            onClick: item.onClick,
+            button: item.button,
+            className: item.className,
+            permission: item.permission,
+            perspectivePermission: item.perspectivePermission,
+            perspectivePermissionHide: item.perspectivePermissionHide,
+            hidden: item.hidden
+          })
+        }
+        currentLevel.push(existingItem)
+      } else if (index === levels.length - 1) {
+        Object.assign(existingItem, {
+          icon: item.icon,
+          groupIcon: item.groupIcon,
+          order: item.order ?? 1000,
+          className: item.className,
+          permission: item.permission,
+          perspectivePermission: item.perspectivePermission,
+          perspectivePermissionHide: item.perspectivePermissionHide,
+          hidden: item.hidden,
+          widgetConfig: item.widgetConfig,
+          onClick: item.onClick,
+          button: item.button,
+          dividerBottom: item.dividerBottom,
+          label: item.label ?? existingItem.label
+        })
+      }
+
+      currentLevel = existingItem.children ?? []
+    })
+  }
+
+  private sortTree (items: IMainNavItem[]): void {
+    items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
+    items.forEach(item => {
+      if (!isNil(item.children)) {
+        this.sortTree(item.children)
+      }
+    })
   }
 }

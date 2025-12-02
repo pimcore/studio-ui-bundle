@@ -41,7 +41,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       order: 100,
       permission: UserPermission.Translations,
-      perspectivePermission: NavPermission.PredefinedProperties,
+      perspectivePermission: NavPermission.Translations,
       widgetConfig: TRANSLATIONS_WIDGET
     })
 

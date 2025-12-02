@@ -37,6 +37,9 @@ export const serviceIds = {
   // Main nav
   mainNavRegistry: 'MainNavRegistry',
 
+  // Perspective Editor
+  perspectivePermissionProviderRegistry: 'PerspectivePermissionProviderRegistry',
+
   // Widget manager
   widgetManager: 'WidgetManagerService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',

@@ -39,9 +39,9 @@ moduleSystem.registerModule({
       path: 'DataManagement/Search & Replace Assignments',
       label: 'navigation.search-replace-assignments',
       className: 'item-style-modifier',
-      order: 500,
+      order: 300,
       permission: UserPermission.Objects,
-      perspectivePermission: NavPermission.NotesAndEvents,
+      perspectivePermission: NavPermission.SearchReplaceAssignments,
       widgetConfig: SEARCH_REPLACE_ASSIGNMENTS_WIDGET
     })
 
