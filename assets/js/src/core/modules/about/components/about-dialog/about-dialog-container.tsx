@@ -37,10 +37,10 @@ export const AboutDialogContainer = (): React.JSX.Element => {
       addModal(
         modalId,
         <AboutDialog
-          onCancel={closeModal}
-          onClose={closeModal}
-          onOk={closeModal}
-          open={isOpen}
+          onCancel={ closeModal }
+          onClose={ closeModal }
+          onOk={ closeModal }
+          open={ isOpen }
         />
       )
     }
@@ -48,8 +48,8 @@ export const AboutDialogContainer = (): React.JSX.Element => {
 
   return (
     <button
-      className={'main-nav__list-btn'}
-      onClick={() => { openModal() }}
+      className={ 'main-nav__list-btn' }
+      onClick={ () => { openModal() } }
     >
       {t('navigation.about')}
     </button>
