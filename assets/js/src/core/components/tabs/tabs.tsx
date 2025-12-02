@@ -21,7 +21,7 @@ export interface ITabsProps extends TabsProps {
   fullHeight?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
 
   const classNames = cn(
@@ -81,7 +81,6 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
       className={ classNames }
       hideAdd
       items={ enhancedItems }
-      onChange={ onChange }
       onEdit={ onEdit }
       type={ tabType }
       { ...props }

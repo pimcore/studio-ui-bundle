@@ -36,6 +36,9 @@ export interface TabpanelProps {
   contentPadding?: BoxProps['padding']
   onClose?: (tabKey: string) => void
   size?: ITabsProps['size']
+  defaultActiveKey?: ITabsProps['defaultActiveKey']
+  activeKey?: ITabsProps['activeKey']
+  onChange?: ITabsProps['onChange']
 }
 
 export const Tabpanel = ({
@@ -51,6 +54,9 @@ export const Tabpanel = ({
   extraPosition,
   onClose,
   size = 'small',
+  defaultActiveKey,
+  activeKey,
+  onChange,
   ...props
 }: TabpanelProps): React.JSX.Element => {
   const tabItems: ITabsProps['items'] = items.map((item, index) => ({
@@ -82,9 +88,12 @@ export const Tabpanel = ({
       title={ title }
     >
       <Tabs
+        activeKey={ activeKey }
+        defaultActiveKey={ defaultActiveKey }
         hasStickyHeader={ hasStickyHeader }
         items={ tabItems }
         noTabBarMargin
+        onChange={ onChange }
         onClose={ onClose !== undefined ? handleClose : undefined }
         size={ size }
         tabPosition={ props.tabPosition }
