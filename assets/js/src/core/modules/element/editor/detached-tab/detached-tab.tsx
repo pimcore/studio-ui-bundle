@@ -22,7 +22,7 @@ export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element =>
   const { context } = useGlobalElementContext()
   const { t } = useTranslation()
 
-  if (context === undefined) {
+  if (context === undefined || context?.type === undefined) {
     return <MissingContext description={ t('widget.missing-context.description') } />
   }
 
