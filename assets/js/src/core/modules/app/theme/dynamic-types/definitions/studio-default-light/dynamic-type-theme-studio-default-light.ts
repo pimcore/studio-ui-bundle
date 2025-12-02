@@ -187,6 +187,9 @@ export const studioDefaultLightThemeConfig = {
           2: '#d6e4ff',
           3: '#adc6ff',
           6: '#2f54eb'
+        },
+        Purple: {
+          4: '#B37FEB'
         }
       }
     },
@@ -230,7 +233,7 @@ export const studioDefaultLightThemeConfig = {
 export class DynamicTypeThemeStudioDefaultLight extends DynamicTypeThemeAbstract {
   id: string = studioThemeIds.light
 
-  getThemeConfig (): PimcoreThemeConfig {
+  getThemeConfig(): PimcoreThemeConfig {
     return studioDefaultLightThemeConfig
   }
 }

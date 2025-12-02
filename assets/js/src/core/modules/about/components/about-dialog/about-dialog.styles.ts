@@ -9,24 +9,33 @@
  */
 
 import { createStyles } from 'antd-style'
+import { FastColor } from '@ant-design/fast-color';
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
     modal: css`
       .ant-modal-content {
+        height: 281px;
+        border-radius: ${token.borderRadiusSM} !important;
+        background: black !important;
+
         .ant-modal-close {
-          color: ${token.colorWhite};
+          color: ${new FastColor(token.colorWhite).setA(0.66).toHexString()};
+
+          &:hover {
+            color: ${new FastColor(token.colorWhite).setA(0.88).toHexString()};
+          }
         }
 
         .ant-modal-header .ant-modal-title {
-          color: ${token.colorWhite};
+          color: ${new FastColor(token.colorWhite).setA(0.88).toHexString()};
           position: absolute;
           z-index: 1;
         }
 
         .ant-modal-body {
           .ant-btn {
-            color: #B37FEB;
+            color: ${token.Colors.Base.Purple[4]};
           }
 
           .video-container {
@@ -36,10 +45,19 @@ export const useStyle = createStyles(({ token, css }) => {
             left: 0; 
             top: 0;
 
+            video {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              object-fit: 'cover';
+              z-index: 0;
+              min-height: 281px;
+            }
+
             .content-container {
               position: relative; 
               z-index: 1; 
-              color: ${token.colorWhite}; 
+              color: ${new FastColor(token.colorWhite).setA(0.88).toHexString()};
               height: 100%;
 
               > .ant-flex {
