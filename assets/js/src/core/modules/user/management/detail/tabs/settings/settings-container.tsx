@@ -51,6 +51,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         active: openedUser?.active,
         admin: openedUser?.admin,
         classes: openedUser?.classes,
+        docTypes: openedUser?.docTypes,
         name: openedUser?.name,
         twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
         firstname: openedUser?.firstname,
