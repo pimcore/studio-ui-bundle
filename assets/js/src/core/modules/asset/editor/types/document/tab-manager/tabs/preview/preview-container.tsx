@@ -18,15 +18,15 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { UnsafePdfView } from './unsafe-pdf-view'
-import { has, isNil } from 'lodash'
+import { has } from 'lodash'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { id } = useAsset()
   const { isLoading, asset } = useAssetDraft(id)
   const [docURL, setDocURL] = useState('')
+  const [hasError, setHasError] = useState(false)
 
   const { data: customSettings, isLoading: isLoadingCustomSettings } = useAssetCustomSettingsGetByIdQuery({ id })
 
@@ -40,17 +40,18 @@ const PreviewContainer = (): React.JSX.Element => {
 
     fetchBlobWithPolling({
       url: `${getPrefix()}/assets/${id}/document/stream/pdf-preview`,
+      throwOnError: true,
       onSuccess: (blob) => {
         setDocURL(URL.createObjectURL(blob))
       }
-    }).catch(() => { trackError(new GeneralError('An error occured while loading pdf preview')) })
+    }).catch(() => { setHasError(true) })
   }, [id, isLoading, isLoadingCustomSettings, isUnsafePdf])
 
-  if (isNil(docURL) || isLoading || isLoadingCustomSettings) {
+  if (isLoading || isLoadingCustomSettings) {
     return <Content loading />
   }
 
-  if (isUnsafePdf) {
+  if (isUnsafePdf || hasError) {
     return (
       <ContentLayout>
         <UnsafePdfView
@@ -59,6 +60,10 @@ const PreviewContainer = (): React.JSX.Element => {
         />
       </ContentLayout>
     )
+  }
+
+  if (docURL === '') {
+    return <Content loading />
   }
 
   return (

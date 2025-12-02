@@ -7,7 +7,7 @@ widget.missing-context.title: "Missing Context"
 widget.missing-context.description: "No related element found"
 widget.missing-tab-context.description: "This feature is not supported for the related element"
 block: Block
-error.error_something_generic_went_wrong: Element not found
+error.error_something_generic_went_wrong: Something went wrong
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument
@@ -62,6 +62,12 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+asset.upload.file-exists.title: File already exists
+asset.upload.file-exists.message: 'The file "{{fileName}}" already exists in this folder. Do you want to overwrite it?'
+asset.upload.overwrite: Overwrite
+asset.upload.keep-both: Keep both
+asset.upload.skip: Skip
+asset.upload.apply-to-all: Apply to all
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
 upload.error.upload-failed: 'Upload failed'
@@ -167,16 +173,15 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
-grid.filter.datetime.before: Before
-grid.filter.datetime.after: After
-grid.filter.datetime.between: Between
-grid.filter.datetime.on: On
-grid.filter.number.from: From
-grid.filter.number.to: To
-grid.filter.number.is: Is
-grid.filter.number.less: Less than
-grid.filter.number.more: More than
-grid.filter.number.between: Between
+grid.filter.before: Before
+grid.filter.after: After
+grid.filter.between: Between
+grid.filter.on: On
+grid.filter.from: From
+grid.filter.to: To
+grid.filter.is: Is
+grid.filter.less: Less than
+grid.filter.more: More than
 grid.copy-notice: Copied to clipboard
 grid.configuration.no-saved-templates: No saved templates available
 grid.configuration.template: Template
@@ -550,6 +555,8 @@ jobs.job.step_hint_single: "Step {{step}}"
 jobs.job.download-error: "Download failed"
 jobs.job.button-show-errors: "Show errors"
 jobs.job.error-modal.title: "Job Errors"
+jobs.job.button-abort: Abort Job
+jobs.job.abort-confirm: Do you really want to abort this job?
 jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV download of {{title}}"

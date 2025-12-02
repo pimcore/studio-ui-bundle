@@ -9,22 +9,9 @@
  */
 
 import { injectable } from 'inversify'
-import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterCheckboxComponent, type DynamicTypeFieldFilterCheckboxProps } from '../../components/dynamic-type-field-filter-checkbox-component'
-import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { FieldFilterFrontendType } from '../../frontendTypes'
+import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean-select/dynamic-type-field-filter-boolean-select'
 
 @injectable()
-export class DynamicTypeFieldFilterBoolean extends DynamicTypeFieldFilterAbstract {
+export class DynamicTypeFieldFilterBoolean extends DynamicTypeFieldFilterBooleanSelect {
   id = 'boolean'
-
-  getFieldFilterType (): string {
-    return FieldFilterFrontendType.Boolean
-  }
-
-  getFieldFilterComponent (props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {
-    return (
-      <DynamicTypeFieldFilterCheckboxComponent { ...props } />
-    )
-  }
 }

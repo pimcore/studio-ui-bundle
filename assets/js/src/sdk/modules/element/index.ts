@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 export * from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+export * from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 export * from '@Pimcore/modules/element/actions/delete/use-delete'
 export * from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 export * from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'

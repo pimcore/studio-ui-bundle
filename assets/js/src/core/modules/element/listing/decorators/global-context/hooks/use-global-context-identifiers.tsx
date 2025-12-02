@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useMemo } from 'react'
-import { find, get, isEmpty, isNil, isNull, uniq } from 'lodash'
+import { find, get, isEmpty, isEqual, isNil, isNull, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -68,35 +68,54 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
 
     const { context, setContext } = getContextByType()
 
-    const currentContext = context?.config?.contextIdentifiers ?? []
-    const baseContext = currentContext.filter(item => !item.includes('_selection'))
+    const currentContext = context?.config?.contextIdentifiers ?? {}
 
-    if (isEmpty(selectedIds) && currentContext.length > baseContext.length && !isNil(context)) {
-      setContext({ id: context.config.id, contextIdentifiers: baseContext })
+    const allTags = currentContext?.tags ?? []
+    const baseTags = currentContext?.tags.filter(item => !item.includes('_selection'))
+
+    if (isEmpty(selectedIds) && !isNil(context) && allTags.length > baseTags.length) {
+      setContext({
+        id: context.config.id,
+        contextIdentifiers: {
+          ...currentContext,
+          tags: baseTags
+        }
+      })
 
       return
     }
 
     if (!isEmpty(selectedIds)) {
-      const newContextValues: string[] = []
+      const newSelectedElementsContext: Array<{ id: number, type: string }> = []
+      const newTagContext: string[] = []
 
       selectedIds.forEach((id) => {
         const rowData = data?.find((row: any) => row.id === id)
         const key = getSelectionContextKey(rowData)
 
-        if (!isNull(key)) newContextValues.push(key)
+        newSelectedElementsContext.push({ id, type: currentContext?.type })
+
+        if (!isNull(key)) newTagContext.push(key)
       })
 
-      if (newContextValues.length > 0) {
-        const filteredContext = currentContext.filter((context) => !context.endsWith('_selection'))
-        const updatedContext = uniq([...filteredContext, ...newContextValues])
+      if (newTagContext.length > 0) {
+        const filteredTagContext = currentContext?.tags.filter((context) => !context.endsWith('_selection'))
+        const updatedTagContext = uniq([...filteredTagContext, ...newTagContext])
 
-        const isSame =
-          updatedContext.length === currentContext.length &&
-          updatedContext.every((value, index) => value === currentContext[index])
+        const isSameTags = isEqual(currentContext.tags, newTagContext)
+        const isSameSelected = isEqual(currentContext.selectedElements, newSelectedElementsContext)
+
+        const isSame = isSameTags || isSameSelected
 
         if (!isSame && !isNil(context)) {
-          setContext({ id: context.config.id, contextIdentifiers: updatedContext })
+          setContext({
+            id: context.config.id,
+            contextIdentifiers: {
+              ...currentContext,
+              tags: updatedTagContext,
+              selectedElements: newSelectedElementsContext
+            }
+          })
         }
       }
     }

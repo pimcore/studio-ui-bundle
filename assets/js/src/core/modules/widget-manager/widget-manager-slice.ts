@@ -14,6 +14,7 @@ import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type 
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 
 export interface IMainWidgetContext {
   nodeId: string
@@ -112,6 +113,20 @@ export const slice = createSlice({
       }
 
       state.innerModel = { ...model.toJson() }
+    },
+
+    updateWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
+      const model = Model.fromJson(state.innerModel)
+      let node: Node | undefined
+
+      if (action.payload.id !== undefined) {
+        node = model.getNodeById(action.payload.id)
+      }
+
+      if (node !== undefined) {
+        model.doAction(Actions.updateNodeAttributes(node.getId(), action.payload))
+        state.innerModel = { ...model.toJson() }
+      }
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -232,7 +247,12 @@ export const slice = createSlice({
 
 export const widgetManagerSliceName = slice.name
 
-injectSliceWithState(slice)
+const persistedReducer = createWidgetManagerPersistedReducer(slice.reducer)
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+injectSliceWithState({
+  ...slice,
+  reducer: persistedReducer
+})
+
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext } = slice.selectors

@@ -20,6 +20,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseAssetContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
+import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
 
 export interface EditorContainerProps {
   id: number
@@ -27,7 +28,7 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, asset, editorType } = useAssetDraft(id)
+  const { isLoading, isError, asset, editorType, activeTab } = useAssetDraft(id)
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
@@ -39,7 +40,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, contextIdentifiers: getBaseAssetContextIdentifiers(asset) })
+      setContext({ id, contextIdentifiers: getBaseAssetContextIdentifiers(asset, activeTab === TAB_LISTING.key) })
     }
 
     return () => {
@@ -47,7 +48,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
         removeContext()
       }
     }
-  }, [isWidgetActive])
+  }, [isWidgetActive, activeTab])
 
   if (isLoading) {
     return <Content loading />

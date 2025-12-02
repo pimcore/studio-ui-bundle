@@ -13,34 +13,19 @@ import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
 
-interface IObjectSelectConfig {
-  fieldDefinition: {
-    options: Array<{ key: string, value: string }>
-  }
-}
-
-interface IAssetSelectConfig {
-  options: string[]
-}
-
 export type MultiselectValue = string[]
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
-  const { setData, data, config: rawConfig } = useDynamicFilter()
+  const { setData, data, config } = useDynamicFilter()
   const [value, setValue] = useState<string[]>(data as MultiselectValue)
 
-  const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
   let formattedOptions: DefaultOptionType[] = []
+  const options = config?.fieldDefinition?.options ?? config?.definition?.options
 
-  if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
-    formattedOptions = config?.fieldDefinition?.options.map((opt) => ({
+  if (Array.isArray(options)) {
+    formattedOptions = options.map((opt) => ({
       label: opt?.key,
       value: opt?.value
-    }))
-  } else if ('options' in config && Array.isArray(config.options)) {
-    formattedOptions = config.options.map((opt) => ({
-      label: opt,
-      value: opt
     }))
   }
 
@@ -58,7 +43,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
       mode="multiple"
       onChange={ handleChange }
       options={ formattedOptions }
-      showSearch={ rawConfig?.showSearch ?? false }
+      showSearch={ config?.showSearch ?? false }
       style={ { width: '100%' } }
       value={ value }
     />

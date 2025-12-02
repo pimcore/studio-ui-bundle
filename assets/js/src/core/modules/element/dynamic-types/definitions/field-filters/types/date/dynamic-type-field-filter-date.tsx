@@ -17,10 +17,10 @@ import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/ge
 
 @injectable()
 export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
-  id = 'datetime'
+  id = 'date'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.DateTime
+    return FieldFilterFrontendType.Date
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterDateProps): ReactElement<DynamicTypeFieldFilterDateProps> {

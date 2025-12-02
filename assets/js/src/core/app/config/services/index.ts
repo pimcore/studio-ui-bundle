@@ -234,8 +234,6 @@ import { DynamicTypeGridCellInteger } from '@Pimcore/modules/element/dynamic-typ
 import { DynamicTypeGridCellError } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { DynamicTypeGridCellArray } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
-import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
-import { DynamicTypeFieldFilterInput } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input/dynamic-type-field-filter-input'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
 import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
@@ -255,6 +253,7 @@ import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
 import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
@@ -265,6 +264,12 @@ import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/se
 import { ElementIconProcessorRegistry } from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
 import { ObjectListingBuilder } from '@sdk/modules/data-object'
 import { AssetListingBuilder } from '@Pimcore/modules/asset/listing/builder/asset-listing-builder'
+import { DynamicTypeFieldFilterInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input-quantity-value/dynamic-type-field-filter-input-quantity-value'
+import { DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/quantity-value/dynamic-type-field-filter-quantity-value'
+import { DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
+import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
+import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -277,6 +282,7 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
+container.bind(serviceIds.widgetRestorerRegistry).to(WidgetRestorerRegistry).inSingletonScope()
 container.bind(serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']).to(PerspectiveProcessorRegistry).inSingletonScope()
 
 // Form services
@@ -342,8 +348,6 @@ container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFie
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(DynamicTypeFieldFilterObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFieldFilterFulltext).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Input']).to(DynamicTypeFieldFilterInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
@@ -353,6 +357,11 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFie
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Consent']).to(DynamicTypeFieldFilterConsent).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/ClassificationStore']).to(DynamicTypeFieldFilterClassificationStore).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/InputQuantityValue']).to(DynamicTypeFieldFilterInputQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/QuantityValue']).to(DynamicTypeFieldFilterQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Color']).to(DynamicTypeFieldFilterColor).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Time']).to(DynamicTypeFieldFilterTime).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
@@ -604,3 +613,6 @@ container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSet
 // Perspective Ediotor & Widget Editor
 container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/WidgetEditor/ElementTree']).to(DynamicTypeWidgetTypeElementTree).inSingletonScope()
+
+// App Loader
+container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSingletonScope()

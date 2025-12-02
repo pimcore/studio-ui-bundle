@@ -39,6 +39,7 @@ export const serviceIds = {
 
   // Widget manager
   widgetManager: 'WidgetManagerService',
+  widgetRestorerRegistry: 'WidgetRestorerRegistry',
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
@@ -104,8 +105,6 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectAdapter': 'DynamicTypes/FieldFilter/DataObjectAdapter',
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
-  'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
-  'DynamicTypes/FieldFilter/Input': 'DynamicTypes/FieldFilter/Input',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
@@ -115,6 +114,11 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
   'DynamicTypes/FieldFilter/Consent': 'DynamicTypes/FieldFilter/Consent',
   'DynamicTypes/FieldFilter/ClassificationStore': 'DynamicTypes/FieldFilter/ClassificationStore',
+  'DynamicTypes/FieldFilter/InputQuantityValue': 'DynamicTypes/FieldFilter/InputQuantityValue',
+  'DynamicTypes/FieldFilter/QuantityValue': 'DynamicTypes/FieldFilter/QuantityValue',
+  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
+  'DynamicTypes/FieldFilter/Time': 'DynamicTypes/FieldFilter/Time',
+  'DynamicTypes/FieldFilter/Color': 'DynamicTypes/FieldFilter/Color',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -345,5 +349,8 @@ export const serviceIds = {
   'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
   'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor',
   'Element/ProcessorRegistry/IconProcessor': 'Element/ProcessorRegistry/IconProcessor',
-  'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor'
+  'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor',
+
+  // AppLoader Registry
+  'AppLoader/Registry': 'AppLoader/Registry'
 }

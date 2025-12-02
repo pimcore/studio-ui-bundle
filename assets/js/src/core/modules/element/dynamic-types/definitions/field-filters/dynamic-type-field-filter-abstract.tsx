@@ -48,14 +48,9 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
   }
 
   transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
-    const isMetadataFilter = filter.type.startsWith('metadata.')
-
-    if (isMetadataFilter) {
-      return filter
-    }
-
     return {
       ...filter,
+      key: filter.meta?.filters?.key ?? filter.key,
       type: this.getFieldFilterType()
     }
   }
