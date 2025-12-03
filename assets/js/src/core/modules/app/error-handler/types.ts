@@ -8,9 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import type { SerializedError } from '@reduxjs/toolkit'
+
 export interface IErrorGetContent {
   data: string | { errorKey: string, title?: string }
 }
+
+export type ApiErrorData = FetchBaseQueryError | SerializedError
 
 export interface IApiErrorDetails {
   detail?: string

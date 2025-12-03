@@ -23,7 +23,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { isUndefined } from 'lodash'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 
 export interface ICreateZipDownloadProps {
