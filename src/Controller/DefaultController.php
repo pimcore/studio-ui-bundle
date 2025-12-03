@@ -16,6 +16,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller;
 use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
+use Pimcore\Tool;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -46,6 +47,7 @@ final class DefaultController extends FrontendController
             'baseUrl' => $studioUrlPath,
             'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
+            'hostname' => Tool::getHostname(),
         ]);
     }
 }
