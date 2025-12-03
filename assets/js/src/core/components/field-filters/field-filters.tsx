@@ -97,11 +97,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
         <Flex gap="mini">
           {filter.localizable === true && (
             <PermissionBasedLanguageSelectionControl
+              customKeys={ isClassificationStore ? ['default'] : [] }
               isNullable
               key={ 'language' }
               onChange={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
               value={ filter.locale === undefined ? null : filter.locale }
-              customKeys={ isClassificationStore ? ['default'] : [] }
             />
           )}
           <IconButton

@@ -105,10 +105,10 @@ export const GridConfigList = (): React.JSX.Element => {
 
     return (
       <PermissionBasedLanguageSelectionControl
+        customKeys={ isClassificationStore ? ['default'] : [] }
         isNullable
         onChange={ (language) => { onLanguageSelection(uniqueId, column, language) } }
         value={ column.locale === undefined ? null : column.locale }
-        customKeys={ isClassificationStore ? ['default'] : [] }
       />
     )
   }

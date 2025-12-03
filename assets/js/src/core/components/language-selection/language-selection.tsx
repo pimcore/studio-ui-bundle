@@ -27,7 +27,7 @@ export const transformLanguage = (language: string): string | null => language =
 export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [language, setLanguage] = useState<string>(selectedLanguage)
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   useEffect(() => {
     setLanguage(selectedLanguage)
@@ -47,10 +47,10 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
 
       <div className='language-select__current-value'>
         { language === '-' && (
-           <Icon
-            options={ { width: 18, height: 18 } }
-            value='minus'
-          />
+        <Icon
+          options={ { width: 18, height: 18 } }
+          value='minus'
+        />
         )}
 
         {customKeys.includes(language) && (
