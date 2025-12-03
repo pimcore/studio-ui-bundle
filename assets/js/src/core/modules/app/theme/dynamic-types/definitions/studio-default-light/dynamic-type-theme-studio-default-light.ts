@@ -172,7 +172,8 @@ export const studioDefaultLightThemeConfig = {
       Brand: {
         Success: {
           colorSuccessBg: '#f6ffed',
-          colorSuccessBorder: '#b7eb8f'
+          colorSuccessBorder: '#b7eb8f',
+          colorSuccessText: '#52c41a'
         },
         Warning: {
           colorWarningBg: '#fffbe6',
