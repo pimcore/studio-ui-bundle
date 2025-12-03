@@ -1395,70 +1395,65 @@ perspective-editor.form.general.name: Name
 perspective-editor.form.general.icon: Icon
 perspective-editor.form.general.widget-configuration: Widget areas
 perspective-editor.form.allowed-context-menu.title: Allowed context menu actions
-perspective-editor.form.allowed-context-menu.category.extras: Extras
-perspective-editor.form.allowed-context-menu.extras.applicationlog: Application Logger
-perspective-editor.form.allowed-context-menu.extras.emails: E-Mails
-perspective-editor.form.allowed-context-menu.extras.gdpr_data_extractor: GDPR Data Extractor
-perspective-editor.form.allowed-context-menu.extras.glossary: Glossary
-perspective-editor.form.allowed-context-menu.extras.hidden: Hide Extras Menu
-perspective-editor.form.allowed-context-menu.extras.maintenance: Maintenance
-perspective-editor.form.allowed-context-menu.extras.notesEvents: Notes & Events
-perspective-editor.form.allowed-context-menu.extras.recycle_bin: Recycle Bin
-perspective-editor.form.allowed-context-menu.extras.redirects: Redirects
-perspective-editor.form.allowed-context-menu.extras.systemTools_hidden: Hide Systemtools Menu
-perspective-editor.form.allowed-context-menu.extras.systemTools_requirements: Sytem-Requirements Check
-perspective-editor.form.allowed-context-menu.extras.translations: Translations
-perspective-editor.form.allowed-context-menu.category.file: File
-perspective-editor.form.allowed-context-menu.file.about: About
-perspective-editor.form.allowed-context-menu.file.close_all: Close All
-perspective-editor.form.allowed-context-menu.file.dashboards: Dashboards
-perspective-editor.form.allowed-context-menu.file.help: Help
-perspective-editor.form.allowed-context-menu.file.hidden: Hide File Menu
-perspective-editor.form.allowed-context-menu.file.open_asset: Open Asset
-perspective-editor.form.allowed-context-menu.file.open_document: Open Document
-perspective-editor.form.allowed-context-menu.file.open_object: Open Object
-perspective-editor.form.allowed-context-menu.file.perspectives: Perspective & Widget Editor
-perspective-editor.form.allowed-context-menu.file.schedule: Schedule
-perspective-editor.form.allowed-context-menu.file.searchReplace: Search & Replace Assignments
-perspective-editor.form.allowed-context-menu.file.see_mode: See Mode
-perspective-editor.form.allowed-context-menu.category.marketing: Marketing
-perspective-editor.form.allowed-context-menu.marketing.hidden: Hide Markeing Menu
-perspective-editor.form.allowed-context-menu.marketing.reports: Reports
+perspective-editor.form.allowed-context-menu.category.quickAccess: Quick Access
+perspective-editor.form.allowed-context-menu.quickAccess.hidden: Hide Quick Access Menu
+perspective-editor.form.allowed-context-menu.quickAccess.open_asset: Open Asset
+perspective-editor.form.allowed-context-menu.quickAccess.open_document: Open Document
+perspective-editor.form.allowed-context-menu.quickAccess.open_object: Open Object
+perspective-editor.form.allowed-context-menu.quickAccess.recycle_bin: Recycle Bin
+perspective-editor.form.allowed-context-menu.category.dataManagement: Data Management
+perspective-editor.form.allowed-context-menu.dataManagement.hidden: Hide Data Management Menu
+perspective-editor.form.allowed-context-menu.dataManagement.notesEvents: Notes & Events
+perspective-editor.form.allowed-context-menu.dataManagement.gdprDataExtractor: GDPR Data Extractor
+perspective-editor.form.allowed-context-menu.dataManagement.searchReplaceAssignments: Search & Replace Assignments
+perspective-editor.form.allowed-context-menu.dataManagement.predefinedProperties: Predefined Properties
+perspective-editor.form.allowed-context-menu.dataManagement.tagConfiguration: Tag Configuration
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_bulkExport: Data Model Definition > Bulk Export
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_bulkImport: Data Model Definition > Bulk Import
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_classes: Data Model Definition > Classes
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_classificationStore: Data Model Definition > Classification Store
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_fieldCollections: Data Model Definition > Field Collections
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_hidden: Hide Data Model Definition Menu
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_objectBricks: Data Model Definition > Object Bricks
+perspective-editor.form.allowed-context-menu.dataManagement.dataModel_quantityValue: Data Model Definition > Quantity Value
+perspective-editor.form.allowed-context-menu.category.experienceEcommerce: Experience & E-commerce
+perspective-editor.form.allowed-context-menu.experienceEcommerce.hidden: Hide Experience & E-commerce Menu
+perspective-editor.form.allowed-context-menu.experienceEcommerce.emails: E-Mails
+perspective-editor.form.allowed-context-menu.experienceEcommerce.documentTypes: Document Types
+perspective-editor.form.allowed-context-menu.experienceEcommerce.websiteSettings: Website Settings
+perspective-editor.form.allowed-context-menu.experienceEcommerce.redirects: Redirects
+perspective-editor.form.allowed-context-menu.category.assetManagement: Asset Management
+perspective-editor.form.allowed-context-menu.assetManagement.hidden: Hide Asset Management Menu
+perspective-editor.form.allowed-context-menu.assetManagement.imageThumbnails: Image Thumbnails
+perspective-editor.form.allowed-context-menu.assetManagement.videoThumbnails: Video Thumbnails
+perspective-editor.form.allowed-context-menu.assetManagement.predefinedAssetMetadata: Predefined Asset Metadata
+perspective-editor.form.allowed-context-menu.category.translations: Translations
+perspective-editor.form.allowed-context-menu.translations.hidden: Hide Translations Menu
+perspective-editor.form.allowed-context-menu.translations.translations: Translations
+perspective-editor.form.allowed-context-menu.category.system: System
+perspective-editor.form.allowed-context-menu.system.hidden: Hide System Menu
+perspective-editor.form.allowed-context-menu.system.applicationLogger: Application Logger
+perspective-editor.form.allowed-context-menu.system.users_hidden: Hide Users/Roles Menu
+perspective-editor.form.allowed-context-menu.system.users_roles: Roles
+perspective-editor.form.allowed-context-menu.system.users_users: Users
+perspective-editor.form.allowed-context-menu.settings.appearanceBranding: Appearance & Branding
+perspective-editor.form.allowed-context-menu.system.perspectiveEditor: Perspective Editor
+perspective-editor.form.allowed-context-menu.system.widgetEditor: Widget Editor
+perspective-editor.form.allowed-context-menu.system.maintenanceMode: Maintenance Mode
+perspective-editor.form.allowed-context-menu.system.cache_clearAll: Cache > Clear All
+perspective-editor.form.allowed-context-menu.system.cache_clearData: Cache > Data Cache
+perspective-editor.form.allowed-context-menu.system.cache_clearOutput: Cache > Clear Full Page Cache
+perspective-editor.form.allowed-context-menu.system.cache_clearSymfony: Cache > Clean Symfony Cache
+perspective-editor.form.allowed-context-menu.system.cache_clearTemp: Cache > Clear temporary files
+perspective-editor.form.allowed-context-menu.system.cache_hidden: Hide Cache Menu
+perspective-editor.form.allowed-context-menu.system.systemSettings: System Settings
+perspective-editor.form.allowed-context-menu.system.about: About
+perspective-editor.form.allowed-context-menu.category.reporting: Reporting
+perspective-editor.form.allowed-context-menu.reporting.hidden: Hide Reporting Menu
+perspective-editor.form.allowed-context-menu.reporting.reports: Reports
+perspective-editor.form.allowed-context-menu.reporting.customReportsConfiguration: Custom Reports Configuration
 perspective-editor.form.allowed-context-menu.category.search: Search
-perspective-editor.form.allowed-context-menu.search.assets: Assets
-perspective-editor.form.allowed-context-menu.search.documents: Documents
 perspective-editor.form.allowed-context-menu.search.hidden: Hide Search Menu
-perspective-editor.form.allowed-context-menu.search.objects: Data Objects
-perspective-editor.form.allowed-context-menu.search.quickSearch: Quick Search
-perspective-editor.form.allowed-context-menu.category.settings: Settings
-perspective-editor.form.allowed-context-menu.settings.adminTranslations: Admin Translations
-perspective-editor.form.allowed-context-menu.settings.appearance: Appearance
-perspective-editor.form.allowed-context-menu.settings.cache_clearAll: Cache > Clear All
-perspective-editor.form.allowed-context-menu.settings.cache_clearData: Cache > Data Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearOutput: Cache > Clear Full Page Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearSymfony: Cache > Clean Symfony Cache
-perspective-editor.form.allowed-context-menu.settings.cache_clearTemp: Cache > Clear temporary files
-perspective-editor.form.allowed-context-menu.settings.cache_hidden: Hide Cache Menu
-perspective-editor.form.allowed-context-menu.settings.customReports: Custom Reports
-perspective-editor.form.allowed-context-menu.settings.documentTypes: Document Types
-perspective-editor.form.allowed-context-menu.settings.hidden: Hide Settings Menu
-perspective-editor.form.allowed-context-menu.settings.object_bulkExport: Data Objects > Bulk Export
-perspective-editor.form.allowed-context-menu.settings.object_bulkImport: Data Objects > Bulk Import
-perspective-editor.form.allowed-context-menu.settings.object_classes: Data Objects > Classes
-perspective-editor.form.allowed-context-menu.settings.object_classificationstore: Data Objects > Classification Store
-perspective-editor.form.allowed-context-menu.settings.object_field_collections: Data Objects > Field Collections
-perspective-editor.form.allowed-context-menu.settings.object_hidden: Hide Data Objects Menu
-perspective-editor.form.allowed-context-menu.settings.object_objectbricks: Data Objects > Object Bricks
-perspective-editor.form.allowed-context-menu.settings.object_quantityValue: Data Objects > Quantity Value
-perspective-editor.form.allowed-context-menu.settings.predefinedMetadata: Predefined Metadata
-perspective-editor.form.allowed-context-menu.settings.predefinedProperties: Predefined Properties
-perspective-editor.form.allowed-context-menu.settings.system: System
-perspective-editor.form.allowed-context-menu.settings.tagConfiguration: Tag Configuration
-perspective-editor.form.allowed-context-menu.settings.thumbnails: Thumbnails
-perspective-editor.form.allowed-context-menu.settings.users_hidden: Hide Users/Roles Menu
-perspective-editor.form.allowed-context-menu.settings.users_roles: Roles
-perspective-editor.form.allowed-context-menu.settings.users_users: Users
-perspective-editor.form.allowed-context-menu.settings.website: Website Settings
 perspective-editor.create.success: Perspective created successfully
 perspective-editor.delete.success: Perspective deleted successfully
 perspective-editor.system-widgets.trees: Trees

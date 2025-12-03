@@ -17,8 +17,18 @@ import { PerspectiveEditorContainer } from './perspective-editor-container'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 
+import { PerspectivePermissionProviderRegistry } from './registry/perspective-permission-provider-registry'
+import { MainNavPerspectivePermissionProvider } from './services/providers/main-nav-perspective-permission-provider'
+import { SearchPerspectivePermissionProvider } from './services/providers/search-perspective-permission-provider'
+
 moduleSystem.registerModule({
   onInit: () => {
+    container.bind(serviceIds.perspectivePermissionProviderRegistry).to(PerspectivePermissionProviderRegistry).inSingletonScope()
+
+    const registry = container.get<PerspectivePermissionProviderRegistry>(serviceIds.perspectivePermissionProviderRegistry)
+    registry.registerProvider(new MainNavPerspectivePermissionProvider(), 100)
+    registry.registerProvider(new SearchPerspectivePermissionProvider(), 50)
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
       name: 'perspective-editor',
@@ -33,7 +43,7 @@ moduleSystem.registerModule({
       dividerBottom: true,
       className: 'item-style-modifier',
       permission: UserPermission.PerspectiveEditor,
-      perspectivePermission: NavPermission.Perspectives,
+      perspectivePermission: NavPermission.PerspectiveEditor,
       widgetConfig: {
         name: 'perspectiveEditor',
         id: 'perspective-editor',

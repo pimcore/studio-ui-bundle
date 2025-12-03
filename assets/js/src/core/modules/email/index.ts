@@ -39,7 +39,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'ExperienceEcommerce/Email',
       label: 'navigation.email',
-      order: 300,
+      order: 100,
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails
     })

@@ -17,6 +17,7 @@ import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permissio
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { SearchReplaceAssignmentsContainer } from './search-replace-assignments-container'
 import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { isAllowed } from '@sdk/modules/auth'
 
 export const SEARCH_REPLACE_ASSIGNMENTS_WIDGET: WidgetManagerTabConfig = {
   name: 'Search & Replace Assignments',
@@ -39,9 +40,11 @@ moduleSystem.registerModule({
       path: 'DataManagement/Search & Replace Assignments',
       label: 'navigation.search-replace-assignments',
       className: 'item-style-modifier',
-      order: 500,
-      permission: UserPermission.Objects,
-      perspectivePermission: NavPermission.NotesAndEvents,
+      order: 300,
+      hidden: () => {
+        return !isAllowed(UserPermission.Assets) && !isAllowed(UserPermission.Documents) && !isAllowed(UserPermission.Objects)
+      },
+      perspectivePermission: NavPermission.SearchReplaceAssignments,
       widgetConfig: SEARCH_REPLACE_ASSIGNMENTS_WIDGET
     })
 

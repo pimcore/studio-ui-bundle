@@ -77,7 +77,7 @@ moduleSystem.registerModule({
       order: 200,
       dividerBottom: true,
       permission: UserPermission.ReportsConfig,
-      perspectivePermission: NavPermission.Reports,
+      perspectivePermission: NavPermission.CustomReportsConfiguration,
       widgetConfig: CUSTOM_REPORTS_WIDGET
     })
 

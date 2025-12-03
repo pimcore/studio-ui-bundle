@@ -34,7 +34,7 @@ moduleSystem.registerModule({
       order: 300,
       className: 'item-style-modifier',
       permission: UserPermission.WidgetEditor,
-      perspectivePermission: NavPermission.Perspectives,
+      perspectivePermission: NavPermission.WidgetEditor,
       widgetConfig: {
         name: 'widgetEditor',
         id: 'widget-editor',
