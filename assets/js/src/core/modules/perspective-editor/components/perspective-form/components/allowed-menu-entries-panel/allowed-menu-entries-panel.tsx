@@ -53,7 +53,7 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
         collapsed={ false }
         collapsible
         theme='fieldset'
-        title={ t('perspective-editor.form.allowed-context-menu.title') }
+        title={ t('perspective-editor.form.main-nav-permission.title') }
       >
         <Spin />
       </FormKit.Panel>
@@ -66,7 +66,7 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
       gap={ 0 }
       vertical
     >
-      <p>{t('perspective-editor.form.allowed-context-menu.title')}</p>
+      <p>{t('perspective-editor.form.main-nav-permission.title')}</p>
 
       <Flex
         gap={ 8 }
@@ -78,7 +78,7 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
             collapsible
             key={ category.key }
             theme='fieldset'
-            title={ t(`perspective-editor.form.allowed-context-menu.category.${category.key}`) }
+            title={ t(`perspective-editor.form.main-nav-permission.category.${category.key}`) }
           >
             <Flex
               gap={ 4 }
@@ -90,7 +90,7 @@ export const AllowedMenuEntriesPanel = (): React.JSX.Element => {
                   name={ ['contextPermissions', category.key, permission.key] }
                 >
                   <Switch
-                    labelRight={ t(`perspective-editor.form.allowed-context-menu.${category.key}.${permission.key}`) }
+                    labelRight={ t(`perspective-editor.form.main-nav-permission.${category.key}.${permission.key}`) }
                     size='small'
                   />
                 </Form.Item>
