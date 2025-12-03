@@ -10,7 +10,7 @@
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import React, { useRef, useState, useMemo } from 'react'
-import { Actions, type Model, TabNode } from 'flexlayout-react'
+import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
 import { isUndefined } from 'lodash'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
