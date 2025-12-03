@@ -9,7 +9,7 @@
  */
 
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import { TabNode } from 'flexlayout-react'
+import { type TabNode } from 'flexlayout-react'
 import { container } from '@Pimcore/app/depency-injection'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
