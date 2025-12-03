@@ -15,6 +15,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { api, type CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveDeleteMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +33,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const { success } = useMessage()
+  const { refreshPerspectives } = usePerspectives()
   const [perspectiveCreateMutation, { isLoading: isCreateLoading }] = usePerspectiveCreateMutation()
   const [perspectiveUpdateMutation, { isLoading: isUpdateLoading }] = usePerspectiveUpdateConfigByIdMutation()
   const [perspectiveDeleteMutation, { isLoading: isDeleteLoading }] = usePerspectiveDeleteMutation()
@@ -69,6 +71,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       }
 
       onFinish?.(value)
+      void refreshPerspectives()
 
       void success(t('perspective-editor.create.success'))
     } catch {
@@ -107,6 +110,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       }
 
       onFinish?.()
+      void refreshPerspectives()
       void success(t('perspective-editor.update.success'))
     } catch {
       onFinish?.()
@@ -147,6 +151,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       )
 
       onFinish?.()
+      void refreshPerspectives()
       void success(t('perspective-editor.delete.success'))
     } catch {
       trackError(new GeneralError('Failed to delete perspective'))

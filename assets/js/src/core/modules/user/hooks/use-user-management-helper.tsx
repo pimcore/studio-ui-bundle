@@ -43,6 +43,8 @@ import { useNotification } from '@Pimcore/components/notification/useNotificatio
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 
 interface AddItemArgs {
   parentId: number
@@ -82,6 +84,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
   const [notificationApi] = useNotification()
   const activeId = useAppSelector(state => state.user.activeId)
   const getAllIds = useAppSelector(state => state.user.ids)
+  const currentUser = useUser()
+  const { refreshPerspectives } = usePerspectives()
 
   const handleNotification = (successMessage, error): void => {
     if (error !== undefined) {
@@ -202,6 +206,10 @@ export const useUserManagementHelper = (): UseUserReturn => {
       }))
 
       handleNotification(t('user-management.save-user.success'), passwordError)
+    }
+
+    if (currentUser.id === id && !currentUser.isAdmin) {
+      void refreshPerspectives()
     }
 
     const userDraft: UserDraft = {

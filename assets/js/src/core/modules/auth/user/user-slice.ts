@@ -83,6 +83,13 @@ const slice = createSlice({
       }
     },
 
+    setPerspectives: (state, { payload }: PayloadAction<UserInformation['perspectives']>) => {
+      return {
+        ...state,
+        perspectives: payload
+      }
+    },
+
     ...useTrackableChangesReducers()
   }
 })
@@ -95,6 +102,7 @@ export const {
   setUser,
   userProfileUpdated,
   userProfileImageUpdated,
+  setPerspectives,
   resetChanges,
   setModifiedCells
 } = slice.actions
