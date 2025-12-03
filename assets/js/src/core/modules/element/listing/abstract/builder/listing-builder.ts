@@ -107,7 +107,7 @@ export class ListingBuilder<T extends IListingBuilder = IListingBuilder> {
         ...decorator.config,
         ...configEntry?.config
       }
-      composedProps = decorator.decorator(composedProps, decoratorConfig)
+      composedProps = decorator.decorator(composedProps, Object.keys(decoratorConfig).length > 0 ? decoratorConfig : undefined)
     }
 
     return composedProps
