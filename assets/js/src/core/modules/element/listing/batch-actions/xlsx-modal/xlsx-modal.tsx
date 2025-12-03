@@ -133,7 +133,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
         type: currentColumn.type,
         group: currentColumn.group as unknown as string[] | undefined,
         locale: currentColumn.locale,
-        config: currentColumn.config
+        config: column.originalApiDefinition?.__meta?.advancedColumnConfig ?? currentColumn.config
       }
     })
 
