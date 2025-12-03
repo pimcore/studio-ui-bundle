@@ -114,6 +114,7 @@ export const GridConfigInner = (): React.JSX.Element => {
           ...baseColumn,
           key: `${baseColumn.key}`,
           frontendType: itemDefinition?.fieldtype,
+          locale: baseColumn.localizable ? 'default' : undefined,
           config: {
             keyId: item.id,
             groupId: item.groupId,

@@ -74,7 +74,9 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   const items: StackListProps['items'] = _data.map((filter) => {
     let key = filter.id
 
-    if (filter.type === 'dataobject.classificationstore') {
+    const isClassificationStore = filter.type === 'dataobject.classificationstore'
+
+    if (isClassificationStore) {
       key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
     }
 
@@ -99,6 +101,7 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
               key={ 'language' }
               onChange={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
               value={ filter.locale === undefined ? null : filter.locale }
+              customKeys={ isClassificationStore ? ['default'] : [] }
             />
           )}
           <IconButton

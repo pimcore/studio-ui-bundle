@@ -35,6 +35,10 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
     availableLanguages.push(...(Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []))
   }
 
+  if (props.customKeys && props.customKeys.length > 0) {
+    availableLanguages.unshift(...props.customKeys);
+  }
+
   if (props.isNullable === true) {
     availableLanguages.unshift('-')
   }
@@ -52,6 +56,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
       languages={ availableLanguages }
       onSelectLanguage={ onChangeLanguage }
       selectedLanguage={ props.value ?? '-' }
+      customKeys={props.customKeys}
     />
   )
 }

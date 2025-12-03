@@ -98,7 +98,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         type: column.type,
         frontendType: fieldDefinition.fieldtype,
         localizable: column.localizable,
-        locale: column.locale,
+        locale: column.localizable ? 'default' : undefined,
         config: {
           fieldDefinition,
           groupId: item.groupId,

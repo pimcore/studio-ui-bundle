@@ -13,18 +13,21 @@ import React, { type MouseEvent, useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './langguage-selection.styles'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
+import { useTranslation } from 'react-i18next'
 
 interface LanguageSelectionProps {
   languages: string[]
+  customKeys?: string[]
   selectedLanguage: string
   onSelectLanguage: (language: string) => void
 }
 
 export const transformLanguage = (language: string): string | null => language === '-' ? null : language
 
-export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
+export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [language, setLanguage] = useState<string>(selectedLanguage)
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLanguage(selectedLanguage)
@@ -43,19 +46,23 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
       </Button>
 
       <div className='language-select__current-value'>
-        { language !== '-'
-          ? (
-            <>
-              <FlagIcon value={ transformLanguage(language) } />
-              <span>{language}</span>
-            </>
-            )
-          : (
-            <Icon
-              options={ { width: 18, height: 18 } }
-              value='minus'
-            />
-            )}
+        { language === '-' && (
+           <Icon
+            options={ { width: 18, height: 18 } }
+            value='minus'
+          />
+        )}
+
+        {customKeys.includes(language) && (
+          <span>{ t(`custom-language.${language}`) }</span>
+        )}
+
+        { language !== '-' && !customKeys.includes(language) && (
+          <>
+            <FlagIcon value={ transformLanguage(language) } />
+            <span>{ language }</span>
+          </>
+        )}
       </div>
 
       <Button
