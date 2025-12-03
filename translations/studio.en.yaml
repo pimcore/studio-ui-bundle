@@ -1634,3 +1634,4 @@ about.platform-version: "Platform Version: {{version}}"
 about.copyright: "© by Pimcore GmbH"
 about.buttons.license: License
 about.buttons.contact: Contact
+custom-language.default: Default
