@@ -10,7 +10,7 @@
 
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useUserResetPasswordMutation } from '../user/user-api-slice.gen'
-import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { generatePath } from 'react-router-dom'
 import { currentDomain, routes } from '@sdk/app'
 import { useLoginTokenMutation } from '../authorization-api-slice.gen'

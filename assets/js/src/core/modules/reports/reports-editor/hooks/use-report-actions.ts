@@ -11,7 +11,7 @@
 import { useEffect } from 'react'
 import { isUndefined } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import {
   type CustomReportsConfigCloneApiArg,
   type CustomReportsConfigDeleteApiArg,

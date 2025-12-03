@@ -12,7 +12,7 @@ import { useRef } from 'react'
 import { store } from '@Pimcore/app/store'
 import type { DataObjectFormatPathApiResponse } from '../data-object-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isNil } from 'lodash'
 
