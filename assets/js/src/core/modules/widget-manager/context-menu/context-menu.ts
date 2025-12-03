@@ -67,7 +67,7 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
       label: t('close-all'),
       onClick: () => {
         if (contextMenuState !== null) {
-          model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
+          contextMenuState?.tabNode?.getParent()?.getChildren().forEach((tabNode: TabNode) => {
             closeWidget(tabNode.getId())
           })
           closeContextMenu()
