@@ -1500,11 +1500,11 @@ widget-editor.widget-form.allowed-context-menu.delete: Delete
 widget-editor.widget-form.allowed-context-menu.paste: Paste
 widget-editor.widget-form.allowed-context-menu.rename: Rename
 widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
-widget-editor.widget-form.allowed-context-menu.addUploadZip: Upload Zip
-widget-editor.widget-form.allowed-context-menu.hideAdd: Hide Add
-widget-editor.widget-form.allowed-context-menu.addUpload: Upload Files
+widget-editor.widget-form.allowed-context-menu.hideAdd: Hide  New Asset(s) Menu
+widget-editor.widget-form.allowed-context-menu.addUploadZip:  New Asset(s) > Upload Zip
+widget-editor.widget-form.allowed-context-menu.addUpload: New Asset(s) > Upload Files
 widget-editor.widget-form.allowed-context-menu.download: Download
-widget-editor.widget-form.allowed-context-menu.pasteCut: Cut
+widget-editor.widget-form.allowed-context-menu.pasteCut: Paste Cut
 widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
 widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
 widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
