@@ -9,7 +9,7 @@
  */
 
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import { type TabNode } from 'flexlayout-react'
+import { TabNode } from 'flexlayout-react'
 import { container } from '@Pimcore/app/depency-injection'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -67,7 +67,7 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
       label: t('close-all'),
       onClick: () => {
         if (contextMenuState !== null) {
-          model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
+          contextMenuState?.tabNode?.getParent()?.getChildren().forEach((tabNode: TabNode) => {
             closeWidget(tabNode.getId())
           })
           closeContextMenu()
