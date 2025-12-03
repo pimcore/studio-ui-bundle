@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useStyle } from './unsafe-pdf-view.styles'
 import { useTranslation } from 'react-i18next'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -17,6 +17,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
 import { Image } from 'antd'
 import { Spin } from '@sdk/components'
+import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 interface UnsafePdfViewProps {
   assetId: number
@@ -28,7 +29,9 @@ const UnsafePdfView = (props: UnsafePdfViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { assetId, fullPath } = props
 
-  const thumbnailUrl = `${getPrefix()}/assets/${assetId}/document/stream/thumbnail/document-thumbnail`
+  const thumbnailUrl = useMemo(() => {
+    return addCacheBusterToUrl(`${getPrefix()}/assets/${assetId}/document/stream/thumbnail/document-thumbnail`)
+  }, [assetId])
 
   const handleOpenInNewWindow = (): void => {
     window.open(fullPath, '_blank')
