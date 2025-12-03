@@ -14,6 +14,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '@sdk/modules/app'
 import React from 'react'
 import { AboutDialogContainer } from './components/about-dialog/about-dialog-container'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -24,6 +25,7 @@ moduleSystem.registerModule({
       label: 'navigation.about',
       className: 'item-style-modifier',
       order: 9999,
+      perspectivePermission: NavPermission.About,
       button: () => React.createElement(AboutDialogContainer, {})
     })
   }
