@@ -28,7 +28,13 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions)
+      const keys = Object.keys(cleanPermissions).filter((key) => key !== 'searchAndMove')
+      const priorityKeys = ['addFolder', 'add', 'rename', 'copy', 'cut', 'paste', 'publish', 'unpublish', 'delete', 'refresh', 'changeChildrenSortBy', 'lock', 'lockAndPropagate', 'unlock', 'unlockAndPropagate']
+
+      const sortedKeys = keys.filter((key) => !priorityKeys.includes(key)).sort()
+      const presentPriorityKeys = priorityKeys.filter((key) => keys.includes(key))
+
+      return [...presentPriorityKeys, ...sortedKeys]
     }
 
     return []
@@ -40,7 +46,13 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions)
+      const keys = Object.keys(cleanPermissions).filter((key) => key !== 'searchAndMove')
+      const priorityKeys = ['hideAdd', 'addUpload', 'addUploadZip', 'addFolder', 'rename', 'copy', 'cut', 'paste', 'pasteCut', 'delete', 'uploadNewVersion', 'lock', 'lockAndPropagate', 'unlock', 'unlockAndPropagate']
+
+      const sortedKeys = keys.filter((key) => !priorityKeys.includes(key)).sort()
+      const presentPriorityKeys = priorityKeys.filter((key) => keys.includes(key))
+
+      return [...presentPriorityKeys, ...sortedKeys]
     }
 
     return []
@@ -52,7 +64,13 @@ export const useWidgetTypeForm = (): UseWidgetTypeFormReturn => {
     // Transform the data by omitting additionalAttributes
     if (!isEmpty(rawPermissions)) {
       const { additionalAttributes, ...cleanPermissions } = rawPermissions
-      return Object.keys(cleanPermissions)
+      const keys = Object.keys(cleanPermissions).filter((key) => !['addHeadlessDocument', 'addNewsletter', 'searchAndMove', 'addPrintPage'].includes(key))
+      const priorityKeys = ['addFolder', 'add', 'addSnippet', 'addLink', 'addEmail', 'addHardlink', 'rename', 'copy', 'paste', 'cut', 'pasteCut', 'publish', 'unpublish', 'delete', 'open', 'refresh', 'lock', 'lockAndPropagate', 'unlock', 'unlockAndPropagate']
+
+      const sortedKeys = keys.filter((key) => !priorityKeys.includes(key)).sort()
+      const presentPriorityKeys = priorityKeys.filter((key) => keys.includes(key))
+
+      return [...presentPriorityKeys, ...sortedKeys]
     }
 
     return []
