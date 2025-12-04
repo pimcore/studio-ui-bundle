@@ -176,8 +176,13 @@ export const studioDefaultLightThemeConfig = {
           colorSuccessText: '#52c41a'
         },
         Warning: {
+          colorWarning: '#faad14',
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
+        },
+        Error: {
+          colorError: '#ff4d4f',
+          colorErrorBg: '#fff2f0'
         },
         Primary: {
           colorPrimaryText: '#22075e'
