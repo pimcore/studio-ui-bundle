@@ -23,6 +23,7 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
+import alertOutline from '@Pimcore/assets/icons/alert-outline.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import alternativeElementTree from '@Pimcore/assets/icons/alternative-element-tree.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
@@ -44,6 +45,7 @@ import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
 import calendar from '@Pimcore/assets/icons/calendar.inline.svg?react'
+import cancel from '@Pimcore/assets/icons/cancel.inline.svg?react'
 import car from '@Pimcore/assets/icons/car.inline.svg?react'
 import catalog from '@Pimcore/assets/icons/catalog.inline.svg?react'
 import category from '@Pimcore/assets/icons/category.inline.svg?react'
@@ -306,6 +308,10 @@ moduleSystem.registerModule({
       component: addUser
     })
     iconLibrary.register({
+      name: 'alert-outline',
+      component: alertOutline
+    })
+    iconLibrary.register({
       name: 'alert',
       component: alert
     })
@@ -388,6 +394,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'calendar',
       component: calendar
+    })
+    iconLibrary.register({
+      name: 'cancel',
+      component: cancel
     })
     iconLibrary.register({
       name: 'car',
