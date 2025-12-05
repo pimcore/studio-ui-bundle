@@ -38,6 +38,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           collapsible
           contentPadding={ props.contentPadding }
           extra={ props.extra }
+          style={ props.style }
           theme={ theme }
           title={ props.title }
         >{props.children}</AccordionView>
@@ -50,6 +51,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         contentPadding={ props.contentPadding }
         extra={ props.extra }
         extraPosition={ props.extraPosition }
+        style={ props.style }
         theme={ theme }
         title={ props.title }
       >{props.children}</CardView>

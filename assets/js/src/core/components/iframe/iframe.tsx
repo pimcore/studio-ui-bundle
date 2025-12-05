@@ -24,7 +24,7 @@ export interface IframeRef {
   getElementRef: () => React.RefObject<HTMLIFrameElement>
 }
 
-interface IframeProps {
+interface IframeProps extends React.HTMLAttributes<HTMLIFrameElement> {
   src: string
   title?: string
   loadingTip?: string
@@ -38,7 +38,7 @@ interface IframeProps {
 }
 
 export const Iframe = forwardRef<IframeRef, IframeProps>(
-  ({ src, title, loadingTip, reloadingTip, onLoad, onReloadStart, onReloadEnd, onReady, useExternalReadyState = false, preserveScrollOnReload }, ref): React.JSX.Element => {
+  ({ src, title, loadingTip, reloadingTip, onLoad, onReloadStart, onReloadEnd, onReady, useExternalReadyState = false, preserveScrollOnReload, ...props }, ref): React.JSX.Element => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [isReady, setIsReady] = useState(false)
     const [isReloading, setIsReloading] = useState(false)
@@ -190,6 +190,7 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
           ref={ handleIframeRef }
           src={ src }
           title={ title }
+          { ...props }
         />
       </Flex>
     )
