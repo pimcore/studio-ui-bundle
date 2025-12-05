@@ -197,6 +197,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectLayout/Text': 'DynamicTypes/ObjectLayout/Text',
   'DynamicTypes/ObjectLayout/Fieldset': 'DynamicTypes/ObjectLayout/Fieldset',
   'DynamicTypes/ObjectLayout/FieldContainer': 'DynamicTypes/ObjectLayout/FieldContainer',
+  'DynamicTypes/ObjectLayout/Iframe': 'DynamicTypes/ObjectLayout/Iframe',
 
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',

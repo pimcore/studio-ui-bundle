@@ -40,6 +40,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           extra={ props.extra }
           theme={ theme }
           title={ props.title }
+          style={ props.style }
         >{props.children}</AccordionView>
       )
     }
@@ -52,6 +53,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         extraPosition={ props.extraPosition }
         theme={ theme }
         title={ props.title }
+        style={ props.style }
       >{props.children}</CardView>
     )
   }, [props, isPaddedLayout])

@@ -22,6 +22,7 @@ export interface CardViewProps {
   contentPadding?: BoxProps['padding']
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
+  style?: React.CSSProperties
 }
 
 export const CardView = (props: CardViewProps): React.JSX.Element => {
@@ -33,6 +34,7 @@ export const CardView = (props: CardViewProps): React.JSX.Element => {
       extraPosition={ props.extraPosition }
       theme={ props.theme }
       title={ isEmpty(props.title) ? undefined : props.title }
+      style={ props.style }
     >
       {props.children}
     </Card>

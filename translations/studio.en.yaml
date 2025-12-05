@@ -1315,6 +1315,7 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+invalid-iframe: The entered iframe URL is invalid
 document.open-in-new-window: Open in new window
 document.open-preview-in-new-window: Open Preview in new window
 document.translation.title: Translation

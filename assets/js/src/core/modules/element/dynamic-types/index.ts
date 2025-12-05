@@ -221,6 +221,7 @@ import { type DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/eleme
 import { type DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 import { type DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { type DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
+import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 
 moduleSystem.registerModule({
   onInit () {
@@ -327,6 +328,7 @@ moduleSystem.registerModule({
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutText>(serviceIds['DynamicTypes/ObjectLayout/Text']))
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutFieldset>(serviceIds['DynamicTypes/ObjectLayout/Fieldset']))
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutFieldContainer>(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']))
+    objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutIframe>(serviceIds['DynamicTypes/ObjectLayout/Iframe']))
 
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
