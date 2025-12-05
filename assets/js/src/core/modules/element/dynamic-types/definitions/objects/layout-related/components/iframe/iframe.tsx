@@ -48,7 +48,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
   
   iframeUrl.searchParams.append('context', JSON.stringify(context));
 
-  const refreshIframe = () => {
+  const refreshIframe = (): void => {
     iframeRef.current?.reload()
   }
 
@@ -59,7 +59,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
       contentPadding={'none'}
       // width need to be ignored until sunsetting classic ui
       style={{height: props.height}}
-      extra={<>
+      extra={
         <IconTextButton
           icon={{ value: 'refresh' }}
           onClick={refreshIframe}
@@ -67,7 +67,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
         >
           {t('refresh')}
         </IconTextButton>
-      </>}
+      }
     >
       <BaseIframe ref={iframeRef} src={iframeUrl.toString()} style={{width: props.width, height: props.height}} />
     </BaseView>
