@@ -221,7 +221,7 @@ import { type DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/eleme
 import { type DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 import { type DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { type DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
-import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
+import { type DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 
 moduleSystem.registerModule({
   onInit () {

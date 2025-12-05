@@ -190,7 +190,7 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
           ref={ handleIframeRef }
           src={ src }
           title={ title }
-          {...props}
+          { ...props }
         />
       </Flex>
     )

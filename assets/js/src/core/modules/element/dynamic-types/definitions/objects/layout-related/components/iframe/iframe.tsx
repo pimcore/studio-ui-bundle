@@ -25,9 +25,9 @@ export interface IframeProps extends AbstractObjectLayoutDefinition {
 
 export const Iframe = (props: IframeProps): React.JSX.Element => {
   const iframeRef = useRef<IframeRef>(null)
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { currentLayout } = useLayoutSelection()
-  const { id } = useElementContext();
+  const { id } = useElementContext()
   let iframeUrl: URL | undefined
 
   try {
@@ -37,39 +37,49 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
   }
 
   if (iframeUrl === undefined) {
-    return <Alert message={t('invalid-iframe')} type='error' />
+    return (
+      <Alert
+        message={ t('invalid-iframe') }
+        type='error'
+      />
+    )
   }
 
   const context = {
     layoutId: currentLayout,
     name: props.name,
-    objectId: id,
+    objectId: id
   }
-  
-  iframeUrl.searchParams.append('context', JSON.stringify(context));
+
+  iframeUrl.searchParams.append('context', JSON.stringify(context))
 
   const refreshIframe = (): void => {
     iframeRef.current?.reload()
   }
 
+  const extraContent = (
+    <IconTextButton
+      icon={ { value: 'refresh' } }
+      onClick={ refreshIframe }
+      type='action'
+    >
+      {t('refresh')}
+    </IconTextButton>
+  )
+
   return (
     <BaseView
+      border
+      contentPadding={ 'none' }
+      extra={ extraContent }
+      style={ { height: props.height } }
       title={ props.title }
-      border={true}
-      contentPadding={'none'}
-      // width need to be ignored until sunsetting classic ui
-      style={{height: props.height}}
-      extra={
-        <IconTextButton
-          icon={{ value: 'refresh' }}
-          onClick={refreshIframe}
-          type='action'
-        >
-          {t('refresh')}
-        </IconTextButton>
-      }
     >
-      <BaseIframe ref={iframeRef} src={iframeUrl.toString()} style={{width: props.width, height: props.height}} />
+      <BaseIframe
+        ref={ iframeRef }
+        src={ iframeUrl.toString() }
+        style={ { width: props.width, height: props.height } }
+      />
     </BaseView>
   )
 }

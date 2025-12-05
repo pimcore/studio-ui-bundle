@@ -11,7 +11,7 @@
 import React from 'react'
 
 import { DynamicTypeObjectLayoutAbstract } from '../dynamic-type-object-layout-abstract'
-import { Iframe, IframeProps } from '../components/iframe/iframe';
+import { Iframe, type IframeProps } from '../components/iframe/iframe'
 
 export class DynamicTypeObjectLayoutIframe extends DynamicTypeObjectLayoutAbstract {
   readonly id = 'iframe'

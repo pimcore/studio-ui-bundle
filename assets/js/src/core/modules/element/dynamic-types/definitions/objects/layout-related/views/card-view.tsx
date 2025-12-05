@@ -32,9 +32,9 @@ export const CardView = (props: CardViewProps): React.JSX.Element => {
       contentPadding={ props.contentPadding }
       extra={ props.extra }
       extraPosition={ props.extraPosition }
+      style={ props.style }
       theme={ props.theme }
       title={ isEmpty(props.title) ? undefined : props.title }
-      style={ props.style }
     >
       {props.children}
     </Card>
