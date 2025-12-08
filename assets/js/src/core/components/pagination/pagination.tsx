@@ -107,10 +107,10 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
       {showSizeChanger === true && (
         <Select
+          disabled={ paginationProps.disabled }
           onChange={ onSelectChange }
           options={ selectOptions }
           value={ `${pageSize} / ${t('pagination.page')}` }
-          disabled={ paginationProps.disabled }
           width={ 112 }
         />
       )}
