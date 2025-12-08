@@ -10,10 +10,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    example: css`
-      color: #fff;
+    pagination: css`
+      .pagination-control {
+        padding: 0;
+        height: 24px;
+      }
+
+      .ant-pagination-next.ant-pagination-disabled,
+      .ant-pagination-prev.ant-pagination-disabled {
+        opacity: 0.5;
+      }
     `
   }
-}, { hashPriority: 'low' })
+})

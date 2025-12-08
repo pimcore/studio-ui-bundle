@@ -27,7 +27,6 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
 
   return (
     <Pagination
-      amountOfVisiblePages={ 3 }
       current={ page }
       defaultPageSize={ pageSize }
       hideOnSinglePage
