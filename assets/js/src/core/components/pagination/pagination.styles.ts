@@ -18,6 +18,7 @@ export const useStyles = createStyles(({ css, token }) => {
         height: 24px;
       }
 
+      &.ant-pagination-disabled .pagination-control,
       .ant-pagination-next.ant-pagination-disabled,
       .ant-pagination-prev.ant-pagination-disabled {
         opacity: 0.5;

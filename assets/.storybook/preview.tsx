@@ -53,6 +53,7 @@ const preview: Preview = {
             'General',
             'Layout',
             'Controls',
+            'Navigation',
             'Data Display',
             'Data Entry',
             [

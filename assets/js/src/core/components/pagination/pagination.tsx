@@ -15,7 +15,8 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import cn from 'classnames'
 
-export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange'> {}
+export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
+}
 
 export const Pagination = (props: PaginationProps): React.JSX.Element => {
   'use memo'
@@ -109,6 +110,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
           onChange={ onSelectChange }
           options={ selectOptions }
           value={ `${pageSize} / ${t('pagination.page')}` }
+          disabled={ paginationProps.disabled }
           width={ 112 }
         />
       )}
