@@ -47,8 +47,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  console.log({ handleSearchTermInSidebar })
-
   const {
     fieldFilters,
     onlyDirectChildren,

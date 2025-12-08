@@ -10,26 +10,19 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    'tree-list__pager': css` 
-      padding: ${token.paddingXXS}px 0;
-
-      &:empty {
+    pagination: css`
+      .pagination-control {
         padding: 0;
-      }
-    `,
-
-    'tree-list__search': css`
-      padding: ${token.paddingXXS}px ${token.paddingSM}px ${token.paddingXS}px 0;
-
-      &:empty {
-        padding: 0;
+        height: 24px;
       }
 
-      .ant-btn-default {
-        border-color: ${token.colorBorder}
+      &.ant-pagination-disabled .pagination-control,
+      .ant-pagination-next.ant-pagination-disabled,
+      .ant-pagination-prev.ant-pagination-disabled {
+        opacity: 0.5;
       }
     `
   }
-}, { hashPriority: 'low' })
+})

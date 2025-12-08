@@ -9,271 +9,126 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
-import { useStyle } from '@Pimcore/components/pagination/pagination.styles'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from '@Pimcore/components/button/button'
-import i18n from '@Pimcore/app/i18n'
-import { isSet } from '@Pimcore/utils/helpers'
-import { SizeChanger } from '@Pimcore/components/pagination/size-changer/size-changer'
-import { InlineTextfield } from '@Pimcore/components/pagination/inline-textfield/inline-textfield'
+import { Pagination as BasePagination, type PaginationProps as BasePaginationProps, ConfigProvider } from 'antd'
+import { Flex, IconButton, Select, type SelectProps } from '@sdk/components'
+import { useTranslation } from 'react-i18next'
+import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
+import cn from 'classnames'
 
-export interface PaginationProps {
-  total: number
-  current?: number
-  defaultPageSize?: number
-  pageSizeOptions?: number[]
-  showSizeChanger?: boolean
-  amountOfVisiblePages?: number
-  hideOnSinglePage?: boolean
-  showTotal?: (total: number) => string
-  onChange?: (page: number, pageSize: number) => void
+export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
 }
 
-export const Pagination = ({
-  total,
-  current = 1,
-  defaultPageSize = 20,
-  pageSizeOptions = [10, 20, 50, 100],
-  showSizeChanger = false,
-  amountOfVisiblePages = 5,
-  hideOnSinglePage = false,
-  showTotal,
-  onChange
-}: PaginationProps): React.JSX.Element => {
-  const { styles } = useStyle()
+export const Pagination = (props: PaginationProps): React.JSX.Element => {
+  'use memo'
 
-  const hashId = useCssComponentHash()
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
-  const [currentPage, setCurrentPage] = useState<number>(current)
-  const [pageSize, setPageSize] = useState<number>(defaultPageSize)
+  const defaultProps: Partial<PaginationProps> = {
+    current: 1,
+    defaultPageSize: 20,
+    pageSizeOptions: ['10', '20', '50', '100'],
+    showSizeChanger: false,
+    simple: true,
+    size: 'small'
+  }
+
+  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
+  const classNames = cn(styles.pagination, className)
+
+  const [current, setCurrent] = useState(baseCurrent ?? 1)
+  const [pageSize, setPageSize] = useState(defaultPageSize ?? 20)
 
   useEffect(() => {
-    if (isSet(onChange)) {
-      onChange!(currentPage, pageSize)
+    setCurrent(baseCurrent ?? 1)
+  }, [baseCurrent])
+
+  useEffect(() => {
+    onChange?.(current, pageSize)
+  }, [current, pageSize])
+
+  const onBasePaginationChange: PaginationProps['onChange'] = (page: number, size: number) => {
+    setCurrent(page)
+    setPageSize(size)
+  }
+
+  const selectOptions: SelectProps['options'] = paginationProps.pageSizeOptions?.map(option => ({
+    label: `${option} / ${t('pagination.page')}`,
+    value: option
+  })) ?? []
+
+  const onSelectChange: SelectProps['onChange'] = (value) => {
+    setCurrent(1)
+    setPageSize(Number(value))
+  }
+
+  const itemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {
+    if (type === 'next') {
+      return (
+        <IconButton
+          className='pagination-control pagination-control--next'
+          icon={ { value: 'chevron-right' } }
+        />
+      )
     }
-  }, [currentPage, pageSize])
 
-  useEffect(() => {
-    setCurrentPage(current)
-  }, [current])
+    if (type === 'prev') {
+      return (
+        <IconButton
+          className='pagination-control pagination-control--prev'
+          icon={ { value: 'chevron-left' } }
+        />
+      )
+    }
 
-  const pages = Math.ceil(total / pageSize)
+    return originalElement
+  }
 
-  if (total === 0 || (hideOnSinglePage && pages === 1)) {
+  const shouldHidePagination = hideOnSinglePage === true && paginationProps.total !== undefined && paginationProps.total <= pageSize
+
+  if (shouldHidePagination) {
     return <></>
   }
 
-  const onClickPageNumber = (pageNumber: number): void => {
-    setCurrentPage(pageNumber)
-  }
-
-  const renderPageNumberItems: React.JSX.Element[] = []
-
-  const getPageNumberItems = (pageNumberRange: number[]): React.JSX.Element[] => {
-    return pageNumberRange.map((pageNumber) => {
-      return PageNumberNode(
-        pageNumber,
-        getClassNameForPageNumber(pageNumber, currentPage),
-        (e) => {
-          onClickPageNumber(pageNumber)
-        }
-      )
-    })
-  }
-
-  if (amountOfVisiblePages >= pages) {
-    const pageNumberRange = [...Array(pages).keys()].map(number => number + 1)
-    renderPageNumberItems.push(...getPageNumberItems(pageNumberRange))
-  } else {
-    const pageNumberRangeLeft = getLeftPageNumberRange(amountOfVisiblePages)
-    const pageNumberRangeRight = getRightPageNumberRange(amountOfVisiblePages, pages)
-
-    renderPageNumberItems.push(...getPageNumberItems(pageNumberRangeLeft))
-
-    if (pages > 3) {
-      const onKeyDownJumpToPage = (e): void => {
-        if (e.key === 'Enter') {
-          const value = Number(e.target.value)
-          if (value > 0 && value <= pages) {
-            setCurrentPage(value)
-          } else if (value < 1) {
-            setCurrentPage(1)
-          } else if (value > pages) {
-            setCurrentPage(pages)
-          }
-          e.target.value = ''
-          e.target.blur()
-        }
-      }
-
-      renderPageNumberItems.push(
-        <li
-          className='ant-pagination-item'
-          key={ 'page-jumper' }
-        >
-          <InlineTextfield
-            onKeyDown={ onKeyDownJumpToPage }
-            showDotsValues={ [...pageNumberRangeLeft.map(String), ...pageNumberRangeRight.map(String)] }
-            value={ currentPage?.toString() }
-          />
-        </li>
-      )
-    }
-
-    renderPageNumberItems.push(...getPageNumberItems(pageNumberRangeRight))
-  }
-
-  const onClickPrev = (): void => {
-    setCurrentPage(currentPage - 1)
-  }
-
-  const onClickNext = (): void => {
-    setCurrentPage(currentPage + 1)
-  }
-
-  const changePageSize = (pageSize: number): void => {
-    setPageSize(pageSize)
-    setCurrentPage(1)
-  }
-
-  return (
-    <div className={ styles.pagination }>
-      <ul className={ 'ant-pagination ' + hashId }>
-        {isSet(showTotal) && (
-          <TotalField
-            showTotal={ showTotal }
-            total={ total }
-          />
-        )}
-
-        <PreviousButton
-          currentPage={ currentPage }
-          onClickPrev={ onClickPrev }
-        />
-
-        {renderPageNumberItems}
-
-        <NextButton
-          currentPage={ currentPage }
-          onClickNext={ onClickNext }
-          pages={ pages }
-        />
-
-        {showSizeChanger &&
-          (
-            <li
-              className='ant-pagination-options'
-              key={ 'page-jumper' }
-            >
-              <SizeChanger
-                defaultSize={ defaultPageSize }
-                handleChange={ changePageSize }
-                label={ i18n.t('pagination.page') }
-                sizeOptions={ pageSizeOptions }
-                width={ 120 }
-              />
-            </li>
-          )
-        }
-      </ul>
-    </div>
-  )
-}
-
-function PreviousButton (prop): React.JSX.Element {
-  const { currentPage, onClickPrev } = prop
-  return (
-    <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
-      <Button
-        className={ 'ant-pagination-item-link' }
-        disabled={ currentPage === 1 }
-        icon={ <Icon
-          options={ { width: 18, height: 18 } }
-          value='chevron-left'
-               /> }
-        onClick={ onClickPrev }
-        size={ 'small' }
-        type={ 'text' }
-      />
-    </li>
-  )
-}
-
-function NextButton (prop): React.JSX.Element {
-  const { currentPage, pages, onClickNext } = prop
-  return (
-    <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
-      <Button
-        className={ 'ant-pagination-item-link' }
-        disabled={ currentPage === pages }
-        icon={ <Icon
-          options={ { width: 18, height: 18 } }
-          value='chevron-right'
-               /> }
-        onClick={ onClickNext }
-        size={ 'small' }
-        type={ 'text' }
-      />
-    </li>
-  )
-}
-
-function TotalField (prop): React.JSX.Element {
-  const { total, showTotal } = prop
-  return (
-    <li className="ant-pagination-total-text">
-      {showTotal(total)}
-    </li>
-  )
-}
-
-function getLeftPageNumberRange (
-  showPageJumperAtOnce: number
-): number[] {
-  if (showPageJumperAtOnce <= 0) {
-    return []
-  }
-
-  const lastJumper = Math.floor(showPageJumperAtOnce / 2)
-  return [...Array(lastJumper).keys()].map(number => number + 1)
-}
-
-function getRightPageNumberRange (
-  showPageJumperAtOnce: number,
-  pages: number
-): number[] {
-  if (showPageJumperAtOnce <= 0) {
-    return []
-  }
-
-  let middleJumper = Math.floor(showPageJumperAtOnce / 2)
-  if (showPageJumperAtOnce % 2 === 0) {
-    middleJumper--
-  }
-  const firstJumper = pages - middleJumper + 1
-  return [...Array(middleJumper).keys()].map(number => number + firstJumper)
-}
-
-function PageNumberNode (
-  pageNumber: number,
-  className: string,
-  onClick: (e) => void
-): React.JSX.Element {
-  return (
-    <li
-      className={ `ant-pagination-item ant-pagination-item-${pageNumber.toString()} ${className}` }
-      key={ pageNumber }
-      title={ pageNumber.toString() }
+  const Pagination = (
+    <Flex
+      gap={ 'extra-small' }
+      style={ { marginLeft: 4 } }
     >
-      <Button
-        className={ 'page-number-node' }
-        onClick={ onClick }
-      >{pageNumber}</Button>
-    </li>
-  )
-}
+      <BasePagination
+        { ...paginationProps }
+        className={ classNames }
+        current={ current }
+        itemRender={ paginationProps.itemRender ?? itemRenderer }
+        onChange={ onBasePaginationChange }
+        pageSize={ pageSize }
+        showSizeChanger={ false }
+      />
 
-function getClassNameForPageNumber (pageNumber: number, current: number): string {
-  return pageNumber === current ? 'ant-pagination-item-active' : ''
+      {showSizeChanger === true && (
+        <Select
+          disabled={ paginationProps.disabled }
+          onChange={ onSelectChange }
+          options={ selectOptions }
+          value={ `${pageSize} / ${t('pagination.page')}` }
+          width={ 112 }
+        />
+      )}
+    </Flex>
+  )
+
+  if (paginationProps.simple === true && paginationProps.size === 'small') {
+    return (
+      <Flex
+        align='center'
+        style={ { height: 32 } }
+      >
+        <ConfigProvider componentSize='small'>
+          {Pagination}
+        </ConfigProvider>
+      </Flex>
+    )
+  }
+
+  return Pagination
 }
