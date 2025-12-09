@@ -1,6 +1,16 @@
-import { store } from "@sdk/app";
-import { UserInformation } from "../user/user-api-slice.gen";
-import { selectCurrentUser } from "../user/user-slice";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { store } from '@sdk/app'
+import { type UserInformation } from '../user/user-api-slice.gen'
+import { selectCurrentUser } from '../user/user-slice'
 
 export const getCurrentUser = (): UserInformation => {
   return selectCurrentUser(store.getState())
