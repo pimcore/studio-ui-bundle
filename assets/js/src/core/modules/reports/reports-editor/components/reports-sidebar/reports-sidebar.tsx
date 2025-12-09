@@ -28,6 +28,7 @@ import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 
 interface IReportsSidebarProps {
   isLoading: boolean
@@ -86,6 +87,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
         await cloneReport({ name: contextItem.id, bundleCustomReportClone: { newName: value } })
 
         const { data: updatedData } = await refetch()
+        void loadReportsMenuItems()
 
         const clonedReport = updatedData?.items?.find((item) => item.id === value)
 
@@ -103,6 +105,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
 
         void deleteReport({ name: contextItem.id }).then(() => {
           handleCloseReport(contextItem.id)
+          void loadReportsMenuItems()
         })
       }
     })

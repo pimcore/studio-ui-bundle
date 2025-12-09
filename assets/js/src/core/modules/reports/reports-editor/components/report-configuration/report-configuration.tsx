@@ -35,6 +35,7 @@ import {
   normalizeDataSourceConfig
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 import { Form } from '@Pimcore/components/form/form'
+import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -101,6 +102,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
     }).then(() => {
       markFormSaved()
       setIsUpdatingReport(false)
+      void loadReportsMenuItems()
     })
   }
 

@@ -24,13 +24,42 @@ import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/report
 export const loadReportsMenuItems = async (): Promise<void> => {
   if (isAllowed(UserPermission.Reports)) {
     const REPORTS_SECTION_NAME = 'Reporting'
+    const DYNAMIC_REPORT_PREFIX = 'dynamic_report_'
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     try {
-      const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 })).unwrap()
+      const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 }, { forceRefetch: true })).unwrap()
 
       if (!isUndefined(reportsData?.items)) {
+        const validPaths = new Set<string>()
+
+        reportsData.items.forEach((report) => {
+          if (report.menuShortcut && report.hasDataSourceConfig) {
+            const reportId = report.name
+            const path = !isEmptyValue(report.group)
+              ? `${REPORTS_SECTION_NAME}/${report.group}/${reportId}`
+              : `${REPORTS_SECTION_NAME}/${reportId}`
+
+            validPaths.add(path)
+
+            if (!isEmptyValue(report.group)) {
+              validPaths.add(`${REPORTS_SECTION_NAME}/${report.group}`)
+            }
+          }
+        })
+
+        const currentItems = mainNavRegistryService.getMainNavItems()
+        const itemsToRemove = currentItems.filter(item =>
+          item.path.startsWith(`${REPORTS_SECTION_NAME}/`) &&
+          !validPaths.has(item.path) &&
+          item.id?.startsWith(DYNAMIC_REPORT_PREFIX)
+        )
+
+        itemsToRemove.forEach(item => {
+          mainNavRegistryService.unregisterMainNavItem(item.path)
+        })
+
         reportsData.items.forEach((report, index) => {
           if (report.menuShortcut && report.hasDataSourceConfig) {
             const reportId = report.name
@@ -42,8 +71,20 @@ export const loadReportsMenuItems = async (): Promise<void> => {
             const reportIconClass = report.iconClass
             const reportGroupIconClass = report.groupIconClass
 
+            if (!isEmptyValue(report.group)) {
+              mainNavRegistryService.registerMainNavItem({
+                id: `${DYNAMIC_REPORT_PREFIX}group_${report.group}`,
+                path: `${REPORTS_SECTION_NAME}/${report.group}`,
+                label: report.group,
+                order: 300 + index,
+                permission: UserPermission.Reports,
+                perspectivePermission: NavPermission.Reports,
+                ...(!isEmptyValue(reportGroupIconClass) && { icon: reportGroupIconClass })
+              })
+            }
+
             mainNavRegistryService.registerMainNavItem({
-              id: `${reportId}-${index}`,
+              id: `${DYNAMIC_REPORT_PREFIX}${reportId}-${index}`,
               path,
               label: reportName,
               group: report.group,
