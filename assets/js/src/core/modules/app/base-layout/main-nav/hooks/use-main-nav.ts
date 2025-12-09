@@ -9,7 +9,7 @@
  */
 
 import { container } from '@Pimcore/app/depency-injection'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-registry'
@@ -27,6 +27,13 @@ export const useMainNav = (): IUseMainNavReturn => {
   const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
   const user = useUser()
   const activePerspective = useSelector(selectActivePerspective)
+  const [registryUpdate, setRegistryUpdate] = useState(0)
+
+  useEffect(() => {
+    return mainNavRegistryService.subscribe(() => {
+      setRegistryUpdate((prev) => prev + 1)
+    })
+  }, [mainNavRegistryService])
 
   const filterItems = (items: IMainNavItem[]): IMainNavItem[] => {
     return items.filter(item => {
@@ -68,7 +75,7 @@ export const useMainNav = (): IUseMainNavReturn => {
 
     const tree = mainNavRegistryService.getMainNavTree()
     return filterItems(tree)
-  }, [user, activePerspective])
+  }, [user, activePerspective, registryUpdate])
 
   return {
     navItems

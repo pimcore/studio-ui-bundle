@@ -36,6 +36,7 @@ export interface IMainNavItem {
 @injectable()
 export class MainNavRegistry {
   private readonly items: IMainNavItem[] = []
+  private readonly listeners: Array<() => void> = []
 
   registerMainNavItem (item: IMainNavItem): void {
     if (!isNil(item.widgetConfig)) {
@@ -52,6 +53,30 @@ export class MainNavRegistry {
     } else {
       this.items.push(item)
     }
+
+    this.notifyListeners()
+  }
+
+  unregisterMainNavItem (path: string): void {
+    const index = this.items.findIndex((item) => item.path === path)
+    if (index !== -1) {
+      this.items.splice(index, 1)
+      this.notifyListeners()
+    }
+  }
+
+  subscribe (listener: () => void): () => void {
+    this.listeners.push(listener)
+    return () => {
+      const index = this.listeners.indexOf(listener)
+      if (index !== -1) {
+        this.listeners.splice(index, 1)
+      }
+    }
+  }
+
+  private notifyListeners (): void {
+    this.listeners.forEach(listener => { listener() })
   }
 
   getMainNavItem (path: string): IMainNavItem | undefined {
