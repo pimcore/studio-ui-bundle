@@ -24,6 +24,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { type ExpandedHotspotMarkerData } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { isEqual } from 'lodash'
+import { MarkerIcon } from './marker-icon'
 
 export interface IStyleOptions {
   hotspot: {
@@ -31,13 +32,18 @@ export interface IStyleOptions {
     height: number
     resizeBorderSize: number
     minSize: number
-    icon: any
+    icon: React.ReactNode
+    marginTop?: number
+    marginLeft?: number
   }
   marker: {
     width: number
     height: number
-    icon: any
+    icon: React.ReactNode
+    marginTop?: number
+    marginLeft?: number
   }
+  [key: string]: any
 }
 
 export const defaultStyleOptions = {
@@ -49,11 +55,11 @@ export const defaultStyleOptions = {
     icon: null
   },
   marker: {
-    width: 24,
-    height: 24,
-    marginLeft: -12,
-    marginTop: -19,
-    icon: 'location-marker'
+    width: 17,
+    height: 21,
+    marginLeft: -8.5,
+    marginTop: -18.5,
+    icon: <MarkerIcon />
   }
 }
 
@@ -229,7 +235,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             trigger={ disableContextMenu === true || disabled === true ? [] : ['contextMenu'] }
           >
             <button
-              className={ `hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''} ${disabled === true ? 'hotspot-image__item--disabled' : ''}` }
+              className={ `${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : 'hotspot-image__item'} ${disabled === true ? 'hotspot-image__item--disabled' : ''}` }
               key={ hotspot.id }
               onMouseDown={ evt => { handleMouseDown(evt, hotspot) } }
               style={ {
@@ -245,9 +251,24 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             >
               {styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
                 ? (
-                  <Icon value={ styleOptions[hotspot.type].icon } />
+                  styleOptions[hotspot.type].icon
                   )
                 : null}
+              {hotspot.type === 'marker' && (
+                <div
+                  style={ {
+                    position: 'absolute',
+                    width: 4,
+                    height: 4,
+                    backgroundColor: 'red',
+                    borderRadius: '50%',
+                    left: `${Math.abs(styleOptions[hotspot.type].marginLeft ?? 0)}px`,
+                    top: `${Math.abs(styleOptions[hotspot.type].marginTop ?? 0)}px`,
+                    transform: 'translate(-50%, -50%)',
+                    pointerEvents: 'none'
+                  } }
+                />
+              )}
             </button>
           </Popover>
         ))
