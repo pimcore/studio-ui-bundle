@@ -43,7 +43,7 @@ interface useWidgetManagerReturn {
   switchToWidget: (id: string) => void
   closeWidget: (id: string) => void
   isMainWidgetOpen: (id: string) => boolean
-  isOuterWidgetOpen: (id: string) => boolean
+  hasOuterWidget: (id: string) => boolean
   getOpenedMainWidget: () => TabNode | undefined
 }
 
@@ -155,7 +155,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     return getInnerModel().getNodeById(id) !== undefined
   }
 
-  function isOuterWidgetOpen (id: string): boolean {
+  function hasOuterWidget (id: string): boolean {
     return getOuterModel().getNodeById(id) !== undefined
   }
 
@@ -172,7 +172,7 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     switchToWidget,
     closeWidget,
     isMainWidgetOpen,
-    isOuterWidgetOpen,
+    hasOuterWidget,
     getOpenedMainWidget
   }
 }
