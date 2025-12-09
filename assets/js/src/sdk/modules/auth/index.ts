@@ -15,3 +15,4 @@ if (module.hot !== undefined) {
 export * from '@Pimcore/modules/auth/enums/user-permission'
 export * from '@Pimcore/modules/auth/permission-helper'
 export * from '@Pimcore/modules/auth/hooks/use-user'
+export * from '@Pimcore/modules/auth/util/user-helper'
