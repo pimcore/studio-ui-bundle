@@ -8,11 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-if (module.hot !== undefined) {
-  module.hot.accept()
-}
+import { store } from '@sdk/app'
+import { type UserInformation } from '../user/user-api-slice.gen'
+import { selectCurrentUser } from '../user/user-slice'
 
-export * from '@Pimcore/modules/auth/enums/user-permission'
-export * from '@Pimcore/modules/auth/permission-helper'
-export * from '@Pimcore/modules/auth/hooks/use-user'
-export * from '@Pimcore/modules/auth/util/user-helper'
+export const getCurrentUser = (): UserInformation => {
+  return selectCurrentUser(store.getState())
+}
