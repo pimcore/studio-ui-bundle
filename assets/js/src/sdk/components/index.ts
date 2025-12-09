@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/components/accordion/accordion'
 export * from '@Pimcore/components/button/button'
+export * from '@Pimcore/components/button-group/button-group'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'
 export * from '@Pimcore/components/alert/alert'
 export * from '@Pimcore/components/asset-target/asset-target'
