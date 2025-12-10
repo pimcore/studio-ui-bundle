@@ -31,7 +31,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
   let iframeUrl: URL | undefined
 
   try {
-    iframeUrl = new URL(props.iframeUrl)
+    iframeUrl = new URL(props.iframeUrl, window.location.origin)
   } catch {
     iframeUrl = undefined
   }
@@ -78,7 +78,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
       <BaseIframe
         ref={ iframeRef }
         src={ iframeUrl.toString() }
-        style={ { width: props.width, height: props.height } }
+        style={ { height: props.height } }
       />
     </BaseView>
   )
