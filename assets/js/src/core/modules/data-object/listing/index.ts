@@ -114,7 +114,8 @@ moduleSystem.registerModule({
 
     listingBuilder.addDecorator({
       name: 'dynamicType',
-      decorator: DynamicTypeDecorator
+      decorator: DynamicTypeDecorator,
+      priority: -200
     })
   }
 })
