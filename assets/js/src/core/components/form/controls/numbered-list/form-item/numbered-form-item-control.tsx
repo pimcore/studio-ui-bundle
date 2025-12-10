@@ -53,7 +53,7 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }, [])
+  }, [name])
 
   if (!isValidElement(Child)) {
     throw new Error('NumberedFormItemControl only accepts a single child')
