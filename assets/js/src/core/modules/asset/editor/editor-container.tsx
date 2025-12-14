@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -40,7 +41,10 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, contextIdentifiers: getBaseAssetContextIdentifiers(asset, activeTab === TAB_LISTING.key) })
+      setContext({
+        id,
+        ...(!isNil(asset) && { contextIdentifiers: getBaseAssetContextIdentifiers(asset, activeTab === TAB_LISTING.key) })
+      })
     }
 
     return () => {
@@ -48,7 +52,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
         removeContext()
       }
     }
-  }, [isWidgetActive, activeTab])
+  }, [isWidgetActive, activeTab, asset])
 
   if (isLoading) {
     return <Content loading />

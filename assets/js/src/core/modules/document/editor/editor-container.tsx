@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalDocumentContext } from '@Pimcore/modules/document/hooks/use-global-document-context'
@@ -39,7 +40,12 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, contextIdentifiers: getBaseDocumentContextIdentifiers(document) })
+      setContext({
+        id,
+        ...(!isNil(document) && {
+          contextIdentifiers: getBaseDocumentContextIdentifiers(document)
+        })
+      })
     }
 
     return () => {
@@ -47,7 +53,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
         removeContext()
       }
     }
-  }, [isWidgetActive])
+  }, [isWidgetActive, document])
 
   if (isLoading) {
     return <Content loading />
