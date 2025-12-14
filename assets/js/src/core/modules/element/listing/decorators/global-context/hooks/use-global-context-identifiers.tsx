@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useMemo } from 'react'
-import { find, get, isEmpty, isEqual, isNil, isNull, uniq } from 'lodash'
+import { find, get, isEmpty, isEqual, isNil, isNull, isObject, uniq } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -22,6 +22,12 @@ import {
   DOCUMENT_CONTEXT_IDENTIFIER_PREFIX,
   OBJECT_CONTEXT_IDENTIFIER_PREFIX
 } from '@Pimcore/utils/global-context-identifiers'
+
+type ContextIdentifiers = NonNullable<GlobalElementContext['config']['contextIdentifiers']>
+
+const isContextIdentifiers = (value: unknown): value is ContextIdentifiers => {
+  return isObject((value)) && !isNull(value) && 'type' in value && 'subType' in value && 'tags' in value
+}
 
 export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }: { data: any, selectedRows?: RowSelectionState, elementType: ElementType }): void => {
   const { context: globalDataObjectContext, setContext: setGlobalDataObjectContext } = useGlobalDataObjectContext()
@@ -68,7 +74,11 @@ export const useGlobalContextIdentifiers = ({ data, selectedRows, elementType }:
 
     const { context, setContext } = getContextByType()
 
-    const currentContext = context?.config?.contextIdentifiers ?? {}
+    if (isNil(context)) return
+
+    const currentContext = context?.config?.contextIdentifiers
+
+    if (!isContextIdentifiers(currentContext)) return
 
     const allTags = currentContext?.tags ?? []
     const baseTags = currentContext?.tags.filter(item => !item.includes('_selection'))

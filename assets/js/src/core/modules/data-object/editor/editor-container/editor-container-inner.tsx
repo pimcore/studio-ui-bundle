@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { DataObjectProvider } from '../../data-object-provider'
 import { Content } from '@Pimcore/components/content/content'
@@ -45,7 +46,12 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id, contextIdentifiers: getBaseDataObjectContextIdentifiers(dataObject, activeTab === TAB_LISTING.key) })
+      setContext({
+        id,
+        ...(!isNil(dataObject) && {
+          contextIdentifiers: getBaseDataObjectContextIdentifiers(dataObject, activeTab === TAB_LISTING.key)
+        })
+      })
     }
 
     return () => {
@@ -53,7 +59,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
         removeContext()
       }
     }
-  }, [isWidgetActive, activeTab])
+  }, [isWidgetActive, activeTab, dataObject])
 
   if (isLoading) {
     return <Content loading />
