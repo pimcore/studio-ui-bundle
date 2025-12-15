@@ -34,6 +34,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -218,6 +219,16 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const secondaryButtons = getSecondaryButtons()
 
   const primaryButtons = getPrimaryButtons()
+
+  useHandleKeyBindings(async () => {
+    if (dataObject != null && checkElementPermission(dataObject.permissions, 'publish')) {
+      await handleSaveClick(SaveTaskType.Publish, () => {
+        if (!dataObject.published) {
+          publishDraft()
+        }
+      })
+    }
+  }, 'publish')
 
   return (
     <>

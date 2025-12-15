@@ -39,6 +39,7 @@ import {
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
 import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -76,6 +77,12 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
       trackError(new ApiError(schedulesError))
     }
   }, [isError, isSchedulesError, error, schedulesError])
+
+  useHandleKeyBindings(async () => {
+    if (asset != null && checkElementPermission(asset.permissions, 'publish') && asset.type !== 'folder') {
+      onSaveClick()
+    }
+  }, 'publish')
 
   return (
     <>

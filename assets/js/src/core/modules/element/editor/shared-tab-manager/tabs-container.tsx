@@ -64,7 +64,6 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
   })
 
   useHandleKeyBindings(() => { if (element != null && checkElementPermission(element.permissions, 'rename') && !(element as unknown as Element).isLocked) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
-  useHandleKeyBindings(() => { if (element != null && isTreeActionAllowed(TreePermission.Publish) && !(element as unknown as Element).isLocked && (has(element, 'published') && element.published === false)) publishNode(element as unknown as Element) }, 'publish')
   useHandleKeyBindings(() => { if (element != null && !isNull(elementType) && elementType !== 'asset' && checkElementPermission(element.permissions, 'unpublish') && !(element as unknown as Element).isLocked) unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
   useHandleKeyBindings(() => { if (element != null) refreshElement(element.id) }, 'refresh')
   useHandleKeyBindings(() => { if (element != null) locateInTree(element.id) }, 'openInTree')
