@@ -55,10 +55,10 @@ export const defaultStyleOptions = {
     icon: null
   },
   marker: {
-    width: 17,
-    height: 21,
-    marginLeft: -8.5,
-    marginTop: -18.5,
+    width: 30,
+    height: 50,
+    marginLeft: -15,
+    marginTop: -36,
     icon: <MarkerIcon />
   }
 }
@@ -251,24 +251,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             >
               {styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
                 ? (
-                  styleOptions[hotspot.type].icon
+                    styleOptions[hotspot.type].icon
                   )
                 : null}
-              {hotspot.type === 'marker' && (
-                <div
-                  style={ {
-                    position: 'absolute',
-                    width: 4,
-                    height: 4,
-                    backgroundColor: 'red',
-                    borderRadius: '50%',
-                    left: `${Math.abs(styleOptions[hotspot.type].marginLeft ?? 0)}px`,
-                    top: `${Math.abs(styleOptions[hotspot.type].marginTop ?? 0)}px`,
-                    transform: 'translate(-50%, -50%)',
-                    pointerEvents: 'none'
-                  } }
-                />
-              )}
             </button>
           </Popover>
         ))
