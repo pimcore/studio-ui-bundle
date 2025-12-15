@@ -28,8 +28,8 @@ export const useStyle = createStyles(({ token, css }) => {
             .hotspot-image__item {
                 border-radius: ${token.borderRadius}px;
                 color: ${token.colorPrimary};
-                background: rgba(215, 199, 236, 0.40);
-                border: 3px dashed ${token.colorPrimary};
+                background: ${token.colorFillAlter};
+                border: 3px dashed ${token.colorPrimaryBorder};
                 border-radius: ${token.borderRadius}px;
                 user-select: none;
                 cursor: nwse-resize;
@@ -47,11 +47,12 @@ export const useStyle = createStyles(({ token, css }) => {
             
             .hotspot-image__item--marker {
                 cursor: move;
-                border-width: 1px;
+                border-width: 0;
                 padding: 0;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                background: transparent;
             }
 
             .hotspot-image__item--disabled {

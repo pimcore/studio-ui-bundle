@@ -10,7 +10,6 @@
 
 import React, { useState, useRef, useEffect, type MouseEvent } from 'react'
 import { useStyle } from './hotspot-image.styles'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -24,6 +23,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { type ExpandedHotspotMarkerData } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { isEqual } from 'lodash'
+import { MarkerIcon } from './marker-icon'
 
 export interface IStyleOptions {
   hotspot: {
@@ -31,13 +31,18 @@ export interface IStyleOptions {
     height: number
     resizeBorderSize: number
     minSize: number
-    icon: any
+    icon: React.ReactNode
+    marginTop?: number
+    marginLeft?: number
   }
   marker: {
     width: number
     height: number
-    icon: any
+    icon: React.ReactNode
+    marginTop?: number
+    marginLeft?: number
   }
+  [key: string]: any
 }
 
 export const defaultStyleOptions = {
@@ -49,11 +54,11 @@ export const defaultStyleOptions = {
     icon: null
   },
   marker: {
-    width: 24,
-    height: 24,
-    marginLeft: -12,
-    marginTop: -19,
-    icon: 'location-marker'
+    width: 30,
+    height: 50,
+    marginLeft: -15,
+    marginTop: -36,
+    icon: <MarkerIcon />
   }
 }
 
@@ -229,7 +234,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             trigger={ disableContextMenu === true || disabled === true ? [] : ['contextMenu'] }
           >
             <button
-              className={ `hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''} ${disabled === true ? 'hotspot-image__item--disabled' : ''}` }
+              className={ `${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : 'hotspot-image__item'} ${disabled === true ? 'hotspot-image__item--disabled' : ''}` }
               key={ hotspot.id }
               onMouseDown={ evt => { handleMouseDown(evt, hotspot) } }
               style={ {
@@ -245,7 +250,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             >
               {styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
                 ? (
-                  <Icon value={ styleOptions[hotspot.type].icon } />
+                    styleOptions[hotspot.type].icon
                   )
                 : null}
             </button>
