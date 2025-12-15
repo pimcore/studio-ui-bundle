@@ -14,6 +14,8 @@ import {
   type UserDefaultKeyBindingsApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+import { isNil } from 'lodash'
 
 interface UseMergedKeyBindingsReturn {
   mergedKeyBindings: KeyBindingForAUser[]
@@ -27,9 +29,14 @@ export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): Us
   const [mergedKeyBindings, setMergedKeyBindings] = useState<KeyBindingForAUser[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { getDefaultKeyBindings } = useUserManagementHelper()
+  const { isAuthenticated } = useIsAuthenticated()
 
   useEffect(() => {
     const loadAndMergeKeyBindings = async (): Promise<void> => {
+      if (isNil(isAuthenticated) || !isAuthenticated) {
+        return
+      }
+
       try {
         setIsLoading(true)
         const defaultData: UserDefaultKeyBindingsApiResponse = await getDefaultKeyBindings()
@@ -53,7 +60,7 @@ export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): Us
     }
 
     void loadAndMergeKeyBindings()
-  }, [userKeyBindings])
+  }, [userKeyBindings, isAuthenticated])
 
   return {
     mergedKeyBindings,
