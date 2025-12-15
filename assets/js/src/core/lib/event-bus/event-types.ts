@@ -17,6 +17,7 @@
  * - action: The action that occurred (e.g., widget-closed, item-selected)
  */
 export const eventTypes = {
+  'auth:unauthorized': 'auth:unauthorized',
   'widget-manager:inner:widget-closed': 'widget-manager:inner:widget-closed',
   'widget-manager:outer:widget-closed': 'widget-manager:outer:widget-closed',
   'data-object:editor:post-update': 'data-object:editor:post-update',
