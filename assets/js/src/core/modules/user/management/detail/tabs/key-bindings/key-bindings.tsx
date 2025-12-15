@@ -111,7 +111,10 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
                 label={ label }
                 name={ field as any }
               >
-                <Input onKeyDown={ (evt) => handleInputChange(evt, field) } />
+                <Input
+                  data-keybinding-input="true"
+                  onKeyDown={ (evt) => handleInputChange(evt, field) }
+                />
               </Form.Item>
             </Col>
           )
