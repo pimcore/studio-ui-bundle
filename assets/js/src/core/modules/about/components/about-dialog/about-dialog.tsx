@@ -20,15 +20,27 @@ interface AboutDialogProps extends Omit<IWindowModalProps, 'children'> { }
 export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { platformVersion } = useSettings()
+  const { platform_version, version } = useSettings()
+
+  const getVersion = (): React.JSX.Element => {
+    if (!isNil(platform_version)) {
+      return <span>{t('about.platform-version', { version: platform_version })}</span>
+    }
+
+    if (!isNil(version)) {
+      return <span>{t('about.version', { version })}</span>
+    }
+
+    return <></>
+  }
 
   return (
     <Modal
-      { ...props }
-      className={ styles.modal }
-      footer={ <></> }
-      title={ t('about.title') }
-      width={ 520 }
+      {...props}
+      className={styles.modal}
+      footer={<></>}
+      title={t('about.title')}
+      width={520}
     >
       <div className="video-container">
         <video
@@ -41,20 +53,18 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
         <div className="content-container">
           <Flex
             align="center"
-            gap={ 'small' }
+            gap={'small'}
             vertical
           >
             <Flex
               align="center"
-              gap={ 'mini' }
+              gap={'mini'}
               vertical
             >
-              {!isNil(platformVersion) && (
-                <span>{t('about.platform-version', { version: platformVersion })}</span>
-              )}
+              {getVersion()}
               <Flex
                 align="center"
-                gap={ 'mini' }
+                gap={'mini'}
               >
                 <span>
                   {t('about.copyright')}
@@ -63,7 +73,7 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
                 <span>
                   (
                   <Button
-                    className={ styles.pimcoreBtn }
+                    className={styles.pimcoreBtn}
                     href="https://pimcore.com/"
                     target="_blank"
                     type="link"
@@ -75,7 +85,7 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
                 </span>
               </Flex>
             </Flex>
-            <Flex gap={ 'normal' }>
+            <Flex gap={'normal'}>
               <Button
                 href="https://github.com/pimcore/pimcore/blob/12.x/LICENSE.md"
                 target="_blank"
