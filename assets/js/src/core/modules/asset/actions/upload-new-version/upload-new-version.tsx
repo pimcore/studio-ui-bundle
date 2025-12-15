@@ -44,7 +44,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       onSuccess: async (result: any) => {
         if (!isNil(result?.[0]?.response?.data)) {
           const newFilename = result[0].response.data
-          
+
           dispatch(renameNode({
             nodeId: String(id),
             elementType: 'asset',
