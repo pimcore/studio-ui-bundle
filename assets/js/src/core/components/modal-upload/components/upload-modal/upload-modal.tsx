@@ -22,7 +22,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Progress } from '@Pimcore/components/progress/progress'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { isNil } from 'lodash'
+import { isNil, isString } from 'lodash'
 
 export interface UploadModalProps {
   open: boolean
@@ -105,19 +105,22 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
         <Upload openFileDialogOnClick={ false }>
           <UploadList
             itemRender={ (originNode, file) => {
-              const errorMessage =
-              file.error?.status === 413
-                ? t('upload.error.file-too-large')
-                : !isNil(file.error)
-                    ? t('upload.error.generic')
-                    : undefined
+              let errorMessage: string | undefined
+
+              if (!isNil(file.error) && !isNil(file.error.status) && file.error.status === 413) {
+                errorMessage = t('upload.error.file-too-large')
+              } else if (!isNil(file.error) && !isNil(file.response) && isString(file.response)) {
+                errorMessage = file.response
+              } else if (!isNil(file.error)) {
+                errorMessage = t('upload.error.generic')
+              }
 
               const clonedNode = React.cloneElement(originNode, {
                 title: !isNil(errorMessage) ? null : originNode.props.title // Disable the default tooltip
               })
 
               return (
-                <Tooltip title={ !isNil(file.error) ? errorMessage : undefined }>
+                <Tooltip title={ errorMessage }>
                   {clonedNode}
                 </Tooltip>
               )

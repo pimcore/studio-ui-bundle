@@ -19,9 +19,12 @@ import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useTranslation } from 'react-i18next'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type ApiErrorData } from '@sdk/modules/app'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -63,6 +66,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const settings = useSettings()
   const { t } = useTranslation()
+  const { success } = useMessage()
 
   const { targetFolderId: resolvedTargetFolderId } = useTargetFolderId({
     targetFolderId: props.targetFolderId,
@@ -76,7 +80,8 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     hasCheckError,
     getReplaceId,
     reset,
-    cleanupProcessedFiles
+    cleanupProcessedFiles,
+    getCheckError
   } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
@@ -125,15 +130,47 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
       return true
     },
     onChange: async (info) => {
+      const formatErrorMessage = (errorData: unknown): string => {
+        const apiError = new ApiError({ data: errorData } as unknown as ApiErrorData)
+        const content = apiError.getContent()
+
+        if (isNil(content)) {
+          return t('error.error_something_generic_went_wrong')
+        }
+
+        if (isString(content)) {
+          return content
+        }
+
+        return t(`error.${content.errorKey}`)
+      }
+
       const updatedFileList = info.fileList.map(file => {
         if (hasCheckError(file as RcFile)) {
+          const checkError = getCheckError(file as RcFile)
           const errorFile: UploadFile = {
             ...file,
-            status: 'error',
-            response: t('error.error_something_generic_went_wrong')
+            status: 'error' as const,
+            response: formatErrorMessage(checkError),
+            error: checkError
           }
           return errorFile
         }
+
+        if (file.status === 'error') {
+          const responseData = file.response ?? file.error
+
+          if (!isNil(responseData) && typeof responseData === 'object') {
+            const errorFile: UploadFile = {
+              ...file,
+              status: 'error' as const,
+              response: formatErrorMessage(responseData),
+              error: responseData
+            }
+            return errorFile
+          }
+        }
+
         return file
       })
 
@@ -175,9 +212,16 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
         setShowProcessing(false)
         if (allFilesDone) {
+          void success(t('asset.upload.files.successfully-uploaded'))
           closeModal()
         } else {
-          setShowUploadError(true)
+          const errorFile = updatedFileList.find(file => file.status === 'error')
+          if (props.maxItems === 1 && !isNil(errorFile)) {
+            trackError(new ApiError({ data: errorFile.error ?? errorFile.response }))
+            closeModal()
+          } else {
+            setShowUploadError(true)
+          }
         }
       }
     }
