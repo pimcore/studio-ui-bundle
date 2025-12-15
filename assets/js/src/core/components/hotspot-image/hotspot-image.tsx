@@ -10,7 +10,6 @@
 
 import React, { useState, useRef, useEffect, type MouseEvent } from 'react'
 import { useStyle } from './hotspot-image.styles'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
