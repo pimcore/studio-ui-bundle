@@ -11,7 +11,6 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
 import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import { eventBus, eventTypes } from '@Pimcore/lib/event-bus'
 
 interface ErrorPayload {
   status?: number
@@ -65,12 +64,6 @@ export const rtkQueryErrorLogger: Middleware =
         if ('endpointName' in actionMetaArgs && actionMetaArgs.endpointName === 'userGetCurrentInformation') {
           return next(action)
         }
-
-        eventBus.publish({
-          identifier: {
-            type: eventTypes['auth:unauthorized']
-          }
-        })
 
         api.dispatch({ type: 'auth/setUser', payload: initialState })
         api.dispatch({ type: 'authentication/setAuthState', payload: false })
