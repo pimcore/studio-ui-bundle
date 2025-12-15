@@ -12,7 +12,6 @@ import React, { useRef } from 'react'
 import { App, Button, Switch } from 'antd'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
-import { trackError, ApiError } from '@sdk/modules/app'
 import { isNil, chunk } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Box, Flex } from '@sdk/components'
@@ -33,6 +32,7 @@ interface UseUploadConflictHandlerResult {
   resolveConflicts: (files: RcFile[]) => Promise<void>
   shouldSkipFile: (file: RcFile) => boolean
   hasCheckError: (file: RcFile) => boolean
+  getCheckError: (file: RcFile) => any
   getReplaceId: (file: RcFile | UploadFile) => number | undefined
   reset: () => void
   cleanupProcessedFiles: (files: UploadFile[]) => void
@@ -47,9 +47,9 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
   const applyToAllRef = useRef<{ action: UploadConflictAction | null }>({ action: null })
   const batchCheckPromiseRef = useRef<Promise<void> | null>(null)
   const skippedFilesRef = useRef<Set<string>>(new Set())
-  const errorFilesRef = useRef<Set<string>>(new Set())
+  const errorFilesRef = useRef<Map<string, any>>(new Map())
 
-  const checkFileExists = async (fileName: string): Promise<{ exists: boolean, id?: number, error?: boolean }> => {
+  const checkFileExists = async (fileName: string): Promise<{ exists: boolean, id?: number, error?: any }> => {
     if (isNil(targetFolderId)) {
       return { exists: false }
     }
@@ -63,8 +63,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
 
     if (!isNil(error)) {
       console.error('Error checking file existence:', error)
-      trackError(new ApiError(error))
-      return { exists: false, error: true }
+      return { exists: false, error }
     }
 
     if (uploadInfo?.exists === true && !isNil(uploadInfo.assetId)) {
@@ -151,7 +150,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
       batchCheckPromiseRef.current = (async () => {
         const CONCURRENCY_LIMIT = 5
         const fileChunks = chunk(files, CONCURRENCY_LIMIT)
-        const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: boolean }> = []
+        const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: any }> = []
 
         for (const fileChunk of fileChunks) {
           const chunkPromises = fileChunk.map(async (f) => {
@@ -164,8 +163,8 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
         }
 
         checkResults.forEach(result => {
-          if (result.error === true) {
-            errorFilesRef.current.add(result.file.uid)
+          if (!isNil(result.error)) {
+            errorFilesRef.current.set(result.file.uid, result.error)
           }
         })
 
@@ -195,6 +194,10 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
     return errorFilesRef.current.has(file.uid)
   }
 
+  const getCheckError = (file: RcFile): unknown => {
+    return errorFilesRef.current.get(file.uid)
+  }
+
   const getReplaceId = (file: RcFile | UploadFile): number | undefined => {
     const fileKey = `${file.name}-${file.size}`
     return replaceFilesRef.current.get(fileKey)
@@ -219,6 +222,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
     resolveConflicts,
     shouldSkipFile,
     hasCheckError,
+    getCheckError,
     getReplaceId,
     reset,
     cleanupProcessedFiles
