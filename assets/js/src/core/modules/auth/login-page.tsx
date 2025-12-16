@@ -61,11 +61,11 @@ export const LoginPage = (): React.JSX.Element => {
   }, [token])
 
   return (
-    <div className={styles.loginPage}>
-      <div className={styles.loginWidget}>
+    <div className={ styles.loginPage }>
+      <div className={ styles.loginWidget }>
         <img
-          alt={'Pimcore Logo'}
-          src={'/bundles/pimcorestudioui/img/logo.png'}
+          alt={ 'Pimcore Logo' }
+          src={ '/bundles/pimcorestudioui/img/logo.png' }
         />
         <LoginFormContainer />
       </div>

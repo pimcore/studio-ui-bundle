@@ -32,12 +32,12 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
         {user.isAdmin && (
           <div className='m-b-normal'>
             <Form.Item
-              name={'admin'}
+              name={ 'admin' }
             >
               <Switch
-                disabled={isDisabled === true}
-                labelRight={t('user-management.admin')}
-                size={'small'}
+                disabled={ isDisabled === true }
+                labelRight={ t('user-management.admin') }
+                size={ 'small' }
               />
             </Form.Item>
 
@@ -47,7 +47,7 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
 
         <div>
           <LoginTokenModalContainer
-            disabled={isDisabled}
+            disabled={ isDisabled }
           />
         </div>
       </>
@@ -55,10 +55,10 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
   ]
   return (
     <Accordion
-      activeKey={'1'}
+      activeKey={ '1' }
       bordered
-      items={content}
-      size={'small'}
+      items={ content }
+      size={ 'small' }
     />
   )
 }
