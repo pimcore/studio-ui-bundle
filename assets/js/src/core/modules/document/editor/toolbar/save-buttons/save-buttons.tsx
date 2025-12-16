@@ -253,6 +253,19 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, 'publish')
 
+  useHandleKeyBindings(async () => {
+    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    if (!saveDisabled && document != null && checkElementPermission(document.permissions, 'save')) {
+      if (document?.type === 'folder') {
+        await handleSaveClick(SaveTaskType.Save)
+      } else if (document?.published && checkElementPermission(document?.permissions, 'publish')) {
+        await handleSaveClick(SaveTaskType.Publish)
+      } else if (!document?.published) {
+        await handleSaveClick(SaveTaskType.Save)
+      }
+    }
+  }, 'save')
+
   return (
     <>
       {isAutoSaveLoading && (

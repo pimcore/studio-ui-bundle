@@ -84,6 +84,12 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
     }
   }, 'publish')
 
+  useHandleKeyBindings(async () => {
+    if (asset != null && checkElementPermission(asset.permissions, 'publish')) {
+      onSaveClick()
+    }
+  }, 'save')
+
   return (
     <>
       { checkElementPermission(asset?.permissions, 'publish') && (
