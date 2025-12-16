@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_modules__auth.28709242.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["5043"],{26550:function(e,s,t){t.r(s),t.d(s,{getCurrentUser:()=>d,isAllowed:()=>i.y,UserPermission:()=>u.P,useUser:()=>r.a});var u=t(34769),i=t(35950),r=t(48497),o=t(46309),c=t(35316);let d=()=>(0,c.HF)(o.h.getState());void 0!==(e=t.hmd(e)).hot&&e.hot.accept()}}]);

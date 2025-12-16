@@ -31,6 +31,7 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -241,6 +242,29 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const secondaryButtons = getSecondaryButtons()
 
   const primaryButtons = getPrimaryButtons()
+
+  useHandleKeyBindings(async () => {
+    if (document != null && checkElementPermission(document.permissions, 'publish')) {
+      await handleSaveClick(SaveTaskType.Publish, () => {
+        if (!document.published) {
+          publishDraft()
+        }
+      })
+    }
+  }, 'publish')
+
+  useHandleKeyBindings(async () => {
+    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    if (!saveDisabled && document != null && checkElementPermission(document.permissions, 'save')) {
+      if (document?.type === 'folder') {
+        await handleSaveClick(SaveTaskType.Save)
+      } else if (document?.published && checkElementPermission(document?.permissions, 'publish')) {
+        await handleSaveClick(SaveTaskType.Publish)
+      } else if (!document?.published) {
+        await handleSaveClick(SaveTaskType.Save)
+      }
+    }
+  }, 'save')
 
   return (
     <>

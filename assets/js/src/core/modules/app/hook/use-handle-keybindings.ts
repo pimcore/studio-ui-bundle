@@ -29,8 +29,8 @@ export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, act
   }
 
   const eventHandler = useCallback((evt: KeyboardEvent) => {
-    // skip shortcuts in input fields
-    if (evt.target instanceof HTMLInputElement) {
+    // skip shortcuts in key-binding definition input fields
+    if (evt.target instanceof HTMLInputElement && evt.target.dataset.keybindingInput === 'true') {
       return
     }
 
