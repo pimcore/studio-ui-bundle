@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Form, Typography } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useTranslation } from 'react-i18next'
-import { Button } from '@Pimcore/components/button/button'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { Form, Typography } from 'antd'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { LoginTokenModalContainer } from '../login-token-modal/login-token-modal-container'
 
 interface IAdminAccordion {
   isDisabled?: boolean
@@ -25,35 +25,33 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
   const content = [
     {
       key: '1',
-      title: <>{ t('user-management.admin') }</>,
+      title: <>{t('user-management.admin')}</>,
       children: <>
         <Form.Item
-          name={ 'admin' }
+          name={'admin'}
         >
           <Switch
-            disabled={ isDisabled }
-            labelRight={ t('user-management.admin') }
-            size={ 'small' }
+            disabled={isDisabled}
+            labelRight={t('user-management.admin')}
+            size={'small'}
           />
         </Form.Item>
 
-        <Text disabled>{ t('user-management.admin.info') }</Text>
-        <div className={ 'm-t-normal' }>
-          <Button
-            disabled={ isDisabled }
-            onClick={ () => { console.log('todo login') } }
-            type="default"
-          >{t('user-management.admin.login')}</Button>
+        <Text disabled>{t('user-management.admin.info')}</Text>
+        <div className={'m-t-normal'}>
+          <LoginTokenModalContainer
+            disabled={isDisabled}
+          />
         </div>
       </>
     }
   ]
   return (
     <Accordion
-      activeKey={ '1' }
+      activeKey={'1'}
       bordered
-      items={ content }
-      size={ 'small' }
+      items={content}
+      size={'small'}
     />
   )
 }
