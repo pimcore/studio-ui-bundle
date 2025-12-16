@@ -3,10 +3,10 @@ import { Button } from "@Pimcore/components/button/button"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Modal } from "@Pimcore/components/modal/modal"
 import { IWindowModalProps } from "@Pimcore/components/modal/window-modal/window-modal"
-import { CodeEditor, Text, TextArea, useMessage } from '@sdk/components'
+import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
+import { TextArea, useMessage } from '@sdk/components'
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 
 interface AboutDialogProps extends Omit<IWindowModalProps, 'children'> {
   tokenUrl: string

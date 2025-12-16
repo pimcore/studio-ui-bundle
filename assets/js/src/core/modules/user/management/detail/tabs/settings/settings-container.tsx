@@ -93,20 +93,20 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   }
   return (
     <Form
-      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'settings' }) }
-      form={ form }
+      data-testid={createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'settings' })}
+      form={form}
       layout="vertical"
-      onValuesChange={ onValuesChange }
+      onValuesChange={onValuesChange}
     >
-      <Row gutter={ [10, 10] }>
-        <Col span={ 8 }>
+      <Row gutter={[10, 10]}>
+        <Col span={8}>
           <Accordion
-            activeKey={ '1' }
+            activeKey={'1'}
             bordered
-            items={ [
+            items={[
               {
                 key: '1',
-                title: <>{ t('user-management.general') }</>,
+                title: <>{t('user-management.general')}</>,
                 info: 'ID: ' + id,
                 children: <>
                   <Flex
@@ -114,119 +114,119 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     gap="small"
                   >
                     <Form.Item
-                      className={ 'm-b-none' }
+                      className={'m-b-none'}
                       name="active"
                     >
                       <Switch
-                        disabled={ user?.id === openedUser?.id }
-                        labelRight={ t('user-management.active') }
-                        size={ 'small' }
+                        disabled={user?.id === openedUser?.id}
+                        labelRight={t('user-management.active')}
+                        size={'small'}
                       />
                     </Form.Item>
 
-                    { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
+                    {openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
-                        )
+                        <Text disabled>{t('user-management.last-login')}: {formatLastLogin(openedUser.lastLogin)}</Text>
+                      )
                       : null}
                   </Flex>
 
                   <Form.Item
-                    label={ t('user-management.name') }
-                    name={ 'name' }
+                    label={t('user-management.name')}
+                    name={'name'}
                   >
                     <Input disabled />
                   </Form.Item>
 
                   <Form.Item
-                    label={ t('user-management.password') }
-                    name={ 'password' }
-                    rules={ [{ min: 10 }] }
+                    label={t('user-management.password')}
+                    name={'password'}
+                    rules={[{ min: 10 }]}
                   >
                     <Input
                       autoComplete="new-password"
-                      suffix={ <IconButton
-                        icon={ { value: 'locked' } }
-                        onClick={ () => {
+                      suffix={<IconButton
+                        icon={{ value: 'locked' }}
+                        onClick={() => {
                           const newPassword = generatePassword()
                           form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
                           setPasswordType('text')
-                        } }
-                        title={ t('user-management.generate-password') }
-                        variant={ 'minimal' }
-                               /> }
-                      type={ passwordType }
+                        }}
+                        title={t('user-management.generate-password')}
+                        variant={'minimal'}
+                      />}
+                      type={passwordType}
                     />
                   </Form.Item>
 
                   <Form.Item
-                    name={ 'twoFactorAuthenticationRequired' }
-                    style={ { marginBottom: '0' } }
+                    name={'twoFactorAuthenticationRequired'}
+                    style={{ marginBottom: '0' }}
                   >
                     <Switch
-                      labelRight={ t('user-management.two-factor-authentication') }
-                      size={ 'small' }
+                      labelRight={t('user-management.two-factor-authentication')}
+                      size={'small'}
                     />
                   </Form.Item>
                 </>
               }
             ]
-          }
-            size={ 'small' }
+            }
+            size={'small'}
           />
         </Col>
-        <Col span={ 8 }>
+        <Col span={8}>
           <UserAvatar
-            onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
-            user={ openedUser }
+            onUserImageChanged={(imageUrl: string) => { updateUserImageInState(imageUrl) }}
+            user={openedUser}
           />
         </Col>
-        <Col span={ 16 }>
-          <CustomisationAccordion isAdmin={ openedUser?.admin } />
+        <Col span={16}>
+          <CustomisationAccordion isAdmin={openedUser?.admin} />
         </Col>
-        <Col span={ 16 }>
-          <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
+        <Col span={16}>
+          <AdminAccordion isDisabled={user?.id === openedUser?.id} />
         </Col>
 
         {openedUser?.admin === false
           ? (
             <>
-              <Col span={ 16 }>
-                <PermissionsAccordion permissions={ permissions } />
+              <Col span={16}>
+                <PermissionsAccordion permissions={permissions} />
               </Col>
-              <Col span={ 16 }>
+              <Col span={16}>
                 <TypesAndClassesAccordion />
               </Col>
             </>
-            )
+          )
           : null}
 
-        <Col span={ 16 }>
+        <Col span={16}>
           <EditorSettingsAccordion
-            data={ openedUser?.contentLanguages }
-            editData={ openedUser?.websiteTranslationLanguagesEdit }
-            onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
-            viewData={ openedUser?.websiteTranslationLanguagesView }
+            data={openedUser?.contentLanguages}
+            editData={openedUser?.websiteTranslationLanguagesEdit}
+            onChange={(languages) => { changeUserInState({ contentLanguages: languages }) }}
+            viewData={openedUser?.websiteTranslationLanguagesView}
           />
         </Col>
 
         {openedUser?.admin === false
           ? (
-            <Col span={ 16 }>
+            <Col span={16}>
               <SharedTranslationSettingsAccordion
-                data={ validLanguages }
-                editData={ openedUser?.websiteTranslationLanguagesEdit }
-                onChange={ (languages) => {
+                data={validLanguages}
+                editData={openedUser?.websiteTranslationLanguagesEdit}
+                onChange={(languages) => {
                   changeUserInState({
                     websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
                     websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
                   })
-                } }
-                viewData={ openedUser?.websiteTranslationLanguagesView }
+                }}
+                viewData={openedUser?.websiteTranslationLanguagesView}
               />
             </Col>
-            )
-          : null }
+          )
+          : null}
       </Row>
     </Form>
   )

@@ -10,10 +10,11 @@
 
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { Form, Typography } from 'antd'
+import { Form, FormInstance, Typography } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoginTokenModalContainer } from '../login-token-modal/login-token-modal-container'
+import { getCurrentUser } from '@sdk/modules/auth'
 
 interface IAdminAccordion {
   isDisabled?: boolean
@@ -21,24 +22,30 @@ interface IAdminAccordion {
 const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
+  const user = getCurrentUser()
 
   const content = [
     {
       key: '1',
       title: <>{t('user-management.admin')}</>,
       children: <>
-        <Form.Item
-          name={'admin'}
-        >
-          <Switch
-            disabled={isDisabled}
-            labelRight={t('user-management.admin')}
-            size={'small'}
-          />
-        </Form.Item>
+        {user.isAdmin === true && (
+          <div className='m-b-normal'>
+            <Form.Item
+              name={'admin'}
+            >
+              <Switch
+                disabled={isDisabled || user.isAdmin !== true}
+                labelRight={t('user-management.admin')}
+                size={'small'}
+              />
+            </Form.Item>
 
-        <Text disabled>{t('user-management.admin.info')}</Text>
-        <div className={'m-t-normal'}>
+            <Text disabled>{t('user-management.admin.info')}</Text>
+          </div>
+        )}
+
+        <div>
           <LoginTokenModalContainer
             disabled={isDisabled}
           />
