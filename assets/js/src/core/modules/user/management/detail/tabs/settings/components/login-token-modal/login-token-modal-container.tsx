@@ -1,13 +1,23 @@
-import { routes } from "@Pimcore/app/router/router"
-import { Button } from "@Pimcore/components/button/button"
-import { useModalHolder } from "@Pimcore/modules/app/modal-holder/use-modal-holder"
-import { useUserManagementContext } from "@Pimcore/modules/user/hooks/use-user-management-context"
-import { useUserTokenLinkGetQuery } from "@Pimcore/modules/user/user-api-slice-enhanced"
-import React, { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { generatePath } from "react-router-dom"
-import { LoginTokenModal } from "./login-token-modal"
-import { currentDomain } from "@Pimcore/app/config/app-config"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { routes } from '@Pimcore/app/router/router'
+import { Button } from '@Pimcore/components/button/button'
+import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
+import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
+import { useUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { generatePath } from 'react-router-dom'
+import { LoginTokenModal } from './login-token-modal'
+import { currentDomain } from '@Pimcore/app/config/app-config'
 
 interface LoginTokenModalContainerProps {
   disabled?: boolean
@@ -35,7 +45,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   const openModal = (): void => {
     if (!isOpen) {
-      refetch()
+      void refetch()
       setIsOpen(true)
     }
   }
@@ -46,11 +56,11 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
         modalId,
         <LoginTokenModal
           isLoading={isLoading}
-          tokenUrl={data?.link ?? ''}
           onCancel={closeModal}
           onClose={closeModal}
           onOk={closeModal}
           open={isOpen}
+          tokenUrl={data?.link ?? ''}
         />
       )
     }

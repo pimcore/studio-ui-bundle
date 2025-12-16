@@ -10,11 +10,11 @@
 
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { Form, FormInstance, Typography } from 'antd'
+import { getCurrentUser } from '@sdk/modules/auth'
+import { Form, Typography } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoginTokenModalContainer } from '../login-token-modal/login-token-modal-container'
-import { getCurrentUser } from '@sdk/modules/auth'
 
 interface IAdminAccordion {
   isDisabled?: boolean
@@ -29,13 +29,13 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
       key: '1',
       title: <>{t('user-management.admin')}</>,
       children: <>
-        {user.isAdmin === true && (
+        {user.isAdmin && (
           <div className='m-b-normal'>
             <Form.Item
               name={'admin'}
             >
               <Switch
-                disabled={isDisabled || user.isAdmin !== true}
+                disabled={isDisabled === true}
                 labelRight={t('user-management.admin')}
                 size={'small'}
               />
