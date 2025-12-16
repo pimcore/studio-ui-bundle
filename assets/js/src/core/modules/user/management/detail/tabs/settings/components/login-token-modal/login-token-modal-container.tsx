@@ -13,15 +13,13 @@ interface LoginTokenModalContainerProps {
   disabled?: boolean
 }
 
-
 export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const { addModal, removeModal } = useModalHolder()
   const modalId = 'login-as-different-user-modal'
   const { id } = useUserManagementContext()
-  //TODO: check if we need to refetch the token after each use
-  const { data, isLoading } = useUserTokenLinkGetQuery({
+  const { data, isLoading, refetch } = useUserTokenLinkGetQuery({
     id,
     tokenLink: {
       tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
@@ -37,6 +35,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   const openModal = (): void => {
     if (!isOpen) {
+      refetch()
       setIsOpen(true)
     }
   }
