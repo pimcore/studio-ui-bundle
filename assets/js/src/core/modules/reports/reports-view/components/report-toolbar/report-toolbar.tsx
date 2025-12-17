@@ -40,7 +40,7 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
   const [fetchExportCSV, { isError, error }] = useCustomReportExportCsvMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [includeHeaders, setIncludeHeaders] = useState(true)
-  const [delimiter, setDelimiter] = useState(',')
+  const [delimiter, setDelimiter] = useState(';')
 
   const executionEngine = useExecutionEngine()
   const { filters } = useGridFilterContext()
