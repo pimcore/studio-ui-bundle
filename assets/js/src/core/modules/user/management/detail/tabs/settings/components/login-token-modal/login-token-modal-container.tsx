@@ -40,12 +40,12 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
     if (isOpen) {
       setIsOpen(false)
       removeModal(modalId)
+      void refetch()
     }
   }
 
   const openModal = (): void => {
     if (!isOpen) {
-      void refetch()
       setIsOpen(true)
     }
   }
@@ -55,21 +55,21 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
       addModal(
         modalId,
         <LoginTokenModal
-          isLoading={ isLoading }
-          onCancel={ closeModal }
-          onClose={ closeModal }
-          onOk={ closeModal }
-          open={ isOpen }
-          tokenUrl={ data?.link ?? '' }
+          isLoading={isLoading}
+          onCancel={closeModal}
+          onClose={closeModal}
+          onOk={closeModal}
+          open={isOpen}
+          tokenUrl={data?.link ?? ''}
         />
       )
     }
-  }, [isOpen])
+  }, [isOpen, data, isLoading])
 
   return (
     <Button
-      disabled={ disabled }
-      onClick={ openModal }
+      disabled={disabled}
+      onClick={openModal}
       type="default"
     >
       {t('user-management.admin.login')}
