@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Pie } from '@ant-design/plots'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil, merge } from 'lodash'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -26,7 +26,7 @@ const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_FIELD_COLOR_KEY = 'color'
 
-export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Element => {
+export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
@@ -44,16 +44,16 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   const [totalCount, setTotalCount] = useState<number>(0)
 
   useEffect(() => {
-    if (chartRef !== null) {
+    if (chartRef !== null && !isNil(reportChartData)) {
       chartRef.chart.changeData(reportChartData)
 
       const totalValue =
           reportChartData
             .filter(item => !disabledItems.includes(item[CHART_FIELD_TYPE_KEY]))
             .reduce((sum, item) => sum + item[CHART_FIELD_VALUE_KEY], 0)
-      setTotalCount(totalValue)
+      setTotalCount(totalValue ?? 0)
     }
-  }, [chartData])
+  }, [reportChartData])
 
   const handleLegendItemClick = (itemKey: string): void => {
     const newDisabledItems = disabledItems?.includes(itemKey)
@@ -114,9 +114,11 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
     ]
   }
 
+  const mergedConfig = chartConfig === undefined ? config : merge({}, config, chartConfig)
+
   return (
     <div>
-      <Pie { ...config } />
+      <Pie { ...mergedConfig } />
       <Flex
         gap="mini"
         justify="center"

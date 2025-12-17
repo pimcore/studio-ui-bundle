@@ -18,7 +18,7 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 
-enum DatePickerSettingValue {
+export enum DatePickerSettingValue {
   ON = 'on',
   BETWEEN = 'between',
   BEFORE = 'before',
@@ -27,16 +27,16 @@ enum DatePickerSettingValue {
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 
+export interface DateValue {
+  setting: DatePickerSettingValue
+  from: string | null
+  to: string | null
+  on: string | null
+}
+
 export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
-  interface DateValue {
-    setting: DatePickerSettingValue
-    from: string | null
-    to: string | null
-    on: string | null
-  }
-
   const { data: rawData, setData } = useDynamicFilter()
 
   const data: DateValue = rawData ?? {
@@ -47,10 +47,10 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
   }
 
   const SETTING_OPTIONS = [
-    { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
-    { label: t('grid.filter.datetime.between'), value: DatePickerSettingValue.BETWEEN },
-    { label: t('grid.filter.datetime.before'), value: DatePickerSettingValue.BEFORE },
-    { label: t('grid.filter.datetime.after'), value: DatePickerSettingValue.AFTER }
+    { label: t('grid.filter.on'), value: DatePickerSettingValue.ON },
+    { label: t('grid.filter.between'), value: DatePickerSettingValue.BETWEEN },
+    { label: t('grid.filter.before'), value: DatePickerSettingValue.BEFORE },
+    { label: t('grid.filter.after'), value: DatePickerSettingValue.AFTER }
   ]
 
   const currentSetting = data?.setting ?? DatePickerSettingValue.ON

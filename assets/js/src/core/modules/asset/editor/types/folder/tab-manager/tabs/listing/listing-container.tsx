@@ -12,27 +12,16 @@ import { ListingContainer as AssetListing } from '@Pimcore/modules/asset/listing
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/MetadataRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/BatchEditRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <AssetListing />
-    </DynamicTypeRegistryProvider>
+    <AssetListing />
   )
 }
 
 export const TAB_LISTING: IEditorTab = {
   key: 'listing',
   label: 'folder.folder-editor-tabs.view',
-  userPermission: 'listing',
   children: <ListingContainer />,
   icon: <Icon value={ 'list' } />,
   isDetachable: false

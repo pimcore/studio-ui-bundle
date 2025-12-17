@@ -24,14 +24,15 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { isNil } from 'lodash'
 
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
-    if (options === null) {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number }> | undefined {
+    if (isNil(options)) {
       return undefined
     }
 

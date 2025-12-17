@@ -25,7 +25,7 @@ export const {
   useCustomReportsChartQuery,
   useCustomReportsConfigAddMutation,
   useCustomReportsConfigCloneMutation,
-  useCustomReportsColumnConfigListMutation,
+  useCustomReportsColumnConfigListQuery,
   useCustomReportsConfigUpdateMutation,
   useCustomReportsConfigDeleteMutation,
   useCustomReportsReportQuery,

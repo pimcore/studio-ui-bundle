@@ -17,6 +17,10 @@ export const useStyles = createStyles(({ css, token }) => {
         display: flex;
         padding: ${token.Form.verticalLabelPadding}px;
       }
+
+      .virtual-item__tooltip {
+        opacity: 0.6;
+      }
     `
   }
 })

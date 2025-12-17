@@ -8,22 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
 import { routes } from '@Pimcore/app/router/router'
-import { LoginForm } from '@Pimcore/components/login-form/login-form'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useIsAuthenticated } from './hooks/use-is-authenticated'
+import { LoginFormContainer } from '@Pimcore/modules/auth/components/login-form/login-form-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
+import React, { useEffect } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
+import { isNil } from 'lodash'
+import { useAuthentication } from './hooks/use-authentication'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setAuthState } from './auth-slice'
 
 export const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const token: string | null = searchParams.get('token')
+  const dispatch = useAppDispatch()
 
   const user = useUser()
   const { isAuthenticated } = useIsAuthenticated()
-
+  const { loginWithToken } = useAuthentication()
   const { styles } = useStyle()
 
   useEffect(() => {
@@ -34,9 +41,24 @@ export const LoginPage = (): React.JSX.Element => {
         navigate(redirectPath ?? routes.root)
 
         await sendStatistics(user.isAdmin)
-      })().catch(() => {})
+      })().catch(() => { })
     }
   }, [isAuthenticated])
+
+  useEffect(() => {
+    if (!isNil(token)) {
+      void loginWithToken(
+        token,
+        async () => {
+          navigate(routes.root)
+          dispatch(setAuthState(true))
+        },
+        () => {
+          navigate(routes.login)
+        }
+      )
+    }
+  }, [token])
 
   return (
     <div className={ styles.loginPage }>
@@ -45,7 +67,7 @@ export const LoginPage = (): React.JSX.Element => {
           alt={ 'Pimcore Logo' }
           src={ '/bundles/pimcorestudioui/img/logo.png' }
         />
-        <LoginForm />
+        <LoginFormContainer />
       </div>
     </div>
   )

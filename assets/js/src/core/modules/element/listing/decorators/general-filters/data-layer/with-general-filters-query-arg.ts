@@ -17,48 +17,9 @@ import { usePqlFilter } from '../context-layer/provider/pql-filter/use-pql-filte
 import { useFieldFilters } from '../context-layer/provider/field-filters/use-field-filters'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
-import { type ColumnFilter } from '@tanstack/react-table'
-
-const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
-  return columnFilters.map(({ filterType, ...rest }) => ({
-    ...rest,
-    ...(filterType !== undefined && { type: filterType })
-  }))
-}
-
-const shouldApplyFieldFilter = (
-  filter: any,
-  availableColumns: any[],
-  hasType: (params: any) => boolean,
-  getType: (params: any) => any
-): boolean => {
-  const column = availableColumns.find(col => col.key === filter.key)
-  const frontendType = column?.frontendType ?? filter.type ?? 'string'
-
-  if (!hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] })) {
-    return false
-  }
-
-  const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [frontendType] }) as DynamicTypeFieldFilterAbstract | null
-  if (dynamicType === null || !('dynamicTypeFieldFilterType' in dynamicType)) {
-    return false
-  }
-
-  const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-  return fieldFilterType.shouldApply(filter.filterValue)
-}
-
-const getApplicableFieldFilters = (
-  filters: any[],
-  availableColumns: any[],
-  hasType: (params: any) => boolean,
-  getType: (params: any) => any
-): any[] => {
-  return filters.filter((filter) =>
-    shouldApplyFieldFilter(filter, availableColumns, hasType, getType)
-  )
-}
+import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
@@ -68,7 +29,60 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { onlyDirectChildren } = useDirectChildrenFilter()
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
-    const { hasType, getType } = useDynamicTypeResolver()
+    const { getType } = useDynamicTypeResolver()
+    const { currentLanguage } = useLanguageSelection()
+
+    const getColumnLocale = (columnKey: string, providedLocale?: string): string | null => {
+      const column = availableColumns.find(col => col.key === columnKey)
+      const isDataObject = 'classId' in baseGetArgs()
+
+      if (providedLocale === 'default') {
+        return null
+      }
+
+      return column?.localizable === true ? (providedLocale ?? (isDataObject ? currentLanguage : null)) : null
+    }
+
+    const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
+      return columnFilters.map(({ ...rest }) => ({
+        ...rest,
+        locale: getColumnLocale(rest.key as string, rest.locale as string | undefined)
+      }))
+    }
+
+    const prepareFilters = (filters: FieldFilter[]): FieldFilter[] => {
+      const preparedFilters: FieldFilter[] = []
+
+      filters.forEach((filter) => {
+        const column = availableColumns.find(col => col.key === filter.key)
+
+        if (column === undefined) {
+          return
+        }
+
+        let type = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] })
+
+        if (type === null) {
+          return
+        }
+
+        if (!(type instanceof DynamicTypeFieldFilterAbstract)) {
+          if ('dynamicTypeFieldFilterType' in type) {
+            type = type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+          } else {
+            return
+          }
+        }
+
+        const dynamicTypeFieldFilter = type as DynamicTypeFieldFilterAbstract
+
+        if (dynamicTypeFieldFilter.shouldApply(filter)) {
+          preparedFilters.push(dynamicTypeFieldFilter.transformFilterToApiRequest(filter))
+        }
+      })
+
+      return preparedFilters
+    }
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
@@ -92,8 +106,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }
 
       if (fieldFilters.length > 0) {
-        const applicableFieldFilters = getApplicableFieldFilters(fieldFilters, availableColumns, hasType, getType)
-        newColumnFilters.push(...applicableFieldFilters as ColumnFilter[])
+        newColumnFilters.push(...prepareFilters(fieldFilters))
       }
 
       return {

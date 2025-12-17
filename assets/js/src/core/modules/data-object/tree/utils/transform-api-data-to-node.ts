@@ -9,33 +9,38 @@
  */
 
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
-import { type DataObjectGetTreeApiResponse, type DataObjectPermissions } from '../../data-object-api-slice.gen'
+import { type DataObjectGetTreeApiResponse, type DataObjectPermissions, type DataObject, type DataObjectFolder } from '../../data-object-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+
+export const transformApiDataToNode = (dataObjectNode: DataObject | DataObjectFolder, node: DataTransformerSourceNode): TreeNode => {
+  return {
+    id: dataObjectNode.id.toString(),
+    elementType: elementTypes.dataObject,
+    icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
+    label: dataObjectNode.key,
+    type: dataObjectNode.type,
+    parentId: dataObjectNode.parentId.toString(),
+    fullPath: dataObjectNode.fullPath,
+    hasChildren: dataObjectNode.hasChildren,
+    locked: dataObjectNode.locked,
+    isLocked: dataObjectNode.isLocked,
+    isPublished: dataObjectNode.published,
+    metaData: {
+      dataObject: dataObjectNode
+    },
+    permissions: dataObjectNode.permissions ?? [] as unknown as DataObjectPermissions,
+    internalKey: `${node.internalKey}-${dataObjectNode.id}`
+  }
+}
 
 export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: DataObjectGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
   const nodes: TreeNode[] = []
 
   const dataObjectData = data.items
   dataObjectData.forEach((dataObjectNode) => {
-    nodes.push({
-      id: dataObjectNode.id.toString(),
-      elementType: elementTypes.dataObject,
-      icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
-      label: dataObjectNode.key,
-      type: dataObjectNode.type,
-      parentId: dataObjectNode.parentId.toString(),
-      hasChildren: dataObjectNode.hasChildren,
-      locked: dataObjectNode.locked,
-      isLocked: dataObjectNode.isLocked,
-      isPublished: dataObjectNode.published,
-      metaData: {
-        dataObject: dataObjectNode
-      },
-      permissions: dataObjectNode.permissions ?? [] as unknown as DataObjectPermissions,
-      internalKey: `${node.internalKey}-${dataObjectNode.id}`
-    })
+    nodes.push(transformApiDataToNode(dataObjectNode, node))
   })
 
   const total = data.totalItems ?? maxItemsPerNode

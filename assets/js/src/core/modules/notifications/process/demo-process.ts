@@ -15,5 +15,7 @@ export class DemoProcess extends AbstractMercureProcess {
   protected name: string = 'demo-process'
   protected description: string = 'Demo process for testing purposes'
 
-  protected topics: string[] = [topics['handler-progress']]
+  protected getTopics (): string[] {
+    return [topics['handler-progress']]
+  }
 }

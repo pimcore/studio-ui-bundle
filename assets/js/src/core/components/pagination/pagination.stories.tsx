@@ -8,35 +8,79 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Meta } from '@storybook/react'
-import { Pagination as PaginationComponent } from './pagination'
+import type { Meta, StoryObj } from '@storybook/react'
+import { Pagination } from './pagination'
+import { fn } from '@storybook/test'
 
-const config: Meta = {
-  title: 'Components/__refactor__/Pagination',
-  component: PaginationComponent,
-  argTypes: {
-    total: {
-      control: false
-    }
-  },
+const meta = {
+  title: 'Components/Navigation/Pagination',
+  component: Pagination,
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
+  argTypes: {
+    size: {
+      control: 'select',
+      options: ['default', 'small']
+    },
+    simple: {
+      control: 'boolean'
+    }
+  },
+  args: {
+    onChange: fn()
+  }
+} satisfies Meta<typeof Pagination>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    total: 50,
+    current: 1
+  }
 }
 
-export default config
-
-export const _default = {
+export const WithTotalAndSizeChanger: Story = {
   args: {
-    total: 182,
-    current: 2,
-    pageSizeOptions: [5, 25, 55, 80],
-    defaultPageSize: 25,
+    total: 85,
+    showTotal: (total) => `Total ${total} items`,
     showSizeChanger: true,
-    hideOnSinglePage: true,
-    amountOfVisiblePages: 4,
-    showTotal: (total: number) => `Total ${total} items`,
-    onChange: (currentPage: number, pageSize: number) => { console.log(`Current page: ${currentPage}, Page size: ${pageSize}`) }
+    defaultPageSize: 20,
+    pageSizeOptions: ['10', '20', '50', '100']
+  }
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    total: 50,
+    showSizeChanger: true
+  }
+}
+
+export const WithSizeChanger: Story = {
+  args: {
+    total: 500,
+    showSizeChanger: true,
+    defaultPageSize: 20
+  }
+}
+
+export const WithTotal: Story = {
+  args: {
+    total: 85,
+    showTotal: (total) => `Total ${total} items`,
+    defaultPageSize: 20
+  }
+}
+
+export const CustomPageSizeOptions: Story = {
+  args: {
+    total: 200,
+    showSizeChanger: true,
+    pageSizeOptions: ['10', '20', '30', '40']
   }
 }

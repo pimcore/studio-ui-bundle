@@ -44,6 +44,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Search"],
             }),
+            documentGetSearch: build.query<DocumentGetSearchApiResponse, DocumentGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/documents`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Search"],
+            }),
             simpleSearchPreviewGet: build.query<SimpleSearchPreviewGetApiResponse, SimpleSearchPreviewGetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/preview/${queryArg.elementType}/${queryArg.id}`,
@@ -101,6 +109,21 @@ export type DataObjectGetSearchApiResponse = /** status 200 Data object search r
 export type DataObjectGetSearchApiArg = {
     /** Class Id of the data object */
     classId?: string;
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
+export type DocumentGetSearchApiResponse = /** status 200 dcocument_get_search_success_response */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type DocumentGetSearchApiArg = {
     body: {
         columns: GridColumnRequest[];
         filters?: GridFilter;
@@ -174,7 +197,7 @@ export type GridColumnRequest = {
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
 };
@@ -363,6 +386,7 @@ export const {
     useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSearchQuery,
+    useDocumentGetSearchQuery,
     useSimpleSearchPreviewGetQuery,
     useSimpleSearchGetQuery,
 } = injectedRtkApi;

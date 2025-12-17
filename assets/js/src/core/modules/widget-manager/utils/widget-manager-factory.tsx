@@ -37,11 +37,13 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
     return undefined
   }
 
-  const { component } = widget
+  const { component, contentTitleComponent } = widget
 
   return (
     <WidgetContainer
       component={ component }
+      contentTitleComponent={ contentTitleComponent }
+      defaultGlobalContext={ widget.defaultGlobalContext ?? true }
       node={ node }
     />
   )

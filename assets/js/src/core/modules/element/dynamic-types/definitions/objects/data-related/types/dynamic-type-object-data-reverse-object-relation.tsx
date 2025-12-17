@@ -30,7 +30,7 @@ export type ReverseObjectRelationObjectDataDefinition = AbstractObjectDataDefini
 
 export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'reverseObjectRelation'
-  supportsBatchAppendModes: boolean = true
+  isAllowedInBatchEdit: boolean = false
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',

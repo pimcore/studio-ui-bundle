@@ -20,6 +20,8 @@ import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/o
 import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-value'
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { ClassificationStoreProvider } from './provider'
+import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   storeId: number
@@ -36,7 +38,12 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 }
 
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
-  const { name: classificationStoreName, value } = props
+  const { name: classificationStoreName, localized, value } = props
+  const { hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
+
+  useEffect(() => {
+    if (localized && !hasLocalizedFields) setHasLocalizedFields(true)
+  }, [])
 
   const valueRef = useRef(value)
   const deletedGroupsRef = useRef(new Set<string>())
@@ -44,10 +51,16 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
+
+  if (dataObject !== undefined && !('objectData' in dataObject)) {
+    throw new Error('Data Object data is undefined in Classification Store')
+  }
+
   const objectData = dataObject?.objectData ?? {}
   const originalValue = getOriginalValue(objectData, classificationStoreName)
   const inheritanceState = useInheritanceState()
   const fieldName = isArray(classificationStoreName) ? classificationStoreName[classificationStoreName.length - 1] : classificationStoreName
+  const classDefinitions = useClassDefinitions()
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -105,6 +118,15 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
     valueRef.current = value
   }, [value])
 
+  if (dataObject === undefined) {
+    return <></>
+  }
+
+  const classId = classDefinitions.getByName(dataObject.className)?.id
+  if (classId === undefined) {
+    return <></>
+  }
+
   return (
     <ClassificationStoreProvider>
       <Form.KeyedList
@@ -115,8 +137,9 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       >
         <ClassificationStoreContent { ...props } />
         <ClassificationStoreModal
+          classId={ classId }
           fieldName={ fieldName }
-          objectId={ id }
+          objectId={ dataObject.id }
           { ...props }
         />
       </Form.KeyedList>

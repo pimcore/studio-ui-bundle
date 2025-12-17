@@ -8,20 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useStyles } from './title-view.styles'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Button } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
+import { isNil } from 'lodash'
 
 interface TitleViewProps {
   title: string
-  icon: ElementIcon
+  icon: IconProps
   className?: string
+  onClose?: () => void
 }
 
 const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { title, icon, className } = props
+  const { title, icon, className, onClose } = props
 
   return (
     <div className={ [styles.WidgetTitle, className, 'foobar'].join(' ') }>
@@ -34,6 +37,16 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
       />
 
       <span>{title}</span>
+
+      {!isNil(onClose) && (
+        <Button
+          className={ styles.CloseButton }
+          icon={ <CloseOutlined /> }
+          onClick={ onClose }
+          size="small"
+          type="text"
+        />
+      )}
     </div>
   )
 }

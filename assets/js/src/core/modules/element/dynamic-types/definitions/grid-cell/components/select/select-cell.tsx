@@ -10,7 +10,6 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { type RefSelectProps } from 'antd/es/select'
-import cn from 'classnames'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Select } from '@Pimcore/components/select/select'
 import { useStyles } from './select-cell.styles'
@@ -58,14 +57,14 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   if (!isInEditMode) {
     return (
-      <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+      <div className={ [styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ') }>
         { displayValue }
       </div>
     )
   }
 
   return (
-    <div className={ cn(styles['select-cell'], 'default-cell__content') }>
+    <div className={ [styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ') }>
       <Select
         onBlur={ disableEditMode }
         onChange={ onChange }

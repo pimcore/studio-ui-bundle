@@ -22,6 +22,9 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         & > .ant-tree-treenode {
           .ant-tree-switcher {
             width: ${props.hasRoot === true ? '24px' : '0'};
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
 
@@ -36,6 +39,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         .ant-tree-treenode {
           padding: 0 ${token.paddingXS}px;
           position: relative;
+          margin-bottom: 0;
           
           @media (hover: hover) {
             &:hover {
@@ -122,6 +126,11 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           right: 0;
           bottom: 0;
         }
+      }
+      
+      .ant-tree-icon__customize {
+        position: relative;
+        top: 1px;
       }
     `,
     noRoot: css`

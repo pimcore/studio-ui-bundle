@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
 
@@ -31,10 +32,14 @@ export class DynamicTypeDocumentEditableTextarea extends DynamicTypeDocumentEdit
         allowMultiLine
         className={ props.config?.class }
         height={ props.config?.height }
+        inherited={ props.inherited }
         placeholder={ props.config?.placeholder }
-        required={ props.config?.required }
         width={ props.config?.width }
       />
     )
+  }
+
+  isEmpty (value: any, props: TextareaEditableDefinition): boolean {
+    return !isNonEmptyString(value)
   }
 }

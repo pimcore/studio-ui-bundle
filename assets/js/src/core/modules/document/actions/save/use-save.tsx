@@ -8,16 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
+import { debounce } from 'lodash'
 import { DocumentContext } from '../../document-provider'
 import { useDocumentDraft } from '../../hooks/use-document-draft'
 import { SaveTaskType } from '@sdk/modules/data-object'
 import { documentSaveService } from '../../services'
+import { useAppDispatch } from '@sdk/app'
+import { setDocumentNodeNavigationExclude } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseSaveHookReturn {
   save: (task?: SaveTaskType, onFinish?: () => void) => Promise<void>
+  debouncedAutoSave: () => void
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -29,10 +33,18 @@ export { SaveTaskType }
 export const useSave = (): UseSaveHookReturn => {
   const { id } = useContext(DocumentContext)
   const { document } = useDocumentDraft(id)
+  const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState<FetchBaseQueryError | SerializedError | undefined>()
+
+  const debouncedAutoSave = useCallback(
+    debounce(() => {
+      documentSaveService.saveDocument(id, SaveTaskType.AutoSave).catch(console.error)
+    }, 500),
+    [id]
+  )
 
   const save = async (task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
     if (document?.changes === undefined) return
@@ -43,8 +55,16 @@ export const useSave = (): UseSaveHookReturn => {
       setError(undefined)
       setIsSuccess(false)
 
-      // Simply call the document save service
       await documentSaveService.saveDocument(id, task)
+
+      if (task !== SaveTaskType.AutoSave && document?.changes?.properties) {
+        const currentNavigationExclude = Boolean(document?.properties?.find(prop => prop.key === 'navigation_exclude')?.data)
+
+        dispatch(setDocumentNodeNavigationExclude({
+          nodeId: String(id),
+          navigationExclude: currentNavigationExclude
+        }))
+      }
 
       setIsSuccess(true)
       onFinish?.()
@@ -60,6 +80,7 @@ export const useSave = (): UseSaveHookReturn => {
 
   return {
     save,
+    debouncedAutoSave,
     isLoading,
     isSuccess,
     isError,

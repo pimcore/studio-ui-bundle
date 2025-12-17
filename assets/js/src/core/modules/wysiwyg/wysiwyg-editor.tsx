@@ -13,20 +13,25 @@ import { type WysiwygProps } from './interface/wysiwyg'
 import { componentConfig, ComponentRenderer } from '../app/component-registry/component-registry'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
-interface WysiwygEditorProps { editorProps: WysiwygProps }
+import { useStyles } from '@Pimcore/modules/wysiwyg/wysiwyg.styles'
+
+interface WysiwygEditorProps {
+  editorProps: WysiwygProps
+}
 
 export const WysiwygEditor = forwardRef(function WysiwygEditor (
   props: WysiwygEditorProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
   const { getStateClasses } = useDroppable()
+  const { styles } = useStyles()
 
   useEffect(() => {
   }, [props.editorProps])
 
   return (
     <div
-      className={ cn(...getStateClasses()) }
+      className={ cn(styles.wysiwygEditor, ...getStateClasses(), props.editorProps.className) }
       ref={ ref }
     >
       <ComponentRenderer

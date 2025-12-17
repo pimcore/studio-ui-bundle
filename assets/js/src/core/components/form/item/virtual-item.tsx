@@ -13,6 +13,8 @@ import React, { useMemo } from 'react'
 import { ItemProvider } from './provider/item/item-provider'
 import { useStyles } from './virtual-item.styles'
 import { Space } from '@Pimcore/components/space/space'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface VirtualItemProps extends FormItemProps {
   children?: React.ReactNode
@@ -39,8 +41,24 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
           <div className="virtual-item__label">
             <Space size="mini">
               <label htmlFor={ id }>
-                <Space size="mini">
+                <Space size="extra-small">
                   {label}
+
+                  {props.tooltip !== undefined && props.tooltip !== null && (
+                    <Tooltip
+                      className='virtual-item__tooltip'
+                      title={ typeof props.tooltip === 'object' && 'title' in props.tooltip ? props.tooltip.title : undefined }
+                    >
+                      {typeof props.tooltip === 'object' && 'icon' in props.tooltip
+                        ? props.tooltip.icon
+                        : (
+                          <Icon
+                            options={ { width: 14, height: 14 } }
+                            value="info-circle"
+                          />
+                          )}
+                    </Tooltip>
+                  )}
                 </Space>
               </label>
               {isRequired && <span className="required-indicator">*</span>}

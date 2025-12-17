@@ -8,15 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type AdvancedColumnConfig } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDataObjectGetGridPreviewQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { PreviewValue } from './preview-value'
-import React from 'react'
 import { Text } from '@Pimcore/components/text/text'
 import { usePreviewItem } from './preview-item-provider'
-import { useTranslation } from 'react-i18next'
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -24,10 +25,13 @@ export interface PreviewProps {
 
 export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   const { column } = props
+
   const { data: gridData } = useData()
   const { item } = usePreviewItem()
+
   const firstItem = gridData.items[0]
   const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined
+
   const { t } = useTranslation()
 
   const { data, error } = useDataObjectGetGridPreviewQuery({
@@ -43,9 +47,13 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
 
   return (
     <>
-      {error !== undefined && <Text type="danger">Error loading preview: {'error' in error ? error?.error : <></>} </Text>}
+      {!isUndefined(error) && (
+        <Text type="danger">
+          {t('grid.advanced-column.error-preview-data')}: {'error' in error ? error?.error : <></>}
+        </Text>
+      )}
 
-      {error === undefined
+      {isUndefined(error)
         ? (
           <>
             {data?.value?.length > 0

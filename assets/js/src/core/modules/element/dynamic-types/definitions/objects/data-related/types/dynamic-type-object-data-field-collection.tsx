@@ -27,6 +27,8 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
     formLayout: 'vertical'
   }
 
+  isAllowedInBatchEdit: boolean = false
+
   getObjectDataComponent (props: FieldCollectionProps): React.ReactElement<FieldCollectionProps> {
     return <FieldCollection { ...props } />
   }

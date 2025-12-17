@@ -9,9 +9,9 @@
  */
 
 import { container } from '@Pimcore/app/depency-injection'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { isNil, isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
@@ -23,90 +23,59 @@ interface IUseMainNavReturn {
   navItems: IMainNavItem[]
 }
 
-const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void => {
-  const levels = item.path.split('/')
-  if (levels.length > 4) {
-    console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', item)
-    return
-  }
-
-  let currentLevel = items
-  levels.forEach((level: string, index) => {
-    let existingItem = currentLevel.find(i => i.id === level)
-    const isCurrentItem = index === levels.length - 1
-
-    if (isUndefined(existingItem)) {
-      let levelLabel = level
-
-      if (!isCurrentItem && !isUndefined(item.group) && level === item.group) {
-        levelLabel = item.group
-      } else if (isCurrentItem) {
-        levelLabel = item.label ?? level
-      }
-
-      existingItem = {
-        order: isCurrentItem ? item.order : 1000,
-        id: level,
-        label: levelLabel,
-        path: levels.slice(0, index + 1).join('/'),
-        children: [],
-        ...(isCurrentItem && {
-          dividerBottom: item.dividerBottom,
-          icon: item.icon,
-          widgetConfig: item.widgetConfig,
-          onClick: item.onClick,
-          button: item.button,
-          className: item.className,
-          perspectivePermission: item.perspectivePermission,
-          perspectivePermissionHide: item.perspectivePermissionHide
-        })
-      }
-      currentLevel.push(existingItem)
-    } else if (index === levels.length - 1) {
-      Object.assign(existingItem, {
-        icon: item.icon,
-        order: item.order ?? 1000,
-        className: item.className
-      })
-    }
-
-    currentLevel.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
-    currentLevel = existingItem.children ?? []
-  })
-
-  items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
-}
-
 export const useMainNav = (): IUseMainNavReturn => {
   const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
   const user = useUser()
   const activePerspective = useSelector(selectActivePerspective)
+  const [registryUpdate, setRegistryUpdate] = useState(0)
 
-  const createNavItems = (): IMainNavItem[] => {
-    const items: IMainNavItem[] = []
-
-    if (isNil(user) || isNil(activePerspective)) {
-      return items
-    }
-
-    mainNavRegistryService.getMainNavItems().forEach(item => {
-      if (item.permission !== undefined && !isAllowed(item.permission)) {
-        return
-      }
-
-      if (item.perspectivePermission !== undefined && !isAllowedInPerspective(item.perspectivePermission)) {
-        return
-      }
-
-      addNavItemToItemList(items, item)
+  useEffect(() => {
+    return mainNavRegistryService.subscribe(() => {
+      setRegistryUpdate((prev) => prev + 1)
     })
+  }, [mainNavRegistryService])
 
-    return items
+  const filterItems = (items: IMainNavItem[]): IMainNavItem[] => {
+    return items.filter(item => {
+      if (!isNil(item.hidden) && item.hidden()) {
+        return false
+      }
+
+      if (!isNil(item.permission) && !isAllowed(item.permission)) {
+        return false
+      }
+
+      if (!isNil(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)) {
+        return false
+      }
+
+      if (!isNil(item.perspectivePermission) && !isAllowedInPerspective(item.perspectivePermission)) {
+        return false
+      }
+
+      if (!isNil(item.children)) {
+        item.children = filterItems(item.children)
+
+        // If the item has no children left and is not an interactive item (leaf), hide it.
+        // This prevents empty menu groups from appearing.
+        const isInteractive = !isNil(item.onClick) || !isNil(item.widgetConfig) || !isNil(item.button)
+        if (item.children.length === 0 && !isInteractive) {
+          return false
+        }
+      }
+
+      return true
+    })
   }
 
   const navItems = useMemo(() => {
-    return createNavItems()
-  }, [mainNavRegistryService.getMainNavItems(), user, activePerspective])
+    if (isNil(user) || isNil(activePerspective)) {
+      return []
+    }
+
+    const tree = mainNavRegistryService.getMainNavTree()
+    return filterItems(tree)
+  }, [user, activePerspective, registryUpdate])
 
   return {
     navItems

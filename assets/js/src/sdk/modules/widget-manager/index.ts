@@ -14,4 +14,24 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 export * from '@Pimcore/modules/widget-manager/services/widget-registry'
-export type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+export * from '@Pimcore/modules/widget-manager/widget-manager-slice'
+// Additional types
+export type { Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
+export type { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+export type { ElementType } from '@Pimcore/types/enums/element/element-type'
+export * from '@Pimcore/modules/widget-manager/events'
+
+// Processor Registry for widget manipulation
+export * from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
+
+// Components for titleComponent (tab/button titles)
+export { TabTitleContainer } from '@Pimcore/modules/widget-manager/title/tab-title-container'
+export { BorderTitleView } from '@Pimcore/modules/widget-manager/title/border-title-view'
+export { TabTitleView } from '@Pimcore/modules/widget-manager/title/tab-title-view'
+export type { TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
+export type { TabTitleOuterContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-outer-container'
+
+// Components for contentTitleComponent (widget content headers)
+export { WidgetContentTitleView } from '@Pimcore/modules/widget-manager/widget/widget-content-title-view'
+export type { WidgetContentTitleViewProps } from '@Pimcore/modules/widget-manager/widget/widget-content-title-view'
+export type { WidgetContentTitleContainerProps } from '@Pimcore/modules/widget-manager/widget/widget-content-title-container'

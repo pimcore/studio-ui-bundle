@@ -33,6 +33,9 @@ interface ElementPatchArgs {
       parentId?: number | null
       key?: string | null
       locked?: string | null
+      index?: number | null
+      childrenSortBy?: string | null
+      childrenSortOrder?: string | null
     }>
   }
 }
@@ -68,7 +71,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const [dataObjectClone] = useDataObjectCloneMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
-  const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DATA_OBJECT_TREE'])
+  const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DOCUMENT_TREE'])
 
   const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
     try {
@@ -101,7 +104,8 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
             data: {
               parentId: args.body.data[0].parentId,
               key: args.body.data[0].key,
-              locked: args.body.data[0].locked
+              locked: args.body.data[0].locked,
+              index: args.body.data[0].index
             }
           }
         })

@@ -10,6 +10,7 @@
 
 import React, { type ReactElement, useState, createContext, useContext } from 'react'
 import { Dropdown } from 'antd'
+import { DropdownHeightProvider } from '@Pimcore/components/dropdown/dropdown-height-provider'
 
 interface ContextMenuContextType {
   closeMenu: () => void
@@ -29,20 +30,25 @@ export const useCloseContextMenu = (): (() => void) | undefined => {
 export interface ContextMenuWrapperProps {
   children: React.ReactNode
   renderMenu: () => ReactElement
+  calculateAutoHeight?: boolean
 }
 
-const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): React.JSX.Element => {
+export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight = true }: ContextMenuWrapperProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
 
   const closeMenu = (): void => {
     setOpen(false)
   }
 
+  const handleContextMenu = (event: React.MouseEvent): void => {
+    event.stopPropagation()
+  }
+
   const contextValue: ContextMenuContextType = {
     closeMenu
   }
 
-  return (
+  const dropdown = (
     <Dropdown
       dropdownRender={ () => (
         <ContextMenuContext.Provider value={ contextValue }>
@@ -53,9 +59,22 @@ const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): 
       open={ open }
       trigger={ ['contextMenu'] }
     >
-      <span>{children}</span>
+      <span
+        onContextMenu={ handleContextMenu }
+        role="none"
+      >{children}</span>
     </Dropdown>
   )
+
+  if (calculateAutoHeight) {
+    return (
+      <DropdownHeightProvider>
+        {dropdown}
+      </DropdownHeightProvider>
+    )
+  }
+
+  return dropdown
 }
 
 export default ContextMenuWrapper

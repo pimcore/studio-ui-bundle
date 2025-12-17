@@ -13,6 +13,7 @@ import { type BaseQueryFn, type TypedUseQueryHookResult } from '@reduxjs/toolkit
 import { type useGridOptions } from '../view-layer/components/grid/hooks/use-grid-options'
 import { type useSidebarOptions } from '../view-layer/components/sidebar/hooks/use-sidebar-options'
 import { type DataContextProps } from '../data-layer/provider/data/data-provider'
+import { type useColumnMapper } from '../configuration-layer/provider/selected-columns/use-column-mapper'
 
 export interface UseQueryHelperReturn {
   hasRequiredArgs: () => boolean
@@ -30,10 +31,12 @@ export interface SettingsContextProps {
   ConfigurationComponent: ElementType
   DataComponent: ElementType
   ViewComponent: ElementType
+  toolbarSlotName?: string
   useDataQueryHelper: () => UseQueryHelperReturn
   useDataQuery: (...props: unknown[]) => TypedUseQueryHookResult<any, unknown, BaseQueryFn>
   useGridOptions: typeof useGridOptions
   useSidebarOptions: typeof useSidebarOptions
+  useColumnMapper: typeof useColumnMapper
   useElementId: () => UseElementIdReturn
 }
 

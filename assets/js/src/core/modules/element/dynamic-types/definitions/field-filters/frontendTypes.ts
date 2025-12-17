@@ -12,11 +12,18 @@
  * Enum for field filter types used in dynamic type field filters.
  * These types determine how the filtering logic is applied on the backend.
  */
-export enum FieldFilterFrontendType {
 
-  String = 'system.string',
-  Fulltext = 'system.fulltext',
+export enum FieldFilterFrontendType {
   Boolean = 'system.boolean',
   DateTime = 'system.datetime',
-  Id = 'system.id'
+  Date = 'system.date',
+  InputQuantityValue = 'system.input_quantity_value',
+  Number = 'system.number',
+  QuantityValue = 'system.quantity_value',
+  Rgba = 'system.rgba',
+  Select = 'system.select',
+  String = 'system.string',
+  Time = 'system.time',
+
+  Consent = 'crm.consent'
 }

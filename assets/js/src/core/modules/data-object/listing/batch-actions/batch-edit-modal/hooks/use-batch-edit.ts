@@ -15,9 +15,10 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
-  updateLocale: (key: string, locale: string | null) => void
+  addOrUpdateBatchEdits: (columns: AvailableColumn[]) => void
+  updateLocale: (batchEdit: BatchEdit, locale: string | null) => void
   resetBatchEdits: () => void
-  removeBatchEdit: (key: string) => void
+  removeBatchEdit: (batchEdit: BatchEdit) => void
 }
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
@@ -28,7 +29,9 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits([])
   }
 
-  const updateLocale = (columnKey: string, locale: string | null): void => {
+  const updateLocale = (batchEdit: BatchEdit, locale: string | null): void => {
+    const columnKey = batchEdit.key
+
     const updatedEdits = batchEdits.map(edit => {
       if (edit.key === columnKey) {
         return {
@@ -63,8 +66,41 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits(updatedEdits)
   }
 
-  const removeBatchEdit = (key: string): void => {
-    const updatedEdits = batchEdits.filter(edit => edit.key !== key)
+  const addOrUpdateBatchEdits = (columns: AvailableColumn[]): void => {
+    const updatedEdits: BatchEdit[] = [...batchEdits]
+
+    columns.forEach(column => {
+      const newEdit: BatchEdit = {
+        ...column,
+        // @todo infer selected language from grid config when available
+        locale: column.localizable ? column.locale ?? settings.requiredLanguages[0] : null,
+        value: undefined
+      }
+
+      const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key)
+
+      if (existingIndex !== -1) {
+        updatedEdits[existingIndex] = newEdit
+      } else {
+        updatedEdits.push(newEdit)
+      }
+    })
+
+    setBatchEdits(updatedEdits)
+  }
+
+  const removeBatchEdit = (batchEdit: BatchEdit): void => {
+    const updatedEdits = batchEdits.filter(edit => {
+      if (batchEdit.type === 'dataobject.classificationstore') {
+        if (!('keyId' in edit.config) || !('groupId' in edit.config) || !('keyId' in batchEdit.config) || !('groupId' in batchEdit.config)) {
+          throw new Error('keyId or groupId is missing in config')
+        }
+
+        return !(edit.key === batchEdit.key && edit.config.keyId === batchEdit.config.keyId && edit.config.groupId === batchEdit.config.groupId)
+      }
+
+      return edit.key !== batchEdit.key
+    })
     setBatchEdits(updatedEdits)
   }
 
@@ -72,6 +108,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     batchEdits,
     setBatchEdits,
     addOrUpdateBatchEdit,
+    addOrUpdateBatchEdits,
     updateLocale,
     resetBatchEdits,
     removeBatchEdit

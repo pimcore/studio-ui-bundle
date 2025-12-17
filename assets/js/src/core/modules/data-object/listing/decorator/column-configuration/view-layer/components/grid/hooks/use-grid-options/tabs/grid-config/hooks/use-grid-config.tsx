@@ -15,6 +15,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 export interface IUseGridConfigHookReturn extends IGridConfigContext {
   removeColumn: (column: AvailableColumn) => void
   addColumn: (column: AvailableColumn) => void
+  addColumns: (columns: AvailableColumn[]) => void
   resetColumns: () => void
 }
 
@@ -29,6 +30,10 @@ export const useGridConfig = (): IUseGridConfigHookReturn => {
     setColumns([...columns, column])
   }
 
+  function addColumns (newColumns: AvailableColumn[]): void {
+    setColumns([...columns, ...newColumns])
+  }
+
   function resetColumns (): void {
     setColumns([])
   }
@@ -38,6 +43,7 @@ export const useGridConfig = (): IUseGridConfigHookReturn => {
     setColumns,
     removeColumn,
     addColumn,
+    addColumns,
     resetColumns
   }
 }

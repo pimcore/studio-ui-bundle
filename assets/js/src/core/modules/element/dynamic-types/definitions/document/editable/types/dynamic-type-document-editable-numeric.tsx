@@ -9,11 +9,9 @@
  */
 
 import React from 'react'
-import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { InputNumber } from '@sdk/components'
 import { isNil } from 'lodash'
-import cn from 'classnames'
-import { toCssDimension } from '@sdk/utils'
+import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
+import { NumericEditable } from '../components/numeric-editable/numeric-editable'
 
 export type NumericEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -30,11 +28,11 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
 
   getEditableDataComponent (props: NumericEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <InputNumber
-        className={ cn('w-full', props.config?.class) }
-        max={ props.config?.maxValue }
-        min={ props.config?.minValue }
-        style={ { maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.small) } }
+      <NumericEditable
+        config={ props.config }
+        inherited={ props.inherited }
+        onChange={ props.onChange }
+        value={ props.value }
       />
     )
   }
@@ -44,5 +42,9 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
       return props.config?.defaultValue
     }
     return value
+  }
+
+  isEmpty (value: any, props: NumericEditableDefinition): boolean {
+    return isNil(value) || value === ''
   }
 }

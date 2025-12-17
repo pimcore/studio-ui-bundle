@@ -8,17 +8,52 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './perspectives-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.PERSPECTIVES],
+  addTagTypes: [
+    tagNames.PERSPECTIVES,
+    tagNames.PERSPECTIVE_DETAIL,
+    tagNames.WIDGETS,
+    tagNames.WIDGET_DETAIL
+  ],
   endpoints: {
     perspectiveGetConfigCollection: {
-      providesTags: () => providingTags.PERSPECTIVES()
+      providesTags: (result): Tag[] => {
+        return providingTags.PERSPECTIVES()
+      }
+    },
+    perspectiveGetConfigById: {
+      providesTags: (result, error, args): Tag[] => {
+        return providingTags.PERSPECTIVE_DETAIL(args.perspectiveId)
+      }
+    },
+    perspectiveUpdateConfigById: {
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
+    },
+    perspectiveDelete: {
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
     },
     perspectiveCreate: {
-      invalidatesTags: () => [tagNames.PERSPECTIVES]
+      invalidatesTags: () => invalidatingTags.PERSPECTIVES()
+    },
+    perspectiveWidgetGetConfigCollection: {
+      providesTags: (result, error, args): Tag[] => providingTags.WIDGETS()
+    },
+    perspectiveWidgetGetConfigById: {
+      providesTags: (result, error, args): Tag[] => {
+        return providingTags.WIDGET_DETAIL(args.widgetId, args.widgetType)
+      }
+    },
+    perspectiveWidgetUpdateConfigById: {
+      invalidatesTags: () => invalidatingTags.WIDGETS()
+    },
+    perspectiveWidgetCreate: {
+      invalidatesTags: () => invalidatingTags.WIDGETS()
+    },
+    perspectiveWidgetDelete: {
+      invalidatesTags: () => invalidatingTags.WIDGETS()
     }
   }
 })

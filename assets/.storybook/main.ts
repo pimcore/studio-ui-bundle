@@ -104,7 +104,10 @@ const config: StorybookConfig = {
     };
   },
 
-  staticDirs: [{from: __dirname + '/../../doc/img', to: 'img'}],
+  staticDirs: [
+    {from: __dirname + '/../../doc/img', to: 'img'},
+    {from: __dirname + '/../../public/img', to: 'bundles/pimcorestudioui/img/storybook'}
+  ],
 };
 
 export default config;

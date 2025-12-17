@@ -29,6 +29,11 @@ export interface DroppableProps {
    * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
    */
   disableDndActiveIndicator?: boolean
+  /**
+   * CSS class name to be applied to external DOM elements to make them droppable targets.
+   * When specified, all elements with this class will receive the same drag and drop functionality.
+   */
+  dropClass?: string
 }
 
 export interface DragAndDropInfo {
@@ -43,7 +48,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   if (props.disabled === true) {
     return (
       <div className={ cn(props.className) }>
-        <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false } }>
+        <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false, hasValidDrop: false } }>
           {props.children}
         </DroppableContextProvider>
       </div>
@@ -54,6 +59,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
     <BaseDroppable
       className={ props.className }
       disableDndActiveIndicator={ props.disableDndActiveIndicator }
+      dropClass={ props.dropClass }
       isValidContext={ props.isValidContext }
       isValidData={ props.isValidData }
       onDrop={ props.onDrop }

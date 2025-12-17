@@ -51,7 +51,11 @@ export const Accordion = ({
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 
   useEffect(() => {
-    setExpandedIds([String(activeKey)])
+    if (Array.isArray(activeKey)) {
+      setExpandedIds(activeKey.map(String))
+    } else if (activeKey != null) {
+      setExpandedIds([String(activeKey)])
+    }
   }, [activeKey])
 
   const onClickChevron = (id: string): void => {
@@ -107,7 +111,7 @@ export const Accordion = ({
       className: itemClassNames.join(' '),
       label: <>
         <Flex
-          align={ 'baseline' }
+          align={ 'center' }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}

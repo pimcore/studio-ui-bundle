@@ -15,7 +15,7 @@ import '@Pimcore/modules/document/editor/types/hardlink'
 import '@Pimcore/modules/document/editor/types/link'
 import '@Pimcore/modules/document/editor/types/page'
 import '@Pimcore/modules/document/editor/types/snippet'
-import '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit'
+import '@Pimcore/modules/document/editor/toolbar/context-menu'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -27,7 +27,7 @@ import {
 import { EditorContainer } from './editor-container'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { EditorToolbarContextMenu } from './toolbar/context-menu/context-menu'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButtons } from './toolbar/save-buttons/save-buttons'
 
 moduleSystem.registerModule({

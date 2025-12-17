@@ -20,6 +20,8 @@ interface ISplitLayoutItem extends Omit<SplitLayoutItemProps, 'withDivider' | 'o
 export interface SplitLayoutProps {
   leftItem: ISplitLayoutItem
   rightItem: ISplitLayoutItem
+  leftItemFullWidth?: boolean
+  rightItemFullWidth?: boolean
   withDivider?: boolean
   resizeAble?: boolean
   withToolbar?: boolean
@@ -29,7 +31,15 @@ interface ISplitLayoutItemSizing extends Omit<ISplitLayoutItem, 'children'> {}
 
 const RESIZE_INCREMENT = 5 // define the amount to resize with each key press
 
-export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAble = false, withToolbar = false }: SplitLayoutProps): React.JSX.Element => {
+export const SplitLayout = ({
+  leftItem,
+  rightItem,
+  withDivider = false,
+  resizeAble = false,
+  withToolbar = false,
+  leftItemFullWidth = false,
+  rightItemFullWidth = false
+}: SplitLayoutProps): React.JSX.Element => {
   const leftItemRef = useRef<HTMLDivElement>(null)
   const rightItemRef = useRef<HTMLDivElement>(null)
   const elementRef = useRef<HTMLDivElement>(null)
@@ -87,32 +97,41 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
     }
   }
 
+  const isLeftItemFullWidth = leftItemFullWidth && !rightItemFullWidth
+  const isRightItemFullWidth = rightItemFullWidth && !leftItemFullWidth
+
   return (
     <Flex
       className={ cn('split-layout', styles.splitLayout) }
       ref={ elementRef }
     >
-      <SplitLayoutItem
-        ref={ leftItemRef }
-        { ...internalLeftItemSizing }
-      >
-        { leftItemChildren }
-      </SplitLayoutItem>
-
-      {withDivider && (
-      <Divider
-        onKeyboardResize={ resizeAble ? onKeyboardResize : undefined }
-        onMouseResize={ resizeAble ? onMouseResize : undefined }
-        withToolbar={ withToolbar }
-      />
+      {!isRightItemFullWidth && (
+        <SplitLayoutItem
+          ref={ leftItemRef }
+          { ...internalLeftItemSizing }
+          size={ leftItemFullWidth ? 100 : internalLeftItemSizing.size }
+        >
+          { leftItemChildren }
+        </SplitLayoutItem>
       )}
 
-      <SplitLayoutItem
-        ref={ rightItemRef }
-        { ...internalRightItemSizing }
-      >
-        { rightItemChildren }
-      </SplitLayoutItem>
+      {withDivider && !isLeftItemFullWidth && !isRightItemFullWidth && (
+        <Divider
+          onKeyboardResize={ resizeAble ? onKeyboardResize : undefined }
+          onMouseResize={ resizeAble ? onMouseResize : undefined }
+          withToolbar={ withToolbar }
+        />
+      )}
+
+      {!isLeftItemFullWidth && (
+        <SplitLayoutItem
+          ref={ rightItemRef }
+          { ...internalRightItemSizing }
+          size={ rightItemFullWidth ? 100 : internalRightItemSizing.size }
+        >
+          { rightItemChildren }
+        </SplitLayoutItem>
+      )}
     </Flex>
   )
 }

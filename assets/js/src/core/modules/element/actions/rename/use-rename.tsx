@@ -20,7 +20,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -31,7 +31,7 @@ import { ContextMenuActionName } from '..'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
-  renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  renameTreeContextMenuItem: (node: TreeNodeProps, onFinish?: (newName: string) => void) => ItemType
   renameContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   renameGridContextMenuItem: (row: any) => ItemType | undefined
   renameMutation: (parentId: number, value: string) => Promise<void>
@@ -62,8 +62,8 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       },
       onOk: async (value: string) => {
         setIsLoading(true)
-        await renameMutation(id, value, parentId, () => {
-          onFinish?.(value)
+        await renameMutation(id, value, parentId, (newName: string) => {
+          onFinish?.(newName)
           setIsLoading(false)
         })
       }
@@ -116,7 +116,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     )
   }
 
-  const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const renameTreeContextMenuItem = (node: TreeNodeProps, onFinish?: (newName: string) => void): ItemType => {
     return {
       label: t('element.rename'),
       key: ContextMenuActionName.rename,
@@ -125,12 +125,12 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
-        rename(id, node.label, parentId)
+        rename(id, node.label, parentId, onFinish)
       }
     }
   }
 
-  const renameMutation = async (id: number, value: string, parentId?: number, onFinish?: () => void): Promise<void> => {
+  const renameMutation = async (id: number, value: string, parentId?: number, onFinish?: (newName: string) => void): Promise<void> => {
     const elementRenameTask = elementPatch({
       body: {
         data: [{
@@ -151,7 +151,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
       updateFilenameOrKey(id, value)
 
-      onFinish?.()
+      onFinish?.(value)
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
     }

@@ -10,20 +10,19 @@
 
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import React, { useContext, useRef, useMemo, useCallback } from 'react'
+import React, { useContext, useRef, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isNil } from 'lodash'
-import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
+import { useDocumentUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DocumentEditorSidebarManager } from './sidebar/sidebar-manager'
+import { getDocumentSidebarManager } from '../../../sidebar/sidebar-manager-helper'
 import { useDocumentEditorSidebarEntries } from './hooks/use-document-editor-sidebar-entries'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { removeDocument } from '@Pimcore/modules/document/document-editor-slice'
+import { DraftAlert } from './components/draft-alert/draft-alert'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
@@ -32,7 +31,7 @@ export const EditContainer = (): React.JSX.Element => {
   const iframeRef = useRef<IframeRef>(null)
   const dispatch = useAppDispatch()
 
-  const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
+  const sidebarManager = getDocumentSidebarManager(documentDraft?.type)
   const sidebarButtons = sidebarManager.getButtons()
   const sidebarEntries = useDocumentEditorSidebarEntries()
 
@@ -49,9 +48,13 @@ export const EditContainer = (): React.JSX.Element => {
     }
   }, [id])
 
-  const iframeSrc = useMemo(() => {
-    return addCacheBusterToUrl(`${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}`)
-  }, [documentDraft?.fullPath, id])
+  const baseParameters = useMemo(() => ({
+    pimcore_editmode: 'true',
+    pimcore_studio: 'true',
+    documentId: id.toString()
+  }), [id])
+
+  const iframeSrc = useDocumentUrlProcessor(id, 'edit', documentDraft?.fullPath ?? '', baseParameters)
 
   // Cleanup on unmount
   React.useEffect(() => {
@@ -68,13 +71,20 @@ export const EditContainer = (): React.JSX.Element => {
   }, [id, dispatch])
 
   return (
-    <ContentLayout renderSidebar={
-      <Sidebar
-        buttons={ sidebarButtons }
-        entries={ sidebarEntries }
-        translateTooltips
-      />
+    <ContentLayout
+      renderSidebar={
+        sidebarEntries.length > 0
+          ? (
+            <Sidebar
+              buttons={ sidebarButtons }
+              entries={ sidebarEntries }
+              sizing="medium"
+              translateTooltips
+            />
+            )
+          : undefined
       }
+      renderTopBar={ <DraftAlert /> }
     >
       <Iframe
         onLoad={ handleIframeLoad }

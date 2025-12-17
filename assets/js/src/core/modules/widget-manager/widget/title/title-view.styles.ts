@@ -19,6 +19,16 @@ export const useStyles = createStyles(({ token, css }) => {
       align-items: center;
       color: ${token.Tree.colorPrimaryHeading};
       font-weight: 600;
+    `,
+    CloseButton: css`
+      margin-left: auto;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     `
   }
 }, { hashPriority: 'low' })

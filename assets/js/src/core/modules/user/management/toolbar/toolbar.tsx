@@ -59,7 +59,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
   }
 
   const onSaveClick = (): void => {
-    updateUserById({ id, user: user as UserDraft }).catch(() => {
+    updateUserById({ id, user: { ...user as UserDraft } }).catch(() => {
       console.error('error')
     })
   }
@@ -68,13 +68,13 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
     {
       key: '1',
       label: t('tree.actions.clone-user'),
-      icon: <Icon value='copy-03'></Icon>,
+      icon: <Icon value='copy'></Icon>,
       onClick: onCloneUser
     },
     {
       key: '2',
       label: t('tree.actions.remove-user'),
-      icon: <Icon value='delete-outlined'></Icon>,
+      icon: <Icon value='trash'></Icon>,
       onClick: onRemoveUser
     }
   ]
@@ -116,7 +116,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
         onClick={ onSaveClick }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )

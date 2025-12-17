@@ -10,7 +10,7 @@
 
 import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } from 'react'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
-import ContextMenuWrapper from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
+import { ContextMenuWrapper } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
 import { DocumentTreeContextMenu } from '../context-menu/context-menu'
 import { isUndefined } from 'lodash'
 

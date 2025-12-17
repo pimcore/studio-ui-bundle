@@ -10,7 +10,7 @@
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import React, { StrictMode } from 'react'
-import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
+import { EditablesLoader } from '../components/editables-renderer/editables-loader'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
 import { isNaN, isNil, isNumber } from 'lodash'
@@ -20,6 +20,7 @@ import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
 import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
+import { DocumentEditorIframeGlobalStyles } from './styles/global.styles'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -60,10 +61,11 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
       <ErrorBoundary>
         <GlobalProvider>
           <AntApp>
+            <DocumentEditorIframeGlobalStyles />
             <ModalsProvider>
               <DateTimeConfig>
                 <DocumentProvider id={ documentId }>
-                  <EditablesRenderer editableDefinitions={ editableDefinitions } />
+                  <EditablesLoader editableDefinitions={ editableDefinitions } />
                 </DocumentProvider>
               </DateTimeConfig>
             </ModalsProvider>

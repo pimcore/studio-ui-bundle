@@ -16,6 +16,20 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 import { TranslationsWrapper } from './translations-wrapper'
+import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+
+export const TRANSLATIONS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Translations',
+  id: 'translations',
+  component: 'translations',
+  config: {
+    translationKey: 'widget.translations',
+    icon: {
+      type: 'name',
+      value: 'translate'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -27,19 +41,8 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       order: 100,
       permission: UserPermission.Translations,
-      perspectivePermission: NavPermission.PredefinedProperties,
-      widgetConfig: {
-        name: 'Translations',
-        id: 'translations',
-        component: 'translations',
-        config: {
-          translationKey: 'widget.translations',
-          icon: {
-            type: 'name',
-            value: 'translate'
-          }
-        }
-      }
+      perspectivePermission: NavPermission.Translations,
+      widgetConfig: TRANSLATIONS_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

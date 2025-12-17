@@ -14,6 +14,7 @@ import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
 import { FocalPoint } from '@Pimcore/components/focal-point/focal-point'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
+import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 interface PreviewViewProps {
   src: string
@@ -35,7 +36,7 @@ const POST_MESSAGE_SUCCESS = {
 const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   const { src } = props
 
-  const [imageSrc, setImageSrc] = useState(src)
+  const [imageSrc, setImageSrc] = useState(addCacheBusterToUrl(src))
 
   const { styles } = useStyle()
 
@@ -50,7 +51,7 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
 
       if (type === POST_MESSAGE_SUCCESS.type && message === POST_MESSAGE_SUCCESS.message) {
         // Update the image to force a reload
-        setImageSrc(`${src}?hash=${new Date().getTime()}`)
+        setImageSrc(addCacheBusterToUrl(src))
       }
     }
 

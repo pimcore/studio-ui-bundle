@@ -22,10 +22,10 @@ import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyle } from '../../components/image-editable/image-editable-preview.styles'
 
 interface ResponsiveAssetPreviewProps {
-  src?: string
   assetId?: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
+  dropClass?: string
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
@@ -35,10 +35,10 @@ interface ResponsiveAssetPreviewProps {
 }
 
 export const ResponsiveAssetPreview = ({
-  src,
   assetId,
   className,
   dropdownItems,
+  dropClass,
   imgAttributes,
   onImageLoad,
   onResize,
@@ -51,21 +51,10 @@ export const ResponsiveAssetPreview = ({
   const keyRef = useRef(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const lastAssetIdRef = useRef<number | undefined>(assetId)
+  const lastImageSrcRef = useRef<string | undefined>(undefined)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResize(imageContainerRef)
-
-  const stableThumbnailUrlRef = useRef<string | null | undefined>(undefined)
-  const lastThumbnailAssetIdRef = useRef<number | undefined>(undefined)
-
-  if (lastThumbnailAssetIdRef.current !== assetId) {
-    lastThumbnailAssetIdRef.current = assetId
-    stableThumbnailUrlRef.current = undefined
-  }
-
-  if (thumbnailUrl !== undefined && thumbnailUrl !== null && stableThumbnailUrlRef.current === undefined) {
-    stableThumbnailUrlRef.current = thumbnailUrl
-  }
 
   useEffect(() => {
     if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0) {
@@ -79,19 +68,25 @@ export const ResponsiveAssetPreview = ({
       keyRef.current = keyRef.current + 1
       setIsImageLoaded(false)
       onImageLoadedChange?.(false)
+      lastImageSrcRef.current = undefined
     }
   }, [assetId, onImageLoadedChange])
 
   const finalImageSrc = useMemo(() => {
-    const stableThumbnailUrl = stableThumbnailUrlRef.current
     if (assetId === undefined) {
-      return src
+      return undefined
     }
-    if (stableThumbnailUrl === undefined) {
-      return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
+    return thumbnailUrl ?? undefined
+  }, [assetId, thumbnailUrl])
+
+  useEffect(() => {
+    if (finalImageSrc !== lastImageSrcRef.current) {
+      lastImageSrcRef.current = finalImageSrc
+      keyRef.current = keyRef.current + 1
+      setIsImageLoaded(false)
+      onImageLoadedChange?.(false)
     }
-    return stableThumbnailUrl ?? src
-  }, [assetId, src, thumbnailUrl])
+  }, [finalImageSrc, onImageLoadedChange])
 
   const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>): void => {
     setIsImageLoaded(true)
@@ -110,6 +105,7 @@ export const ResponsiveAssetPreview = ({
   return (
     <Dropdown
       disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      dropClass={ dropClass }
       menu={ { items: dropdownItems } }
       trigger={ ['contextMenu'] }
     >

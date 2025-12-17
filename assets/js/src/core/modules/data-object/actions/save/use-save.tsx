@@ -11,7 +11,6 @@
 import { useContext, useEffect } from 'react'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import type { DataObjectUpdateByIdApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import type {
   DataProperty as DataPropertyApi
@@ -25,6 +24,16 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type DataObjectSaveDataProcessorRegistry,
+  DataObjectSaveDataContext,
+  type DataObjectSaveUpdateData
+} from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type PostUpdateEvent } from '../../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -84,7 +93,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     setRunningTask(task)
 
-    const updatedData: DataObjectUpdateByIdApiArg['body']['data'] = {}
+    const updatedData: DataObjectSaveUpdateData = {}
     if (dataObject.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
@@ -112,6 +121,13 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     updatedData.useDraftData = useDraftData
 
+    const saveDataProcessorRegistry = container.get<DataObjectSaveDataProcessorRegistry>(
+      serviceIds['DataObject/ProcessorRegistry/SaveDataProcessor']
+    )
+
+    const context = new DataObjectSaveDataContext(id, task, updatedData)
+    saveDataProcessorRegistry.executeProcessors(context)
+
     await saveDataObject({
       id,
       body: {
@@ -121,10 +137,29 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       }
     }).then((response) => {
       if (response.error === undefined) {
-        setDraftData(response.data?.draftData ?? null)
+        if ('draftData' in response.data) {
+          setDraftData(response.data?.draftData ?? null)
+        }
+
         if (task === SaveTaskType.Publish) {
           dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: true }))
         }
+
+        const event: PostUpdateEvent = {
+          identifier: {
+            type: eventTypes['data-object:editor:post-update'],
+            id: String(id)
+          },
+          payload: {
+            id,
+            task,
+            updatedData,
+            responseData: response.data
+          }
+        }
+
+        eventBus.publish(event)
+
         onFinish?.()
       }
       setRunningTask(undefined)

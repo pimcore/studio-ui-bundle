@@ -14,7 +14,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon, type Element } from '@Pimcore/modules/element/element-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
-import { openMainWidget, setActiveWidgetById } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
 
 // Import draft fetcher functions directly
@@ -63,32 +63,25 @@ export class DocumentOpeningService {
     }
   }
 
-  async openDocument (config: DocumentConfig): Promise<void> {
-    const { id } = config
-    const widgetId = getWidgetId('document', id)
-
-    if (this.isWidgetOpen(widgetId)) {
-      this.switchToWidget(widgetId)
-      return
-    }
-
+  async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(id)))
     const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
 
-    if (isError) {
+    if (isError && !silent) {
       trackError(new ApiError(error))
     }
 
     if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
-      return
+      return undefined
     }
 
     // Store draft data for the element editor
     await this.fetchAndStoreDocumentDraft(id)
 
     const icon = getElementIcon(data as Element, { value: 'widget', type: 'name' })
+    const widgetId = getWidgetId('document', id)
 
-    store.dispatch(openMainWidget({
+    return {
       name: data?.key,
       id: widgetId,
       component: 'document-editor',
@@ -100,7 +93,23 @@ export class DocumentOpeningService {
           value: icon.value
         }
       }
-    }))
+    }
+  }
+
+  async openDocument (config: DocumentConfig): Promise<void> {
+    const { id } = config
+    const widgetId = getWidgetId('document', id)
+
+    if (this.isWidgetOpen(widgetId)) {
+      this.switchToWidget(widgetId)
+      return
+    }
+
+    const widgetConfig = await this.getWidgetConfig(id)
+
+    if (!isNil(widgetConfig)) {
+      store.dispatch(openMainWidget(widgetConfig))
+    }
   }
 }
 

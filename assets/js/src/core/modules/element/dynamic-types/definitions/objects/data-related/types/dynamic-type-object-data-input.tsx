@@ -30,7 +30,7 @@ export type InputObjectDataDefinition = AbstractObjectDataDefinition & InputProp
 export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInput {
   id: string = 'input'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getObjectDataFormItemProps (props: InputObjectDataDefinition): FormItemProps {
     return {

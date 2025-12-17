@@ -9,12 +9,25 @@
  */
 
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Input, Col, Row, Alert, Flex } from 'antd'
+import { isEmpty, startCase } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import type { KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { renderKeyCombination } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/helpers'
+import {
+  ALL_FIELDS,
+  GENERAL_FIELDS,
+  NAVIGATION_FIELDS,
+  SEARCH_FIELDS,
+  SEO_FIELDS,
+  SYSTEM_FIELDS
+} from '@Pimcore/modules/user/management/detail/tabs/key-bindings/constants'
+
+const BUNDLES = 'bundles'
 
 export interface KeyBinding {
   action: string
@@ -24,7 +37,7 @@ export interface KeyBinding {
   key?: number
 }
 interface IKeyBindings {
-  values?: any
+  values?: KeyBindingForAUser[]
   modified?: boolean
   onResetKeyBindings: (items) => void
   onChange: (name: string, code: object) => void
@@ -34,21 +47,6 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
-  const getKeyName = (key: number): string => {
-    let name = ''
-    if (key >= 112 && key <= 123) {
-      name = 'F' + (key - 111)
-    } else if (key === 32) {
-      name = 'Space'
-    } else {
-      name = String.fromCharCode(key)
-    }
-    return name
-  }
-
-  const renderKeyCombination = (keyBinding: any): string => {
-    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key as number)}`
-  }
 
   const handleInputChange = (evt: any, name: string): object | boolean => {
     const key = evt.keyCode
@@ -77,140 +75,61 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   }
 
   useEffect(() => {
-    if (values === undefined && values.length === 0) {
+    if (isEmpty(values)) {
       return
     }
 
-    values.forEach((keyBinding: any) => {
+    values?.forEach((keyBinding: any) => {
       form.setFieldsValue({
         [keyBinding.action]: renderKeyCombination(keyBinding)
       })
     })
   }, [values, modified])
 
-  const generalFields = ['save', 'publish', 'unpublish', 'rename', 'refresh']
-  const generalAccordion = [
-    {
-      key: '1',
-      title: <>{ t('key-bindings.general') }</>,
-      children: <Row gutter={ [40, 0] }>
-        {generalFields.map((field) => (
-          <Col
-            key={ field }
-            span={ 12 }
-          >
-            <Form.Item
-              label={ t(`key-bindings.${field}`) }
-              name={ field as any }
-            >
-              <Input
-                onKeyDown={ (evt) => handleInputChange(evt, field) }
-              />
-            </Form.Item>
-          </Col>
-        ))}
-      </Row>
-    }
-  ]
+  const bundleFields = !isEmpty(values)
+    ? values?.map((v) => v.action)?.filter((action) => !ALL_FIELDS.includes(action))
+    : []
 
-  const navigationFields = ['openDocument', 'openAsset', 'openObject', 'openClassEditor', 'openInTree', 'closeAllTabs']
-  const navigationAccordion = [
-    {
-      key: '1',
-      title: <>{ t('key-bindings.navigation') }</>,
-      children: <Row gutter={ [40, 0] }>
-        {navigationFields.map((field) => (
-          <Col
-            key={ field }
-            span={ 12 }
-          >
-            <Form.Item
-              label={ t(`key-bindings.${field}`) }
-              name={ field as any }
-            >
-              <Input
-                onKeyDown={ (evt) => handleInputChange(evt, field) }
-              />
-            </Form.Item>
-          </Col>
-        ))}
-      </Row>
-    }
-  ]
+  const getAccordionItem = (title: string, fields: string[]): {
+    key: string
+    title: React.ReactElement
+    children: React.ReactElement
+  } => ({
+    key: title,
+    title: <>{t(`key-bindings.${title}`)}</>,
+    children: (
+      <Row gutter={ [40, 0] }>
+        {fields.map((field) => {
+          const label = title !== BUNDLES ? t(`key-bindings.${field}`) : startCase(field)
 
-  const seoFields = ['redirects', 'tagManager', 'tagConfiguration', 'seoDocumentEditor', 'robots']
-  const seoAccordion = [
-    {
-      key: '1',
-      title: <>{ t('key-bindings.seo') }</>,
-      children: <Row gutter={ [40, 0] }>
-        {seoFields.map((field) => (
-          <Col
-            key={ field }
-            span={ 12 }
-          >
-            <Form.Item
-              label={ t(`key-bindings.${field}`) }
-              name={ field as any }
+          return (
+            <Col
+              key={ field }
+              span={ 12 }
             >
-              <Input
-                onKeyDown={ (evt) => handleInputChange(evt, field) }
-              />
-            </Form.Item>
-          </Col>
-        ))}
+              <Form.Item
+                label={ label }
+                name={ field as any }
+              >
+                <Input
+                  data-keybinding-input="true"
+                  onKeyDown={ (evt) => handleInputChange(evt, field) }
+                />
+              </Form.Item>
+            </Col>
+          )
+        })}
       </Row>
-    }
-  ]
+    )
+  })
 
-  const systemFields = ['showMetaInfo', 'showElementHistory', 'sharedTranslations', 'recycleBin', 'notesEvents', 'users', 'roles', 'clearAllCaches', 'clearDataCache', 'customReports', 'reports', 'applicationLogger', 'glossary', 'httpErrorLog']
-  const systemAccordion = [
-    {
-      key: '1',
-      title: <>{ t('key-bindings.system') }</>,
-      children: <Row gutter={ [40, 0] }>
-        {systemFields.map((field) => (
-          <Col
-            key={ field }
-            span={ 12 }
-          >
-            <Form.Item
-              label={ t(`key-bindings.${field}`) }
-              name={ field as any }
-            >
-              <Input
-                onKeyDown={ (evt) => handleInputChange(evt, field) }
-              />
-            </Form.Item>
-          </Col>
-        ))}
-      </Row>
-    }
-  ]
-
-  const searchFields = ['searchDocument', 'searchAsset', 'searchObject', 'searchAndReplaceAssignments', 'quickSearch']
-  const searchAccordion = [
-    {
-      key: '1',
-      title: <>{ t('key-bindings.search') }</>,
-      children: <Row gutter={ [40, 0] }>
-        {searchFields.map((field) => (
-          <Col
-            key={ field }
-            span={ 12 }
-          >
-            <Form.Item
-              label={ t(`key-bindings.${field}`) }
-              name={ field as any }
-            >
-              <Input
-                onKeyDown={ (evt) => handleInputChange(evt, field) }
-              />
-            </Form.Item>
-          </Col>
-        ))}
-      </Row>
-    }
+  const accordions = [
+    getAccordionItem('general', GENERAL_FIELDS),
+    getAccordionItem('navigation', NAVIGATION_FIELDS),
+    getAccordionItem('search', SEARCH_FIELDS),
+    getAccordionItem('system', SYSTEM_FIELDS),
+    getAccordionItem('seo', SEO_FIELDS),
+    ...(!isEmpty(bundleFields) ? [getAccordionItem(BUNDLES, bundleFields!)] : [])
   ]
 
   const setKeyBindingsToDefault = (): void => {
@@ -247,51 +166,19 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
             <Button onClick={ setKeyBindingsToDefault }>{ t('key-bindings.reset') }</Button>
           </Flex>
         </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ generalAccordion }
-            size={ 'small' }
+        {accordions.map((item) => (
+          <Col
+            key={ item.key }
+            span={ 14 }
           >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ navigationAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ searchAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ systemAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ seoAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
+            <Accordion
+              activeKey={ accordions.map(item => item.key) }
+              bordered
+              items={ [item] }
+              size={ 'small' }
+            />
+          </Col>
+        ))}
       </Row>
     </Form>
   )

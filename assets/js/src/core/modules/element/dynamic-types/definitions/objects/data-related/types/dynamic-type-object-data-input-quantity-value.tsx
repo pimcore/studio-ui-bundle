@@ -17,8 +17,10 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/input-quantity-value/input-quantity-value'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _, { isNull } from 'lodash'
+import _, { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container } from '@sdk/app'
 
 export type InputQuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
@@ -30,6 +32,8 @@ export type InputQuantityValueObjectDataDefinition = AbstractObjectDataDefinitio
 export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDataAbstract {
   id: string = 'inputQuantityValue'
   gridCellEditMode: EditMode = 'edit-modal'
+
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get<DynamicTypeFieldFilterAbstract>('DynamicTypes/FieldFilter/InputQuantityValue')
 
   getObjectDataComponent (props: InputQuantityValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -56,7 +60,7 @@ export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDa
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: InputQuantityValueValue | null = props.cellProps.getValue()
 
-    return isNull(value)
+    return isEmpty(value)
       ? <></>
       : (
         <QuantityValuePreview

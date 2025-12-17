@@ -9,17 +9,18 @@
  */
 
 import React, { type ReactElement } from 'react'
+import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterDateComponent, type DynamicTypeFieldFilterDateProps } from '../../components/dynamic-type-field-filter-date-component'
-import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
 export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
-  id = 'datetime'
+  id = 'date'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.DateTime
+    return FieldFilterFrontendType.Date
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterDateProps): ReactElement<DynamicTypeFieldFilterDateProps> {
@@ -28,7 +29,9 @@ export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
     )
   }
 
-  shouldApply (value: any): boolean {
+  shouldApply (filter: FieldFilter): boolean {
+    const value = filter.filterValue
+
     if (value == null || typeof value !== 'object') {
       return false
     }

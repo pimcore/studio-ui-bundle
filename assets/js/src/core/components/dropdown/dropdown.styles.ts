@@ -13,21 +13,33 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     dropdown: css`
-    .ant-dropdown-menu {
-    display: flex;
-    flex-direction: column;
-    }
+      .ant-dropdown-menu {
+        display: flex;
+        flex-direction: column;
+      }
     
-    .ant-dropdown-menu-item-group-list {
-    display: flex;
-    flex-direction: column;
-    }
+      .ant-dropdown-menu-item-group-list {
+        display: flex;
+        flex-direction: column;
+      }
     
       .ant-dropdown-menu-submenu {
-          .ant-dropdown-menu-submenu-title {
-              display: flex;
-              align-items: center;
-          }
+        .ant-dropdown-menu-submenu-title {
+          display: flex;
+          align-items: center;
+        }
+      }
+    `,
+
+    menu: css`
+      .ant-dropdown-menu-title-content {
+        display: flex;
+        align-items: center;
+      }
+        
+      .ant-dropdown-menu-title-content > span {
+        display: block;
+        width: 100%;
       }
     `
   }

@@ -136,8 +136,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setPageSize(newPageSize)
   }
 
-  const isDataLoading = redirectsLoading || redirectsFetching ||
-    (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
+  const isDataLoading = redirectsLoading || redirectsFetching
 
   const handleSortingChange = (newSorting: SortingState): void => {
     setSorting(newSorting)
@@ -175,7 +174,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ !isDataLoading && (isUndefined(redirects) || redirects.length === 0) }
+        none={ !isDataLoading && redirectRows.length === 0 }
       >
         <Box
           margin={ {

@@ -15,8 +15,6 @@ import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimco
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
 import React from 'react'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
-import { compose } from '@Pimcore/utils/compose'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
@@ -28,6 +26,9 @@ import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decora
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
+import { useDataObjectColumnMapper } from './column-mapper/use-column-mapper'
+import { serviceIds, useInjection } from '@sdk/app'
+import { type ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -40,38 +41,21 @@ const defaultProps = {
   ViewComponent: DefaultView,
   useDataQuery: useDataObjectGetGridQuery,
   useDataQueryHelper,
-  useElementId
+  useElementId,
+  useColumnMapper: useDataObjectColumnMapper
 }
-
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-const props = compose<AbstractDecoratorProps>(
-  ActionColumnDecorator,
-  SortingDecorator,
-  PagingDecorator,
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
-  ColumnConfigurationDecorator,
-  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
-  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  ContextMenuDecorator,
-  TagFilterDecorator,
-  GeneralFiltersDecorator
-)(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const ListingContainer = (): React.JSX.Element => {
+  const listingBuilder = useInjection<ListingBuilder>(serviceIds['DataObject/Listing/Builder'])
+
   return (
-    <DynamicTypeRegistryProvider
-      serviceIds={ [
-        'DynamicTypes/ObjectDataRegistry',
-        'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry',
-        'DynamicTypes/BatchEditRegistry',
-        'DynamicTypes/FieldFilterRegistry'
-      ] }
-    >
-      <BaseListing
-        { ...props }
-      />
-    </DynamicTypeRegistryProvider>
+    <BaseListing
+      { ...listingBuilder.build({
+        props: defaultProps
+      }) }
+    />
   )
 }
+
+export { defaultProps as listingDefaultProps, useInlineEditApiUpdate, BaseListing, ActionColumnDecorator, SortingDecorator, PagingDecorator, ClassDefinitionSelectionDecorator, ColumnConfigurationDecorator, InlineEditDecorator, RowSelectionDecorator, ContextMenuDecorator, TagFilterDecorator, GeneralFiltersDecorator }
+export type { AbstractDecoratorProps, ClassDefinitionSelectionDecoratorConfig, IInlineEditDecoratorConfig, IRowSelectionDecoratorConfig }

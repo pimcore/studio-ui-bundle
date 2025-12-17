@@ -11,7 +11,7 @@
 import React, { type Key, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty, Space } from 'antd'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined, reject, uniq } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -20,19 +20,33 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
-import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
+import {
+  FIELD_TYPE_MAP,
+  FRONTEND_TO_ORIGINAL_TYPE,
+  getDateFieldFilterData,
+  getNumberFieldFilterData
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/helpers'
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
-
-const EQUAL_OPERATOR = 'eq'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import type { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import { FieldFilterOperators, type IFieldFilterTypeData } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/types'
+import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { type NumberValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
+import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
+import { type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
 
 export const FieldFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
-  const { reportDetailData, chartDetailData } = useReportDataContext()
+  const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
+  const { data: fullChartDetailData } = useFullChartData({ name: reportDetailData?.name ?? '' })
+
+  const { getType } = useDynamicTypeResolver()
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
     (!isEmptyValue(column.label) ? column.label : column.name)
@@ -45,18 +59,23 @@ export const FieldFilters = (): React.JSX.Element => {
 
     const id = getLabelValue(column)
     const fieldName = column.name
-    const fieldOptions = chartDetailData?.items.map(item => item.data[fieldName])
+    const fieldOptions = reject(
+      fullChartDetailData?.items.map(item => item.data[fieldName]),
+      value => isNull(value)
+    )
 
     setFieldFilters([
       ...fieldFilters,
       {
         data: undefined,
         id,
+        translationKey: id,
         name: fieldName,
         type,
         frontendType,
         config: {
-          options: fieldOptions
+          options: uniq(fieldOptions),
+          showSearch: frontendType === 'select'
         }
       }
     ])
@@ -67,12 +86,38 @@ export const FieldFilters = (): React.JSX.Element => {
 
     const updatedColumnFilters = data
       .filter(item => !isUndefined(item.data))
-      .map(item => ({
-        property: item.name!,
-        type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
-        operator: EQUAL_OPERATOR,
-        value: String(item.data)
-      }))
+      .flatMap(item => {
+        const dynType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] }) as DynamicTypeFieldFilterAbstract | null
+
+        const baseFilterData = {
+          property: item.name!,
+          type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!]
+        }
+        const defaultFilterData: IFieldFilterTypeData = {
+          operator: FieldFilterOperators.LIKE,
+          value: String(item.data)
+        }
+
+        if (isNull(dynType)) {
+          return [{ ...baseFilterData, ...defaultFilterData }]
+        }
+
+        let filterData: IFieldFilterTypeData[] = []
+
+        if (dynType instanceof DynamicTypeFieldFilterNumber) {
+          filterData = getNumberFieldFilterData(item.data as NumberValue)
+        } else if (dynType instanceof DynamicTypeFieldFilterDate) {
+          filterData = getDateFieldFilterData(item.data as DateValue)
+        } else {
+          filterData = [defaultFilterData]
+        }
+
+        return filterData.map(filter => ({
+          ...baseFilterData,
+          operator: filter.operator,
+          value: filter.value
+        }))
+      })
 
     !isUndefined(updatedColumnFilters) && setColumnsFilters(updatedColumnFilters)
   }
@@ -83,9 +128,13 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
-    const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
+    if (isEmpty(fullChartDetailData)) return
 
-    const newAddColumnMenu = columnConfigurationsList
+    const filterableColumnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => {
+      return item.display && !isEmptyValue(item.filterType)
+    })
+
+    const newAddColumnMenu = filterableColumnConfigurationsList
       ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
       ?.map((column) => ({
         key: column.id as Key,
@@ -94,7 +143,7 @@ export const FieldFilters = (): React.JSX.Element => {
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportDetailData, fieldFilters])
+  }, [fullChartDetailData, reportDetailData, fieldFilters])
 
   return (
     <>

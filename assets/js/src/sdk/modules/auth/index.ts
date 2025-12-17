@@ -1,0 +1,19 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
+export * from '@Pimcore/modules/auth/enums/user-permission'
+export * from '@Pimcore/modules/auth/permission-helper'
+export * from '@Pimcore/modules/auth/hooks/use-user'
+export * from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+export * from '@Pimcore/modules/auth/util/user-helper'

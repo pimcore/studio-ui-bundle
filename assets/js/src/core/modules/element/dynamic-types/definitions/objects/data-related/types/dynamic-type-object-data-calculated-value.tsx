@@ -32,6 +32,7 @@ export type CalculatedValueObjectDataDefinition = AbstractObjectDataDefinition &
 
 export class DynamicTypeObjectDataCalculatedValue extends DynamicTypeObjectDataAbstract {
   id: string = 'calculatedValue'
+  isAllowedInBatchEdit: boolean = false
 
   getObjectDataComponent (props: CalculatedValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

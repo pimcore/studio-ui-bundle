@@ -16,6 +16,9 @@ export * from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbna
 export * from '@Pimcore/modules/asset/actions/download/use-download'
 export * from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 export * from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+export * from '@Pimcore/modules/asset/events/post-update-event'
+
+export * from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 
 export * from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 export * from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
@@ -39,3 +42,7 @@ export * from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 export * as AssetApiSlice from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 export * from '@Pimcore/modules/asset/asset-draft-slice'
 export * from '@Pimcore/modules/asset/asset-provider'
+
+export * from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'
+export * from '@Pimcore/modules/asset/listing/listing-container'
+export * from '@Pimcore/modules/asset/listing/builder/asset-listing-builder'

@@ -17,15 +17,19 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ClassificationStoreDataTab } from '../../components/classification-store-data-tab/classification-store-data-tab'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { ClassificationStoreCallbackTab } from '../../components/classification-store-data-tab/classification-store-callback-tab'
+import { useClassificationStoreModalOptional } from '../../../../provider/classifcation-store-modal-provider'
 
 interface CollectionTabProps {
   storeId: ClassificationStoreGetCollectionsApiArg['storeId']
-  objectId: ClassificationStoreGetCollectionsApiArg['objectId']
+  classId: ClassificationStoreGetCollectionsApiArg['classId']
+  objectId?: number
   fieldName: ClassificationStoreGetCollectionsApiArg['fieldName']
 }
 
 export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
+  const hasModalContext = useClassificationStoreModalOptional({}) !== undefined
   const { t } = useTranslation()
 
   const columns = [
@@ -35,15 +39,33 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
   ]
 
   return (
-    <ClassificationStoreDataTab
-      columns={ columns }
-      queryArgs={ {
-        storeId: props.storeId,
-        objectId: props.objectId,
-        fieldName: props.fieldName
-      } }
-      queryHook={ useClassificationStoreGetCollectionsQuery }
-      tabId={ TabId.Collection }
-    />
+    <>
+      {hasModalContext && (
+        <ClassificationStoreCallbackTab
+          columns={ columns }
+          queryArgs={ {
+            storeId: props.storeId,
+            classId: props.classId,
+            fieldName: props.fieldName
+          } }
+          queryHook={ useClassificationStoreGetCollectionsQuery }
+          tabId={ TabId.Collection }
+        />
+      )}
+
+      {!hasModalContext && (
+        <ClassificationStoreDataTab
+          columns={ columns }
+          queryArgs={ {
+            storeId: props.storeId,
+            classId: props.classId,
+            objectId: props.objectId,
+            fieldName: props.fieldName
+          } }
+          queryHook={ useClassificationStoreGetCollectionsQuery }
+          tabId={ TabId.Collection }
+        />
+      )}
+    </>
   )
 }

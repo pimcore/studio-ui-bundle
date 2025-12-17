@@ -21,7 +21,7 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 
-const ManagementContainer = ({ ...props }): React.JSX.Element => {
+const ManagementContainer = ({ userId, ...props }: Record<string, any>): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserManagementHelper()
 
@@ -60,7 +60,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
-      isLeaf: item.children === false
+      isLeaf: item.hasChildren === false
     }))
   }
 
@@ -140,6 +140,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
         } }
         onUpdateTreeData={ updateTreeData }
         treeData={ treeData }
+        userId={ userId }
       />
     ]
   }

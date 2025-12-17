@@ -13,7 +13,7 @@ import { type AbstractJob } from '../../jobs/abstact-job'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type JobComponentRegistry } from '../../services/job-component-registry'
-import { NotificationJobContainer as DefaultComponent } from '../../jobs/default/notification-job-container'
+import { MessageBusJobNotification as DefaultComponent } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 
 export interface JobProps extends AbstractJob {}
 
@@ -21,5 +21,5 @@ export const Job = (props: JobProps): React.JSX.Element => {
   const jobRegistryService = useInjection<JobComponentRegistry>(serviceIds['ExecutionEngine/JobComponentRegistry'])
   const Component = jobRegistryService.getComponentByType(props.type) ?? DefaultComponent
 
-  return <Component { ...props } />
+  return <Component { ...props as any } />
 }

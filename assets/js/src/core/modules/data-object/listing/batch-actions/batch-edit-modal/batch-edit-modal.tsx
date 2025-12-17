@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useEffect, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -28,14 +30,22 @@ import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@sdk/app'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { DataObjectBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-batch-edit-job'
+import { DataObjectFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-folder-batch-edit-job'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -44,7 +54,7 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { getAvailableColumnsDropdown } = useAvailableColumns()
-  const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
+  const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
   const { selectedRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
@@ -53,11 +63,15 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
-  const { addJob } = useJobs()
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
-  const { hasType } = useDynamicTypeResolver()
+  const { hasType, getType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
+  const classDefinitionSelection = useClassDefinitionSelection()
+  const selectedClassDefinition = classDefinitionSelection.selectedClassDefinition
+  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
+  const { availableColumns } = useAvailableColumns()
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -84,7 +98,63 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
+  function onClassificationStoreUpdate (data): void {
+    const fieldDefinition = data.modalContext
+    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore')
+
+    if (baseColumn === undefined) {
+      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name)
+    }
+
+    const columnsToAdd: AvailableColumn[] = []
+
+    if (data.type === 'group-by-key') {
+      data.data.forEach((item) => {
+        const itemDefinition = item.definition
+        let alreadyInBatchEdits = false
+
+        batchEdits.forEach((batchEdit) => {
+          if (batchEdit.key === baseColumn.key && (batchEdit.config as { keyId: string, groupId: string })?.keyId === item.id && (batchEdit.config as { keyId: string, groupId: string })?.groupId === item.groupId) {
+            alreadyInBatchEdits = true
+          }
+        })
+
+        if (alreadyInBatchEdits) {
+          return
+        }
+
+        columnsToAdd.push({
+          ...baseColumn,
+          key: `${baseColumn.key}`,
+          frontendType: itemDefinition?.fieldtype,
+          config: {
+            keyId: item.id,
+            groupId: item.groupId,
+            fieldDefinition: itemDefinition
+          }
+        })
+      })
+
+      addOrUpdateBatchEdits(columnsToAdd)
+    }
+  }
+
   const onColumnClick = (column: AvailableColumn): void => {
+    if (column.type === 'dataobject.classificationstore') {
+      if (!('fieldDefinition' in column.config)) {
+        throw new Error('Field definition is missing in config')
+      }
+
+      const fieldDefinition = column.config?.fieldDefinition as ClassificationStoreModalProps
+
+      openModal({
+        ...fieldDefinition,
+        fieldName: column.key,
+        allowedTabs: [TabId.GroupByKey]
+      })
+      return
+    }
+
     addOrUpdateBatchEdit(column, undefined)
   }
 
@@ -94,33 +164,21 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     if (selectedRowsCount === 0) {
-      addJob(createJob({
+      const filters = getArgs()?.body?.filters ?? {}
+      delete filters.page
+      delete filters.pageSize
+
+      const job = new DataObjectFolderBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const response = await patchObjectsInFolder({
-            body: {
-              data: [
-                {
-                  folderId: id,
-                  editableData: values
-                }
-              ],
-              filters: getArgs()?.body?.filters
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchObjectsInFolder,
+        folderId: id,
+        values,
+        filters,
+        classId: String(selectedClassDefinition?.id),
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
       await patchObjectsByIds({
         body: {
@@ -133,30 +191,15 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         }
       })
     } else {
-      addJob(createJob({
+      const job = new DataObjectBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const response = await patchObjectsByIds({
-            body: {
-              data: selectedRowsIds.map((rowId) => ({
-                id: parseInt(rowId),
-                editableData: values
-              }))
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchObjectsByIds,
+        selectedRowsIds: selectedRowsIds.map(Number),
+        values,
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     }
 
     resetModal()
@@ -165,115 +208,84 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
-  // Helper function to compare groups that can be strings, arrays, or nested arrays
-  const areGroupsEqual = (group1: any, group2: any): boolean => {
-    // Normalize groups to string arrays for comparison
-    const normalizeGroup = (group: any): string[] => {
-      if (typeof group === 'string') {
-        return group.split('.')
-      }
-      if (Array.isArray(group)) {
-        return group.flat().map(part => String(part))
-      }
-      return [String(group)]
-    }
-
-    const normalizedGroup1 = normalizeGroup(group1)
-    const normalizedGroup2 = normalizeGroup(group2)
-
-    // Compare arrays by length and content
-    if (normalizedGroup1.length !== normalizedGroup2.length) {
-      return false
-    }
-
-    return normalizedGroup1.every((part, index) => part === normalizedGroup2[index])
-  }
-
-  const getFilteredTypes = (column: any): object[] => {
-    return column?.children?.filter((child: any) => {
-      const isEditable: boolean = child.editable === true
-      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && areGroupsEqual(child.group, item.group))
-      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
-
-      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
-    })
-  }
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
     if (isUndefined(availableDropdownList)) return []
 
-    return availableDropdownList.map((column: any) => {
-      return {
-        ...column,
-        children: getFilteredTypes(column)
-      }
-    })
-  }, [availableDropdownList])
-  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
+    return filterDropdownItems(
+      availableDropdownList as Array<ItemType<MenuItemType>>,
+      batchEdits,
+      hasType,
+      getType
+    )
+  }, [availableDropdownList, batchEdits, hasType, getType])
+
+  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
 
   return (
-    <WindowModal
-      afterClose={ () => {
-        resetModal()
-      } }
-      footer={ <ModalFooter
-        divider
-        justify={ 'space-between' }
-               >
-        <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
-          <IconTextButton
-            disabled={ isEmptyDropdownList }
-            icon={ { value: 'new' } }
-            type='default'
-          >
-            {t('listing.add-column')}
-          </IconTextButton>
-        </Dropdown>
-        {batchEdits.length > 0 &&
-            (
-            <Flex
-              align={ 'center' }
-              gap={ 'extra-small' }
-            >
-              <IconTextButton
-                icon={ { value: 'close' } }
-                onClick={ () => {
-                  resetModal()
-                } }
-                type='link'
-              >
-                {t('batch-edit.modal-footer.discard-all-changes')}
-              </IconTextButton>
-              <Button
-                onClick={ handleApplyChanges }
-                type='primary'
-              >
-                {t('batch-edit.modal-footer.apply-changes')}
-              </Button>
-            </Flex>
-            )}
-      </ModalFooter> }
-      onCancel={ () => {
-        setBatchEditModalOpen(false)
-      } }
-      open={ batchEditModalOpen }
-      size={ 'XL' }
-      title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
-    >
-      <FieldWidthProvider
-        fieldWidthValues={ {
-          large: 9999,
-          medium: 9999,
-          small: 9999
+    <FieldCollectionProvider>
+      <WindowModal
+        afterClose={ () => {
+          resetModal()
         } }
+        footer={ <ModalFooter
+          divider
+          justify={ 'space-between' }
+                 >
+          <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
+            <IconTextButton
+              disabled={ isEmptyDropdownList }
+              icon={ { value: 'new' } }
+              type='default'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </Dropdown>
+          {batchEdits.length > 0 &&
+              (
+              <Flex
+                align={ 'center' }
+                gap={ 'extra-small' }
+              >
+                <IconTextButton
+                  icon={ { value: 'close' } }
+                  onClick={ () => {
+                    resetModal()
+                  } }
+                  type='link'
+                >
+                  {t('batch-edit.modal-footer.discard-all-changes')}
+                </IconTextButton>
+                <Button
+                  onClick={ handleApplyChanges }
+                  type='primary'
+                >
+                  {t('batch-edit.modal-footer.apply-changes')}
+                </Button>
+              </Flex>
+              )}
+        </ModalFooter> }
+        onCancel={ () => {
+          setBatchEditModalOpen(false)
+        } }
+        open={ batchEditModalOpen }
+        size={ 'XL' }
+        title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
       >
-        <Form
-          form={ form }
-          onFinish={ onFormFinish }
+        <FieldWidthProvider
+          fieldWidthValues={ {
+            large: 9999,
+            medium: 9999,
+            small: 9999
+          } }
         >
-          <BatchEditListContainer />
-        </Form>
-      </FieldWidthProvider>
-    </WindowModal>
+          <Form
+            form={ form }
+            onFinish={ onFormFinish }
+          >
+            <BatchEditListContainer />
+          </Form>
+        </FieldWidthProvider>
+      </WindowModal>
+    </FieldCollectionProvider>
   )
 }

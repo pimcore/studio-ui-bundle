@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -31,24 +31,29 @@ export const useTranslation = (): UseTranslationReturn => {
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
-    try {
-      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple', domain }] }
-      const result = await createTranslation({ createTranslation: translationData })
-
-      if ('data' in result) {
-        const createdTranslation: TranslationDataItem = {
-          key: translationData.translationData[0].key,
-          type: translationData.translationData[0].type,
-          ...settings.validLanguages.reduce((acc, lang) => {
-            acc[`_${lang}`] = ''
-            return acc
-          }, {} satisfies Record<string, string>)
-        }
-        return { success: true, data: createdTranslation }
-      }
-    } catch {
-      trackError(new GeneralError('Was not able to create Translation'))
+    const translationData: TranslationCreate = {
+      errorOnDuplicate: true,
+      translationData: [{ key, type: 'simple', domain }]
     }
+    const result = await createTranslation({ createTranslation: translationData })
+
+    if ('data' in result) {
+      const createdTranslation: TranslationDataItem = {
+        key: translationData.translationData[0].key,
+        type: translationData.translationData[0].type,
+        ...settings.validLanguages.reduce((acc, lang) => {
+          acc[`_${lang}`] = ''
+          return acc
+        }, {} satisfies Record<string, string>)
+      }
+      return { success: true, data: createdTranslation }
+    }
+
+    if ('error' in result && result.error !== undefined) {
+      trackError(new ApiError(result.error))
+      return { success: false }
+    }
+
     return { success: false }
   }
 
@@ -72,48 +77,18 @@ export const useTranslation = (): UseTranslationReturn => {
 
   const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
-      if (columnId === 'type') {
-        const rowLocales = Object.keys(row)
-          .filter(key => key.startsWith('_'))
-          .map(key => key.substring(1))
-
-        if (rowLocales.length > 0) {
-          const firstLocale = rowLocales[0]
-          const translationData = [toApiTranslation(row, firstLocale, domainParam)]
-
-          const result = await updateTranslation({
-            domain: domainParam,
-            body: {
-              data: [
-                {
-                  key: row.key,
-                  type: row.type,
-                  translationData
-                }
-              ]
-            }
-          })
-
-          return { success: 'data' in result }
-        }
-
-        trackError(new GeneralError('No locales found in translation row data'))
-        return { success: false }
-      }
-
-      const locale = columnId.substring(1)
-      const translationData = [toApiTranslation(row, locale, domainParam)]
+      const translationData = columnId === 'type'
+        ? []
+        : [toApiTranslation(row, columnId.substring(1), domainParam)]
 
       const result = await updateTranslation({
         domain: domainParam,
         body: {
-          data: [
-            {
-              key: row.key,
-              type: row.type,
-              translationData
-            }
-          ]
+          data: [{
+            key: row.key,
+            type: row.type,
+            translationData
+          }]
         }
       })
 

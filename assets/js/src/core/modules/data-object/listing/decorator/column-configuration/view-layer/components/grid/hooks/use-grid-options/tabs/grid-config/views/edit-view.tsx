@@ -25,10 +25,9 @@ import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { GridConfigModal } from '../grid-config-modal'
+import { useSettings } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/use-settings'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -43,8 +42,6 @@ export interface EditViewProps {
   columns: any[]
   gridConfig: GridConfigData['gridConfig']
   currentUserId?: number
-  currentLanguage: string
-  setCurrentLanguage: (language: string) => void
 }
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
@@ -60,14 +57,11 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     savedGridConfigurations,
     isUpdating,
     isLoading,
-    currentUserId,
-    currentLanguage,
-    setCurrentLanguage
+    currentUserId
   } = props
 
-  const settings = useSettings()
-
   const { t } = useTranslation()
+  const { saveEnabled } = useSettings()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
   const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
@@ -112,41 +106,35 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
               className='w-full'
               justify='space-between'
             >
-              <Dropdown
-                disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                menu={ { items: savedGridConfigurations } }
-              >
-                <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
-                  <IconTextButton
-                    disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                    icon={ { value: 'style' } }
-                    loading={ isLoading }
-                    style={ { minHeight: '32px', minWidth: '100px' } }
-                  >
-                    { isSavedConfiguration
-                      ? (
-                        <>
-                          { gridConfig.name}
-                        </>
-                        )
-                      : (
-                        <>
-                          {t('grid.configuration.template')}
-                        </>
-                        ) }
-                  </IconTextButton>
-                </Tooltip>
-              </Dropdown>
+              {saveEnabled === true && (
+                <Dropdown
+                  disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+                  menu={ { items: savedGridConfigurations } }
+                >
+                  <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
+                    <IconTextButton
+                      disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+                      icon={ { value: 'style' } }
+                      loading={ isLoading }
+                      style={ { minHeight: '32px', minWidth: '100px' } }
+                    >
+                      { isSavedConfiguration
+                        ? (
+                          <>
+                            { gridConfig.name}
+                          </>
+                          )
+                        : (
+                          <>
+                            {t('grid.configuration.template')}
+                          </>
+                          ) }
+                    </IconTextButton>
+                  </Tooltip>
+                </Dropdown>
+              )}
 
               <Flex gap={ 'mini' }>
-                <LanguageSelection
-                  languages={ settings.requiredLanguages.map((value: string) => {
-                    return value
-                  }) }
-                  onSelectLanguage={ setCurrentLanguage }
-                  selectedLanguage={ currentLanguage }
-                />
-
                 <IconButton
                   icon={ { value: 'show-details' } }
                   onClick={ () => { setOpen(true) } }
@@ -180,69 +168,73 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   function renderSaveButton (): React.JSX.Element {
     return (
       <>
-        { !isSavedConfiguration && (
-          <Button
-            onClick={ onSaveConfigurationClick }
-            type='default'
-          >
-            {t('grid.configuration.save-template')}
-          </Button>
-        ) }
-
-        { isSavedConfiguration && (
+        {saveEnabled === true && (
           <>
-            { isGridTemplateOwner && (
-              <Compact>
-                <Button
-                  loading={ isUpdating }
-                  onClick={ onUpdateConfigurationClick }
-                  type='default'
-                >
-                  {t('grid.configuration.update-template')}
-                </Button>
-
-                <Dropdown menu={
-                  {
-                    items: [
-                      {
-                        key: 0,
-                        icon: <Icon value='edit' />,
-                        label: t('grid.configuration.edit-template-details'),
-                        onClick: () => {
-                          onEditConfigurationClick()
-                        }
-                      },
-
-                      {
-                        key: 1,
-                        icon: <Icon value='save' />,
-                        label: t('grid.configuration.save-new-template'),
-                        onClick: () => {
-                          onSaveConfigurationClick()
-                        }
-                      }
-                    ]
-                  }
-                }
-                >
-                  <IconButton
-                    icon={ { value: 'more' } }
-                    type='default'
-                  />
-                </Dropdown>
-              </Compact>
-            )}
-
-            { !isGridTemplateOwner && (
+            { !isSavedConfiguration && (
               <Button
                 onClick={ onSaveConfigurationClick }
                 type='default'
               >
                 {t('grid.configuration.save-template')}
               </Button>
+            ) }
+
+            { isSavedConfiguration && (
+              <>
+                { isGridTemplateOwner && (
+                  <Compact>
+                    <Button
+                      loading={ isUpdating }
+                      onClick={ onUpdateConfigurationClick }
+                      type='default'
+                    >
+                      {t('grid.configuration.update-template')}
+                    </Button>
+
+                    <Dropdown menu={
+                      {
+                        items: [
+                          {
+                            key: 0,
+                            icon: <Icon value='edit' />,
+                            label: t('grid.configuration.edit-template-details'),
+                            onClick: () => {
+                              onEditConfigurationClick()
+                            }
+                          },
+
+                          {
+                            key: 1,
+                            icon: <Icon value='save' />,
+                            label: t('grid.configuration.save-new-template'),
+                            onClick: () => {
+                              onSaveConfigurationClick()
+                            }
+                          }
+                        ]
+                      }
+                    }
+                    >
+                      <IconButton
+                        icon={ { value: 'more' } }
+                        type='default'
+                      />
+                    </Dropdown>
+                  </Compact>
+                )}
+
+                { !isGridTemplateOwner && (
+                  <Button
+                    onClick={ onSaveConfigurationClick }
+                    type='default'
+                  >
+                    {t('grid.configuration.save-template')}
+                  </Button>
+                )}
+              </>
             )}
           </>
-        )}
+        ) }
       </>
     )
   }

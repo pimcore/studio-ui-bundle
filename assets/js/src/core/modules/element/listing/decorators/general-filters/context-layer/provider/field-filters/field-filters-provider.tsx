@@ -16,6 +16,10 @@ export interface FieldFilter {
   filterValue: any
   locale: string | null | undefined
   filterType?: string
+  meta: {
+    translationKey: string
+    [key: string]: any
+  }
 }
 
 export interface FieldFiltersData {

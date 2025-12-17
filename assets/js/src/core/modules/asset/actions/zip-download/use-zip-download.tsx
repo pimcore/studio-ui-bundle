@@ -8,21 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type AssetExportZipAssetApiArg, type AssetExportZipAssetApiResponse, type AssetExportZipFolderApiArg, type AssetExportZipFolderApiResponse, useAssetExportZipAssetMutation, useAssetExportZipFolderMutation } from '../../asset-api-slice-enhanced'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
+import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
 import { useTranslation } from 'react-i18next'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useEffect } from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
+import { isUndefined } from 'lodash'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
+import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -53,7 +55,7 @@ export interface UseZipDownloadHookReturn {
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
   const [fetchFolder] = useAssetExportZipFolderMutation()
   const [fetchAssets, { isError, error }] = useAssetExportZipAssetMutation()
-  const { addJob } = useJobs()
+  const executionEngine = useExecutionEngine()
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
 
@@ -64,11 +66,9 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   }, [isError])
 
   const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
-    addJob(createJob({
-      // @todo add api domain
+    const job = new DownloadJob({
       title: t('jobs.zip-job.title', { title: jobTitle }),
-      topics: [topics['zip-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
+      downloadUrl: `${getPrefix()}/assets/download/zip/{jobRunId}`,
       action: async () => {
         let promise: ReturnType<typeof fetchFolder> | ReturnType<typeof fetchAssets>
 
@@ -79,10 +79,17 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
         }
 
         const response = (await promise) as any
+
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error as ApiErrorData))
+          throw new ApiError(response.error as ApiErrorData)
+        }
+
         const data = response.data as AssetExportZipAssetApiResponse | AssetExportZipFolderApiResponse
         return data.jobRunId
       }
-    }))
+    })
+    void executionEngine.runJob(job)
   }
 
   const createZipDownloadContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {

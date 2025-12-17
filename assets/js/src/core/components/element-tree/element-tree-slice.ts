@@ -13,24 +13,27 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { isEqual, isUndefined } from 'lodash'
+import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
 export interface TreeNode {
   id: string
-  elementType?: ElementType
+  elementType?: string
   parentId?: string
+  fullPath?: string
   icon: ElementIcon
   label: string
+  labelAddon?: string
   type?: string
 
   permissions: ElementPermissions
   locked: string | null
   isLocked: boolean
   isPublished?: boolean
+  isSite?: boolean
   hasChildren?: boolean
   metaData?: any
 
@@ -127,7 +130,7 @@ const getAscendants = (nodes: TreeNodesState, parentId: string): string[] => {
   return allAscendants
 }
 
-const applyToAllAscendants = (state: TreesState, nodes: TreeNodesState, nodeId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+const applyToAllAscendants = (state: TreesState, nodes: TreeNodesState, nodeId: string, elementType: string, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
   const ascendants = getAscendants(nodes, nodeId).reverse()
   ascendants.forEach(nodeId => {
     Object.keys(state).forEach(treeId => {
@@ -149,7 +152,7 @@ const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: bool
   return allDescendants
 }
 
-const applyToAllDescendants = (state: TreesState, nodes: TreeNodesState, parentId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+const applyToAllDescendants = (state: TreesState, nodes: TreeNodesState, parentId: string, elementType: string, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
   const descendants = getDescendants(nodes, parentId, true)
   descendants.forEach(nodeId => {
     Object.keys(state).forEach(treeId => {
@@ -209,7 +212,7 @@ const slice = createSlice({
     },
     setNodeLoadingInAllTree: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, loading: boolean }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, loading: boolean }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -395,9 +398,18 @@ const slice = createSlice({
         isFetching: payload.isFetching
       }))
     },
+    markNodeDeletingForTree: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string, isDeleting: boolean }>
+    ) => {
+      updateNodeState(state, payload.treeId, payload.nodeId, node => ({
+        ...node,
+        isDeleting: payload.isDeleting
+      }))
+    },
     refreshNodeChildren: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -414,7 +426,7 @@ const slice = createSlice({
     },
     renameNode: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, newLabel: string }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, newLabel: string }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -430,10 +442,29 @@ const slice = createSlice({
         }
       })
     },
+    updateNodeType: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, newType: string, newIcon: ElementIcon }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  type: payload.newType,
+                  icon: payload.newIcon
+                }
+              : undefined
+          }))
+        }
+      })
+    },
 
     refreshTargetNode: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -455,7 +486,7 @@ const slice = createSlice({
     },
     refreshSourceNode: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -468,7 +499,7 @@ const slice = createSlice({
     },
     refreshTreeByElementType: (
       state,
-      { payload }: PayloadAction<{ elementTypes: ElementType[] }>
+      { payload }: PayloadAction<{ elementTypes: string[] }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (Object.keys(state[treeId].nodes).length > 0) {
@@ -484,7 +515,7 @@ const slice = createSlice({
     },
     markNodeDeleting: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isDeleting: boolean }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, isDeleting: boolean }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -497,7 +528,7 @@ const slice = createSlice({
     },
     setNodePublished: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isPublished: boolean }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, isPublished: boolean }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -513,6 +544,41 @@ const slice = createSlice({
         }
       })
     },
+    setNodeAdditionalAttributes: (
+      state,
+      { payload }: PayloadAction<{
+        nodeId: string
+        elementType: string
+        additionalAttributes: Record<string, any>
+      }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => {
+            const metadataKey = camelCase(payload.elementType)
+            return {
+              ...node,
+              treeNodeProps: !isUndefined(node.treeNodeProps)
+                ? {
+                    ...node.treeNodeProps,
+                    metaData: {
+                      ...node.treeNodeProps.metaData,
+                      [metadataKey]: {
+                        ...node.treeNodeProps.metaData?.[metadataKey],
+                        additionalAttributes: merge(
+                          {},
+                          node.treeNodeProps.metaData?.[metadataKey]?.additionalAttributes,
+                          payload.additionalAttributes
+                        )
+                      }
+                    }
+                  }
+                : undefined
+            }
+          })
+        }
+      })
+    },
     setRootNode: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, rootNode: TreeNode }>
@@ -524,9 +590,30 @@ const slice = createSlice({
         isRoot: true
       }))
     },
+    setDocumentNodeSiteStatus: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, isSite: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === elementTypes.document) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  isSite: payload.isSite,
+                  icon: payload.isSite
+                    ? { type: 'name' as const, value: 'home-root-folder' }
+                    : { type: 'name' as const, value: 'document' }
+                }
+              : undefined
+          }))
+        }
+      })
+    },
     setNodeLocked: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isLocked: boolean, lockType: LockType }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, isLocked: boolean, lockType: LockType }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -622,6 +709,30 @@ const slice = createSlice({
           }
         }
       })
+    },
+    setDocumentNodeNavigationExclude: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, navigationExclude: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === elementTypes.document) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  metaData: {
+                    ...node.treeNodeProps.metaData,
+                    document: {
+                      ...node.treeNodeProps.metaData?.document,
+                      navigationExclude: payload.navigationExclude
+                    }
+                  }
+                }
+              : undefined
+          }))
+        }
+      })
     }
   }
 })
@@ -630,7 +741,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked, refreshTreeByElementType } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

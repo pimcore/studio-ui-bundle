@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { setRootFetchTriggered, setRootNode as setRootNodeAction, type TreeNode } from '../element-tree-slice'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { isNil } from 'lodash'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useElementTreeNode } from './use-element-tree-node'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
@@ -24,7 +24,7 @@ export interface UseElementTreeRootNodeResult {
   isLoading: boolean
 }
 
-export const useElementTreeRootNode = (id: number, showRoot: boolean): UseElementTreeRootNodeResult => {
+export const useElementTreeRootNode = (id: number | string, showRoot: boolean): UseElementTreeRootNodeResult => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const { treeId } = useTreeId()

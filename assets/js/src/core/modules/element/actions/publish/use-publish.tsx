@@ -17,13 +17,14 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type Element } from '../../element-helper'
 import { useElementHelper } from '../../hooks/use-element-helper'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { ContextMenuActionName } from '..'
+import { checkElementPermission } from '@sdk/modules/element'
 
 export interface PublishHookReturn {
-  publishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  publishNode: (node: TreeNodeProps | Element) => void
+  publishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
+  publishNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
 }
 
 export const usePublish = (elementType: ElementType): PublishHookReturn => {
@@ -32,23 +33,24 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
   const { executeElementTask } = useElementHelper()
 
   const isPublishHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Publish) || node.isLocked || node.isPublished === true
+    return !checkElementPermission(node.permissions, 'publish') ||
+           !isTreeActionAllowed(TreePermission.Publish) ||
+           node.isLocked ||
+           node.isPublished === true
   }
 
-  const publishNode = (node: TreeNodeProps | Element): void => {
+  const publishNode = (node: TreeNodeProps | Element, onFinish?: () => void): void => {
     const nodeId = typeof node.id === 'string' ? parseInt(node.id) : node.id
-    executeElementTask(elementType, nodeId, SaveTaskType.Publish)
+    executeElementTask(elementType, nodeId, SaveTaskType.Publish, onFinish)
   }
 
-  const publishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const publishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     return {
       label: t('element.publish'),
       key: ContextMenuActionName.publish,
       icon: <Icon value='eye' />,
       hidden: isPublishHidden(node),
-      onClick: () => {
-        publishNode(node)
-      }
+      onClick: () => { publishNode(node, onFinish) }
     }
   }
 

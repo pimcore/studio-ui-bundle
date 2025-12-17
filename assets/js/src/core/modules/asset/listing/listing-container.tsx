@@ -18,7 +18,6 @@ import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/m
 import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
 import { useElementId } from './hooks/use-element-id'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
-import { compose } from '@Pimcore/utils/compose'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { DefaultView } from './views/default-view'
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
@@ -26,6 +25,8 @@ import { ContextMenuDecorator } from './decorator/context-menu/context-menu-deco
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { TagFilterDecorator } from './decorator/tag-filter/tag-filter-decorator'
 import { GeneralFiltersDecorator } from '../../element/listing/decorators/general-filters/general-filters-decorator'
+import { useInjection } from '@sdk/app'
+import { type AssetListingBuilder } from '@Pimcore/modules/asset/listing/builder/asset-listing-builder'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
@@ -41,23 +42,15 @@ const defaultProps = {
   useElementId
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-const props = compose<AbstractDecoratorProps>(
-  SortingDecorator,
-  PagingDecorator,
-  ColumnConfigurationDecorator,
-  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
-  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  ActionColumnDecorator,
-  ContextMenuDecorator,
-  TagFilterDecorator,
-  GeneralFiltersDecorator
-)(defaultProps) as IAssetListingDefaultParams
-
 export const ListingContainer = (): React.JSX.Element => {
+  const listingBuilder = useInjection<AssetListingBuilder>('Asset/Listing/Builder')
+
   return (
     <BaseListingContainer
-      { ...props }
+      { ...listingBuilder.build({ props: defaultProps }) }
     />
   )
 }
+
+export { defaultProps as listingDefaultProps, useInlineEditApiUpdate, BaseListingContainer as BaseListing, ActionColumnDecorator, SortingDecorator, PagingDecorator, ColumnConfigurationDecorator, InlineEditDecorator, RowSelectionDecorator, ContextMenuDecorator, TagFilterDecorator, GeneralFiltersDecorator }
+export type { AbstractDecoratorProps, IInlineEditDecoratorConfig, IRowSelectionDecoratorConfig }

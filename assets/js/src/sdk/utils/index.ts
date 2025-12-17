@@ -12,6 +12,7 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export * from '@Pimcore/utils/clipboard'
 export * from '@Pimcore/utils/compose'
 export * from '@Pimcore/utils/css'
 export * from '@Pimcore/utils/currency'
@@ -27,6 +28,8 @@ export * from '@Pimcore/utils/query-string'
 export * from '@Pimcore/utils/relative-time'
 export * from '@Pimcore/utils/url-cache-buster'
 export * from '@Pimcore/utils/uuid'
+export * from '@Pimcore/utils/type-utils'
+export * from '@Pimcore/utils/local-storage'
 
 export * from '@Pimcore/utils/hooks/use-click-outside'
 export * from '@Pimcore/utils/hooks/use-css-container/use-css-container'
@@ -34,3 +37,4 @@ export * from '@Pimcore/utils/hooks/use-element-resize'
 export * from '@Pimcore/utils/hooks/use-element-visible'
 export * from '@Pimcore/utils/hooks/use-previous'
 export * from '@Pimcore/utils/hooks/use-server-side-event'
+export * from '@Pimcore/utils/hooks/use-debounce'

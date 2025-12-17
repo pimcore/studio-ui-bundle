@@ -39,7 +39,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'ExperienceEcommerce/Email',
       label: 'navigation.email',
-      order: 300,
+      order: 100,
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails
     })
@@ -80,7 +80,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.email-blocklist',
           icon: {
             type: 'name',
-            value: 'mail-02'
+            value: 'users-x'
           }
         }
       }

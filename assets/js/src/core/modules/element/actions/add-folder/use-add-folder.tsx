@@ -19,10 +19,10 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
-import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@sdk/app'
 import { ContextMenuActionName } from '..'
@@ -58,11 +58,15 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   }
 
   const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    const canHaveChildren = elementType === 'asset'
+      ? node.type === 'folder'
+      : true
+
     return {
       label: t('element.new-folder'),
       key: ContextMenuActionName.addFolder,
       icon: <Icon value={ 'add-folder' } />,
-      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
+      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || !canHaveChildren || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(

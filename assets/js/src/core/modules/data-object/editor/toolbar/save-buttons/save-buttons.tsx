@@ -34,6 +34,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -88,6 +89,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }
 
   const getSecondaryButtons = (): ReactElement[] => {
+    if (dataObject?.type === 'folder') {
+      return []
+    }
     const secondaryButtons: ReactElement[] = []
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
@@ -162,6 +166,23 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
     const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
 
+    if (dataObject?.type === 'folder') {
+      primaryButtons.push(
+        <Button
+          disabled={ saveDisabled }
+          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
+          onClick={ async () => {
+            await handleSaveClick(SaveTaskType.Save)
+          } }
+          type="primary"
+        >
+          {t('toolbar.save')}
+        </Button>
+      )
+
+      return primaryButtons
+    }
+
     if (dataObject?.published === true && checkElementPermission(dataObject?.permissions, 'publish')) {
       primaryButtons.push(
         <Button
@@ -198,6 +219,29 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const secondaryButtons = getSecondaryButtons()
 
   const primaryButtons = getPrimaryButtons()
+
+  useHandleKeyBindings(async () => {
+    if (dataObject != null && checkElementPermission(dataObject.permissions, 'publish')) {
+      await handleSaveClick(SaveTaskType.Publish, () => {
+        if (!dataObject.published) {
+          publishDraft()
+        }
+      })
+    }
+  }, 'publish')
+
+  useHandleKeyBindings(async () => {
+    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    if (!saveDisabled && dataObject != null && checkElementPermission(dataObject.permissions, 'save')) {
+      if (dataObject?.type === 'folder') {
+        await handleSaveClick(SaveTaskType.Save)
+      } else if (dataObject?.published && checkElementPermission(dataObject?.permissions, 'publish')) {
+        await handleSaveClick(SaveTaskType.Publish)
+      } else if (!dataObject?.published) {
+        await handleSaveClick(SaveTaskType.Save)
+      }
+    }
+  }, 'save')
 
   return (
     <>

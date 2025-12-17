@@ -45,3 +45,20 @@ export const getIframeOffset = (view: Window): { x: number, y: number } => {
 
   return { x: 0, y: 0 }
 }
+
+/**
+ * Safely gets the parent document when running in an iframe
+ * @returns The parent document if accessible, null otherwise
+ */
+export const getParentDocument = (): Document => {
+  if (!isInIframe()) {
+    return document
+  }
+
+  try {
+    return window.parent.document
+  } catch {
+    // Cross-origin restriction - parent document not accessible
+    return document
+  }
+}

@@ -17,7 +17,7 @@ export const useStyles = createStyles(({ token, css }) => {
       overflow: hidden;
     `,
     containerChild: css`
-      min-width: 150px
+      // minWidth is now set dynamically via inline styles
     `,
     unpublishedIcon: css`
       color: ${token.colorIconTreeUnpublished}

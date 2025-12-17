@@ -14,6 +14,7 @@ import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import '@Pimcore/modules/data-object/tree/context-menu'
 
 moduleSystem.registerModule({
   onInit: () => {

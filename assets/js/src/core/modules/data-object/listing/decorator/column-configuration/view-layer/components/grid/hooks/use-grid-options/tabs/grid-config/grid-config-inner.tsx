@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useEffect, useMemo, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useGridConfig as useTabGridConfig } from './hooks/use-grid-config'
@@ -28,6 +30,9 @@ import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decora
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 
 enum ViewState {
   Edit = 'edit',
@@ -37,32 +42,30 @@ enum ViewState {
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
-  const { getAvailableColumnsDropdown } = useAvailableColumns()
+  const { availableColumns, getAvailableColumnsDropdown } = useAvailableColumns()
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
-  const { columns, setColumns, addColumn } = useTabGridConfig()
+  const { columns, setColumns, addColumn, addColumns } = useTabGridConfig()
   const { getId } = useElementId()
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
   const { selectedClassDefinition } = useClassDefinitionSelection()
+  const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
 
   const { isLoading, isFetching, data } = useDataObjectListSavedGridConfigurationsQuery({
-    classId: selectedClassDefinition!.id
-  })
+    classId: selectedClassDefinition?.id ?? ''
+  }, { skip: selectedClassDefinition === undefined })
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
   const { isFetching: gridConfigIsLoading } = useDataObjectGetGridConfigurationQuery({
-    classId: selectedClassDefinition!.id,
+    classId: selectedClassDefinition?.id ?? '',
     folderId: getId(),
     configurationId: selectedGridConfigId
-  })
+  }, { skip: selectedClassDefinition === undefined })
 
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useDataObjectSaveGridConfigurationMutation()
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useDataObjectUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
-
-  // @todo prefill current language with language of the current configuration
-  const [currentLanguage, setCurrentLanguage] = useState<string>('en')
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = useForm()
@@ -93,8 +96,53 @@ export const GridConfigInner = (): React.JSX.Element => {
     }) as AvailableColumn[])
   }, [selectedColumns])
 
+  function onClassificationStoreUpdate (data): void {
+    const fieldDefinition = data.modalContext
+    const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore')
+
+    if (baseColumn === undefined) {
+      throw new Error('Could not find base column for classification store field ' + fieldDefinition.name)
+    }
+
+    const columnsToAdd: AvailableColumn[] = []
+
+    if (data.type === 'group-by-key') {
+      data.data.forEach((item) => {
+        const itemDefinition = item.definition
+
+        columnsToAdd.push({
+          ...baseColumn,
+          key: `${baseColumn.key}`,
+          frontendType: itemDefinition?.fieldtype,
+          locale: baseColumn.localizable ? 'default' : undefined,
+          config: {
+            keyId: item.id,
+            groupId: item.groupId,
+            fieldDefinition: itemDefinition
+          }
+        })
+      })
+    }
+
+    addColumns(columnsToAdd)
+  }
+
   const onColumnClick = (column: AvailableColumn): void => {
-    addColumn(column)
+    if (column.type === 'dataobject.classificationstore') {
+      if (!('fieldDefinition' in column.config)) {
+        throw new Error('Field definition is missing in column config')
+      }
+
+      const fieldDefinition = column.config.fieldDefinition as ClassificationStoreModalProps
+
+      openModal({
+        ...fieldDefinition,
+        fieldName: fieldDefinition.name,
+        allowedTabs: [TabId.GroupByKey]
+      })
+    } else {
+      addColumn(column)
+    }
   }
 
   const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])
@@ -139,8 +187,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
-      // @todo Currently the type in backend is not matching anymore
-      // group: column.group,
+      group: column.group,
       type: column.type,
       config: column.__meta?.advancedColumnConfig ?? column.config
     }))
@@ -218,7 +265,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     setSelectedColumns(columns.map(column => {
       return {
         key: column.key,
-        locale: column.locale === null && column.localizable ? currentLanguage : column.locale,
+        locale: column.locale === null && column.localizable ? undefined : column.locale,
         type: column.type,
         config: column.config,
         sortable: column.sortable,
@@ -242,7 +289,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         <EditView
           addColumnMenu={ availableColumnsDropdown.menu.items }
           columns={ columns }
-          currentLanguage={ currentLanguage }
           currentUserId={ userData?.id }
           gridConfig={ gridConfig }
           isLoading={ isLoading || isFetching }
@@ -255,7 +301,6 @@ export const GridConfigInner = (): React.JSX.Element => {
           onSaveConfigurationClick={ () => { setView(ViewState.Save) } }
           onUpdateConfigurationClick={ onUpdatedConfigurationClick }
           savedGridConfigurations={ savedGridConfigurations }
-          setCurrentLanguage={ setCurrentLanguage }
         />
       ) }
 

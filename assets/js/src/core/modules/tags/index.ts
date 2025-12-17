@@ -16,6 +16,20 @@ import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configurati
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
+import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+
+export const TAG_CONFIGURATION_WIDGET: WidgetManagerTabConfig = {
+  name: 'Tag Configuration',
+  id: 'tag-configuration',
+  component: 'tag-configuration',
+  config: {
+    translationKey: 'widget.tag-configuration',
+    icon: {
+      type: 'name',
+      value: 'tag-configuration'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -25,21 +39,10 @@ moduleSystem.registerModule({
       path: 'DataManagement/Tag Configuration',
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
-      order: 100,
+      order: 500,
       permission: UserPermission.TagsConfiguration,
       perspectivePermission: NavPermission.TagConfiguration,
-      widgetConfig: {
-        name: 'Tag Configuration',
-        id: 'tag-configuration',
-        component: 'tag-configuration',
-        config: {
-          translationKey: 'widget.tag-configuration',
-          icon: {
-            type: 'name',
-            value: 'tag-configuration'
-          }
-        }
-      }
+      widgetConfig: TAG_CONFIGURATION_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

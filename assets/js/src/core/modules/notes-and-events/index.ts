@@ -16,6 +16,20 @@ import { NotesAndEventsContainer } from '@Pimcore/modules/notes-and-events/notes
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
+import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+
+export const NOTES_AND_EVENTS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Notes & Events',
+  id: 'notes-and-events',
+  component: 'notes-and-events',
+  config: {
+    translationKey: 'widget.notes-and-events',
+    icon: {
+      type: 'name',
+      value: 'notes-events'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -25,22 +39,11 @@ moduleSystem.registerModule({
       path: 'DataManagement/Notes & Events',
       label: 'navigation.notes-and-events',
       dividerBottom: true,
-      order: 400,
+      order: 100,
       className: 'item-style-modifier',
       permission: UserPermission.NotesAndEvents,
       perspectivePermission: NavPermission.NotesAndEvents,
-      widgetConfig: {
-        name: 'Notes & Events',
-        id: 'notes-and-events',
-        component: 'notes-and-events',
-        config: {
-          translationKey: 'widget.notes-and-events',
-          icon: {
-            type: 'name',
-            value: 'notes-events'
-          }
-        }
-      }
+      widgetConfig: NOTES_AND_EVENTS_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

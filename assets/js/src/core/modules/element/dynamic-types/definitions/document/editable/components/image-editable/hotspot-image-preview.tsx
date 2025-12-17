@@ -10,6 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { ImageEditablePreview } from './image-editable-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
@@ -44,6 +45,7 @@ interface DocumentHotspotImagePreviewProps {
   disableInlineUpload?: boolean
   imgAttributes?: Record<string, string>
   focalPointContextMenuItem?: boolean
+  dropClass?: string
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
   // Alt text overlay props
@@ -52,6 +54,9 @@ interface DocumentHotspotImagePreviewProps {
   hideAltTextInput?: boolean
   isImageLoaded?: boolean
   onImageLoadedChange?: (isLoaded: boolean) => void
+  // Thumbnail config from image editable configuration
+  thumbnailConfig?: string | object
+  className?: string
 }
 
 export const DocumentHotspotImagePreview = ({
@@ -71,13 +76,16 @@ export const DocumentHotspotImagePreview = ({
   disableInlineUpload,
   imgAttributes,
   focalPointContextMenuItem,
+  dropClass,
   onResize,
   lastImageDimensions,
   altText,
   onAltTextChange,
   hideAltTextInput,
   isImageLoaded,
-  onImageLoadedChange
+  onImageLoadedChange,
+  thumbnailConfig,
+  className
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
@@ -96,6 +104,15 @@ export const DocumentHotspotImagePreview = ({
     // Same as open - open the asset in the editor where focal point can be set
     handleOpen()
   }
+
+  // Stabilize crop settings to prevent unnecessary URL regeneration
+  const stableCropSettings = useMemo(() => value.crop, [
+    value.crop?.cropLeft,
+    value.crop?.cropTop,
+    value.crop?.cropWidth,
+    value.crop?.cropHeight,
+    value.crop?.cropPercent
+  ])
 
   const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => {
     const items: DropdownProps['menu']['items'] = []
@@ -169,17 +186,19 @@ export const DocumentHotspotImagePreview = ({
   }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <div className={ styles.root }>
+    <div className={ cn(styles.root, className) }>
       <ImageEditablePreview
         assetId={ assetId }
         containerWidth={ containerWidth }
+        dropClass={ dropClass }
         dropdownItems={ dropdownItems }
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
         onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
-        thumbnailSettings={ value.crop }
+        thumbnailConfig={ thumbnailConfig }
+        thumbnailSettings={ stableCropSettings }
         width={ width }
       />
       {hideAltTextInput !== true && isImageLoaded !== false && (

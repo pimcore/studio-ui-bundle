@@ -9,10 +9,20 @@
  */
 
 import { createStyles, type SerializedStyles } from 'antd-style'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 const BORDER_WIDTH = 1
 
-export const useStyles = createStyles(({ token, css }) => {
+export interface UseStylesProps {
+  size?: GridProps['size']
+  enableVirtualizer?: boolean
+}
+
+export const useStyles = createStyles(({ token, css }, { size = 'normal', enableVirtualizer = false }: UseStylesProps) => {
+  const rowHeight = size === 'small' ? 32 : 41
+  const rowHeightValue = enableVirtualizer ? 'auto' : `${rowHeight}px`
+  const paddingValue = size !== 'small' && enableVirtualizer ? `${token.paddingXXS}px 0 !important` : 0
+
   const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
     content: '';
     display: block;
@@ -180,7 +190,11 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-table-row {
-        height: 41px;
+        height: ${rowHeightValue};
+          
+        .ant-table-cell {
+          padding: ${paddingValue};
+        }
       }
 
       .ant-table-content {
@@ -190,6 +204,9 @@ export const useStyles = createStyles(({ token, css }) => {
         }
           
           .ant-table-tbody {
+            position: relative;
+            width: 100%;
+              
             .ant-table-row:last-of-type {
               .ant-table-cell:first-of-type {
                 border-bottom-left-radius: 8px;
@@ -207,6 +224,13 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-table-content {
           table {
             width: 100% !important;
+            min-width: 100% !important;
+            table-layout: auto;
+              
+            .ant-table-cell {
+              width: inherit !important;
+              min-width: inherit !important;
+            }
           }
         }
       }

@@ -12,6 +12,7 @@ import { ListingContainer as ObjectListing } from '@Pimcore/modules/data-object/
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { componentConfig, ComponentRenderer } from '@sdk/modules/app'
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
@@ -22,7 +23,7 @@ export const ListingContainer = (): React.JSX.Element => {
 export const TAB_LISTING: IEditorTab = {
   key: 'listing',
   label: 'folder.folder-editor-tabs.view',
-  children: <ListingContainer />,
+  children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.listing.name } />,
   icon: <Icon value={ 'list' } />,
   isDetachable: false
 }

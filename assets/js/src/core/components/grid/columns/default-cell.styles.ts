@@ -9,8 +9,16 @@
  */
 
 import { createStyles } from 'antd-style'
+import { type GridProps } from '@Pimcore/types/components/types'
 
-export const useStyle = createStyles(({ token, css }) => {
+export interface UseStyleProps {
+  size?: GridProps['size']
+}
+
+export const useStyle = createStyles(({ token, css }, { size = 'normal' }: UseStyleProps) => {
+  const gridCellPaddingVertical = size === 'small' ? 2 : 4
+  const gridCellPaddingHorizontal = 4
+
   return {
     'default-cell': css`
       display: flex;
@@ -34,6 +42,11 @@ export const useStyle = createStyles(({ token, css }) => {
         overflow: hidden;
         text-overflow: ellipsis;
         align-items: center;
+        white-space: normal;
+      }
+
+      .default-cell__content--padded {
+        padding: ${gridCellPaddingVertical}px ${gridCellPaddingHorizontal}px;
       }
 
       &.default-cell--modified, .default-cell--modified {

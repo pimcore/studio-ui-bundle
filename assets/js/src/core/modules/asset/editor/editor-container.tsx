@@ -9,8 +9,9 @@
  */
 
 import React, { useEffect } from 'react'
+import { isNil } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
+import { useIsActiveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '@sdk/modules/asset'
 import { Content } from '@Pimcore/components/content/content'
@@ -19,6 +20,8 @@ import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { getBaseAssetContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
+import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
 
 export interface EditorContainerProps {
   id: number
@@ -26,8 +29,8 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, asset, editorType } = useAssetDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
+  const { isLoading, isError, asset, editorType, activeTab } = useAssetDraft(id)
+  const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
   useEffect(() => {
@@ -38,7 +41,10 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   useEffect(() => {
     if (isWidgetActive) {
-      setContext({ id })
+      setContext({
+        id,
+        ...(!isNil(asset) && { contextIdentifiers: getBaseAssetContextIdentifiers(asset, activeTab === TAB_LISTING.key) })
+      })
     }
 
     return () => {
@@ -46,7 +52,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
         removeContext()
       }
     }
-  }, [isWidgetActive])
+  }, [isWidgetActive, activeTab, asset])
 
   if (isLoading) {
     return <Content loading />

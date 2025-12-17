@@ -9,19 +9,8 @@
  */
 
 import { isEmpty, isString, isUndefined } from 'lodash'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import type { SerializedError } from '@reduxjs/toolkit'
 import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
-import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
-
-export type ApiErrorData = FetchBaseQueryError | SerializedError
-
-export interface IApiErrorDetails {
-  detail?: string
-  errorKey?: string
-  message?: string
-  error?: string
-}
+import { type ApiErrorData, type IApiErrorDetails, type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
 export const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
@@ -46,7 +35,7 @@ class ApiError extends Error {
       }
     }
 
-    if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR) {
+    if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR && errorKey !== ErrorKeyTypes.INVALID_ARGUMENT) {
       return { errorKey: errorKey! }
     }
 

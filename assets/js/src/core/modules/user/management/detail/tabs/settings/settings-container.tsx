@@ -39,7 +39,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { Text } = Typography
   const { id } = useUserManagementContext()
   const user = useUser()
-  const { user: openedUser, isLoading, changeUserInState } = useUserManagementDraft(id)
+  const { user: openedUser, isLoading, changeUserInState, updateUserImageInState } = useUserManagementDraft(id)
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
@@ -51,12 +51,14 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         active: openedUser?.active,
         admin: openedUser?.admin,
         classes: openedUser?.classes,
+        docTypes: openedUser?.docTypes,
         name: openedUser?.name,
-        twoFactorAuthenticationEnabled: openedUser?.twoFactorAuthenticationEnabled,
+        twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
         firstname: openedUser?.firstname,
         lastname: openedUser?.lastname,
         email: openedUser?.email,
         language: openedUser?.language,
+        dateTimeLocale: openedUser?.dateTimeLocale ?? '',
         welcomeScreen: openedUser?.welcomeScreen,
         memorizeTabs: openedUser?.memorizeTabs,
         allowDirtyClose: openedUser?.allowDirtyClose,
@@ -66,7 +68,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
     }
-  }, [openedUser, isLoading])
+  }, [openedUser, isLoading, permissions])
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
@@ -104,7 +106,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             items={ [
               {
                 key: '1',
-                title: <>{ t('user-management.general') }</>,
+                title: <>{t('user-management.general')}</>,
                 info: 'ID: ' + id,
                 children: <>
                   <Flex
@@ -118,12 +120,13 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       <Switch
                         disabled={ user?.id === openedUser?.id }
                         labelRight={ t('user-management.active') }
+                        size={ 'small' }
                       />
                     </Form.Item>
 
-                    { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
+                    {openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin as number) }</Text>
+                        <Text disabled>{t('user-management.last-login')}: {formatLastLogin(openedUser.lastLogin)}</Text>
                         )
                       : null}
                   </Flex>
@@ -155,18 +158,28 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       type={ passwordType }
                     />
                   </Form.Item>
-                  <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
-                    <Switch labelRight={ t('user-management.two-factor-authentication') } />
+
+                  <Form.Item
+                    name={ 'twoFactorAuthenticationRequired' }
+                    style={ { marginBottom: '0' } }
+                  >
+                    <Switch
+                      labelRight={ t('user-management.two-factor-authentication') }
+                      size={ 'small' }
+                    />
                   </Form.Item>
                 </>
               }
             ]
-          }
+            }
             size={ 'small' }
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar user={ openedUser } />
+          <UserAvatar
+            onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
+            user={ openedUser }
+          />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />
@@ -213,7 +226,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
               />
             </Col>
             )
-          : null }
+          : null}
       </Row>
     </Form>
   )

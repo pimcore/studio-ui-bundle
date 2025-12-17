@@ -14,7 +14,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon, type Element } from '@Pimcore/modules/element/element-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
-import { openMainWidget, setActiveWidgetById } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
 
 // Import draft fetcher functions directly
@@ -50,6 +50,7 @@ export class DataObjectOpeningService {
 
     if (!isNil(data)) {
       const mergedDataObjectData = {
+        draftData: null,
         ...data,
         id,
         modified: false,
@@ -60,7 +61,41 @@ export class DataObjectOpeningService {
         modifiedObjectData: {},
         ...initialTabsStateValue
       }
+
       store.dispatch(dataObjectReceived(mergedDataObjectData))
+    }
+  }
+
+  async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
+    store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
+    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+
+    if (isError && !silent) {
+      trackError(new ApiError(error))
+    }
+
+    if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
+      return undefined
+    }
+
+    // Store draft data for the element editor
+    await this.fetchAndStoreDataObjectDraft(id)
+
+    const icon = getElementIcon(data as Element, { value: 'widget', type: 'name' })
+    const widgetId = getWidgetId('data-object', id)
+
+    return {
+      name: data?.key,
+      id: widgetId,
+      component: 'data-object-editor',
+      config: {
+        id,
+        elementType: 'data-object',
+        icon: {
+          type: icon.type,
+          value: icon.value
+        }
+      }
     }
   }
 
@@ -73,35 +108,11 @@ export class DataObjectOpeningService {
       return
     }
 
-    store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
-    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+    const widgetConfig = await this.getWidgetConfig(id)
 
-    if (isError) {
-      trackError(new ApiError(error))
+    if (!isNil(widgetConfig)) {
+      store.dispatch(openMainWidget(widgetConfig))
     }
-
-    if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
-      return
-    }
-
-    // Store draft data for the element editor
-    await this.fetchAndStoreDataObjectDraft(id)
-
-    const icon = getElementIcon(data as Element, { value: 'widget', type: 'name' })
-
-    store.dispatch(openMainWidget({
-      name: data?.key,
-      id: widgetId,
-      component: 'data-object-editor',
-      config: {
-        id,
-        elementType: 'data-object',
-        icon: {
-          type: icon.type,
-          value: icon.value
-        }
-      }
-    }))
   }
 }
 

@@ -9,16 +9,16 @@
  */
 
 import React, { createContext, useContext, useState, type ReactNode, useMemo } from 'react'
-import { type AccessorKeyColumnDef } from '@tanstack/react-table'
+import { type AccessorFnColumnDef } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 
 interface IColumnsContext {
-  columns: Array<AccessorKeyColumnDef<unknown, any>>
-  setColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
-  initialColumns: Array<AccessorKeyColumnDef<unknown, any>>
-  setInitialColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
+  columns: Array<AccessorFnColumnDef<unknown, any>>
+  setColumns: (columns: Array<AccessorFnColumnDef<unknown, any>>) => void
+  initialColumns: Array<AccessorFnColumnDef<unknown, any>>
+  setInitialColumns: (columns: Array<AccessorFnColumnDef<unknown, any>>) => void
   resetColumnsToInitial: () => void
-  addColumn: (column: AccessorKeyColumnDef<unknown, any>) => void
+  addColumn: (column: AccessorFnColumnDef<unknown, any>) => void
 }
 
 const ColumnsContext = createContext<IColumnsContext | undefined>(undefined)
@@ -28,14 +28,14 @@ interface IColumnsProviderProps {
 }
 
 export const ColumnsProvider = ({ children }: IColumnsProviderProps): React.JSX.Element => {
-  const [columns, setColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
-  const [initialColumns, setInitialColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
+  const [columns, setColumns] = useState<Array<AccessorFnColumnDef<unknown, any>>>([])
+  const [initialColumns, setInitialColumns] = useState<Array<AccessorFnColumnDef<unknown, any>>>([])
 
   const resetColumnsToInitial = (): void => {
     setColumns(initialColumns)
   }
 
-  const addColumn = (column: AccessorKeyColumnDef<unknown, any>): void => {
+  const addColumn = (column: AccessorFnColumnDef<unknown, any>): void => {
     setColumns([...columns, column])
   }
 

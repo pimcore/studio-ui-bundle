@@ -8,33 +8,38 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AssetGetTreeApiResponse, type AssetPermissions } from '../../asset-api-slice.gen'
+import { type AssetGetTreeApiResponse, type AssetPermissions, type Image, type AssetDocument, type Audio, type Video, type Archive, type Text, type AssetFolder, type Unknown } from '../../asset-api-slice.gen'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+
+export const transformApiDataToNode = (assetNode: Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown, node: DataTransformerSourceNode): TreeNode => {
+  return {
+    id: assetNode.id.toString(),
+    elementType: elementTypes.asset,
+    icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
+    label: assetNode.filename,
+    type: assetNode.type,
+    parentId: String(assetNode.parentId),
+    fullPath: assetNode.fullPath,
+    hasChildren: assetNode.hasChildren,
+    locked: assetNode.locked,
+    isLocked: assetNode.isLocked,
+    metaData: {
+      asset: assetNode
+    },
+    permissions: assetNode.permissions ?? [] as unknown as AssetPermissions,
+    internalKey: `${node.internalKey}-${assetNode.id}`
+  }
+}
 
 export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: AssetGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
   const nodes: TreeNode[] = []
 
   const assetData = data.items
   assetData.forEach((assetNode) => {
-    nodes.push({
-      id: assetNode.id.toString(),
-      elementType: elementTypes.asset,
-      icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
-      label: assetNode.filename,
-      type: assetNode.type,
-      parentId: assetNode.parentId.toString(),
-      hasChildren: assetNode.hasChildren,
-      locked: assetNode.locked,
-      isLocked: assetNode.isLocked,
-      metaData: {
-        asset: assetNode
-      },
-      permissions: assetNode.permissions ?? [] as unknown as AssetPermissions,
-      internalKey: `${node.internalKey}-${assetNode.id}`
-    })
+    nodes.push(transformApiDataToNode(assetNode, node))
   })
 
   const total = data.totalItems ?? maxItemsPerNode

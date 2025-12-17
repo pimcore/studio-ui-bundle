@@ -194,7 +194,7 @@ export type Element = {
     /** path */
     path: string;
     /** icon */
-    icon?: ElementIcon;
+    icon: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
@@ -207,22 +207,22 @@ export type Element = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
+    /** elementType */
+    elementType: string;
 };
 export type DataObjectVersion = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Inheritance allowed */
-    allowInheritance?: boolean;
-    /** Variants allowed */
-    allowVariants?: boolean;
     /** Show variants */
-    showVariants?: boolean;
+    showVariants: boolean;
+    /** Inheritance allowed */
+    allowInheritance: boolean;
     /** Has preview */
-    hasPreview?: boolean;
+    hasPreview: boolean;
     /** Has workflow available */
-    hasWorkflowAvailable?: boolean;
+    hasWorkflowAvailable: boolean;
     /** Key */
     key: string;
     /** Type */
@@ -239,6 +239,8 @@ export type DataObjectVersion = Element & {
     published: boolean | null;
     /** Detail object data */
     objectData: object;
+    /** Allow variants */
+    allowVariants: boolean | null;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */

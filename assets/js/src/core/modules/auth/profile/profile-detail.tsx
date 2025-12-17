@@ -28,18 +28,31 @@ import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 
 interface IProfileDetail {
   id: number
+  resetPassword?: boolean
 }
 
-const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
+const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
-  const { availableAdminLanguages } = useSettings()
+  const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
   const { user, setModifiedCells } = useUserDraft()
+  const { mergedKeyBindings } = useMergedKeyBindings(user?.keyBindings)
   const [keyBindingsModified, setKeyBindingsModified] = useState(false)
+  const { updateUserImageInState } = useUserHelper()
+
+  const [passwordType, setPasswordType] = useState<'text' | 'password'>('password')
+
+  const validLocalesOptions = [{ value: '', label: '(system)' },
+    ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
+      value: key,
+      label: value
+    }))]
 
   useEffect(() => {
     if (user?.modified === false) {
@@ -48,10 +61,14 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
         lastname: user?.lastname,
         email: user?.email,
         language: user?.language,
+        dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,
-        contentLanguages: user?.contentLanguages
+        contentLanguages: user?.contentLanguages,
+        password: '',
+        passwordConfirmation: '',
+        oldPassword: ''
       })
 
       setKeyBindingsModified(false)
@@ -103,7 +120,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             items={ [
               {
                 key: '1',
-                title: <>{ t('user-management.general') }</>,
+                title: <>{t('user-management.general')}</>,
                 children: <>
                   <Form.Item
                     label={ t('user-management.firstname') }
@@ -140,15 +157,14 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                   </Form.Item>
 
                   <Form.Item
-                    label={ 'TODO ' + t('user-management.dateTime') }
-                    name="dateTime"
+                    label={ t('user-management.dateTime') }
+                    name="dateTimeLocale"
                   >
                     <Select
-                      options={ availableAdminLanguages.map((language: string) => ({
-                        value: language,
-                        label: getDisplayName(language)
-                      })) }
+                      optionFilterProp="label"
+                      options={ validLocalesOptions }
                       placeholder={ t('user-management.dateTime') }
+                      showSearch
                     />
                   </Form.Item>
 
@@ -166,12 +182,15 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                 </>
               }
             ]
-                        }
+            }
             size={ 'small' }
           />
         </Col>
         <Col span={ 6 }>
-          <UserAvatar user={ user } />
+          <UserAvatar
+            onUserImageChanged={ updateUserImageInState }
+            user={ user }
+          />
         </Col>
         <Col span={ 14 }>
           <Accordion
@@ -180,29 +199,36 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             items={ [
               {
                 key: '2',
-                title: <>{ t('user-profile.change-password') }</>,
+                title: <>{t('user-profile.change-password')}</>,
                 children: <>
-                  <Form.Item
-                    label={ t('user-profile.password-old') }
-                    name={ 'passwordOld' }
-                  >
-                    <Input />
-                  </Form.Item>
+                  {!resetPassword && (
+                    <Form.Item
+                      label={ t('user-profile.password-old') }
+                      name={ 'oldPassword' }
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                  )}
 
                   <Form.Item
                     label={ t('user-profile.password-new') }
                     name={ 'password' }
                     rules={ [{ min: 10 }] }
                   >
-                    <Input suffix={ <IconButton
-                      icon={ { value: 'locked' } }
-                      onClick={ () => {
-                        const newPassword = generatePassword()
-                        form.setFieldValue('password', newPassword)
-                      } }
-                      title={ t('user-management.generate-password') }
-                      variant={ 'minimal' }
-                                    /> }
+                    <Input
+                      onKeyDown={ () => { setPasswordType('password') } }
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
+                          const newPassword = generatePassword()
+                          form.setFieldValue('password', newPassword)
+                          setModifiedCells({ password: newPassword })
+                          setPasswordType('text')
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
+                      type={ passwordType }
                     />
                   </Form.Item>
                   <Form.Item
@@ -223,7 +249,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                 </>
               }
             ]
-                        }
+            }
             size={ 'small' }
           />
         </Col>
@@ -243,7 +269,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
             modified={ keyBindingsModified }
             onChange={ handleOnChangeKeyBindings }
             onResetKeyBindings={ handleOnResetKeyBindings }
-            values={ user?.keyBindings }
+            values={ mergedKeyBindings }
           />
         </Col>
       </Row>

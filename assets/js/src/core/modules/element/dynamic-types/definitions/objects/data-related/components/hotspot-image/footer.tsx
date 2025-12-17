@@ -19,7 +19,7 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
-  hasValueData
+  hasHotspotsOrMarkers
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
@@ -42,12 +42,11 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
   const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
 
-  const clearValueData = async (): Promise<void> => {
+  const clearHotspotsMarkers = async (): Promise<void> => {
     props.setValue({
       ...props.value!,
       hotspots: [],
-      marker: [],
-      crop: {}
+      marker: []
     })
 
     await messageApi.success(t('hotspots.data-cleared'))
@@ -133,11 +132,11 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
               }
             },
             {
-              hidden: props.disabled === true || !hasValueData(props.value),
+              hidden: props.disabled === true || !hasHotspotsOrMarkers(props.value),
               label: t('hotspots.clear-data'),
               key: 'clear-data',
               icon: <Icon value={ 'remove-marker' } />,
-              onClick: clearValueData
+              onClick: clearHotspotsMarkers
             }
           ]
         } }

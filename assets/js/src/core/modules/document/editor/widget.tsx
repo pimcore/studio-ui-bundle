@@ -22,6 +22,7 @@ export const DocumentEditorWidget: Widget = {
   name: 'document-editor',
   component: EditorContainerRenderer,
   titleComponent: TitleContainer,
+  defaultGlobalContext: false,
   isModified: (tabNode) => {
     const config = tabNode.getConfig() as EditorContainerProps
     const document = selectDocumentById(store.getState(), config.id)

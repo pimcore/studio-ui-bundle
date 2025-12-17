@@ -10,18 +10,20 @@
 
 import React, { useState } from 'react'
 import { useAppDispatch } from '@sdk/app'
-import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/user/user-api-slice.gen'
+import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { api as userApi } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { setActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { updateOuterModel } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { getInitialModelJson } from '@Pimcore/modules/widget-manager/utils/widget-manager-outer-model'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { setUser, setPerspectives } from '@Pimcore/modules/auth/user/user-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import {
   api,
+  type PerspectiveConfigDetail,
   type PerspectiveConfig, type PerspectiveGetConfigCollectionApiResponse
-} from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+} from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import trackError, { ApiError } from '../../app/error-handler'
-import { isPlainObject, isUndefined } from 'lodash'
+import { isNil, isPlainObject, isUndefined } from 'lodash'
 import { App } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -31,8 +33,9 @@ import { Box } from '@Pimcore/components/box/box'
 
 export interface UsePerspectiveSwitcherReturn {
   switchPerspective: (perspective: PerspectiveConfig) => Promise<void>
-  loadPerspective: (perspectiveId: string) => Promise<any>
+  loadPerspective: (perspectiveId: string, forceRefetch?: boolean) => Promise<{ data?: PerspectiveConfigDetail, error?: any, isSuccess: boolean, isError: boolean }>
   getPerspectiveConfigCollection: () => Promise<PerspectiveGetConfigCollectionApiResponse | undefined>
+  refreshPerspectives: () => Promise<void>
   isLoading: boolean
 }
 
@@ -44,8 +47,8 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
   const { modal } = App.useApp()
   const { t } = useTranslation()
 
-  const loadPerspective = async (perspectiveId: string): Promise<any> => {
-    const perspectiveFetcher = dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
+  const loadPerspective = async (perspectiveId: string, forceRefetch: boolean = false): Promise<{ data?: PerspectiveConfigDetail, error?: any, isSuccess: boolean, isError: boolean }> => {
+    const perspectiveFetcher = dispatch(api.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }, { forceRefetch }))
 
     perspectiveFetcher
       .then(({ data, isSuccess, isError, error }) => {
@@ -56,7 +59,7 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
           dispatch(updateOuterModel(getInitialModelJson()))
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await perspectiveFetcher
   }
@@ -91,7 +94,7 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
     if (!isUndefined(updateResult.error)) {
       trackError(new ApiError(updateResult.error))
     } else {
-      await loadPerspective(perspectiveId)
+      await loadPerspective(perspectiveId, true)
       dispatch(setUser({ ...user, activePerspective: perspectiveId }))
     }
 
@@ -109,5 +112,18 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
     return data
   }
 
-  return { switchPerspective, loadPerspective, getPerspectiveConfigCollection, isLoading }
+  const refreshPerspectives = async (): Promise<void> => {
+    const { data, isSuccess } = await dispatch(userApi.endpoints.userGetCurrentInformation.initiate(undefined, { forceRefetch: true }))
+    if (isSuccess && !isNil(data)) {
+      dispatch(setPerspectives(data.perspectives))
+    }
+  }
+
+  return {
+    switchPerspective,
+    loadPerspective,
+    getPerspectiveConfigCollection,
+    refreshPerspectives,
+    isLoading
+  }
 }

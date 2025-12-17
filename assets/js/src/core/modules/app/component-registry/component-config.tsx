@@ -16,9 +16,35 @@ const defaultComponentConfig = {
     feedback: {
       type: ComponentType.SLOT,
       name: 'global.feedback'
+    },
+    modal: {
+      type: ComponentType.SLOT,
+      name: 'global.modal'
     }
   },
   asset: {
+    listing: {
+      toolbar: {
+        component: {
+          type: ComponentType.SINGLE,
+          name: 'asset.listing.toolbar'
+        },
+        left: {
+          type: ComponentType.SLOT,
+          name: 'asset.listing.toolbar.left',
+          defaultEntries: [
+            { name: 'batch-actions', priority: 100 }
+          ]
+        },
+        right: {
+          type: ComponentType.SLOT,
+          name: 'asset.listing.toolbar.right',
+          defaultEntries: [
+            { name: 'pagination', priority: 100 }
+          ]
+        }
+      }
+    },
     editor: {
       container: { type: ComponentType.SINGLE, name: 'asset.editor.container' },
       tab: {
@@ -47,10 +73,42 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'asset.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'asset.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'asset.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   dataObject: {
+    listing: {
+      toolbar: {
+        component: {
+          type: ComponentType.SINGLE,
+          name: 'dataObject.listing.toolbar'
+        },
+        left: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.listing.toolbar.left',
+          defaultEntries: [
+            { name: 'batch-actions', priority: 100 }
+          ]
+        },
+        right: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.listing.toolbar.right',
+          defaultEntries: [
+            { name: 'pagination', priority: 100 }
+          ]
+        }
+      }
+    },
     editor: {
       toolbar: {
         slots: {
@@ -71,10 +129,27 @@ const defaultComponentConfig = {
             ]
           }
         }
+      },
+      tab: {
+        listing: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.listing' },
+        edit: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.edit' },
+        preview: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.preview' },
+        versions: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.versions' },
+        variants: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.variants' }
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'dataObject.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.tree.node.meta',
+          defaultEntries: [
+            { name: 'lockIcon', priority: 100 }
+          ]
+        }
+      }
     }
   },
   document: {
@@ -101,7 +176,30 @@ const defaultComponentConfig = {
       }
     },
     tree: {
-      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' },
+      tooltip: { type: ComponentType.SINGLE, name: 'document.tree.tooltip' },
+      node: {
+        meta: {
+          type: ComponentType.SLOT,
+          name: 'document.tree.node.meta',
+          defaultEntries: [
+            { name: 'navigationExcludeIcon', priority: 100 },
+            { name: 'lockIcon', priority: 200 }
+          ]
+        }
+      }
+    }
+  },
+  element: {
+    editor: {
+      tab: {
+        properties: { type: ComponentType.SINGLE, name: 'element.editor.tab.properties' },
+        schedule: { type: ComponentType.SINGLE, name: 'element.editor.tab.schedule' },
+        dependencies: { type: ComponentType.SINGLE, name: 'element.editor.tab.dependencies' },
+        workflow: { type: ComponentType.SINGLE, name: 'element.editor.tab.workflow' },
+        notesAndEvents: { type: ComponentType.SINGLE, name: 'element.editor.tab.notesAndEvents' },
+        tags: { type: ComponentType.SINGLE, name: 'element.editor.tab.tags' }
+      }
     }
   },
   leftSidebar: {
@@ -112,6 +210,25 @@ const defaultComponentConfig = {
         { name: 'mainNav', priority: 100 },
         { name: 'search', priority: 200 }
       ]
+    }
+  },
+  rightSidebar: {
+    slot: {
+      type: ComponentType.SLOT,
+      name: 'rightSidebar.slot',
+      defaultEntries: [
+        { name: 'logoContainer', priority: 100 }
+      ]
+    },
+    logo: {
+      image: {
+        type: ComponentType.SINGLE,
+        name: 'rightSidebar.logo.image'
+      },
+      subscriptionDetails: {
+        type: ComponentType.SINGLE,
+        name: 'rightSidebar.logo.subscriptionDetails'
+      }
     }
   },
   wysiwyg: {

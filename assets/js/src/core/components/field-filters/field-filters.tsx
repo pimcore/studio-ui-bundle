@@ -14,10 +14,9 @@ import { StackList, type StackListProps } from '../stack-list/stack-list'
 import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
 import { IconButton } from '../icon-button/icon-button'
 import { Tag } from '../tag/tag'
-import { LanguageSelection } from '../language-selection'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '../flex/flex'
-import { isNil } from 'lodash'
+import { Tooltip } from '../tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -26,7 +25,6 @@ export interface FieldFiltersProps {
 
 export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
   const [_data, _setData] = useState(data)
-  const { requiredLanguages } = useSettings()
 
   const setData = (data: IDynamicFilter[]): void => {
     _setData(data)
@@ -41,30 +39,54 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
   }, [data])
 
   const onFilterChange = (filter: IDynamicFilter, data: any): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], data }
     setData(updatedData)
   }
 
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
-    const index = _data.findIndex((f) => f.id === filter.id)
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], locale }
     setData(updatedData)
   }
 
   const onRemoveClick = (filter: IDynamicFilter): void => {
+    if (filter.type === 'dataobject.classificationstore') {
+      setData(_data.filter((f) => !(f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)))
+      return
+    }
+
     setData(_data.filter((f) => f.id !== filter.id))
   }
 
   const items: StackListProps['items'] = _data.map((filter) => {
+    let key = filter.id
+
+    const isClassificationStore = filter.type === 'dataobject.classificationstore'
+
+    if (isClassificationStore) {
+      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
+    }
+
     return {
       id: filter.id,
-
-      key: filter.id,
+      key,
       title: filter.id,
-      children: <Tag>{filter.id}</Tag>,
+      children: <Tooltip title={ filter.nameTooltip }>
+        <Tag>{filter.translationKey}</Tag>
+      </Tooltip>,
       body: (
         <DynamicFilter
           { ...filter }
@@ -74,11 +96,12 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       renderRightToolbar: (
         <Flex gap="mini">
           {filter.localizable === true && (
-            <LanguageSelection
+            <PermissionBasedLanguageSelectionControl
+              customKeys={ isClassificationStore ? ['default'] : [] }
+              isNullable
               key={ 'language' }
-              languages={ requiredLanguages }
-              onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
-              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
+              onChange={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
+              value={ filter.locale === undefined ? null : filter.locale }
             />
           )}
           <IconButton

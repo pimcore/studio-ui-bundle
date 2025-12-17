@@ -10,7 +10,8 @@
 
 import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { isNil } from 'lodash'
+import { isNil, isEmpty, isArray } from 'lodash'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AbstractFieldFilterDefinition {}
@@ -28,7 +29,29 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     return ''
   }
 
-  shouldApply (value: any): boolean {
-    return !isNil(value) && value !== ''
+  shouldApply (filter: FieldFilter): boolean {
+    const value = filter.filterValue
+
+    if (isNil(value) || value === '') {
+      return false
+    }
+
+    if (isArray(value) && isEmpty(value)) {
+      return false
+    }
+
+    return true
+  }
+
+  isFilterAvailable (subtype: string | null): boolean {
+    return true
+  }
+
+  transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    return {
+      ...filter,
+      key: filter.meta?.filters?.key ?? filter.key,
+      type: this.getFieldFilterType()
+    }
   }
 }

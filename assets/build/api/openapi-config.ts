@@ -54,6 +54,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'documentGetSearch',
+      type: 'query',
+    },
+    {
       pattern: 'assetGetSearch',
       type: 'query',
     },
@@ -82,11 +86,23 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'customReportsColumnConfigList',
+      type: 'query'
+    },
+    {
       pattern: 'translationGetList',
       type: 'query'
     },
     {
       pattern: 'documentPageSnippetAreaBlockRender',
+      type: 'query'
+    },
+    {
+      pattern: 'executionEngineListJobs',
+      type: 'query'
+    },
+    {
+      pattern: 'userTokenLinkGet',
       type: 'query'
     }
   ],
@@ -157,9 +173,6 @@ const config: ConfigFile = {
     '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/unit\//i)
     },
-    '../../js/src/core/modules/document/sites-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/documents\/sites\//i)
-    },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)
     },
@@ -181,11 +194,17 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
     },
+    '../../js/src/core/modules/element/search-replace-assignments/usage-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/elements\/usage\/?/i)
+    },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
     },
     '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
+    },
+    '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)
     }
   },
   exportName: 'api',

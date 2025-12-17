@@ -9,8 +9,8 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { isNil, isUndefined } from 'lodash'
-import { type AccessorKeyColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
+import { isNil, isNull, isUndefined } from 'lodash'
+import { type AccessorFnColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
@@ -27,6 +27,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
@@ -42,7 +43,10 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const [isShowLoading, setIsShowLoading] = useState(false)
   const prevReportRef = useRef<string | null>(null)
 
+  const reportName = reportDetailData?.name ?? ''
+
   const { sorting, setSorting } = useReportDataContext()
+  const { data: fullChartDataList } = useFullChartData({ name: reportName })
 
   useEffect(() => {
     if (currentReport !== prevReportRef.current) {
@@ -106,34 +110,51 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     </Flex>
   )
 
-  const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
-    const list: Array<AccessorKeyColumnDef<unknown, never>> = []
+  const getColumns = (): Array<AccessorFnColumnDef<unknown, never>> | undefined => {
+    const list: Array<AccessorFnColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
       const isShowColumn = item.display && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
-        const columnId = item?.name ?? `id-${index}`
+        const columnId = !isEmptyValue(item?.name) ? item.name : `id-${index}`
 
-        list.push(
-          columnHelper.accessor(columnId, {
-            header: !isEmptyValue(item.label) ? item.label : item.name
-          })
-        )
+        if (item.displayType !== 'hide') {
+          list.push(
+            columnHelper.accessor(
+              row => row?.[columnId],
+              {
+                id: columnId,
+                header: !isEmptyValue(item.label) ? item.label : item.name,
+                enableSorting: item.order,
+                ...(!isNull(item.width) && { size: item.width }),
+                meta: {
+                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
+                  ...(item.displayType === 'date' && { config: { showTime: true } }),
+                  ...(isNull(item.width) && { autoWidth: true })
+                }
+              }
+            )
+          )
+        }
 
         if (!isEmptyValue(item.action)) {
           list.push(
-            columnHelper.accessor(`${columnId}-action`, {
-              header: t('actions.open'),
-              enableSorting: false,
-              size: 50,
-              cell: (info) => {
-                const rowData = info.row.original as object
-                const id = rowData[columnId]
+            columnHelper.accessor(
+              row => row?.[columnId],
+              {
+                id: `${columnId}-action`,
+                header: t('actions.open'),
+                enableSorting: false,
+                size: 50,
+                cell: (info) => {
+                  const rowData = info.row.original as object
+                  const id = rowData[columnId]
 
-                return renderColumnActionCell({ id, actionType: item.action as ReportActionType | undefined })
+                  return renderColumnActionCell({ id, actionType: item.action as ReportActionType | undefined })
+                }
               }
-            })
+            )
           )
         }
       }
@@ -151,7 +172,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
-      ?.filter((item) => !isNil(item.filterDrilldown) && !isNil(item.filterType))
+      ?.filter((item) => !isEmptyValue(item.filterDrilldown))
       .map(item => item)
   )
 
@@ -159,7 +180,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
-  const reportName = reportDetailData?.name ?? ''
+  const fullChartData = fullChartDataList?.items?.map((item) => item.data)
 
   if (isLoading && isShowLoading) {
     return <Content loading />
@@ -193,12 +214,13 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       >
         {isShowChart && (
           <ReportChart
-            chartData={ chartData }
+            chartData={ fullChartData }
             reportData={ reportDetailData }
           />
         )}
         {!isUndefined(chartData) && (
           <Grid
+            allowMultipleAutoWidthColumns
             autoWidth
             className={ styles.gridTable }
             columns={ columns }

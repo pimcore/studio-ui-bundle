@@ -11,7 +11,7 @@
 import { type RootState, useAppDispatch } from '@sdk/app'
 import { type InternalNodeState, selectNodeState, setFetchTriggered } from '../element-tree-slice'
 import { useSelector } from 'react-redux'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { useElementTree } from './use-element-tree'
 
 export type NodeState = InternalNodeState

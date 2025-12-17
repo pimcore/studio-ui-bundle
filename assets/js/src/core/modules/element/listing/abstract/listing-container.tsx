@@ -17,6 +17,7 @@ import { DataLayerContainer } from './data-layer/data-layer-container'
 import { ViewLayerComponent } from './view-layer/view-layer-component'
 import { useGridOptions } from './view-layer/components/grid/hooks/use-grid-options'
 import { useSidebarOptions } from './view-layer/components/sidebar/hooks/use-sidebar-options'
+import { useColumnMapper } from './configuration-layer/provider/selected-columns/use-column-mapper'
 
 export interface ListingContainerProps extends Partial<SettingsContextProps> {
   useDataQuery: SettingsContextProps['useDataQuery']
@@ -24,7 +25,7 @@ export interface ListingContainerProps extends Partial<SettingsContextProps> {
   useElementId: SettingsContextProps['useElementId']
 }
 
-export interface DefaultProps extends Pick<SettingsContextProps, 'ContextComponent' | 'ConfigurationComponent' | 'DataComponent' | 'ViewComponent' | 'useGridOptions' | 'useSidebarOptions'> {}
+export interface DefaultProps extends Pick<SettingsContextProps, 'ContextComponent' | 'ConfigurationComponent' | 'DataComponent' | 'ViewComponent' | 'useGridOptions' | 'useSidebarOptions' | 'useColumnMapper'> {}
 
 export const defaultProps: DefaultProps = {
   ContextComponent: ContextLayerComponent,
@@ -32,7 +33,8 @@ export const defaultProps: DefaultProps = {
   DataComponent: DataLayerContainer,
   ViewComponent: ViewLayerComponent,
   useGridOptions,
-  useSidebarOptions
+  useSidebarOptions,
+  useColumnMapper
 }
 
 export const ListingContainer = ({
@@ -42,9 +44,11 @@ export const ListingContainer = ({
   ViewComponent = defaultProps.ViewComponent,
   useGridOptions = defaultProps.useGridOptions,
   useSidebarOptions = defaultProps.useSidebarOptions,
+  useColumnMapper = defaultProps.useColumnMapper,
   useDataQueryHelper,
   useDataQuery,
-  useElementId
+  useElementId,
+  toolbarSlotName
 }: ListingContainerProps): React.JSX.Element => {
   const settings = {
     ContextComponent,
@@ -53,9 +57,11 @@ export const ListingContainer = ({
     ViewComponent,
     useGridOptions,
     useSidebarOptions,
+    useColumnMapper,
     useDataQueryHelper,
     useDataQuery,
-    useElementId
+    useElementId,
+    toolbarSlotName
   }
 
   return (

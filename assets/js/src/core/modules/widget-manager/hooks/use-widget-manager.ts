@@ -15,22 +15,35 @@ import {
   openLeftWidget as openLeftWidgetAction,
   openMainWidget as openMainWidgetAction,
   openRightWidget as openRightWidgetAction,
+  updateWidget as updateWidgetAction,
   selectInnerModel,
+  selectOuterModel,
   setActiveWidgetById,
   type widgetManagerSliceName,
   type WidgetManagerState,
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
-import { Model, type TabNode } from 'flexlayout-react'
+import { Model, TabNode } from 'flexlayout-react'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import {
+  type CloseMainWidgetEvent,
+  type CloseMainWidgetEventPayload,
+  type CloseOuterWidgetEvent,
+  type CloseOuterWidgetEventPayload
+} from '../events'
+import { isNull, isUndefined } from 'lodash'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
+  updateWidget: (tabConfig: WidgetManagerTabConfig) => void
   openBottomWidget: (tabConfig: WidgetManagerTabConfig) => void
   openLeftWidget: (tabConfig: WidgetManagerTabConfig) => void
   openRightWidget: (tabConfig: WidgetManagerTabConfig) => void
   switchToWidget: (id: string) => void
   closeWidget: (id: string) => void
   isMainWidgetOpen: (id: string) => boolean
+  hasOuterWidget: (id: string) => boolean
   getOpenedMainWidget: () => TabNode | undefined
 }
 
@@ -39,6 +52,10 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
 
   function openMainWidget (tabConfig: WidgetManagerTabConfig): void {
     dispatch(openMainWidgetAction(tabConfig))
+  }
+
+  function updateWidget (tabConfig: WidgetManagerTabConfig): void {
+    dispatch(updateWidgetAction(tabConfig))
   }
 
   function openBottomWidget (tabConfig: WidgetManagerTabConfig): void {
@@ -58,7 +75,68 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   }
 
   function closeWidget (id: string): void {
+    const innerWidgetData = getInnerWidgetData(id)
+    const outerWidgetData = getOuterWidgetData(id)
+
     dispatch(closeWidgetAction(id))
+
+    if (!isNull(innerWidgetData)) {
+      const event: CloseMainWidgetEvent = {
+        identifier: {
+          type: eventTypes['widget-manager:inner:widget-closed'],
+          id
+        },
+        payload: innerWidgetData
+      }
+      eventBus.publish(event)
+    }
+
+    if (!isNull(outerWidgetData)) {
+      const event: CloseOuterWidgetEvent = {
+        identifier: {
+          type: eventTypes['widget-manager:outer:widget-closed'],
+          id
+        },
+        payload: outerWidgetData
+      }
+      eventBus.publish(event)
+    }
+  }
+
+  function getInnerWidgetData (id: string): CloseMainWidgetEventPayload | null {
+    try {
+      const innerModel = getInnerModel()
+      const node = innerModel.getNodeById(id)
+
+      if (!isUndefined(node) && node instanceof TabNode) {
+        return {
+          widgetId: id,
+          node
+        }
+      }
+    } catch (error) {
+      console.warn('Could not retrieve inner widget data for event:', error)
+    }
+
+    return null
+  }
+
+  function getOuterWidgetData (id: string): CloseOuterWidgetEventPayload | null {
+    try {
+      const outerModel = getOuterModel()
+      const node = outerModel.getNodeById(id)
+
+      if (!isUndefined(node) && node instanceof TabNode) {
+        return {
+          widgetId: id,
+          node
+        }
+      }
+    } catch (error) {
+      console.warn('Could not retrieve outer widget data for event:', error)
+    }
+
+    return null
   }
 
   function getInnerModel (): Model {
@@ -67,8 +145,18 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     return Model.fromJson(modelJson)
   }
 
+  function getOuterModel (): Model {
+    const state = store.getState()
+    const modelJson = selectOuterModel(state as { [widgetManagerSliceName]: WidgetManagerState })
+    return Model.fromJson(modelJson)
+  }
+
   function isMainWidgetOpen (id: string): boolean {
     return getInnerModel().getNodeById(id) !== undefined
+  }
+
+  function hasOuterWidget (id: string): boolean {
+    return getOuterModel().getNodeById(id) !== undefined
   }
 
   function getOpenedMainWidget (): TabNode | undefined {
@@ -77,12 +165,14 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
 
   return {
     openMainWidget,
+    updateWidget,
     openBottomWidget,
     openLeftWidget,
     openRightWidget,
     switchToWidget,
     closeWidget,
     isMainWidgetOpen,
+    hasOuterWidget,
     getOpenedMainWidget
   }
 }

@@ -23,6 +23,7 @@ const fetchingDrafts = new Map<number, boolean>()
 interface DynamicCustomSettings {
   focalPointX: number
   focalPointY: number
+  document_pdf_scan_status?: string
 }
 
 interface UseAssetDraftFetcherReturn {

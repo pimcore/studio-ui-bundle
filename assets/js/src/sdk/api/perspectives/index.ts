@@ -12,4 +12,4 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
-export * from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+export * from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'

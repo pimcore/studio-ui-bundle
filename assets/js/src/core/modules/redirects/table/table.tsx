@@ -21,7 +21,7 @@ import {
   useBundleSeoRedirectListPrioritiesQuery
 } from '../seo-api-slice-enhanced'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
-import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
@@ -201,7 +201,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
       autoWidth
       columns={ tableColumns }
       data={ redirectRows }
-      manualSorting
+      enableSorting
       modifiedCells={ modifiedCells }
       onSortingChange={ onSortingChange }
       onUpdateCellData={ onUpdateCellData }

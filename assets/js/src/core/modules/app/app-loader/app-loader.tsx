@@ -24,6 +24,9 @@ import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
 import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
+import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
+import { type AppLoaderRegistry } from './services/app-loader-registry'
+import { container, serviceIds } from '@sdk/app'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -48,6 +51,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadSettings } = useSettingsLoader()
   const { loadAvailableLocales } = useLanguageLoader()
   const { loadPerspective } = usePerspectives()
+  const appLoaderRegistry = container.get<AppLoaderRegistry>(serviceIds['AppLoader/Registry'])
 
   async function initActivePerspective (): Promise<any> {
     const user = selectCurrentUser(store.getState())
@@ -83,8 +87,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadTranslations(),
           loadSettings(),
           loadAvailableLocales(),
-          initActivePerspective()
+          initActivePerspective(),
+          loadReportsMenuItems()
         ])
+
+        await appLoaderRegistry.loadAll()
 
         setIsLoading(() => false)
       }

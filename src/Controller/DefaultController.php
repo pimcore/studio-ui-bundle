@@ -16,6 +16,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller;
 use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
+use Pimcore\Tool;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -30,9 +31,10 @@ final class DefaultController extends FrontendController
 
     #[Route('')]
     #[Route('/login')]
+    #[Route('/reset-password')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
-        string $studioUrlUrlPath,
+        string $studioUrlPath,
         array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
@@ -42,9 +44,10 @@ final class DefaultController extends FrontendController
             'bundleJsFiles' => $this->staticResourcesResolver->getBundleJsFiles(),
             'additionalCssFiles' => $this->staticResourcesResolver->getAdditionalCssFiles(),
             'additionalJsFiles' => $this->staticResourcesResolver->getAdditionalJsFiles(),
-            'baseUrl' => $studioUrlUrlPath,
+            'baseUrl' => $studioUrlPath,
             'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
+            'hostname' => Tool::getHostname(),
         ]);
     }
 }

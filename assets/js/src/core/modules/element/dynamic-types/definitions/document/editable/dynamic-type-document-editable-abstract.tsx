@@ -9,6 +9,7 @@
  */
 
 import { injectable } from 'inversify'
+import { isNil } from 'lodash'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
 import { type IFieldWidthContext } from '@sdk/modules/element'
@@ -18,7 +19,7 @@ export interface AbstractDocumentEditableDefinition {
   name: string
   realName: string
   data: any
-  config: any
+  config?: any
   type: string
   inherited: boolean
   inDialogBox: string | null
@@ -49,15 +50,18 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
-  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
-    return undefined
-  }
-
   /**
    * Helper method to check if the editable has reload config enabled
    */
   protected hasReloadConfig (props: AbstractDocumentEditableDefinition): boolean {
     return Boolean(props.config?.reload)
+  }
+
+  /**
+   * Helper method to check if the editable has required config enabled
+   */
+  hasRequiredConfig (props: AbstractDocumentEditableDefinition): boolean {
+    return Boolean(props.config?.required)
   }
 
   /**
@@ -67,6 +71,32 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    */
   reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
+  }
+
+  /**
+   * Determines if the current value is empty for validation purposes.
+   * Base implementation only checks for null and undefined.
+   * Each editable type should override this method to implement type-specific empty checks.
+   * @param value The current value of the editable
+   * @param props The editable props
+   * @returns true if the value is considered empty, false otherwise
+   */
+  isEmpty (value: any, props: AbstractDocumentEditableDefinition): boolean {
+    return isNil(value)
+  }
+
+  /**
+   * Validates if the editable meets the required field constraint
+   * @param value The current value of the editable
+   * @param props The editable props
+   * @returns true if validation passes, false if the field is required but empty
+   */
+  validateRequired (value: any, props: AbstractDocumentEditableDefinition): boolean {
+    if (!this.hasRequiredConfig(props)) {
+      return true // Not required, so validation passes
+    }
+
+    return !this.isEmpty(value, props)
   }
 
   /**

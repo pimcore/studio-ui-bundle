@@ -11,12 +11,13 @@
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Popconfirm } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import React, { type MouseEvent } from 'react'
+import React, { useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Filename } from '@Pimcore/components/filename/filename'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 
 interface TabTitleViewProps {
   icon: ElementIcon
@@ -29,6 +30,8 @@ interface TabTitleViewProps {
 export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const { user } = useUserDraft()
+  const [isOpen, setIsOpen] = useState(false)
 
   const triggerClose = (): void => {
     onClose?.()
@@ -36,6 +39,19 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: Ta
 
   const triggerConfirm = (): void => {
     onConfirm?.()
+  }
+
+  const handleAllowDirtyClose = (open: boolean): void => {
+    if (!open) {
+      setIsOpen(open)
+      return
+    }
+
+    if (user?.allowDirtyClose) {
+      triggerConfirm()
+    } else {
+      setIsOpen(open)
+    }
   }
 
   return (
@@ -63,6 +79,8 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: Ta
       {onClose !== undefined && onConfirm !== undefined && (
         <Popconfirm
           onConfirm={ triggerConfirm }
+          onOpenChange={ handleAllowDirtyClose }
+          open={ isOpen }
           title={ t('widget-manager.tab-title.close-confirmation') }
         >
           { renderCloseButton() }

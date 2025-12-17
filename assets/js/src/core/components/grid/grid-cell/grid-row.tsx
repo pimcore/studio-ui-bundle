@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type CSSProperties, useMemo } from 'react'
+import React, { type CSSProperties, useCallback, useLayoutEffect, useMemo, useRef } from 'react'
 import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { isNull } from 'lodash'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
@@ -31,19 +32,42 @@ export interface GridRowProps {
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
   enableRowDrag?: boolean
+  size?: GridProps['size']
+  rowStyle?: CSSProperties
+  measureElement?: (node: HTMLElement | null) => void
+  virtualIndex?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
+
+  // Since dnd-kit does not allow assigning multiple refs directly,
+  // we need a separate ref for the virtualizer.
+  // The logic below combines both refs so that the node can be used
+  // for drag-and-drop and also measured by the virtualizer.
+  const internalNodeRef = useRef<HTMLElement | null>(null)
+
+  const combinedRef = useCallback((node: HTMLElement | null): void => {
+    internalNodeRef.current = node
+    setNodeRef(node)
+  }, [setNodeRef])
+
+  useLayoutEffect(() => {
+    if (isDragging || isNull(internalNodeRef.current)) return
+
+    // measure dynamic row
+    props?.measureElement?.(internalNodeRef.current)
+  }, [isDragging, props.measureElement])
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
-    position: 'relative'
+    position: 'relative',
+    ...rowStyle
   }
 
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
@@ -87,9 +111,10 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
         row.getIsSelected() ? 'ant-table-row-selected' : '',
         props.onRowDoubleClick !== undefined ? 'hover' : ''
       ].join(' ') }
+      data-index={ props?.virtualIndex } // needed for dynamic row height measurement
       data-testid={ createTableRowTestId(row.index) }
       onDoubleClick={ onRowDoubleClick }
-      ref={ setNodeRef }
+      ref={ combinedRef }
       style={ style }
     >
       {row.getVisibleCells().map((cell, index) => (
@@ -116,6 +141,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
                 isModified={ isModifiedCell(cell.column.id) }
                 onFocusCell={ props.onFocusCell }
                 rowIndex={ row.index }
+                size={ props.size }
                 tableElement={ props.tableElement }
               />
               )}

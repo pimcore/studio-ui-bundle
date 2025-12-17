@@ -11,26 +11,22 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isEqual, isUndefined } from 'lodash'
+import { isEmpty, isEqual, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
-import type { DragAndDropInfo } from '@sdk/components'
-import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
-  dndIsValidData,
+  createElementSelectorConfig,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { PathTarget } from './path-target'
+import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
-import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
@@ -53,9 +49,11 @@ export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
+  showOpenForTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
   readOnly?: boolean
+  vertical?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -66,6 +64,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   className?: string
   combinedFieldName?: string
   pathFormatterClass?: string
+  additionalButtons?: (value: ManyToOneRelationValueType) => React.ReactNode
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
@@ -89,10 +88,14 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [props.value])
 
   const clickOpenElement = (): void => {
-    if (value !== null && value.textInput !== true) {
-      const elementType = mapToElementType(value.type)
-      if (!isUndefined(elementType)) {
-        openElement({ type: elementType, id: value.id }).catch(() => { })
+    if (value !== null) {
+      if (value.textInput === true) {
+        window.open(value.fullPath, '_blank', 'noopener,noreferrer')
+      } else {
+        const elementType = mapToElementType(value.type)
+        if (!isUndefined(elementType)) {
+          openElement({ type: elementType, id: value.id }).catch(() => { })
+        }
       }
 
       props.onOpenElement?.()
@@ -108,36 +111,23 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
+      vertical={ props.vertical }
     >
-      <div className={ styles.droppableWrapper }>
-        <Droppable
-          isValidContext={ (info: DragAndDropInfo) => isEnabled && isValidElementType(info.type) }
-          isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
-          onDrop={ (info: DragAndDropInfo) => {
-            const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
-
-            setValue(newValue ?? null)
-          } }
-        >
-          <PathTarget
-            allowPathTextInput={ props.allowPathTextInput }
-            combinedFieldName={ props.combinedFieldName }
-            disabled={ props.disabled }
-            inherited={ props.inherited }
-            onChange={ setValue }
-            pathFormatterClass={ props.pathFormatterClass }
-            value={ value }
-          />
-        </Droppable>
-      </div>
-      <Flex gap="extra-small">
-        {props.allowPathTextInput !== true && (
+      <ManyToOneRelationInput
+        { ...props }
+        onChange={ setValue }
+        value={ value }
+      />
+      <Flex
+        gap="extra-small"
+        justify={ props.vertical === true ? 'start' : undefined }
+      >
+        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
           >
             <IconButton
-              disabled={ value === null }
               icon={ { value: 'open-folder' } }
               onClick={ clickOpenElement }
               style={ { flex: '0 0 auto' } }
@@ -164,13 +154,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           </Tooltip>
         )}
 
-        {props.allowToClearRelation === true && (
+        {props.allowToClearRelation === true && !(isNull(value) || props.disabled === true) && (
           <Tooltip
             key="empty"
             title={ t('empty') }
           >
             <IconButton
-              disabled={ value === null || props.disabled === true }
               icon={ { value: 'trash' } }
               onClick={ () => {
                 setValue(null)
@@ -185,17 +174,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             elementSelectorConfig={ {
               selectionType: SelectionType.Single,
               areas: createElementSelectorAreas(props),
-              config: {
-                assets: {
-                  allowedTypes: props.allowedAssetTypes
-                },
-                documents: {
-                  allowedTypes: props.allowedAssetTypes
-                },
-                objects: {
-                  allowedTypes: props.allowedClasses
-                }
-              },
+              config: createElementSelectorConfig(props),
               onFinish: (event) => {
                 if (!isEmpty(event.items)) {
                   setValue({
@@ -210,6 +189,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         )}
+
+        {props.additionalButtons?.(value)}
       </Flex>
     </Flex>
   )

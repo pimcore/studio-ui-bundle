@@ -12,16 +12,31 @@ import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Divider } from '@Pimcore/components/divider/divider'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { useMainNav } from './hooks/use-main-nav'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
+import { modalTexts } from '@Pimcore/modules/open-element/open-element'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
-import { Divider } from '@sdk/components'
+import { RECYCLE_BIN_WIDGET } from '@Pimcore/modules/recycle-bin'
+import { NOTES_AND_EVENTS_WIDGET } from '@Pimcore/modules/notes-and-events'
+import { APPLICATION_LOGGER_WIDGET } from '@Pimcore/modules/application-logger'
+import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
+import { ROLES_WIDGET, USERS_WIDGET } from '@Pimcore/modules/user'
+import { CUSTOM_REPORTS_WIDGET, REPORTS_WIDGET } from '@Pimcore/modules/reports'
+import { REDIRECTS_WIDGET } from '@Pimcore/modules/redirects'
+import { TAG_CONFIGURATION_WIDGET } from '@Pimcore/modules/tags'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -29,6 +44,8 @@ export const MainNav = (): React.JSX.Element => {
   const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
+  const { input } = useFormModal()
+  const { openElementByPathOrId } = openElementHelper()
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
@@ -44,7 +61,7 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
-    const hasChildren = item.children !== undefined && item.children.length > 0
+    const hasChildren = !isEmpty(item.children)
     const isOpen = openKeys.includes(index)
     const isNestedItem = index.includes('-')
 
@@ -52,14 +69,27 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
-    const isVisible = (item.children !== undefined && item.children.length > 0) ||
-            (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
+    const hasChildren = !isEmpty(item.children)
+    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.onClick) || !isUndefined(item.button)
 
-    const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
+    const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
-    if (!isVisible || isHiddenInPerspective) {
+    const isHidden = !isUndefined(item.hidden) && item.hidden()
+
+    if (!isVisible || isHiddenInPerspective || isHidden) {
       return <></>
     }
+
+    const renderIcon = (value: string): React.JSX.Element => (
+      <Icon
+        className={ openKeys.includes(index) ? undefined : 'plain-icon' }
+        options={ openKeys.includes(index) ? { width: 16, height: 16 } : undefined }
+        sphere={ openKeys.includes(index) }
+        value={ value }
+      />
+    )
+
+    const elementWithGroupIcon = hasChildren ? item.children?.find(child => !isEmpty(child.groupIcon)) : undefined
 
     return (
       <li
@@ -69,68 +99,61 @@ export const MainNav = (): React.JSX.Element => {
       >
         {!isUndefined(item.button)
           ? (
-            <div>
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+            <div onClick={ () => { setIsOpen(false) } }>
               {item.button()}
-              { item.dividerBottom !== undefined && item.dividerBottom && (
-              <Divider
-                className={ 'main-nav__list-item-divider' }
-                size={ 'mini' }
-              />
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                <Divider
+                  className={ 'main-nav__list-item-divider' }
+                  size={ 'mini' }
+                />
               )}
             </div>
             )
           : (
-            <><button
-              className={ 'main-nav__list-btn' }
-              data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-              onClick={ () => {
-                if (item.children !== undefined && item.children.length > 0) {
-                  handleOpenState(index)
-                } else if (item.onClick !== undefined) {
-                  item.onClick()
-                  setIsOpen(false)
-                } else if (item.widgetConfig !== undefined) {
-                  openMainWidget(item.widgetConfig)
-                  setIsOpen(false)
-                }
-              } }
+            <>
+              <button
+                className={ 'main-nav__list-btn' }
+                data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
+                onClick={ () => {
+                  if (hasChildren) {
+                    handleOpenState(index)
+                  } else if (!isUndefined(item.onClick)) {
+                    item.onClick()
+                    setIsOpen(false)
+                  } else if (!isUndefined(item.widgetConfig)) {
+                    openMainWidget(item.widgetConfig)
+                    setIsOpen(false)
+                  }
+                } }
               >
-              {item.icon !== undefined && (
-                openKeys.includes(index)
-                  ? (
-                    <Icon
-                      options={ { width: 16, height: 16 } }
-                      sphere
-                      value={ item.icon }
-                    />
-                    )
-                  : (
-                    <Icon
-                      className={ 'plain-icon' }
-                      value={ item.icon }
-                    />
-                    )
-              )}
-              {t(`${item.label}`)}
+                {!isUndefined(item.icon) && renderIcon(item.icon)}
 
-              {shouldShowChevron(item, index) && (
-                <Icon
-                  className={ 'main-nav__list-chevron-btn-icon' }
-                  options={ { height: 18, width: 18 } }
-                  value={ 'chevron-right' }
+                {!isUndefined(elementWithGroupIcon?.groupIcon) && isUndefined(item.icon) && (
+                  renderIcon(elementWithGroupIcon?.groupIcon)
+                )}
+
+                <SanitizeHtml html={ t(`${item.label}`) } />
+
+                {shouldShowChevron(item, index) && (
+                  <Icon
+                    className={ 'main-nav__list-chevron-btn-icon' }
+                    options={ { height: 18, width: 18 } }
+                    value={ 'chevron-right' }
+                  />
+                )}
+              </button>
+
+              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                <Divider
+                  className={ 'main-nav__list-item-divider' }
+                  size={ 'mini' }
                 />
-              )}
-            </button>
-              { item.dividerBottom !== undefined && item.dividerBottom && (
-              <Divider
-                className={ 'main-nav__list-item-divider' }
-                size={ 'mini' }
-              />
               )}
             </>
             )}
 
-        {item.children !== undefined && item.children.length > 0
+        {hasChildren
           ? (
             <div
               className={ 'main-nav__list-detail' }
@@ -177,6 +200,41 @@ export const MainNav = (): React.JSX.Element => {
       document.removeEventListener('click', handleClickOutside)
     }
   }, [isOpen])
+
+  const handleOpen = (type: ElementType): void => {
+    input({
+      title: t(`${modalTexts[type].title}`),
+      label: t(`${modalTexts[type].label}`),
+      rule: {
+        required: true,
+        message: t(`${modalTexts[type].requiredMessage}`)
+      },
+      okText: t(`${modalTexts[type].okText}`),
+      cancelText: t(`${modalTexts[type].cancelText}`),
+      onOk: async (value: string) => {
+        await openElementByPathOrId(value, type)
+      }
+    })
+  }
+
+  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject', true, UserPermission.Objects)
+  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument', true, UserPermission.Documents)
+  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset', true, UserPermission.Assets)
+
+  useHandleKeyBindings(() => { openMainWidget(TRANSLATIONS_WIDGET) }, 'sharedTranslations', true, UserPermission.Translations)
+  useHandleKeyBindings(() => { openMainWidget(RECYCLE_BIN_WIDGET) }, 'recycleBin', true, UserPermission.RecycleBin)
+  useHandleKeyBindings(() => { openMainWidget(NOTES_AND_EVENTS_WIDGET) }, 'notesEvents', true, UserPermission.NotesAndEvents)
+
+  useHandleKeyBindings(() => { openMainWidget(USERS_WIDGET) }, 'users', true, UserPermission.Users)
+  useHandleKeyBindings(() => { openMainWidget(ROLES_WIDGET) }, 'roles', true, UserPermission.Users)
+
+  useHandleKeyBindings(() => { openMainWidget(REPORTS_WIDGET) }, 'reports', true, UserPermission.Reports)
+  useHandleKeyBindings(() => { openMainWidget(CUSTOM_REPORTS_WIDGET) }, 'customReports', true, UserPermission.ReportsConfig)
+
+  useHandleKeyBindings(() => { openMainWidget(APPLICATION_LOGGER_WIDGET) }, 'applicationLogger', true, UserPermission.ApplicationLogger)
+
+  useHandleKeyBindings(() => { openMainWidget(REDIRECTS_WIDGET) }, 'redirects', true, UserPermission.Redirects)
+  useHandleKeyBindings(() => { openMainWidget(TAG_CONFIGURATION_WIDGET) }, 'tagConfiguration', true, UserPermission.TagsConfiguration)
 
   return (
     <div ref={ elRef }>

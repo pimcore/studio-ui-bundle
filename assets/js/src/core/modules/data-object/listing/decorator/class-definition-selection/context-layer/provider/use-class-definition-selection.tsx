@@ -11,12 +11,18 @@
 import { useContext } from 'react'
 import { ClassDefinitionSelectionContext, type ClassDefinitionSelectionData } from './class-definition-selection-provider'
 
-export const useClassDefinitionSelection = (): ClassDefinitionSelectionData => {
+export function useClassDefinitionSelection (): ClassDefinitionSelectionData
+export function useClassDefinitionSelection (silent: true): ClassDefinitionSelectionData | undefined
+export function useClassDefinitionSelection (silent?: true): ClassDefinitionSelectionData | undefined {
   const context = useContext(ClassDefinitionSelectionContext)
 
-  if (context === undefined) {
+  if (context === undefined && !silent) {
     throw new Error('useClassDefinitionSelection must be used within a ClassDefinitionSelectionProvider')
   }
 
   return context
+}
+
+export const useClassDefinitionSelectionOptional = (): ClassDefinitionSelectionData | undefined => {
+  return useClassDefinitionSelection(true)
 }

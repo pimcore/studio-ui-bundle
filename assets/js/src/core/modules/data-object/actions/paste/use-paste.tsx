@@ -17,7 +17,7 @@ import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-s
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@sdk/app'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { useDataObjectReplaceContentMutation } from '../../data-object-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
@@ -72,7 +72,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: true, updateReferences: false }, getStoredNode())
       }
     }
@@ -85,7 +84,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: true, updateReferences: true }, getStoredNode())
       }
     }
@@ -98,7 +96,6 @@ export const usePaste = (): UsePasteHookReturn => {
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
-        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: false, updateReferences: false }, getStoredNode())
       }
     }

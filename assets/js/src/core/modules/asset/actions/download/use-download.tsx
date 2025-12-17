@@ -18,7 +18,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 

@@ -9,33 +9,39 @@
  */
 
 import { type Element, getElementIcon } from '@Pimcore/modules/element/element-helper'
-import { type DocumentGetTreeApiResponse, type DocumentPermissions } from '../../document-api-slice.gen'
+import { type DocumentGetTreeApiResponse, type DocumentPermissions, type Document } from '../../document-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+
+export const transformApiDataToNode = (documentNode: Document, node: DataTransformerSourceNode): TreeNode => {
+  return {
+    id: documentNode.id.toString(),
+    elementType: elementTypes.document,
+    icon: getElementIcon(documentNode as Element, { type: 'name', value: 'document' }),
+    label: documentNode.key,
+    type: documentNode.type,
+    parentId: documentNode.parentId.toString(),
+    fullPath: documentNode.fullPath,
+    hasChildren: documentNode.hasChildren,
+    locked: documentNode.locked,
+    isLocked: documentNode.isLocked,
+    isPublished: documentNode.published,
+    isSite: documentNode.isSite,
+    metaData: {
+      document: documentNode
+    },
+    permissions: documentNode.permissions ?? [] as unknown as DocumentPermissions,
+    internalKey: `${node.internalKey}-${documentNode.id}`
+  }
+}
 
 export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: DocumentGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
   const nodes: TreeNode[] = []
 
   const documentData = data.items
   documentData.forEach((documentNode) => {
-    nodes.push({
-      id: documentNode.id.toString(),
-      elementType: elementTypes.document,
-      icon: getElementIcon(documentNode as Element, { type: 'name', value: 'document' }),
-      label: documentNode.key,
-      type: documentNode.type,
-      parentId: documentNode.parentId.toString(),
-      hasChildren: documentNode.hasChildren,
-      locked: documentNode.locked,
-      isLocked: documentNode.isLocked,
-      isPublished: documentNode.published,
-      metaData: {
-        document: documentNode
-      },
-      permissions: documentNode.permissions ?? [] as unknown as DocumentPermissions,
-      internalKey: `${node.internalKey}-${documentNode.id}`
-    })
+    nodes.push(transformApiDataToNode(documentNode, node))
   })
 
   const total = data.totalItems ?? maxItemsPerNode

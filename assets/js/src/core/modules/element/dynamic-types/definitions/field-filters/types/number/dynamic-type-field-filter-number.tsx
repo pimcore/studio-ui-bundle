@@ -9,22 +9,33 @@
  */
 
 import React, { type ReactElement } from 'react'
+import { injectable } from 'inversify'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
-import { injectable } from 'inversify'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
 @injectable()
 export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract {
-  id = 'id'
+  id = 'number'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.Id
+    return FieldFilterFrontendType.Number
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
     return (
       <DynamicTypeFieldFilterNumberComponent { ...props } />
     )
+  }
+
+  shouldApply (filter: FieldFilter): boolean {
+    const value = filter.filterValue
+
+    if (value == null || typeof value !== 'object') {
+      return false
+    }
+
+    return value.is != null || value.from != null || value.to != null
   }
 }

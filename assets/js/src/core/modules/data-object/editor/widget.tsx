@@ -21,6 +21,7 @@ export const DataObjectEditorWidget: Widget = {
   name: 'data-object-editor',
   component: EditorContainer,
   titleComponent: TitleContainer,
+  defaultGlobalContext: false,
   isModified: (tabNode) => {
     const config = tabNode.getConfig() as EditorContainerProps
     const dataObject = selectDataObjectById(store.getState(), config.id)

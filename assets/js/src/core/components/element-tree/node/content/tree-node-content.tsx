@@ -8,21 +8,53 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { forwardRef, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { type TreeNodeProps } from '../tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { isEmpty, isNil } from 'lodash'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { Text } from '@sdk/components'
+import { isNull, isUndefined } from 'lodash'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
 }
 
+export interface TreeNodeContentMetaProps {
+  node: TreeNodeProps
+}
+
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label, isPublished, isLocked, locked } = props.node
+  const { icon, label, labelAddon, isPublished, elementType } = props.node
   const { styles } = useStyles()
+  const metaRef = useRef<HTMLDivElement>(null)
+  const [containerChildMinWidth, setContainerChildMinWidth] = useState(150)
+
+  useLayoutEffect(() => {
+    if (metaRef.current !== null) {
+      const metaWidth = metaRef.current.offsetWidth
+      const calculatedMinWidth = Math.max(0, 150 - metaWidth)
+      setContainerChildMinWidth(calculatedMinWidth)
+    }
+  }, [])
+
+  const getMetaSlotName = (): string | null => {
+    switch (elementType) {
+      case elementTypes.asset:
+        return componentConfig.asset.tree.node.meta.name
+      case elementTypes.document:
+        return componentConfig.document.tree.node.meta.name
+      case elementTypes.dataObject:
+        return componentConfig.dataObject.tree.node.meta.name
+    }
+    return null
+  }
+
+  const metaSlotName = getMetaSlotName()
 
   return (
     <Flex
@@ -37,6 +69,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         data-testid={ `tree-node-content-main-${props.node.id}` }
         gap={ 'small' }
         ref={ ref }
+        style={ { minWidth: `${containerChildMinWidth}px` } }
       >
         <Icon
           { ...icon }
@@ -48,23 +81,29 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         <span
           className="tree-node-content__label"
           data-testid={ `tree-node-label-${props.node.id}` }
-        >{label}</span>
+        >
+          {label}
+          {!isUndefined(labelAddon) && (
+            <Text type="secondary">
+              {` ${labelAddon}`}
+            </Text>
+          )}
+        </span>
       </Flex>
 
       <Flex
         align='center'
         data-testid={ `tree-node-content-meta-${props.node.id}` }
-        gap={ 'mini' }
-        ref={ ref }
+        ref={ metaRef }
       >
-        {isLocked && (
-          <Icon
-            className={ !isNil(locked) && !isEmpty(locked) ? '' : styles.indirectLockedIcon }
-            data-testid={ `tree-node-lock-icon-${props.node.id}` }
-            options={ { width: 14, height: 14 } }
-            value='lock'
-          />
-        )}
+        {isNull(metaSlotName)
+          ? null
+          : (
+            <SlotRenderer
+              props={ { node: props.node } }
+              slot={ metaSlotName }
+            />
+            )}
       </Flex>
     </Flex>
   )

@@ -18,6 +18,7 @@ export enum WysiwygContext {
 }
 
 export interface WysiwygProps {
+  className?: string
   value?: string | null
   onChange?: (value: string | null) => void
   disabled?: boolean

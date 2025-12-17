@@ -14,6 +14,7 @@ import {
   api as baseApi
 } from '@Pimcore/modules/element/element-api-slice.gen'
 import { invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { type DocumentPermissions } from '../document/document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL],
@@ -24,7 +25,7 @@ const api = baseApi.enhanceEndpoints({
   }
 })
 
-export type ElementPermissions = AssetPermissions | DataObjectPermissions
+export type ElementPermissions = AssetPermissions | DataObjectPermissions | DocumentPermissions
 
 export type ElementPermissionKeys = keyof (AssetPermissions & DataObjectPermissions)
 

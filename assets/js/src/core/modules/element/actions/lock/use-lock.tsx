@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '..'
 import { useAppDispatch } from '@sdk/app'
@@ -37,6 +37,7 @@ export interface UseLockHookReturn {
   unlockContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   unlockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   unlockAndPropagateContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  lockMenuTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   isLockMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
@@ -200,36 +201,59 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return node.isLocked && !isNil(node.locked)
   }
 
+  const isNodeInheritedLocked = (node: Element | TreeNodeProps): boolean => {
+    return node.isLocked && isNil(node.locked)
+  }
+
   const isLockHidden = (node: Element | TreeNodeProps): boolean => {
-    if (node.isLocked && isNil(node.locked)) {
-      return false
-    }
-
-    return !isTreeActionAllowed(TreePermission.Lock) || node.isLocked || !user.isAdmin
-  }
-
-  const isLockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
-    if (!isNodeDirectlyLocked(node)) {
-      return false
-    }
-
-    return !isTreeActionAllowed(TreePermission.LockAndPropagate) || node.isLocked || !user.isAdmin
-  }
-
-  const isUnlockHidden = (node: Element | TreeNodeProps): boolean => {
-    if (!isNodeDirectlyLocked(node)) {
+    if (!isTreeActionAllowed(TreePermission.Lock) || !user.isAdmin) {
       return true
     }
 
-    return !isTreeActionAllowed(TreePermission.Unlock) || !node.isLocked || !user.isAdmin
+    return node.isLocked && !isNodeInheritedLocked(node)
+  }
+
+  const isLockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isTreeActionAllowed(TreePermission.LockAndPropagate) || !user.isAdmin) {
+      return true
+    }
+
+    return isNodeDirectlyLocked(node)
+  }
+
+  const isUnlockHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isTreeActionAllowed(TreePermission.Unlock) || !user.isAdmin) {
+      return true
+    }
+
+    return !isNodeDirectlyLocked(node)
   }
 
   const isUnlockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.UnlockAndPropagate) || !node.isLocked || !user.isAdmin
+    if (!isTreeActionAllowed(TreePermission.UnlockAndPropagate) || !user.isAdmin) {
+      return true
+    }
+
+    return !node.isLocked
   }
 
   const isLockMenuHidden = (node: Element | TreeNodeProps): boolean => {
     return isLockHidden(node) && isLockPropagateHidden(node) && isUnlockHidden(node) && isUnlockPropagateHidden(node)
+  }
+
+  const lockMenuTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.lock'),
+      key: 'advanced-lock',
+      icon: <Icon value="lock" />,
+      hidden: isLockMenuHidden(node),
+      children: [
+        lockTreeContextMenuItem(node),
+        lockAndPropagateTreeContextMenuItem(node),
+        unlockTreeContextMenuItem(node),
+        unlockAndPropagateTreeContextMenuItem(node)
+      ]
+    }
   }
 
   return {
@@ -245,6 +269,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     unlockContextMenuItem,
     unlockAndPropagateTreeContextMenuItem,
     unlockAndPropagateContextMenuItem,
+    lockMenuTreeContextMenuItem,
     isLockMenuHidden
   }
 }

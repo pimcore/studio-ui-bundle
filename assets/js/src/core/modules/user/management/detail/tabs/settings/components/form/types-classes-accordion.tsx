@@ -16,10 +16,12 @@ import { Select } from '@Pimcore/components/select/select'
 import {
   useClassDefinitionCollectionQuery
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useDocumentDocTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 const TypesAndClassesAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { data, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
+  const { data: classesData, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
+  const { data: documentTypesData, isLoading: documentTypesLoading } = useDocumentDocTypeListQuery({})
 
   const content = [
     {
@@ -31,9 +33,12 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
             name="docTypes"
           >
             <Select
-              disabled={ classesLoading }
+              disabled={ documentTypesLoading }
               mode="multiple"
-              options={ [] }
+              options={ documentTypesData?.items.map((item) => ({
+                label: item.name,
+                value: item.id
+              })) }
               placeholder={ t('user-management.doc-types') }
             ></Select>
           </Form.Item>
@@ -43,7 +48,7 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
             <Select
               disabled={ classesLoading }
               mode="multiple"
-              options={ data?.items.map((item) => ({
+              options={ classesData?.items.map((item) => ({
                 label: item.name,
                 value: item.id
               })) }

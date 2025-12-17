@@ -14,7 +14,7 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { checkElementPermission } from '../../../element/permissions/permission-helper'
 import { type Element } from '../../../element/element-helper'
 import { useTreeCopyPasteContext } from './tree-copy-paste-context'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 
 export interface UsePasteVisibilityReturn {
   isPasteHidden: (targetNode?: TreeNodeProps | Element, allowedTask?: 'copy' | 'cut') => boolean

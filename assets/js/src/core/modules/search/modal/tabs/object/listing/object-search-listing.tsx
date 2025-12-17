@@ -26,13 +26,15 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
+import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 
 const defaultProps = {
   ...listingDefaultProps,
   ViewComponent: DefaultView,
   useDataQuery: useDataObjectGetSearchQuery,
   useDataQueryHelper,
-  useElementId: useRootElementId
+  useElementId: useRootElementId,
+  useColumnMapper: useDataObjectColumnMapper
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */

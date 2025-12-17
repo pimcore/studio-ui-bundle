@@ -36,6 +36,7 @@ export interface ClassDefinitionSelectionProviderProps {
 export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefinitionSelectionProviderProps): React.JSX.Element => {
   const { data } = useClassDefinitions()
   const [selectedClassDefinition, setSelectedClassDefinition] = useState<ClassDefinitionSelectionData['selectedClassDefinition']>(undefined)
+
   const availableClassDefinitions = useMemo(() => {
     if (config.classRestriction !== undefined) {
       const restrictedClasses: string[] = config.classRestriction.map((classDefinition) => classDefinition.classes)

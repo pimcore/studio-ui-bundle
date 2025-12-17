@@ -125,7 +125,8 @@ export const {
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
   useAssetGetGridConfigurationByFolderIdQuery,
   useAssetGetAvailableGridColumnsQuery,
-  useAssetPatchFolderByIdMutation
+  useAssetPatchFolderByIdMutation,
+  useAssetUploadInfoQuery
 } = api
 
 export { api }

@@ -199,6 +199,7 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         $scripts = array_merge(
             $this->staticResourcesResolver->getBundleJsFiles(),
             $this->staticResourcesResolver->getStudioJsFiles(),
+            array_map([$this, 'addCacheBuster'], $this->staticResourcesResolver->getAdditionalJsFiles())
         );
 
         foreach ($scripts as $jsFile) {
@@ -207,8 +208,10 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         }
 
         $stylesheets = array_merge(
+            [$this->addCacheBuster('/bundles/pimcorestudioui/css/editmode.css')],
             $this->staticResourcesResolver->getStudioCssFiles(),
-            $this->staticResourcesResolver->getBundleCssFiles()
+            $this->staticResourcesResolver->getBundleCssFiles(),
+            array_map([$this, 'addCacheBuster'], $this->staticResourcesResolver->getAdditionalCssFiles())
         );
 
         // include stylesheets
@@ -226,5 +229,18 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         $headHtml .= "\n\n<!-- /pimcore editmode -->\n\n\n";
 
         return $headHtml;
+    }
+
+    private function addCacheBuster(string $filePath): string
+    {
+        $publicPath = PIMCORE_WEB_ROOT . $filePath;
+
+        if (file_exists($publicPath)) {
+            $mtime = filemtime($publicPath);
+
+            return $filePath . '?v=' . $mtime;
+        }
+
+        return $filePath;
     }
 }

@@ -26,6 +26,8 @@ import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-p
 import { Flex } from 'antd'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { isEmpty, isNil } from 'lodash'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container, serviceIds } from '@sdk/app'
 
 export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
   previewWidth: number | null
@@ -37,6 +39,8 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
   id: string = 'externalImage'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
+
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

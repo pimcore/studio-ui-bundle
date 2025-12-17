@@ -22,6 +22,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -33,6 +34,7 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const { isInEditMode, fireOnUpdateCellDataEvent, disableEditMode } = useEditMode(props.cellProps)
   const [form] = Form.useForm()
   const { t } = useTranslation()
+  const { currentLanguage } = useLanguageSelection()
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -52,6 +54,20 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const apiColumns = props?.cellProps?.row?.original?.['__api-data']
 
   const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
+    if (column?.type === 'dataobject.classificationstore') {
+      const apiColumnKey = column.key!.split('.')[0]
+
+      if (column?.localizable) {
+        return column.key === apiColumnKey && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+      }
+
+      return column.key === apiColumnKey && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+    }
+
+    if (column?.localizable === true) {
+      return apiColumn.key === column?.key && (column.locale ?? currentLanguage) === apiColumn.locale
+    }
+
     return apiColumn.key === column?.key
   })
 

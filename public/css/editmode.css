@@ -1,0 +1,7 @@
+.pimcore_editable_select, .pimcore_editable_checkbox, .pimcore_editable_link {
+    display: inline-block;
+}
+
+.pimcore_block_entry {
+	clear:both;
+}

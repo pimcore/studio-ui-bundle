@@ -23,6 +23,7 @@ import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,6 +31,7 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -48,6 +50,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
+  const {
+    validateRequiredFields,
+    showValidationErrorModal
+  } = useRequiredFieldsValidation()
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -87,6 +93,14 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (document?.changes === undefined) return
 
+    if (task === SaveTaskType.Publish) {
+      const validationResult = validateRequiredFields(id)
+      if (!validationResult.isValid) {
+        showValidationErrorModal(validationResult.requiredFields)
+        return
+      }
+    }
+
     Promise.all([
       saveDocument(task, () => {
         onFinish?.()
@@ -98,6 +112,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }
 
   const getSecondaryButtons = (): ReactElement[] => {
+    if (document?.type === 'folder') {
+      return []
+    }
     const secondaryButtons: ReactElement[] = []
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
@@ -172,6 +189,23 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
     const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
 
+    if (document?.type === 'folder') {
+      primaryButtons.push(
+        <Button
+          disabled={ saveDisabled }
+          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
+          onClick={ async () => {
+            await handleSaveClick(SaveTaskType.Save)
+          } }
+          type="primary"
+        >
+          {t('toolbar.save')}
+        </Button>
+      )
+
+      return primaryButtons
+    }
+
     if (document?.published === true && checkElementPermission(document?.permissions, 'publish')) {
       primaryButtons.push(
         <Button
@@ -209,6 +243,29 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   const primaryButtons = getPrimaryButtons()
 
+  useHandleKeyBindings(async () => {
+    if (document != null && checkElementPermission(document.permissions, 'publish')) {
+      await handleSaveClick(SaveTaskType.Publish, () => {
+        if (!document.published) {
+          publishDraft()
+        }
+      })
+    }
+  }, 'publish')
+
+  useHandleKeyBindings(async () => {
+    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    if (!saveDisabled && document != null && checkElementPermission(document.permissions, 'save')) {
+      if (document?.type === 'folder') {
+        await handleSaveClick(SaveTaskType.Save)
+      } else if (document?.published && checkElementPermission(document?.permissions, 'publish')) {
+        await handleSaveClick(SaveTaskType.Publish)
+      } else if (!document?.published) {
+        await handleSaveClick(SaveTaskType.Save)
+      }
+    }
+  }, 'save')
+
   return (
     <>
       {isAutoSaveLoading && (
@@ -233,7 +290,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           noSpacing
         />
       )}
-
     </>
   )
 }

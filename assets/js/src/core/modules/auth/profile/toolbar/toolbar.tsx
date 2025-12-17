@@ -17,6 +17,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Popconfirm } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 interface IToolbarProps {
   id: number
@@ -52,6 +53,8 @@ export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
     removeTrackedChanges()
   }
 
+  useHandleKeyBindings(async () => { await updateUserProfile(user) }, 'save')
+
   return (
     <ToolbarView>
       <Flex>
@@ -76,7 +79,7 @@ export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
         onClick={ async () => await updateUserProfile(user) }
         type="primary"
       >
-        {t('toolbar.save-and-publish')}
+        {t('toolbar.save')}
       </Button>
     </ToolbarView>
   )

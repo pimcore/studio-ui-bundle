@@ -18,6 +18,34 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 import { UserProfileWidget } from '@Pimcore/modules/auth/profile/widget'
+import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
+import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
+
+export const USERS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Users',
+  id: 'user-management',
+  component: 'user-management',
+  config: {
+    translationKey: 'widget.user-management',
+    icon: {
+      type: 'name',
+      value: 'user'
+    }
+  }
+}
+export const ROLES_WIDGET: WidgetManagerTabConfig = {
+  name: 'Roles',
+  id: 'role-management',
+  component: 'role-management',
+  config: {
+    translationKey: 'widget.role-management',
+    icon: {
+      type: 'name',
+      value: 'user'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -39,18 +67,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       permission: UserPermission.Users,
       perspectivePermission: NavPermission.Users,
-      widgetConfig: {
-        name: 'Users',
-        id: 'user-management',
-        component: 'user-management',
-        config: {
-          translationKey: 'widget.user-management',
-          icon: {
-            type: 'name',
-            value: 'user'
-          }
-        }
-      }
+      widgetConfig: USERS_WIDGET
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -59,18 +76,7 @@ moduleSystem.registerModule({
       order: 200,
       permission: UserPermission.Users,
       perspectivePermission: NavPermission.Roles,
-      widgetConfig: {
-        name: 'Roles',
-        id: 'role-management',
-        component: 'role-management',
-        config: {
-          translationKey: 'widget.role-management',
-          icon: {
-            type: 'name',
-            value: 'user'
-          }
-        }
-      }
+      widgetConfig: ROLES_WIDGET
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
@@ -86,5 +92,7 @@ moduleSystem.registerModule({
     })
 
     widgetRegistryService.registerWidget(UserProfileWidget)
+
+    staticWidgetRestorer.registerStaticWidget(USERPROFILE)
   }
 })

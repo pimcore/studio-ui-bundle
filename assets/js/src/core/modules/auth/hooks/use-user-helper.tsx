@@ -15,12 +15,13 @@ import {
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
+import { userProfileUpdated, userProfileImageUpdated } from '@Pimcore/modules/auth/user/user-slice'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
   getUserImageById: (id: number) => Promise<string | undefined>
+  updateUserImageInState: (image: string, hasImage: boolean) => void
 }
 
 interface IBlobResponse {
@@ -76,6 +77,19 @@ export const useUserHelper = (): UseUserReturn => {
       }
     }))
 
+    if (user?.modifiedCells?.password !== undefined || user?.modifiedCells?.passwordConfirmation !== undefined || user?.modifiedCells?.oldPassword !== undefined) {
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id: user.id,
+        body: {
+          password: user.modifiedCells?.password,
+          passwordConfirmation: user.modifiedCells?.passwordConfirmation,
+          oldPassword: user.modifiedCells?.oldPassword
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
+
     handleNotification(t('user-management.save-user.success'), error)
 
     dispatch(userProfileUpdated(data))
@@ -90,7 +104,11 @@ export const useUserHelper = (): UseUserReturn => {
     return blobResponse?.data
   }
 
+  function updateUserImageInState (image: string, hasImage: boolean): void {
+    dispatch(userProfileImageUpdated({ data: { image, hasImage } }))
+  }
+
   return {
-    updateUserProfile, getUserImageById
+    updateUserProfile, getUserImageById, updateUserImageInState
   }
 }

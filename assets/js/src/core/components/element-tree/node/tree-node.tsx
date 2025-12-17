@@ -19,22 +19,25 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
+import cn from 'classnames'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
   id: string
   icon: ElementIcon
   label: string
+  labelAddon?: string
   internalKey: string
   children?: TreeNodeProps[]
   level: number
   permissions: ElementPermissions
   locked: string | null
   isLocked: boolean
-  elementType?: ElementType
+  elementType?: string
   hasChildren?: boolean
+  fullPath?: string
   metaData?: any
   type?: string
   parentId?: string
@@ -43,6 +46,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  isSite?: boolean
   wrapNode?: TreeNodeWrapper
 }
 
@@ -54,6 +58,7 @@ export const defaultProps: TreeNodeProps = {
     value: 'folder'
   },
   label: '',
+  labelAddon: undefined,
   children: [],
   permissions: {
     list: false,
@@ -93,7 +98,8 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     onSelect,
     onRightClick,
     nodesRefs,
-    nodeOrder
+    nodeOrder,
+    tooltipSlotName
   } = useContext(TreeContext)
   const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
@@ -120,10 +126,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
-
-    if (isSelected) {
-      classes.push('tree-node--selected')
-    }
 
     if (danger) {
       classes.push('tree-node--danger')
@@ -215,8 +217,10 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 
   const nodeContent = (
     <Flex
-      className="tree-node__content-inner"
+      align="center"
+      className={ cn('tree-node__content-inner') }
       gap="small"
+      justify="center"
       onClick={ onClick }
       onContextMenu={ onContextMenu }
       onKeyDown={ onKeyDown }
@@ -230,15 +234,22 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         }
       tabIndex={ -1 }
     >
-      {isRoot !== true && (
-      <TreeExpander
-        node={ treeNodeProps }
-        state={ [isExpanded, setExpanded] }
-      />
-      )}
-      <div className="tree-node__content-wrapper">
-        <RenderNodeContent node={ treeNodeProps } />
-      </div>
+      <Flex
+        align="center"
+        className='tree-node__content-wrapper-outer w-full'
+        gap="small"
+        justify="center"
+      >
+        {isRoot !== true && (
+        <TreeExpander
+          node={ treeNodeProps }
+          state={ [isExpanded, setExpanded] }
+        />
+        )}
+        <div className="tree-node__content-wrapper">
+          <RenderNodeContent node={ treeNodeProps } />
+        </div>
+      </Flex>
     </Flex>
   )
 
@@ -248,9 +259,25 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       data-testid={ createNodeTestId(parseInt(id, 10), props.elementType) }
       ref={ forwardRef }
     >
-      <div className="tree-node__content">
-        {wrapNode(nodeContent)}
-      </div>
+      {!isNil(tooltipSlotName)
+        ? (
+          <ComponentRenderer
+            component={ tooltipSlotName }
+            props={ {
+              node: treeNodeProps,
+              children: (
+                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+                  {wrapNode(nodeContent)}
+                </div>
+              )
+            } }
+          />
+          )
+        : (
+          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+            {wrapNode(nodeContent)}
+          </div>
+          )}
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />

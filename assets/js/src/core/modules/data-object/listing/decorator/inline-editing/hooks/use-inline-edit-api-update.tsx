@@ -14,10 +14,15 @@ import { api, type DataObjectGetGridApiArg, useDataObjectPatchByIdMutation } fro
 import { type UseInlineEditApiUpdateReturn } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { isNil, set } from 'lodash'
 import { addBatchAppendMode, BatchAppendMode, META_SUPPORTS_BATCH_APPEND_MODE } from '../../../batch-actions/batch-append-mode/batch-append-mode'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const [patchDataObject] = useDataObjectPatchByIdMutation()
   const dispatch = useAppDispatch()
+  const { currentLanguage } = useLanguageSelection()
+  const { useColumnMapper } = useSettings()
+  const columnMapper = useColumnMapper()
 
   const updateCache: UseInlineEditApiUpdateReturn['updateCache'] = (event) => {
     const { update, getGetRequestArgs } = event
@@ -31,7 +36,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
         }
 
         for (const column of item.columns!) {
-          if (column.key === columnToUpdate.key && column.locale === columnToUpdate.locale) {
+          if (columnMapper.shouldMapDataToColumn(column, columnToUpdate)) {
             column.value = value
             if (!isNil(column.inheritance) && 'inherited' in column.inheritance && column.inheritance.inherited === true) {
               column.inheritance.inherited = false
@@ -47,32 +52,22 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   }
 
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
-    const { update } = event
-    let columnKey = update.column.key
+    const columnType = event.update.column.type
 
-    if (update.column.localizable && update.column.locale !== undefined && update.column.locale !== null) {
-      const splittedColumnKey = (columnKey ?? '').split('.')
-      const columnId = splittedColumnKey[splittedColumnKey.length - 1]
-      splittedColumnKey.pop()
-      const hasPrepath = splittedColumnKey.length > 0 && splittedColumnKey[0] !== ''
+    let dataItem
 
-      columnKey = `${splittedColumnKey.join('.')}${hasPrepath ? '.' : ''}localizedfields.${columnId}.${update.column.locale}`
+    switch (columnType) {
+      case 'dataobject.classificationstore':
+        dataItem = prepareClassificationStoreApiUpdateData(event)
+        break
+      default:
+        dataItem = prepareDefaultApiUpdateData(event)
+        break
     }
-
-    const value = event.meta?.[META_SUPPORTS_BATCH_APPEND_MODE] === true
-      ? addBatchAppendMode(update.value, BatchAppendMode.Replace)
-      : update.value
 
     const promise = patchDataObject({
       body: {
-        data: [
-          {
-            id: update.id,
-            editableData: {
-              ...set({}, columnKey ?? '', value)
-            }
-          }
-        ]
+        data: [dataItem]
       }
     })
 
@@ -82,6 +77,60 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     }
 
     return result
+  }
+
+  const prepareClassificationStoreApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
+    const { update } = event
+    const locale = update.column.locale ?? (update.column.localizable ? currentLanguage ?? 'default' : 'default')
+    const columnKey = update.column.key!
+    const columnConfig = update.column.config!
+
+    return {
+      id: update.id,
+      editableData: {
+        [columnKey]: {
+          [columnConfig.groupId]: {
+            [locale]: {
+              [columnConfig.keyId]: update.value
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const prepareDefaultApiUpdateData = (event: Parameters<UseInlineEditApiUpdateReturn['updateApiData']>[0]): Record<string, any> => {
+    const { update } = event
+    let columnKey = update.column.key
+
+    if (update.column.localizable) {
+      const splittedColumnKey = (columnKey ?? '').split('.')
+      const columnId = splittedColumnKey[splittedColumnKey.length - 1]
+      splittedColumnKey.pop()
+      const hasPrepath = splittedColumnKey.length > 0 && splittedColumnKey[0] !== ''
+
+      columnKey = `${splittedColumnKey.join('.')}${hasPrepath ? '.' : ''}localizedfields.${columnId}.${update.column.locale ?? currentLanguage}`
+    }
+
+    const value = event.meta?.[META_SUPPORTS_BATCH_APPEND_MODE] === true
+      ? addBatchAppendMode(update.value, BatchAppendMode.Replace)
+      : update.value
+
+    const isPublishedColumn = columnKey === 'published'
+
+    return {
+      id: update.id,
+      ...(isPublishedColumn
+        ? {
+            published: value
+          }
+        : {
+            editableData: {
+              ...set({}, columnKey ?? '', value)
+            }
+          }
+      )
+    }
   }
 
   return {

@@ -12,6 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    iconHide: css`
+      display: none;
+    `,
+
     subIcon: css`
       position: absolute;
       height: 10px;

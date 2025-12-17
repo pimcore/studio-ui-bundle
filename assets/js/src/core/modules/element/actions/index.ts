@@ -27,12 +27,26 @@ export enum ContextMenuActionName {
   addFolder = 'addFolder',
 
   addObject = 'addObject',
+  addVariant = 'addVariant',
   pasteAsChildRecursive = 'pasteAsChildRecursive',
   pasteRecursiveUpdatingReferences = 'pasteRecursiveUpdatingReferences',
   pasteAsChild = 'pasteAsChild',
   pasteOnlyContents = 'pasteOnlyContents',
 
+  sorting = 'sorting',
+  sortingAscending = 'sortingAscending',
+  sortingDescending = 'sortingDescending',
+  sortingIndexed = 'sortingIndexed',
+
   openInNewWindow = 'openInNewWindow',
+  openPreviewInNewWindow = 'openPreviewInNewWindow',
+
+  addPage = 'addPage',
+  addSnippet = 'addSnippet',
+  addNewsletter = 'addNewsletter',
+  addEmail = 'addEmail',
+  addLink = 'addLink',
+  addHardlink = 'addHardlink',
 
   downloadAsZip = 'downloadAsZip',
   uploadNewVersion = 'uploadNewVersion',

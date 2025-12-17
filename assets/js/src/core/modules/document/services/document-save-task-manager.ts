@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { selectDocumentById, setDraftData } from '@Pimcore/modules/document/document-draft-slice'
@@ -17,7 +18,20 @@ import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import type {
   DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil, isUndefined } from 'lodash'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
+import {
+  type DocumentSaveDataProcessorRegistry,
+  DocumentSaveDataContext,
+  type DocumentSaveUpdateData
+} from './processors/document-save-data-processor-registry'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
+import { type DocumentPostUpdateEvent } from '../events/post-update-event'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -91,6 +105,16 @@ export class DocumentSaveTaskManager {
     onFinish?: () => void,
     useDraftData: boolean = true
   ): Promise<void> {
+    // Skip auto-save if user doesn't have save permission
+    if (task === SaveTaskType.AutoSave) {
+      const state = store.getState()
+      const document = selectDocumentById(state, this.documentId)
+
+      if (!checkElementPermission(document?.permissions, 'save')) {
+        return
+      }
+    }
+
     // Handle task queuing logic
     if (this.runningTask != null) {
       if (task === SaveTaskType.AutoSave) {
@@ -117,6 +141,10 @@ export class DocumentSaveTaskManager {
     onFinish?: () => void,
     useDraftData: boolean = true
   ): Promise<void> {
+    // Flush any pending debounced form changes for this specific document before saving
+    const debouncedFormRegistry = container.get<DebouncedFormRegistry>(serviceIds.debouncedFormRegistry)
+    debouncedFormRegistry.flushByTag(createDocumentDebounceTag(this.documentId))
+
     this.setRunningTask(task)
 
     try {
@@ -135,6 +163,21 @@ export class DocumentSaveTaskManager {
             isPublished: true
           }))
         }
+
+        const event: DocumentPostUpdateEvent = {
+          identifier: {
+            type: eventTypes['document:editor:post-update'],
+            id: String(this.documentId)
+          },
+          payload: {
+            id: this.documentId,
+            task,
+            updatedData: result.data,
+            responseData: result.data
+          }
+        }
+
+        eventBus.publish(event)
 
         onFinish?.()
       } else {
@@ -168,12 +211,22 @@ export class DocumentSaveTaskManager {
 
   /**
    * Gets editable data from the iframe API for this document
+   * Only includes non-inherited values for saving
    */
   private getEditableData (): Record<string, any> {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
+
+      if (!documentApi.isIframeAvailable(this.documentId)) {
+        return {}
+      }
+
       const iframeApi = documentApi.getIframeApi(this.documentId)
-      return iframeApi.documentEditable.getValues(true)
+      const allValues = iframeApi.documentEditable.getValues(true)
+
+      return Object.fromEntries(
+        Object.entries(allValues).filter(([key]) => !iframeApi.documentEditable.getInheritanceState(key))
+      )
     } catch (error) {
       console.warn(`Could not get editable data for document ${this.documentId}:`, error)
       return {}
@@ -183,7 +236,7 @@ export class DocumentSaveTaskManager {
   private buildUpdateData (
     task: SaveTaskType = SaveTaskType.AutoSave,
     useDraftData: boolean = true
-  ): any {
+  ): DocumentSaveUpdateData {
     const state = store.getState()
     const document = selectDocumentById(state, this.documentId)
 
@@ -191,7 +244,7 @@ export class DocumentSaveTaskManager {
       throw new Error(`Document ${this.documentId} not found in state`)
     }
 
-    const updatedData: any = {}
+    const updatedData: DocumentSaveUpdateData = {}
 
     // Handle properties if they exist and have changes
     if (document.changes?.properties) {
@@ -211,16 +264,26 @@ export class DocumentSaveTaskManager {
       updatedData.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
+    if (!isNil(document.changes?.settingsData) && !isNil(document.settingsData)) {
+      updatedData.settingsData = document.settingsData
+    }
+
     const editableData = this.getEditableData()
     if (Object.keys(editableData).length > 0) {
       updatedData.editableData = editableData
     }
 
     updatedData.task = task
-
     updatedData.useDraftData = useDraftData
 
-    return updatedData
+    const saveDataProcessorRegistry = container.get<DocumentSaveDataProcessorRegistry>(
+      serviceIds['Document/ProcessorRegistry/SaveDataProcessor']
+    )
+
+    const context = new DocumentSaveDataContext(this.documentId, task, updatedData)
+    saveDataProcessorRegistry.executeProcessors(context)
+
+    return context.updateData
   }
 
   /**

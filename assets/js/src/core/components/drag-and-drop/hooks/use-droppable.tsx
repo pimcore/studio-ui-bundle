@@ -16,7 +16,7 @@ interface DroppableHookReturn extends IDroppableContext {
 }
 
 export const useDroppable = (): DroppableHookReturn => {
-  const { isDragActive, isOver, isValid } = useContext(droppableContext)
+  const { isDragActive, isOver, isValid, hasValidDrop } = useContext(droppableContext)
 
   function getStateClasses (): string[] {
     const cssClasses: string[] = []
@@ -25,12 +25,16 @@ export const useDroppable = (): DroppableHookReturn => {
       cssClasses.push('dnd--drag-active')
     }
 
-    if (isOver && isValid) {
+    if ((isOver) && (isValid)) {
       cssClasses.push('dnd--drag-valid')
     }
 
-    if (isOver && !isValid) {
+    if ((isOver) && (!isValid)) {
       cssClasses.push('dnd--drag-error')
+    }
+
+    if (hasValidDrop === true) {
+      cssClasses.push('dnd--has-valid-drop')
     }
 
     return cssClasses
@@ -40,6 +44,7 @@ export const useDroppable = (): DroppableHookReturn => {
     isDragActive,
     isOver,
     isValid,
+    hasValidDrop,
     getStateClasses
   }
 }

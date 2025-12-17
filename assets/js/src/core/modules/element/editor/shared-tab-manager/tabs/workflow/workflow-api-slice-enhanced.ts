@@ -13,7 +13,7 @@ import { api as baseApi } from './workflow-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.WORKFLOW],
+  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.DOCUMENT_DETAIL],
 
   endpoints: {
     workflowGetDetails: {
@@ -26,7 +26,6 @@ const api = baseApi.enhanceEndpoints({
     workflowActionSubmit: {
       invalidatesTags: (result, error, args) => {
         const tags = invalidatingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
-
         return tags.filter((tag) => tag !== undefined)
       }
     }

@@ -52,11 +52,32 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .tree-node__content-inner {
-        padding: 2px ${token.paddingSM}px 2px 0;
+        padding: 0 ${token.paddingSM}px 0 0;
+
+        @media (hover: hover) {
+          &:hover {
+            background-color: ${token.controlItemBgActiveHover};
+          }
+        }
+
+        &:focus {
+          outline: none;
+          background-color: ${token.controlItemBgActiveHover};
+        }
       }
 
-      &.tree-node--selected > .tree-node__content {
+      .tree-node__content-wrapper-outer {
+        position: relative;
+        padding: 2px 0 2px 0;
+      }
+
+      .tree-node__content--selected {
         background-color: ${token.controlItemBgActive};
+
+        &:hover,
+        & .tree-node__content-inner {
+          background-color: ${token.controlItemBgActive};
+        }
       }
 
       .tree-node-content__label {

@@ -14,7 +14,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/collections`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                         fieldName: queryArg.fieldName,
@@ -31,7 +31,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/groups`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         searchTerm: queryArg.searchTerm,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -48,7 +48,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/key-group-relations`,
                     params: {
                         storeId: queryArg.storeId,
-                        objectId: queryArg.objectId,
+                        classId: queryArg.classId,
                         searchTerm: queryArg.searchTerm,
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -83,6 +83,19 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Classification Store"],
             }),
+            classificationStoreGetLayoutByKey: build.query<
+                ClassificationStoreGetLayoutByKeyApiResponse,
+                ClassificationStoreGetLayoutByKeyApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/layout-by-key/${queryArg.keyId}`,
+                    params: {
+                        objectId: queryArg.objectId,
+                        fieldName: queryArg.fieldName,
+                    },
+                }),
+                providesTags: ["Classification Store"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -94,8 +107,8 @@ export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List o
 export type ClassificationStoreGetCollectionsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Page number */
     page: number;
     /** Number of items per page */
@@ -112,8 +125,8 @@ export type ClassificationStoreGetGroupsApiResponse = /** status 200 List of cla
 export type ClassificationStoreGetGroupsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Search Term */
     searchTerm?: string;
     /** Page number */
@@ -131,8 +144,8 @@ export type ClassificationStoreGetKeyGroupRelationsApiResponse =
 export type ClassificationStoreGetKeyGroupRelationsApiArg = {
     /** Classification Store ID */
     storeId: number;
-    /** object ID */
-    objectId?: number;
+    /** Class ID */
+    classId?: string;
     /** Search Term */
     searchTerm?: string;
     /** Page number */
@@ -159,6 +172,16 @@ export type ClassificationStoreGetLayoutByGroupApiArg = {
     objectId: number;
     /** GroupId of the Group ID */
     groupId: number;
+    /** Field Name */
+    fieldName: string;
+};
+export type ClassificationStoreGetLayoutByKeyApiResponse =
+    /** status 200 Layout definition */ ClassificationStoreCollection2;
+export type ClassificationStoreGetLayoutByKeyApiArg = {
+    /** object ID */
+    objectId?: number;
+    /** KeyId of the Key ID */
+    keyId: number;
     /** Field Name */
     fieldName: string;
 };
@@ -250,4 +273,5 @@ export const {
     useClassificationStoreGetKeyGroupRelationsQuery,
     useClassificationStoreGetLayoutByCollectionQuery,
     useClassificationStoreGetLayoutByGroupQuery,
+    useClassificationStoreGetLayoutByKeyQuery,
 } = injectedRtkApi;

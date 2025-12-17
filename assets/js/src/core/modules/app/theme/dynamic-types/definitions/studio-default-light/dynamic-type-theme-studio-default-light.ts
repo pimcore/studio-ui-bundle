@@ -37,6 +37,7 @@ export const studioDefaultLightThemeConfig = {
     colorFill: 'rgba(215, 199, 236, 0.6)',
     colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
     colorBgLayout: '#fcfcfc',
+    colorBgSpotlight: '#060606',
     colorPrimary: '#722ed1',
     fontSize: 12,
     fontSizeHeading1: 35,
@@ -101,6 +102,7 @@ export const studioDefaultLightThemeConfig = {
       borderRadiusSM: '4px'
     },
     Button: {
+      primaryColor: '#ffffff',
       defaultBorderColor: '#d3adf7',
       defaultColor: '#722ed1',
       defaultGhostBorderColor: '#d9d9d9',
@@ -168,9 +170,22 @@ export const studioDefaultLightThemeConfig = {
         }
       },
       Brand: {
+        Success: {
+          colorSuccessBg: '#f6ffed',
+          colorSuccessBorder: '#b7eb8f',
+          colorSuccessText: '#52c41a'
+        },
         Warning: {
+          colorWarning: '#faad14',
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
+        },
+        Error: {
+          colorError: '#ff4d4f',
+          colorErrorBg: '#fff2f0'
+        },
+        Primary: {
+          colorPrimaryText: '#22075e'
         }
       },
       Base: {

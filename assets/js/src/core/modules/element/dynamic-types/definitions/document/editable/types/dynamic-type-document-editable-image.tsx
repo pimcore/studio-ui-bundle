@@ -10,57 +10,9 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { DocumentImageEditable } from '../components/image-editable/image-editable'
-import { isNil } from 'lodash'
-
-export interface ImageEditableConfig {
-  title?: string
-  width?: number
-  height?: number
-  thumbnail?: string | object
-  hidetext?: boolean
-  reload?: boolean
-  minWidth?: number
-  minHeight?: number
-  ratioX?: number
-  ratioY?: number
-  uploadPath?: string
-  disableInlineUpload?: boolean
-  highResolution?: number
-  dropClass?: string
-  deferred?: boolean
-  class?: string
-  predefinedDataTemplates?: {
-    marker?: Array<{
-      menuName: string
-      name: string
-      data: any[]
-    }>
-    hotspot?: Array<{
-      menuName: string
-      name: string
-      data: any[]
-    }>
-  }
-  cacheBuster?: boolean
-  required?: boolean
-}
-
-export interface ImageEditableValue {
-  id?: number
-  path?: string
-  alt?: string
-  title?: string
-  hotspots?: any[]
-  marker?: any[]
-  crop?: {
-    cropTop?: number
-    cropLeft?: number
-    cropWidth?: number
-    cropHeight?: number
-    cropPercent?: boolean
-  }
-}
+import { ImageEditable } from '../components/image-editable/image-editable'
+import { isNil, isPlainObject, isUndefined } from 'lodash'
+import { type ImageEditableConfig, type ImageEditableValue } from './image-editable-types'
 
 export type ImageEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: ImageEditableConfig
@@ -71,12 +23,10 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
 
   getEditableDataComponent (props: ImageEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <DocumentImageEditable
+      <ImageEditable
         config={ props.config }
         containerRef={ props.containerRef }
-        disabled={ props.inherited }
-        onChange={ (newValue) => props.onChange?.(newValue) }
-        value={ props.value }
+        inherited={ props.inherited }
       />
     )
   }
@@ -87,7 +37,24 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
     }
 
     if (typeof value === 'object') {
-      return value
+      const { cropTop, cropLeft, cropWidth, cropHeight, cropPercent, ...otherProps } = value
+
+      const hasCropData = !isUndefined(cropTop) || !isUndefined(cropLeft) ||
+                         !isUndefined(cropWidth) || !isUndefined(cropHeight) ||
+                         !isUndefined(cropPercent)
+
+      return {
+        ...otherProps,
+        ...(hasCropData && {
+          crop: {
+            ...(!isUndefined(cropTop) && { cropTop }),
+            ...(!isUndefined(cropLeft) && { cropLeft }),
+            ...(!isUndefined(cropWidth) && { cropWidth }),
+            ...(!isUndefined(cropHeight) && { cropHeight }),
+            ...(!isUndefined(cropPercent) && { cropPercent })
+          }
+        })
+      }
     }
 
     return null
@@ -98,7 +65,12 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return null
     }
 
-    return value
+    const { crop, ...otherProps } = value
+
+    return {
+      ...otherProps,
+      ...crop
+    }
   }
 
   private getImageId (value: ImageEditableValue | null | undefined): number | undefined {
@@ -106,6 +78,14 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return undefined
     }
     return value.id
+  }
+
+  isEmpty (value: ImageEditableValue | null | undefined, props: ImageEditableDefinition): boolean {
+    if (!isNil(value) && isPlainObject(value)) {
+      return isNil(value.id)
+    }
+
+    return true
   }
 
   reloadOnChange (props: ImageEditableDefinition, oldValue: any, newValue: any): boolean {

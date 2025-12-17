@@ -14,16 +14,13 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { type Asset } from '../../../asset-api-slice-enhanced'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { isDndSourceAllowed, isDndTargetAllowed as isDndTargetPermissionAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 import { isUndefined } from 'lodash'
-
-const isDndTargetAllowed = (asset: Asset): boolean => {
-  return isDndTargetPermissionAllowed(asset) && asset.type === 'folder'
-}
+import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('asset')
+    const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
 
     if (props.metaData?.asset === undefined) {
       return (
@@ -33,7 +30,11 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const targetAsset: Asset = props.metaData.asset
 
-    if (targetAsset.type !== 'folder') {
+    const isAssetTargetAllowed = (asset: Asset): boolean => {
+      return isTargetAllowed(asset) && asset.type === 'folder'
+    }
+
+    if (!isAssetTargetAllowed(targetAsset)) {
       return (
         <Component { ...props } />
       )
@@ -41,7 +42,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const sourceAsset: Asset = info.data
-      if (!isDndSourceAllowed(sourceAsset) || !isDndTargetAllowed(targetAsset)) {
+
+      if (!isSourceAllowed(sourceAsset) || !isAssetTargetAllowed(targetAsset)) {
         return
       }
       move({
@@ -58,7 +60,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceAsset: Asset = info.data
-      return info.type === 'asset' && isDndSourceAllowed(sourceAsset) && isDndTargetAllowed(targetAsset)
+      return info.type === 'asset' && isSourceAllowed(sourceAsset) && isAssetTargetAllowed(targetAsset)
     }
 
     return (

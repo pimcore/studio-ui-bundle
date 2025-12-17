@@ -95,7 +95,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, edi
         ),
         meta: {
           editable: lang.canEdit ?? false,
-          type: 'text',
+          type: 'textarea',
           callback: true,
           editCallback: handleEditCallback,
           htmlDetection: true

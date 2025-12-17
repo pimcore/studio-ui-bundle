@@ -13,7 +13,7 @@ import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoadin
 import { isUndefined } from 'lodash'
 import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
-import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 
 export type NodeState = InternalNodeState
 

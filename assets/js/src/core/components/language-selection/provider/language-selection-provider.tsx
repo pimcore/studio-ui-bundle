@@ -8,7 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useMemo, useState } from 'react'
+import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import React, { createContext } from 'react'
+import { ProviderWithElementContext } from './type/provider-with-element-context'
+import { ProviderWithoutContext } from './type/provider-without-context'
 
 export interface ILanguageSelectionContext {
   currentLanguage: string
@@ -29,13 +32,11 @@ export interface LanguageSelectionProviderProps {
 }
 
 export const LanguageSelectionProvider = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
-  // @todo check for default language
-  const [currentLanguage, setCurrentLanguage] = useState('en')
-  const [hasLocalizedFields, setHasLocalizedFields] = useState(false)
+  const element = useOptionalElementContext()
 
-  return useMemo(() => (
-    <LanguageSelectionContext.Provider value={ { currentLanguage, setCurrentLanguage, setHasLocalizedFields, hasLocalizedFields } }>
-      {children}
-    </LanguageSelectionContext.Provider>
-  ), [currentLanguage, hasLocalizedFields, children])
+  if (element !== null) {
+    return <ProviderWithElementContext>{ children }</ProviderWithElementContext>
+  }
+
+  return <ProviderWithoutContext>{ children }</ProviderWithoutContext>
 }

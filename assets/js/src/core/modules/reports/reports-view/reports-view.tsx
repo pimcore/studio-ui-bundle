@@ -17,8 +17,11 @@ import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-re
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { useStyles } from './reports-view.styles'
 
 interface IReportsViewProps {
@@ -28,7 +31,12 @@ interface IReportsViewProps {
 export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element => {
   const [currentReport, setCurrentReport] = useState<string | null>(reportId ?? null)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
+  const hasPermission = isAllowed(UserPermission.Reports)
+
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery(
+    { page: 1, pageSize: 9999 },
+    { skip: !hasPermission }
+  )
 
   const { styles } = useStyles()
 
@@ -38,16 +46,18 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
       gap="mini"
     >
       {!isEmptyValue(iconClass) && <Icon value={ iconClass } />}
-      {value}
+      <SanitizeHtml html={ value } />
     </Flex>
   )
 
   const reportsTreeOptions: DefaultOptionType[] | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
+      const reportsTreeDataWithSourceConfig = reportsTreeData.items?.filter(item => item.hasDataSourceConfig)
+
       const groupedOptions: Record<string, DefaultOptionType> = {}
       const ungroupedOptions: DefaultOptionType[] = []
 
-      reportsTreeData.items?.forEach(item => {
+      reportsTreeDataWithSourceConfig?.forEach(item => {
         const reportLabel = !isEmptyValue(item.niceName) ? item.niceName : item.name
 
         if (isEmptyValue(item.group)) {
@@ -60,8 +70,12 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
         }
 
         if (isUndefined(groupedOptions[item.group])) {
+          const elementWithGroupIcon = reportsTreeDataWithSourceConfig
+            ?.filter(element => element.group === item.group)
+            .find(element => !isEmptyValue(element.groupIconClass))
+
           groupedOptions[item.group] = {
-            label: renderOptionLabel(item.groupIconClass, item.group),
+            label: renderOptionLabel(elementWithGroupIcon?.groupIconClass ?? '', item.group),
             title: item.group,
             options: []
           }

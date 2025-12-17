@@ -17,6 +17,18 @@ import { type ElementEditorType } from '@Pimcore/modules/element/editor/services
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { TabManagerProvider } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-manager-context'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
+import { getElementKey } from '@Pimcore/modules/element/element-helper'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
+import { type Element } from '@Pimcore/modules/element/element-helper'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
+import { isNull } from 'lodash'
+import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -24,6 +36,10 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
   const tabs = tabManager.getTabs()
+  const { rename } = useRename(elementType)
+  const { unpublishTreeNode } = useUnpublish(elementType)
+  const { refreshElement } = useElementRefresh(elementType)
+  const { locateInTree } = useLocateInTree(elementType)
 
   const preparedTabs = tabs.map((tab, index) => {
     const baseTab = {
@@ -34,11 +50,16 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
     if (tab.key === 'workflow') {
       return {
         ...baseTab,
-        hidden: () => element?.hasWorkflowAvailable === false || element?.hasWorkflowAvailable === undefined
+        hidden: () => !isWorkflowAvailable(element, elementType)
       }
     }
     return baseTab
   })
+
+  useHandleKeyBindings(() => { if (element != null && checkElementPermission(element.permissions, 'rename') && !(element as unknown as Element).isLocked) rename(element.id, getElementKey(element as unknown as Element, elementType)) }, 'rename')
+  useHandleKeyBindings(() => { if (element != null && !isNull(elementType) && elementType !== 'asset' && checkElementPermission(element.permissions, 'unpublish') && !(element as unknown as Element).isLocked) unpublishTreeNode(element as unknown as DataObject | Document) }, 'unpublish')
+  useHandleKeyBindings(() => { if (element != null) refreshElement(element.id) }, 'refresh')
+  useHandleKeyBindings(() => { if (element != null) locateInTree(element.id) }, 'openInTree')
 
   return (
     <TabManagerProvider tabManager={ tabManager }>

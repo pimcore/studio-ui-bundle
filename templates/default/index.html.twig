@@ -10,6 +10,32 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <title>{{ hostname }} :: Pimcore Studio</title>
+        
+        <!-- Dynamic favicon based on theme -->
+        <link rel="icon" id="favicon" href="/bundles/pimcorestudioui/img/favicon.svg" type="image/svg+xml">
+        
+        <script {{ pimcore_studio_csp.getNonceHtmlAttribute()|raw }}>
+            // Set favicon based on theme preference
+            (function() {
+                const favicon = document.getElementById('favicon');
+                const darkThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                
+                function updateFavicon(isDark) {
+                    favicon.href = isDark 
+                        ? '/bundles/pimcorestudioui/img/favicon-dark.svg'
+                        : '/bundles/pimcorestudioui/img/favicon.svg';
+                }
+                
+                // Set initial favicon
+                updateFavicon(darkThemeMediaQuery.matches);
+                
+                // Listen for theme changes
+                darkThemeMediaQuery.addEventListener('change', function(e) {
+                    updateFavicon(e.matches);
+                });
+            })();
+        </script>
 
         {% for cssFile in studioCssFiles %}
             <link rel="stylesheet" href="{{ cssFile }}"/>

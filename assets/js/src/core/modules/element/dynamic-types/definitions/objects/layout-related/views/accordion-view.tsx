@@ -22,6 +22,7 @@ export interface AccordionViewProps {
   contentPadding?: BoxProps['padding']
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
+  style?: React.CSSProperties
 }
 
 export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewProps): React.JSX.Element => {
@@ -36,6 +37,7 @@ export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewPr
       hasContentSeparator={ props.theme !== 'fieldset' }
       label={ (<>{props.title}</>) }
       size='small'
+      style={ props.style }
       theme={ props.theme }
     >
       {props.children}

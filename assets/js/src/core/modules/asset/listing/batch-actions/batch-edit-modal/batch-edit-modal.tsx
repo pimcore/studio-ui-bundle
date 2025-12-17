@@ -24,16 +24,19 @@ import { Form } from '@Pimcore/components/form/form'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
 import { api, useAssetPatchByIdMutation, useAssetPatchFolderByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
+import { AssetBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/asset-batch-edit-job'
+import { AssetFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/asset-folder-batch-edit-job'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -50,7 +53,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { selectedRows } = useRowSelection()
   const selectedRowsIds = Object.keys(selectedRows ?? {}).map(Number)
   const selectedRowsCount = selectedRowsIds.length
-  const { addJob } = useJobs()
+  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const { id, elementType } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
@@ -104,34 +107,21 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       }
     })
 
+    const filters = getArgs()?.body?.filters ?? {}
+    delete filters.page
+    delete filters.pageSize
+
     if (selectedRowsCount === 0) {
-      addJob(createJob({
+      const job = new AssetFolderBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const response = await patchAssetsInFolder({
-            body: {
-              data: [
-                {
-                  folderId: id,
-                  metadata: patches
-                }
-              ],
-              filters: getArgs()?.body?.filters
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchAssetsInFolder,
+        folderId: id,
+        patches,
+        filters,
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
       await patchAssets({
         body: {
@@ -144,80 +134,31 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         }
       })
     } else {
-      addJob(createJob({
+      const job = new AssetBatchEditJob({
         title: t('batch-edit.job-title'),
-        topics: [topics['patch-finished'], ...defaultTopics],
-        action: async () => {
-          const response = await patchAssets({
-            body: {
-              data: selectedRowsIds.map((rowId) => ({
-                id: rowId,
-                metadata: patches
-              }))
-            }
-          })
-
-          if (response.data?.jobRunId === undefined) {
-            trackError(new GeneralError('JobRunId is undefined'))
-            throw new Error('JobRunId is undefined')
-          }
-
-          return response.data?.jobRunId
-        },
-        refreshGrid,
-        // @todo change that to a more generic context
-        assetContextId: id
-      }))
+        patchAssets,
+        selectedRowsIds,
+        patches,
+        assetContextId: id,
+        refreshGrid
+      })
+      await executionEngine.runJob(job)
     }
   }
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
-  // Helper function to compare groups that can be strings, arrays, or nested arrays
-  const areGroupsEqual = (group1: any, group2: any): boolean => {
-    // Normalize groups to string arrays for comparison
-    const normalizeGroup = (group: any): string[] => {
-      if (typeof group === 'string') {
-        return group.split('.')
-      }
-      if (Array.isArray(group)) {
-        return group.flat().map(part => String(part))
-      }
-      return [String(group)]
-    }
-
-    const normalizedGroup1 = normalizeGroup(group1)
-    const normalizedGroup2 = normalizeGroup(group2)
-
-    // Compare arrays by length and content
-    if (normalizedGroup1.length !== normalizedGroup2.length) {
-      return false
-    }
-
-    return normalizedGroup1.every((part, index) => part === normalizedGroup2[index])
-  }
-
-  const getFilteredTypes = (column: any): object[] => {
-    return column?.children?.filter((child: any) => {
-      const isEditable: boolean = child.editable === true
-      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && areGroupsEqual(child.group, item.group))
-      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
-
-      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
-    })
-  }
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
     if (isUndefined(availableDropdownList)) return []
 
-    return availableDropdownList.map((column: any) => {
-      return {
-        ...column,
-        children: getFilteredTypes(column)
-      }
-    })
-  }, [availableDropdownList])
-  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
+    return filterDropdownItems(
+      availableDropdownList as Array<ItemType<MenuItemType>>,
+      batchEdits,
+      hasType
+    )
+  }, [availableDropdownList, batchEdits, hasType])
+
+  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
 
   return (
     <WindowModal

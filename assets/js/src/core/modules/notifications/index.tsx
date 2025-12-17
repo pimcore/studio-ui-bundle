@@ -16,8 +16,7 @@ import { NotificationsContainer } from './notifications-container'
 import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
 import { type BackgroundProcessor } from '../background-processor/services/background-processor'
 import { DemoProcess } from './process/demo-process'
-import { type ComponentRegistry } from '../app/component-registry/component-registry'
-import { NotificationUpdates } from './notification-updates'
+import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
 
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
@@ -41,11 +40,13 @@ moduleSystem.registerModule({
       component: NotificationsContainer
     })
 
-    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+    staticWidgetRestorer.registerStaticWidget(NOTIFICATIONS)
+
+    /* const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
     componentRegistry.registerToSlot('global.feedback', {
       name: 'notifications',
       component: NotificationUpdates
-    })
+    }) */
 
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())

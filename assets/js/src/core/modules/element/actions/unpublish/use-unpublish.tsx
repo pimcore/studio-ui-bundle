@@ -19,15 +19,16 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { checkElementPermission } from '../../permissions/permission-helper'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { ContextMenuActionName } from '..'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 
 type Element = DataObject | Document
 
-interface UseUnpublishHookReturn {
-  unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+export interface UseUnpublishHookReturn {
+  unpublishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
   unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  unpublishTreeNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
 }
 
 export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn => {
@@ -64,19 +65,20 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
     }
   }
 
-  const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const unpublishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unpublish'),
       key: ContextMenuActionName.unpublish,
       isLoading,
       icon: <Icon value='eye-off' />,
       hidden: node.isPublished === false || !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
-      onClick: () => { unpublishTreeNode(node) }
+      onClick: () => { unpublishTreeNode(node, onFinish) }
     }
   }
 
   return {
     unpublishTreeContextMenuItem,
-    unpublishContextMenuItem
+    unpublishContextMenuItem,
+    unpublishTreeNode
   }
 }
