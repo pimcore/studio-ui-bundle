@@ -18,7 +18,7 @@ import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
 import { isPlainObject, isUndefined, isEmpty } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
-import { type ElementReference } from '@Pimcore/modules/element/element-helper'
+import { isElementReference, type ElementReference } from '@Pimcore/modules/element/element-helper'
 import { useEditMode, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
 
@@ -74,7 +74,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
     const value = props.getValue()
 
-    if (isPlainObject(value) && includesTypeInformation) {
+    if (isPlainObject(value) && (isElementReference(value) || includesTypeInformation)) {
       const element: ElementReference = value as ElementReference
       const elementType = mapToElementType(String(element.type))
       return {
