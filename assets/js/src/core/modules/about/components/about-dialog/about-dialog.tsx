@@ -20,11 +20,11 @@ interface AboutDialogProps extends Omit<IWindowModalProps, 'children'> { }
 export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { platform_version, version } = useSettings()
+  const { platform_version: platformVersion, version } = useSettings()
 
   const getVersion = (): React.JSX.Element => {
-    if (!isNil(platform_version)) {
-      return <span>{t('about.platform-version', { version: platform_version })}</span>
+    if (!isNil(platformVersion)) {
+      return <span>{t('about.platform-version', { version: platformVersion })}</span>
     }
 
     if (!isNil(version)) {
