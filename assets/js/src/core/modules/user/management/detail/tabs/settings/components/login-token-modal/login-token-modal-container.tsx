@@ -55,12 +55,12 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
       addModal(
         modalId,
         <LoginTokenModal
-          isLoading={ isLoading }
-          onCancel={ closeModal }
-          onClose={ closeModal }
-          onOk={ closeModal }
-          open={ isOpen }
-          tokenUrl={ data?.link ?? '' }
+          isLoading={isLoading}
+          onCancel={closeModal}
+          onClose={closeModal}
+          onOk={closeModal}
+          open={isOpen}
+          tokenUrl={data?.link ?? ''}
         />
       )
     }
@@ -68,8 +68,8 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   return (
     <Button
-      disabled={ disabled }
-      onClick={ openModal }
+      disabled={disabled}
+      onClick={openModal}
       type="default"
     >
       {t('user-management.admin.login')}
