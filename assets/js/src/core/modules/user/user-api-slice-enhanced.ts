@@ -54,7 +54,8 @@ export const {
   useUserUpdatePasswordByIdMutation,
   useUserUploadImageMutation,
   useUserGetImageQuery,
-  useUserGetTreeQuery
+  useUserGetTreeQuery,
+  useUserTokenLinkGetQuery
 } = api
 
 export { api }

@@ -100,6 +100,10 @@ const config: ConfigFile = {
     {
       pattern: 'executionEngineListJobs',
       type: 'query'
+    },
+    {
+      pattern: 'userTokenLinkGet',
+      type: 'query'
     }
   ],
   outputFiles: {

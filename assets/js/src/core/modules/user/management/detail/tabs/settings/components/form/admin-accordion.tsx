@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Form, Typography } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useTranslation } from 'react-i18next'
-import { Button } from '@Pimcore/components/button/button'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { getCurrentUser } from '@sdk/modules/auth'
+import { Form, Typography } from 'antd'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { LoginTokenModalContainer } from '../login-token-modal/login-token-modal-container'
 
 interface IAdminAccordion {
   isDisabled?: boolean
@@ -21,29 +22,33 @@ interface IAdminAccordion {
 const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
+  const user = getCurrentUser()
 
   const content = [
     {
       key: '1',
-      title: <>{ t('user-management.admin') }</>,
+      title: <>{t('user-management.admin')}</>,
       children: <>
-        <Form.Item
-          name={ 'admin' }
-        >
-          <Switch
-            disabled={ isDisabled }
-            labelRight={ t('user-management.admin') }
-            size={ 'small' }
-          />
-        </Form.Item>
+        {user.isAdmin && (
+          <div className='m-b-normal'>
+            <Form.Item
+              name={ 'admin' }
+            >
+              <Switch
+                disabled={ isDisabled === true }
+                labelRight={ t('user-management.admin') }
+                size={ 'small' }
+              />
+            </Form.Item>
 
-        <Text disabled>{ t('user-management.admin.info') }</Text>
-        <div className={ 'm-t-normal' }>
-          <Button
+            <Text disabled>{t('user-management.admin.info')}</Text>
+          </div>
+        )}
+
+        <div>
+          <LoginTokenModalContainer
             disabled={ isDisabled }
-            onClick={ () => { console.log('todo login') } }
-            type="default"
-          >{t('user-management.admin.login')}</Button>
+          />
         </div>
       </>
     }

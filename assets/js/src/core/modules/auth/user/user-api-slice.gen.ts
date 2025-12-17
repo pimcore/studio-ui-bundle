@@ -102,13 +102,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
-            userTokenLinkGet: build.mutation<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
+            userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.tokenLink,
                 }),
-                invalidatesTags: ["User Management"],
+                providesTags: ["User Management"],
             }),
             userUpdateActivePerspective: build.mutation<
                 UserUpdateActivePerspectiveApiResponse,
@@ -651,7 +651,7 @@ export const {
     useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
-    useUserTokenLinkGetMutation,
+    useUserTokenLinkGetQuery,
     useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUpdateProfileMutation,

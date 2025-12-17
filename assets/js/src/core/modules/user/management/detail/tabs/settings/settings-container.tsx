@@ -106,7 +106,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             items={ [
               {
                 key: '1',
-                title: <>{ t('user-management.general') }</>,
+                title: <>{t('user-management.general')}</>,
                 info: 'ID: ' + id,
                 children: <>
                   <Flex
@@ -124,9 +124,9 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       />
                     </Form.Item>
 
-                    { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
+                    {openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin) }</Text>
+                        <Text disabled>{t('user-management.last-login')}: {formatLastLogin(openedUser.lastLogin)}</Text>
                         )
                       : null}
                   </Flex>
@@ -171,7 +171,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                 </>
               }
             ]
-          }
+            }
             size={ 'small' }
           />
         </Col>
@@ -226,7 +226,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
               />
             </Col>
             )
-          : null }
+          : null}
       </Row>
     </Form>
   )
