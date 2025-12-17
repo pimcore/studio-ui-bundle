@@ -360,6 +360,10 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.delete: Delete
 listing.actions.export: Export
+reports.csv-export-modal.title: CSV Export Options
+reports.csv-export-modal.include-headers: Include column headers
+reports.csv-export-modal.delimiter-label: Delimiter
+reports.csv-export-modal.delimiter-placeholder: Enter delimiter
 listing.actions.csv-export: CSV Export
 listing.actions.xlsx-export: Excel Export
 listing.actions.batch-edit: Batch edit
