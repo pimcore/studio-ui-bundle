@@ -20,7 +20,19 @@ interface AboutDialogProps extends Omit<IWindowModalProps, 'children'> { }
 export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { platformVersion } = useSettings()
+  const { platform_version: platformVersion, version } = useSettings()
+
+  const getVersion = (): React.JSX.Element => {
+    if (!isNil(platformVersion)) {
+      return <span>{t('about.platform-version', { version: platformVersion })}</span>
+    }
+
+    if (!isNil(version)) {
+      return <span>{t('about.version', { version })}</span>
+    }
+
+    return <></>
+  }
 
   return (
     <Modal
@@ -49,9 +61,7 @@ export const AboutDialog = (props: AboutDialogProps): React.JSX.Element => {
               gap={ 'mini' }
               vertical
             >
-              {!isNil(platformVersion) && (
-                <span>{t('about.platform-version', { version: platformVersion })}</span>
-              )}
+              {getVersion()}
               <Flex
                 align="center"
                 gap={ 'mini' }
