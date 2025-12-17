@@ -34,6 +34,10 @@ export class DynamicTypeFieldFilterObjectAdapter extends DynamicTypeFieldFilterA
 
     const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
+    if (!objectRegistry.hasDynamicType(subtype)) {
+      return false
+    }
+
     const objectType = objectRegistry.getDynamicType(subtype)
     return objectType.dynamicTypeFieldFilterType.isFilterAvailable(null)
   }
