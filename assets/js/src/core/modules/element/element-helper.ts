@@ -13,7 +13,7 @@ import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-sl
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import type { ElementType } from '../../types/enums/element/element-type'
 import { type DragAndDropInfo } from '@sdk/components'
-import { isBoolean } from 'lodash'
+import { has, isBoolean, isPlainObject } from 'lodash'
 import { baseUrl } from '@Pimcore/app/router/router'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -93,6 +93,15 @@ export interface ElementReference {
   fullPath: string
   isPublished?: boolean | null
   subtype?: string
+}
+
+export const isElementReference = (data: any): data is ElementReference => {
+  return (
+    isPlainObject(data) &&
+    has(data, 'id') &&
+    has(data, 'type') &&
+    has(data, 'fullPath')
+  )
 }
 
 export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo, showPublishedState: boolean = true): ElementReference => {
