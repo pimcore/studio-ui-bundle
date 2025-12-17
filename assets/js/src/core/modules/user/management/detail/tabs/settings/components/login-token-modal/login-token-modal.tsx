@@ -42,34 +42,34 @@ export const LoginTokenModal = ({ tokenUrl, isLoading = false, ...props }: About
 
   return (
     <Modal
-      {...props}
-      footer={<Flex justify="end"><ButtonGroup
-        items={[
+      { ...props }
+      footer={ <Flex justify="end"><ButtonGroup
+        items={ [
           <Button
             key="closeBtn"
-            loading={isLoading}
-            onClick={props.onClose}
+            loading={ isLoading }
+            onClick={ props.onClose }
           >
             {t('login-token-modal.close')}
           </Button>,
           <Button
             key="copyAndCloseBtn"
-            loading={isLoading}
-            onClick={copyToClipboard}
+            loading={ isLoading }
+            onClick={ copyToClipboard }
             type="primary"
           >
             {t('login-token-modal.copy-and-close')}
           </Button>
-        ]}
-      /></Flex>}
-      title={t('login-token-modal.title')}
+        ] }
+                                   /></Flex> }
+      title={ t('login-token-modal.title') }
     >
       <Flex vertical>
         <p>{t('login-token-modal.description')}</p>
         <TextArea
           readOnly
-          rows={5}
-          value={tokenUrl}
+          rows={ 5 }
+          value={ tokenUrl }
         />
       </Flex>
     </Modal>
