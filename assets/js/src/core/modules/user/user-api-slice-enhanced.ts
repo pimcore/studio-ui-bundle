@@ -55,7 +55,8 @@ export const {
   useUserUploadImageMutation,
   useUserGetImageQuery,
   useUserGetTreeQuery,
-  useUserTokenLinkGetQuery
+  useUserTokenLinkGetQuery,
+  useLazyUserTokenLinkGetQuery
 } = api
 
 export { api }
