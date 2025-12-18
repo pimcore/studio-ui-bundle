@@ -55,12 +55,12 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
       addModal(
         modalId,
         <LoginTokenModal
-          isLoading={isLoading || isFetching}
-          onCancel={closeModal}
-          onClose={closeModal}
-          onOk={closeModal}
-          open={isOpen}
-          tokenUrl={data?.link ?? ''}
+          isLoading={ isLoading || isFetching }
+          onCancel={ closeModal }
+          onClose={ closeModal }
+          onOk={ closeModal }
+          open={ isOpen }
+          tokenUrl={ data?.link ?? '' }
         />
       )
     }
@@ -68,9 +68,9 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   return (
     <Button
-      loading={isLoading || isFetching}
-      disabled={disabled}
-      onClick={openModal}
+      disabled={ disabled }
+      loading={ isLoading || isFetching }
+      onClick={ openModal }
       type="default"
     >
       {t('user-management.admin.login')}
