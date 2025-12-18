@@ -27,7 +27,7 @@ export interface IMainNavItem {
   perspectivePermission?: string
   perspectivePermissionHide?: string
   onClick?: () => void
-  button?: () => React.JSX.Element
+  button?: (props: { closeMainNav: () => void }) => React.JSX.Element
   widgetConfig?: WidgetManagerTabConfig
   className?: string
   hidden?: () => boolean

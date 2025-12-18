@@ -27,7 +27,7 @@ moduleSystem.registerModule({
       order: 100,
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
-      button: () => React.createElement(OpenElement, { elementType: 'asset' })
+      button: (props) => React.createElement(OpenElement, { elementType: 'asset', ...props })
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -36,7 +36,7 @@ moduleSystem.registerModule({
       order: 200,
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
-      button: () => React.createElement(OpenElement, { elementType: 'data-object' })
+      button: (props) => React.createElement(OpenElement, { elementType: 'data-object', ...props })
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -46,7 +46,7 @@ moduleSystem.registerModule({
       order: 300,
       permission: UserPermission.Documents,
       perspectivePermission: NavPermission.OpenDocument,
-      button: () => React.createElement(OpenElement, { elementType: 'document' })
+      button: (props) => React.createElement(OpenElement, { elementType: 'document', ...props })
     })
   }
 })
