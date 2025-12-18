@@ -16,6 +16,7 @@ import React from 'react'
 
 interface OpenDocumentProp {
   elementType: ElementType
+  closeMainNav?: () => void
 }
 
 export const modalTexts = {
@@ -42,7 +43,7 @@ export const modalTexts = {
   }
 }
 
-export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Element => {
+export const OpenElement = ({ elementType, closeMainNav }: OpenDocumentProp): React.JSX.Element => {
   const { openElementByPathOrId } = openElementHelper()
   const { t } = useTranslation()
   const { input } = useFormModal()
@@ -54,7 +55,8 @@ export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Elemen
   }
 
   const texts = modalTexts[elementType]
-  const handleClick = (): void => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.stopPropagation()
     input({
       title: t(texts.title),
       label: t(texts.label),
@@ -66,6 +68,7 @@ export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Elemen
       cancelText: t(texts.cancelText),
       onOk: async (value: string) => {
         await openElementByPathOrId(value, elementType)
+        closeMainNav?.()
       }
     })
   }

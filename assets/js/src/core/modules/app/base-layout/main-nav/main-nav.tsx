@@ -101,7 +101,7 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
             <div onClick={ () => { setIsOpen(false) } }>
-              {item.button()}
+              {item.button({ closeMainNav: () => { setIsOpen(false) } })}
               {!isUndefined(item.dividerBottom) && item.dividerBottom && (
                 <Divider
                   className={ 'main-nav__list-item-divider' }
