@@ -8,16 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { currentDomain } from '@Pimcore/app/config/app-config'
 import { routes } from '@Pimcore/app/router/router'
 import { Button } from '@Pimcore/components/button/button'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
-import { useUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useLazyUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router-dom'
 import { LoginTokenModal } from './login-token-modal'
-import { currentDomain } from '@Pimcore/app/config/app-config'
 
 interface LoginTokenModalContainerProps {
   disabled?: boolean
@@ -29,23 +29,23 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
   const { addModal, removeModal } = useModalHolder()
   const modalId = 'login-as-different-user-modal'
   const { id } = useUserManagementContext()
-  const { data, isLoading, refetch } = useUserTokenLinkGetQuery({
-    id,
-    tokenLink: {
-      tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
-    }
-  })
+  const [trigger, { data, isLoading, isFetching }] = useLazyUserTokenLinkGetQuery()
 
   const closeModal = (): void => {
     if (isOpen) {
       setIsOpen(false)
       removeModal(modalId)
-      void refetch()
     }
   }
 
-  const openModal = (): void => {
+  const openModal = async (): Promise<void> => {
     if (!isOpen) {
+      await trigger({
+        id,
+        tokenLink: {
+          tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
+        }
+      })
       setIsOpen(true)
     }
   }
@@ -55,7 +55,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
       addModal(
         modalId,
         <LoginTokenModal
-          isLoading={ isLoading }
+          isLoading={ isLoading || isFetching }
           onCancel={ closeModal }
           onClose={ closeModal }
           onOk={ closeModal }
@@ -69,6 +69,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
   return (
     <Button
       disabled={ disabled }
+      loading={ isLoading || isFetching }
       onClick={ openModal }
       type="default"
     >
