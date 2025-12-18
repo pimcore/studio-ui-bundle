@@ -77,11 +77,11 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
 
   const renderDropdownLabel = (translationKey: string, isShowIcon = true): React.JSX.Element => (
     <Flex
-      align={'center'}
-      className={styles.dropdownLabel}
+      align={ 'center' }
+      className={ styles.dropdownLabel }
       gap="extra-small"
     >
-      {isShowIcon && <Icon value={'export'} />}
+      {isShowIcon && <Icon value={ 'export' } />}
       {t(translationKey)}
     </Flex>
   )
@@ -100,25 +100,25 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
         justify="space-between"
         theme="secondary"
       >
-        <Dropdown menu={{ items: dropdownItems }}>
+        <Dropdown menu={ { items: dropdownItems } }>
           <DropdownButton>
             {renderDropdownLabel('reports.export', false)}
           </DropdownButton>
         </Dropdown>
         <Pagination
-          page={page}
-          pageSize={pageSize}
-          setPage={setPage}
-          setPageSize={setPageSize}
-          totalItems={totalItems}
+          page={ page }
+          pageSize={ pageSize }
+          setPage={ setPage }
+          setPageSize={ setPageSize }
+          totalItems={ totalItems }
         />
       </Toolbar>
 
       <Modal
-        onCancel={() => { setIsModalOpen(false) }}
-        onOk={handleExportCSV}
-        open={isModalOpen}
-        title={t('reports.csv-export-modal.title')}
+        onCancel={ () => { setIsModalOpen(false) } }
+        onOk={ handleExportCSV }
+        open={ isModalOpen }
+        title={ t('reports.csv-export-modal.title') }
       >
         <Flex
           gap="small"
@@ -126,23 +126,23 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
         >
           <div>
             <Checkbox
-              checked={includeHeaders}
-              onChange={(e) => { setIncludeHeaders(e.target.checked) }}
+              checked={ includeHeaders }
+              onChange={ (e) => { setIncludeHeaders(e.target.checked) } }
             >
               {t('reports.csv-export-modal.include-headers')}
             </Checkbox>
           </div>
 
           <div>
-            <div style={{ marginBottom: '8px' }}>
+            <div style={ { marginBottom: '8px' } }>
               <strong>{t('reports.csv-export-modal.delimiter-label')}:</strong>
             </div>
             <Input
-              maxLength={1}
-              onChange={(e) => { setDelimiter(e.target.value) }}
-              placeholder={t('reports.csv-export-modal.delimiter-placeholder')}
-              style={{ width: '100%' }}
-              value={delimiter}
+              maxLength={ 1 }
+              onChange={ (e) => { setDelimiter(e.target.value) } }
+              placeholder={ t('reports.csv-export-modal.delimiter-placeholder') }
+              style={ { width: '100%' } }
+              value={ delimiter }
             />
           </div>
         </Flex>
