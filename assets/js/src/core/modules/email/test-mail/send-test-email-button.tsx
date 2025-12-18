@@ -8,20 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
 import { useSendTestEmailContext } from './provider/use-send-test-email-context'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
-export const SendTestEmailButton = (): React.JSX.Element => {
-  const { t } = useTranslation()
+export const SEND_TEST_EMAIL_BUTTON_ID = 'send-test-email-button'
+
+export const SendTestEmailButton = (): null => {
   const { setIsOpen } = useSendTestEmailContext()
+  const { closeWidget } = useWidgetManager()
 
-  return (
-    <button
-      className="main-nav__list-btn"
-      onClick={ () => { setIsOpen(true) } }
-    >
-      {t('navigation.test-email')}
-    </button>
-  )
+  useEffect(() => {
+    setIsOpen(true)
+    closeWidget(SEND_TEST_EMAIL_BUTTON_ID)
+  }, [])
+
+  return null
 }

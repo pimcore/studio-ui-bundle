@@ -14,11 +14,10 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { EmailBlocklistContainer } from './blocklist/email-blocklist-container'
 import { EmailLogContainer } from './log/email-log-container'
+import { SEND_TEST_EMAIL_BUTTON_ID, SendTestEmailButton } from '@Pimcore/modules/email/test-mail/send-test-email-button'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import React from 'react'
-import { SendTestEmailButton } from './test-mail/send-test-email-button'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -32,6 +31,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'email-log',
       component: EmailLogContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'send-test-email-button',
+      component: SendTestEmailButton
     })
 
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
@@ -93,7 +97,18 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
-      button: () => React.createElement(SendTestEmailButton)
+      widgetConfig: {
+        name: 'SendTestEmailButton',
+        id: SEND_TEST_EMAIL_BUTTON_ID,
+        component: 'send-test-email-button',
+        config: {
+          translationKey: 'navigation.test-email',
+          icon: {
+            type: 'name',
+            value: 'mail-02'
+          }
+        }
+      }
     })
   }
 })
