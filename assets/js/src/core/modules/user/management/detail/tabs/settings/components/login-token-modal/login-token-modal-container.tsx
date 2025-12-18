@@ -29,7 +29,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
   const { addModal, removeModal } = useModalHolder()
   const modalId = 'login-as-different-user-modal'
   const { id } = useUserManagementContext()
-  const { data, isLoading, refetch } = useUserTokenLinkGetQuery({
+  const { data, isLoading, refetch, isFetching } = useUserTokenLinkGetQuery({
     id,
     tokenLink: {
       tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
@@ -40,12 +40,12 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
     if (isOpen) {
       setIsOpen(false)
       removeModal(modalId)
-      void refetch()
     }
   }
 
   const openModal = (): void => {
     if (!isOpen) {
+      void refetch()
       setIsOpen(true)
     }
   }
@@ -55,7 +55,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
       addModal(
         modalId,
         <LoginTokenModal
-          isLoading={ isLoading }
+          isLoading={ isLoading || isFetching }
           onCancel={ closeModal }
           onClose={ closeModal }
           onOk={ closeModal }
