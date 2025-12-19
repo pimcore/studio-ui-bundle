@@ -200,4 +200,4 @@ export * from '@Pimcore/components/creatable-select/creatable-select'
 
 export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
-export { type InputRef } from 'antd'
+export { type InputRef } from 'antd/es/input'
