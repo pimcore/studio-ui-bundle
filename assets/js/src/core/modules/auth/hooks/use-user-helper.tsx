@@ -47,7 +47,7 @@ export const useUserHelper = (): UseUserReturn => {
     }
   }
 
-  async function updateUserProfile (user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
+  async function updateUserProfile(user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
     if (user.modifiedCells !== undefined) {
       const mergedKeyBindings = Array.from(([...(user.keyBindings ?? []), ...(user.modifiedCells.keyBindings ?? [])].reduce(
         (map, item: KeyBindingForAUser) => map.set(item.action, item), new Map<string, KeyBindingForAUser>()) as Map<string, KeyBindingForAUser>
@@ -88,6 +88,8 @@ export const useUserHelper = (): UseUserReturn => {
       }))
 
       handleNotification(t('user-management.save-user.password.success'), passwordError)
+      dispatch(userProfileUpdated(data))
+      return data
     }
 
     handleNotification(t('user-management.save-user.success'), error)
@@ -96,7 +98,7 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getUserImageById (id: number): Promise<string | undefined> {
+  async function getUserImageById(id: number): Promise<string | undefined> {
     const result = await dispatch(api.endpoints.userGetImage.initiate({ id }))
 
     const blobResponse = result.data as IBlobResponse | undefined
@@ -104,7 +106,7 @@ export const useUserHelper = (): UseUserReturn => {
     return blobResponse?.data
   }
 
-  function updateUserImageInState (image: string, hasImage: boolean): void {
+  function updateUserImageInState(image: string, hasImage: boolean): void {
     dispatch(userProfileImageUpdated({ data: { image, hasImage } }))
   }
 
