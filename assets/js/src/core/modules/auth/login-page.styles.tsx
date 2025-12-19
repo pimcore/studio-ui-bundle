@@ -15,7 +15,6 @@ export const useStyle = createStyles(({ token, css }) => {
     loginPage: css`
       display: flex;
       align-items: center;
-      background: url(/bundles/pimcorestudioui/img/login-bg.png) lightgray 50% / cover no-repeat;
       position: absolute;
       inset: 0;
       overflow: hidden;

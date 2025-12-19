@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
@@ -17,6 +16,7 @@ import { useHandleDeepLink } from './hook/use-handle-deeplink'
 import { SlotRenderer } from './component-registry/slot-renderer'
 import { SessionPinger } from './app-loader/loader/session/session-pinger'
 import { WidgetRestorer } from '../widget-manager/components/widget-restorer'
+import { PageTransition } from '@Pimcore/components/page-transition/page-transition'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
@@ -26,22 +26,26 @@ export const DefaultPage = (): React.JSX.Element => {
   }
 
   return (
-    <div
-      onDragOver={ preventDrop }
-      onDrop={ preventDrop }
+    <PageTransition
+      style={{ height: '100%', width: '100%' }}
     >
-      <WidgetRestorer>
-        <Background />
-        <ClassDefinitionsProvider>
-          <ElementSelectorProvider>
-            <BaseLayoutView />
-          </ElementSelectorProvider>
-        </ClassDefinitionsProvider>
+      <div
+        onDragOver={ preventDrop }
+        onDrop={ preventDrop }
+        style={{ height: '100%', width: '100%' }}
+      >
+        <WidgetRestorer>
+          <ClassDefinitionsProvider>
+            <ElementSelectorProvider>
+              <BaseLayoutView />
+            </ElementSelectorProvider>
+          </ClassDefinitionsProvider>
 
-        <SlotRenderer slot="global.feedback" />
-        <div id="global-overlay-container" />
-        <SessionPinger />
-      </WidgetRestorer>
-    </div>
+          <SlotRenderer slot="global.feedback" />
+          <div id="global-overlay-container" />
+          <SessionPinger />
+        </WidgetRestorer>
+      </div>
+    </PageTransition>
   )
 }

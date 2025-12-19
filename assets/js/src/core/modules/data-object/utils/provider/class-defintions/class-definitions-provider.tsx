@@ -102,7 +102,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   return useMemo(() => {
     if (transformedQueryResult.isLoading) {
       return (
-        <Content loading />
+        <></>
       )
     }
 

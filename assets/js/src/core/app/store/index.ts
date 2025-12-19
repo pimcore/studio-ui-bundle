@@ -12,6 +12,7 @@ import { type Reducer, combineSlices, configureStore, type CombinedSliceReducer,
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { api as pimcoreApi } from '@sdk/api'
 import { rtkQueryErrorLogger } from './middleware/rtkQueryErrorLogger'
+import { uiSlice } from '@Pimcore/modules/app/ui-slice'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LazyloadedSlices { };
@@ -24,7 +25,8 @@ interface SliceLike<ReducerPath extends string, State> {
 type AnySliceLike = SliceLike<string, any>
 
 const slices: AnySliceLike[] = [
-  pimcoreApi
+  pimcoreApi,
+  uiSlice
 ]
 
 const createRootReducer = (): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {

@@ -64,7 +64,7 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
   }, [user.id])
 
   if (isLoading) {
-    return <Content loading />
+    return <></>
   }
 
   return <>{children}</>

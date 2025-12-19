@@ -17,7 +17,7 @@ export const useStyle = createStyles(({ token, css }) => {
       inset: 0;
       background: #FFF;
       overflow: hidden; 
-      opacity: 0.3;
+      z-index: -1;
 
       .background-figure {
         position: absolute;
@@ -30,7 +30,7 @@ export const useStyle = createStyles(({ token, css }) => {
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1324px);
-          background: rgba(55, 217, 243, 0.20);
+          background: rgba(55, 217, 243, 0.60);
           filter: blur(310px);
         }
 
@@ -52,7 +52,7 @@ export const useStyle = createStyles(({ token, css }) => {
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: rgba(122, 58, 212, 0.42);
+          background: rgba(122, 58, 212, 0.80);
           filter: blur(310px);
         }
       }

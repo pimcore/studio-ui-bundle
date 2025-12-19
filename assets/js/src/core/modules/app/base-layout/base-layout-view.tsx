@@ -14,13 +14,28 @@ import { WidgetManagerContainer } from '@Pimcore/modules/widget-manager/widget-m
 import { RightSidebarView } from './right-sidebar-view'
 import { useStlyes } from './base-layout-view.styles'
 import { Notification as ExecutionEngineNotification } from '@Pimcore/modules/execution-engine/notification/notification'
+import { motion } from 'framer-motion'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setBackgroundAnimationEnabled } from '../ui-slice'
 
 export const BaseLayoutView = (): React.JSX.Element => {
   const { styles } = useStlyes()
+  const dispatch = useAppDispatch()
+
+  React.useEffect(() => {
+    dispatch(setBackgroundAnimationEnabled(false))
+
+    return () => {
+      dispatch(setBackgroundAnimationEnabled(true))
+    }
+  }, [])
 
   return (
-    <div
+    <motion.div
       className={ ['base-layout', styles.baseLayout].join(' ') }
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
       <LeftSidebarView />
 
@@ -28,6 +43,6 @@ export const BaseLayoutView = (): React.JSX.Element => {
       <ExecutionEngineNotification />
 
       <RightSidebarView />
-    </div>
+    </motion.div>
   )
 }

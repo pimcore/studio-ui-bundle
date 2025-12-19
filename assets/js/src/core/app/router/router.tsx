@@ -16,6 +16,8 @@ import React from 'react'
 import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 import { appConfig } from '../config/app-config'
 import { PasswordReset } from '@Pimcore/components/password-reset/password-reset'
+import { GlobalLayout } from '@Pimcore/modules/app/global-layout'
+import { AppLoader } from '@Pimcore/modules/app/app-loader/app-loader'
 
 export const baseUrl = appConfig.baseUrl.endsWith('/')
   ? appConfig.baseUrl.slice(0, -1) + '/'
@@ -51,23 +53,28 @@ const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): Reac
 
 export const router = createBrowserRouter([
   {
-    path: routes.root,
-    element: <AuthenticatedRoute>
-      <DefaultPage />
-    </AuthenticatedRoute>
-  },
-  {
-    path: routes.login,
-    element: <LoginPage />
-  },
-  {
-    path: routes.deeplinkAsset,
-    element: <AuthenticatedRoute>
-      <DeepLink />
-    </AuthenticatedRoute>
-  },
-  {
-    path: routes.passwordReset,
-    element: <PasswordReset />
+    element: <AppLoader><GlobalLayout /></AppLoader>,
+    children: [
+      {
+        path: routes.root,
+        element: <AuthenticatedRoute>
+          <DefaultPage />
+        </AuthenticatedRoute>
+      },
+      {
+        path: routes.login,
+        element: <LoginPage />
+      },
+      {
+        path: routes.deeplinkAsset,
+        element: <AuthenticatedRoute>
+          <DeepLink />
+        </AuthenticatedRoute>
+      },
+      {
+        path: routes.passwordReset,
+        element: <PasswordReset />
+      }
+    ]
   }
 ])

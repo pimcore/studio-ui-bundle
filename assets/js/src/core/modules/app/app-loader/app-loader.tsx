@@ -27,6 +27,7 @@ import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
+import { useLocation } from 'react-router-dom'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -34,6 +35,9 @@ export interface IAppLoaderProps {
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(true)
+  const [arePublicTranslationsLoaded, setArePublicTranslationsLoaded] = useState(false)
+  const location = useLocation()
+  const isLoginPage = location.pathname.includes('/login')
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
@@ -71,6 +75,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         await Promise.all([
           loadPublicTranslations()
         ]).then(() => {
+          setArePublicTranslationsLoaded(true)
           setIsLoading(() => false)
         }).catch((error) => {
           console.error('Error during login preparation', error)
@@ -102,8 +107,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     <>
       <GlobalStyles />
 
-      {isLoading && <Content loading />}
-      {!isLoading && props.children}
+      {(!isLoading || (isLoginPage && arePublicTranslationsLoaded)) && props.children}
     </>
   )
 }

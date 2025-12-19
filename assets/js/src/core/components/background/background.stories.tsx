@@ -23,3 +23,9 @@ const config: Meta = {
 export default config
 
 export const _default = {}
+
+export const Loading = {
+  args: {
+    loading: true
+  }
+}

@@ -13,30 +13,40 @@ import { GlobalProvider } from './global-provider'
 import { App as AntApp } from 'antd'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '@Pimcore/app/router/router'
-import { AppLoader } from '@Pimcore/modules/app/app-loader/app-loader'
 import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
+import { Background } from '@Pimcore/components/background/background'
+import { useAppSelector } from '@Pimcore/app/store'
+
+const AppContent = (): React.JSX.Element => {
+  const isEnabled = useAppSelector((state) => state.ui?.isBackgroundAnimationEnabled ?? true)
+
+  return (
+    <>
+      <Background loading={isEnabled} />
+      <AntApp>
+        <TreeCopyPasteProvider>
+          <ModalsProvider>
+            { <ApiGateway /> }
+            <DateTimeConfig>
+              <RouterProvider router={ router } />
+            </DateTimeConfig>
+          </ModalsProvider>
+        </TreeCopyPasteProvider>
+      </AntApp>
+    </>
+  )
+}
 
 export const AppView = (): React.JSX.Element => {
   return (
     <StrictMode>
       <ErrorBoundary>
         <GlobalProvider>
-          <AntApp>
-            <TreeCopyPasteProvider>
-              <ModalsProvider>
-                { <ApiGateway /> }
-                <DateTimeConfig>
-                  <AppLoader>
-                    <RouterProvider router={ router } />
-                  </AppLoader>
-                </DateTimeConfig>
-              </ModalsProvider>
-            </TreeCopyPasteProvider>
-          </AntApp>
+          <AppContent />
         </GlobalProvider>
       </ErrorBoundary>
     </StrictMode>
