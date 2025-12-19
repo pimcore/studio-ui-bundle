@@ -199,3 +199,5 @@ export * from '@Pimcore/components/data-object-preview/data-object-preview'
 export * from '@Pimcore/components/creatable-select/creatable-select'
 
 export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+
+export * from 'antd/es/input'
