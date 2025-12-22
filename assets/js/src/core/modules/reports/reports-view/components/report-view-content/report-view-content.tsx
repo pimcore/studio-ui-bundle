@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import type { DefaultOptionType } from 'antd/es/select'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
@@ -25,6 +25,12 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import type { ISourceDefinition } from '@Pimcore/modules/reports/reports-editor/types'
+import { container } from '@Pimcore/app/depency-injection'
+import type {
+  DynamicTypeCustomReportDefinitionRegistry
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 interface IReportViewContentProps {
   currentReport: string | null
@@ -39,6 +45,21 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const isLoadingReportsData = isLoading || isFetching
+
+  const currentSourceDefinition = (reportDetailData?.dataSourceConfig as ISourceDefinition)?.type
+
+  const isEmptySourceDefinitionConfig = isUndefined(currentSourceDefinition)
+
+  const sourceDefinitionService = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/CustomReportDefinitionRegistry'])
+  const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
+
+  const showPagination = useMemo(() => {
+    if (isNull(currentReport)) {
+      return false
+    }
+
+    return currentAdapter?.getPagination() ?? false
+  }, [currentReport, currentAdapter])
 
   const renderMainContent = (): React.JSX.Element => (
     <Content
@@ -80,6 +101,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
           pageSize={ pageSize }
           setPage={ setPage }
           setPageSize={ setPageSize }
+          showPagination={ showPagination }
           totalItems={ chartDetailData?.totalItems ?? 0 }
         />
       ) }
