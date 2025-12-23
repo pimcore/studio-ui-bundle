@@ -53,6 +53,11 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-tag {
         background-color: ${token.Colors.Neutral.Fill.colorFillTertiary};
       }
+    `,
+
+    chartSelect: css`
+      width: 100%;
+      max-width: 100% !important;
     `
   }
 })
