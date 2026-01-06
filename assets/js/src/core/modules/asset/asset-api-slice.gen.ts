@@ -514,13 +514,13 @@ export type AssetDocumentStreamCustomApiArg = {
     dpi?: number;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDocumentStreamDynamicApiResponse =
     /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
@@ -554,13 +554,13 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -764,13 +764,13 @@ export type AssetImageStreamCustomApiArg = {
     forceResize?: boolean;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetImageStreamDynamicApiResponse =
     /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
@@ -814,13 +814,13 @@ export type AssetImageStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
     /** Mime type of steamed image. */
     mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };

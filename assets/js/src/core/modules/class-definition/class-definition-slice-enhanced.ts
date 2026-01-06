@@ -42,7 +42,9 @@ export const {
   usePimcoreStudioApiClassCustomLayoutImportMutation,
   useClassFieldCollectionObjectLayoutQuery,
   useClassDefinitionGetQuery,
-  useClassObjectBrickObjectLayoutQuery
+  useClassObjectBrickObjectLayoutQuery,
+  useClassDefinitionGetIdentifierDataQuery,
+  useClassDefinitionCreateMutation
 } = api
 
 export { api }

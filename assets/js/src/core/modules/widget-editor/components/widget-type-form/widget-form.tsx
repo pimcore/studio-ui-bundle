@@ -63,7 +63,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
       } }
     >
       <Flex
-        className='makeTabsGreatAgain'
+        className='absolute-stretch'
         justify='space-between'
         vertical
       >

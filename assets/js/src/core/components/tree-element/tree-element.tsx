@@ -17,16 +17,17 @@ import { useStyles } from './tree-element.styles'
 
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
+  meta?: Record<string, any>
   allowDrop?: boolean
   allowDrag?: boolean
 }
 
-interface ITreeElementProps extends TreeProps {
+export interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  onActionsClick?: (key: string, action: string) => void
+  onActionsClick?: (key: string, action: string, node: TreeDataItem) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
-  onSelected?: (key: any) => void
+  onSelected?: (key: any, node: TreeDataItem) => void
   onLoadData?: (node: any) => Promise<any>
   onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
@@ -112,10 +113,10 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       titleRender={ (node) => (
         <TreeElementItem
           actions={ node.actions }
-          onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action) }
+          onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action, node) }
           onSelected={ () => {
             setSelectedKeys([node.key])
-            onSelected?.(node.key)
+            onSelected?.(node.key, node)
           } }
           title={ node.title as string }
         />
