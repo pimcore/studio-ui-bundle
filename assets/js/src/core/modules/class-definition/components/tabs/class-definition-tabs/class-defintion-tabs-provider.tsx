@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react"
 
-export interface ClassDefinition {
+export interface ClassDefinitionPartial {
   id: string
   name: string
   group?: string
@@ -11,11 +11,11 @@ export interface ClassDefinition {
 }
 
 export interface IClassDefinitionTabsContext {
-  classDefinitions: Array<ClassDefinition>
-  activeClassDefinition: ClassDefinition | undefined
-  closeClassDefinition: (classDef: ClassDefinition) => void
-  openClassDefinition: (classDef: ClassDefinition) => void
-  setActiveClassDefinition: (classDef: ClassDefinition) => void
+  classDefinitions: Array<ClassDefinitionPartial>
+  activeClassDefinition: ClassDefinitionPartial | undefined
+  closeClassDefinition: (classDef: ClassDefinitionPartial) => void
+  openClassDefinition: (classDef: ClassDefinitionPartial) => void
+  setActiveClassDefinition: (classDef: ClassDefinitionPartial) => void
   closeActiveClassDefinition: () => void
 }
 
@@ -26,8 +26,8 @@ export interface ClassDefinitionsProviderProps {
 }
 
 export const ClassDefinitionsTabsProvider = (props: ClassDefinitionsProviderProps): React.JSX.Element => {
-  const [classDefinitions, setClassDefinitions] = useState<Array<ClassDefinition>>([]);
-  const [activeClassDefinition, setActiveClassDefinitionInternal] = useState<ClassDefinition | undefined>(undefined);
+  const [classDefinitions, setClassDefinitions] = useState<Array<ClassDefinitionPartial>>([]);
+  const [activeClassDefinition, setActiveClassDefinitionInternal] = useState<ClassDefinitionPartial | undefined>(undefined);
 
   const closeActiveClassDefinition = () => {
     if (activeClassDefinition === undefined) {
@@ -48,7 +48,7 @@ export const ClassDefinitionsTabsProvider = (props: ClassDefinitionsProviderProp
     setActiveClassDefinitionInternal(undefined);
   }
 
-  const setActiveClassDefinition = (classDef: ClassDefinition) => {
+  const setActiveClassDefinition = (classDef: ClassDefinitionPartial) => {
     if (!classDefinitions.find((cd) => cd.id === classDef.id)) {
       openClassDefinition(classDef);
       return;
@@ -57,7 +57,7 @@ export const ClassDefinitionsTabsProvider = (props: ClassDefinitionsProviderProp
     setActiveClassDefinitionInternal(classDef);
   }
 
-  const openClassDefinition = (classDef: ClassDefinition) => {
+  const openClassDefinition = (classDef: ClassDefinitionPartial) => {
     setClassDefinitions((prevClassDefs) => {
       if (prevClassDefs.find((cd) => cd.id === classDef.id)) {
         return prevClassDefs;
@@ -69,7 +69,7 @@ export const ClassDefinitionsTabsProvider = (props: ClassDefinitionsProviderProp
     setActiveClassDefinitionInternal(classDef);
   };
 
-  const closeClassDefinition = (classDef: ClassDefinition) => {
+  const closeClassDefinition = (classDef: ClassDefinitionPartial) => {
     if (activeClassDefinition?.id === classDef.id) {
       closeActiveClassDefinition();
     }

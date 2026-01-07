@@ -1,3 +1,4 @@
+import { useClassDefinitionTabs } from "@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider"
 import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from "@sdk/api/class-definition"
 import { Content, Form, Input, Modal } from "@sdk/components"
 import { ApiError, trackError } from "@sdk/modules/app"
@@ -13,6 +14,7 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
   const [form] = useForm()
   const { data, isLoading, error, refetch } = useClassDefinitionGetIdentifierDataQuery();
   const [createClassDefinition] = useClassDefinitionCreateMutation();
+  const { openClassDefinition } = useClassDefinitionTabs();
 
   useEffect(() => {
     if (props.open) {
@@ -38,8 +40,15 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
         name: values.className,
         uid: values.uniqueIdentifier
       }
-    }).then(() => {
+    }).then((data) => {
       props.onOpenChange?.(false);
+      openClassDefinition({
+        id: data.data!.id,
+        name: data.data!.name,
+        // @todo check schema with backend
+        group: data.data!.group,
+        icon: data.data!.icon,
+      });
     }).catch((err) => {
       trackError(new ApiError(err));
     });

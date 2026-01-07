@@ -44,7 +44,10 @@ export const {
   useClassDefinitionGetQuery,
   useClassObjectBrickObjectLayoutQuery,
   useClassDefinitionGetIdentifierDataQuery,
-  useClassDefinitionCreateMutation
+  useClassDefinitionCreateMutation,
+  useClassDefinitionGetLayoutByIdQuery,
+  useClassDefinitionGetTreeQuery,
+  useClassDefinitionGetByIdQuery
 } = api
 
 export { api }

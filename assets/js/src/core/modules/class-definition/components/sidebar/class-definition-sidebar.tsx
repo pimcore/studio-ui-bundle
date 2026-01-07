@@ -1,7 +1,7 @@
 import { useClassDefinitionCollectionQuery, useClassDefinitionDeleteMutation } from "@Pimcore/modules/class-definition/class-definition-slice.gen"
 import { ClassDefinitionModalNew } from "@Pimcore/modules/class-definition/components/sidebar/class-definition-modal-new";
 import { useClassDefinitionTabs } from "@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider";
-import { Content, ContentLayout, Dropdown, Icon, IconButton, IconTextButton, ITreeElementProps, SearchInput, Toolbar, TreeDataItem, TreeElement } from "@sdk/components"
+import { Content, ContentLayout, Icon, IconButton, IconTextButton, ITreeElementProps, SearchInput, Toolbar, TreeDataItem, TreeElement } from "@sdk/components"
 import { useDebounce } from "@sdk/utils";
 import { isNil } from "lodash";
 import React, { useMemo, useState } from "react"
@@ -12,7 +12,7 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
   const [ searchTerm, setSearchTerm ] = useState<string>("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300); 
   const [ showNewModal, setShowNewModal ] = useState<boolean>(false);
-  const { setActiveClassDefinition } = useClassDefinitionTabs();
+  const { setActiveClassDefinition, activeClassDefinition, closeClassDefinition } = useClassDefinitionTabs();
 
   const treeData: ITreeElementProps["treeData"] = useMemo(() => {
     if (data === undefined) {
@@ -37,7 +37,7 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
       if (isNil(groupName) || groupName === "") {
         formattedTreeData.push({
           title: classDef.name,
-          key: `class-${classDef.id}`,
+          key: `${classDef.id}`,
           icon: classDef.icon ? <Icon {...classDef.icon} /> : undefined,
           meta: { classDefinition: classDef },
           actions: [
@@ -59,7 +59,7 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
 
       groupMap[groupName].children!.push({
         title: classDef.name,
-        key: `class-${classDef.id}`,
+        key: `${classDef.id}`,
         icon: classDef.icon ? <Icon {...classDef.icon} /> : undefined,
         meta: { classDefinition: classDef },
         actions: [
@@ -88,6 +88,7 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
   }, [treeData, debouncedSearchTerm]);
 
   const deleteClassDefinition = (node: TreeDataItem) => {
+    closeClassDefinition(node.meta!.classDefinition);
     deleteClassDefinitionMutation({ id: node.meta!.classDefinition.id })
   };
 
@@ -131,6 +132,7 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
             <TreeElement 
               treeData={ treeData }
               defaultExpandedKeys={ expandedKeys }
+              selectedKeys={activeClassDefinition ? [activeClassDefinition.id] : undefined}
               onSelected={(key, node) => {
                 setActiveClassDefinition(node.meta!.classDefinition);
               }} 
