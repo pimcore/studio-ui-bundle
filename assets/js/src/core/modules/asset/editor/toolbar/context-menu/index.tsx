@@ -13,7 +13,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import {
-  type AssetEditorContextMenuProps,
+  type AssetEditorContextMenuProps
 } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
