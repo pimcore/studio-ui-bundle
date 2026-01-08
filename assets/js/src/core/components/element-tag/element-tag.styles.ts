@@ -13,22 +13,35 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   const baseTag = css`
     max-width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
 
     &.ant-tag {
+      display: flex;
       cursor: default;
+      
+      > .tag-content {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .ant-tag-close-icon {
+        flex: 0 0 auto;
+        margin-inline-start: 4px;
+      }
     }
   `
 
   return {
     tag: css`
       ${baseTag}
-      display: block;
     `,
     tagInline: css`
       ${baseTag}
-      display: inline-block;
+      
+      &.ant-tag {
+        display: inline-flex;
+      }
     `,
     tagClickable: css`
       &.ant-tag {

@@ -25,7 +25,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useSave } from '@Pimcore/modules/document/actions/save/use-save'
-import { isNull, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { uuid } from '@Pimcore/utils/uuid'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
@@ -35,6 +35,8 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useDocumentPageSnippetChangeMainDocumentMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation'
+import { Button } from '@sdk/components'
 
 interface ContentSettingsFormProps {
   documentId: number
@@ -265,39 +267,40 @@ export const ContentSettingsForm = ({
       )}
 
       {(!isUndefined(allowedContentMainDocumentTypes) || document?.type === 'page' || document?.type === 'snippet') && (
-        <Form.Item
-          label={
-            <SidebarHeadline
-              asFormLabel
-              withBorder
-            >
-              {t('content-main-document')}
-            </SidebarHeadline>
-            }
-          name="contentMainDocument"
-        >
-          <ManyToOneRelation
-            additionalButtons={ (value) =>
-              !isNull(value) && !isUndefined(value)
+        <>
+          <Form.Item
+            label={
+              <SidebarHeadline
+                asFormLabel
+                withBorder
+              >
+                {t('content-main-document')}
+              </SidebarHeadline>
+              }
+            name="contentMainDocument"
+          >
+            <ManyToOneRelationInput
+          
+              allowedDocumentTypes={ allowedContentMainDocumentTypes ?? ['page', 'snippet'] }
+              disabled={ !canEdit }
+              documentsAllowed
+              enableSearch
+              allowElementTagClose
+            />
+          </Form.Item>
+
+          {!isNil(document?.settingsData?.contentMainDocumentPath)
                 ? (
-                  <IconTextButton
-                    icon={ { value: 'checkmark' } }
+                  <Button
                     loading={ isApplyingMainDocument }
                     onClick={ handleApplyMainDocument }
                     type="default"
                   >
-                    {t('apply')}
-                  </IconTextButton>
+                    {t('content-main-document.apply')}
+                  </Button>
                   )
-                : null
-            }
-            allowToClearRelation
-            allowedDocumentTypes={ allowedContentMainDocumentTypes ?? ['page', 'snippet'] }
-            disabled={ !canEdit }
-            documentsAllowed
-            vertical
-          />
-        </Form.Item>
+                : null}
+                </>
       )}
     </FormKit>
   )

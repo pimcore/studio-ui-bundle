@@ -29,11 +29,34 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     droppableWrapper: css`
+      display: flex;
       flex: 1;
       overflow: hidden;
+ 
+      > * {
+        width: 100%;
+      }
       
       .ant-input-prefix {
         width: 100%;
+      }
+
+      .ant-input-group {
+        display: flex;
+        width: 100%;
+      }
+
+      .ant-input-group > .ant-input-affix-wrapper {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+      }
+
+      .ant-input-group > .ant-input-group-addon {
+        display: flex;
+        flex: 0 0 auto;
+        width: auto;
       }
     `
   }

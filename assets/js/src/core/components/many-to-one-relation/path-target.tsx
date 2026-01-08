@@ -28,7 +28,7 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './path-target.styles'
 
 export interface PathTargetProps {
-  value: ManyToOneRelationValueType
+  value?: ManyToOneRelationValueType
   disabled?: boolean
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
@@ -36,12 +36,14 @@ export interface PathTargetProps {
   combinedFieldName?: string
   pathFormatterClass?: string
   onSearch?: () => void
+  allowElementTagClose?: boolean
 }
 
 export const PathTarget = forwardRef(function PathTarget (
   props: PathTargetProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
+  console.log('PathTarget render', props.value)
   const { t } = useTranslation()
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { isDragActive, isOver, isValid } = useDroppable()
@@ -120,6 +122,10 @@ export const PathTarget = forwardRef(function PathTarget (
           id={ value.id }
           path={ elementTagPath }
           published={ value.isPublished ?? undefined }
+          onClose={ props.allowElementTagClose ? () => {
+              setValue(null)
+              props.onChange?.(null)
+            } : undefined }
         />
       )
     }
@@ -159,6 +165,7 @@ export const PathTarget = forwardRef(function PathTarget (
                   } }
                   path={ elementTagPath }
                   published={ value.isPublished ?? undefined }
+                  inline
                 />
               }
               readOnly
