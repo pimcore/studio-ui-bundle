@@ -47,7 +47,7 @@ export const SIZING_VALUES: readonly Sizings[] = [
   'maxi'
 ] as const
 
-const getTokenValue = (
+export const getTokenValue = (
   token: GlobalToken | FullToken,
   size: Sizings,
   type: 'margin' | 'padding'

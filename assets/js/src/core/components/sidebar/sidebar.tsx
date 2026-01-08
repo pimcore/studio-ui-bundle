@@ -16,6 +16,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { SidebarContext } from './sidebar-provider'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
+import { ContentConfigProvider } from '../content/content-config-provider'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -66,84 +67,86 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   }
 
   return (
-    <div className={ styles.sidebar }>
-      <div className={ 'sidebar__navigation' }>
-        <div
-          className={ 'sidebar__navigation__tabs' }
-          role={ 'tablist' }
-        >
-          {
-            preparedEntries.map((entry, index) => {
-              return (
-                <Tooltip
-                  key={ entry.key }
-                  placement="left"
-                  title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
-                >
-                  <div
-                    aria-controls={ entry.key }
-                    aria-selected={ entry.key === activeTab }
-                    className={ [
-                      'entry',
-                      entry.key === activeTab ? 'sidebar--active' : '',
-                      highlights.includes(entry.key) ? 'entry--highlighted' : ''
-                    ].join(' ') }
-                    onClick={ () => {
-                      handleSidebarClick(entry.key)
-                    } }
-                    onKeyDown={ () => {
-                      handleSidebarClick(entry.key)
-                    } }
-                    role={ 'tab' }
-                    tabIndex={ index }
+    <ContentConfigProvider gap="extra-small">
+      <div className={ styles.sidebar }>
+        <div className={ 'sidebar__navigation' }>
+          <div
+            className={ 'sidebar__navigation__tabs' }
+            role={ 'tablist' }
+          >
+            {
+              preparedEntries.map((entry, index) => {
+                return (
+                  <Tooltip
+                    key={ entry.key }
+                    placement="left"
+                    title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                   >
-                    {entry.icon}
-                  </div>
-                </Tooltip>
-              )
-            })
-          }
+                    <div
+                      aria-controls={ entry.key }
+                      aria-selected={ entry.key === activeTab }
+                      className={ [
+                        'entry',
+                        entry.key === activeTab ? 'sidebar--active' : '',
+                        highlights.includes(entry.key) ? 'entry--highlighted' : ''
+                      ].join(' ') }
+                      onClick={ () => {
+                        handleSidebarClick(entry.key)
+                      } }
+                      onKeyDown={ () => {
+                        handleSidebarClick(entry.key)
+                      } }
+                      role={ 'tab' }
+                      tabIndex={ index }
+                    >
+                      {entry.icon}
+                    </div>
+                  </Tooltip>
+                )
+              })
+            }
+          </div>
+          <div className={ 'sidebar__navigation__buttons' }>
+            {
+              preparedButtons.map((button, index) => {
+                const { component, key, ...props } = button
+
+                if (!isValidElement(component)) {
+                  trackError(new GeneralError('SidebarButton must be a valid react component'))
+                }
+
+                const SidebarButton = component.type
+                const sidebarButtonProps = component.props
+
+                return (
+                  <SidebarButton
+                    key={ key }
+                    { ...props }
+                    { ...sidebarButtonProps }
+                  />
+                )
+              })
+            }
+          </div>
         </div>
-        <div className={ 'sidebar__navigation__buttons' }>
-          {
-            preparedButtons.map((button, index) => {
-              const { component, key, ...props } = button
 
-              if (!isValidElement(component)) {
-                trackError(new GeneralError('SidebarButton must be a valid react component'))
-              }
-
-              const SidebarButton = component.type
-              const sidebarButtonProps = component.props
-
-              return (
-                <SidebarButton
-                  key={ key }
-                  { ...props }
-                  { ...sidebarButtonProps }
-                />
-              )
-            })
-          }
-        </div>
-      </div>
-
-      <div className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (activeTab !== '' ? 'expanded' : '') }>
-        {preparedEntries.map((entry, index) => {
-          return (
-            <div
-              aria-labelledby={ entry.key }
-              className={ 'tab ' + (entry.key === activeTab ? 'sidebar--active' : '') }
-              id={ entry.key }
-              key={ entry.key }
-              role="tabpanel"
-              tabIndex={ index }
-            >
-              {entry.component}
-            </div>
-          )
-        })}
-      </div>
+        <div className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (activeTab !== '' ? 'expanded' : '') }>
+          {preparedEntries.map((entry, index) => {
+            return (
+              <div
+                aria-labelledby={ entry.key }
+                className={ 'tab ' + (entry.key === activeTab ? 'sidebar--active' : '') }
+                id={ entry.key }
+                key={ entry.key }
+                role="tabpanel"
+                tabIndex={ index }
+              >
+                {entry.component}
+          </div>
+        )
+      })}
     </div>
+  </div>
+    </ContentConfigProvider>
   )
 }
