@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
@@ -87,7 +87,14 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
           if (existingConfigMap.has(name)) {
             finalConfig.push(existingConfigMap.get(name)!)
           } else {
-            finalConfig.push(createDefaultColumnConfig(name))
+            const defaultConfig = createDefaultColumnConfig(name)
+            const itemData = columnConfigData.items.find(item => item.name === name)
+
+            if (!isUndefined(itemData)) {
+              Object.assign(defaultConfig, itemData)
+            }
+
+            finalConfig.push(defaultConfig)
           }
         })
 
