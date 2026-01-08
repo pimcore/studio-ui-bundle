@@ -35,12 +35,14 @@ export const VersionObjectLocalizedFields = ({ children, className, value }: Obj
       size="small"
     >
       {children?.map((child, index) => {
-        const objectDataType = objectDataRegistry.getDynamicType(child?.fieldtype ?? '')
+        const objectDataType = objectDataRegistry.getDynamicType(child.fieldtype!)
 
-        return Object.entries(value?.[child?.name] as Record<string, any>).map(([locale, localizedValue]) => {
+        const fieldName = child?.name
+
+        return Object.entries(value?.[fieldName] as Record<string, any>).map(([locale, localizedValue]) => {
           const _props = {
             ...child,
-            name: child?.name,
+            name: fieldName,
             defaultFieldWidth: fieldWidth,
             className,
             title: locale,
