@@ -75,6 +75,7 @@ export const contextMenuConfig = {
     priority: {
       rename: 100,
       delete: 200,
+      uploadNewVersion: 250,
       download: 300,
       zipDownload: 400,
       clearImageThumbnail: 500,
