@@ -25,7 +25,9 @@ interface DataComponentFormItemProps {
 }
 
 const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName }: DataComponentFormItemProps) => {
-  const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
+  const form = Form.useFormInstance()
+  
+  const formItemProps = objectDataType.getObjectDataFormItemProps(_props, form, formFieldName)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
 
   return useMemo(() => (

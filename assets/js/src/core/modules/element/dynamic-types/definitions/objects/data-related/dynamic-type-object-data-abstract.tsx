@@ -104,7 +104,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return this.getObjectDataComponent({ ...props, noteditable: true })
   }
 
-  getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: AbstractObjectDataDefinition, form?: FormInstance, fieldName?: NamePath): FormItemProps {
     return {
       className: 'w-full',
       label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
