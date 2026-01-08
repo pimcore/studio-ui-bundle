@@ -24,8 +24,8 @@ export interface TreeAction {
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<TreeAction>
   meta?: Record<string, any>
-  allowDrop?: boolean | ((params: { dropNode: TreeDataItem, dropPosition: number }) => boolean)
-  allowDrag?: boolean
+  allowDrop?: boolean | ((params: { dropNode: TreeDataItem, dropPosition: number, dragNode: TreeDataItem }) => boolean)
+  allowDrag?: boolean | ((params: { node: TreeDataItem }) => boolean)
 }
 
 export interface ITreeElementProps extends TreeProps {
@@ -104,12 +104,12 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       {treeData.length > 0 && (
         <Tree
           { ...optionalProps }
-          allowDrop={ ({ dropNode, dropPosition }): boolean => {
+          allowDrop={ ({ dropNode, dropPosition, dragNode }): boolean => {
             if (typeof dropNode.allowDrop === 'boolean') {
               return dropNode.allowDrop && dropPosition === 0
             }
 
-            return dropNode.allowDrop ? dropNode.allowDrop({ dropNode, dropPosition }) : false
+            return dropNode.allowDrop ? dropNode.allowDrop({ dropNode, dropPosition, dragNode }) : false
           } }
           blockNode
           checkStrictly={ checkStrictly }
@@ -121,6 +121,12 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           loadData={ onLoadData !== null ? onLoadData : undefined }
           onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
           onDragStart={ (evt): void => {
+            if (typeof evt.node.allowDrag === 'function') {
+              if (evt.node.allowDrag({ node: evt.node as TreeDataItem }) === false) {
+                evt.event.preventDefault()
+              }
+            }
+
             if (evt.node.allowDrag === false) {
               evt.event.preventDefault()
             }

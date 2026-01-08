@@ -1,3 +1,4 @@
+import { FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
 import { DynamicTypeFieldDefinitionLayoutAbstract } from "@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/dynamic-type-field-defintion-layout-abstract";
 
 export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionLayoutAbstract {
@@ -7,7 +8,7 @@ export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionL
     return [...super.getGroup(), 'panel'];
   }
 
-  getTags(): string[] {
-    return [...super.getTags(), `root`];
+  getTags(props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), `group:root`];
   }
 }

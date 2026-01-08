@@ -6,7 +6,7 @@ import { useDebounce } from "@sdk/utils";
 import React, { useEffect, useMemo } from "react";
 
 export const FieldDefinition = (): React.JSX.Element => {
-  const { currentFieldDefinitionId, fieldDefinitions, updateFieldDefinition } = useClassDefinitionLayout();
+  const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useClassDefinitionLayout();
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!];
   const [values, setValues] = React.useState<any>(fieldDefinition);
   const debouncedValues = useDebounce(values, 300);
@@ -17,7 +17,7 @@ export const FieldDefinition = (): React.JSX.Element => {
     }
     
     return null;
-  }, [fieldDefinition.fieldtype]);
+  }, [fieldDefinition]);
 
   useEffect(() => {
     if (currentFieldDefinitionId && debouncedValues && debouncedValues !== fieldDefinition) {
@@ -43,7 +43,7 @@ export const FieldDefinition = (): React.JSX.Element => {
               }
             }}
           >
-            {dynamicType.getFormFields({ area: ['classes'], fieldDefinitions: fieldDefinitions, path: [currentFieldDefinitionId!] })}
+            {dynamicType.getFormFields({ area: ['class'], fieldDefinitions: fieldDefinitions, path: currentFieldDefinitionIdPath! })}
           </FormKit>
         </Content>
       ) : null}

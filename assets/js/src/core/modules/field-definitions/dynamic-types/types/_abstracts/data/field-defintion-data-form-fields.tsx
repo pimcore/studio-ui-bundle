@@ -1,9 +1,9 @@
-import { FieldDefinitionFormContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
+import { FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
 import { Form, FormKit, Input } from "@sdk/components";
 import React from "react";
 
 export interface FieldDefinitionDataFormFieldsProps {
-  context: FieldDefinitionFormContext;
+  context: FieldDefinitionContext;
 }
 
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionDataFormFieldsProps): React.JSX.Element => {

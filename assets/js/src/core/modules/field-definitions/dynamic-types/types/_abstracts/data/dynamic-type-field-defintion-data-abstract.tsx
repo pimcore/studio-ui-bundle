@@ -1,4 +1,4 @@
-import { DynamicTypeFieldDefinitionAbstract, FieldDefinitionDataAbstract, FieldDefinitionFormContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
+import { DynamicTypeFieldDefinitionAbstract, FieldDefinitionDataAbstract, FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
 import { FieldDefinitionDataFormFields } from "@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/field-defintion-data-form-fields";
 import React from "react";
 
@@ -9,8 +9,8 @@ export interface FieldDefinitionData extends FieldDefinitionDataAbstract {
 }
 
 export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicTypeFieldDefinitionAbstract {
-  getTags(): string[] {
-    return [...super.getTags(), `data`];
+  getTags(props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), `group:data`];
   }
 
   getGroup(): string[] {
@@ -30,7 +30,7 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
     return data.name.trim().length > 0;
   }
 
-  getFormFields(context: FieldDefinitionFormContext): React.JSX.Element {
+  getFormFields(context: FieldDefinitionContext): React.JSX.Element {
     return (
       <FieldDefinitionDataFormFields context={context} />
     )

@@ -6,6 +6,7 @@ moduleSystem.registerModule({
   onInit: () => {
     const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>('DynamicTypes/FieldDefinitionRegistry');
 
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Block'));
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Input'));
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Panel'));
   }
