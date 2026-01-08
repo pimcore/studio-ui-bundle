@@ -16,7 +16,7 @@ export const useStyle = createStyles(({ token, css }) => {
       form {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 16px;
         font-family: Lato, sans-serif;
         font-size: 12px;
         font-style: normal;
@@ -35,6 +35,10 @@ export const useStyle = createStyles(({ token, css }) => {
           &:hover {
             color: ${token.colorPrimaryHover};
           }
+        }
+
+        .pimcore-icon {
+          color: ${token.colorIcon};
         }
       }
         

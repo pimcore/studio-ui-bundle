@@ -65,7 +65,7 @@ export const LoginPage = (): React.JSX.Element => {
       <div className={ styles.loginWidget }>
         <img
           alt={ 'Pimcore Logo' }
-          src={ '/bundles/pimcorestudioui/img/logo.png' }
+          src={ '/bundles/pimcorestudioui/img/logo-purple.svg' }
         />
         <LoginFormContainer />
       </div>
