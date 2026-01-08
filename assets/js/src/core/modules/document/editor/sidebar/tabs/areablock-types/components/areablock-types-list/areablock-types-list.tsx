@@ -33,7 +33,7 @@ export const AreablockTypesList = (): React.JSX.Element => {
     return (
       <Box
         className={ styles.gridContainer }
-        padding={ { x: 'small', bottom: 'small' } }
+        padding={ { x: 'extra-small', bottom: 'small' } }
       >
         {types.map((type: AreablockTypeEntry, typeIndex) => (
           <DraggableAreablockType
@@ -64,6 +64,7 @@ export const AreablockTypesList = (): React.JSX.Element => {
             key={ groupName }
             theme="card-with-highlight"
             title={ t(groupName) }
+            contentPadding="extra-small"
           >
             <Box className={ styles.gridContainer }>
               {types.map((type: AreablockTypeEntry, typeIndex) => {
