@@ -191,7 +191,7 @@ export const ToolStrip = ({
           {renderDragger()}
           {title !== undefined && (
             <Box margin={ { right: 'mini' } }>
-              <Text>{title}</Text>
+              <Text className={ styles.title }>{title}</Text>
             </Box>
           )}
           {renderAdditionalIcon()}
@@ -225,7 +225,7 @@ export const ToolStrip = ({
         {renderDragger()}
         {title !== undefined && (
           <Box margin={ { right: 'mini' } }>
-            <Text>{title}</Text>
+            <Text className={styles.title}>{title}</Text>
           </Box>
         )}
         {renderAdditionalIcon()}
