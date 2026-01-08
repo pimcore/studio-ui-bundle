@@ -145,7 +145,7 @@ export const ToolStrip = ({
     let draggerColor: string
 
     if (disabled) {
-      draggerColor = token.Button?.primaryColor
+      draggerColor = token.colorIcon
     } else {
       const isInverseTheme = toolStripTheme === 'inverse'
       const activeColor = isInverseTheme ? token.colorButtonInverse : token.colorText
@@ -170,7 +170,7 @@ export const ToolStrip = ({
     if (additionalIcon === undefined) return null
 
     return (
-      <Box margin={ { left: 'mini', right: 'small' } }>
+      <Box margin={ { left: 'mini', right: 'mini' } }>
         <Icon
           options={ { width: 16, height: 16, color: token.Button?.defaultColor } }
           value={ additionalIcon }
@@ -191,7 +191,7 @@ export const ToolStrip = ({
           {renderDragger()}
           {title !== undefined && (
             <Box margin={ { right: 'mini' } }>
-              <Text>{title}</Text>
+              <Text className={ styles.title }>{title}</Text>
             </Box>
           )}
           {renderAdditionalIcon()}
@@ -225,7 +225,7 @@ export const ToolStrip = ({
         {renderDragger()}
         {title !== undefined && (
           <Box margin={ { right: 'mini' } }>
-            <Text>{title}</Text>
+            <Text className={ styles.title }>{title}</Text>
           </Box>
         )}
         {renderAdditionalIcon()}

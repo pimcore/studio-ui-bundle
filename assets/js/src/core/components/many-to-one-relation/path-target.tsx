@@ -28,7 +28,7 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './path-target.styles'
 
 export interface PathTargetProps {
-  value: ManyToOneRelationValueType
+  value?: ManyToOneRelationValueType
   disabled?: boolean
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
@@ -36,12 +36,14 @@ export interface PathTargetProps {
   combinedFieldName?: string
   pathFormatterClass?: string
   onSearch?: () => void
+  allowElementTagClose?: boolean
 }
 
 export const PathTarget = forwardRef(function PathTarget (
   props: PathTargetProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
+  console.log('PathTarget render', props.value)
   const { t } = useTranslation()
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { isDragActive, isOver, isValid } = useDroppable()
@@ -118,6 +120,12 @@ export const PathTarget = forwardRef(function PathTarget (
           disabled={ props.disabled === true || props.inherited === true }
           elementType={ mapToElementType(value.type) }
           id={ value.id }
+          onClose={ props.allowElementTagClose === true
+            ? () => {
+                setValue(null)
+                props.onChange?.(null)
+              }
+            : undefined }
           path={ elementTagPath }
           published={ value.isPublished ?? undefined }
         />
@@ -153,6 +161,7 @@ export const PathTarget = forwardRef(function PathTarget (
                   disabled={ props.disabled === true || props.inherited === true }
                   elementType={ mapToElementType(value.type) }
                   id={ value.id }
+                  inline
                   onClose={ () => {
                     setValue(null)
                     props.onChange?.(null)

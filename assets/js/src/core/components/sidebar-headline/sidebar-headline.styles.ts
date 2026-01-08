@@ -35,23 +35,23 @@ export const useStyles = createStyles(({ token, css }, { marginBottom }: StylePr
 
   return {
     container: css`
-      padding: 0 ${token.paddingMD}px;
+      padding: ${token.paddingXS}px;
       margin-bottom: ${marginBottomValue}px;
     `,
 
     containerWithBorder: css`
-      padding: 0 ${token.paddingXS}px;
+      padding: ${token.paddingXS}px;
       border-bottom: 1px solid ${token.colorBorderSecondary};
       margin-bottom: ${marginBottomValue}px;
     `,
 
     containerAsFormLabel: css`
-      padding: 0 ${token.paddingXXS}px ${token.paddingXXS}px;
+      padding: ${token.paddingXS}px;
       margin-bottom: ${marginBottomValue}px;
     `,
 
     containerAsFormLabelWithBorder: css`
-      padding: 0 ${token.paddingXXS}px ${token.paddingXXS}px;
+      padding: ${token.paddingXS}px;
       margin-bottom: ${marginBottomValue}px;
       position: relative;
       
@@ -69,7 +69,8 @@ export const useStyles = createStyles(({ token, css }, { marginBottom }: StylePr
     `,
 
     title: css`
-
+      margin: 0 !important;
+      line-height: 20px !important;
     `
   }
 })

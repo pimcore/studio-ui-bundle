@@ -36,7 +36,7 @@ export const useStyles = createStyles(({ css, token }) => {
           align-items: center;
         }
 
-        &.ant-collapse-small .collapse-header__title {
+        &.ant-collapse-small:not(.collapse-item--theme-card-with-highlight) .collapse-header__title {
           font-weight: 400;
         }
 

@@ -11,18 +11,33 @@
 import { useState, useEffect, type RefObject } from 'react'
 import { isNull } from 'lodash'
 
-const useElementOverflow = (ref: RefObject<HTMLSpanElement>): boolean => {
+const useElementOverflow = (ref: RefObject<HTMLElement>): boolean => {
   const [isOverflow, setIsOverflow] = useState(false)
 
   useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      if (!isNull(ref.current)) {
-        setIsOverflow(ref.current.scrollWidth > ref.current.clientWidth)
-      }
-    })
+    const checkOverflow = (): void => {
+      if (isNull(ref.current)) return
+
+      const element = ref.current
+
+      const range = document.createRange()
+      range.selectNodeContents(element)
+      const contentWidth = range.getBoundingClientRect().width
+      const elementWidth = element.getBoundingClientRect().width
+
+      const style = window.getComputedStyle(element)
+      const paddingLeft = parseFloat(style.paddingLeft) ?? 0
+      const paddingRight = parseFloat(style.paddingRight) ?? 0
+      const availableWidth = elementWidth - paddingLeft - paddingRight
+
+      setIsOverflow(contentWidth > availableWidth)
+    }
+
+    const observer = new ResizeObserver(checkOverflow)
 
     if (!isNull(ref.current)) {
       observer.observe(ref.current)
+      checkOverflow()
     }
 
     return () => {
