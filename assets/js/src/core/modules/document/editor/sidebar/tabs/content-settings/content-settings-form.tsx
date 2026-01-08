@@ -17,7 +17,6 @@ import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Select } from '@Pimcore/components/select/select'
 import { SidebarHeadline } from '@Pimcore/components/sidebar-headline/sidebar-headline'
-import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
@@ -30,7 +29,6 @@ import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debou
 import { uuid } from '@Pimcore/utils/uuid'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useDocumentPageSnippetChangeMainDocumentMutation } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
@@ -280,27 +278,27 @@ export const ContentSettingsForm = ({
             name="contentMainDocument"
           >
             <ManyToOneRelationInput
-          
+
+              allowElementTagClose
               allowedDocumentTypes={ allowedContentMainDocumentTypes ?? ['page', 'snippet'] }
               disabled={ !canEdit }
               documentsAllowed
               enableSearch
-              allowElementTagClose
             />
           </Form.Item>
 
           {!isNil(document?.settingsData?.contentMainDocumentPath)
-                ? (
-                  <Button
-                    loading={ isApplyingMainDocument }
-                    onClick={ handleApplyMainDocument }
-                    type="default"
-                  >
-                    {t('content-main-document.apply')}
-                  </Button>
-                  )
-                : null}
-                </>
+            ? (
+              <Button
+                loading={ isApplyingMainDocument }
+                onClick={ handleApplyMainDocument }
+                type="default"
+              >
+                {t('content-main-document.apply')}
+              </Button>
+              )
+            : null}
+        </>
       )}
     </FormKit>
   )

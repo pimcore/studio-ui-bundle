@@ -19,17 +19,17 @@ const useElementOverflow = (ref: RefObject<HTMLElement>): boolean => {
       if (isNull(ref.current)) return
 
       const element = ref.current
-      
+
       const range = document.createRange()
       range.selectNodeContents(element)
       const contentWidth = range.getBoundingClientRect().width
       const elementWidth = element.getBoundingClientRect().width
-      
+
       const style = window.getComputedStyle(element)
       const paddingLeft = parseFloat(style.paddingLeft) ?? 0
       const paddingRight = parseFloat(style.paddingRight) ?? 0
       const availableWidth = elementWidth - paddingLeft - paddingRight
-      
+
       setIsOverflow(contentWidth > availableWidth)
     }
 

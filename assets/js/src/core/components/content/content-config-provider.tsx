@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, type ReactNode } from 'react'
+import React, { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { type Sizings } from '../box/box'
 
 interface ContentConfigProviderProps {
@@ -26,8 +26,10 @@ export const ContentConfigProvider = ({
   children,
   gap
 }: ContentConfigProviderProps): React.JSX.Element => {
+  const value = useMemo(() => ({ gap }), [gap])
+
   return (
-    <ContentConfigContext.Provider value={{ gap }}>
+    <ContentConfigContext.Provider value={ value }>
       {children}
     </ContentConfigContext.Provider>
   )

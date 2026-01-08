@@ -61,10 +61,10 @@ export const AreablockTypesList = (): React.JSX.Element => {
             border={ false }
             collapsed={ false }
             collapsible
+            contentPadding="extra-small"
             key={ groupName }
             theme="card-with-highlight"
             title={ t(groupName) }
-            contentPadding="extra-small"
           >
             <Box className={ styles.gridContainer }>
               {types.map((type: AreablockTypeEntry, typeIndex) => {

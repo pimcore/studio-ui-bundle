@@ -142,11 +142,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 tabIndex={ index }
               >
                 {entry.component}
-          </div>
-        )
-      })}
-    </div>
-  </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </ContentConfigProvider>
   )
 }

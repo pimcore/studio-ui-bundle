@@ -120,12 +120,14 @@ export const PathTarget = forwardRef(function PathTarget (
           disabled={ props.disabled === true || props.inherited === true }
           elementType={ mapToElementType(value.type) }
           id={ value.id }
+          onClose={ props.allowElementTagClose === true
+            ? () => {
+                setValue(null)
+                props.onChange?.(null)
+              }
+            : undefined }
           path={ elementTagPath }
           published={ value.isPublished ?? undefined }
-          onClose={ props.allowElementTagClose ? () => {
-              setValue(null)
-              props.onChange?.(null)
-            } : undefined }
         />
       )
     }
@@ -159,13 +161,13 @@ export const PathTarget = forwardRef(function PathTarget (
                   disabled={ props.disabled === true || props.inherited === true }
                   elementType={ mapToElementType(value.type) }
                   id={ value.id }
+                  inline
                   onClose={ () => {
                     setValue(null)
                     props.onChange?.(null)
                   } }
                   path={ elementTagPath }
                   published={ value.isPublished ?? undefined }
-                  inline
                 />
               }
               readOnly
