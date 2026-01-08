@@ -85,9 +85,12 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
         { 'menu--is-calculated-height': dropdownHeight?.height !== undefined }
       ) }
       data-testid={ dataTestId }
+      expandIcon={ <Icon
+        options={ { width: 14, height: 14 } }
+        value="chevron-right"
+                   /> }
       items={ undefined }
       ref={ ref }
-      expandIcon={ <Icon value="chevron-right" options={{width:14, height:14}} /> }
       style={ {
         ...restProps.style,
         maxHeight: `min(${dropdownHeight?.height}px, 65vh)`
