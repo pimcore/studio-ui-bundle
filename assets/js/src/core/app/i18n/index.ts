@@ -14,6 +14,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
 import { returnKeyIfEmptyProcessor } from './utils/post-processors'
+import { isNonEmptyString } from '@sdk/utils'
 
 export const FALLBACK_LANGUAGE = 'en'
 
@@ -35,8 +36,10 @@ i18n
 i18n.use(returnKeyIfEmptyProcessor)
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
-  store.dispatch(addMissingTranslation(key))
-  i18n.addResource(FALLBACK_LANGUAGE, namespace, key, key)
+  if (isNonEmptyString(key)) {
+    store.dispatch(addMissingTranslation(key))
+    i18n.addResource(FALLBACK_LANGUAGE, namespace, key, key)
+  }
 })
 
 export default i18n
