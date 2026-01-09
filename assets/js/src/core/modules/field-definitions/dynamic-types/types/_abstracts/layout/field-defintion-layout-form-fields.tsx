@@ -7,21 +7,28 @@ export interface FieldDefinitionDataFormFieldsProps {
 }
 
 export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionDataFormFieldsProps): React.JSX.Element => {
+  const { context } = props;
+  const { fieldDefinitions, path } = context;
+  const parent = fieldDefinitions[path[path.length - 2]];
+  const isRegion = parent !== undefined && parent.fieldtype === 'region';
+
   return (<>
     <FormKit.Panel title="Basic Information">
       <Form.Item label="Name" name="name">
         <Input />
       </Form.Item>
 
-      <Form.Item label="Region" name="region">
-        <Select options={[
-          { label: 'center', value: 'center' },
-          { label: 'north', value: 'north' },
-          { label: 'south', value: 'south' },
-          { label: 'east', value: 'east' },
-          { label: 'west', value: 'west' },
-        ]} />
-      </Form.Item>
+      {isRegion && (
+        <Form.Item label="Region" name="region">
+          <Select options={[
+            { label: 'center', value: 'center' },
+            { label: 'north', value: 'north' },
+            { label: 'south', value: 'south' },
+            { label: 'east', value: 'east' },
+            { label: 'west', value: 'west' },
+          ]} />
+        </Form.Item>
+      )}
 
       <Form.Item label="Title" name="title">
         <Input />

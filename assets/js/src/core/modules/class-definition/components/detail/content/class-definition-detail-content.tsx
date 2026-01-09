@@ -18,7 +18,7 @@ export const ClassDefinitionDetailContent = (): React.JSX.Element => {
 
   return (
     <>
-      {currentFieldDefinitionId === null || fieldDefinition === null ? (
+      {currentFieldDefinitionId === null ? (
         <Content padded>
           Please select a field from the tree to edit its properties.
         </Content>

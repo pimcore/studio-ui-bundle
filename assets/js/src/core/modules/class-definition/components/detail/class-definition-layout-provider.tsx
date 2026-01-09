@@ -7,20 +7,21 @@ export interface StructureNode {
   children: StructureNode[];
 }
 
-export interface fieldDefinition extends Record<string, any> {}
+export interface FieldDefinition extends Record<string, any> {}
 
 export interface IClassDefinitionLayoutContext {
   structure: StructureNode | undefined
-  fieldDefinitions: Record<string, fieldDefinition>
+  fieldDefinitions: Record<string, FieldDefinition>
   currentFieldDefinitionId: StructureNode["id"] | null
   currentFieldDefinitionIdPath: string[] | null
   setCurrentFieldDefinitionId: (id: StructureNode["id"] | null) => void
   setCurrentFieldDefinitionIdPath: (path: string[] | null) => void
-  updateFieldDefinition: (structureNodeId: StructureNode["id"], updatedFieldDefinition: fieldDefinition) => void
-  addFieldDefinition: (structureNodeId: StructureNode["id"], newFieldDefinition: fieldDefinition) => StructureNode["id"]
+  updateFieldDefinition: (structureNodeId: StructureNode["id"], updatedFieldDefinition: FieldDefinition) => void
+  addFieldDefinition: (structureNodeId: StructureNode["id"], newFieldDefinition: FieldDefinition) => StructureNode["id"]
   removeFieldDefinition: (structureNodeId: StructureNode["id"]) => void
   cloneFieldDefinition: (structureNodeId: StructureNode["id"]) => StructureNode["id"]
   moveFieldDefinition: (structureNodeId: StructureNode["id"], newParentId: StructureNode["id"], newIndex: number) => void
+  getLayout: () => Layout
 }
 
 export const ClassDefinitionLayoutContext = createContext<IClassDefinitionLayoutContext | undefined>(undefined);
@@ -70,7 +71,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     setFieldDefinitions(initialFieldDefinitions);
   }, [props.layout]);
 
-  const updateFieldDefinition = (structureNodeId: StructureNode["id"], updatedFieldDefinition: fieldDefinition) => {
+  const updateFieldDefinition = (structureNodeId: StructureNode["id"], updatedFieldDefinition: FieldDefinition) => {
     setFieldDefinitions((prevDefs) => ({
       ...prevDefs,
       [structureNodeId]: {
@@ -80,7 +81,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     }));
   };
 
-  const addFieldDefinition = (structureNodeId: StructureNode["id"], newFieldDefinition: fieldDefinition): StructureNode["id"] => {
+  const addFieldDefinition = (structureNodeId: StructureNode["id"], newFieldDefinition: FieldDefinition): StructureNode["id"] => {
     const newId = uuid();
 
     const addNodeRecursively = (node: StructureNode): StructureNode => {
@@ -251,6 +252,23 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     });
   };
 
+  const getLayout: IClassDefinitionLayoutContext['getLayout'] = () => {
+    const buildLayoutRecursively = (node: StructureNode): Layout => {
+      const fieldDef = fieldDefinitions[node.id];
+      const children = node.children.map(buildLayoutRecursively);
+
+      const { id, ...restFieldDef } = fieldDef;
+
+      return {
+        ...restFieldDef as Layout,
+        children: (children.length > 0 ? children : null) as Layout['children'],
+      } as Layout;
+    };
+
+    // @todo ensure structure is defined by injecting pimcore_root early on when necessary
+    return buildLayoutRecursively(structure!);
+  };
+
   return useMemo(() => (
     <ClassDefinitionLayoutContext.Provider 
       value={
@@ -265,7 +283,8 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
           addFieldDefinition,
           removeFieldDefinition,
           cloneFieldDefinition,
-          moveFieldDefinition
+          moveFieldDefinition,
+          getLayout,
         }
       }
     >

@@ -19,10 +19,11 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
 
   getDefaultData(): FieldDefinitionData {
     return {
+      fieldtype: this.id,
+      datatype: 'data',
       name: '',
       title: '',
       tooltip: 'Some predefined tooltip',
-      fieldtype: this.id,
     };
   }
 

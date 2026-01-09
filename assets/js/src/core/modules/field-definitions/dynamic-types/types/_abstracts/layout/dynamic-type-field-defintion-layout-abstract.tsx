@@ -24,6 +24,7 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
   getDefaultData(): FieldDefinitionLayout {
     return {
       fieldtype: this.id,
+      datatype: 'layout',
       name: 'Panel',
       title: '',
       region: '',
