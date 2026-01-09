@@ -19,6 +19,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use-item'
 import { InheritanceButton } from '@Pimcore/modules/data-object/components/inheritance-button'
+import { isNonEmptyString } from '@sdk/utils'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -48,7 +49,7 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
         </Tooltip>
       ) }
       { props.additionalIcons }
-      <span>{props.label}</span>
+      <span>{isNonEmptyString(props.label) ? t(props.label) : props.label}</span>
     </Flex>
   )
 }

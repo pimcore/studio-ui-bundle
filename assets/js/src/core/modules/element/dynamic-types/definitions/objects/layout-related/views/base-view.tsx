@@ -12,6 +12,8 @@ import React, { useMemo } from 'react'
 import { isEmpty } from 'lodash'
 import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
+import { isNonEmptyString } from '@sdk/utils'
+import { useTranslation } from 'react-i18next'
 
 export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
@@ -20,6 +22,7 @@ export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
+  const { t } = useTranslation()
 
   return useMemo(() => {
     if (!isPaddedLayout) {
@@ -53,7 +56,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         extraPosition={ props.extraPosition }
         style={ props.style }
         theme={ theme }
-        title={ props.title }
+        title={ isNonEmptyString(props.title) ? t(props.title) : props.title }
       >{props.children}</CardView>
     )
   }, [props, isPaddedLayout])
