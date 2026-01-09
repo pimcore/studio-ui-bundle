@@ -11,19 +11,22 @@
 import React, { type ReactNode } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
+import { isNonEmptyString } from '@sdk/utils'
 
 export interface CalculatedValueLabelProps {
-  label: ReactNode
+  label: ReactNode | string
 }
 
 export const CalculatedValueLabel = (props: CalculatedValueLabelProps): React.JSX.Element => {
+  const { t } = useTranslation()
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
       <Icon value={ 'calculator' } />
-      <span>{props.label}</span>
+      <span>{isNonEmptyString(props.label) ? t(props.label) : props.label}</span>
     </Flex>
   )
 }
