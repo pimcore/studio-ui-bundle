@@ -43,7 +43,6 @@ export const PathTarget = forwardRef(function PathTarget (
   props: PathTargetProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
-  console.log('PathTarget render', props.value)
   const { t } = useTranslation()
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { isDragActive, isOver, isValid } = useDroppable()
