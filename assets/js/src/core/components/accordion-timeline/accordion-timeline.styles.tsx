@@ -13,14 +13,14 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
-        & .ant-collapse {
-            width: 340px;
-            background-color: white;
-        }
+      & .ant-collapse {
+        width: 352px;
+        background-color: white;
+      }
 
-        & span, & div, div.anticon, button {
-            vertical-align: middle;
-        }
+      & span, & div, div.anticon, button {
+        vertical-align: middle;
+      }
     `
   }
 }, { hashPriority: 'low' })
