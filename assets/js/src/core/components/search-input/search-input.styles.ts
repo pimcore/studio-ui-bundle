@@ -57,6 +57,10 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-input {
         border-radius: ${token.borderRadius}px !important;
       }
+        
+      .ant-input {
+        padding: 0 1px !important;
+      }
     `,
 
     searchIcon: css`
