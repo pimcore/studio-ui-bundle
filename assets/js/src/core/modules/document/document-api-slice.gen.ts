@@ -68,6 +68,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
+            documentGetTypes: build.query<DocumentGetTypesApiResponse, DocumentGetTypesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/documents/types` }),
+                providesTags: ["Documents"],
+            }),
             documentGetById: build.query<DocumentGetByIdApiResponse, DocumentGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}` }),
                 providesTags: ["Documents"],
@@ -287,6 +291,11 @@ export type DocumentDocTypeListApiArg = {
     /** Filter results by docType type */
     type?: string;
 };
+export type DocumentGetTypesApiResponse = /** status 200 Successfully retrieved all available document types */ {
+    totalItems: number;
+    items: DocumentType[];
+};
+export type DocumentGetTypesApiArg = void;
 export type DocumentGetByIdApiResponse =
     /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
 export type DocumentGetByIdApiArg = {
@@ -560,6 +569,14 @@ export type DocTypeType = {
     /** Only printable children */
     onlyPrintableChildren?: boolean;
 };
+export type DocumentType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** key */
+    key: string;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -817,6 +834,7 @@ export const {
     useDocumentDocTypeDeleteMutation,
     useDocumentDocTypeTypeListQuery,
     useDocumentDocTypeListQuery,
+    useDocumentGetTypesQuery,
     useDocumentGetByIdQuery,
     useDocumentUpdateByIdMutation,
     useDocumentPageCheckPrettyUrlMutation,

@@ -178,6 +178,22 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
+            classDefinitionGetTextLayoutPreview: build.query<
+                ClassDefinitionGetTextLayoutPreviewApiResponse,
+                ClassDefinitionGetTextLayoutPreviewApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/definition/configuration-view/text-layout/preview`,
+                    params: {
+                        className: queryArg.className,
+                        path: queryArg.path,
+                        renderingData: queryArg.renderingData,
+                        renderingClass: queryArg.renderingClass,
+                        html: queryArg.html,
+                    },
+                }),
+                providesTags: ["Class Definition"],
+            }),
             classDefinitionGetTree: build.query<ClassDefinitionGetTreeApiResponse, ClassDefinitionGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/definition/configuration-view/tree`,
@@ -213,6 +229,15 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/object-brick/${queryArg.objectId}/object/layout`,
+                }),
+                providesTags: ["Class Definition"],
+            }),
+            classSelectOptionGetTree: build.query<ClassSelectOptionGetTreeApiResponse, ClassSelectOptionGetTreeApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/select-option/tree`,
+                    params: {
+                        withGroup: queryArg.withGroup,
+                    },
                 }),
                 providesTags: ["Class Definition"],
             }),
@@ -349,6 +374,19 @@ export type ClassDefinitionGetLayoutByIdApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
+export type ClassDefinitionGetTextLayoutPreviewApiResponse = /** status 200 Text layout preview as HTML */ Blob;
+export type ClassDefinitionGetTextLayoutPreviewApiArg = {
+    /** Class definition name where layout is defined */
+    className: string;
+    /** Path to optional object to render the layout with */
+    path?: string;
+    /** Optional dynamic data to be used for rendering the layout */
+    renderingData?: string;
+    /** Optional rendering class to be used for rendering the layout */
+    renderingClass?: string;
+    /** Optional static HTML to be used for rendering the layout */
+    html?: string;
+};
 export type ClassDefinitionGetTreeApiResponse = /** status 200 Class definition data for the tree view */ {
     totalItems: number;
     items: (ClassDefinitionTreeNodeItem | ClassDefinitionTreeNodeFolder)[];
@@ -385,6 +423,14 @@ export type ClassObjectBrickObjectLayoutApiResponse = /** status 200 List of lay
 export type ClassObjectBrickObjectLayoutApiArg = {
     /** ObjectId of the element */
     objectId: number;
+};
+export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
+    totalItems: number;
+    items: (SelectOptionTreeItem | SelectOptionTreeFolder)[];
+};
+export type ClassSelectOptionGetTreeApiArg = {
+    /** Whether to group the results. */
+    withGroup: boolean;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -704,6 +750,38 @@ export type ObjectBrickLayoutDefinition = {
     /** Children */
     children: object;
 };
+export type SelectOptionTreeItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Id of select option */
+    id: string;
+    /** Text of select option */
+    name: string;
+    /** icon */
+    icon: ElementIcon;
+    /** Group */
+    group: string | null;
+    /** Only for admin user */
+    adminOnly: boolean;
+};
+export type SelectOptionTreeFolder = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Id of select option */
+    id: string;
+    /** Text of select option */
+    name: string;
+    /** icon */
+    icon: ElementIcon;
+    /** Group */
+    group: string | null;
+    /** Child nodes */
+    children: SelectOptionTreeItem[];
+};
 export const {
     useClassDefinitionCollectionQuery,
     useClassDefinitionCollectionCreatableQuery,
@@ -726,9 +804,11 @@ export const {
     useClassDefinitionGetIdentifierDataQuery,
     useClassDefinitionImportMutation,
     useClassDefinitionGetLayoutByIdQuery,
+    useClassDefinitionGetTextLayoutPreviewQuery,
     useClassDefinitionGetTreeQuery,
     useClassFieldCollectionObjectLayoutQuery,
     useClassDefinitionFolderCollectionQuery,
     useClassDefinitionGetQuery,
     useClassObjectBrickObjectLayoutQuery,
+    useClassSelectOptionGetTreeQuery,
 } = injectedRtkApi;
