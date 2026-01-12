@@ -52,15 +52,15 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
       <Tag
         bordered={ false }
         className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
-        closeIcon={ !isUndefined(onClose) }
+        closeIcon={ disabled !== true && !isUndefined(onClose) }
         color={ isUnpublished ? 'gold' : 'geekblue' }
         iconName={ isUnpublished ? 'eye-off' : undefined }
         onClick={ isClickable ? onClick : undefined }
-        onClose={ onClose }
+        onClose={ disabled === true ? undefined : onClose }
         ref={ textRef }
         { ...props }
       >
-        {path}
+        <span className="tag-content">{path}</span>
       </Tag>
     </Tooltip>
   )

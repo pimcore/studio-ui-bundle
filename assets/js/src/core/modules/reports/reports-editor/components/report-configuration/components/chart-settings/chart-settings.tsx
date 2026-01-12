@@ -16,9 +16,11 @@ import { Form } from '@Pimcore/components/form/form'
 import { Conditional } from '@Pimcore/components/form/conditional/conditional'
 import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/modules/reports/constants'
 import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
+import { useStyles } from '../../report-configuration.styles'
 
 export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const CHART_OPTIONS = [
     { value: '', label: t('reports.editor.chart-settings.chart-type.none') },
@@ -40,7 +42,7 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
       name={ name }
     >
       <Select
-        className="w-full"
+        className={ styles.chartSelect }
         mode={ mode }
         options={ chartSelectOptions }
       />
@@ -53,7 +55,10 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
         label={ t('reports.editor.chart-settings.chart-type') }
         name="chartType"
       >
-        <Select options={ CHART_OPTIONS } />
+        <Select
+          className={ styles.chartSelect }
+          options={ CHART_OPTIONS }
+        />
       </Form.Item>
 
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_PIE }>

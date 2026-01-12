@@ -20,86 +20,86 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     accordion: css`
-        border: none;
+      border: none;
 
-        &.ant-collapse-borderless.accordion--spaced {
-            > .ant-collapse-item:last-child {
-                > .ant-collapse-header[aria-expanded='false'] {
-                    border-radius: ${themeToken.borderRadiusLG}px;
-                }
-
-                > .ant-collapse-header[aria-expanded='true'] {
-                    border-top-left-radius: ${themeToken.borderRadiusLG}px;
-                    border-top-right-radius: ${themeToken.borderRadiusLG}px;
-                }
-            }
-        }
-
-        .ant-collapse-item.accordion__item--theme-success {
-            border: 1px solid ${themeToken.highlightBorderColor};
-            background-color: ${themeToken.highlightBackgroundColor};
-            border-radius: ${themeToken.borderRadiusLG}px !important;
-
-            > .ant-collapse-content {
-                border-top: 1px solid ${themeToken.highlightBorderColor};
-                background-color: transparent;
-            }
-        }
-
-        .ant-collapse-item.accordion__item--theme-primary {
-            border: 1px solid ${themeToken.colorBorder};
-            border-radius: ${themeToken.borderRadiusLG}px !important;
-            background-color: ${themeToken.colorFillAlter};
-
-            > .ant-collapse-content {
-                border-top: 1px solid ${themeToken.colorBorder};
-                background-color: transparent;
-            }
-        }
-
-        .accordion__item {
-          + .accordion__item {
-            margin-top: ${token.marginXS}px;
+      &.ant-collapse-borderless.accordion--spaced {
+        > .ant-collapse-item:last-child {
+          > .ant-collapse-header[aria-expanded='false'] {
+            border-radius: ${themeToken.borderRadiusLG}px;
           }
-          
-            > .ant-collapse-header {
-                display: inline-flex;
-                width: 100%;
-                align-items: baseline;
 
-                > .ant-collapse-header-text {
-                    margin-inline-end: 0;
-                }
+          > .ant-collapse-header[aria-expanded='true'] {
+            border-top-left-radius: ${themeToken.borderRadiusLG}px;
+            border-top-right-radius: ${themeToken.borderRadiusLG}px;
+          }
+        }
+      }
 
-                > .ant-collapse-expand-icon {
-                    display: none;
-                }
-            }
+      .ant-collapse-item.accordion__item--theme-success {
+        border: 1px solid ${themeToken.highlightBorderColor};
+        background-color: ${themeToken.highlightBackgroundColor};
+        border-radius: ${themeToken.borderRadiusLG}px !important;
 
-            .accordion__chevron-btn {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin: 0 ${token.marginXXS}px;
-              align-self: center;
-            }
+        > .ant-collapse-content {
+          border-top: 1px solid ${themeToken.highlightBorderColor};
+          background-color: transparent;
+        }
+      }
 
-            .accordion__chevron {
-                rotate: 180deg;
-                transition-duration: 0.6s;
-                transition-property: transform;
-            }
+      .ant-collapse-item.accordion__item--theme-primary {
+        border: 1px solid ${themeToken.colorPrimaryBorder};
+        border-radius: ${themeToken.borderRadiusLG}px !important;
+        background-color: ${themeToken.colorFillAlter};
 
-            .accordion__chevron--up {
-                transform: rotate(-180deg);
-            }
+        > .ant-collapse-content {
+          border-top: 1px solid ${themeToken.colorBorder};
+          background-color: transparent;
+        }
+      }
+
+      .accordion__item {
+        + .accordion__item {
+          margin-top: ${token.marginXS}px;
         }
 
-        .ant-collapse-extra {
-            order: 1;
-            margin-left: 5px;
+        > .ant-collapse-header {
+          display: inline-flex;
+          width: 100%;
+          align-items: baseline;
+
+          > .ant-collapse-header-text {
+            margin-inline-end: 0;
+          }
+
+          > .ant-collapse-expand-icon {
+            display: none;
+          }
         }
-      
+
+        .accordion__chevron-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 ${token.marginXXS}px;
+          align-self: center;
+        }
+
+        .accordion__chevron {
+          rotate: 180deg;
+          transition-duration: 0.6s;
+          transition-property: transform;
+        }
+
+        .accordion__chevron--up {
+          transform: rotate(-180deg);
+        }
+      }
+
+      .ant-collapse-extra {
+        order: 1;
+        margin-left: 5px;
+      }
+
       .ant-form-item:last-child {
         margin-bottom: 0;
       }
@@ -126,9 +126,11 @@ export const useStyles = createStyles(({ token, css }) => {
           th:first-child {
             border-left: 0;
           }
+
           tr:first-child th:first-child {
             border-top-left-radius: 0;
           }
+
           tr:first-child th:last-child {
             border-top-right-radius: 0;
           }
@@ -157,14 +159,14 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
     bordered: css`
       background: ${token.colorBgContainer};
-      
+
       &.accordion--bordered {
         .ant-collapse-item {
           background: ${token.colorBgContainer};
           border: 1px solid ${token.colorBorderSecondary};
           border-radius: ${token.borderRadiusLG}px;
         }
-        
+
         .ant-collapse-header {
           font-weight: ${token.fontWeightStrong};
         }
@@ -177,7 +179,7 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-collapse-content {
           border-color: ${token.colorBorderSecondary};
         }
-        
+
         &.ant-collapse-small {
           .ant-collapse-header {
             padding: ${token.paddingXS}px ${token.paddingSM}px;

@@ -8,3 +8,6 @@ pimcore_studio_ui_backend:
     type:     attribute
     prefix:   '%pimcore_studio_backend.url_prefix%'
 
+pimcore_studio_ui_document_diffversions_html:
+    path: /__pimcore-studio/documents/diff-versions-html
+    defaults: { _controller: Pimcore\Bundle\StudioUiBundle\Controller\Backend\DocumentVersionsController::diffVersionsHtmlAction }

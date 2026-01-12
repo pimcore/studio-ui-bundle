@@ -244,6 +244,9 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             <Flex
               className="w-100"
               justify="flex-end"
+              style={ {
+                justifyContent: 'space-between'
+              } }
             >
               <ButtonGroup items={ [
                 <IconTextButton
@@ -256,7 +259,10 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
                   }) }
                 >
                   {t('empty')}
-                </IconTextButton>,
+                </IconTextButton>
+              ] }
+              />
+              <ButtonGroup items={ [
                 <CancelBtn key="cancel" />,
                 <OkBtn key="ok" />
               ] }

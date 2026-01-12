@@ -13,6 +13,8 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { BaseView } from '../../views/base-view'
 import { Collapse, type CollapseProps } from '@Pimcore/components/collapse/collapse'
+import { useTranslation } from 'react-i18next'
+import { isNonEmptyString } from '@sdk/utils'
 
 export interface AccordionProps extends AbstractObjectLayoutDefinition {
   title?: string
@@ -22,9 +24,10 @@ export interface AccordionProps extends AbstractObjectLayoutDefinition {
 }
 
 export const Accordion = ({ children, title, border, collapsed, collapsible, noteditable }: AccordionProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const items: CollapseProps['items'] = children.map((child, index) => ({
     key: index,
-    label: child.title,
+    label: isNonEmptyString(child.title) ? t(child.title as string) : child.title,
     forceRender: true,
     children: (
       <ObjectComponent
