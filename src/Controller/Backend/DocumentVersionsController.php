@@ -85,7 +85,6 @@ final class DocumentVersionsController extends AbstractController
         }
     }
 
-    #[Route('/diff-versions/html/{id}', name: 'pimcore_studio_ui_document_diffversions_html', methods: ['GET'])]
     public function diffVersionsHtmlAction(Request $request): BinaryFileResponse
     {
         $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($request->get('id'));
