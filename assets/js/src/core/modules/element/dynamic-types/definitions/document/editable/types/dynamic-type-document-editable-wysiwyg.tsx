@@ -21,7 +21,6 @@ export interface WysiwygEditableConfig {
   height?: string | number
   maxCharacters?: number
   placeholder?: string
-  editorConfig?: Record<string, any>
   class?: string
   required?: boolean
 }
@@ -38,7 +37,7 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
     return (
       <WysiwygEditable
         context={ WysiwygContext.DOCUMENT }
-        editorConfig={ props.config?.editorConfig }
+        editorConfig={ props.config }
         height={ props.config?.height }
         inherited={ props.inherited }
         maxCharacters={ props.config?.maxCharacters }
