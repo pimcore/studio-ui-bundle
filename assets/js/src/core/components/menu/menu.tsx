@@ -18,6 +18,8 @@ import {
 import { MenuItem } from './item/menu-item'
 import { useDropdownHeightOptional } from '@Pimcore/components/dropdown/dropdown-height-provider'
 import classNames from 'classnames'
+import { Icon } from '@sdk/components'
+import { useStyles } from './menu.styles'
 
 type OldItemType = Extract<MenuProps['items'], any[]>[0]
 type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
@@ -54,6 +56,7 @@ export interface IMenuProps extends Omit<MenuProps, 'items' > {
 export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Element => {
   const { dataTestId, ...restProps } = props
   const dropdownHeight = useDropdownHeightOptional()
+  const { styles } = useStyles()
 
   const filteredItems = props.items?.filter(function filterItems (item: ItemType) {
     // @ts-expect-error - the prop exists trust me bro ;)
@@ -78,9 +81,14 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
     <AntMenu
       { ...restProps }
       className={ classNames(
+        styles.menu,
         { 'menu--is-calculated-height': dropdownHeight?.height !== undefined }
       ) }
       data-testid={ dataTestId }
+      expandIcon={ <Icon
+        options={ { width: 14, height: 14 } }
+        value="chevron-right"
+                   /> }
       items={ undefined }
       ref={ ref }
       style={ {

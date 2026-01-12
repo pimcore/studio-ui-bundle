@@ -13,7 +13,8 @@ import cn from 'classnames'
 import { useStyles } from './content.styles'
 import { type INoContentProps, NoContent } from '../no-content/no-content'
 import { Spin } from '../spin/spin'
-import { Box, type BoxProps } from '../box/box'
+import { Box, type BoxProps, type Sizings } from '../box/box'
+import { useContentConfig } from './content-config-provider'
 
 export type OverflowValue = 'visible' | 'hidden' | 'scroll' | 'auto'
 
@@ -27,6 +28,7 @@ export interface ContentProps extends Omit<BoxProps, 'children'> {
   fullPage?: boolean
   noneOptions?: INoContentProps
   overflow?: { x: OverflowValue, y: OverflowValue }
+  gap?: Sizings
 }
 
 export const Content = ({
@@ -41,9 +43,13 @@ export const Content = ({
   centered = false,
   noneOptions,
   fullPage,
+  gap: gapProp,
   ...props
 }: ContentProps): React.JSX.Element => {
-  const { styles } = useStyles()
+  const { gap: configGap } = useContentConfig()
+  const gap = gapProp ?? configGap ?? 'small'
+
+  const { styles } = useStyles({ gap })
 
   const showChildren = !loading && !none
   const contentCentered = centered || none || loading

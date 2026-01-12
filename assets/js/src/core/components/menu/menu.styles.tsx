@@ -11,20 +11,20 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
+  const submenuStyles = css`
+    .ant-dropdown-menu-submenu-title {
+      padding-inline-end: ${token.paddingXL}px !important;
+    }
+
+    .ant-dropdown-menu-submenu-expand-icon {
+      inset-inline-end: ${token.paddingXS}px !important;
+      position: absolute !important;
+      margin-top: 2px;
+    }
+  `
+
   return {
-    container: css`
-      padding: ${token.paddingSM}px;
-      margin-left: 1px;
-    `,
-
-    containerWithBorder: css`
-      padding: ${token.paddingSM}px;
-      border-bottom: 1px solid ${token.colorBorderSecondary};
-    `,
-
-    title: css`
-      margin: 0 !important;
-      line-height: 20px !important;
-    `
+    menu: submenuStyles,
+    submenuPopup: submenuStyles
   }
 })

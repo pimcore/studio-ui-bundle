@@ -20,7 +20,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      // @todo check path
+      // @todo translations
       path: 'DataManagement/DataModelDefinitions/ClassDefinitions',
       label: 'classes',
       order: 100,

@@ -113,14 +113,22 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
     [props.onSearch]
   )
 
+  const withButton = buttons.length > 0
+
   return (
-    <Box padding="extra-small">
+    <Box padding={ {
+      top: 'extra-small',
+      left: withButton ? 'extra-small' : 'none',
+      bottom: 'extra-small',
+      right: withButton ? 'extra-small' : 'none'
+    } }
+    >
       <Flex
         align="center"
-        gap="extra-small"
-        justify="space-between"
+        gap={ withButton ? 'extra-small' : undefined }
+        justify={ withButton ? 'space-between' : 'start' }
       >
-        { buttons.length > 0 ? <ButtonGroup items={ buttons } /> : <div></div> }
+        { withButton ? <ButtonGroup items={ buttons } /> : <div></div> }
 
         <div>
           <SearchInput

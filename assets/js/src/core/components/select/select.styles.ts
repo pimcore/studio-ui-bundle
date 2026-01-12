@@ -95,7 +95,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
     selectContainerWithClear: css`
       &:hover {
-        .ant-select:not(.ant-select-disabled) {
+        .ant-select:not(.ant-select-disabled):has(.ant-select-clear) {
           .ant-select-arrow {
             display: none;
           }

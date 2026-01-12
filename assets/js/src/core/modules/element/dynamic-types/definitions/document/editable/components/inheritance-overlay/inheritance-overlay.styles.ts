@@ -56,10 +56,10 @@ export const useStyles = createStyles((
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: ${token.borderRadiusXS}px;
+      border-radius: ${token.borderRadiusSM}px;
       background: ${token.colorFillActive};
       padding: ${token.paddingXXS}px;
-      color: ${token.colorText};
+      color: ${token.colorPrimary};
     `
   }
 })

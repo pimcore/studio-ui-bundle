@@ -16,10 +16,8 @@ export const useStyle = createStyles(({ token, css }) => {
       position: absolute !important;
       top: ${token.paddingXXS}px;
       right: ${token.paddingXXS}px;
-      
-      // todo: remove this when loading animation in button is fixed
-      & > div {
-        display:none;
+      .ant-btn-icon {
+        display: flex;
       }
     `
   }

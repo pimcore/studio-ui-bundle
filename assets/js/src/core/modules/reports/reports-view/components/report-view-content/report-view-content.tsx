@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNull, isUndefined } from 'lodash'
+import { isEmpty, isFunction, isNull, isUndefined } from 'lodash'
 import type { DefaultOptionType } from 'antd/es/select'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
@@ -54,7 +54,11 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
 
   const showPagination = useMemo(() => {
-    if (isNull(currentReport)) {
+    if (isNull(currentReport) || isUndefined(currentAdapter)) {
+      return false
+    }
+
+    if (!isFunction(currentAdapter?.getPagination)) {
       return false
     }
 

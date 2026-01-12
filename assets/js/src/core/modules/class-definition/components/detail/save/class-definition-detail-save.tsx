@@ -38,7 +38,7 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
       classDefinitionUpdate: {
         values: {
           ...classDefinition,
-          // @todo check how to handle new icon types
+          // @todo check how to handle new icon types with backend
           icon: ''
         },
         configuration: {

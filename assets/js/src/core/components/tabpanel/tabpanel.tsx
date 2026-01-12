@@ -12,6 +12,8 @@ import React from 'react'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { Box, type BoxProps } from '../box/box'
+import { useTranslation } from 'react-i18next'
+import { isNonEmptyString } from '@sdk/utils'
 
 export interface TabpanelItem {
   key?: string
@@ -59,16 +61,22 @@ export const Tabpanel = ({
   onChange,
   ...props
 }: TabpanelProps): React.JSX.Element => {
-  const tabItems: ITabsProps['items'] = items.map((item, index) => ({
-    key: item.key ?? index.toString(),
-    label: item.label ?? item.title ?? `Tab ${index + 1}`,
-    forceRender: true,
-    closable: item.closable,
-    ...item,
-    children: <Box padding={ border === true ? 'small' : { x: 'none', y: 'small' } }>
-      {item.children}
-    </Box>
-  }))
+  const { t } = useTranslation()
+  const tabItems: ITabsProps['items'] = items.map((item, index) => {
+    const labelOrTitle = item.label ?? item.title
+    const label = isNonEmptyString(labelOrTitle) ? t(labelOrTitle) : `Tab ${index + 1}`
+
+    return {
+      ...item,
+      key: index.toString(),
+      label,
+      forceRender: true,
+      closable: item.closable,
+      children: <Box padding={ border === true ? 'small' : { x: 'none', y: 'small' } }>
+        {item.children}
+      </Box>
+    }
+  })
 
   const handleClose = (tabKey: string): void => {
     if (onClose !== undefined) {
@@ -85,7 +93,7 @@ export const Tabpanel = ({
       extra={ extra }
       extraPosition={ extraPosition }
       theme={ theme }
-      title={ title }
+      title={ isNonEmptyString(title) ? t(title) : title }
     >
       <Tabs
         activeKey={ activeKey }

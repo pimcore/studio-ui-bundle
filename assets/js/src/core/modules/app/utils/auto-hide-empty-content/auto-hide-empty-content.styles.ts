@@ -10,21 +10,16 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css }, { contentSelector }: { contentSelector: string }) => {
   return {
-    container: css`
-      padding: ${token.paddingSM}px;
-      margin-left: 1px;
-    `,
+    wrapper: css`
+      /* Use display:contents to avoid affecting layout */
+      display: contents;
 
-    containerWithBorder: css`
-      padding: ${token.paddingSM}px;
-      border-bottom: 1px solid ${token.colorBorderSecondary};
-    `,
-
-    title: css`
-      margin: 0 !important;
-      line-height: 20px !important;
+      /* Hide when content selector matches an empty element */
+      &:has(${contentSelector}:empty) {
+        display: none;
+      }
     `
   }
 })
