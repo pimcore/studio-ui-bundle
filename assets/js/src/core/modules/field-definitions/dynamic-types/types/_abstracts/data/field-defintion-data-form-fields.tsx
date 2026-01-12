@@ -8,10 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
 import React from 'react'
-
 
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const isCustomLayout = props.context.area.includes('custom-layout')
