@@ -16,3 +16,8 @@ export const getParent = <T extends FieldDefinition = FieldDefinition>(context: 
   const definition = fieldDefinitions[path[path.length - 2]]
   return definition as T | undefined
 }
+
+export const isParent = (fieldType: string, context: FieldDefinitionContext): boolean => {
+  const parent = getParent(context)
+  return parent?.fieldtype === fieldType
+}

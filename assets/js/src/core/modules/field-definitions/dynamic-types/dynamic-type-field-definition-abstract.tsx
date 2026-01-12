@@ -25,6 +25,10 @@ export interface FieldDefinitionContext extends Record<string, any> {
   fieldDefinitions: IClassDefinitionLayoutContext['fieldDefinitions']
 }
 
+export interface FieldDefinitionAbstractFormFieldsProps {
+  context: FieldDefinitionContext
+}
+
 export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbstract {
   abstract getGroup (): string[]
 

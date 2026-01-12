@@ -8,19 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { FieldDefinitionAbstractFormFieldsProps, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { isParent } from '@Pimcore/modules/field-definitions/utils/context-helpers'
 import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
 import React from 'react'
 
-export interface FieldDefinitionDataFormFieldsProps {
-  context: FieldDefinitionContext
-}
-
-export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionDataFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { context } = props
-  const { fieldDefinitions, path } = context
-  const parent = fieldDefinitions[path[path.length - 2]]
-  const isRegion = parent !== undefined && parent.fieldtype === 'region'
+  const isRegion = isParent('region', context)
 
   return (
     <>

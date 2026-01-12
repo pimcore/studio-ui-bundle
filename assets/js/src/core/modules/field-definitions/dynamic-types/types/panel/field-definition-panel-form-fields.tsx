@@ -8,15 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, IconSelector, Switch } from '@sdk/components'
 import React from 'react'
 
-export interface FieldDefinitionPanelFormFieldsProps {
-  context: FieldDefinitionContext
-}
-
-export const FieldDefinitionPanelFormFields = (props: FieldDefinitionPanelFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionPanelFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
     <>
       <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
