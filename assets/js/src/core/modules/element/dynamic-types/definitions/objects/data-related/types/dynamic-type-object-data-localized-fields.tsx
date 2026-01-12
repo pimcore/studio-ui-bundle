@@ -17,6 +17,7 @@ import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import { VersionObjectLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-object-localized-fields'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
   id: string = DynamicTypesList.LOCALIZED_FIELDS
@@ -27,13 +28,7 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition & { children?: any[] }): React.ReactElement<AbstractObjectDataDefinition> {
-    // For version view, we use ObjectLocalizedFields with noteditable=true
-    return (
-      <ObjectLocalizedFields
-        { ...props }
-        noteditable
-      />
-    )
+    return <VersionObjectLocalizedFields { ...props } />
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
