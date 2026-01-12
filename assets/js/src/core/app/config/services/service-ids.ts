@@ -362,5 +362,5 @@ export const serviceIds = {
   // Field Definitions
   'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
   'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',
-  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel',
+  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel'
 }

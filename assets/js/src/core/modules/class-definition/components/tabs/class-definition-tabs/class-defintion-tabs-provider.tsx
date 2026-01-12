@@ -1,4 +1,14 @@
-import React, { createContext, useContext, useMemo, useState } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { createContext, useContext, useMemo, useState } from 'react'
 
 export interface ClassDefinitionPartial {
   id: string
@@ -11,7 +21,7 @@ export interface ClassDefinitionPartial {
 }
 
 export interface IClassDefinitionTabsContext {
-  classDefinitions: Array<ClassDefinitionPartial>
+  classDefinitions: ClassDefinitionPartial[]
   activeClassDefinition: ClassDefinitionPartial | undefined
   closeClassDefinition: (classDef: ClassDefinitionPartial) => void
   openClassDefinition: (classDef: ClassDefinitionPartial) => void
@@ -19,88 +29,89 @@ export interface IClassDefinitionTabsContext {
   closeActiveClassDefinition: () => void
 }
 
-export const ClassDefinitionTabsContext = createContext<IClassDefinitionTabsContext | undefined>(undefined);
+export const ClassDefinitionTabsContext = createContext<IClassDefinitionTabsContext | undefined>(undefined)
 
 export interface ClassDefinitionsProviderProps {
   children: React.ReactNode
 }
 
 export const ClassDefinitionsTabsProvider = (props: ClassDefinitionsProviderProps): React.JSX.Element => {
-  const [classDefinitions, setClassDefinitions] = useState<Array<ClassDefinitionPartial>>([]);
-  const [activeClassDefinition, setActiveClassDefinitionInternal] = useState<ClassDefinitionPartial | undefined>(undefined);
+  const [classDefinitions, setClassDefinitions] = useState<ClassDefinitionPartial[]>([])
+  const [activeClassDefinition, setActiveClassDefinitionInternal] = useState<ClassDefinitionPartial | undefined>(undefined)
 
-  const closeActiveClassDefinition = () => {
+  const closeActiveClassDefinition = (): void => {
     if (activeClassDefinition === undefined) {
-      return;
+      return
     }
 
     setClassDefinitions((prevClassDefs) => {
-      return prevClassDefs.filter((cd) => cd.id !== activeClassDefinition.id);
-    });
+      return prevClassDefs.filter((cd) => cd.id !== activeClassDefinition.id)
+    })
 
     if (classDefinitions.length > 1) {
-      const currentIndex = classDefinitions.findIndex((cd) => cd.id === activeClassDefinition.id);
-      const nextIndex = currentIndex === classDefinitions.length - 1 ? currentIndex - 1 : currentIndex + 1;
-      setActiveClassDefinitionInternal(classDefinitions[nextIndex]);
-      return;
+      const currentIndex = classDefinitions.findIndex((cd) => cd.id === activeClassDefinition.id)
+      const nextIndex = currentIndex === classDefinitions.length - 1 ? currentIndex - 1 : currentIndex + 1
+      setActiveClassDefinitionInternal(classDefinitions[nextIndex])
+      return
     }
 
-    setActiveClassDefinitionInternal(undefined);
+    setActiveClassDefinitionInternal(undefined)
   }
 
-  const setActiveClassDefinition = (classDef: ClassDefinitionPartial) => {
-    if (!classDefinitions.find((cd) => cd.id === classDef.id)) {
-      openClassDefinition(classDef);
-      return;
+  const setActiveClassDefinition = (classDef: ClassDefinitionPartial): void => {
+    if (classDefinitions.find((cd) => cd.id === classDef.id) === undefined) {
+      openClassDefinition(classDef)
+      return
     }
 
-    setActiveClassDefinitionInternal(classDef);
+    setActiveClassDefinitionInternal(classDef)
   }
 
-  const openClassDefinition = (classDef: ClassDefinitionPartial) => {
+  const openClassDefinition = (classDef: ClassDefinitionPartial): void => {
     setClassDefinitions((prevClassDefs) => {
-      if (prevClassDefs.find((cd) => cd.id === classDef.id)) {
-        return prevClassDefs;
+      if (prevClassDefs.find((cd) => cd.id === classDef.id) !== undefined) {
+        return prevClassDefs
       }
 
-      return [...prevClassDefs, classDef];
-    });
+      return [...prevClassDefs, classDef]
+    })
 
-    setActiveClassDefinitionInternal(classDef);
-  };
+    setActiveClassDefinitionInternal(classDef)
+  }
 
-  const closeClassDefinition = (classDef: ClassDefinitionPartial) => {
+  const closeClassDefinition = (classDef: ClassDefinitionPartial): void => {
     if (activeClassDefinition?.id === classDef.id) {
-      closeActiveClassDefinition();
+      closeActiveClassDefinition()
     }
 
     setClassDefinitions((prevClassDefs) => {
-      return prevClassDefs.filter((cd) => cd.id !== classDef.id);
-    });
-  };
-  
+      return prevClassDefs.filter((cd) => cd.id !== classDef.id)
+    })
+  }
+
   return useMemo(() => {
     return (
-      <ClassDefinitionTabsContext.Provider value={{
-        classDefinitions: classDefinitions,
-        closeClassDefinition: closeClassDefinition,
-        openClassDefinition: openClassDefinition,
-        activeClassDefinition: activeClassDefinition,
-        setActiveClassDefinition: setActiveClassDefinition,
-        closeActiveClassDefinition: closeActiveClassDefinition
-      }}>
+      <ClassDefinitionTabsContext.Provider value={ {
+        classDefinitions,
+        closeClassDefinition,
+        openClassDefinition,
+        activeClassDefinition,
+        setActiveClassDefinition,
+        closeActiveClassDefinition
+      } }
+      >
         {props.children}
       </ClassDefinitionTabsContext.Provider>
     )
-  }, [props.children, classDefinitions, activeClassDefinition]);
+  }, [props.children, classDefinitions, activeClassDefinition])
 }
 
 export const useClassDefinitionTabs = (): IClassDefinitionTabsContext => {
-  const context = useContext(ClassDefinitionTabsContext);
+  const context = useContext(ClassDefinitionTabsContext)
 
-  if (!context) {
-    throw new Error('useClassDefinitionTabsContext must be used within a ClassDefinitionsProvider');
+  if (context === undefined) {
+    throw new Error('useClassDefinitionTabsContext must be used within a ClassDefinitionsProvider')
   }
 
-  return context;
+  return context
 }

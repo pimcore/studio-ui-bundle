@@ -1,51 +1,71 @@
-import { FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
-import { Form, FormKit, Input, Switch, TextArea } from "@sdk/components";
-import React from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
+import React from 'react'
 
 // @todo centralize type
 export interface FieldDefinitionDataFormFieldsProps {
-  context: FieldDefinitionContext;
+  context: FieldDefinitionContext
 }
 
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionDataFormFieldsProps): React.JSX.Element => {
-  const isCustomLayout = props.context.area.includes('custom-layout');
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
-  return (<>
-    <FormKit.Panel title="Basic Information">
-      <Form.Item label="name" name="name">
-        <Input />
-      </Form.Item>
+  return (
+    <>
+      <FormKit.Panel title="Basic Information">
+        <Form.Item
+          label="name"
+          name="name"
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item label="title" name="title">
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="title"
+          name="title"
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item label="tooltip" name="tooltip">
-        <TextArea />
-      </Form.Item>
+        <Form.Item
+          label="tooltip"
+          name="tooltip"
+        >
+          <TextArea />
+        </Form.Item>
 
-      <Form.Item name="index">
-        <Switch labelRight="index" />
-      </Form.Item>
+        <Form.Item name="index">
+          <Switch labelRight="index" />
+        </Form.Item>
 
-      <Form.Item name="mandatory">
-        <Switch labelRight="mandatoryfield" />
-      </Form.Item>
+        <Form.Item name="mandatory">
+          <Switch labelRight="mandatoryfield" />
+        </Form.Item>
 
-      {/* @todo check behavior for unique fields */}
-      <Form.Item name="unique">
-        <Switch labelRight="unique" />
-      </Form.Item>
+        {/* @todo check behavior for unique fields */}
+        <Form.Item name="unique">
+          <Switch labelRight="unique" />
+        </Form.Item>
 
-      <Form.Item name="noteditable">
-        <Switch labelRight="not_editable" />
-      </Form.Item>
+        <Form.Item name="noteditable">
+          <Switch labelRight="not_editable" />
+        </Form.Item>
 
-      <Form.Item name="invisible">
-        <Switch labelRight="invisible" />
-      </Form.Item>
+        <Form.Item name="invisible">
+          <Switch labelRight="invisible" />
+        </Form.Item>
 
-      {!isCustomLayout && (
+        {!isCustomLayout && (
         <>
           <Form.Item name="visibleGridView">
             <Switch labelRight="visible_in_gridview" />
@@ -55,7 +75,8 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionDataFormFiel
             <Switch labelRight="visible_in_searchresult" />
           </Form.Item>
         </>
-      )}
-    </FormKit.Panel> 
-  </>);
+        )}
+      </FormKit.Panel>
+    </>
+  )
 }

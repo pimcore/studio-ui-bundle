@@ -22,7 +22,7 @@ export interface TreeAction {
 }
 
 export interface TreeDataItem extends TreeDataNode {
-  actions?: Array<TreeAction>
+  actions?: TreeAction[]
   meta?: Record<string, any>
   allowDrop?: boolean | ((params: { dropNode: TreeDataItem, dropPosition: number, dragNode: TreeDataItem }) => boolean)
   allowDrag?: boolean | ((params: { node: TreeDataItem }) => boolean)
@@ -73,7 +73,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     if (propSelectedKeys !== undefined) {
       setSelectedKeys(propSelectedKeys)
     }
-  }, [propSelectedKeys]);
+  }, [propSelectedKeys])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined
@@ -100,7 +100,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
   }
 
   return (
-    <> 
+    <>
       {treeData.length > 0 && (
         <Tree
           { ...optionalProps }
@@ -109,20 +109,20 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
               return dropNode.allowDrop && dropPosition === 0
             }
 
-            return dropNode.allowDrop ? dropNode.allowDrop({ dropNode, dropPosition, dragNode }) : false
+            return dropNode.allowDrop !== undefined ? dropNode.allowDrop({ dropNode, dropPosition, dragNode }) : false
           } }
           blockNode
           checkStrictly={ checkStrictly }
           checkable={ onCheck !== undefined }
           checkedKeys={ checkedKeys }
           className={ cn(styles.treeContainer, className) }
-          draggable={ draggable }
           defaultExpandAll={ defaultExpandAll }
+          draggable={ draggable }
           loadData={ onLoadData !== null ? onLoadData : undefined }
           onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
           onDragStart={ (evt): void => {
             if (typeof evt.node.allowDrag === 'function') {
-              if (evt.node.allowDrag({ node: evt.node as TreeDataItem }) === false) {
+              if (!evt.node.allowDrag({ node: evt.node as TreeDataItem })) {
                 evt.event.preventDefault()
               }
             }

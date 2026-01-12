@@ -48,7 +48,7 @@ export const {
   useClassDefinitionGetLayoutByIdQuery,
   useClassDefinitionGetTreeQuery,
   useClassDefinitionGetByIdQuery,
-  useClassDefinitionUpdateMutation,
+  useClassDefinitionUpdateMutation
 } = api
 
 export { api }

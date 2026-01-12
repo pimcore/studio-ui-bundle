@@ -1,39 +1,49 @@
-import { DynamicTypeFieldDefinitionAbstract, FieldDefinitionDataAbstract, FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
-import { FieldDefinitionLayoutFormFields } from "@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/field-defintion-layout-form-fields";
-import React from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { FieldDefinitionLayoutFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/field-defintion-layout-form-fields'
+import React from 'react'
 
 export interface FieldDefinitionLayout extends FieldDefinitionDataAbstract {
-  name: string;
-  title: string;
-  region: string;
+  name: string
+  title: string
+  region: string
 }
 
 export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTypeFieldDefinitionAbstract {
-  protected getAllowedChildTags(props: FieldDefinitionContext): string[] {
-    return [...super.getAllowedChildTags(props), 'group:layout', 'group:data'];
+  protected getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
   }
 
-  getTags(props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), `group:layout`];
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'group:layout']
   }
 
-  getGroup(): string[] {
-    return ['layout'];
+  getGroup (): string[] {
+    return ['layout']
   }
 
-  getDefaultData(): FieldDefinitionLayout {
+  getDefaultData (): FieldDefinitionLayout {
     return {
       fieldtype: this.id,
       datatype: 'layout',
       name: 'Layout',
       title: '',
-      region: '',
-    };
+      region: ''
+    }
   }
 
-  getFormFields(context: FieldDefinitionContext): React.JSX.Element {
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return (
-      <FieldDefinitionLayoutFormFields context={context} />
+      <FieldDefinitionLayoutFormFields context={ context } />
     )
   }
 }

@@ -1,9 +1,19 @@
-import { useClassDefinitionTabs } from "@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider"
-import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from "@sdk/api/class-definition"
-import { Content, Form, Input, Modal } from "@sdk/components"
-import { ApiError, trackError } from "@sdk/modules/app"
-import { useForm } from "antd/es/form/Form"
-import React, { useEffect } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type ClassDefinitionPartial, useClassDefinitionTabs } from '@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider'
+import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from '@sdk/api/class-definition'
+import { Content, Form, Input, Modal } from '@sdk/components'
+import { ApiError, trackError } from '@sdk/modules/app'
+import { useForm } from 'antd/es/form/Form'
+import React, { useEffect } from 'react'
 
 export interface ClassDefinitionModalNewProps {
   open: boolean
@@ -12,28 +22,28 @@ export interface ClassDefinitionModalNewProps {
 
 export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): React.JSX.Element => {
   const [form] = useForm()
-  const { data, isLoading, error, refetch } = useClassDefinitionGetIdentifierDataQuery();
-  const [createClassDefinition] = useClassDefinitionCreateMutation();
-  const { openClassDefinition } = useClassDefinitionTabs();
+  const { data, isLoading, error, refetch } = useClassDefinitionGetIdentifierDataQuery()
+  const [createClassDefinition] = useClassDefinitionCreateMutation()
+  const { openClassDefinition } = useClassDefinitionTabs()
 
   useEffect(() => {
     if (props.open) {
-      refetch();
+      void refetch()
     }
-  }, [props.open, refetch, form]);
+  }, [props.open, refetch, form])
 
   useEffect(() => {
-    if (error) {
-      trackError(new ApiError(error));
+    if (error !== undefined) {
+      trackError(new ApiError(error))
     }
-  }, [error]);
+  }, [error])
 
-  const onFormFinish = (values: any) => {
+  const onFormFinish = (values: any): void => {
     if (data === undefined) {
-      return;
+      return
     }
 
-    form.resetFields();
+    form.resetFields()
 
     createClassDefinition({
       createClassDefinition: {
@@ -41,63 +51,73 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
         uid: values.uniqueIdentifier
       }
     }).then((data) => {
-      props.onOpenChange?.(false);
-      openClassDefinition({
+      props.onOpenChange?.(false)
+
+      const classDef: ClassDefinitionPartial = {
         id: data.data!.id,
         name: data.data!.name,
         // @todo check schema with backend
+        /*  @ts-expect-error group currently not in backend schema */
         group: data.data!.group,
-        icon: data.data!.icon,
-      });
-    }).catch((err) => {
-      trackError(new ApiError(err));
-    });
+        /*  @ts-expect-error icon currently not in backend schema */
+        icon: data.data!.icon
+      }
+
+      openClassDefinition(classDef)
+    }).catch((err: ApiError) => {
+      trackError(new ApiError(err))
+    })
   }
 
-  const onCancel = () => {
-    form.resetFields();
-    props.onOpenChange?.(false);
+  const onCancel = (): void => {
+    form.resetFields()
+    props.onOpenChange?.(false)
   }
 
   return (
-    <Modal 
-      open={props.open}
-      onCancel={onCancel}
-      onOk={ () => form.submit()}
-      title={"Create New Class Definition"}
+    <Modal
+      onCancel={ onCancel }
+      onOk={ () => { form.submit() } }
+      open={ props.open }
+      title={ 'Create New Class Definition' }
     >
-      <Content loading={isLoading}>
-        <Form layout="vertical" form={form} onFinish={onFormFinish}>
+      <Content loading={ isLoading }>
+        <Form
+          form={ form }
+          layout="vertical"
+          onFinish={ onFormFinish }
+        >
           <Form.Item
-            name="className"
             label="Class name"
-            rules={[
+            name="className"
+            rules={ [
               { required: true, message: 'Please enter a class name' },
               { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: 'The class name must start with a letter and can contain only letters, numbers, and underscores.' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            name="uniqueIdentifier"
+            initialValue={ data?.suggestedId }
             label="Unique identifier"
-            initialValue={data?.suggestedId}
-            rules={[
+            name="uniqueIdentifier"
+            rules={ [
               { required: true, message: 'Please enter a unique identifier' },
-              { validator: (_, value) => {
-                  if (data?.existingIds.includes(value.toLowerCase())) {
-                    return Promise.reject(new Error('This unique identifier is already in use'));
+              {
+                validator: async (_, value: string) => {
+                  if (data?.existingIds.includes(value.toLowerCase()) === true) {
+                    return await Promise.reject(new Error('This unique identifier is already in use'))
                   }
 
-                  return Promise.resolve();
+                  await Promise.resolve()
                 }
               },
               { pattern: /^[a-zA-Z0-9_]{0,63}$/, message: 'The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.' }
-            ]}
+            ] }
           >
             <Input
-              maxLength={64}
+              maxLength={ 64 }
             />
           </Form.Item>
 

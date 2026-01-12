@@ -1,30 +1,43 @@
-import { Layout } from "@sdk/api/class-definition";
-import { uuid } from "@sdk/utils";
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+/* eslint-disable max-lines */
+import { type Layout } from '@sdk/api/class-definition'
+import { uuid } from '@sdk/utils'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 export interface StructureNode {
-  id: string;
-  children: StructureNode[];
+  id: string
+  children: StructureNode[]
 }
 
-export interface FieldDefinition extends Record<string, any> {}
+export interface FieldDefinition extends Record<string, any> {
+  fieldtype: string
+}
 
 export interface IClassDefinitionLayoutContext {
   structure: StructureNode | undefined
   fieldDefinitions: Record<string, FieldDefinition>
-  currentFieldDefinitionId: StructureNode["id"] | null
+  currentFieldDefinitionId: StructureNode['id'] | null
   currentFieldDefinitionIdPath: string[] | null
-  setCurrentFieldDefinitionId: (id: StructureNode["id"] | null) => void
+  setCurrentFieldDefinitionId: (id: StructureNode['id'] | null) => void
   setCurrentFieldDefinitionIdPath: (path: string[] | null) => void
-  updateFieldDefinition: (structureNodeId: StructureNode["id"], updatedFieldDefinition: FieldDefinition) => void
-  addFieldDefinition: (structureNodeId: StructureNode["id"], newFieldDefinition: FieldDefinition) => StructureNode["id"]
-  removeFieldDefinition: (structureNodeId: StructureNode["id"]) => void
-  cloneFieldDefinition: (structureNodeId: StructureNode["id"]) => StructureNode["id"]
-  moveFieldDefinition: (structureNodeId: StructureNode["id"], newParentId: StructureNode["id"], newIndex: number) => void
+  updateFieldDefinition: (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition) => void
+  addFieldDefinition: (structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition) => StructureNode['id']
+  removeFieldDefinition: (structureNodeId: StructureNode['id']) => void
+  cloneFieldDefinition: (structureNodeId: StructureNode['id']) => StructureNode['id']
+  moveFieldDefinition: (structureNodeId: StructureNode['id'], newParentId: StructureNode['id'], newIndex: number) => void
   getLayout: () => Layout
 }
 
-export const ClassDefinitionLayoutContext = createContext<IClassDefinitionLayoutContext | undefined>(undefined);
+export const ClassDefinitionLayoutContext = createContext<IClassDefinitionLayoutContext | undefined>(undefined)
 
 export interface ClassDefinitionLayoutProviderProps {
   layout: Layout | undefined
@@ -32,245 +45,248 @@ export interface ClassDefinitionLayoutProviderProps {
 }
 
 export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProviderProps): React.JSX.Element => {
-  const [structure, setStructure] = useState<IClassDefinitionLayoutContext['structure']>(undefined);
-  const [fieldDefinitions, setFieldDefinitions] = useState<IClassDefinitionLayoutContext['fieldDefinitions']>({});
-  const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionId']>(null);
-  const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionIdPath']>(null);
+  const [structure, setStructure] = useState<IClassDefinitionLayoutContext['structure']>(undefined)
+  const [fieldDefinitions, setFieldDefinitions] = useState<IClassDefinitionLayoutContext['fieldDefinitions']>({})
+  const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionId']>(null)
+  const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionIdPath']>(null)
 
   useEffect(() => {
     if (props.layout === undefined) {
-      setStructure(undefined);
-      setFieldDefinitions({});
-      setCurrentFieldDefinitionId(null);
-      setCurrentFieldDefinitionIdPath(null);
-      return;
+      setStructure(undefined)
+      setFieldDefinitions({})
+      setCurrentFieldDefinitionId(null)
+      setCurrentFieldDefinitionIdPath(null)
+      return
     }
 
-    const initialFieldDefinitions: IClassDefinitionLayoutContext['fieldDefinitions'] = {};
+    const initialFieldDefinitions: IClassDefinitionLayoutContext['fieldDefinitions'] = {}
 
     const buildStructure = (layoutItem: Layout): StructureNode => {
-      const id = uuid();
+      const id = uuid()
 
       const node: StructureNode = {
-        id: id,
-        children: layoutItem.children ? layoutItem.children.map((child) => buildStructure(child as Layout)) : [],
-      };
+        id,
+        children: layoutItem.children !== undefined ? layoutItem.children.map((child) => buildStructure(child as Layout)) : []
+      }
 
-      const { children, ...fieldDef } = layoutItem;
+      const { children, ...fieldDef } = layoutItem
 
-      initialFieldDefinitions[id] = fieldDef;
+      // @todo remove type conversion after fix of typo from backendSide (fieldtype vs. fieldType)
+      initialFieldDefinitions[id] = fieldDef as unknown as FieldDefinition
 
-      return node;
-    };
+      return node
+    }
 
-    const rootStructure = buildStructure(props.layout);
+    const rootStructure = buildStructure(props.layout)
 
-    setCurrentFieldDefinitionId(null);
-    setCurrentFieldDefinitionIdPath(null);
-    setStructure(rootStructure);
-    setFieldDefinitions(initialFieldDefinitions);
-  }, [props.layout]);
+    setCurrentFieldDefinitionId(null)
+    setCurrentFieldDefinitionIdPath(null)
+    setStructure(rootStructure)
+    setFieldDefinitions(initialFieldDefinitions)
+  }, [props.layout])
 
-  const updateFieldDefinition = (structureNodeId: StructureNode["id"], updatedFieldDefinition: FieldDefinition) => {
+  const updateFieldDefinition = (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition): void => {
     setFieldDefinitions((prevDefs) => ({
       ...prevDefs,
       [structureNodeId]: {
         ...prevDefs[structureNodeId],
-        ...updatedFieldDefinition,
-      },
-    }));
-  };
+        ...updatedFieldDefinition
+      }
+    }))
+  }
 
-  const addFieldDefinition = (structureNodeId: StructureNode["id"], newFieldDefinition: FieldDefinition): StructureNode["id"] => {
-    const newId = uuid();
+  const addFieldDefinition = (structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition): StructureNode['id'] => {
+    const newId = uuid()
 
     const addNodeRecursively = (node: StructureNode): StructureNode => {
       if (node.id === structureNodeId) {
         return {
           ...node,
-          children: [...node.children, { id: newId, children: [] }],
-        };
+          children: [...node.children, { id: newId, children: [] }]
+        }
       }
 
       return {
         ...node,
-        children: node.children.map(addNodeRecursively),
-      };
-    };
+        children: node.children.map(addNodeRecursively)
+      }
+    }
 
-    setStructure((prevStructure) => prevStructure ? addNodeRecursively(prevStructure) : prevStructure);
+    setStructure((prevStructure) => prevStructure !== undefined ? addNodeRecursively(prevStructure) : prevStructure)
     setFieldDefinitions((prevDefs) => ({
       ...prevDefs,
-      [newId]: newFieldDefinition,
-    }));
+      [newId]: newFieldDefinition
+    }))
 
-    return newId;
-  };
+    return newId
+  }
 
-  const removeFieldDefinition = (structureNodeId: StructureNode["id"]) => {
+  const removeFieldDefinition = (structureNodeId: StructureNode['id']): void => {
     const removeNodeRecursively = (node: StructureNode): StructureNode | undefined => {
       if (node.id === structureNodeId) {
-        return undefined;
+        return undefined
       }
 
       const updatedChildren = node.children
         .map(removeNodeRecursively)
-        .filter((child): child is StructureNode => child !== undefined);
+        .filter((child): child is StructureNode => child !== undefined)
 
       return {
         ...node,
-        children: updatedChildren,
-      };
-    };
+        children: updatedChildren
+      }
+    }
 
     if (currentFieldDefinitionId === structureNodeId) {
-      setCurrentFieldDefinitionId(null);
-      setCurrentFieldDefinitionIdPath(null);
+      setCurrentFieldDefinitionId(null)
+      setCurrentFieldDefinitionIdPath(null)
     }
-    
-    setStructure((prevStructure) => prevStructure ? removeNodeRecursively(prevStructure) : prevStructure);
-    setFieldDefinitions((prevDefs) => {
-      const { [structureNodeId]: _, ...rest } = prevDefs;
-      return rest;
-    });
-  };
 
-  const cloneFieldDefinition = (structureNodeId: StructureNode["id"]): StructureNode["id"] => {
-    const oldToNewIdMap: Record<string, string> = {};
-    
-    const cloneNodeRecursively = (node: StructureNode): StructureNode => {
-      const newId = uuid();
-      oldToNewIdMap[node.id] = newId;
-      
-      return {
-        id: newId,
-        children: node.children.map(cloneNodeRecursively),
-      };
-    };
-    
-    const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
-      if (node.id === targetId) {
-        return node;
-      }
-      
-      for (const child of node.children) {
-        const found = findNode(child, targetId);
-        if (found !== undefined) return found;
-      }
-      
-      return undefined;
-    };
-    
-    const insertClonedNodeAsSibling = (node: StructureNode, targetId: string, clonedNode: StructureNode): StructureNode => {
-      const childIndex = node.children.findIndex(child => child.id === targetId);
-      
-      if (childIndex !== -1) {
-        const newChildren = [...node.children];
-        newChildren.splice(childIndex + 1, 0, clonedNode);
-        
-        return {
-          ...node,
-          children: newChildren,
-        };
-      }
-      
-      return {
-        ...node,
-        children: node.children.map(child => insertClonedNodeAsSibling(child, targetId, clonedNode)),
-      };
-    };
-    
-    if (structure === undefined) {
-      return structureNodeId;
-    }
-    
-    const nodeToClone = findNode(structure, structureNodeId);
-    
-    if (nodeToClone === undefined) {
-      return structureNodeId;
-    }
-    
-    const clonedNode = cloneNodeRecursively(nodeToClone);
-    
-    setStructure((prevStructure) => 
-      prevStructure !== undefined ? insertClonedNodeAsSibling(prevStructure, structureNodeId, clonedNode) : prevStructure
-    );
-    
+    setStructure((prevStructure) => prevStructure !== undefined ? removeNodeRecursively(prevStructure) : prevStructure)
     setFieldDefinitions((prevDefs) => {
-      const newDefs = { ...prevDefs };
-      
-      Object.entries(oldToNewIdMap).forEach(([oldId, newId]) => {
-        newDefs[newId] = { ...prevDefs[oldId] };
-      });
-      
-      return newDefs;
-    });
-    
-    return clonedNode.id;
+      const { [structureNodeId]: _, ...rest } = prevDefs
+      return rest
+    })
   }
 
-  const moveFieldDefinition = (structureNodeId: StructureNode["id"], newParentId: StructureNode["id"], newIndex: number) => {
-    const findAndRemoveNode = (node: StructureNode, targetId: string): { updatedNode: StructureNode | null; removedNode: StructureNode | null } => {
+  const cloneFieldDefinition = (structureNodeId: StructureNode['id']): StructureNode['id'] => {
+    const oldToNewIdMap: Record<string, string> = {}
+
+    const cloneNodeRecursively = (node: StructureNode): StructureNode => {
+      const newId = uuid()
+      oldToNewIdMap[node.id] = newId
+
+      return {
+        id: newId,
+        children: node.children.map(cloneNodeRecursively)
+      }
+    }
+
+    const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
       if (node.id === targetId) {
-        return { updatedNode: null, removedNode: node };
+        return node
       }
 
-      let removedNode: StructureNode | null = null;
+      for (const child of node.children) {
+        const found = findNode(child, targetId)
+        if (found !== undefined) return found
+      }
+
+      return undefined
+    }
+
+    const insertClonedNodeAsSibling = (node: StructureNode, targetId: string, clonedNode: StructureNode): StructureNode => {
+      const childIndex = node.children.findIndex(child => child.id === targetId)
+
+      if (childIndex !== -1) {
+        const newChildren = [...node.children]
+        newChildren.splice(childIndex + 1, 0, clonedNode)
+
+        return {
+          ...node,
+          children: newChildren
+        }
+      }
+
+      return {
+        ...node,
+        children: node.children.map(child => insertClonedNodeAsSibling(child, targetId, clonedNode))
+      }
+    }
+
+    if (structure === undefined) {
+      return structureNodeId
+    }
+
+    const nodeToClone = findNode(structure, structureNodeId)
+
+    if (nodeToClone === undefined) {
+      return structureNodeId
+    }
+
+    const clonedNode = cloneNodeRecursively(nodeToClone)
+
+    setStructure((prevStructure) =>
+      prevStructure !== undefined ? insertClonedNodeAsSibling(prevStructure, structureNodeId, clonedNode) : prevStructure
+    )
+
+    setFieldDefinitions((prevDefs) => {
+      const newDefs = { ...prevDefs }
+
+      Object.entries(oldToNewIdMap).forEach(([oldId, newId]) => {
+        newDefs[newId] = { ...prevDefs[oldId] }
+      })
+
+      return newDefs
+    })
+
+    return clonedNode.id
+  }
+
+  const moveFieldDefinition = (structureNodeId: StructureNode['id'], newParentId: StructureNode['id'], newIndex: number): void => {
+    const findAndRemoveNode = (node: StructureNode, targetId: string): { updatedNode: StructureNode | null, removedNode: StructureNode | null } => {
+      if (node.id === targetId) {
+        return { updatedNode: null, removedNode: node }
+      }
+
+      let removedNode: StructureNode | null = null
       const updatedChildren = node.children
         .map((child) => {
-          const result = findAndRemoveNode(child, targetId);
-          if (result.removedNode) {
-            removedNode = result.removedNode;
+          const result = findAndRemoveNode(child, targetId)
+          if (result.removedNode !== null) {
+            removedNode = result.removedNode
           }
-          return result.updatedNode;
+          return result.updatedNode
         })
-        .filter((child): child is StructureNode => child !== null);
+        .filter((child): child is StructureNode => child !== null)
 
-      return { updatedNode: { ...node, children: updatedChildren }, removedNode };
-    };
+      return { updatedNode: { ...node, children: updatedChildren }, removedNode }
+    }
 
     const insertNodeAtNewPosition = (node: StructureNode, targetParentId: string, nodeToInsert: StructureNode, index: number): StructureNode => {
       if (node.id === targetParentId) {
-        const newChildren = [...node.children];
-        newChildren.splice(index, 0, nodeToInsert);
-        return { ...node, children: newChildren };
+        const newChildren = [...node.children]
+        newChildren.splice(index, 0, nodeToInsert)
+        return { ...node, children: newChildren }
       }
 
       return {
         ...node,
-        children: node.children.map((child) => insertNodeAtNewPosition(child, targetParentId, nodeToInsert, index)),
-      };
-    };
+        children: node.children.map((child) => insertNodeAtNewPosition(child, targetParentId, nodeToInsert, index))
+      }
+    }
 
     setStructure((prevStructure) => {
-      if (!prevStructure) return prevStructure;
+      if (prevStructure === undefined) return prevStructure
 
-      const { updatedNode, removedNode } = findAndRemoveNode(prevStructure, structureNodeId);
-      if (!removedNode || !updatedNode) return prevStructure;
+      const { updatedNode, removedNode } = findAndRemoveNode(prevStructure, structureNodeId)
+      if (removedNode === null || updatedNode === null) return prevStructure
 
-      return insertNodeAtNewPosition(updatedNode, newParentId, removedNode, newIndex);
-    });
-  };
+      return insertNodeAtNewPosition(updatedNode, newParentId, removedNode, newIndex)
+    })
+  }
 
   const getLayout: IClassDefinitionLayoutContext['getLayout'] = () => {
     const buildLayoutRecursively = (node: StructureNode): Layout => {
-      const fieldDef = fieldDefinitions[node.id];
-      const children = node.children.map(buildLayoutRecursively);
+      const fieldDef = fieldDefinitions[node.id]
+      const children = node.children.map(buildLayoutRecursively)
 
-      const { id, ...restFieldDef } = fieldDef;
+      const { id, ...restFieldDef } = fieldDef
 
+      /* eslint-disable @typescript-eslint/consistent-type-assertions */
       return {
-        ...restFieldDef as Layout,
-        children: (children.length > 0 ? children : null) as Layout['children'],
-      } as Layout;
-    };
+        ...restFieldDef,
+        children: (children.length > 0 ? children : null) as Layout['children']
+      } as unknown as Layout
+      /* eslint-enable @typescript-eslint/consistent-type-assertions */
+    }
 
     // @todo ensure structure is defined by injecting pimcore_root early on when necessary
-    return buildLayoutRecursively(structure!);
-  };
+    return buildLayoutRecursively(structure!)
+  }
 
   return useMemo(() => (
-    <ClassDefinitionLayoutContext.Provider 
+    <ClassDefinitionLayoutContext.Provider
       value={
         {
           structure,
@@ -284,21 +300,21 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
           removeFieldDefinition,
           cloneFieldDefinition,
           moveFieldDefinition,
-          getLayout,
+          getLayout
         }
       }
     >
       {props.children}
     </ClassDefinitionLayoutContext.Provider>
-  ), [structure, fieldDefinitions, currentFieldDefinitionId, props.children]);
+  ), [structure, fieldDefinitions, currentFieldDefinitionId, props.children])
 }
 
 export const useClassDefinitionLayout = (): IClassDefinitionLayoutContext => {
-  const context = useContext(ClassDefinitionLayoutContext);
+  const context = useContext(ClassDefinitionLayoutContext)
 
-  if (!context) {
-    throw new Error("useClassDefinitionLayout must be used within a ClassDefinitionLayoutProvider");
+  if (context === undefined) {
+    throw new Error('useClassDefinitionLayout must be used within a ClassDefinitionLayoutProvider')
   }
 
-  return context;
+  return context
 }

@@ -12,11 +12,11 @@ import React, { useMemo } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { TreeAction } from '@sdk/components'
+import { type TreeAction } from '@sdk/components'
 
 export interface ITreeElementItemProps {
   title: string
-  actions?: Array<TreeAction>
+  actions?: TreeAction[]
   onSelected?: () => void
   onActionsClick?: (action: string, title: string) => void
 }
@@ -27,14 +27,14 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
     const menuItems: MenuProps['items'] = []
 
     // handle nested actions
-    const buildMenuItems = (actionsList: Array<TreeAction>) => {
+    const buildMenuItems = (actionsList: TreeAction[]): MenuProps['items'] => {
       return actionsList.map((action) => {
-        if (action.actions && action.actions.length > 0) {
+        if (action.actions !== undefined && action.actions.length > 0) {
           return {
             key: action.key,
             label: t(`tree.actions.${action.key}`),
             icon: <Icon value={ action.icon } />,
-            children: buildMenuItems(action.actions),
+            children: buildMenuItems(action.actions)
           }
         } else {
           return {
@@ -49,8 +49,8 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
       })
     }
 
-    if (actions) {
-      menuItems.push(...buildMenuItems(actions))
+    if (actions !== undefined && actions.length > 0) {
+      menuItems.push(...(buildMenuItems(actions) ?? []))
     }
 
     return menuItems
