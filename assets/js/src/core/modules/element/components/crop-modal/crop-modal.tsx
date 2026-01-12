@@ -122,15 +122,17 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
       size="L"
       title={ t('crop') }
     >
-      <HotspotImage
-        data={ modalOpened ? [cropToHotspot(crop, props.ratioX, props.ratioY, imageRatio)] : [] }
-        disableContextMenu
-        disabled={ props.disabled }
-        onUpdate={ onUpdate }
-        ratioX={ props.ratioX }
-        ratioY={ props.ratioY }
-        src={ thumbnailSrc }
-      />
+      {assetData !== undefined && (
+        <HotspotImage
+          data={ modalOpened ? [cropToHotspot(crop, props.ratioX, props.ratioY, imageRatio)] : [] }
+          disableContextMenu
+          disabled={ props.disabled }
+          onUpdate={ onUpdate }
+          ratioX={ props.ratioX }
+          ratioY={ props.ratioY }
+          src={ thumbnailSrc }
+        />
+      )}
     </Modal>
   )
 }
