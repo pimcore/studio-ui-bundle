@@ -1039,6 +1039,8 @@ image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
+site-id: Site ID
+deleted: deleted
 collection.empty: No available fields yet. Start by adding a field.
 video.type: Video Type
 video.type.asset: Asset
