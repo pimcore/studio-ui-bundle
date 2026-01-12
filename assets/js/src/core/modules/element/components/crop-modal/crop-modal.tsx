@@ -19,33 +19,41 @@ import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import {
-  cropToHotspot, defaultCrop, hotspotToCrop
+  cropToHotspot, hotspotToCrop
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/crop-converter'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface CropModalProps {
   crop?: CropSettings | null
   imageId: number
   open: boolean
   disabled?: boolean
+  ratioX?: number
+  ratioY?: number
   onClose?: () => void
   onChange?: (crop: CropSettings | null) => void
 }
 
 export const CropModal = (props: CropModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [crop, setCrop] = useState<CropSettings | null>(props.crop ?? null)
+  const { data: assetData } = useAssetGetByIdQuery({ id: props.imageId })
+  const imageRatio = (assetData?.width !== undefined && assetData?.height !== undefined) ? Number(assetData.width) / Number(assetData.height) : 1
+
+  const [crop, setCrop] = useState<CropSettings | null>(() => {
+    return hotspotToCrop(cropToHotspot(props.crop, props.ratioX, props.ratioY, imageRatio))
+  })
   const [modalOpened, setModalOpened] = useState(false)
 
   const width = 652
   const height = 500
 
   useEffect(() => {
-    setCrop(props.crop ?? null)
-  }, [props.crop])
+    setCrop(hotspotToCrop(cropToHotspot(props.crop, props.ratioX, props.ratioY, imageRatio)))
+  }, [props.crop, props.ratioX, props.ratioY, imageRatio])
 
   const handleOk = (): void => {
-    props.onChange?.(crop ?? defaultCrop())
+    props.onChange?.(crop)
     props.onClose?.()
   }
 
@@ -115,10 +123,12 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
       title={ t('crop') }
     >
       <HotspotImage
-        data={ modalOpened ? [cropToHotspot(crop)] : [] }
+        data={ modalOpened ? [cropToHotspot(crop, props.ratioX, props.ratioY, imageRatio)] : [] }
         disableContextMenu
         disabled={ props.disabled }
         onUpdate={ onUpdate }
+        ratioX={ props.ratioX }
+        ratioY={ props.ratioY }
         src={ thumbnailSrc }
       />
     </Modal>

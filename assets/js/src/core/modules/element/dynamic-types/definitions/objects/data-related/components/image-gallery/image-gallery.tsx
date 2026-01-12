@@ -34,6 +34,8 @@ export interface ImageGalleryProps {
   className?: string
   width: string | number | null
   height: string | number | null
+  ratioX?: number
+  ratioY?: number
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
@@ -157,6 +159,8 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
                 index={ index }
                 item={ item }
                 key={ item.key }
+                ratioX={ props.ratioX }
+                ratioY={ props.ratioY }
                 setInternalValue={ setInternalValue }
                 setValue={ handleChange }
                 value={ internalValue }

@@ -16,31 +16,39 @@ import { useCropModalContext } from '../provider/use-crop-modal-context'
 
 export interface UseCropModalOptions {
   disabled?: boolean
+  ratioX?: number
+  ratioY?: number
   onChange?: (crop: CropSettings | null) => void
 }
 
 export interface UseCropModalReturn {
-  openModal: (imageId: number, crop?: CropSettings | null) => void
+  openModal: (imageId: number, crop?: CropSettings | null, ratioX?: number, ratioY?: number) => void
   closeModal: () => void
   isOpen: boolean
 }
 
 export const useCropModal = (options: UseCropModalOptions = {}): UseCropModalReturn => {
   const cropModalContext = useCropModalContext()
-  const openModal = useCallback((imageId: number, crop?: CropSettings | null) => {
+  const openModal = useCallback((imageId: number, crop?: CropSettings | null, ratioX?: number, ratioY?: number) => {
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       const { element } = getPimcoreStudioApi()
       element.openCropModal({
         imageId,
         crop,
+        ratioX: ratioX ?? options.ratioX,
+        ratioY: ratioY ?? options.ratioY,
         options
       })
       return
     }
 
     // Fallback to local context
-    cropModalContext.openModal(imageId, crop, options)
+    cropModalContext.openModal(imageId, crop, {
+      ...options,
+      ratioX: ratioX ?? options.ratioX,
+      ratioY: ratioY ?? options.ratioY
+    })
   }, [cropModalContext, options])
 
   const closeModal = useCallback(() => {

@@ -24,7 +24,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isNumber } from 'lodash'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
@@ -41,9 +41,11 @@ interface ImageGalleryImagePreviewProps {
   disabled?: boolean
   width: string
   height: string
+  ratioX?: number
+  ratioY?: number
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { openAsset } = useAssetHelper()
@@ -133,7 +135,12 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const handleOpenCropModal = (): void => {
     if (!isNil(item.image?.id)) {
-      openCropModal(item.image.id, item.crop)
+      openCropModal(
+        item.image.id,
+        item.crop,
+        isNumber(ratioX) ? ratioX : (!isNil(ratioX) ? Number(ratioX) : undefined),
+        isNumber(ratioY) ? ratioY : (!isNil(ratioY) ? Number(ratioY) : undefined)
+      )
     }
   }
 

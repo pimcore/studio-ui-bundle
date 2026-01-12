@@ -35,7 +35,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import {
   hasHotspotsOrMarkers
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
-import _, { isNil } from 'lodash'
+import _, { isNil, isNumber } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './hotspot-image.styles'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
@@ -56,6 +56,8 @@ export interface HotspotImageProps {
   value?: HotspotImageValue | null
   onChange?: (value: HotspotImageValue | null) => void
   className?: string
+  ratioX?: number
+  ratioY?: number
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
@@ -138,7 +140,12 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
 
   const handleOpenCropModal = (): void => {
     if (!isNil(imageValue?.image?.id)) {
-      openCropModal(imageValue.image.id, imageValue.crop)
+      openCropModal(
+        imageValue.image.id,
+        imageValue.crop,
+        !isNil(props.ratioX) ? Number(props.ratioX) : undefined,
+        !isNil(props.ratioY) ? Number(props.ratioY) : undefined
+      )
     }
   }
 
@@ -175,6 +182,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         } }
         variant="outline"
       >
+          <pre>props.ratioX { props.ratioX }</pre>
+          <pre>props.ratioY {props.ratioY}</pre>
         { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           imageValue !== null && imageValue?.image !== null
             ? (
@@ -184,6 +193,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 height={ height! }
                 markerModalOpen={ false }
                 onChange={ handleChange }
+                ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
+                ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
                 setMarkerModalOpen={ openHotspotMarkersModal }
                 value={ imageValue }
                 width={ width! }

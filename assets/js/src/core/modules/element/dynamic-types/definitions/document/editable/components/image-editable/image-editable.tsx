@@ -141,7 +141,12 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   const handleOpenCropModal = (): void => {
     if (!isNil(imageValue?.id)) {
       const cropSettings: CropSettings | null = imageValue.crop! ?? null
-      openCropModal(imageValue.id, cropSettings)
+      openCropModal(
+        imageValue.id,
+        cropSettings,
+        !isNil(props.config?.ratioX) ? Number(props.config?.ratioX) : undefined,
+        !isNil(props.config?.ratioY) ? Number(props.config?.ratioY) : undefined
+      )
     }
   }
 

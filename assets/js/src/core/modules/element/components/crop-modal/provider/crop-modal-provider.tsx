@@ -21,6 +21,8 @@ export interface CropModalContextProps {
 
 export interface CropModalOptions {
   disabled?: boolean
+  ratioX?: number
+  ratioY?: number
   onChange?: (crop: CropSettings | null) => void
 }
 
@@ -71,6 +73,8 @@ export const CropModalProvider: React.FC<CropModalProviderProps> = ({ children }
           onChange={ handleChange }
           onClose={ closeModal }
           open={ isOpen }
+          ratioX={ modalOptions.ratioX }
+          ratioY={ modalOptions.ratioY }
         />
       )}
       {children}

@@ -25,25 +25,69 @@ export const resizeItem = (
   hotspotIndex: number,
   minSize: number,
   dx: number,
-  dy: number
+  dy: number,
+  ratioX?: number,
+  ratioY?: number
 ): IHotspot[] => {
   const hotspot = convertHotspotToPixel(hotspots[hotspotIndex], containerBounds)
   let newWidth = resizeStart.width
   let newHeight = resizeStart.height
   let newX = hotspot.x
   let newY = hotspot.y
+  if (ratioX !== undefined && ratioY !== undefined && ratioX > 0 && ratioY > 0) {
+    const ratio = ratioX / ratioY
 
-  if (resizeDirection?.includes('w') === true) {
-    ({ newWidth, newX } = handleWestResize(resizeStart, hotspot, dx, evt, containerBounds, minSize))
-  }
-  if (resizeDirection?.includes('e') === true) {
-    newWidth = Math.min(containerBounds.width - hotspot.x, Math.max(minSize, resizeStart.width + dx))
-  }
-  if (resizeDirection?.includes('n') === true) {
-    ({ newHeight, newY } = handleNorthResize(resizeStart, hotspot, dy, evt, containerBounds, minSize))
-  }
-  if (resizeDirection?.includes('s') === true) {
-    newHeight = Math.max(minSize, resizeStart.height + dy)
+    if (resizeDirection === 'e' || resizeDirection === 'w') {
+      newWidth = resizeDirection === 'e'
+        ? Math.min(containerBounds.width - hotspot.x, Math.max(minSize, resizeStart.width + dx))
+        : Math.max(minSize, resizeStart.width - dx)
+
+      newHeight = newWidth / ratio
+
+      if (resizeDirection === 'w') {
+        newX = resizeStart.x - containerBounds.left + (resizeStart.width - newWidth)
+      }
+    } else if (resizeDirection === 's' || resizeDirection === 'n') {
+      newHeight = resizeDirection === 's'
+        ? Math.max(minSize, resizeStart.height + dy)
+        : Math.max(minSize, resizeStart.height - dy)
+
+      newWidth = newHeight * ratio
+
+      if (resizeDirection === 'n') {
+        newY = resizeStart.y - containerBounds.top + (resizeStart.height - newHeight)
+      }
+    } else if (resizeDirection !== null && resizeDirection.length > 1) {
+      // Corner resize
+      newWidth = Math.max(minSize, resizeDirection.includes('e') ? resizeStart.width + dx : resizeStart.width - dx)
+      newHeight = Math.max(minSize, resizeDirection.includes('s') ? resizeStart.height + dy : resizeStart.height - dy)
+
+      if (newWidth / newHeight > ratio) {
+        newWidth = newHeight * ratio
+      } else {
+        newHeight = newWidth / ratio
+      }
+
+      if (resizeDirection.includes('w')) {
+        newX = resizeStart.x - containerBounds.left + (resizeStart.width - newWidth)
+      }
+      if (resizeDirection.includes('n')) {
+        newY = resizeStart.y - containerBounds.top + (resizeStart.height - newHeight)
+      }
+    }
+  } else {
+    if (resizeDirection?.includes('w') === true) {
+      ({ newWidth, newX } = handleWestResize(resizeStart, hotspot, dx, evt, containerBounds, minSize))
+    }
+    if (resizeDirection?.includes('e') === true) {
+      newWidth = Math.min(containerBounds.width - hotspot.x, Math.max(minSize, resizeStart.width + dx))
+    }
+    if (resizeDirection?.includes('n') === true) {
+      ({ newHeight, newY } = handleNorthResize(resizeStart, hotspot, dy, evt, containerBounds, minSize))
+    }
+    if (resizeDirection?.includes('s') === true) {
+      newHeight = Math.max(minSize, resizeStart.height + dy)
+    }
   }
 
   return hotspots.map((h, i) => i === hotspotIndex
