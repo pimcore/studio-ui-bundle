@@ -30,7 +30,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
   'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
   'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
-  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
+  'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry'
 }
 
 export const serviceIds = {
@@ -356,5 +357,10 @@ export const serviceIds = {
   'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor',
 
   // AppLoader Registry
-  'AppLoader/Registry': 'AppLoader/Registry'
+  'AppLoader/Registry': 'AppLoader/Registry',
+
+  // Field Definitions
+  'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
+  'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',
+  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel'
 }

@@ -8,32 +8,53 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { type TreeAction } from '@sdk/components'
 
 export interface ITreeElementItemProps {
   title: string
-  actions?: Array<{ key: string, icon: string }>
+  actions?: TreeAction[]
   onSelected?: () => void
   onActionsClick?: (action: string, title: string) => void
 }
 const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeElementItemProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const items: MenuProps['items'] = []
+  const items: MenuProps['items'] = useMemo(() => {
+    const menuItems: MenuProps['items'] = []
 
-  actions?.forEach((action) => {
-    items?.push({
-      key: action.key,
-      label: t(`tree.actions.${action.key}`),
-      icon: <Icon value={ action.icon } />,
-      onClick: () => {
-        onActionsClick?.(action.key, title)
-      }
-    })
-  })
+    // handle nested actions
+    const buildMenuItems = (actionsList: TreeAction[]): MenuProps['items'] => {
+      return actionsList.map((action) => {
+        if (action.actions !== undefined && action.actions.length > 0) {
+          return {
+            key: action.key,
+            label: t(`tree.actions.${action.key}`),
+            icon: <Icon value={ action.icon } />,
+            children: buildMenuItems(action.actions)
+          }
+        } else {
+          return {
+            key: action.key,
+            label: t(`tree.actions.${action.key}`),
+            icon: <Icon value={ action.icon } />,
+            onClick: () => {
+              onActionsClick?.(action.key, title)
+            }
+          }
+        }
+      })
+    }
+
+    if (actions !== undefined && actions.length > 0) {
+      menuItems.push(...(buildMenuItems(actions) ?? []))
+    }
+
+    return menuItems
+  }, [actions])
 
   const renderTitle = (): React.JSX.Element => (
     <button
