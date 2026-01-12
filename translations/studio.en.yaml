@@ -1548,6 +1548,7 @@ language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
+content-main-document.apply: Apply Content-Main Document
 content-main-document.apply-warning-title: Are you sure?
 content-main-document.apply-warning-message: All content will be lost
 never: never
