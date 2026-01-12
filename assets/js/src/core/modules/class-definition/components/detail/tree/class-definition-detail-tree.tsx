@@ -2,7 +2,7 @@ import { useClassDefinitionLayout } from "@Pimcore/modules/class-definition/comp
 import { DynamicTypeFieldDefinitionAbstract } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
 import { DynamicTypeFieldDefinitionRegistry } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry";
 import { serviceIds, useInjection } from "@sdk/app";
-import { TreeElement, ITreeElementProps, Icon } from "@sdk/components";
+import { TreeElement, ITreeElementProps, Icon, Content } from "@sdk/components";
 import React from "react"
 
 export const ClassDefinitionDetailTree = (): React.JSX.Element => {
@@ -118,16 +118,18 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
   }
 
   return (
-    <TreeElement 
-      defaultExpandAll
-      treeData={items} 
-      onActionsClick={onActionsClick}
-      selectedKeys={currentFieldDefinitionId ? [currentFieldDefinitionId] : []}
-      onSelected={onSelected}
-      draggable
-      onDragAndDrop={({node, dragNode, dropPosition}) => {
-        moveFieldDefinition(dragNode.key as string, node.key as string, dropPosition);
-      }}
-    />
+    <Content padded padding={{ 'y': 'small', 'x': 'mini' }}>
+      <TreeElement 
+        defaultExpandAll
+        treeData={items} 
+        onActionsClick={onActionsClick}
+        selectedKeys={currentFieldDefinitionId ? [currentFieldDefinitionId] : []}
+        onSelected={onSelected}
+        draggable
+        onDragAndDrop={({node, dragNode, dropPosition}) => {
+          moveFieldDefinition(dragNode.key as string, node.key as string, dropPosition);
+        }}
+      />
+    </Content>
   )
 }

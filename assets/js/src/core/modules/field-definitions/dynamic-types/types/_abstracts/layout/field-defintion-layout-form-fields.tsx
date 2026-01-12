@@ -1,5 +1,5 @@
 import { FieldDefinitionContext } from "@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract";
-import { Form, FormKit, Input, Select } from "@sdk/components";
+import { Form, FormKit, Input, Select, Switch } from "@sdk/components";
 import React from "react";
 
 export interface FieldDefinitionDataFormFieldsProps {
@@ -13,13 +13,16 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionDataFormFi
   const isRegion = parent !== undefined && parent.fieldtype === 'region';
 
   return (<>
-    <FormKit.Panel title="Basic Information">
-      <Form.Item label="Name" name="name">
+    <FormKit.Panel 
+      title="panel"
+      contentPadding={{bottom: 'none', top: 'small', x: 'small' }}
+    >
+      <Form.Item label="name" name="name">
         <Input />
       </Form.Item>
 
       {isRegion && (
-        <Form.Item label="Region" name="region">
+        <Form.Item label="region" name="region">
           <Select options={[
             { label: 'center', value: 'center' },
             { label: 'north', value: 'north' },
@@ -30,8 +33,16 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionDataFormFi
         </Form.Item>
       )}
 
-      <Form.Item label="Title" name="title">
+      <Form.Item label="title" name="title">
         <Input />
+      </Form.Item>
+
+      <Form.Item name="collapsible">
+        <Switch labelRight="collapsible" />
+      </Form.Item>
+
+      <Form.Item name="collapsed">
+        <Switch labelRight="collapsed" />
       </Form.Item>
     </FormKit.Panel> 
   </>);

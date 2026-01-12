@@ -34,7 +34,7 @@ export const FieldDefinition = (): React.JSX.Element => {
       ) : null}
 
       {dynamicType !== null ? (
-        <Content padded key={currentFieldDefinitionId}>
+        <Content padded padding={{ x: 'small', bottom: 'small', top: 'none' }} key={currentFieldDefinitionId}>
           <FormKit 
             formProps={{
               initialValues: {...fieldDefinition},

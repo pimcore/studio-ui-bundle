@@ -84,8 +84,13 @@ export const ClassDefinitionDetail = (props: ClassDefinitionDetailProps): React.
         >
           <Content loading={isLayoutLoading || isDetailLoading || isLayoutFetching || isDetailFetching}>
             <ConfigLayout 
+              resizeAble
               leftItem={{
-                children: <ClassDefinitionDetailTree />
+                minSize: 250,
+                maxSize: 350,
+                size: 250,
+                children:
+                  <ClassDefinitionDetailTree />
               }}
 
               rightItem={{
