@@ -60,158 +60,152 @@ const api = baseApi.enhanceEndpoints({
 
 export type * from './perspectives-slice.gen'
 
-export type SaveDocumentContextPermissions = {
-    /** Add */
-    add: boolean;
-    /** Add E-Mail */
-    addEmail: boolean;
-    /** Add Folder */
-    addFolder: boolean;
-    /** Add Hardlink */
-    addHardlink: boolean;
-    /** Add Headless Document */
-    addHeadlessDocument: boolean;
-    /** Add Link */
-    addLink: boolean;
-    /** Add Newsletter */
-    addNewsletter: boolean;
-    /** Add Print Page */
-    addPrintPage: boolean;
-    /** Add Snippet */
-    addSnippet: boolean;
-    /** Convert */
-    convert: boolean;
-    /** Copy */
-    copy: boolean;
-    /** Cut */
-    cut: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Edit Site */
-    editSite: boolean;
-    /** Lock */
-    lock: boolean;
-    /** Lock and Propagate */
-    lockAndPropagate: boolean;
-    /** Open */
-    open: boolean;
-    /** Paste */
-    paste: boolean;
-    /** Paste Cut */
-    pasteCut: boolean;
-    /** Publish */
-    publish: boolean;
-    /** Refresh */
-    refresh: boolean;
-    /** Remove Site */
-    removeSite: boolean;
-    /** Rename */
-    rename: boolean;
-    /** Search and Move */
-    searchAndMove: boolean;
-    /** Unlock */
-    unlock: boolean;
-    /** Unlock and Propagate */
-    unlockAndPropagate: boolean;
-    /** Unpublish */
-    unpublish: boolean;
-    /** Use As Site */
-    useAsSite: boolean;
-};
+export interface SaveDocumentContextPermissions {
+  /** Add */
+  add: boolean
+  /** Add E-Mail */
+  addEmail: boolean
+  /** Add Folder */
+  addFolder: boolean
+  /** Add Hardlink */
+  addHardlink: boolean
+  /** Add Headless Document */
+  addHeadlessDocument: boolean
+  /** Add Link */
+  addLink: boolean
+  /** Add Newsletter */
+  addNewsletter: boolean
+  /** Add Print Page */
+  addPrintPage: boolean
+  /** Add Snippet */
+  addSnippet: boolean
+  /** Convert */
+  convert: boolean
+  /** Copy */
+  copy: boolean
+  /** Cut */
+  cut: boolean
+  /** Delete */
+  delete: boolean
+  /** Edit Site */
+  editSite: boolean
+  /** Lock */
+  lock: boolean
+  /** Lock and Propagate */
+  lockAndPropagate: boolean
+  /** Open */
+  open: boolean
+  /** Paste */
+  paste: boolean
+  /** Paste Cut */
+  pasteCut: boolean
+  /** Publish */
+  publish: boolean
+  /** Refresh */
+  refresh: boolean
+  /** Remove Site */
+  removeSite: boolean
+  /** Rename */
+  rename: boolean
+  /** Search and Move */
+  searchAndMove: boolean
+  /** Unlock */
+  unlock: boolean
+  /** Unlock and Propagate */
+  unlockAndPropagate: boolean
+  /** Unpublish */
+  unpublish: boolean
+  /** Use As Site */
+  useAsSite: boolean
+}
 export type DocumentContextPermissions = SaveDocumentContextPermissions & {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-};
+  /** AdditionalAttributes */
+  additionalAttributes?: Record<string, string | number | boolean | object>
+}
 
-export type SaveDataObjectContextPermissions = {
-    /** Add */
-    add: boolean;
-    /** Add Folder */
-    addFolder: boolean;
-    /** Change Children SortBy */
-    changeChildrenSortBy: boolean;
-    /** Copy */
-    copy: boolean;
-    /** Cut */
-    cut: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Lock */
-    lock: boolean;
-    /** Lock and Propagate */
-    lockAndPropagate: boolean;
-    /** Paste */
-    paste: boolean;
-    /** Publish */
-    publish: boolean;
-    /** Refresh */
-    refresh: boolean;
-    /** Rename */
-    rename: boolean;
-    /** Search and Move */
-    searchAndMove: boolean;
-    /** Unlock */
-    unlock: boolean;
-    /** Unlock and Propagate */
-    unlockAndPropagate: boolean;
-    /** Unpublish */
-    unpublish: boolean;
-};
+export interface SaveDataObjectContextPermissions {
+  /** Add */
+  add: boolean
+  /** Add Folder */
+  addFolder: boolean
+  /** Change Children SortBy */
+  changeChildrenSortBy: boolean
+  /** Copy */
+  copy: boolean
+  /** Cut */
+  cut: boolean
+  /** Delete */
+  delete: boolean
+  /** Lock */
+  lock: boolean
+  /** Lock and Propagate */
+  lockAndPropagate: boolean
+  /** Paste */
+  paste: boolean
+  /** Publish */
+  publish: boolean
+  /** Refresh */
+  refresh: boolean
+  /** Rename */
+  rename: boolean
+  /** Search and Move */
+  searchAndMove: boolean
+  /** Unlock */
+  unlock: boolean
+  /** Unlock and Propagate */
+  unlockAndPropagate: boolean
+  /** Unpublish */
+  unpublish: boolean
+}
 export type DataObjectContextPermissions = SaveDataObjectContextPermissions & {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-};
+  /** AdditionalAttributes */
+  additionalAttributes?: Record<string, string | number | boolean | object>
+}
 
-export type SaveAssetContextPermissions = {
-    /** Hide Add Menu */
-    hideAdd: boolean;
-    /** Add Upload */
-    addUpload: boolean;
-    /** Upload New Version */
-    uploadNewVersion: boolean;
-    /** Add Upload Zip */
-    addUploadZip: boolean;
-    /** Download */
-    download: boolean;
-    /** Download Zip */
-    downloadZip: boolean;
-    /** Add Folder */
-    addFolder: boolean;
-    /** Copy */
-    copy: boolean;
-    /** Cut */
-    cut: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Lock */
-    lock: boolean;
-    /** Lock And Propagate */
-    lockAndPropagate: boolean;
-    /** Paste */
-    paste: boolean;
-    /** Paste Cut */
-    pasteCut: boolean;
-    /** Refresh */
-    refresh: boolean;
-    /** Rename */
-    rename: boolean;
-    /** SearchAndMove */
-    searchAndMove: boolean;
-    /** Unlock */
-    unlock: boolean;
-    /** Unlock And Propagate */
-    unlockAndPropagate: boolean;
-};
+export interface SaveAssetContextPermissions {
+  /** Hide Add Menu */
+  hideAdd: boolean
+  /** Add Upload */
+  addUpload: boolean
+  /** Upload New Version */
+  uploadNewVersion: boolean
+  /** Add Upload Zip */
+  addUploadZip: boolean
+  /** Download */
+  download: boolean
+  /** Download Zip */
+  downloadZip: boolean
+  /** Add Folder */
+  addFolder: boolean
+  /** Copy */
+  copy: boolean
+  /** Cut */
+  cut: boolean
+  /** Delete */
+  delete: boolean
+  /** Lock */
+  lock: boolean
+  /** Lock And Propagate */
+  lockAndPropagate: boolean
+  /** Paste */
+  paste: boolean
+  /** Paste Cut */
+  pasteCut: boolean
+  /** Refresh */
+  refresh: boolean
+  /** Rename */
+  rename: boolean
+  /** SearchAndMove */
+  searchAndMove: boolean
+  /** Unlock */
+  unlock: boolean
+  /** Unlock And Propagate */
+  unlockAndPropagate: boolean
+}
 export type AssetContextPermissions = SaveAssetContextPermissions & {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-};
+  /** AdditionalAttributes */
+  additionalAttributes?: Record<string, string | number | boolean | object>
+}
 
 export const {
   usePerspectiveCreateMutation,
