@@ -22,7 +22,7 @@ import {
   cropToHotspot, hotspotToCrop
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/crop-converter'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useAssetGetByIdQuery, type Image } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface CropModalProps {
   crop?: CropSettings | null
@@ -38,7 +38,8 @@ export interface CropModalProps {
 export const CropModal = (props: CropModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { data: assetData } = useAssetGetByIdQuery({ id: props.imageId })
-  const imageRatio = (assetData?.width !== undefined && assetData?.height !== undefined) ? Number(assetData.width) / Number(assetData.height) : 1
+  const image = assetData as Image
+  const imageRatio = (image?.width !== undefined && image?.height !== undefined) ? Number(image.width) / Number(image.height) : 1
 
   const [crop, setCrop] = useState<CropSettings | null>(() => {
     return hotspotToCrop(cropToHotspot(props.crop, props.ratioX, props.ratioY, imageRatio))
