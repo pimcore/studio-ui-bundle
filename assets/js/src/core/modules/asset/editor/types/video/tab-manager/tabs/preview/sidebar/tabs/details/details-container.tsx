@@ -17,7 +17,7 @@ import {
 import { useThumbnailVideoGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
-import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
+import { useVideoContext } from '@Pimcore/components/pimcore-video/video-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -30,7 +30,7 @@ const noop = (): void => {}
 
 const DetailContainer = (): React.JSX.Element => {
   const [isDownloading, setIsDownloading] = useState(false)
-  const { playerPosition, setThumbnail } = React.useContext(VideoContext)
+  const { playerPosition, setThumbnail } = useVideoContext()
   const assetContext = useContext(AssetContext)
   const [imagePreview, setImagePreview] = useState('')
 
