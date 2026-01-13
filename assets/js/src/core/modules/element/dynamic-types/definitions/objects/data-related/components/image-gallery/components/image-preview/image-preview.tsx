@@ -138,8 +138,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
       openCropModal(
         item.image.id,
         item.crop,
-        isNumber(ratioX) ? ratioX : (!isNil(ratioX) ? Number(ratioX) : undefined),
-        isNumber(ratioY) ? ratioY : (!isNil(ratioY) ? Number(ratioY) : undefined)
+        !isNil(ratioX) ? Number(ratioX) : undefined,
+        !isNil(ratioY) ? Number(ratioY) : undefined
       )
     }
   }
