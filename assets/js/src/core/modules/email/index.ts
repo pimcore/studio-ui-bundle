@@ -17,8 +17,7 @@ import { EmailLogContainer } from './log/email-log-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import React from 'react'
-import { SendTestEmailButton } from './test-mail/send-test-email-button'
+import { useSendTestEmailContext } from '@Pimcore/modules/email/test-mail/provider/use-send-test-email-context'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -93,7 +92,15 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
-      button: () => React.createElement(SendTestEmailButton)
+      useCustomMainNavItem: () => {
+        const { setIsOpen } = useSendTestEmailContext()
+
+        return {
+          name: 'SendTestEmail',
+          onClick: () => { setIsOpen(true) },
+          icon: { type: 'name', value: 'users-x' }
+        }
+      }
     })
   }
 })

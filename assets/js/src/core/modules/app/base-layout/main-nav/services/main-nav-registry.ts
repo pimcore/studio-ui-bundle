@@ -11,7 +11,6 @@
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { injectable } from 'inversify'
 import { isNil, isUndefined } from 'lodash'
-import type React from 'react'
 
 export interface IMainNavItem {
   path: string
@@ -26,8 +25,12 @@ export interface IMainNavItem {
   permission?: string
   perspectivePermission?: string
   perspectivePermissionHide?: string
-  onClick?: () => void
-  button?: (props: { closeMainNav: () => void }) => React.JSX.Element
+  useCustomMainNavItem?: () => {
+    onClick: () => void
+    name?: string
+    icon?: string | { type: string, value: string }
+    translationKey?: string
+  }
   widgetConfig?: WidgetManagerTabConfig
   className?: string
   hidden?: () => boolean
@@ -131,8 +134,7 @@ export class MainNavRegistry {
             icon: item.icon,
             groupIcon: item.groupIcon,
             widgetConfig: item.widgetConfig,
-            onClick: item.onClick,
-            button: item.button,
+            useCustomMainNavItem: item.useCustomMainNavItem,
             className: item.className,
             permission: item.permission,
             perspectivePermission: item.perspectivePermission,
@@ -152,8 +154,7 @@ export class MainNavRegistry {
           perspectivePermissionHide: item.perspectivePermissionHide,
           hidden: item.hidden,
           widgetConfig: item.widgetConfig,
-          onClick: item.onClick,
-          button: item.button,
+          useCustomMainNavItem: item.useCustomMainNavItem,
           dividerBottom: item.dividerBottom,
           label: item.label ?? existingItem.label
         })

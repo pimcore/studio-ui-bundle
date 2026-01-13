@@ -65,7 +65,7 @@ export const LoginTokenModal = ({ tokenUrl, isLoading = false, ...props }: About
       title={ t('login-token-modal.title') }
     >
       <Flex vertical>
-        <p>{t('login-token-modal.description')}</p>
+        <p>{t('login-token-modal.description')}:</p>
         <TextArea
           readOnly
           rows={ 5 }

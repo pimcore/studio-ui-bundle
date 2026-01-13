@@ -58,7 +58,7 @@ export const useMainNav = (): IUseMainNavReturn => {
 
         // If the item has no children left and is not an interactive item (leaf), hide it.
         // This prevents empty menu groups from appearing.
-        const isInteractive = !isNil(item.onClick) || !isNil(item.widgetConfig) || !isNil(item.button)
+        const isInteractive = !isNil(item.useCustomMainNavItem) || !isNil(item.widgetConfig)
         if (item.children.length === 0 && !isInteractive) {
           return false
         }

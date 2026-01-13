@@ -17,6 +17,8 @@ import { VideoModalProvider } from '../element/components/video-modal/provider/v
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
 import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
 import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
+import { AboutDialogWrapper } from '@Pimcore/modules/about/components/about-dialog/about-dialog-wrapper'
+import { OpenElementWrapper } from '@Pimcore/modules/open-element/open-element-wrapper'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
@@ -37,10 +39,14 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
             <HotspotMarkersModalProvider>
               <VideoModalProvider>
                 <SendTestEmailProvider>
-                  <SiteModalProvider>
-                    <SlotRenderer slot={ componentConfig.global.modal.name } />
-                    {children}
-                  </SiteModalProvider>
+                  <AboutDialogWrapper>
+                    <OpenElementWrapper>
+                      <SiteModalProvider>
+                        <SlotRenderer slot={ componentConfig.global.modal.name } />
+                        {children}
+                      </SiteModalProvider>
+                    </OpenElementWrapper>
+                  </AboutDialogWrapper>
                 </SendTestEmailProvider>
               </VideoModalProvider>
             </HotspotMarkersModalProvider>
