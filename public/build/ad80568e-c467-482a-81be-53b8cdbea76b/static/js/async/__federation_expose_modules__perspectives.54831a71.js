@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_modules__perspectives.54831a71.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["3816"],{2877:function(e,i,s){s.r(i),s.d(i,{TreePermission:()=>u.W,usePerspectives:()=>o.o});var u=s(51469),o=s(63654);void 0!==(e=s.hmd(e)).hot&&e.hot.accept()}}]);
