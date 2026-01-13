@@ -10,17 +10,21 @@
 
 import { useClassDefinitionDetail } from '@Pimcore/modules/class-definition/components/detail/class-definition-detail-provider'
 import { useClassDefinitionLayout } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { useClassDefinitionUpdateMutation } from '@sdk/api/class-definition'
+import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect } from 'react'
 
 export const ClassDefinitionDetailSave = (): React.JSX.Element => {
-  const { getLayout } = useClassDefinitionLayout()
+  // @todo translations
+  const { getLayout, fieldDefinitions, setInvalidFieldDefinitionIds } = useClassDefinitionLayout()
   const { classDefinition } = useClassDefinitionDetail()
   const [updateClassDefinitionMutation, { isLoading, error }] = useClassDefinitionUpdateMutation()
   const messageApi = useMessage()
+  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   useEffect(() => {
     if (error !== undefined) {
@@ -30,6 +34,33 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
 
   const onClick: ButtonProps['onClick'] = () => {
     if (classDefinition === undefined) {
+      return
+    }
+
+    const invalidDefinitions: string[] = []
+
+    // Validate all field definitions before saving
+    for (const [key, definition] of Object.entries(fieldDefinitions)) {
+      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
+        const hasDynamicType = fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)
+
+        if (hasDynamicType) {
+          const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
+          // @todo check if we can handle the path here
+          const isValid = dynamicType.isValid(definition, { area: ['class'], fieldDefinitions, path: [] })
+
+          if (!isValid) {
+            invalidDefinitions.push(key)
+          }
+        }
+      }
+    }
+
+    setInvalidFieldDefinitionIds(invalidDefinitions)
+
+    if (invalidDefinitions.length > 0) {
+      /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
+      messageApi.error('Configuration contains invalid field definitions.')
       return
     }
 

@@ -127,6 +127,16 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           bottom: 0;
         }
       }
+
+      .tree-element-item--danger {
+        .ant-tree-title .ant-tree-title__btn {
+          color: ${token.colorError};
+        }
+
+        .ant-tree-icon__customize {
+          color: ${token.colorError};
+        }
+      }
       
       .ant-tree-icon__customize {
         position: relative;

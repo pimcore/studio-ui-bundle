@@ -16,7 +16,7 @@ import { TreeElement, type ITreeElementProps, Icon, Content } from '@sdk/compone
 import React from 'react'
 
 export const ClassDefinitionDetailTree = (): React.JSX.Element => {
-  const { structure, fieldDefinitions, currentFieldDefinitionId, addFieldDefinition, setCurrentFieldDefinitionIdPath, setCurrentFieldDefinitionId, moveFieldDefinition, removeFieldDefinition, cloneFieldDefinition } = useClassDefinitionLayout()
+  const { structure, fieldDefinitions, invalidFieldDefinitionIds, currentFieldDefinitionId, addFieldDefinition, setCurrentFieldDefinitionIdPath, setCurrentFieldDefinitionId, moveFieldDefinition, removeFieldDefinition, cloneFieldDefinition } = useClassDefinitionLayout()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
@@ -56,6 +56,7 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
         icon: dynType !== undefined ? <Icon { ...dynType.getIcon() } /> : undefined,
         key: node.id,
         meta: { currentPath },
+        className: invalidFieldDefinitionIds.includes(node.id) ? 'tree-element-item--danger' : undefined,
         children: node.children.map((child) => buildTreeItems(child, currentPath)),
         allowDrag (params) {
           // Prevent dragging of root node
@@ -93,7 +94,7 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
     }
 
     return [buildTreeItems(structure)]
-  }, [structure, fieldDefinitions])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
