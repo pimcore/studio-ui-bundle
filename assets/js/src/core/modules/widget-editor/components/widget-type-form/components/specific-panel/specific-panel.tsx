@@ -12,7 +12,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { usePrevious } from '@sdk/utils'
 import { InputNumber } from 'antd'
 import { isNil } from 'lodash'
@@ -35,7 +35,7 @@ export const SpecificPanel = (): React.JSX.Element => {
     // Only reset the rootFolder when elementType actually changes (not on initial render)
     if (!isNil(previousElementType)) {
       form.setFieldValue('rootFolder', null)
-      const items = registry.getItems(elementType)
+      const items = registry.getItems(elementType as ElementType)
       form.setFieldValue(
         'contextPermissions',
         items.reduce<Record<string, boolean>>((acc, key) => {
