@@ -68,6 +68,7 @@ export const useStyles = createStyles(({ token, css }, { gap }: ContentStylesPro
         align-items: center;
       }
       
+      &.content--is-default-padded .ant-table-thead,
       &.content--padded .ant-table-thead,
       &.p-t-small .ant-table-thead {
         top: -${token.paddingSM}px;
