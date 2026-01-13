@@ -1644,6 +1644,6 @@ about.buttons.license: License
 about.buttons.contact: Contact
 custom-language.default: Default
 login-token-modal.title: Login as this user in a different browser
-login-token-modal.description: The following link is a temporary link that allows you to login as this user in a different browser:
+login-token-modal.description: The following link is a temporary link that allows you to login as this user in a different browser
 login-token-modal.close: Close
 login-token-modal.copy-and-close: Copy & Close
