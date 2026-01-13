@@ -70,7 +70,7 @@ export const MainNav = (): React.JSX.Element => {
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const hasChildren = !isEmpty(item.children)
-    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.useMainNavItem)
+    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.useCustomMainNavItem)
 
     const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
@@ -97,9 +97,9 @@ export const MainNav = (): React.JSX.Element => {
         data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
         key={ item.path }
       >
-        {!isUndefined(item.useMainNavItem)
+        {!isUndefined(item.useCustomMainNavItem)
           ? (() => {
-              const customMainNavItem = item.useMainNavItem()
+              const customMainNavItem = item.useCustomMainNavItem()
 
               return (
                 <button

@@ -26,7 +26,7 @@ moduleSystem.registerModule({
       order: 100,
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
-      useMainNavItem: () => {
+      useCustomMainNavItem: () => {
         const { open } = useOpenElement()
 
         return {
@@ -42,7 +42,7 @@ moduleSystem.registerModule({
       order: 200,
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
-      useMainNavItem: () => {
+      useCustomMainNavItem: () => {
         const { open } = useOpenElement()
 
         return {
@@ -59,7 +59,7 @@ moduleSystem.registerModule({
       order: 300,
       permission: UserPermission.Documents,
       perspectivePermission: NavPermission.OpenDocument,
-      useMainNavItem: () => {
+      useCustomMainNavItem: () => {
         const { open } = useOpenElement()
 
         return {

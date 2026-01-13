@@ -92,7 +92,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
-      useMainNavItem: () => {
+      useCustomMainNavItem: () => {
         const { setIsOpen } = useSendTestEmailContext()
 
         return {

@@ -25,11 +25,11 @@ export interface IMainNavItem {
   permission?: string
   perspectivePermission?: string
   perspectivePermissionHide?: string
-  useMainNavItem?: () => {
+  useCustomMainNavItem?: () => {
+    onClick: () => void
     name?: string
     icon?: string | { type: string, value: string }
     translationKey?: string
-    onClick: () => void
   }
   widgetConfig?: WidgetManagerTabConfig
   className?: string
@@ -134,7 +134,7 @@ export class MainNavRegistry {
             icon: item.icon,
             groupIcon: item.groupIcon,
             widgetConfig: item.widgetConfig,
-            useMainNavItem: item.useMainNavItem,
+            useCustomMainNavItem: item.useCustomMainNavItem,
             className: item.className,
             permission: item.permission,
             perspectivePermission: item.perspectivePermission,
@@ -154,7 +154,7 @@ export class MainNavRegistry {
           perspectivePermissionHide: item.perspectivePermissionHide,
           hidden: item.hidden,
           widgetConfig: item.widgetConfig,
-          useMainNavItem: item.useMainNavItem,
+          useCustomMainNavItem: item.useCustomMainNavItem,
           dividerBottom: item.dividerBottom,
           label: item.label ?? existingItem.label
         })

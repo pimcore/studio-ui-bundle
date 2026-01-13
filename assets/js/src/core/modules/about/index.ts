@@ -25,7 +25,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       order: 9999,
       perspectivePermission: NavPermission.About,
-      useMainNavItem: () => {
+      useCustomMainNavItem: () => {
         const { open } = useAboutDialogContext()
 
         return {
