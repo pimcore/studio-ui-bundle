@@ -13,3 +13,4 @@ if (module.hot !== undefined) {
 }
 
 export * from '@Pimcore/modules/perspectives/enums/tree-permission'
+export * from '@Pimcore/modules/perspectives/hooks/use-perspectives'
