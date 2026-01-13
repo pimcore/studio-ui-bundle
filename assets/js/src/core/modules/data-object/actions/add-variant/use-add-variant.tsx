@@ -127,7 +127,7 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   }
 
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Add) ||
+    return !isTreeActionAllowed(TreePermission.AddVariant) ||
       !checkElementPermission(node.permissions, 'create') ||
       isEmpty(getClassDefinitionsForCurrentUser())
   }

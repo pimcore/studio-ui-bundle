@@ -43,16 +43,6 @@ moduleSystem.registerModule({
       useMenuItem: (context: AssetTreeContextMenuProps) => {
         const { t } = useTranslation()
         const { uploadContextMenuItem, zipUploadContextMenuItem } = useUpload()
-        const { isTreeActionAllowed } = useTreePermission()
-
-        const isUploadMenuHidden = isTreeActionAllowed(TreePermission.HideAdd) ||
-          (!isTreeActionAllowed(TreePermission.AddUpload) && !isTreeActionAllowed(TreePermission.AddUploadZip)) ||
-          !checkElementPermission(context.target.permissions, 'create') ||
-          context.target?.type !== 'folder'
-
-        if (isUploadMenuHidden) {
-          return null
-        }
 
         return {
           label: t('element.tree.context-menu.new-assets'),

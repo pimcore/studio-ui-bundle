@@ -20,17 +20,29 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ElementTypeSelect } from '../../../element-type-select/element-type-select'
 import { useWidgetFormContext } from '../../context/hooks/use-widget-form-context'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ElementTreeWidgetPermissionRegistry } from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
 
 export const SpecificPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { form } = useWidgetFormContext()
   const elementType = Form.useWatch('elementType', form)
   const previousElementType = usePrevious(elementType)
+  const registry = container.get<ElementTreeWidgetPermissionRegistry>(serviceIds.elementTreeWidgetPermissionRegistry)
 
   useEffect(() => {
     // Only reset the rootFolder when elementType actually changes (not on initial render)
     if (!isNil(previousElementType)) {
       form.setFieldValue('rootFolder', null)
+      const items = registry.getItems(elementType)
+      form.setFieldValue(
+        'contextPermissions',
+        items.reduce<Record<string, boolean>>((acc, key) => {
+          acc[key] = true
+          return acc
+        }, {})
+      )
     }
   }, [elementType, form])
 
