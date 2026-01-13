@@ -24,7 +24,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
-import { isEmpty, isNil, isNumber } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
