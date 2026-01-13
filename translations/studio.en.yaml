@@ -89,11 +89,11 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
-document.tree.context-menu.add-page: Add Page
-document.tree.context-menu.add-snippet: Add Snippet
-document.tree.context-menu.add-email: Add Email
-document.tree.context-menu.add-link: Add Link
-document.tree.context-menu.add-hardlink: Add Hardlink
+document.tree.context-menu.add-page: New Page
+document.tree.context-menu.add-snippet: New Snippet
+document.tree.context-menu.add-email: New Email
+document.tree.context-menu.add-link: New Link
+document.tree.context-menu.add-hardlink: New Hardlink
 document.required-fields.validation-title: Required Fields Missing
 document.required-fields.validation-message: The following required fields must be filled before publishing
 document.site.remove-site: Remove Site
@@ -124,8 +124,8 @@ blank: "Blank"
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.select-class-to-display: Select a class to display
-data-object.tree.context-menu.add-object: Add Object
-data-object.tree.context-menu.add-variant: Add Variant
+data-object.tree.context-menu.add-object: New Object
+data-object.tree.context-menu.add-variant: New Variant
 data-object.variant-listing.create-data-variant: New Variant
 data-object.create-data-object: Add new Object of type {{className}}
 data-object.create-variant: Add new Variant of type {{className}} 
@@ -744,7 +744,7 @@ tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
 tree.actions.user: User
-tree.actions.add-folder: Add Folder
+tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
@@ -1492,13 +1492,14 @@ widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default ev
 widget-editor.widget-form.filters.title: Filters
 widget-editor.widget-form.filters.pql: PQL Statement
 widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
-widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.addObject: New Object
+widget-editor.widget-form.allowed-context-menu.addVariant: New Variant
 widget-editor.widget-form.allowed-context-menu.copy: Copy
 widget-editor.widget-form.allowed-context-menu.lock: Lock
 widget-editor.widget-form.allowed-context-menu.publish: Publish
 widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
 widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
-widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.addFolder: New Folder
 widget-editor.widget-form.allowed-context-menu.cut: Cut
 widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
 widget-editor.widget-form.allowed-context-menu.refresh: Refresh
@@ -1508,25 +1509,22 @@ widget-editor.widget-form.allowed-context-menu.delete: Delete
 widget-editor.widget-form.allowed-context-menu.paste: Paste
 widget-editor.widget-form.allowed-context-menu.rename: Rename
 widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
-widget-editor.widget-form.allowed-context-menu.hideAdd: Hide  New Asset(s) Menu
 widget-editor.widget-form.allowed-context-menu.addUploadZip:  New Asset(s) > Upload Zip
 widget-editor.widget-form.allowed-context-menu.addUpload: New Asset(s) > Upload Files
 widget-editor.widget-form.allowed-context-menu.download: Download
 widget-editor.widget-form.allowed-context-menu.pasteCut: Paste Cut
 widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
 widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
-widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
-widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
 widget-editor.widget-form.allowed-context-menu.convert: Convert
 widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
 widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
-widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
-widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
 widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
 widget-editor.widget-form.allowed-context-menu.open: Open
-widget-editor.widget-form.allowed-context-menu.addLink: Add Link
-widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
-widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
+widget-editor.widget-form.allowed-context-menu.addPage: New Page
+widget-editor.widget-form.allowed-context-menu.addSnippet: New Snippet
+widget-editor.widget-form.allowed-context-menu.addLink: New Link
+widget-editor.widget-form.allowed-context-menu.addEmail: New Email
+widget-editor.widget-form.allowed-context-menu.addHardlink: New Hardlink
 edit.label: Edit
 scheduled-block.delete-all-in-past: Delete all past timestamps
 scheduled-block.delete-all: Delete all timestamps
