@@ -43,7 +43,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
   const { t } = useTranslation()
   const { form, widget } = useWidgetFormContext()
   const { setWidgets, closeWidget } = useWidgetEditorContext()
-  const { removeWithConfirmation, updateWidget, isLoading } = useWidgetEditor()
+  const { removeWithConfirmation, updateWidget, getWidgetById, isLoading } = useWidgetEditor()
   const isWriteable = widget.isWriteable !== false
 
   const elementTreeWidget = widget as ElementTreeWidget
@@ -83,8 +83,17 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
             <IconButton
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
-              onClick={ () => {
-                form.resetFields()
+              onClick={ async () => {
+                const newWidgetData = await getWidgetById(widget.id, widget.widgetType)
+
+                if (newWidgetData !== undefined) {
+                  setWidgets((prev) => prev.map((w) => w.id === widget.id ? newWidgetData : w))
+                  form.resetFields(['classes'])
+                  form.setFieldsValue({
+                    ...newWidgetData,
+                    classes: convertClassesArrayToObject((newWidgetData as ElementTreeWidget).classes)
+                  })
+                }
               } }
               title={ t('refresh') }
             />
