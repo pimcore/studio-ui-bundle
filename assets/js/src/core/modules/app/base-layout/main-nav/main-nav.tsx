@@ -102,18 +102,26 @@ export const MainNav = (): React.JSX.Element => {
               const customMainNavItem = item.useCustomMainNavItem()
 
               return (
-                <button
-                  className="main-nav__list-btn"
-                  data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-                  onClick={ () => {
-                    customMainNavItem.onClick?.()
-                    setIsOpen(false)
-                  } }
-                >
-                  {!isUndefined(item.icon) && renderIcon(item.icon)}
+                <>
+                  <button
+                    className="main-nav__list-btn"
+                    data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
+                    onClick={ () => {
+                      customMainNavItem.onClick?.()
+                      setIsOpen(false)
+                    } }
+                  >
+                    {!isUndefined(item.icon) && renderIcon(item.icon)}
 
-                  <SanitizeHtml html={ t(`${item.label}`) } />
-                </button>
+                    <SanitizeHtml html={ t(`${item.label}`) } />
+                  </button>
+                  {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                    <Divider
+                      className={ 'main-nav__list-item-divider' }
+                      size={ 'mini' }
+                    />
+                  )}
+                </>
               )
             })()
           : (
