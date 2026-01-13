@@ -27,6 +27,8 @@ export interface IClassDefinitionLayoutContext {
   fieldDefinitions: Record<string, FieldDefinition>
   currentFieldDefinitionId: StructureNode['id'] | null
   currentFieldDefinitionIdPath: string[] | null
+  invalidFieldDefinitionIds: string[]
+  setInvalidFieldDefinitionIds: (ids: string[]) => void
   setCurrentFieldDefinitionId: (id: StructureNode['id'] | null) => void
   setCurrentFieldDefinitionIdPath: (path: string[] | null) => void
   updateFieldDefinition: (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition) => void
@@ -49,11 +51,13 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
   const [fieldDefinitions, setFieldDefinitions] = useState<IClassDefinitionLayoutContext['fieldDefinitions']>({})
   const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionId']>(null)
   const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionIdPath']>(null)
+  const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<IClassDefinitionLayoutContext['invalidFieldDefinitionIds']>([])
 
   useEffect(() => {
     if (props.layout === undefined) {
       setStructure(undefined)
       setFieldDefinitions({})
+      setInvalidFieldDefinitionIds([])
       setCurrentFieldDefinitionId(null)
       setCurrentFieldDefinitionIdPath(null)
       return
@@ -81,6 +85,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
 
     setCurrentFieldDefinitionId(null)
     setCurrentFieldDefinitionIdPath(null)
+    setInvalidFieldDefinitionIds([])
     setStructure(rootStructure)
     setFieldDefinitions(initialFieldDefinitions)
   }, [props.layout])
@@ -140,6 +145,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     if (currentFieldDefinitionId === structureNodeId) {
       setCurrentFieldDefinitionId(null)
       setCurrentFieldDefinitionIdPath(null)
+      setInvalidFieldDefinitionIds((prevIds) => prevIds.filter(id => id !== structureNodeId))
     }
 
     setStructure((prevStructure) => prevStructure !== undefined ? removeNodeRecursively(prevStructure) : prevStructure)
@@ -293,6 +299,8 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
           fieldDefinitions,
           currentFieldDefinitionId,
           currentFieldDefinitionIdPath,
+          invalidFieldDefinitionIds,
+          setInvalidFieldDefinitionIds,
           setCurrentFieldDefinitionId,
           setCurrentFieldDefinitionIdPath,
           updateFieldDefinition,
@@ -306,7 +314,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     >
       {props.children}
     </ClassDefinitionLayoutContext.Provider>
-  ), [structure, fieldDefinitions, currentFieldDefinitionId, props.children])
+  ), [structure, fieldDefinitions, currentFieldDefinitionId, invalidFieldDefinitionIds, props.children])
 }
 
 export const useClassDefinitionLayout = (): IClassDefinitionLayoutContext => {
