@@ -144,9 +144,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     if (!isNil(imageValue?.image?.id)) {
       openCropModal(
         imageValue.image.id,
-        imageValue.crop,
-        !isNil(props.ratioX) ? Number(props.ratioX) : undefined,
-        !isNil(props.ratioY) ? Number(props.ratioY) : undefined
+        imageValue.crop
       )
     }
   }
