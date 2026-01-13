@@ -11,9 +11,9 @@
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Text } from '@Pimcore/components/text/text'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useStyles } from './missing-context.styles'
 
 export interface IMissingContextProps {
   description: string
@@ -21,13 +21,14 @@ export interface IMissingContextProps {
 
 export default function MissingContext ({ description }: IMissingContextProps): React.JSX.Element {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   return (
     <Content centered>
       <Flex
         align='center'
-        gap={ 'mini' }
-        style={ { maxWidth: '300px', textAlign: 'center' } }
+        className={ styles.container }
+        gap={ 'small' }
         vertical
       >
         <Flex
@@ -38,9 +39,9 @@ export default function MissingContext ({ description }: IMissingContextProps): 
           <span>{t('widget.missing-context.title')}</span>
         </Flex>
 
-        <Text type='secondary'>
+        <div>
           {description}
-        </Text>
+        </div>
       </Flex>
     </Content>
   )
