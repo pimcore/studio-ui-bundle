@@ -21,6 +21,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
   const dispatch = useAppDispatch()
   const model = Model.fromJson(modelJson)
+  const tabCount = model.getActiveTabset()?.getChildren().length ?? 0
 
   useEffect(() => {
     model.doAction(Actions.updateModelAttributes({
@@ -56,6 +57,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
       className='widget-manager--inner'
       createContextMenuItems={ createContextMenuItems }
       factory={ widgetManagerFactory }
+      key={ tabCount === 0 ? 'empty' : 'tabs' }
       model={ model }
       onModelChange={ onModelChange }
       onRenderTab={ onRenderTab }
