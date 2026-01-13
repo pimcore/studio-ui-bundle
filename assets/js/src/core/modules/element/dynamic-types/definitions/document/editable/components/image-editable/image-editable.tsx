@@ -104,7 +104,9 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
 
   const { openModal: openCropModal } = useCropModal({
     disabled,
-    onChange: handleCropChange
+    onChange: handleCropChange,
+    ratioX: !isNil(props.config?.ratioX) ? Number(props.config?.ratioX) : undefined,
+    ratioY: !isNil(props.config?.ratioY) ? Number(props.config?.ratioY) : undefined
   })
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
@@ -143,9 +145,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
       const cropSettings: CropSettings | null = imageValue.crop! ?? null
       openCropModal(
         imageValue.id,
-        cropSettings,
-        !isNil(props.config?.ratioX) ? Number(props.config?.ratioX) : undefined,
-        !isNil(props.config?.ratioY) ? Number(props.config?.ratioY) : undefined
+        cropSettings
       )
     }
   }

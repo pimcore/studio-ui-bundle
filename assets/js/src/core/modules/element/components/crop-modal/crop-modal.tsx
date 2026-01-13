@@ -23,16 +23,14 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/crop-converter'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { useAssetGetByIdQuery, type Image } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type CropModalOptions } from './provider/crop-modal-provider'
 
 export interface CropModalProps {
   crop?: CropSettings | null
   imageId: number
   open: boolean
-  disabled?: boolean
-  ratioX?: number
-  ratioY?: number
   onClose?: () => void
-  onChange?: (crop: CropSettings | null) => void
+  options?: CropModalOptions
 }
 
 export const CropModal = (props: CropModalProps): React.JSX.Element => {
@@ -42,7 +40,7 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
   const imageRatio = (image?.width !== undefined && image?.height !== undefined) ? Number(image.width) / Number(image.height) : 1
 
   const [crop, setCrop] = useState<CropSettings | null>(() => {
-    return hotspotToCrop(cropToHotspot(props.crop, props.ratioX, props.ratioY, imageRatio))
+    return hotspotToCrop(cropToHotspot(props.crop, props.options?.ratioX, props.options?.ratioY, imageRatio))
   })
   const [modalOpened, setModalOpened] = useState(false)
 
@@ -50,11 +48,13 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
   const height = 500
 
   useEffect(() => {
-    setCrop(hotspotToCrop(cropToHotspot(props.crop, props.ratioX, props.ratioY, imageRatio)))
-  }, [props.crop, props.ratioX, props.ratioY, imageRatio])
+    setCrop(hotspotToCrop(cropToHotspot(props.crop, props.options?.ratioX, props.options?.ratioY, imageRatio)))
+  }, [props.crop, props.options?.ratioX, props.options?.ratioY, imageRatio])
 
   const handleOk = (): void => {
-    props.onChange?.(crop)
+    if (props.options?.onChange !== undefined) {
+      props.options.onChange(crop)
+    }
     props.onClose?.()
   }
 
@@ -73,7 +73,9 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
 
   const removeCrop = (): void => {
     setCrop(null)
-    props.onChange?.(null)
+    if (props.options?.onChange !== undefined) {
+      props.options.onChange(null)
+    }
     props.onClose?.()
   }
 
@@ -87,7 +89,7 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
   return (
     <Modal
       afterOpenChange={ afterOpenChange }
-      footer={ props.disabled === true
+      footer={ props.options?.disabled === true
         ? <span></span>
         : (_, { OkBtn, CancelBtn }) => (
           <Flex
@@ -125,12 +127,12 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
     >
       {assetData !== undefined && (
         <HotspotImage
-          data={ modalOpened ? [cropToHotspot(crop, props.ratioX, props.ratioY, imageRatio)] : [] }
+          data={ modalOpened ? [cropToHotspot(crop, props.options?.ratioX, props.options?.ratioY, imageRatio)] : [] }
           disableContextMenu
-          disabled={ props.disabled }
+          disabled={ props.options?.disabled }
           onUpdate={ onUpdate }
-          ratioX={ props.ratioX }
-          ratioY={ props.ratioY }
+          ratioX={ props.options?.ratioX }
+          ratioY={ props.options?.ratioY }
           src={ thumbnailSrc }
         />
       )}

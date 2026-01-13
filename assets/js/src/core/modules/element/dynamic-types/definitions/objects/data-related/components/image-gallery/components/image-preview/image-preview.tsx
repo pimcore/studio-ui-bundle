@@ -54,6 +54,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const { openModal: openCropModal } = useCropModal({
     disabled,
+    ratioX,
+    ratioY,
     onChange: (crop) => {
       if (!isNil(item.image?.id)) {
         const newValue = value.map((v, i) => i === index ? { ...v, crop: crop ?? {} } : v)
@@ -137,9 +139,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
     if (!isNil(item.image?.id)) {
       openCropModal(
         item.image.id,
-        item.crop,
-        !isNil(ratioX) ? Number(ratioX) : undefined,
-        !isNil(ratioY) ? Number(ratioY) : undefined
+        item.crop
       )
     }
   }

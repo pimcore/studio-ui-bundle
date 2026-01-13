@@ -52,11 +52,6 @@ export const CropModalProvider: React.FC<CropModalProviderProps> = ({ children }
     setModalOptions({})
   }
 
-  const handleChange = (crop: CropSettings | null): void => {
-    modalOptions.onChange?.(crop)
-    closeModal()
-  }
-
   const contextValue = useMemo(() => ({
     openModal,
     closeModal,
@@ -68,13 +63,10 @@ export const CropModalProvider: React.FC<CropModalProviderProps> = ({ children }
       {isOpen && !isNull(currentImageId) && (
         <CropModal
           crop={ currentCrop }
-          disabled={ modalOptions.disabled }
           imageId={ currentImageId }
-          onChange={ handleChange }
           onClose={ closeModal }
           open={ isOpen }
-          ratioX={ modalOptions.ratioX }
-          ratioY={ modalOptions.ratioY }
+          options={ modalOptions }
         />
       )}
       {children}

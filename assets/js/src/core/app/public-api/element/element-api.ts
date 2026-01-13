@@ -69,8 +69,6 @@ export interface LinkModalProps {
 export interface CropModalProps {
   imageId: number
   crop?: CropSettings | null
-  ratioX?: number
-  ratioY?: number
   options?: CropModalOptions
 }
 

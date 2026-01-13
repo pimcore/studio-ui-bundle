@@ -14,9 +14,5 @@ import { type ApiGatewayEventType } from '../types/event-types'
 export const openCropModalHandler: ApiGatewayHandler<ApiGatewayEventType.openCropModal> = (payload, context) => {
   const { cropModalContext } = context
 
-  cropModalContext.openModal(payload.imageId, payload.crop, {
-    ...payload.options,
-    ratioX: payload.ratioX ?? payload.options?.ratioX,
-    ratioY: payload.ratioY ?? payload.options?.ratioY
-  })
+  cropModalContext.openModal(payload.imageId, payload.crop, payload.options)
 }

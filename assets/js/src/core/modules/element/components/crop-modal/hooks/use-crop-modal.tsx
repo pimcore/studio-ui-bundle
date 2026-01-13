@@ -22,33 +22,27 @@ export interface UseCropModalOptions {
 }
 
 export interface UseCropModalReturn {
-  openModal: (imageId: number, crop?: CropSettings | null, ratioX?: number, ratioY?: number) => void
+  openModal: (imageId: number, crop?: CropSettings | null) => void
   closeModal: () => void
   isOpen: boolean
 }
 
 export const useCropModal = (options: UseCropModalOptions = {}): UseCropModalReturn => {
   const cropModalContext = useCropModalContext()
-  const openModal = useCallback((imageId: number, crop?: CropSettings | null, ratioX?: number, ratioY?: number) => {
+  const openModal = useCallback((imageId: number, crop?: CropSettings | null) => {
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       const { element } = getPimcoreStudioApi()
       element.openCropModal({
         imageId,
         crop,
-        ratioX: ratioX ?? options.ratioX,
-        ratioY: ratioY ?? options.ratioY,
         options
       })
       return
     }
 
     // Fallback to local context
-    cropModalContext.openModal(imageId, crop, {
-      ...options,
-      ratioX: ratioX ?? options.ratioX,
-      ratioY: ratioY ?? options.ratioY
-    })
+    cropModalContext.openModal(imageId, crop, options)
   }, [cropModalContext, options])
 
   const closeModal = useCallback(() => {
