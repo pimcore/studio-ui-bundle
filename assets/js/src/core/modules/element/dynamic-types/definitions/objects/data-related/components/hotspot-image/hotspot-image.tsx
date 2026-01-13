@@ -182,8 +182,6 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         } }
         variant="outline"
       >
-          <pre>props.ratioX { props.ratioX }</pre>
-          <pre>props.ratioY {props.ratioY}</pre>
         { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           imageValue !== null && imageValue?.image !== null
             ? (
