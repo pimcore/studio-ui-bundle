@@ -86,14 +86,14 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
               onClick={ async () => {
                 const newWidgetData = await getWidgetById(widget.id, widget.widgetType)
 
-                  if (newWidgetData !== undefined) {
-                      setWidgets((prev) => prev.map((w) => w.id === widget.id ? newWidgetData : w))
-                      form.resetFields(['classes'])
-                      form.setFieldsValue({
-                          ...newWidgetData,
-                          classes: convertClassesArrayToObject((newWidgetData as ElementTreeWidget).classes)
-                      })
-                  }
+                if (newWidgetData !== undefined) {
+                  setWidgets((prev) => prev.map((w) => w.id === widget.id ? newWidgetData : w))
+                  form.resetFields(['classes'])
+                  form.setFieldsValue({
+                    ...newWidgetData,
+                    classes: convertClassesArrayToObject((newWidgetData as ElementTreeWidget).classes)
+                  })
+                }
               } }
               title={ t('refresh') }
             />
