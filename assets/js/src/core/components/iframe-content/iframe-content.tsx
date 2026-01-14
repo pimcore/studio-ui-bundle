@@ -1,11 +1,11 @@
+import { Tooltip } from "@sdk/components";
+import { isNil } from "lodash";
 import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { ContentLayout } from "../content-layout/content-layout";
 import { IconButton } from "../icon-button/icon-button";
 import { Iframe, IframeProps, IframeRef } from "../iframe/iframe";
 import { Toolbar } from "../toolbar/toolbar";
-import { isNil } from "lodash";
-import { Flex, Tooltip } from "@sdk/components";
-import { useTranslation } from "react-i18next";
 
 interface IframeContentProps {
   iframe: IframeProps
@@ -74,17 +74,19 @@ export const IframeContent = (props: IframeContentProps): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={!isNil(toolbar)
-        ? toolbar
-        : (<Toolbar
-          justify="start"
-          theme='secondary'
-        >
-          <div>
-            {getReloadButton()}
-            {getOpenButton()}
-          </div>
-        </Toolbar>)
+      renderToolbar={isNil(toolbar)
+        ? (
+          <Toolbar
+            justify="start"
+            theme='secondary'
+          >
+            <div>
+              {getReloadButton()}
+              {getOpenButton()}
+            </div>
+          </Toolbar>
+        )
+        : toolbar
       }
     >
       <Iframe

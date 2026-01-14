@@ -24,7 +24,7 @@ moduleSystem.registerModule({
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
-      name: 'iframe-widget',
+      name: 'iframe',
       component: IframeContent
     })
   }
