@@ -14,6 +14,8 @@ import { componentConfig, ComponentRenderer } from '../app/component-registry/co
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/modules/wysiwyg/wysiwyg.styles'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 interface WysiwygEditorProps {
   editorProps: WysiwygProps
@@ -29,15 +31,31 @@ export const WysiwygEditor = forwardRef(function WysiwygEditor (
   useEffect(() => {
   }, [props.editorProps])
 
+  const disabled = props.editorProps.disabled === true || (props.editorProps as any).noteditable === true
+
   return (
     <div
       className={ cn(styles.wysiwygEditor, ...getStateClasses(), props.editorProps.className) }
       ref={ ref }
     >
-      <ComponentRenderer
-        component={ componentConfig.wysiwyg.editor.name }
-        props={ { ...props.editorProps } }
-      />
+      { disabled
+        ? (
+          <div
+            className={ cn(styles.disabledEditor, props.editorProps.className) }
+            style={ {
+              maxWidth: toCssDimension(props.editorProps.width),
+              height: toCssDimension(props.editorProps.height)
+            } }
+          >
+            <SanitizeHtml html={ props.editorProps.value ?? '' } />
+          </div>
+          )
+        : (
+          <ComponentRenderer
+            component={ componentConfig.wysiwyg.editor.name }
+            props={ { ...props.editorProps } }
+          />
+          ) }
     </div>
   )
 })
