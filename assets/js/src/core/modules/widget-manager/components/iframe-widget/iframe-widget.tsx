@@ -1,11 +1,21 @@
-import { Tooltip } from "@sdk/components";
-import { isNil } from "lodash";
-import React, { useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { ContentLayout } from "../../../../components/content-layout/content-layout";
-import { IconButton } from "../../../../components/icon-button/icon-button";
-import { Iframe, IframeProps, IframeRef } from "../../../../components/iframe/iframe";
-import { Toolbar } from "../../../../components/toolbar/toolbar";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Tooltip } from '@sdk/components'
+import { isNil } from 'lodash'
+import React, { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ContentLayout } from '../../../../components/content-layout/content-layout'
+import { IconButton } from '../../../../components/icon-button/icon-button'
+import { Iframe, type IframeProps, type IframeRef } from '../../../../components/iframe/iframe'
+import { Toolbar } from '../../../../components/toolbar/toolbar'
 
 interface IframeContentProps {
   iframe: IframeProps
@@ -34,17 +44,17 @@ export const IframeWidget = (props: IframeContentProps): React.JSX.Element => {
     }
 
     return (
-      <Tooltip title={t('toolbar.reload')}>
+      <Tooltip title={ t('toolbar.reload') }>
         <IconButton
-          icon={{ value: 'refresh' }}
-          onClick={() => {
+          icon={ { value: 'refresh' } }
+          onClick={ () => {
             if (!isNil(onReload)) {
               onReload(iframeRef.current)
               return
             }
 
             iframeRef.current?.reload()
-          }}
+          } }
         />
       </Tooltip>
     )
@@ -56,17 +66,17 @@ export const IframeWidget = (props: IframeContentProps): React.JSX.Element => {
     }
 
     return (
-      <Tooltip title={t('open')}>
+      <Tooltip title={ t('open') }>
         <IconButton
-          icon={{ value: 'open-folder' }}
-          onClick={() => {
+          icon={ { value: 'open-folder' } }
+          onClick={ () => {
             if (!isNil(onOpen)) {
               onOpen(iframeRef.current)
               return
             }
 
             window.open(iframe.src, '_blank')
-          }}
+          } }
         />
       </Tooltip>
     )
@@ -74,22 +84,24 @@ export const IframeWidget = (props: IframeContentProps): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={!isNil(toolbar)
+      renderToolbar={ !isNil(toolbar)
         ? toolbar
-        : (<Toolbar
-          justify="start"
-          theme='secondary'
-        >
-          <div>
-            {getReloadButton()}
-            {getOpenButton()}
-          </div>
-        </Toolbar>)
+        : (
+          <Toolbar
+            justify="start"
+            theme='secondary'
+          >
+            <div>
+              {getReloadButton()}
+              {getOpenButton()}
+            </div>
+          </Toolbar>
+          )
       }
     >
       <Iframe
-        ref={iframeRef}
-        {...iframe}
+        ref={ iframeRef }
+        { ...iframe }
       />
     </ContentLayout>
   )

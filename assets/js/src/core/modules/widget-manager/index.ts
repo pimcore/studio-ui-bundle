@@ -14,13 +14,12 @@ import { staticWidgetRestorer } from './services/static-widget-restorer'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { IframeContent } from '@Pimcore/components/iframe-content/iframe-content'
-import { WidgetRegistry } from './services/widget-registry'
+import { type WidgetRegistry } from './services/widget-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRestorerRegistry = container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry)
     widgetRestorerRegistry.register(staticWidgetRestorer)
-
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
