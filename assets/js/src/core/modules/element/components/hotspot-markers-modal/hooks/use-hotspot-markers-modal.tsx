@@ -19,10 +19,11 @@ import { useHotspotMarkersModalContext } from '../provider/use-hotspot-markers-m
 export interface UseHotspotMarkersModalOptions {
   disabled?: boolean
   onChange?: (hotspots: IHotspot[]) => void
+  predefinedDataTemplates?: string | null
 }
 
 export interface UseHotspotMarkersModalReturn {
-  openModal: (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null) => void
+  openModal: (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, predefinedDataTemplates?: string | null) => void
   closeModal: () => void
   isOpen: boolean
   modalId: string
@@ -35,19 +36,25 @@ export const useHotspotMarkersModal = (options: UseHotspotMarkersModalOptions = 
 
   const context = useHotspotMarkersModalContext()
 
-  const openModal = useCallback((imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null) => {
+  const openModal = useCallback((imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, predefinedDataTemplates?: string | null) => {
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       const { element } = getPimcoreStudioApi()
       element.openHotspotMarkersModal({
         imageId,
         hotspots,
         crop,
-        options
+        options: {
+          ...options,
+          predefinedDataTemplates
+        }
       })
       return
     }
 
-    context.openModal(modalId, imageId, hotspots, crop, options)
+    context.openModal(modalId, imageId, hotspots, crop, {
+      ...options,
+      predefinedDataTemplates
+    })
   }, [modalId, context, options])
 
   const closeModal = useCallback(() => {

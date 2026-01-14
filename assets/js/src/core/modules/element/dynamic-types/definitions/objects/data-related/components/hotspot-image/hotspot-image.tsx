@@ -56,6 +56,7 @@ export interface HotspotImageProps {
   value?: HotspotImageValue | null
   onChange?: (value: HotspotImageValue | null) => void
   className?: string
+  predefinedDataTemplates?: string | null
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
@@ -145,7 +146,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const handleOpenHotspotMarkersModal = (): void => {
     if (!isNil(imageValue?.image?.id)) {
       const hotspots = toIHotspots(imageValue.hotspots ?? [], imageValue.marker ?? [])
-      openHotspotMarkersModal(imageValue.image.id, hotspots, imageValue.crop)
+      openHotspotMarkersModal(imageValue.image.id, hotspots, imageValue.crop, props.predefinedDataTemplates)
     }
   }
 

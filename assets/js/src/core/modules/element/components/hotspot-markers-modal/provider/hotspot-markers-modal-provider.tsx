@@ -24,6 +24,7 @@ export interface HotspotMarkersModalContextProps {
 export interface HotspotMarkersModalOptions {
   disabled?: boolean
   onChange?: (hotspots: IHotspot[]) => void
+  predefinedDataTemplates?: string | null
 }
 
 export interface HotspotMarkersModalProviderProps {
@@ -99,6 +100,7 @@ export const HotspotMarkersModalProvider: React.FC<HotspotMarkersModalProviderPr
             onChange={ (hotspots) => { handleModalChange(modalInstance.modalId, hotspots) } }
             onClose={ () => { handleModalClose(modalInstance.modalId) } }
             open
+            predefinedDataTemplates={ modalInstance.options.predefinedDataTemplates }
           />
         </HotspotDataProvider>
       ))}

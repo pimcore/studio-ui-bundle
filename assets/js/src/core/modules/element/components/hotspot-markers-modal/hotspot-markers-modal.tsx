@@ -13,8 +13,11 @@ import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { defaultStyleOptions, HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { type MenuProps } from 'antd'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { HotspotMarkersDataModal } from './hotspot-markers-data-modal'
 import { isUndefined } from 'lodash'
@@ -28,6 +31,18 @@ export interface HotspotMarkersModalProps {
   onClose?: () => void
   onChange?: (hotspots: IHotspot[]) => void
   crop?: CropSettings
+  predefinedDataTemplates?: string | null
+}
+
+interface DataTemplateItem {
+  menuName?: string
+  name: string
+  data?: any[]
+}
+
+interface DataTemplates {
+  marker?: DataTemplateItem[]
+  hotspot?: DataTemplateItem[]
 }
 
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
@@ -36,6 +51,20 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
   const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
+
+  const templates: DataTemplates = React.useMemo(() => {
+    if (props.predefinedDataTemplates === null || props.predefinedDataTemplates === undefined || props.predefinedDataTemplates === '') {
+      return {}
+    }
+    try {
+      return JSON.parse(props.predefinedDataTemplates)
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to parse predefinedDataTemplates', e)
+      return {}
+    }
+  }, [props.predefinedDataTemplates])
+
   const width = 952
   const height = 800
 
@@ -79,7 +108,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setModalOpened(open)
   }
 
-  const addHotspot = (type: string): void => {
+  const addHotspot = (type: string, template?: DataTemplateItem): void => {
     const style = defaultStyleOptions[type]
     const newHotspot: IHotspot = {
       id: hotspots.length + 1,
@@ -87,10 +116,58 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       y: 5,
       width: style.width,
       height: style.height,
-      type
+      type,
+      name: template?.name,
+      data: (template?.data !== undefined && template?.data !== null) ? [...template.data] : undefined
     }
 
     setHotspots(currentHotspots => [...currentHotspots, newHotspot])
+  }
+
+  const renderAddButton = (type: 'marker' | 'hotspot'): React.JSX.Element => {
+    const typeTemplates = templates[type]
+    const label = t(type === 'marker' ? 'hotspots.new-marker' : 'hotspots.new-hotspot')
+    const iconValue = type === 'marker' ? 'new-marker' : 'new-hotspot'
+
+    const mainButton = (
+      <IconTextButton
+        icon={ { value: iconValue } }
+        key={ `new-${type}-main` }
+        onClick={ () => { addHotspot(type) } }
+      >
+        {label}
+      </IconTextButton>
+    )
+
+    if (typeTemplates !== undefined && typeTemplates.length > 0) {
+      const items: MenuProps['items'] = typeTemplates.map((template, index) => ({
+        key: index,
+        label: t(template.menuName ?? template.name),
+        onClick: () => { addHotspot(type, template) }
+      }))
+
+      return (
+        <ButtonGroup
+          items={ [
+            mainButton,
+            <Dropdown
+              key={ `new-${type}-dropdown` }
+              menu={ { items } }
+              trigger={ ['click'] }
+            >
+              <IconButton
+                icon={ { value: 'chevron-down' } }
+                type="default"
+              />
+            </Dropdown>
+          ] }
+          key={ `new-${type}-group` }
+          noSpacing
+        />
+      )
+    }
+
+    return mainButton
   }
 
   const thumbnailSrc = createImageThumbnailUrl(props.imageId, {
@@ -115,20 +192,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
             } }
           >
             <ButtonGroup items={ [
-              <IconTextButton
-                icon={ { value: 'new-marker' } }
-                key="new-marker"
-                onClick={ () => { addHotspot('marker') } }
-              >
-                {t('hotspots.new-marker')}
-              </IconTextButton>,
-              <IconTextButton
-                icon={ { value: 'new-hotspot' } }
-                key="new-hotspot"
-                onClick={ () => { addHotspot('hotspot') } }
-              >
-                {t('hotspots.new-hotspot')}
-              </IconTextButton>
+              renderAddButton('marker'),
+              renderAddButton('hotspot')
             ] }
             />
             <ButtonGroup items={ [
