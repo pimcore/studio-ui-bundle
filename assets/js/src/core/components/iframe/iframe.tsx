@@ -24,7 +24,7 @@ export interface IframeRef {
   getElementRef: () => React.RefObject<HTMLIFrameElement>
 }
 
-interface IframeProps extends React.HTMLAttributes<HTMLIFrameElement> {
+export interface IframeProps extends React.HTMLAttributes<HTMLIFrameElement> {
   src: string
   title?: string
   loadingTip?: string
@@ -172,25 +172,25 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
     return (
       <Flex
         align="center"
-        className={ styles.iframeContainer }
+        className={styles.iframeContainer}
         justify="center"
       >
         {showLoadingOverlay && (
-          <div className={ styles.loadingOverlay }>
+          <div className={styles.loadingOverlay}>
             <Spin
               asContainer
               size="large"
-              tip={ loadingMessage }
+              tip={loadingMessage}
             />
           </div>
         )}
         <iframe
-          className={ styles.iframe }
-          onLoad={ handleIframeLoad }
-          ref={ handleIframeRef }
-          src={ src }
-          title={ title }
-          { ...props }
+          className={styles.iframe}
+          onLoad={handleIframeLoad}
+          ref={handleIframeRef}
+          src={src}
+          title={title}
+          {...props}
         />
       </Flex>
     )
