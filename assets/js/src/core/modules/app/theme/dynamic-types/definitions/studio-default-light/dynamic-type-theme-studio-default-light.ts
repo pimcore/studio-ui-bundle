@@ -78,7 +78,7 @@ export const studioDefaultLightThemeConfig = {
     colorBorderInverse: '#424242',
     colorDividerInverse: 'rgba(217, 217, 217, 0.34)',
     colorInactiveInverse: 'rgba(255, 255, 255, 0.5)',
-    
+
     // custom color tokens (e.g. for icon colors)
     red1: '#b73933',
     red2: '#cc4a46',
