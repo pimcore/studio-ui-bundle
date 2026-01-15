@@ -10,18 +10,19 @@
 
 import { injectable } from 'inversify'
 import { type ColorToken, defaultIconColorGroups } from './default-icon-color-groups'
-import { isUndefined } from 'lodash'
+import { isArray, isUndefined } from 'lodash'
 
-export type IconColorGroup = 'element' | 'fieldDefinition' | string
+export type IconColorGroupName = 'element' | 'fieldDefinition' | string
+export type IconColorGroup = IconColorGroupName | IconColorGroupName[]
 
 export type IconColorGroupDefinition = Record<string, ColorToken>
 
 export interface IconColorGroupsRegistry {
-  registerGroup: (groupName: IconColorGroup, definitions: IconColorGroupDefinition) => void
-  addToGroup: (groupName: IconColorGroup, iconName: string, colorToken: ColorToken) => void
-  getGroup: (groupName: IconColorGroup) => IconColorGroupDefinition | undefined
-  hasGroup: (groupName: IconColorGroup) => boolean
-  getIconColor: (groupName: IconColorGroup, iconName: string) => ColorToken | undefined
+  registerGroup: (groupName: IconColorGroupName, definitions: IconColorGroupDefinition) => void
+  addToGroup: (groupName: IconColorGroupName, iconName: string, colorToken: ColorToken) => void
+  getGroup: (groupName: IconColorGroupName) => IconColorGroupDefinition | undefined
+  hasGroup: (groupName: IconColorGroupName) => boolean
+  getIconColor: (groupName: IconColorGroupName, iconName: string) => ColorToken | undefined
   getIconColorValue: (groupName: IconColorGroup, iconName: string, token: Record<string, any>) => string | undefined
   getAllGroups: () => Record<string, IconColorGroupDefinition>
 }
@@ -32,11 +33,11 @@ export class IconColorGroupsRegistryService implements IconColorGroupsRegistry {
     Object.entries(defaultIconColorGroups)
   )
 
-  registerGroup (groupName: IconColorGroup, definitions: IconColorGroupDefinition): void {
+  registerGroup (groupName: IconColorGroupName, definitions: IconColorGroupDefinition): void {
     this.groups.set(groupName, definitions)
   }
 
-  addToGroup (groupName: IconColorGroup, iconName: string, colorToken: ColorToken): void {
+  addToGroup (groupName: IconColorGroupName, iconName: string, colorToken: ColorToken): void {
     const group = this.groups.get(groupName)
 
     if (isUndefined(group)) {
@@ -46,15 +47,15 @@ export class IconColorGroupsRegistryService implements IconColorGroupsRegistry {
     }
   }
 
-  getGroup (groupName: IconColorGroup): IconColorGroupDefinition | undefined {
+  getGroup (groupName: IconColorGroupName): IconColorGroupDefinition | undefined {
     return this.groups.get(groupName)
   }
 
-  hasGroup (groupName: IconColorGroup): boolean {
+  hasGroup (groupName: IconColorGroupName): boolean {
     return this.groups.has(groupName)
   }
 
-  getIconColor (groupName: IconColorGroup, iconName: string): ColorToken | undefined {
+  getIconColor (groupName: IconColorGroupName, iconName: string): ColorToken | undefined {
     const group = this.getGroup(groupName)
     if (isUndefined(group)) {
       return undefined
@@ -64,6 +65,16 @@ export class IconColorGroupsRegistryService implements IconColorGroupsRegistry {
   }
 
   getIconColorValue (groupName: IconColorGroup, iconName: string, token: Record<string, any>): string | undefined {
+    if (isArray(groupName)) {
+      for (const name of groupName) {
+        const colorTokenKey = this.getIconColor(name, iconName)
+        if (!isUndefined(colorTokenKey)) {
+          return token[colorTokenKey]
+        }
+      }
+      return undefined
+    }
+
     const colorTokenKey = this.getIconColor(groupName, iconName)
     if (isUndefined(colorTokenKey)) {
       return undefined

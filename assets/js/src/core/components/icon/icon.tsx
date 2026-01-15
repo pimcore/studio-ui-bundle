@@ -80,6 +80,7 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
 
     return (
       <SvgIcon
+        className='pimcore-icon__svg'
         height={ height }
         width={ width }
         { ...options }
@@ -112,7 +113,7 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
       { ...props }
     >
       {!isNil(SubIcon) && (
-        <div className={ `${styles.subIcon} sub-icon-variant--${subIconVariant}` }><SubIcon /></div>
+        <div className={ `${styles.subIcon} pimcore-icon-sub-icon sub-icon-variant--${subIconVariant}` }><SubIcon /></div>
       )}
       {renderIcon()}
     </div >
