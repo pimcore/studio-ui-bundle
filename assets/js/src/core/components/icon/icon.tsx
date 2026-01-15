@@ -17,6 +17,7 @@ import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-li
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useStyles } from './icon.styles'
+import { type IconColorGroupsRegistry, type IconColorGroup } from './icon-color-groups-registry'
 
 type SubIconVariant = 'default' | 'green'
 
@@ -28,10 +29,12 @@ export interface IconProps extends Omit<ElementIcon, 'type'> {
   subIconVariant?: SubIconVariant
   sphere?: boolean
   onLoadError?: (hasError: boolean) => void
+  iconColorGroup?: IconColorGroup
 }
 
-export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, onLoadError, ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, onLoadError, iconColorGroup, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
+  const iconColorGroupsRegistry = useInjection<IconColorGroupsRegistry>(serviceIds.iconColorGroupsRegistry)
 
   const width = options?.width ?? 16
   const height = options?.height ?? 16
@@ -46,6 +49,16 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
   const isPathType = type === 'path'
   const SvgIcon = isNameType ? iconLibrary.get(value) : undefined
   const shouldHideIcon = isNameType && (isNil(value) || isUndefined(SvgIcon))
+
+  const getIconColor = (): string | undefined => {
+    if (isUndefined(iconColorGroup) || !isNameType) {
+      return undefined
+    }
+
+    return iconColorGroupsRegistry.getIconColorValue(iconColorGroup, value, token)
+  }
+
+  const iconColor = getIconColor()
 
   const renderIcon = (): React.JSX.Element => {
     if (isPathType) {
@@ -67,6 +80,7 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
 
     return (
       <SvgIcon
+        className='pimcore-icon__svg'
         height={ height }
         width={ width }
         { ...options }
@@ -76,18 +90,19 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
 
   const SubIcon = isUndefined(subIconName) ? undefined : iconLibrary.get(subIconName)
 
-  const containerStyle = sphere
-    ? {
-        width: containerSize,
-        height: containerHeight,
-        position: 'relative' as const,
-        backgroundColor: token.colorFillAlter,
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }
-    : { width, height, position: 'relative' as const }
+  const containerStyle = {
+    width: sphere ? containerSize : width,
+    height: sphere ? containerHeight : height,
+    position: 'relative' as const,
+    ...(sphere && {
+      backgroundColor: token.colorFillAlter,
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }),
+    ...(!isUndefined(iconColor) && { color: iconColor })
+  }
 
   return (
     <div
@@ -98,7 +113,7 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
       { ...props }
     >
       {!isNil(SubIcon) && (
-        <div className={ `${styles.subIcon} sub-icon-variant--${subIconVariant}` }><SubIcon /></div>
+        <div className={ `${styles.subIcon} pimcore-icon-sub-icon sub-icon-variant--${subIconVariant}` }><SubIcon /></div>
       )}
       {renderIcon()}
     </div >
