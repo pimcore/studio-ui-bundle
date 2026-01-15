@@ -153,7 +153,6 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
             <Dropdown
               key={ `new-${type}-dropdown` }
               menu={ { items } }
-              trigger={ ['click'] }
             >
               <IconButton
                 icon={ { value: 'chevron-down' } }
