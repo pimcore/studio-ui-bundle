@@ -20,7 +20,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { HotspotMarkersDataModal } from './hotspot-markers-data-modal'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 
 export interface HotspotMarkersModalProps {
@@ -53,7 +53,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
 
   const templates: DataTemplates = React.useMemo(() => {
-    if (props.predefinedDataTemplates === null || props.predefinedDataTemplates === undefined || props.predefinedDataTemplates === '') {
+    if (isNil(props.predefinedDataTemplates) || props.predefinedDataTemplates === '') {
       return {}
     }
     try {
@@ -118,7 +118,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       height: style.height,
       type,
       name: template?.name,
-      data: (template?.data !== undefined && template?.data !== null) ? [...template.data] : undefined
+      data: !isNil(template?.data) ? [...template.data] : undefined
     }
 
     setHotspots(currentHotspots => [...currentHotspots, newHotspot])
@@ -139,7 +139,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       </IconTextButton>
     )
 
-    if (typeTemplates !== undefined && typeTemplates.length > 0) {
+    if (!isUndefined(typeTemplates) && typeTemplates.length > 0) {
       const items: MenuProps['items'] = typeTemplates.map((template, index) => ({
         key: index,
         label: t(template.menuName ?? template.name),
