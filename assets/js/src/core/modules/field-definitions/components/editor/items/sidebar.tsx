@@ -8,22 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassDefinitionCollectionQuery, useClassDefinitionDeleteMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
-import { ClassDefinitionModalNew } from '@Pimcore/modules/class-definition/components/sidebar/class-definition-modal-new'
-import { type ClassDefinitionPartial, useClassDefinitionTabs } from '@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider'
+import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { AddModalProvider } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
+import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/modal-holder'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
 
-export const ClassDefinitionSidebar = (): React.JSX.Element => {
-  const { isLoading, isFetching, data, refetch } = useClassDefinitionCollectionQuery()
-  const [deleteClassDefinitionMutation] = useClassDefinitionDeleteMutation()
+export const ItemsSidebar = (): React.JSX.Element => {
+  const { useItemsQuery, useItemsDeleteMutation } = useSettings()
+  const { isLoading, isFetching, data, refetch } = useItemsQuery()
+  const [deleteConfigurationMutation] = useItemsDeleteMutation()
+
   const [searchTerm, setSearchTerm] = useState<string>('')
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
   const [showNewModal, setShowNewModal] = useState<boolean>(false)
-  const { setActiveClassDefinition, activeClassDefinition, closeClassDefinition } = useClassDefinitionTabs()
+  const { setActiveConfiguration, activeConfiguration, closeConfiguration } = useItems()
 
   const treeData: ITreeElementProps['treeData'] = useMemo(() => {
     if (data === undefined) {
@@ -34,23 +37,22 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
 
     const groupMap: Record<string, ITreeElementProps['treeData'][0]> = {}
 
-    const filteredData = data.items.filter((classDef) => {
+    const filteredData = data.items.filter((configuration) => {
       if (debouncedSearchTerm === '') {
         return true
       }
 
-      return classDef.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      return configuration.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     })
 
-    filteredData.forEach((classDef) => {
-      const groupName = classDef.group
-
+    filteredData.forEach((configuration) => {
+      const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
-          title: classDef.name,
-          key: `${classDef.id}`,
-          icon: classDef.icon !== undefined ? <Icon { ...classDef.icon } /> : undefined,
-          meta: { classDefinition: classDef },
+          title: configuration.name,
+          key: `${configuration.id}`,
+          icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
+          meta: { configuration },
           actions: [
             { key: 'delete', icon: 'delete' }
           ]
@@ -69,10 +71,10 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
       }
 
       const treeDataItem: TreeDataItem = {
-        title: classDef.name,
-        key: `${classDef.id}`,
-        icon: classDef.icon !== undefined ? <Icon { ...classDef.icon } /> : undefined,
-        meta: { classDefinition: classDef },
+        title: configuration.name,
+        key: `${configuration.id}`,
+        icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
+        meta: { configuration },
         actions: [
           { key: 'delete', icon: 'delete' }
         ]
@@ -84,11 +86,11 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
     // @todo check sorting logic
     formattedTreeData.sort((a, b) => {
       if ((a.children?.length ?? 0) !== 0 && (b.children?.length ?? 0) === 0) {
-        return 1
+        return -1
       }
 
       if ((a.children?.length ?? 0) === 0 && (b.children?.length ?? 0) !== 0) {
-        return -1
+        return 1
       }
 
       return 0
@@ -101,22 +103,22 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
     return debouncedSearchTerm !== '' ? treeData.map(item => item.key) : []
   }, [treeData, debouncedSearchTerm])
 
-  const deleteClassDefinition = (node: TreeDataItem): void => {
-    const classDef = node.meta!.classDefinition! as ClassDefinitionPartial
+  const deleteConfiguration = (node: TreeDataItem): void => {
+    const configuration = node.meta!.configuration! as ConfigurationPartial
 
-    closeClassDefinition(classDef)
-    deleteClassDefinitionMutation({ id: classDef.id }).catch((err: Error) => {
+    closeConfiguration(configuration)
+    deleteConfigurationMutation({ id: configuration.id }).catch((err: Error) => {
       trackError(new ApiError(err))
     })
   }
 
   // @todo Translations!!
   return (
-    <>
-      <ClassDefinitionModalNew
-        onOpenChange={ setShowNewModal }
-        open={ showNewModal }
-      />
+    <AddModalProvider
+      onOpenChange={ setShowNewModal }
+      open={ showNewModal }
+    >
+      <SidebarModalHolder />
 
       <ContentLayout
         renderToolbar={
@@ -154,18 +156,18 @@ export const ClassDefinitionSidebar = (): React.JSX.Element => {
               defaultExpandedKeys={ expandedKeys }
               onActionsClick={ (key, action, node) => {
                 if (action === 'delete') {
-                  deleteClassDefinition(node)
+                  deleteConfiguration(node)
                 }
               } }
               onSelected={ (key, node) => {
-                setActiveClassDefinition(node.meta!.classDefinition as ClassDefinitionPartial)
+                setActiveConfiguration(node.meta!.configuration as ConfigurationPartial)
               } }
-              selectedKeys={ activeClassDefinition !== undefined ? [activeClassDefinition.id] : undefined }
+              selectedKeys={ activeConfiguration !== undefined ? [activeConfiguration.id] : undefined }
               treeData={ treeData }
             />
           </Content>
         </Content>
       </ContentLayout>
-    </>
+    </AddModalProvider>
   )
 }

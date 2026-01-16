@@ -28,7 +28,15 @@ export interface TreeDataItem extends TreeDataNode {
   allowDrag?: boolean | ((params: { node: TreeDataItem }) => boolean)
 }
 
-export interface ITreeElementProps extends TreeProps {
+type OriginalTitleRender = NonNullable<TreeProps['titleRender']>
+
+// Create a new type with an additional parameter
+type ExtendedTitleRender = (
+  node: Parameters<OriginalTitleRender>[0],
+  initialComponent: React.ReactElement
+) => ReturnType<OriginalTitleRender>
+
+export interface ITreeElementProps extends Omit<TreeProps, 'titleRender'> {
   treeData: TreeDataItem[]
   className?: string
   onActionsClick?: (key: string, action: string, node: TreeDataItem) => void
@@ -41,6 +49,7 @@ export interface ITreeElementProps extends TreeProps {
   isHideRootChecker?: boolean
   defaultExpandAll?: boolean
   hasRoot?: boolean
+  titleRender?: ExtendedTitleRender
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -61,7 +70,8 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     defaultExpandAll,
     withCustomSwitcherIcon,
     isHideRootChecker = true,
-    hasRoot = true
+    hasRoot = true,
+    titleRender
   } = props
 
   const { styles } = useStyles({ isHideRootChecker, hasRoot })
@@ -144,17 +154,23 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           selectedKeys={ selectedKeys }
           showIcon
           switcherIcon={ handleCustomSwitcherIcon }
-          titleRender={ (node) => (
-            <TreeElementItem
-              actions={ node.actions }
-              onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action, node) }
-              onSelected={ () => {
-                setSelectedKeys([node.key])
-                onSelected?.(node.key, node)
-              } }
-              title={ node.title as string }
-            />
-          ) }
+          titleRender={ (node) => {
+            const component = (
+              <TreeElementItem
+                actions={ node.actions }
+                onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action, node) }
+                onSelected={ () => {
+                  setSelectedKeys([node.key])
+                  onSelected?.(node.key, node)
+                } }
+                title={ node.title as string }
+              />
+            )
+
+            return (
+              <>{titleRender !== undefined ? titleRender(node, component) : component}</>
+            )
+          } }
           treeData={ treeData }
         />
       )}

@@ -8,19 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinition as FieldDefinitionType, useClassDefinitionLayout } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { type FieldDefinition as FieldDefinitionType } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Content, FormKit } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-export const FieldDefinition = (): React.JSX.Element => {
-  const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useClassDefinitionLayout()
+export const LayoutForm = (): React.JSX.Element => {
+  const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
-  const [values, setValues] = React.useState<FieldDefinitionType>(fieldDefinition)
+  const [values, setValues] = useState<FieldDefinitionType>(fieldDefinition)
   const debouncedValues = useDebounce(values, 300)
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const { area } = useArea()
   const dynamicType = useMemo(() => {
     if (fieldDefinition !== undefined && fieldDefinitionRegistry.hasDynamicType(fieldDefinition.fieldtype)) {
       return fieldDefinitionRegistry.getDynamicType(fieldDefinition.fieldtype)
@@ -60,7 +63,7 @@ export const FieldDefinition = (): React.JSX.Element => {
                 }
               } }
             >
-              {dynamicType.getFormFields({ area: ['class'], fieldDefinitions, path: currentFieldDefinitionIdPath! })}
+              {dynamicType.getFormFields({ area, fieldDefinitions, path: currentFieldDefinitionIdPath! })}
             </FormKit>
           </Content>
           )

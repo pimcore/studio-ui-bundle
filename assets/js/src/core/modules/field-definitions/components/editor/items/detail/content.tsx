@@ -8,19 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassDefinitionLayout } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
-import { FieldDefinition } from '@Pimcore/modules/class-definition/components/detail/content/field-defintion/field-definition'
+import { LayoutForm } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content/layout-form'
+import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { Content } from '@sdk/components'
 import React from 'react'
 
-export const ClassDefinitionDetailContent = (): React.JSX.Element => {
-  const { currentFieldDefinitionId } = useClassDefinitionLayout()
+export const DetailContent = (): React.JSX.Element => {
+  const { currentFieldDefinitionId } = useLayout()
 
   return (
     <>
       {currentFieldDefinitionId === null
         ? (
-          <Content padded>
+          <Content
+            centered
+            padded
+          >
             Please select a field from the tree to edit its properties.
           </Content>
           )
@@ -28,7 +31,7 @@ export const ClassDefinitionDetailContent = (): React.JSX.Element => {
 
       {currentFieldDefinitionId !== null
         ? (
-          <FieldDefinition />
+          <LayoutForm />
           )
         : null}
     </>

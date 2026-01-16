@@ -9,7 +9,7 @@
  */
 
 import type React from 'react'
-import { type IClassDefinitionLayoutContext } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { type ILayoutContext } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { DynamicTypeAbstract } from '@sdk/modules/element'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { container, serviceIds } from '@sdk/app'
@@ -22,7 +22,7 @@ export interface FieldDefinitionDataAbstract extends Record<string, any> {
 export interface FieldDefinitionContext extends Record<string, any> {
   area: string[]
   path: string[]
-  fieldDefinitions: IClassDefinitionLayoutContext['fieldDefinitions']
+  fieldDefinitions: ILayoutContext['fieldDefinitions']
 }
 
 export interface FieldDefinitionAbstractFormFieldsProps {

@@ -8,23 +8,28 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassDefinitionDetail } from '@Pimcore/modules/class-definition/components/detail/class-definition-detail-provider'
-import { useClassDefinitionLayout } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
+import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { useClassDefinitionUpdateMutation } from '@sdk/api/class-definition'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect } from 'react'
 
-export const ClassDefinitionDetailSave = (): React.JSX.Element => {
+export const DetailSave = (): React.JSX.Element => {
   // @todo translations
-  const { getLayout, fieldDefinitions, setInvalidFieldDefinitionIds } = useClassDefinitionLayout()
-  const { classDefinition } = useClassDefinitionDetail()
-  const [updateClassDefinitionMutation, { isLoading, error }] = useClassDefinitionUpdateMutation()
+  const { fieldDefinitions, setInvalidFieldDefinitionIds } = useLayout()
+  const { generalSettings } = useGeneralSettings()
+  const { useDetailUpdateMutation } = useSettings()
+  const [updateDetailMutation, result] = useDetailUpdateMutation()
+  const { isLoading } = result
+  const error = result.error as FetchBaseQueryError | undefined
   const messageApi = useMessage()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const { area } = useArea()
 
   useEffect(() => {
     if (error !== undefined) {
@@ -33,7 +38,7 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
   }, [error])
 
   const onClick: ButtonProps['onClick'] = () => {
-    if (classDefinition === undefined) {
+    if (generalSettings === undefined) {
       return
     }
 
@@ -47,7 +52,7 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
         if (hasDynamicType) {
           const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
           // @todo check if we can handle the path here
-          const isValid = dynamicType.isValid(definition, { area: ['class'], fieldDefinitions, path: [] })
+          const isValid = dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
 
           if (!isValid) {
             invalidDefinitions.push(key)
@@ -64,21 +69,9 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
       return
     }
 
-    updateClassDefinitionMutation({
-      id: classDefinition.id,
-      classDefinitionUpdate: {
-        values: {
-          ...classDefinition,
-          // @todo check how to handle new icon types with backend
-          icon: ''
-        },
-        configuration: {
-          children: getLayout().children
-        }
-      }
-    }).then(() => {
+    updateDetailMutation({}).then(() => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success('Class definition saved successfully.')
+      messageApi.success('Saved successfully.')
     }).catch((e) => {
       trackError(new ApiError(e as FetchBaseQueryError))
     })
@@ -86,7 +79,7 @@ export const ClassDefinitionDetailSave = (): React.JSX.Element => {
 
   return (
     <Button
-      disabled={ isLoading || classDefinition === undefined }
+      disabled={ isLoading || generalSettings === undefined }
       loading={ isLoading }
       onClick={ onClick }
       type="primary"

@@ -9,9 +9,11 @@
  */
 
 /* eslint-disable max-lines */
-import { type Layout } from '@sdk/api/class-definition'
+import { type Layout as LayoutType } from '@sdk/api/class-definition'
 import { uuid } from '@sdk/utils'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+
+export type Layout = LayoutType
 
 export interface StructureNode {
   id: string
@@ -22,7 +24,7 @@ export interface FieldDefinition extends Record<string, any> {
   fieldtype: string
 }
 
-export interface IClassDefinitionLayoutContext {
+export interface ILayoutContext {
   structure: StructureNode | undefined
   fieldDefinitions: Record<string, FieldDefinition>
   currentFieldDefinitionId: StructureNode['id'] | null
@@ -39,19 +41,19 @@ export interface IClassDefinitionLayoutContext {
   getLayout: () => Layout
 }
 
-export const ClassDefinitionLayoutContext = createContext<IClassDefinitionLayoutContext | undefined>(undefined)
+export const LayoutContext = createContext<ILayoutContext | undefined>(undefined)
 
-export interface ClassDefinitionLayoutProviderProps {
+export interface LayoutProviderProps {
   layout: Layout | undefined
   children: React.ReactNode
 }
 
-export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProviderProps): React.JSX.Element => {
-  const [structure, setStructure] = useState<IClassDefinitionLayoutContext['structure']>(undefined)
-  const [fieldDefinitions, setFieldDefinitions] = useState<IClassDefinitionLayoutContext['fieldDefinitions']>({})
-  const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionId']>(null)
-  const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<IClassDefinitionLayoutContext['currentFieldDefinitionIdPath']>(null)
-  const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<IClassDefinitionLayoutContext['invalidFieldDefinitionIds']>([])
+export const LayoutProvider = (props: LayoutProviderProps): React.JSX.Element => {
+  const [structure, setStructure] = useState<ILayoutContext['structure']>(undefined)
+  const [fieldDefinitions, setFieldDefinitions] = useState<ILayoutContext['fieldDefinitions']>({})
+  const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<ILayoutContext['currentFieldDefinitionId']>(null)
+  const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<ILayoutContext['currentFieldDefinitionIdPath']>(null)
+  const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<ILayoutContext['invalidFieldDefinitionIds']>([])
 
   useEffect(() => {
     if (props.layout === undefined) {
@@ -63,7 +65,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
       return
     }
 
-    const initialFieldDefinitions: IClassDefinitionLayoutContext['fieldDefinitions'] = {}
+    const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
 
     const buildStructure = (layoutItem: Layout): StructureNode => {
       const id = uuid()
@@ -272,7 +274,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
     })
   }
 
-  const getLayout: IClassDefinitionLayoutContext['getLayout'] = () => {
+  const getLayout: ILayoutContext['getLayout'] = () => {
     const buildLayoutRecursively = (node: StructureNode): Layout => {
       const fieldDef = fieldDefinitions[node.id]
       const children = node.children.map(buildLayoutRecursively)
@@ -292,7 +294,7 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
   }
 
   return useMemo(() => (
-    <ClassDefinitionLayoutContext.Provider
+    <LayoutContext.Provider
       value={
         {
           structure,
@@ -313,15 +315,15 @@ export const ClassDefinitionLayoutProvider = (props: ClassDefinitionLayoutProvid
       }
     >
       {props.children}
-    </ClassDefinitionLayoutContext.Provider>
+    </LayoutContext.Provider>
   ), [structure, fieldDefinitions, currentFieldDefinitionId, invalidFieldDefinitionIds, props.children])
 }
 
-export const useClassDefinitionLayout = (): IClassDefinitionLayoutContext => {
-  const context = useContext(ClassDefinitionLayoutContext)
+export const useLayout = (): ILayoutContext => {
+  const context = useContext(LayoutContext)
 
   if (context === undefined) {
-    throw new Error('useClassDefinitionLayout must be used within a ClassDefinitionLayoutProvider')
+    throw new Error('useLayout must be used within a LayoutProvider')
   }
 
   return context

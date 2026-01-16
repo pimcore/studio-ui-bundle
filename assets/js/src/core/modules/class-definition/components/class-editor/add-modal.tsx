@@ -8,29 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ClassDefinitionPartial, useClassDefinitionTabs } from '@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider'
+import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from '@sdk/api/class-definition'
-import { Content, Form, Input, Modal } from '@sdk/components'
+import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect } from 'react'
 
-export interface ClassDefinitionModalNewProps {
-  open: boolean
-  onOpenChange?: (open: boolean) => void
-}
-
-export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): React.JSX.Element => {
+export const ClassDefinitionsAddModal = (): React.JSX.Element => {
   const [form] = useForm()
-  const { data, isLoading, error, refetch } = useClassDefinitionGetIdentifierDataQuery()
+  const { closeModal } = useAddModal()
+  const { data, isLoading, error } = useClassDefinitionGetIdentifierDataQuery()
   const [createClassDefinition] = useClassDefinitionCreateMutation()
-  const { openClassDefinition } = useClassDefinitionTabs()
-
-  useEffect(() => {
-    if (props.open) {
-      void refetch()
-    }
-  }, [props.open, refetch, form])
+  const { openConfiguration } = useItems()
 
   useEffect(() => {
     if (error !== undefined) {
@@ -51,9 +42,9 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
         uid: values.uniqueIdentifier
       }
     }).then((data) => {
-      props.onOpenChange?.(false)
+      closeModal()
 
-      const classDef: ClassDefinitionPartial = {
+      const classDef: ConfigurationPartial = {
         id: data.data!.id,
         name: data.data!.name,
         // @todo check schema with backend
@@ -63,22 +54,15 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
         icon: data.data!.icon
       }
 
-      openClassDefinition(classDef)
+      openConfiguration(classDef)
     }).catch((err: ApiError) => {
       trackError(new ApiError(err))
     })
   }
 
-  const onCancel = (): void => {
-    form.resetFields()
-    props.onOpenChange?.(false)
-  }
-
   return (
-    <Modal
-      onCancel={ onCancel }
+    <AddModal
       onOk={ () => { form.submit() } }
-      open={ props.open }
       title={ 'Create New Class Definition' }
     >
       <Content loading={ isLoading }>
@@ -124,6 +108,6 @@ export const ClassDefinitionModalNew = (props: ClassDefinitionModalNewProps): Re
           Be careful with the unique identifier because table names can contain only up to 64 characters.
         </Form>
       </Content>
-    </Modal>
+    </AddModal>
   )
 }

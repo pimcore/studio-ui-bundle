@@ -8,16 +8,74 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassDefinitionLayout } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { type FieldDefinition, useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Icon, Content } from '@sdk/components'
-import React from 'react'
+import { TreeElement, type ITreeElementProps, Icon, Content, Draggable, Droppable } from '@sdk/components'
+import React, { useMemo } from 'react'
 
-export const ClassDefinitionDetailTree = (): React.JSX.Element => {
-  const { structure, fieldDefinitions, invalidFieldDefinitionIds, currentFieldDefinitionId, addFieldDefinition, setCurrentFieldDefinitionIdPath, setCurrentFieldDefinitionId, moveFieldDefinition, removeFieldDefinition, cloneFieldDefinition } = useClassDefinitionLayout()
+export interface DetailSidebarProps {
+  allowExternalDrag?: boolean
+  allowExternalDrop?: boolean
+}
+
+export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
+  const {
+    allowExternalDrag = false,
+    allowExternalDrop = false
+  } = props
+
+  const { area } = useArea()
+
+  const {
+    structure,
+    fieldDefinitions,
+    invalidFieldDefinitionIds,
+    currentFieldDefinitionId,
+    addFieldDefinition,
+    setCurrentFieldDefinitionIdPath,
+    setCurrentFieldDefinitionId,
+    moveFieldDefinition,
+    removeFieldDefinition,
+    cloneFieldDefinition
+  } = useLayout()
+
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+
+  const titleRender: ITreeElementProps['titleRender'] = useMemo(() => {
+    /* eslint-disable react/display-name */
+    if (allowExternalDrag) {
+      return (node, initialComponent) => (
+        <Draggable info={ {
+          type: 'field-definition',
+          data: fieldDefinitions[node.key.toString()],
+          // @todo icon
+          icon: { value: 'folder' },
+          title: node.title as string
+        } }
+        >
+          {initialComponent}
+        </Draggable>
+      )
+    }
+
+    if (allowExternalDrop) {
+      return (node, initialComponent) => (
+        <Droppable
+          isValidContext={ () => true }
+          onDrop={ (info) => {
+            addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
+          } }
+        >
+          {initialComponent}
+        </Droppable>
+      )
+    }
+
+    return undefined
+  }, [allowExternalDrag, fieldDefinitions])
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
     if (structure === undefined) {
@@ -37,8 +95,8 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
 
       if (fieldDef.name !== 'pimcore_root') {
         if (dynType !== undefined) {
-          const allowedChildTags = dynType.getValidChildTags({ area: ['class'], path: currentPath, fieldDefinitions })
-          fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area: ['class'], path: currentPath, fieldDefinitions }).forEach((type) => {
+          const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
+          fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
             actions.push({ key: `add-${type.id}`, icon: type.getIcon().value })
           })
         }
@@ -46,7 +104,7 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
         actions.push({ key: 'clone', icon: 'clone' })
         actions.push({ key: 'delete', icon: 'delete' })
       } else {
-        fieldDefinitionRegistry.getTypesByTags(['group:root'], { area: ['class'], path: currentPath, fieldDefinitions }).forEach((type) => {
+        fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
           actions.push({ key: `add-${type.id}`, icon: type.getIcon().value })
         })
       }
@@ -71,7 +129,7 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
           let isValid = false
 
           if (fieldDef.name === 'pimcore_root') {
-            fieldDefinitionRegistry.getTypesByTags(['group:root'], { area: ['class'], path: currentPath, fieldDefinitions }).forEach((type) => {
+            fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
               if (type.id === dragFieldDef.fieldtype) {
                 isValid = true
               }
@@ -79,8 +137,8 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
           }
 
           if (dynType !== undefined) {
-            const allowedChildTags = dynType.getValidChildTags({ area: ['class'], path: currentPath, fieldDefinitions })
-            fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area: ['class'], path: currentPath, fieldDefinitions }).forEach((type) => {
+            const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
+            fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
               if (type.id === dragFieldDef.fieldtype) {
                 isValid = true
               }
@@ -109,7 +167,7 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
       const typeId = actionKey.replace('add-', '')
       const type = fieldDefinitionRegistry.getDynamicType(typeId)
 
-      const newFieldDefData = type.getDefaultData({ area: ['class'], path: node.meta?.currentPath ?? [], fieldDefinitions })
+      const newFieldDefData = type.getDefaultData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions })
       addFieldDefinition(nodeKey, newFieldDefData)
     }
   }
@@ -134,13 +192,14 @@ export const ClassDefinitionDetailTree = (): React.JSX.Element => {
     >
       <TreeElement
         defaultExpandAll
-        draggable
+        draggable={ !allowExternalDrag }
         onActionsClick={ onActionsClick }
         onDragAndDrop={ ({ node, dragNode, dropPosition }) => {
           moveFieldDefinition(dragNode.key as string, node.key as string, dropPosition)
         } }
         onSelected={ onSelected }
         selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }
+        titleRender={ titleRender }
         treeData={ items }
       />
     </Content>
