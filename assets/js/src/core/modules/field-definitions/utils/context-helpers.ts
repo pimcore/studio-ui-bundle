@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinition } from '@Pimcore/modules/class-definition/components/detail/class-definition-layout-provider'
+import { type FieldDefinition } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 
 export const getParent = <T extends FieldDefinition = FieldDefinition>(context: FieldDefinitionContext): T | undefined => {

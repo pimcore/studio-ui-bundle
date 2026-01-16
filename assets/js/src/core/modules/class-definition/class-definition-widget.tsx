@@ -8,27 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ClassDefinitionTabs } from '@Pimcore/modules/class-definition/components/tabs/class-definition-tabs'
-import { ClassDefinitionSidebar } from '@Pimcore/modules/class-definition/components/sidebar/class-definition-sidebar'
-import { ConfigLayout } from '@sdk/components'
 import React from 'react'
-import { ClassDefinitionsTabsProvider } from '@Pimcore/modules/class-definition/components/tabs/class-definition-tabs/class-defintion-tabs-provider'
+import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
+import { useClassDefinitionCollectionQuery, useClassDefinitionDeleteMutation, useClassDefinitionGetByIdQuery, useClassDefinitionGetLayoutByIdQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { ClassDefinitionsAddModal } from '@Pimcore/modules/class-definition/components/class-editor/add-modal'
+import { useClassDefinitionUpdate } from '@Pimcore/modules/class-definition/components/class-editor/use-class-definition-update'
 
 export const ClassDefinitionWidget = (): React.JSX.Element => {
   return (
-    <ClassDefinitionsTabsProvider>
-      <ConfigLayout
-        leftItem={ {
-          minSize: 250,
-          maxSize: 350,
-          size: 250,
-          children: <ClassDefinitionSidebar />
-        } }
-        resizeAble
-        rightItem={ {
-          children: <ClassDefinitionTabs />
-        } }
-      />
-    </ClassDefinitionsTabsProvider>
+    <Editor
+      AddModal={ ClassDefinitionsAddModal }
+      area={ ['class'] }
+      useDetailGeneralSettingsQuery={ useClassDefinitionGetByIdQuery }
+      useDetailLayoutQuery={ useClassDefinitionGetLayoutByIdQuery }
+      useDetailUpdateMutation={ useClassDefinitionUpdate }
+      useItemsDeleteMutation={ useClassDefinitionDeleteMutation }
+      useItemsQuery={ useClassDefinitionCollectionQuery }
+    />
   )
 }
