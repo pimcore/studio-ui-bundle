@@ -93,7 +93,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
   return useMemo(() => {
     const isInAutoWidthColumnEditMode = isInEditMode && column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
     const tooltip = isNonEmptyString(column.columnDef.meta?.tooltip) ? column.columnDef.meta?.tooltip : undefined
-    
+
     const cellContent = (
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
@@ -121,7 +121,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
         </EditableCellContextProvider>
       </div>
     )
-    
+
     if (!isUndefined(tooltip)) {
       return (
         <Tooltip title={ tooltip }>
@@ -129,7 +129,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
         </Tooltip>
       )
     }
-    
+
     return cellContent
   }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active, props.modified])
 
