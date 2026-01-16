@@ -59,6 +59,7 @@ export interface ColumnMetaType {
   autoWidth?: boolean
   type?: string | ((rowData: any) => string)
   columnKey?: string
+  tooltip?: string | ((rowData: any) => string | null)
   config?: any | ((rowData: any) => any)
   callback?: boolean
   editCallback?: (row: any, columnId: string, currentValue: string) => Promise<string>

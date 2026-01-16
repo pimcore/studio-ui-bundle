@@ -21,10 +21,11 @@ import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { isBoolean, isFunction } from 'lodash'
+import { isBoolean, isFunction, isUndefined } from 'lodash'
 import { addColumnMeta } from './helpers'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { GridContext } from '../grid-context'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface DefaultCellProps extends ExtendedCellContext {}
 
@@ -48,6 +49,10 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
 
     if (isFunction(meta?.config)) {
       metaUpdates.config = meta.config(row.original)
+    }
+
+    if (isFunction(meta?.tooltip)) {
+      metaUpdates.tooltip = meta.tooltip(row.original)
     }
 
     return Object.keys(metaUpdates).length > 0 ? addColumnMeta(originalProps, metaUpdates) : originalProps
@@ -87,7 +92,9 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
 
   return useMemo(() => {
     const isInAutoWidthColumnEditMode = isInEditMode && column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
-    return (
+    const tooltip = isNonEmptyString(column.columnDef.meta?.tooltip) ? column.columnDef.meta?.tooltip : undefined
+
+    const cellContent = (
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
         data-grid-column={ column.getIndex() }
@@ -114,6 +121,16 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
         </EditableCellContextProvider>
       </div>
     )
+
+    if (!isUndefined(tooltip)) {
+      return (
+        <Tooltip title={ tooltip }>
+          { cellContent }
+        </Tooltip>
+      )
+    }
+
+    return cellContent
   }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active, props.modified])
 
   function getCssClasses (): string[] {
