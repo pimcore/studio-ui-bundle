@@ -9,6 +9,7 @@
  */
 
 import { Icon } from '@Pimcore/components/icon/icon'
+import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import React from 'react'
 import { Tooltip } from 'antd'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -17,9 +18,10 @@ interface BorderTitleViewProps {
   icon: ElementIcon
   title: string
   dataTestId?: string
+  iconColorGroup?: IconColorGroup
 }
 
-export const BorderTitleView = ({ icon, title, dataTestId }: BorderTitleViewProps): React.JSX.Element => {
+export const BorderTitleView = ({ icon, title, dataTestId, iconColorGroup }: BorderTitleViewProps): React.JSX.Element => {
   return (
     <Tooltip
       placement={ 'right' }
@@ -27,6 +29,7 @@ export const BorderTitleView = ({ icon, title, dataTestId }: BorderTitleViewProp
     >
       <div data-testid={ dataTestId }>
         <Icon
+          iconColorGroup={ iconColorGroup }
           options={ { width: 16, height: 16 } }
           { ...icon }
         />

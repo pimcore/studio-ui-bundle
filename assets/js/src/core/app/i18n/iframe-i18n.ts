@@ -41,6 +41,7 @@ export const initializeIframeI18n = async (): Promise<void> => {
         fallbackLng: fallbackLanguage,
         ns: ['translation'],
         defaultNS: 'translation',
+        keySeparator: false,
         resources,
         saveMissing: true,
         postProcess: ['returnKeyIfEmpty'],
@@ -81,6 +82,7 @@ export const initializeIframeI18n = async (): Promise<void> => {
       .init({
         lng: FALLBACK_LANGUAGE,
         fallbackLng: FALLBACK_LANGUAGE,
+        keySeparator: false,
         ns: ['translation'],
         resources: {},
         saveMissing: false

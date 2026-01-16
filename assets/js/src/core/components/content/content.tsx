@@ -62,7 +62,8 @@ export const Content = ({
     `content--overflow-y-${overflow.y}`,
     {
       'content--centered': contentCentered,
-      [styles.contentFullPage]: fullPage
+      [styles.contentFullPage]: fullPage,
+      'content--is-default-padded': padded
     }
   )
 

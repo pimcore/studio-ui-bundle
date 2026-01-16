@@ -14,6 +14,7 @@ import { useCssContainer, type UseCssContainerProps } from '@Pimcore/utils/hooks
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type TabNode } from 'flexlayout-react'
 import { type WidgetContentTitleContainerProps, WidgetContentTitleContainer } from './widget-content-title-container'
+import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 
 interface WidgetViewProps {
   title: string
@@ -22,6 +23,7 @@ interface WidgetViewProps {
   node: TabNode
   contentTitleComponent?: ComponentType<WidgetContentTitleContainerProps>
   children: React.ReactNode
+  iconColorGroup?: IconColorGroup
 }
 
 export const cssContainerWidget: UseCssContainerProps = {
@@ -33,7 +35,7 @@ export const WIDGET_CONTENT_CLASS = 'widget__content'
 const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   const { styleDefinition } = useCssContainer(cssContainerWidget)
   const { styles } = useStyles()
-  const { title, showTitle, icon, node, contentTitleComponent, children } = props
+  const { title, showTitle, icon, node, contentTitleComponent, children, iconColorGroup } = props
 
   return (
     <div className={ ['widget', styles.Widget, styleDefinition.styles.container].join(' ') }>
@@ -41,6 +43,7 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
         <WidgetContentTitleContainer
           contentTitleComponent={ contentTitleComponent }
           icon={ icon }
+          iconColorGroup={ iconColorGroup }
           node={ node }
           title={ title }
         />

@@ -94,7 +94,8 @@ export class DataObjectOpeningService {
         icon: {
           type: icon.type,
           value: icon.value
-        }
+        },
+        iconColorGroup: 'element'
       }
     }
   }

@@ -44,6 +44,7 @@ export const serviceIds = {
   // Widget manager
   widgetManager: 'WidgetManagerService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',
+  elementTreeWidgetPermissionRegistry: 'ElementTreeWidgetPermissionRegistry',
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
@@ -99,6 +100,7 @@ export const serviceIds = {
 
   // icon library
   iconLibrary: 'IconLibrary',
+  iconColorGroupsRegistry: 'IconColorGroupsRegistry',
 
   // Grid
   'Grid/TypeRegistry': 'Grid/TypeRegistry',

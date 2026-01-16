@@ -166,7 +166,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   }
 
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Add) ||
+    return !isTreeActionAllowed(TreePermission.AddObject) ||
       !checkElementPermission(node.permissions, 'create') ||
       isEmpty(getClassDefinitionsForCurrentUser())
   }

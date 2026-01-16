@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -33,6 +35,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { TreePermission } from '@sdk/modules/perspectives'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -58,7 +61,8 @@ moduleSystem.registerModule({
           iconValue: 'document',
           contextMenuKey: ContextMenuActionName.addPage,
           formType: AddDocumentFormType.FULL,
-          modalTitle: t('document.tree.context-menu.add-page')
+          modalTitle: t('document.tree.context-menu.add-page'),
+          perspectiveTreePermission: TreePermission.AddPage
         })
         return addDocumentTreeContextMenuItem(context.target)
       }
@@ -74,7 +78,8 @@ moduleSystem.registerModule({
           iconValue: 'snippet',
           contextMenuKey: ContextMenuActionName.addSnippet,
           formType: AddDocumentFormType.KEY_ONLY,
-          modalTitle: t('document.tree.context-menu.add-snippet')
+          modalTitle: t('document.tree.context-menu.add-snippet'),
+          perspectiveTreePermission: TreePermission.AddSnippet
         })
         return addDocumentTreeContextMenuItem(context.target)
       }
@@ -91,7 +96,8 @@ moduleSystem.registerModule({
           contextMenuKey: ContextMenuActionName.addLink,
           formType: AddDocumentFormType.KEY_ONLY,
           modalTitle: t('document.tree.context-menu.add-link'),
-          hasNoChildren: true
+          hasNoChildren: true,
+          perspectiveTreePermission: TreePermission.AddLink
         })
         return addDocumentTreeContextMenuItem(context.target)
       }
@@ -108,7 +114,8 @@ moduleSystem.registerModule({
           contextMenuKey: ContextMenuActionName.addHardlink,
           formType: AddDocumentFormType.KEY_ONLY,
           modalTitle: t('document.tree.context-menu.add-hardlink'),
-          hasNoChildren: true
+          hasNoChildren: true,
+          perspectiveTreePermission: TreePermission.AddHardlink
         })
         return addDocumentTreeContextMenuItem(context.target)
       }
@@ -124,7 +131,8 @@ moduleSystem.registerModule({
           iconValue: 'mail-02',
           contextMenuKey: ContextMenuActionName.addEmail,
           formType: AddDocumentFormType.KEY_ONLY,
-          modalTitle: t('document.tree.context-menu.add-email')
+          modalTitle: t('document.tree.context-menu.add-email'),
+          perspectiveTreePermission: TreePermission.AddEmail
         })
         return addDocumentTreeContextMenuItem(context.target)
       }

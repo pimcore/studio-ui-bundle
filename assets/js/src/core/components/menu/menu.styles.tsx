@@ -12,6 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   const submenuStyles = css`
+    .ant-dropdown-menu-submenu-title,
+    .ant-dropdown-menu-title-content {
+      align-items: center;
+    }
     .ant-dropdown-menu-submenu-title {
       padding-inline-end: ${token.paddingXL}px !important;
     }
@@ -19,7 +23,6 @@ export const useStyles = createStyles(({ token, css }) => {
     .ant-dropdown-menu-submenu-expand-icon {
       inset-inline-end: ${token.paddingXS}px !important;
       position: absolute !important;
-      margin-top: 2px;
     }
   `
 

@@ -13,9 +13,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import { OpenElement } from '@Pimcore/modules/open-element/open-element'
-import React from 'react'
 import { UserPermission } from '../auth/enums/user-permission'
+import { useOpenElement } from '@Pimcore/modules/open-element/context/open-element-data-context'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -27,7 +26,14 @@ moduleSystem.registerModule({
       order: 100,
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
-      button: (props) => React.createElement(OpenElement, { elementType: 'asset', ...props })
+      useCustomMainNavItem: () => {
+        const { open } = useOpenElement()
+
+        return {
+          name: 'OpenAsset',
+          onClick: () => { open('asset') }
+        }
+      }
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -36,7 +42,14 @@ moduleSystem.registerModule({
       order: 200,
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
-      button: (props) => React.createElement(OpenElement, { elementType: 'data-object', ...props })
+      useCustomMainNavItem: () => {
+        const { open } = useOpenElement()
+
+        return {
+          name: 'OpenDataObject',
+          onClick: () => { open('data-object') }
+        }
+      }
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -46,7 +59,14 @@ moduleSystem.registerModule({
       order: 300,
       permission: UserPermission.Documents,
       perspectivePermission: NavPermission.OpenDocument,
-      button: (props) => React.createElement(OpenElement, { elementType: 'document', ...props })
+      useCustomMainNavItem: () => {
+        const { open } = useOpenElement()
+
+        return {
+          name: 'OpenDocument',
+          onClick: () => { open('document') }
+        }
+      }
     })
   }
 })

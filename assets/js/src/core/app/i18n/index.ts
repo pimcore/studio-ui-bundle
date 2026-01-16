@@ -25,6 +25,7 @@ i18n
     fallbackLng: FALLBACK_LANGUAGE,
     ns: ['translation'],
     resources: {},
+    keySeparator: false,
     saveMissing: true,
     postProcess: ['returnKeyIfEmpty']
   })
