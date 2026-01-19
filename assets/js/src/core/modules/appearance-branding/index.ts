@@ -21,12 +21,12 @@ import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/wid
 export const APPEARANCE_BRANDING_WIDGET: WidgetManagerTabConfig = {
   name: 'Appearance & Branding',
   id: 'appearance-branding',
-  component: 'appearance-banding',
+  component: 'appearance-branding',
   config: {
     translationKey: 'widget.appearance-branding',
     icon: {
       type: 'name',
-      value: 'apprearance-branding'
+      value: 'appearance-branding'
     }
   }
 }
