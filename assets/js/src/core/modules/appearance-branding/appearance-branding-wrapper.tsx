@@ -9,12 +9,8 @@
  */
 
 import React from 'react'
-
+import { AppearanceForm } from './components/appearance-form/appearance-form'
 
 export const AppearanceBrandingWrapper = (): React.JSX.Element => {
-  return (
-    <div>
-      Test
-    </div>
-  )
+  return <AppearanceForm />
 }

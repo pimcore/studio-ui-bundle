@@ -934,7 +934,7 @@ navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
-navigation.appearance-banding: Appearance & Branding 
+navigation.appearance-branding: Appearance & Branding
 navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
@@ -1021,6 +1021,13 @@ widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
 widget.appearance-branding: Appearance & Branding
+appearance-branding.title: "Appearance & Branding"
+appearance-branding.color.title: "Color"
+appearance-branding.color.brand-color.label: "Brand Color"
+appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
+appearance-branding.color.background-shade.label: "Background Shade"
+appearance-branding.color.background-shade.description: "Applied to the canvas background with lowered opacity for a seamless blend."
+appearance-branding.update.success: "Appearance settings updated successfully"
 search-replace-assignments.search-for: Search for
 search-replace-assignments.replace-with: Replace with
 search-replace-assignments.select-element: Select target element
