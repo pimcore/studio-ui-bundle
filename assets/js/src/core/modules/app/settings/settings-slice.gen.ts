@@ -6,6 +6,17 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            settingsCountryCollection: build.query<
+                SettingsCountryCollectionApiResponse,
+                SettingsCountryCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/settings/available-countries` }),
+                providesTags: ["Settings"],
+            }),
+            adminSettingsGet: build.query<AdminSettingsGetApiResponse, AdminSettingsGetApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/settings/admin` }),
+                providesTags: ["Settings"],
+            }),
             systemSettingsGet: build.query<SystemSettingsGetApiResponse, SystemSettingsGetApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/settings` }),
                 providesTags: ["Settings"],
@@ -18,10 +29,25 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/settings/ping` }),
                 providesTags: ["Settings"],
             }),
+            adminSettingsUpdate: build.mutation<AdminSettingsUpdateApiResponse, AdminSettingsUpdateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/settings/admin/save`,
+                    method: "POST",
+                    body: queryArg.updateAdminSettings,
+                }),
+                invalidatesTags: ["Settings"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type SettingsCountryCollectionApiResponse = /** status 200 List of available countries */ {
+    totalItems: number;
+    items: AvailableCountry[];
+};
+export type SettingsCountryCollectionApiArg = void;
+export type AdminSettingsGetApiResponse = /** status 200 Admin system settings data */ AdminSettings;
+export type AdminSettingsGetApiArg = void;
 export type SystemSettingsGetApiResponse = /** status 200 System settings data */ {
     [key: string]: any;
 };
@@ -33,6 +59,20 @@ export type ActiveBundlesGetApiResponse = /** status 200 List of active bundles 
 export type ActiveBundlesGetApiArg = void;
 export type PingActionApiResponse = unknown;
 export type PingActionApiArg = void;
+export type AdminSettingsUpdateApiResponse = unknown;
+export type AdminSettingsUpdateApiArg = {
+    updateAdminSettings: UpdateAdminSettings;
+};
+export type AvailableCountry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Country name */
+    name: string;
+    /** Country ISO 3166-1 code */
+    code: string;
+};
 export type Error = {
     /** Message */
     message: string;
@@ -43,6 +83,34 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type Branding = {
+    /** Invert colors on login screen */
+    loginScreenInvertColors: boolean;
+    /** Color for login screen */
+    colorLoginScreen: string;
+    /** Color for admin interface */
+    colorAdminInterface: string;
+    /** Background color for admin interface */
+    colorAdminInterfaceBackground: string;
+    /** Custom image for login screen */
+    loginScreenCustomBackgroundImage: string;
+    /** Custom image for login screen */
+    loginScreenCustomImage: string;
+};
+export type Assets = {
+    /** Hide edit image button */
+    hide_edit_image: boolean;
+    /** Disable tree preview */
+    disable_tree_preview: boolean;
+};
+export type AdminSettings = {
+    /** Branding configuration */
+    branding: Branding;
+    /** Assets configuration */
+    assets: Assets;
+    /** Whether the settings are writeable */
+    writeable: boolean;
+};
 export type ActiveBundle = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -51,4 +119,17 @@ export type ActiveBundle = {
     /** Bundle name */
     name: string;
 };
-export const { useSystemSettingsGetQuery, useActiveBundlesGetQuery, usePingActionQuery } = injectedRtkApi;
+export type UpdateAdminSettings = {
+    /** Branding configuration */
+    branding: Branding;
+    /** Assets configuration */
+    assets: Assets;
+};
+export const {
+    useSettingsCountryCollectionQuery,
+    useAdminSettingsGetQuery,
+    useSystemSettingsGetQuery,
+    useActiveBundlesGetQuery,
+    usePingActionQuery,
+    useAdminSettingsUpdateMutation,
+} = injectedRtkApi;
