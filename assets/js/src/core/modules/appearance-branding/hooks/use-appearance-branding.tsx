@@ -12,14 +12,21 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
-import { useAdminSettingsGetQuery, useAdminSettingsUpdateMutation, type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { 
+  useAdminSettingsGetQuery, 
+  useAdminSettingsUpdateMutation, 
+  type UpdateAdminSettings,
+  type AdminSettings 
+} from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 interface UseAppearanceBrandingReturn {
   updateSettings: (settings: UpdateAdminSettings, onFinish?: () => void) => Promise<void>
   isLoading: boolean
-  adminSettings: any
+  adminSettings: AdminSettings | undefined
   isSettingsLoading: boolean
+  isError: boolean
 }
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
@@ -27,7 +34,11 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
   const { t } = useTranslation()
   const { success } = useMessage()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
-  const { data: adminSettings, isLoading: isSettingsLoading } = useAdminSettingsGetQuery()
+  const { 
+    data: adminSettings, 
+    isLoading: isSettingsLoading,
+    isError 
+  } = useAdminSettingsGetQuery()
 
   const updateSettings = async (settings: UpdateAdminSettings, onFinish?: () => void): Promise<void> => {
     const settingsUpdateTask = adminSettingsUpdateMutation({
@@ -35,9 +46,9 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     })
 
     try {
-      const response = (await settingsUpdateTask) as any
+      const response = await settingsUpdateTask
 
-      if (response.error !== undefined) {
+      if (!isUndefined(response.error)) {
         onFinish?.()
         trackError(new ApiError(response.error as ApiErrorData))
         return
@@ -45,7 +56,7 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
 
       onFinish?.()
       void success(t('appearance-branding.update.success'))
-    } catch {
+    } catch (error) {
       onFinish?.()
       trackError(new GeneralError('Failed to update appearance settings.'))
     }
@@ -57,6 +68,7 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     updateSettings,
     isLoading,
     adminSettings,
-    isSettingsLoading
+    isSettingsLoading,
+    isError
   }
 }
