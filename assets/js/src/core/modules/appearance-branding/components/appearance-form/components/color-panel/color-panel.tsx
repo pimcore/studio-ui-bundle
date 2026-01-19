@@ -10,7 +10,7 @@
 
 import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 import { Form } from '@Pimcore/components/form/form'
-import { Collapse } from '@Pimcore/components/collapse/collapse'
+import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,43 +18,39 @@ import { useTranslation } from 'react-i18next'
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const items = [
-    {
-      key: 'color',
-      label: t('appearance-branding.color.title'),
-      children: (
-        <Space
-          direction="vertical"
-          size="large"
-        >
-          <Form.Item
-            label={t('appearance-branding.color.brand-color.label')}
-            name={['branding', 'colorAdminInterface']}
-          >
-            <ColorPicker showText />
-            <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
-              {t('appearance-branding.color.brand-color.description')}
-            </div>
-          </Form.Item>
-
-          <Form.Item
-            label={t('appearance-branding.color.background-shade.label')}
-            name={['branding', 'colorAdminInterfaceBackground']}
-          >
-            <ColorPicker showText />
-            <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
-              {t('appearance-branding.color.background-shade.description')}
-            </div>
-          </Form.Item>
-        </Space>
-      )
-    }
-  ]
-
   return (
-    <Collapse
-      defaultActiveKeys={['color']}
-      items={items}
-    />
+    <Panel
+      title={t('appearance-branding.color.title')}
+      theme="card-with-highlight"
+      border= {false}
+      contentPadding="small"
+      collapsed={ false }
+      collapsible
+    >
+      <Space
+        direction="vertical"
+        size="large"
+      >
+        <Form.Item
+          label={t('appearance-branding.color.brand-color.label')}
+          name={['branding', 'colorAdminInterface']}
+        >
+          <ColorPicker showText />
+          <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
+            {t('appearance-branding.color.brand-color.description')}
+          </div>
+        </Form.Item>
+
+        <Form.Item
+          label={t('appearance-branding.color.background-shade.label')}
+          name={['branding', 'colorAdminInterfaceBackground']}
+        >
+          <ColorPicker showText />
+          <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
+            {t('appearance-branding.color.background-shade.description')}
+          </div>
+        </Form.Item>
+      </Space>
+    </Panel>
   )
 }

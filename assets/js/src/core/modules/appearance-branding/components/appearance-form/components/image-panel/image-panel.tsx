@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Collapse } from '@Pimcore/components/collapse/collapse'
+import { Panel } from '@Pimcore/components/panel/panel'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { Image, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
@@ -55,27 +55,24 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
   const { t } = useTranslation()
 
   return (
-    <Collapse
-      items={[
-        {
-          key: '1',
-          label: t(titleKey),
-          children: (
-            <>
-              <Text className="mb-4" type="secondary">
-                {t(descriptionKey)}
-              </Text>
-              
-              <Form.Item name={fieldName}>
-                <ImageFieldWrapper
-                  width={width}
-                  height={height}
-                />
-              </Form.Item>
-            </>
-          )
-        }
-      ]}
-    />
+    <Panel
+      title={t(titleKey)}
+      border= {false}
+      theme="card-with-highlight"
+      contentPadding="small"
+      collapsed={ false }
+      collapsible
+    >
+      <Text className="mb-4" type="secondary">
+        {t(descriptionKey)}
+      </Text>
+      
+      <Form.Item name={fieldName}>
+        <ImageFieldWrapper
+          width={width}
+          height={height}
+        />
+      </Form.Item>
+    </Panel>
   )
 }
