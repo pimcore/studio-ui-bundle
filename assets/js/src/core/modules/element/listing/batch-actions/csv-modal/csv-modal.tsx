@@ -25,7 +25,7 @@ import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listin
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
-import { GridColumnRequest } from '@sdk/api/asset'
+import { type GridColumnRequest } from '@sdk/api/asset'
 
 export interface CsvModalProps {
   open: boolean
@@ -121,11 +121,11 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
     const extractedColumnsFromColumnArg: GridColumnRequest[] = []
-    
+
     const columns = getArgs()?.body?.columns ?? []
 
     for (const column of columns) {
-      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) { 
+      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) {
         continue
       }
 
