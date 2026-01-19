@@ -39,8 +39,8 @@ moduleSystem.registerModule({
       path: 'System/Appearance-Branding',
       label: 'navigation.appearance-branding',
       className: 'item-style-modifier',
-      order: 100,
-      permission: UserPermission.Translations,
+      order: 200,
+      permission: UserPermission.Appearance,
       perspectivePermission: NavPermission.Translations,
       widgetConfig: APPEARANCE_BRANDING_WIDGET
     })

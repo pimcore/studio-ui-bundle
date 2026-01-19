@@ -934,6 +934,7 @@ navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
+navigation.appearance-banding: Appearance & Branding 
 navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
@@ -1019,6 +1020,7 @@ widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+widget.appearance-branding: Appearance & Branding
 search-replace-assignments.search-for: Search for
 search-replace-assignments.replace-with: Replace with
 search-replace-assignments.select-element: Select target element
