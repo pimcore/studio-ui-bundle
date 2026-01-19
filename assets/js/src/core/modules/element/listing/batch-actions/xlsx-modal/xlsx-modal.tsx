@@ -25,6 +25,7 @@ import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listin
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
+import { GridColumnRequest } from '@sdk/api/data-object'
 
 export interface XlsxModalProps {
   open: boolean
@@ -118,24 +119,22 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
-    const argColumns = getArgs().body.columns ?? []
-    const extractedColumnsFromColumnArg = selectedColumns.map(column => {
-      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
+    const extractedColumnsFromColumnArg: GridColumnRequest[] = []  
+    const columns = getArgs()?.body?.columns ?? []
 
-      if (currentColumn?.type === 'dataobject.advanced') {
-        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
+    for (const column of columns) {
+      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) { 
+        continue
       }
 
-      currentColumn = currentColumn ?? column
-
-      return {
-        key: currentColumn.key,
-        type: currentColumn.type,
-        group: currentColumn.group as unknown as string[] | undefined,
-        locale: currentColumn.locale,
-        config: column.originalApiDefinition?.__meta?.advancedColumnConfig ?? currentColumn.config
-      }
-    })
+      extractedColumnsFromColumnArg.push({
+        key: column.key,
+        type: column.type,
+        group: column.group as unknown as string[] | undefined,
+        locale: column.locale,
+        config: column.config
+      })
+    }
 
     if (numberedSelectedRows.length === 0) {
       const filters = getArgs()?.body?.filters ?? {}
