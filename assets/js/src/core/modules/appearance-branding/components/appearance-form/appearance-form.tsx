@@ -24,21 +24,47 @@ import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
 
+// Internal form state type with image objects instead of strings
+interface AppearanceFormValues {
+  branding: {
+    loginScreenInvertColors: boolean
+    colorLoginScreen: string
+    colorAdminInterface: string
+    colorAdminInterfaceBackground: string
+    loginScreenCustomBackgroundImage: { id: number, fullPath: string } | null
+    loginScreenCustomImage: { id: number, fullPath: string } | null
+  }
+  assets: {
+    hide_edit_image: boolean
+    disable_tree_preview: boolean
+  }
+}
+
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading, isError } = useAppearanceBranding()
-  const [form] = Form.useForm<UpdateAdminSettings>()
+  const [form] = Form.useForm<AppearanceFormValues>()
   
   const isWriteable = adminSettings?.writeable ?? false
 
-  const initialValues: UpdateAdminSettings = {
+  const initialValues: AppearanceFormValues = {
     branding: {
       loginScreenInvertColors: adminSettings?.branding?.loginScreenInvertColors ?? false,
       colorLoginScreen: adminSettings?.branding?.colorLoginScreen ?? '#3C3F41',
       colorAdminInterface: adminSettings?.branding?.colorAdminInterface ?? '#3C3F41',
       colorAdminInterfaceBackground: adminSettings?.branding?.colorAdminInterfaceBackground ?? '#FFFFFF',
-      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage ?? '',
-      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage ?? ''
+      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage 
+        ? {
+            id: 0, // We don't have the asset ID from API, so use 0
+            fullPath: adminSettings.branding.loginScreenCustomBackgroundImage
+          }
+        : null,
+      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage
+        ? {
+            id: 0, // We don't have the asset ID from API, so use 0
+            fullPath: adminSettings.branding.loginScreenCustomImage
+          }
+        : null
     },
     assets: {
       hide_edit_image: adminSettings?.assets?.hide_edit_image ?? false,
@@ -59,8 +85,17 @@ export const AppearanceForm = (): React.JSX.Element => {
       formProps={{
         form,
         initialValues,
-        onFinish: async (values: UpdateAdminSettings) => {
-          await updateSettings(values)
+        onFinish: async (values: AppearanceFormValues) => {
+          // Transform the form values for the API - extract fullPath from image objects
+          const apiValues: UpdateAdminSettings = {
+            ...values,
+            branding: {
+              ...values.branding,
+              loginScreenCustomBackgroundImage: values.branding?.loginScreenCustomBackgroundImage?.fullPath || '',
+              loginScreenCustomImage: values.branding?.loginScreenCustomImage?.fullPath || ''
+            }
+          }
+          await updateSettings(apiValues)
         }
       }}
     >
