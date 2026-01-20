@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/e45eac75-748f-4ede-90f3-fe79ec9ebafa/"
+    "publicPath": "/bundles/pimcorestudioui/build/5ade69d2-23c3-4d2b-8dd7-39534d0af2ff/"
   },
   "shared": [],
   "remotes": [
