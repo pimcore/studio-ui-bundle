@@ -58,12 +58,14 @@ export const useDocumentUrlProcessor = (
 export const useDocumentPreviewUrlProcessor = (
   documentId: number,
   baseUrl: string,
-  refreshKey?: number
+  refreshKey?: number,
+  forceDeviceType?: string
 ): string => {
   const baseParameters = useMemo(() => ({
     pimcore_preview: 'true',
-    pimcore_studio_preview: 'true'
-  }), [refreshKey])
+    pimcore_studio_preview: 'true',
+    ...(!isNil(forceDeviceType) && forceDeviceType !== '' ? { forceDeviceType } : {})
+  }), [refreshKey, forceDeviceType])
 
   return useDocumentUrlProcessor(documentId, 'preview', baseUrl, baseParameters)
 }
