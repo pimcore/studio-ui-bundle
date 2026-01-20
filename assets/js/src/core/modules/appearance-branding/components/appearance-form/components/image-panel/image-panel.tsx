@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
-import { Image, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
+import { ImageUpload, type ImageUploadValue } from '@Pimcore/components/image-upload/image-upload'
 
 interface ImagePanelProps {
   titleKey: string
@@ -21,34 +21,6 @@ interface ImagePanelProps {
   fieldName: string | string[]
   width?: string | number | null
   height?: string | number | null
-}
-
-// Component to bridge between string path and ImageValue
-const ImageFieldWrapper = ({ value, onChange, width, height }: {
-  value?: string
-  onChange?: (value: string) => void
-  width?: string | number | null
-  height?: string | number | null
-}): React.JSX.Element => {
-  // Convert string path to ImageValue for the Image component
-  const imageValue: ImageValue | null = value && value.trim() !== '' 
-    ? { type: 'asset', id: parseInt(value) || 0 } 
-    : null
-
-  const handleImageChange = (newValue: ImageValue | null): void => {
-    // Convert ImageValue back to string for the form
-    const stringValue = newValue ? newValue.id.toString() : ''
-    onChange?.(stringValue)
-  }
-
-  return (
-    <Image
-      value={imageValue}
-      onChange={handleImageChange}
-      width={width ?? 300}
-      height={height ?? 150}
-    />
-  )
 }
 
 export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150 }: ImagePanelProps): React.JSX.Element => {
@@ -67,10 +39,32 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         {t(descriptionKey)}
       </Text>
       
-      <Form.Item name={fieldName}>
-        <ImageFieldWrapper
+      <Form.Item 
+        name={fieldName}
+        getValueFromEvent={(value: ImageUploadValue | null) => {
+          return value ? {
+            id: value.id,
+            fullPath: value.fullPath
+          } : null
+        }}
+        getValueProps={(value: { id: number, fullPath: string } | null) => {
+
+          return {
+            value: value 
+              ? { 
+                  type: 'asset' as const, 
+                  id: value.id,
+                  fullPath: value.fullPath 
+                } 
+              : null
+          }
+        }}
+      >
+        <ImageUpload
           width={width}
           height={height}
+          allowedTypes={['image']}
+          placeholder="Drop an image here or click to select"
         />
       </Form.Item>
     </Panel>

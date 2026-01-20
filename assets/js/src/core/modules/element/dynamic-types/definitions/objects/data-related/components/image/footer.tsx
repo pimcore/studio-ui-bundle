@@ -10,9 +10,6 @@
 
 import React, { type ReactElement } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import {
-  type ImageValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
 import { isEmpty } from 'lodash'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +18,12 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+
+export interface ImageValue {
+  type: 'asset'
+  id: number
+  fullPath: string
+}
 
 interface ImageFooterProps {
   emptyValue?: () => void
@@ -67,7 +70,8 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
           if (!isEmpty(event.items)) {
             props.setValue({
               type: elementTypes.asset,
-              id: event.items[0].data.id
+              id: event.items[0].data.id,
+              fullPath: event.items[0].data.fullpath
             })
           }
         }
