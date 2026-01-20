@@ -50,8 +50,6 @@ export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
   }
 
   const handleChange = (value: ImageUploadValue | null): void => {
-    console.log("HEERREE", value);
-    
     props.onChange?.(value)
   }
 
@@ -98,7 +96,7 @@ export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
           <AssetTarget
             dndIcon={props.disabled !== true}
             height={height}
-            title={t(props.placeholder ?? 'image-upload.dnd-target')}
+            title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
             uploadIcon={props.disabled !== true}
             width={width}
           />

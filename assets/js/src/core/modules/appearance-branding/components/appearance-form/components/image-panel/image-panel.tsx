@@ -64,7 +64,6 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
           width={width}
           height={height}
           allowedTypes={['image']}
-          placeholder="Drop an image here or click to select"
         />
       </Form.Item>
     </Panel>

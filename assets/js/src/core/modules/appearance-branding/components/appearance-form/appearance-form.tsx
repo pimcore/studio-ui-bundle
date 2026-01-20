@@ -24,13 +24,10 @@ import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
 
-// Internal form state type with image objects instead of strings
 interface AppearanceFormValues {
   branding: {
-    loginScreenInvertColors: boolean
-    colorLoginScreen: string
-    colorAdminInterface: string
-    colorAdminInterfaceBackground: string
+    brandColor: string
+    backgroundShade: string
     loginScreenCustomBackgroundImage: { id: number, fullPath: string } | null
     loginScreenCustomImage: { id: number, fullPath: string } | null
   }
@@ -49,19 +46,17 @@ export const AppearanceForm = (): React.JSX.Element => {
 
   const initialValues: AppearanceFormValues = {
     branding: {
-      loginScreenInvertColors: adminSettings?.branding?.loginScreenInvertColors ?? false,
-      colorLoginScreen: adminSettings?.branding?.colorLoginScreen ?? '#3C3F41',
-      colorAdminInterface: adminSettings?.branding?.colorAdminInterface ?? '#3C3F41',
-      colorAdminInterfaceBackground: adminSettings?.branding?.colorAdminInterfaceBackground ?? '#FFFFFF',
+      brandColor: adminSettings?.branding?.brandColor ?? '',
+      backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
       loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage 
         ? {
-            id: 0, // We don't have the asset ID from API, so use 0
+            id: 0, 
             fullPath: adminSettings.branding.loginScreenCustomBackgroundImage
           }
         : null,
       loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage
         ? {
-            id: 0, // We don't have the asset ID from API, so use 0
+            id: 0,
             fullPath: adminSettings.branding.loginScreenCustomImage
           }
         : null
@@ -85,12 +80,14 @@ export const AppearanceForm = (): React.JSX.Element => {
       formProps={{
         form,
         initialValues,
-        onFinish: async (values: AppearanceFormValues) => {
-          // Transform the form values for the API - extract fullPath from image objects
+        onFinish: async (values: AppearanceFormValues) => { 
+            console.log("values", values);
+                       
           const apiValues: UpdateAdminSettings = {
             ...values,
             branding: {
-              ...values.branding,
+              brandColor: values.branding.brandColor || '',
+              backgroundShade: values.branding.backgroundShade || '',
               loginScreenCustomBackgroundImage: values.branding?.loginScreenCustomBackgroundImage?.fullPath || '',
               loginScreenCustomImage: values.branding?.loginScreenCustomImage?.fullPath || ''
             }

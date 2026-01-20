@@ -12,11 +12,27 @@ import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 import { Form } from '@Pimcore/components/form/form'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
+import { Switch } from '@Pimcore/components/switch/switch'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { type Color } from 'antd/es/color-picker'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const form = Form.useFormInstance()
+
+  const formatColor = (color: any): string | null => {
+    if (color?.cleared) {
+      return null
+    }
+    if (color?.metaColor) {
+      const { r, g, b } = color.metaColor
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+    }
+
+    
+    return color || null
+  }
 
   return (
     <Panel
@@ -33,9 +49,16 @@ export const ColorPanel = (): React.JSX.Element => {
       >
         <Form.Item
           label={t('appearance-branding.color.brand-color.label')}
-          name={['branding', 'colorAdminInterface']}
+          name={['branding', 'brandColor']}
         >
-          <ColorPicker showText />
+          <ColorPicker 
+            showText 
+            format="hex"
+            onChange={(color) => {
+              const hexValue = formatColor(color)
+              form.setFieldValue(['branding', 'brandColor'], hexValue)
+            }}
+          />
           <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
             {t('appearance-branding.color.brand-color.description')}
           </div>
@@ -43,9 +66,16 @@ export const ColorPanel = (): React.JSX.Element => {
 
         <Form.Item
           label={t('appearance-branding.color.background-shade.label')}
-          name={['branding', 'colorAdminInterfaceBackground']}
+          name={['branding', 'backgroundShade']}
         >
-          <ColorPicker showText />
+          <ColorPicker 
+            showText 
+            format="hex"
+            onChange={(color) => {
+              const hexValue = formatColor(color)
+              form.setFieldValue(['branding', 'backgroundShade'], hexValue)
+            }}
+          />
           <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
             {t('appearance-branding.color.background-shade.description')}
           </div>
