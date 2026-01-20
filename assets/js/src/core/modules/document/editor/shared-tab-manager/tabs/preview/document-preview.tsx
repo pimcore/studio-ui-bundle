@@ -15,6 +15,10 @@ import { useDocumentPreviewUrlProcessor } from '@Pimcore/modules/document/hooks/
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { Iframe, type IframeRef } from '@Pimcore/components/iframe/iframe'
 import { isNil } from 'lodash'
+import {ContentLayout} from "@Pimcore/components/content-layout/content-layout";
+import {Toolbar} from "@Pimcore/components/toolbar/toolbar";
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Compact } from '@Pimcore/components/compact/compact'
 
 interface DocumentPreviewProps {
   id: number
@@ -34,16 +38,62 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
   }, [document?.draftData?.modificationDate, isVisible])
 
   const previewUrl = useDocumentPreviewUrlProcessor(id, document?.fullPath ?? '', refreshKey)
-
-  if (previewUrl === '' || isNil(document)) {
+    console.log('previewUrl', previewUrl);
+    if (previewUrl === '' || isNil(document)) {
     return <div>{t('preview.label')}</div>
   }
 
   return (
-    <Iframe
-      ref={ iframeRef }
-      src={ previewUrl }
-      title={ `${t('preview.label')}-${id}` }
-    />
+      <ContentLayout
+          renderToolbar={  (
+                  <Toolbar
+                      justify="start"
+                      theme='secondary'
+                  >
+                    <Compact>
+                        <IconTextButton
+                            icon={ { value: 'monitor' } }
+                            onClick={ () => {
+                                console.log('set iframe size');
+                            } }
+                            >
+                            { t('preview.desktop') }
+                        </IconTextButton>
+                        <IconTextButton
+                            icon={ { value: 'tablet' } }
+                            onClick={ () => {
+                                console.log('set iframe size');
+                            } }
+                        >
+                            { t('preview.tablet') }
+                        </IconTextButton>
+                        <IconTextButton
+                            icon={ { value: 'phone' } }
+                            onClick={ () => {
+                                console.log('set iframe size');
+                            } }
+                        >
+                            { t('preview.phone') }
+                        </IconTextButton>
+                        <IconTextButton
+                            icon={ { value: 'phone-horizontal' } }
+                            onClick={ () => {
+                                console.log('set iframe size');
+                            } }
+                        >
+                            { t('preview.phone-horizontal') }
+                        </IconTextButton>
+                    </Compact>
+                  </Toolbar>
+              )
+          }
+      >
+        <Iframe
+            ref={ iframeRef }
+            src={ previewUrl }
+            title={ `${t('preview.label')}-${id}` }
+        />
+      </ContentLayout>
+
   )
 }

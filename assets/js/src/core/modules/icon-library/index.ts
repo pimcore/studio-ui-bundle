@@ -166,6 +166,7 @@ import menuShortcut from '@Pimcore/assets/icons/menu-shortcut.inline.svg?react'
 import menu from '@Pimcore/assets/icons/menu.inline.svg?react'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg?react'
 import minus from '@Pimcore/assets/icons/minus.inline.svg?react'
+import monitor from '@Pimcore/assets/icons/monitor.inline.svg?react'
 import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
@@ -191,6 +192,8 @@ import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
 import paste from '@Pimcore/assets/icons/paste.inline.svg?react'
 import pdf from '@Pimcore/assets/icons/pdf.inline.svg?react'
 import personalUser from '@Pimcore/assets/icons/personal-user.inline.svg?react'
+import phoneHorizontal from '@Pimcore/assets/icons/phone-horizontal.inline.svg?react'
+import phone from '@Pimcore/assets/icons/phone.inline.svg?react'
 import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
@@ -239,6 +242,7 @@ import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
 import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
+import tablet from '@Pimcore/assets/icons/tablet.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
@@ -880,6 +884,10 @@ moduleSystem.registerModule({
       component: minus
     })
     iconLibrary.register({
+      name: 'monitor',
+      component: monitor
+    })
+    iconLibrary.register({
       name: 'more',
       component: more
     })
@@ -978,6 +986,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'personal-user',
       component: personalUser
+    })
+    iconLibrary.register({
+      name: 'phone-horizontal',
+      component: phoneHorizontal
+    })
+    iconLibrary.register({
+      name: 'phone',
+      component: phone
     })
     iconLibrary.register({
       name: 'pie-chart',
@@ -1170,6 +1186,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'subscription-enterprise',
       component: subscriptionEnterprise
+    })
+    iconLibrary.register({
+      name: 'tablet',
+      component: tablet
     })
     iconLibrary.register({
       name: 'tag-configuration',
