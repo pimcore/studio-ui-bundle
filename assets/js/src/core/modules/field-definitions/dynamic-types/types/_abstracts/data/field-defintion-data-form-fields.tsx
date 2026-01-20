@@ -17,7 +17,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
 
   return (
     <>
-      <FormKit.Panel title="Basic Information">
+      <FormKit.Panel title={ `${props.id} (Type: ${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }>
         <Form.Item
           label="name"
           name="name"
@@ -39,12 +39,12 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
           <TextArea />
         </Form.Item>
 
-        <Form.Item name="index">
-          <Switch labelRight="index" />
-        </Form.Item>
-
         <Form.Item name="mandatory">
           <Switch labelRight="mandatoryfield" />
+        </Form.Item>
+
+        <Form.Item name="index">
+          <Switch labelRight="index" />
         </Form.Item>
 
         {/* @todo check behavior for unique fields */}

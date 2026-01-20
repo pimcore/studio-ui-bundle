@@ -42,8 +42,15 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = context.path[context.path.length - 1]
+    const fieldDefinition = context.fieldDefinitions[id]
+
     return (
-      <FieldDefinitionDataFormFields context={ context } />
+      <FieldDefinitionDataFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

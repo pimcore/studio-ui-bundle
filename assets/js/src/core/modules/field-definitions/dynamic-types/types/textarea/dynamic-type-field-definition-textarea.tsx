@@ -10,15 +10,15 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionInputFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/input/field-defintion-input-form-fields'
+import { FieldDefinitionTextareaFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/textarea/field-definition-textarea-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'input'
+export class DynamicTypeFieldDefinitionTextarea extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'textarea'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'text-field' }
+    return { type: 'name', value: 'textarea' }
   }
 
   getGroup (): string[] {
@@ -32,7 +32,7 @@ export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionD
     return (
       <>
         {super.getFormFields(context)}
-        <FieldDefinitionInputFormFields
+        <FieldDefinitionTextareaFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }

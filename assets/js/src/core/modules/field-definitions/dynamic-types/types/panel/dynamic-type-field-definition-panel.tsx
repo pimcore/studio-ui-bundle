@@ -25,10 +25,17 @@ export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionL
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = context.path[context.path.length - 1]
+    const fieldDefinition = context.fieldDefinitions[id]
+
     return (
       <>
         {super.getFormFields(context)}
-        <FieldDefinitionPanelFormFields context={ context } />
+        <FieldDefinitionPanelFormFields
+          context={ context }
+          id={ fieldDefinition?.name ?? id }
+          type={ this.id }
+        />
       </>
     )
   }

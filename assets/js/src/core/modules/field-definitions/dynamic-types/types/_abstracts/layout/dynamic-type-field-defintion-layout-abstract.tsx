@@ -42,8 +42,15 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = context.path[context.path.length - 1]
+    const fieldDefinition = context.fieldDefinitions[id]
+
     return (
-      <FieldDefinitionLayoutFormFields context={ context } />
+      <FieldDefinitionLayoutFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }
