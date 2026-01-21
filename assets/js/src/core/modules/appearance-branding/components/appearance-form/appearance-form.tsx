@@ -20,7 +20,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Title } from '@Pimcore/components/title/title'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { type UpdateAdminSettings, type RelatedElementData } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
@@ -29,8 +29,8 @@ interface AppearanceFormValues {
   branding: {
     brandColor: string
     backgroundShade: string
-    loginScreenCustomBackgroundImage: { id: number, fullPath: string } | null
-    loginScreenCustomImage: { id: number, fullPath: string } | null
+    loginScreenCustomBackgroundImage: RelatedElementData | null
+    loginScreenCustomImage: RelatedElementData | null
   }
   assets: {
     hide_edit_image: boolean
@@ -50,18 +50,8 @@ export const AppearanceForm = (): React.JSX.Element => {
     branding: {
       brandColor: adminSettings?.branding?.brandColor ?? '',
       backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
-      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage 
-        ? {
-            id: 0, 
-            fullPath: adminSettings.branding.loginScreenCustomBackgroundImage
-          }
-        : null,
-      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage
-        ? {
-            id: 0,
-            fullPath: adminSettings.branding.loginScreenCustomImage
-          }
-        : null
+      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage ?? null,
+      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage ?? null
     },
     assets: {
       hide_edit_image: adminSettings?.assets?.hide_edit_image ?? false,
@@ -82,16 +72,20 @@ export const AppearanceForm = (): React.JSX.Element => {
       formProps={{
         form,
         initialValues,
-        onFinish: async (values: AppearanceFormValues) => {                        
+        onFinish: async (values: AppearanceFormValues) => {                                  
           const apiValues: UpdateAdminSettings = {
-            ...values,
             branding: {
               brandColor: values.branding.brandColor || '',
               backgroundShade: values.branding.backgroundShade || '',
-              loginScreenCustomBackgroundImage: values.branding?.loginScreenCustomBackgroundImage?.fullPath || '',
-              loginScreenCustomImage: values.branding?.loginScreenCustomImage?.fullPath || ''
+              loginScreenCustomBackgroundImage: values.branding?.loginScreenCustomBackgroundImage || null,
+              loginScreenCustomImage: values.branding?.loginScreenCustomImage || null
+            },
+            assets: {
+              hide_edit_image: initialValues.assets.hide_edit_image,
+              disable_tree_preview: initialValues.assets.disable_tree_preview
             }
           }
+                    
           
           const result = await updateSettings(apiValues)
           

@@ -12,10 +12,8 @@ import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 import { Form } from '@Pimcore/components/form/form'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
-import { Switch } from '@Pimcore/components/switch/switch'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type Color } from 'antd/es/color-picker'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()

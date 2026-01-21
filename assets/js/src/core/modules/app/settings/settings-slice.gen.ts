@@ -100,8 +100,6 @@ export type Branding = {
     backgroundShade: string;
     /** Brand color */
     brandColor: string;
-    /** Background color for admin interface */
-    colorAdminInterfaceBackground: string;
     /** Custom image for login screen */
     loginScreenCustomBackgroundImage: RelatedElementData | null;
     /** Custom image for login screen */

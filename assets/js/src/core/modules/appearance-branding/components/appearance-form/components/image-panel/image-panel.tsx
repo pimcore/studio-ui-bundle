@@ -14,6 +14,7 @@ import { Panel } from '@Pimcore/components/panel/panel'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { ImageUpload, type ImageUploadValue } from '@Pimcore/components/image-upload/image-upload'
+import { type RelatedElementData } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 interface ImagePanelProps {
   titleKey: string
@@ -44,17 +45,19 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         getValueFromEvent={(value: ImageUploadValue | null) => {
           return value ? {
             id: value.id,
-            fullPath: value.fullPath
+            type: value.type || 'asset',
+            subtype: 'image', // Default subtype for images
+            fullPath: value.fullPath,
+            isPublished: true // Default to published
           } : null
         }}
-        getValueProps={(value: { id: number, fullPath: string } | null) => {
-
+        getValueProps={(value: RelatedElementData | null) => {
           return {
             value: value 
               ? { 
                   type: 'asset' as const, 
                   id: value.id,
-                  fullPath: value.fullPath 
+                  fullPath: value.fullPath
                 } 
               : null
           }
