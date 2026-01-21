@@ -8,11 +8,12 @@ import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useGdprSearchDataQuery } from "./gdpr-data-extractor-api-slice.gen"
 import { ColumnFilter } from "../app/types/column-filter"
 import { SortFilter } from "../app/types/sort-filter"
 import { SearchForm } from "./components/search-form/search-form"
 import { Tabpanel } from "./components/tab-panel/tab-panel"
+import { useLazyGdprSearchDataQuery } from "./gdpr-data-extractor-slice-enhanced"
+import { isEmpty } from "lodash"
 
 export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -20,19 +21,28 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([])
   const [sortFilter, setSortFilter] = useState<SortFilter>({ key: 'id', direction: 'ASC' })
-  const [provider, setProvider] = useState<string>('')
+  const [provider, setProvider] = useState<string>('data_objects')
 
-  const { data, isLoading, isFetching, refetch } = useGdprSearchDataQuery({
-    provider,
-    body: {
-      filters: {
-        page,
-        pageSize,
-        columnFilters,
-        sortFilter
+  const [trigger, { data, isLoading, isFetching }] = useLazyGdprSearchDataQuery()
+
+  const executeSearch = (overrides?: { provider?: string, columnFilters?: ColumnFilter[] }): void => {
+    const currentProvider = overrides?.provider ?? provider
+    const currentColumnFilters = overrides?.columnFilters ?? columnFilters
+
+    if (currentProvider === '' || isEmpty(currentColumnFilters)) return
+
+    trigger({
+      provider: currentProvider,
+      body: {
+        filters: {
+          page,
+          pageSize,
+          columnFilters: currentColumnFilters,
+          sortFilter
+        }
       }
-    }
-  })
+    })
+  }
 
   return (
     <ContentLayout
@@ -48,11 +58,9 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           <Flex align="center">
             <Split> {/* TODO: Why does the Split doesnt hide itself if pagination is hidden via hideOnSinglePage */}
               <IconButton
-                disabled={isLoading || isFetching}
+                disabled={isLoading || isFetching || provider === ''}
                 icon={{ value: 'refresh' }}
-                onClick={() => {
-                  //refetch()
-                }}
+                onClick={() => executeSearch()}
               />
               <Pagination
                 current={page}
@@ -94,15 +102,19 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
         }}
       >
         <SearchForm
+          isLoading={isLoading || isFetching}
           onSearch={(columnFilters) => {
             setColumnFilters(columnFilters)
-            //refetch()
+            executeSearch({ columnFilters })
           }}
         />
-
         <Tabpanel
+          isLoading={isLoading || isFetching}
           data={data?.items}
-          onProviderChange={setProvider}
+          onProviderChange={(providerKey) => {
+            setProvider(providerKey)
+            executeSearch({ provider: providerKey })
+          }}
         />
       </Content>
     </ContentLayout>

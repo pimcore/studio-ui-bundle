@@ -14,9 +14,10 @@ interface GdprSearchFormValues {
 
 interface SearchFormProps {
   onSearch?: (filters: ColumnFilter[]) => void
+  isLoading?: boolean
 }
 
-export const SearchForm = ({ onSearch }: SearchFormProps): React.JSX.Element => {
+export const SearchForm = ({ onSearch, isLoading }: SearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const [form] = Form.useForm()
@@ -80,6 +81,7 @@ export const SearchForm = ({ onSearch }: SearchFormProps): React.JSX.Element => 
         <Button
           htmlType="submit"
           type="primary"
+          loading={isLoading}
         >
           {t('gdpr-extractor.search-form.submit')}
         </Button>
