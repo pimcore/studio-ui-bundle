@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
@@ -30,7 +29,6 @@ interface UseAppearanceBrandingReturn {
 }
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { success } = useMessage()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()

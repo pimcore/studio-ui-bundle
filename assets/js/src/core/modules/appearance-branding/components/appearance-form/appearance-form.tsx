@@ -80,9 +80,7 @@ export const AppearanceForm = (): React.JSX.Element => {
       formProps={{
         form,
         initialValues,
-        onFinish: async (values: AppearanceFormValues) => { 
-            console.log("values", values);
-                       
+        onFinish: async (values: AppearanceFormValues) => {                        
           const apiValues: UpdateAdminSettings = {
             ...values,
             branding: {
