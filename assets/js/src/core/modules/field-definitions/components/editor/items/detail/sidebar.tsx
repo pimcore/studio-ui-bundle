@@ -12,8 +12,9 @@ import { useArea } from '@Pimcore/modules/field-definitions/components/editor/ar
 import { type FieldDefinition, useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Icon, Content, Draggable, Droppable } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, Draggable, Droppable } from '@sdk/components'
 import React, { useMemo } from 'react'
 
 export interface DetailSidebarProps {
@@ -82,76 +83,74 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       return []
     }
 
-    const buildTreeItems = (node: typeof structure, parentPath: string[] = []): ITreeElementProps['treeData'][0] => {
-      const fieldDef = fieldDefinitions[node.id]
-      const actions: ITreeElementProps['treeData'][0]['actions'] = []
-      let dynType: undefined | DynamicTypeFieldDefinitionAbstract
+    const treeItems = buildTree({
+      structure,
+      fieldDefinitions,
+      itemCallback: ({ fieldDefinition, initialTreeItem }) => {
+        const actions: ITreeElementProps['treeData'][0]['actions'] = []
+        let dynType: undefined | DynamicTypeFieldDefinitionAbstract
+        const currentPath = initialTreeItem.meta!.currentPath!
 
-      if (fieldDefinitionRegistry.hasDynamicType(fieldDef.fieldtype)) {
-        dynType = fieldDefinitionRegistry.getDynamicType(fieldDef.fieldtype)
-      }
+        if (fieldDefinitionRegistry.hasDynamicType(fieldDefinition.fieldtype)) {
+          dynType = fieldDefinitionRegistry.getDynamicType(fieldDefinition.fieldtype)
+        }
 
-      const currentPath = [...parentPath, node.id]
+        if (fieldDefinition.name !== 'pimcore_root') {
+          if (dynType !== undefined) {
+            const allowedChildTags = dynType.getValidDropdownTags({ area, path: currentPath, fieldDefinitions })
+            fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
+              actions.push({ key: `add-${type.id}`, icon: type.getIcon().value })
+            })
+          }
 
-      if (fieldDef.name !== 'pimcore_root') {
-        if (dynType !== undefined) {
-          const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
-          fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
+          actions.push({ key: 'clone', icon: 'clone' })
+          actions.push({ key: 'delete', icon: 'delete' })
+        } else {
+          fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
             actions.push({ key: `add-${type.id}`, icon: type.getIcon().value })
           })
         }
 
-        actions.push({ key: 'clone', icon: 'clone' })
-        actions.push({ key: 'delete', icon: 'delete' })
-      } else {
-        fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-          actions.push({ key: `add-${type.id}`, icon: type.getIcon().value })
-        })
+        return {
+          ...initialTreeItem,
+          className: invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined,
+          actions,
+          allowDrag (params) {
+            // Prevent dragging of root node
+            if (fieldDefinition.name === 'pimcore_root') {
+              return false
+            }
+
+            return true
+          },
+          allowDrop: ({ dropNode, dragNode }) => {
+            const dragFieldDef = fieldDefinitions[dragNode.key as string]
+            let isValid = false
+
+            if (fieldDefinition.name === 'pimcore_root') {
+              fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
+                if (type.id === dragFieldDef.fieldtype) {
+                  isValid = true
+                }
+              })
+            }
+
+            if (dynType !== undefined) {
+              const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
+              fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
+                if (type.id === dragFieldDef.fieldtype) {
+                  isValid = true
+                }
+              })
+            }
+
+            return isValid
+          }
+        }
       }
+    })
 
-      return {
-        title: fieldDef?.name,
-        icon: dynType !== undefined ? <Icon { ...dynType.getIcon() } /> : undefined,
-        key: node.id,
-        meta: { currentPath },
-        className: invalidFieldDefinitionIds.includes(node.id) ? 'tree-element-item--danger' : undefined,
-        children: node.children.map((child) => buildTreeItems(child, currentPath)),
-        allowDrag (params) {
-          // Prevent dragging of root node
-          if (fieldDef.name === 'pimcore_root') {
-            return false
-          }
-
-          return true
-        },
-        allowDrop: ({ dropNode, dragNode }) => {
-          const dragFieldDef = fieldDefinitions[dragNode.key as string]
-          let isValid = false
-
-          if (fieldDef.name === 'pimcore_root') {
-            fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-              if (type.id === dragFieldDef.fieldtype) {
-                isValid = true
-              }
-            })
-          }
-
-          if (dynType !== undefined) {
-            const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
-            fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-              if (type.id === dragFieldDef.fieldtype) {
-                isValid = true
-              }
-            })
-          }
-
-          return isValid
-        },
-        actions
-      }
-    }
-
-    return [buildTreeItems(structure)]
+    return [treeItems]
   }, [structure, fieldDefinitions, invalidFieldDefinitionIds])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {

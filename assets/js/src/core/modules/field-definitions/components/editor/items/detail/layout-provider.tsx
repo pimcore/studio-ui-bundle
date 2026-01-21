@@ -9,6 +9,7 @@
  */
 
 /* eslint-disable max-lines */
+import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
 import { uuid } from '@sdk/utils'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
@@ -65,25 +66,7 @@ export const LayoutProvider = (props: LayoutProviderProps): React.JSX.Element =>
       return
     }
 
-    const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
-
-    const buildStructure = (layoutItem: Layout): StructureNode => {
-      const id = uuid()
-
-      const node: StructureNode = {
-        id,
-        children: layoutItem.children !== undefined ? layoutItem.children.map((child) => buildStructure(child as Layout)) : []
-      }
-
-      const { children, ...fieldDef } = layoutItem
-
-      // @todo remove type conversion after fix of typo from backendSide (fieldtype vs. fieldType)
-      initialFieldDefinitions[id] = fieldDef as unknown as FieldDefinition
-
-      return node
-    }
-
-    const rootStructure = buildStructure(props.layout)
+    const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout })!
 
     setCurrentFieldDefinitionId(null)
     setCurrentFieldDefinitionIdPath(null)
