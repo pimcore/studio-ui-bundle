@@ -22,7 +22,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 export interface ImageValue {
   type: 'asset'
   id: number
-  fullPath: string
+  fullpath?: string
 }
 
 interface ImageFooterProps {
@@ -71,7 +71,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
             props.setValue({
               type: elementTypes.asset,
               id: event.items[0].data.id,
-              fullPath: event.items[0].data.fullpath
+              fullpath: event.items[0].data.fullpath
             })
           }
         }
