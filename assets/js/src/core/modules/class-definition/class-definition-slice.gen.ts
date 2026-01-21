@@ -6,18 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            classGetAvailableVisibleFields: build.query<
-                ClassGetAvailableVisibleFieldsApiResponse,
-                ClassGetAvailableVisibleFieldsApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/definition/available-visible-fields`,
-                    params: {
-                        classNames: queryArg.classNames,
-                    },
-                }),
-                providesTags: ["Class Definition"],
-            }),
             classDefinitionCollection: build.query<
                 ClassDefinitionCollectionApiResponse,
                 ClassDefinitionCollectionApiArg
@@ -45,6 +33,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/class/all-layouts` }),
                 providesTags: ["Class Definition"],
             }),
+            pimcoreStudioApiClassCustomLayoutCreate: build.mutation<
+                PimcoreStudioApiClassCustomLayoutCreateApiResponse,
+                PimcoreStudioApiClassCustomLayoutCreateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/${queryArg.customLayoutId}`,
+                    method: "POST",
+                    body: queryArg.customLayoutNew,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             pimcoreStudioApiClassCustomLayoutGet: build.query<
                 PimcoreStudioApiClassCustomLayoutGetApiResponse,
                 PimcoreStudioApiClassCustomLayoutGetApiArg
@@ -60,17 +59,6 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/class/custom-layout/${queryArg.customLayoutId}`,
                     method: "PUT",
                     body: queryArg.customLayoutUpdate,
-                }),
-                invalidatesTags: ["Class Definition"],
-            }),
-            pimcoreStudioApiClassCustomLayoutCreate: build.mutation<
-                PimcoreStudioApiClassCustomLayoutCreateApiResponse,
-                PimcoreStudioApiClassCustomLayoutCreateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/custom-layout/${queryArg.customLayoutId}`,
-                    method: "POST",
-                    body: queryArg.customLayoutNew,
                 }),
                 invalidatesTags: ["Class Definition"],
             }),
@@ -111,7 +99,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
-            classCustomLayoutImport: build.mutation<ClassCustomLayoutImportApiResponse, ClassCustomLayoutImportApiArg>({
+            pimcoreStudioApiClassCustomLayoutImport: build.mutation<
+                PimcoreStudioApiClassCustomLayoutImportApiResponse,
+                PimcoreStudioApiClassCustomLayoutImportApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/custom-layout/import/${queryArg.customLayoutId}`,
                     method: "POST",
@@ -187,18 +178,6 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
-            classGetSelectedVisibleFields: build.query<
-                ClassGetSelectedVisibleFieldsApiResponse,
-                ClassGetSelectedVisibleFieldsApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/definition/configuration-view/detail/${queryArg.id}/selected-visible-fields`,
-                    params: {
-                        relationField: queryArg.relationField,
-                    },
-                }),
-                providesTags: ["Class Definition"],
-            }),
             classDefinitionGetTextLayoutPreview: build.query<
                 ClassDefinitionGetTextLayoutPreviewApiResponse,
                 ClassDefinitionGetTextLayoutPreviewApiArg
@@ -222,13 +201,6 @@ const injectedRtkApi = api
                         withGroup: queryArg.withGroup,
                     },
                 }),
-                providesTags: ["Class Definition"],
-            }),
-            classFieldCollectionCollection: build.query<
-                ClassFieldCollectionCollectionApiResponse,
-                ClassFieldCollectionCollectionApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/class/field-collection/collection` }),
                 providesTags: ["Class Definition"],
             }),
             classFieldCollectionObjectLayout: build.query<
@@ -273,15 +245,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ClassGetAvailableVisibleFieldsApiResponse =
-    /** status 200 Successfully retrieved available visible fields */ {
-        totalItems: number;
-        items: ClassDefinitionVisibleField[];
-    };
-export type ClassGetAvailableVisibleFieldsApiArg = {
-    /** Comma-separated list of class names */
-    classNames?: string;
-};
 export type ClassDefinitionCollectionApiResponse = /** status 200 List of class definitions */ {
     totalItems: number;
     items: ClassDefinitionListItem[];
@@ -308,6 +271,12 @@ export type ClassAllLayoutCollectionApiResponse = /** status 200 List of all ava
     items: ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces[];
 };
 export type ClassAllLayoutCollectionApiArg = void;
+export type PimcoreStudioApiClassCustomLayoutCreateApiResponse = /** status 200 Custom layout created */ CustomLayouts;
+export type PimcoreStudioApiClassCustomLayoutCreateApiArg = {
+    /** Id of custom layout */
+    customLayoutId: string;
+    customLayoutNew: SchemaUsedToCreateCustomLayouts;
+};
 export type PimcoreStudioApiClassCustomLayoutGetApiResponse = /** status 200 Custom layout data */ CustomLayouts;
 export type PimcoreStudioApiClassCustomLayoutGetApiArg = {
     /** Id of custom layout */
@@ -318,12 +287,6 @@ export type PimcoreStudioApiClassCustomLayoutUpdateApiArg = {
     /** Id of custom layout */
     customLayoutId: string;
     customLayoutUpdate: SchemaUsedToUpdateCustomLayouts;
-};
-export type PimcoreStudioApiClassCustomLayoutCreateApiResponse = /** status 200 Custom layout created */ CustomLayouts;
-export type PimcoreStudioApiClassCustomLayoutCreateApiArg = {
-    /** Id of custom layout */
-    customLayoutId: string;
-    customLayoutNew: SchemaUsedToCreateCustomLayouts;
 };
 export type PimcoreStudioApiClassCustomLayoutDeleteApiResponse = unknown;
 export type PimcoreStudioApiClassCustomLayoutDeleteApiArg = {
@@ -350,9 +313,8 @@ export type ClassCustomLayoutGetIdentifierDataApiArg = {
     /** Class definition unique identifier for custom layouts */
     classDefinitionId: string;
 };
-export type ClassCustomLayoutImportApiResponse =
-    /** status 200 Successfully imported custom layout configuration */ CustomLayouts;
-export type ClassCustomLayoutImportApiArg = {
+export type PimcoreStudioApiClassCustomLayoutImportApiResponse = /** status 200 Http status code */ CustomLayouts;
+export type PimcoreStudioApiClassCustomLayoutImportApiArg = {
     /** Id of custom layout */
     customLayoutId: string;
     body: {
@@ -398,7 +360,7 @@ export type ClassDefinitionGetIdentifierDataApiResponse =
     /** status 200 Suggested unique ID and existing class IDs */ ClassDefinitionIdentifierData;
 export type ClassDefinitionGetIdentifierDataApiArg = void;
 export type ClassDefinitionImportApiResponse =
-    /** status 200 Successfully imported class definition configuration */ ClassDefinition;
+    /** status 200 Successfully imported class definition configuration */ CustomLayouts;
 export type ClassDefinitionImportApiArg = {
     /** Class definition unique identifier */
     id: string;
@@ -411,16 +373,6 @@ export type ClassDefinitionGetLayoutByIdApiResponse = /** status 200 Layout defi
 export type ClassDefinitionGetLayoutByIdApiArg = {
     /** Class definition unique identifier */
     id: string;
-};
-export type ClassGetSelectedVisibleFieldsApiResponse =
-    /** status 200 Successfully retrieved selected visible fields */ {
-        columns?: GridColumnConfiguration[];
-    };
-export type ClassGetSelectedVisibleFieldsApiArg = {
-    /** Class definition unique identifier */
-    id: string;
-    /** Relation field name for which the selected fields should be retrieved as dot notation. */
-    relationField?: string;
 };
 export type ClassDefinitionGetTextLayoutPreviewApiResponse = /** status 200 Text layout preview as HTML */ Blob;
 export type ClassDefinitionGetTextLayoutPreviewApiArg = {
@@ -443,11 +395,6 @@ export type ClassDefinitionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
 };
-export type ClassFieldCollectionCollectionApiResponse = /** status 200 List of field collection configurations */ {
-    totalItems: number;
-    items: FieldCollectionConfiguration[];
-};
-export type ClassFieldCollectionCollectionApiArg = void;
 export type ClassFieldCollectionObjectLayoutApiResponse = /** status 200 List of layouts */ {
     totalItems: number;
     items: FieldCollectionLayoutDefinition[];
@@ -485,24 +432,6 @@ export type ClassSelectOptionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
 };
-export type ClassDefinitionVisibleField = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Field key */
-    key: string;
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -524,6 +453,16 @@ export type ClassDefinitionListItem = {
     icon: ElementIcon;
     /** Group */
     group: string | null;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type CustomLayoutsInCompactFormatToBeUsedForEGListings = {
     /** AdditionalAttributes */
@@ -615,17 +554,17 @@ export type CustomLayouts = {
     /** Layout definitions */
     layoutDefinition: Layout | null;
 };
-export type SchemaUsedToUpdateCustomLayouts = {
-    /** Layout configuration for fields (Panel, Input, ..) */
-    configuration: object;
-    /** Values for custom layout object itself */
-    values: object;
-};
 export type SchemaUsedToCreateCustomLayouts = {
     /** Name */
     name: string;
     /** Data object class id */
     classId: number;
+};
+export type SchemaUsedToUpdateCustomLayouts = {
+    /** Layout configuration for fields (Panel, Input, ..) */
+    configuration: object;
+    /** Values for custom layout object itself */
+    values: object;
 };
 export type CustomLayoutIdentifierData = {
     /** AdditionalAttributes */
@@ -731,34 +670,6 @@ export type ClassDefinitionIdentifierData = {
     /** Array of existing class definition IDs */
     existingIds: string[];
 };
-export type GridColumnConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key */
-    key: string;
-    /** Define the group structure */
-    group: object;
-    /** Sortable */
-    sortable: boolean;
-    /** Editable */
-    editable: boolean;
-    /** Exportable */
-    exportable?: boolean;
-    /** Filterable */
-    filterable?: boolean;
-    /** Localizable */
-    localizable: boolean;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Frontend Type */
-    frontendType?: string;
-    /** Config */
-    config: object;
-};
 export type ClassDefinitionTreeNodeItem = ClassDefinitionListItem & {
     /** Enable grid locking */
     enableGridLocking: boolean;
@@ -768,16 +679,6 @@ export type ClassDefinitionTreeNodeItem = ClassDefinitionListItem & {
 export type ClassDefinitionTreeNodeFolder = ClassDefinitionListItem & {
     /** Child nodes */
     children: ClassDefinitionTreeNodeItem[];
-};
-export type FieldCollectionConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key */
-    key: string;
-    /** Title */
-    title: string;
 };
 export type FieldCollectionLayoutDefinition = {
     /** AdditionalAttributes */
@@ -882,19 +783,18 @@ export type SelectOptionTreeFolder = {
     children: SelectOptionTreeItem[];
 };
 export const {
-    useClassGetAvailableVisibleFieldsQuery,
     useClassDefinitionCollectionQuery,
     useClassDefinitionCollectionCreatableQuery,
     useClassCustomLayoutCollectionQuery,
     useClassAllLayoutCollectionQuery,
+    usePimcoreStudioApiClassCustomLayoutCreateMutation,
     usePimcoreStudioApiClassCustomLayoutGetQuery,
     usePimcoreStudioApiClassCustomLayoutUpdateMutation,
-    usePimcoreStudioApiClassCustomLayoutCreateMutation,
     usePimcoreStudioApiClassCustomLayoutDeleteMutation,
     useClassCustomLayoutEditorCollectionQuery,
     usePimcoreStudioApiClassCustomLayoutExportQuery,
     useClassCustomLayoutGetIdentifierDataQuery,
-    useClassCustomLayoutImportMutation,
+    usePimcoreStudioApiClassCustomLayoutImportMutation,
     useClassDefinitionGetBricksUsagesQuery,
     useClassDefinitionCreateMutation,
     useClassDefinitionGetByIdQuery,
@@ -904,10 +804,8 @@ export const {
     useClassDefinitionGetIdentifierDataQuery,
     useClassDefinitionImportMutation,
     useClassDefinitionGetLayoutByIdQuery,
-    useClassGetSelectedVisibleFieldsQuery,
     useClassDefinitionGetTextLayoutPreviewQuery,
     useClassDefinitionGetTreeQuery,
-    useClassFieldCollectionCollectionQuery,
     useClassFieldCollectionObjectLayoutQuery,
     useClassDefinitionFolderCollectionQuery,
     useClassDefinitionGetQuery,
