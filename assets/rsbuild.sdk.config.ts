@@ -138,6 +138,7 @@ export default defineConfig({
       './modules/auth': './js/src/sdk/modules/auth/index.ts',
       './modules/icon-library': './js/src/sdk/modules/icon-library/index.ts',
       './modules/reports': './js/src/sdk/modules/reports/index.ts',
+      './modules/translations': './js/src/sdk/modules/translations/index.ts',
       './modules/user': './js/src/sdk/modules/user/index.ts',
       './modules/widget-editor': './js/src/sdk/modules/widget-editor/index.ts',
       './modules/widget-manager': './js/src/sdk/modules/widget-manager/index.ts',
