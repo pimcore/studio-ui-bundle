@@ -20,8 +20,12 @@ const config: Meta = {
 
   argTypes: {
     value: {
-      options: ['asset', 'folder'],
+      options: ['asset', 'folder', 'data-object'],
       control: { type: 'radio' }
+    },
+    iconColorGroup: {
+      options: ['element', 'fieldDefinition'],
+      control: { type: 'select' }
     }
   },
 

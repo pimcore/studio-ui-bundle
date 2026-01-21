@@ -250,6 +250,7 @@ import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dy
 import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
+import { IconColorGroupsRegistryService } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
@@ -353,6 +354,7 @@ container.bind(serviceIds['Document/Editor/Sidebar/FolderSidebarManager']).to(Do
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
+container.bind(serviceIds.iconColorGroupsRegistry).to(IconColorGroupsRegistryService).inSingletonScope()
 
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()

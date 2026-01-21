@@ -15,6 +15,7 @@ import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
+import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 
 export interface IMainWidgetContext {
   nodeId: string
@@ -33,6 +34,7 @@ export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
     translationKey?: string
     label?: string
     icon?: ElementIcon
+    iconColorGroup?: IconColorGroup
     [key: string]: any
   }
 }

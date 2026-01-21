@@ -45,6 +45,7 @@ export const TabTitleContainer = ({ node, modified, title: titleProp, icon: icon
   // Type-safe config extraction
   const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
   const elementType = typeof config.elementType === 'string' ? config.elementType as string : undefined
+  const iconColorGroup = typeof config.iconColorGroup === 'string' ? config.iconColorGroup : undefined
   const rawNodeName = node.getName()
   const nodeName = typeof rawNodeName === 'string' ? rawNodeName : undefined
 
@@ -55,6 +56,7 @@ export const TabTitleContainer = ({ node, modified, title: titleProp, icon: icon
       <BorderTitleView
         dataTestId={ dataTestId }
         icon={ icon }
+        iconColorGroup={ iconColorGroup }
         title={ title }
       />
     )
@@ -64,6 +66,7 @@ export const TabTitleContainer = ({ node, modified, title: titleProp, icon: icon
     <TabTitleView
       dataTestId={ createTabTitleTestId(getTitle(), nodeId, elementType) }
       icon={ icon }
+      iconColorGroup={ iconColorGroup }
       onClose={ isCloseable ? onClose : undefined }
       onConfirm={ modified === true ? onConfirm : undefined }
       title={ getTitle() }

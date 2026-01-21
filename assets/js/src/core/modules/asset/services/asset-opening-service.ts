@@ -87,7 +87,8 @@ export class AssetOpeningService {
       config: {
         id,
         elementType: 'asset',
-        icon: getElementIcon(data, { value: 'widget', type: 'name' })
+        icon: getElementIcon(data, { value: 'widget', type: 'name' }),
+        iconColorGroup: 'element'
       }
     }
   }

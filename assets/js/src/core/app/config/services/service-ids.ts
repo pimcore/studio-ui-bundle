@@ -101,6 +101,7 @@ export const serviceIds = {
 
   // icon library
   iconLibrary: 'IconLibrary',
+  iconColorGroupsRegistry: 'IconColorGroupsRegistry',
 
   // Grid
   'Grid/TypeRegistry': 'Grid/TypeRegistry',
