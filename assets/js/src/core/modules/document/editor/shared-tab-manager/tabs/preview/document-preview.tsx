@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '@Pimcore/app/store'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentPreviewUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
@@ -19,6 +20,9 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Compact } from '@Pimcore/components/compact/compact'
+import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { selectDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
 
 interface DocumentPreviewProps {
   id: number
@@ -35,6 +39,8 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
     width?: number
     height?: number
   }>({ device: 'desktop' })
+  const [previewTimestamp, setPreviewTimestamp] = useState<number | undefined>()
+  const isTimeSliderVisible = useAppSelector((state) => selectDocumentTimeSliderVisible(state, id))
 
   useEffect(() => {
     if (isVisible) {
@@ -43,7 +49,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
   }, [document?.draftData?.modificationDate, isVisible])
 
   const forceDeviceType = mode.device === 'phone-horizontal' ? 'phone' : mode.device
-  const previewUrl = useDocumentPreviewUrlProcessor(id, document?.fullPath ?? '', refreshKey, forceDeviceType)
+  const previewUrl = useDocumentPreviewUrlProcessor(id, document?.fullPath ?? '', refreshKey, forceDeviceType, previewTimestamp)
 
   if (previewUrl === '' || isNil(document)) {
     return <div>{ t('preview.label') }</div>
@@ -58,7 +64,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
     : {
         width: mode.width,
         height: mode.height,
-        border: `1px solid #eae8ed`,
+        border: '1px solid #eae8ed',
         margin: 'auto',
         position: 'relative'
       }
@@ -70,56 +76,78 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
           justify="start"
           theme="secondary"
         >
-          <Compact>
-            <IconTextButton
-              active={ mode.device === 'desktop' }
-              icon={ { value: 'monitor' } }
-              onClick={ () => {
-                setMode({ device: 'desktop' })
-              } }
-            >
-              { t('preview.desktop') }
-            </IconTextButton>
-            <IconTextButton
-              active={ mode.device === 'tablet' }
-              icon={ { value: 'tablet' } }
-              onClick={ () => {
-                setMode({
-                  device: 'tablet',
-                  width: 1024,
-                  height: 768
-                })
-              } }
-            >
-              { t('preview.tablet') }
-            </IconTextButton>
-            <IconTextButton
-              active={ mode.device === 'phone' }
-              icon={ { value: 'phone' } }
-              onClick={ () => {
-                setMode({
-                  device: 'phone',
-                  width: 375,
-                  height: 667
-                })
-              } }
-            >
-              { t('preview.phone') }
-            </IconTextButton>
-            <IconTextButton
-              active={ mode.device === 'phone-horizontal' }
-              icon={ { value: 'phone-horizontal' } }
-              onClick={ () => {
-                setMode({
-                  device: 'phone-horizontal',
-                  width: 667,
-                  height: 375
-                })
-              } }
-            >
-              { t('preview.phone-horizontal') }
-            </IconTextButton>
-          </Compact>
+          <Flex gap="small">
+            <Compact>
+              <IconTextButton
+                active={ mode.device === 'desktop' }
+                icon={ { value: 'monitor' } }
+                onClick={ () => {
+                  setMode({ device: 'desktop' })
+                } }
+              >
+                { t('preview.desktop') }
+              </IconTextButton>
+              <IconTextButton
+                active={ mode.device === 'tablet' }
+                icon={ { value: 'tablet' } }
+                onClick={ () => {
+                  setMode({
+                    device: 'tablet',
+                    width: 1024,
+                    height: 768
+                  })
+                } }
+              >
+                { t('preview.tablet') }
+              </IconTextButton>
+              <IconTextButton
+                active={ mode.device === 'phone' }
+                icon={ { value: 'phone' } }
+                onClick={ () => {
+                  setMode({
+                    device: 'phone',
+                    width: 375,
+                    height: 667
+                  })
+                } }
+              >
+                { t('preview.phone') }
+              </IconTextButton>
+              <IconTextButton
+                active={ mode.device === 'phone-horizontal' }
+                icon={ { value: 'phone-horizontal' } }
+                onClick={ () => {
+                  setMode({
+                    device: 'phone-horizontal',
+                    width: 667,
+                    height: 375
+                  })
+                } }
+              >
+                { t('preview.phone-horizontal') }
+              </IconTextButton>
+            </Compact>
+            { isTimeSliderVisible && (
+              <DatePicker
+                onChange={ (value) => {
+                  console.log('value', value);
+                  // if (value instanceof Date) {
+                  //   setPreviewTimestamp(Math.floor(value.getTime() / 1000))
+                  // } else
+                    if (typeof value === 'string') {
+                    setPreviewTimestamp(Math.floor(new Date(value).getTime() / 1000))
+                  } else {
+                    setPreviewTimestamp(undefined)
+                  }
+                } }
+                outputFormat="YYYY-MM-DD HH:mm"
+                outputType="dateString"
+                placeholder={ t('preview.select_date_time') }
+                value={previewTimestamp}
+                showTime
+              />
+            ) }
+          </Flex>
         </Toolbar>
       ) }
     >

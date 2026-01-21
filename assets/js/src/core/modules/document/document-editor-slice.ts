@@ -23,10 +23,12 @@ export type AreablockGroupedTypes = Record<string, AreablockTypeEntry[]>
 
 export interface DocumentEditorState {
   documentAreablocks: Record<number, AreablockGroupedTypes>
+  timeSliderVisible: Record<number, boolean>
 }
 
 const initialState: DocumentEditorState = {
-  documentAreablocks: {}
+  documentAreablocks: {},
+  timeSliderVisible: {}
 }
 
 const documentEditorSlice = createSlice({
@@ -36,20 +38,28 @@ const documentEditorSlice = createSlice({
     setDocumentAreablockTypes: (state, action: PayloadAction<{ documentId: number, areablockTypes: AreablockGroupedTypes }>) => {
       state.documentAreablocks[action.payload.documentId] = action.payload.areablockTypes
     },
+    setDocumentTimeSliderVisible: (state, action: PayloadAction<{ documentId: number, visible: boolean }>) => {
+      state.timeSliderVisible[action.payload.documentId] = action.payload.visible
+    },
     removeDocument: (state, action: PayloadAction<number>) => {
       const documentId = action.payload
       if (state.documentAreablocks[documentId] !== undefined) {
         const { [documentId]: removed, ...remainingAreablocks } = state.documentAreablocks
         state.documentAreablocks = remainingAreablocks
       }
+      if (state.timeSliderVisible[documentId] !== undefined) {
+        const { [documentId]: removed, ...remainingTimeSliderVisible } = state.timeSliderVisible
+        state.timeSliderVisible = remainingTimeSliderVisible
+      }
     },
     clearAllDocuments: (state) => {
       state.documentAreablocks = {}
+      state.timeSliderVisible = {}
     }
   }
 })
 
-export const { setDocumentAreablockTypes, removeDocument, clearAllDocuments } = documentEditorSlice.actions
+export const { setDocumentAreablockTypes, setDocumentTimeSliderVisible, removeDocument, clearAllDocuments } = documentEditorSlice.actions
 
 export const selectDocumentEditorState = (state: any): DocumentEditorState => state['document-editor']
 
@@ -57,6 +67,13 @@ export const selectDocumentAreablockGroupedTypes = createSelector(
   [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
   (documentEditorState, documentId) => {
     return documentEditorState.documentAreablocks[documentId] ?? {}
+  }
+)
+
+export const selectDocumentTimeSliderVisible = createSelector(
+  [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
+  (documentEditorState, documentId) => {
+    return documentEditorState.timeSliderVisible[documentId] ?? false
   }
 )
 

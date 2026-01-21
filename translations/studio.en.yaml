@@ -1111,6 +1111,7 @@ preview.desktop: Desktop
 preview.tablet: Tablet
 preview.phone-vertical: Phone vertical
 preview.phone-horizontal: Phone horizontal
+preview.select_date_time: Select date & time
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
 main: Main
