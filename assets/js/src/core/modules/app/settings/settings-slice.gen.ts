@@ -85,10 +85,14 @@ export type DevError = {
 };
 export type Branding = {
     /** Invert colors on login screen */
-    brandColor: string;
+    loginScreenInvertColors: boolean;
     /** Color for login screen */
-    backgroundShade: string;
+    colorLoginScreen: string;
     /** Color for admin interface */
+    colorAdminInterface: string;
+    /** Background color for admin interface */
+    colorAdminInterfaceBackground: string;
+    /** Custom image for login screen */
     loginScreenCustomBackgroundImage: string;
     /** Custom image for login screen */
     loginScreenCustomImage: string;
