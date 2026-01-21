@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { 
@@ -17,11 +16,10 @@ import {
   type UpdateAdminSettings,
   type AdminSettings 
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 
 interface UseAppearanceBrandingReturn {
-  updateSettings: (settings: UpdateAdminSettings, onFinish?: () => void) => Promise<void>
+  updateSettings: (settings: UpdateAdminSettings) => Promise<{ success: boolean }>
   isLoading: boolean
   adminSettings: AdminSettings | undefined
   isSettingsLoading: boolean
@@ -29,8 +27,6 @@ interface UseAppearanceBrandingReturn {
 }
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
-  const { t } = useTranslation()
-  const { success } = useMessage()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
   const { 
     data: adminSettings, 
@@ -38,25 +34,21 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     isError 
   } = useAdminSettingsGetQuery()
 
-  const updateSettings = async (settings: UpdateAdminSettings, onFinish?: () => void): Promise<void> => {
-    const settingsUpdateTask = adminSettingsUpdateMutation({
-      updateAdminSettings: settings
-    })
-
+  const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
     try {
-      const response = await settingsUpdateTask
+      const response = await adminSettingsUpdateMutation({
+        updateAdminSettings: settings
+      })
 
       if (!isUndefined(response.error)) {
-        onFinish?.()
         trackError(new ApiError(response.error as ApiErrorData))
-        return
+        return { success: false }
       }
 
-      onFinish?.()
-      void success(t('appearance-branding.update.success'))
-    } catch (error) {
-      onFinish?.()
+      return { success: 'data' in response }
+    } catch {
       trackError(new GeneralError('Failed to update appearance settings.'))
+      return { success: false }
     }
   }
 

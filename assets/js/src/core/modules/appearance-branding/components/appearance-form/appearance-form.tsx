@@ -13,6 +13,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Space } from '@Pimcore/components/space/space'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
@@ -39,6 +40,7 @@ interface AppearanceFormValues {
 
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { success } = useMessage()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading, isError } = useAppearanceBranding()
   const [form] = Form.useForm<AppearanceFormValues>()
   
@@ -90,7 +92,12 @@ export const AppearanceForm = (): React.JSX.Element => {
               loginScreenCustomImage: values.branding?.loginScreenCustomImage?.fullPath || ''
             }
           }
-          await updateSettings(apiValues)
+          
+          const result = await updateSettings(apiValues)
+          
+          if (result.success) {
+            void success(t('appearance-branding.update.success'))
+          }
         }
       }}
     >
