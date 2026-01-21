@@ -79,6 +79,7 @@ export const AssetsTab = ({ data, providerKey, isLoading }: AssetsTabProps): Rea
               id={data.id}
               elementType={elementTypes.asset}
               label={data.fullPath}
+              disabled={data.__gdprIsDeletable !== true}
             />
           </Flex>
         )

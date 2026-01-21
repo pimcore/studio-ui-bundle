@@ -1,9 +1,11 @@
+import { Flex } from "@Pimcore/components/flex/flex"
 import { Grid } from "@Pimcore/components/grid/grid"
-import { GdprDataRow } from "@Pimcore/modules/gdpr-data-extractor/gdpr-data-extractor-slice-enhanced"
 import { createColumnHelper } from "@tanstack/react-table"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { ExportButton } from "../../../export-button/export-button"
 import { GDPRProviderTabProps } from "../../tab-panel"
+import { DeleteButton } from "./components/delete-button/delete-button"
 
 interface UserRow {
   data: {
@@ -24,7 +26,7 @@ export interface UsersTabProps extends GDPRProviderTabProps<UserRow> {
   data: UserRow[]
 }
 
-export const UsersTab = ({ data, isLoading }: UsersTabProps): React.JSX.Element => {
+export const UsersTab = ({ data, isLoading, providerKey }: UsersTabProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const columnHelper = createColumnHelper<UserTable>()
@@ -47,7 +49,25 @@ export const UsersTab = ({ data, isLoading }: UsersTabProps): React.JSX.Element 
     }),
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
-      size: 100
+      size: 100,
+      cell: ({ row }) => {
+        const data = row.original
+
+        return (
+          <Flex>
+            <ExportButton
+              id={data.id}
+              providerKey={providerKey}
+            />
+
+            <DeleteButton
+              id={data.id}
+              label={data.firstname + ' ' + data.lastname}
+              disabled={data.__gdprIsDeletable !== true}
+            />
+          </Flex>
+        )
+      }
     })
   ]
 

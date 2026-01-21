@@ -94,7 +94,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
@@ -109,7 +109,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
       isLoading,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = node.id
@@ -128,7 +128,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !checkElementPermission(data.permissions, 'delete') || data.isLocked,
       onClick: async () => {
         await stagedLoading(data.id)

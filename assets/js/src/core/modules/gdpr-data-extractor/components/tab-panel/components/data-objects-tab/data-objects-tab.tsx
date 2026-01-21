@@ -79,6 +79,7 @@ export const DataObjectsTab = ({ data, providerKey, isLoading }: DataObjectsTabP
               id={data.id}
               elementType={elementTypes.dataObject}
               label={data.fullPath}
+              disabled={data.__gdprIsDeletable !== true}
             />
           </Flex>
         )

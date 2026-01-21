@@ -1,6 +1,6 @@
 import { ColumnFilter, StringColumnFilter } from "@Pimcore/modules/app/types/column-filter"
 import { Button, Flex, Form, FormKit, Input } from "@sdk/components"
-import { isNil } from "lodash"
+import _, { isNil } from "lodash"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { useStyle } from "./search-form.styles"
@@ -14,14 +14,30 @@ interface GdprSearchFormValues {
 
 interface SearchFormProps {
   onSearch?: (filters: ColumnFilter[]) => void
+  onValueChange?: (filters: ColumnFilter[]) => void
   isLoading?: boolean
 }
 
-export const SearchForm = ({ onSearch, isLoading }: SearchFormProps): React.JSX.Element => {
+export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const [form] = Form.useForm()
   const initialValues: GdprSearchFormValues = {}
+
+  const createSearchFilters = (values: GdprSearchFormValues): ColumnFilter[] => {
+    const newSearchFilters: ColumnFilter[] = []
+    Object.entries(values).forEach(([key, value]) => {
+      if (!isNil(value)) {
+        const stringFilter: StringColumnFilter = {
+          type: key,
+          filterValue: value
+        }
+        newSearchFilters.push(stringFilter)
+      }
+    })
+
+    return newSearchFilters
+  }
 
   return (
     <FormKit
@@ -30,19 +46,11 @@ export const SearchForm = ({ onSearch, isLoading }: SearchFormProps): React.JSX.
         initialValues,
         layout: 'horizontal',
         className: styles.form,
+        onValuesChange: (_, values) => {
+          onValueChange?.(createSearchFilters(values))
+        },
         onFinish: (values: GdprSearchFormValues) => {
-          const newSearchFilters: ColumnFilter[] = []
-          Object.entries(values).forEach(([key, value]) => {
-            if (!isNil(value)) {
-              const stringFilter: StringColumnFilter = {
-                type: key,
-                filterValue: value
-              }
-              newSearchFilters.push(stringFilter)
-            }
-          })
-
-          onSearch?.(newSearchFilters)
+          onSearch?.(createSearchFilters(values))
         }
       }}
     >

@@ -3,20 +3,22 @@ import { IconButton } from "@sdk/components"
 import { useDelete } from '@sdk/modules/element'
 import React from "react"
 
-interface DeleteButtonProps {
+interface DeleteButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
   elementType: ElementType
   label: string
 }
 
-export const DeleteButton = ({ id, elementType, label }: DeleteButtonProps): React.JSX.Element => {
+export const DeleteButton = ({ id, elementType, label, onClick, ...iconButtonProps }: DeleteButtonProps): React.JSX.Element => {
   const { deleteElement } = useDelete(elementType)
 
   return (
     <IconButton
+      {...iconButtonProps}
       icon={{ value: 'trash' }}
-      onClick={() => {
+      onClick={(e) => {
         deleteElement(id, label);
+        onClick?.(e)
       }}
     />
   )

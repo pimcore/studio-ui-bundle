@@ -6,8 +6,9 @@ import { Pagination } from "@Pimcore/components/pagination/pagination"
 import { Split } from "@Pimcore/components/split/split"
 import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { debounce } from "lodash"
 import { ColumnFilter } from "../app/types/column-filter"
 import { SortFilter } from "../app/types/sort-filter"
 import { SearchForm } from "./components/search-form/search-form"
@@ -24,6 +25,13 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const [provider, setProvider] = useState<string>('data_objects')
 
   const [trigger, { data, isLoading, isFetching }] = useLazyGdprSearchDataQuery()
+
+  const debouncedSetColumnFilters = useMemo(
+    () => debounce((filters: ColumnFilter[]) => {
+      setColumnFilters(filters)
+    }, 300),
+    []
+  )
 
   const executeSearch = (overrides?: { provider?: string, columnFilters?: ColumnFilter[] }): void => {
     const currentProvider = overrides?.provider ?? provider
@@ -56,7 +64,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           justify="end"
         >
           <Flex align="center">
-            <Split> {/* TODO: Why does the Split doesnt hide itself if pagination is hidden via hideOnSinglePage */}
+            <Split>
               <IconButton
                 disabled={isLoading || isFetching || provider === ''}
                 icon={{ value: 'refresh' }}
@@ -71,6 +79,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
                 showSizeChanger
                 showTotal={(total) => t('pagination.show-total', { total })}
                 total={data?.totalItems ?? 0}
+                hideOnSinglePage
               />
             </Split>
           </Flex>
@@ -103,6 +112,9 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       >
         <SearchForm
           isLoading={isLoading || isFetching}
+          onValueChange={(filters) => {
+            debouncedSetColumnFilters(filters)
+          }}
           onSearch={(columnFilters) => {
             setColumnFilters(columnFilters)
             executeSearch({ columnFilters })

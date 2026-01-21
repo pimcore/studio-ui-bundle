@@ -61,7 +61,10 @@ export const tagNames = {
   PERSPECTIVES: 'PERSPECTIVES',
   PERSPECTIVE_DETAIL: 'PERSPECTIVE_DETAIL',
   WIDGETS: 'WIDGETS',
-  WIDGET_DETAIL: 'WIDGET_DETAIL'
+  WIDGET_DETAIL: 'WIDGET_DETAIL',
+  USERS: 'USERS',
+  USER_DETAIL: 'USER_DETAIL',
+  USER_TREE: 'USER_TREE',
 }
 
 export const providingTags = {
@@ -128,7 +131,10 @@ export const providingTags = {
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
   PERSPECTIVE_DETAIL: (id: string) => [{ type: tagNames.PERSPECTIVE_DETAIL, id }],
   WIDGETS: () => [tagNames.WIDGETS],
-  WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }]
+  WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }],
+  USERS: () => [tagNames.USERS],
+  USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
+  USER_TREE: () => [tagNames.USER_TREE]
 }
 
 export const invalidatingTags = {
@@ -185,7 +191,10 @@ export const invalidatingTags = {
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
-  WIDGETS: () => [tagNames.WIDGETS]
+  WIDGETS: () => [tagNames.WIDGETS],
+  USERS: () => [tagNames.USERS],
+  USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
+  USER_TREE: () => [tagNames.USER_TREE]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

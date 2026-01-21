@@ -2,21 +2,40 @@ import { IconButton } from "@sdk/components"
 import React from "react"
 import { useLazyGdprExportQuery } from "../../gdpr-data-extractor-slice-enhanced"
 
-interface ExportButtonProps {
+interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
   providerKey: string
 }
 
-export const ExportButton = (props: ExportButtonProps): React.JSX.Element => {
+export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonProps }: ExportButtonProps): React.JSX.Element => {
   const [trigger, { isLoading }] = useLazyGdprExportQuery()
+
+  const handleExport = async (e: React.MouseEvent<HTMLElement, MouseEvent>): Promise<void> => {
+    try {
+      const result = await trigger({ id, providerKey }).unwrap()
+
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `gdpr-export-${providerKey}-${id}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+
+      onClick?.(e)
+    } catch (error) {
+      console.error('Export failed:', error)
+    }
+  }
 
   return (
     <IconButton
+      {...iconButtonProps}
       icon={{ value: 'export' }}
-      loading={isLoading}
-      onClick={() => {
-        trigger(props)
-      }}
+      loading={isLoading || loading}
+      onClick={handleExport}
     />
   )
 }
