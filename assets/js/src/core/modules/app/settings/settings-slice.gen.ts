@@ -83,19 +83,29 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+};
 export type Branding = {
-    /** Invert colors on login screen */
-    loginScreenInvertColors: boolean;
-    /** Color for login screen */
-    colorLoginScreen: string;
-    /** Color for admin interface */
-    colorAdminInterface: string;
+    /** Background shade */
+    backgroundShade: string;
+    /** Brand color */
+    brandColor: string;
     /** Background color for admin interface */
     colorAdminInterfaceBackground: string;
     /** Custom image for login screen */
-    loginScreenCustomBackgroundImage: string;
+    loginScreenCustomBackgroundImage: RelatedElementData | null;
     /** Custom image for login screen */
-    loginScreenCustomImage: string;
+    loginScreenCustomImage: RelatedElementData | null;
 };
 export type Assets = {
     /** Hide edit image button */
