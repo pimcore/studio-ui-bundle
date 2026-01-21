@@ -29,20 +29,22 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
 
   return (
     <Panel
-      title={t(titleKey)}
-      border= {false}
-      theme="card-with-highlight"
-      contentPadding="small"
+      border={ false }
       collapsed={ false }
       collapsible
+      contentPadding="small"
+      theme="card-with-highlight"
+      title={ t(titleKey) }
     >
-      <Text className="mb-4" type="secondary">
+      <Text
+        className="mb-4"
+        type="secondary"
+      >
         {t(descriptionKey)}
       </Text>
-      
-      <Form.Item 
-        name={fieldName}
-        getValueFromEvent={(value: ImageUploadValue | null) => {
+
+      <Form.Item
+        getValueFromEvent={ (value: ImageUploadValue | null) => {
           return value ? {
             id: value.id,
             type: value.type || 'asset',
@@ -50,23 +52,24 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
             fullPath: value.fullPath,
             isPublished: true // Default to published
           } : null
-        }}
-        getValueProps={(value: RelatedElementData | null) => {
+        } }
+        getValueProps={ (value: RelatedElementData | null) => {
           return {
-            value: value 
-              ? { 
-                  type: 'asset' as const, 
+            value: value
+              ? {
+                  type: 'asset' as const,
                   id: value.id,
                   fullPath: value.fullPath
-                } 
+                }
               : null
           }
-        }}
+        } }
+        name={ fieldName }
       >
         <ImageUpload
-          width={width}
-          height={height}
-          allowedTypes={['image']}
+          allowedTypes={ ['image'] }
+          height={ height }
+          width={ width }
         />
       </Form.Item>
     </Panel>

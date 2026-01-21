@@ -41,9 +41,9 @@ interface AppearanceFormValues {
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
-  const { updateSettings, isLoading, adminSettings, isSettingsLoading, isError } = useAppearanceBranding()
+  const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
   const [form] = Form.useForm<AppearanceFormValues>()
-  
+
   const isWriteable = adminSettings?.writeable ?? false
 
   const initialValues: AppearanceFormValues = {
@@ -59,20 +59,12 @@ export const AppearanceForm = (): React.JSX.Element => {
     }
   }
 
-  if (isSettingsLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (isError) {
-    return <div>Error loading settings</div>
-  }
-
   return (
     <FormKit
-      formProps={{
+      formProps={ {
         form,
         initialValues,
-        onFinish: async (values: AppearanceFormValues) => {                                  
+        onFinish: async (values: AppearanceFormValues) => {
           const apiValues: UpdateAdminSettings = {
             branding: {
               brandColor: values.branding.brandColor || '',
@@ -85,15 +77,14 @@ export const AppearanceForm = (): React.JSX.Element => {
               disable_tree_preview: initialValues.assets.disable_tree_preview
             }
           }
-                    
-          
+
           const result = await updateSettings(apiValues)
-          
+
           if (result.success) {
             void success(t('appearance-branding.update.success'))
           }
         }
-      }}
+      } }
     >
       <Flex
         className="appearance-branding-form absolute-stretch"
@@ -101,43 +92,47 @@ export const AppearanceForm = (): React.JSX.Element => {
         vertical
       >
         <Content
+        loading={isSettingsLoading}
           padded
-          padding={{
+          padding={ {
             x: 'small',
             y: 'small'
-          }}
+          } }
         >
-          <Title level={2}>
+          <Title level={ 2 }>
             {t('appearance-branding.title')}
           </Title>
 
-          <Space direction="vertical" size="large">
+          <Space
+            direction="vertical"
+            size="large"
+          >
             <ColorPanel />
-            
+
             <ImagePanel
-              titleKey="appearance-branding.custom-logo.title"
               descriptionKey="appearance-branding.custom-logo.description"
-              fieldName={['branding', 'loginScreenCustomImage']}
-              width={300}
-              height={150}
+              fieldName={ ['branding', 'loginScreenCustomImage'] }
+              height={ 150 }
+              titleKey="appearance-branding.custom-logo.title"
+              width={ 300 }
             />
-            
+
             <ImagePanel
-              titleKey="appearance-branding.custom-login-background.title"
               descriptionKey="appearance-branding.custom-login-background.description"
-              fieldName={['branding', 'loginScreenCustomBackgroundImage']}
-              width={300}
-              height={150}
+              fieldName={ ['branding', 'loginScreenCustomBackgroundImage'] }
+              height={ 150 }
+              titleKey="appearance-branding.custom-login-background.title"
+              width={ 300 }
             />
           </Space>
         </Content>
 
         <Toolbar justify="flex-end">
-          <Tooltip title={isWriteable ? '' : t('config_not_writeable')}>
+          <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
             <Button
-              disabled={!isWriteable}
+              disabled={ !isWriteable }
               htmlType="submit"
-              loading={isLoading}
+              loading={ isLoading }
               type="primary"
             >
               {t('save')}

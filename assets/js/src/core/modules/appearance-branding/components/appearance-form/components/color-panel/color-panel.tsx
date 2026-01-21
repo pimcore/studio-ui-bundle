@@ -28,53 +28,52 @@ export const ColorPanel = (): React.JSX.Element => {
       return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
     }
 
-    
     return color || null
   }
 
   return (
     <Panel
-      title={t('appearance-branding.color.title')}
-      theme="card-with-highlight"
-      border= {false}
-      contentPadding="small"
+      border={ false }
       collapsed={ false }
       collapsible
+      contentPadding="small"
+      theme="card-with-highlight"
+      title={ t('appearance-branding.color.title') }
     >
       <Space
         direction="vertical"
         size="large"
       >
         <Form.Item
-          label={t('appearance-branding.color.brand-color.label')}
-          name={['branding', 'brandColor']}
+          label={ t('appearance-branding.color.brand-color.label') }
+          name={ ['branding', 'brandColor'] }
         >
-          <ColorPicker 
-            showText 
+          <ColorPicker
             format="hex"
-            onChange={(color) => {
+            onChange={ (color) => {
               const hexValue = formatColor(color)
               form.setFieldValue(['branding', 'brandColor'], hexValue)
-            }}
+            } }
+            showText
           />
-          <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
+          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
             {t('appearance-branding.color.brand-color.description')}
           </div>
         </Form.Item>
 
         <Form.Item
-          label={t('appearance-branding.color.background-shade.label')}
-          name={['branding', 'backgroundShade']}
+          label={ t('appearance-branding.color.background-shade.label') }
+          name={ ['branding', 'backgroundShade'] }
         >
-          <ColorPicker 
-            showText 
+          <ColorPicker
             format="hex"
-            onChange={(color) => {
+            onChange={ (color) => {
               const hexValue = formatColor(color)
               form.setFieldValue(['branding', 'backgroundShade'], hexValue)
-            }}
+            } }
+            showText
           />
-          <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
+          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
             {t('appearance-branding.color.background-shade.description')}
           </div>
         </Form.Item>

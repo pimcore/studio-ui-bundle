@@ -20,7 +20,6 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-upload.styles'
 import { ImageFooter, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/footer'
 
-
 export interface ImageUploadValue {
   type: 'asset'
   id: number
@@ -65,60 +64,64 @@ export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
     }
   }
 
-  const footerValue = imageValue ? {
-    type: imageValue.type,
-    id: imageValue.id,
-    fullpath: imageValue.fullPath
-  } : null
+  const footerValue = imageValue
+    ? {
+        type: imageValue.type,
+        id: imageValue.id,
+        fullpath: imageValue.fullPath
+      }
+    : null
 
   const width = toCssDimension(props.width, 300)
   const height = toCssDimension(props.height, 150)
 
   return (
     <Card
-      className={cn('max-w-full', styles.imageUpload, props.className)}
+      className={ cn('max-w-full', styles.imageUpload, props.className) }
       fitContent
-      footer={(
+      footer={ (
         <ImageFooter
-          disabled={props.disabled}
-          emptyValue={clearValue}
+          disabled={ props.disabled }
+          emptyValue={ clearValue }
           key="image-upload-footer"
-          setValue={handleFooterChange}
-          value={footerValue}
+          setValue={ handleFooterChange }
+          value={ footerValue }
         />
-      )}
+      ) }
     >
       <Droppable
-        isValidContext={(info: DragAndDropInfo) => props.disabled !== true}
-        isValidData={(info: DragAndDropInfo) => 
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
+        isValidData={ (info: DragAndDropInfo) =>
           info.type === 'asset' && allowedTypes.includes(info.data.type)
         }
-        onDrop={(info: DragAndDropInfo) => {
-            console.log("info", info);
-            
+        onDrop={ (info: DragAndDropInfo) => {
+          console.log('info', info)
+
           props.onChange?.({
             type: 'asset',
             id: info.data.id as number,
             fullPath: info.data.fullPath
           })
-        }}
+        } }
         variant="outline"
       >
-        {imageValue !== null ? (
-          <ImagePreview
-            assetId={imageValue?.id}
-            height={height!}
-            width={width!}
-          />
-        ) : (
-          <AssetTarget
-            dndIcon={props.disabled !== true}
-            height={height}
-            title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
-            uploadIcon={props.disabled !== true}
-            width={width}
-          />
-        )}
+        {imageValue !== null
+          ? (
+            <ImagePreview
+              assetId={ imageValue?.id }
+              height={ height! }
+              width={ width! }
+            />
+            )
+          : (
+            <AssetTarget
+              dndIcon={ props.disabled !== true }
+              height={ height }
+              title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
+              uploadIcon={ props.disabled !== true }
+              width={ width }
+            />
+            )}
       </Droppable>
     </Card>
   )

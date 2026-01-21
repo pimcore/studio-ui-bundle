@@ -10,11 +10,11 @@
 
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
-import { 
-  useAdminSettingsGetQuery, 
-  useAdminSettingsUpdateMutation, 
+import {
+  useAdminSettingsGetQuery,
+  useAdminSettingsUpdateMutation,
   type UpdateAdminSettings,
-  type AdminSettings 
+  type AdminSettings
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { isUndefined } from 'lodash'
 
@@ -28,10 +28,10 @@ interface UseAppearanceBrandingReturn {
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
-  const { 
-    data: adminSettings, 
+  const {
+    data: adminSettings,
     isLoading: isSettingsLoading,
-    isError 
+    isError
   } = useAdminSettingsGetQuery()
 
   const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
