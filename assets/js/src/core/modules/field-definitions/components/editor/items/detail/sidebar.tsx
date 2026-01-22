@@ -107,7 +107,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
           actions.push({ key: 'delete', icon: 'delete' })
         } else {
           fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-            actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition']})
+            actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'] })
           })
         }
 
