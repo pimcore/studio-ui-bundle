@@ -11,11 +11,11 @@
 import { CustomLayout } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout'
 import { DetailContent } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content'
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
-import { type Layout, LayoutProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
@@ -26,12 +26,13 @@ export interface ItemDetailProps {
 }
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
-  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery } = useSettings()
-  const layoutResult = useDetailLayoutQuery({
+  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
+  const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
   })
-  const { isLoading: isLayoutLoading, isFetching: isLayoutFetching, refetch: refetchLayout, data: layoutData } = layoutResult
-  const layoutError = layoutResult.error as FetchBaseQueryError | undefined
+  const layoutError = layoutResult?.error as FetchBaseQueryError | undefined
+
+  const layoutAccessor = useDetailLayoutAccessor?.()
 
   const detailResult = useDetailGeneralSettingsQuery({
     id: props.configuration.id
@@ -39,11 +40,18 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { isLoading: isDetailLoading, isFetching: isDetailFetching, refetch: refetchDetail, data: detailData } = detailResult
   const detailError = detailResult.error as FetchBaseQueryError | undefined
 
-  const [layout, setLayout] = useState<Layout | undefined>(layoutData as Layout | undefined)
+  const [layout, setLayout] = useState<Layout | undefined>(layoutResult?.data as Layout | undefined)
 
   useEffect(() => {
-    setLayout(layoutData as Layout | undefined)
-  }, [layoutData])
+    setLayout(layoutResult?.data as Layout | undefined)
+  }, [layoutResult?.data])
+
+  useEffect(() => {
+    if (layoutAccessor !== undefined && detailData !== undefined) {
+      const accessedLayout = layoutAccessor.accessor(detailData as Record<string, any>)
+      setLayout(accessedLayout)
+    }
+  }, [detailData, layoutAccessor])
 
   useEffect(() => {
     // @todo check this with backend team why 404 is returned for missing layouts
@@ -94,19 +102,19 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                 <IconButton
                   icon={ { value: 'refresh' } }
                   onClick={ () => {
-                    void refetchLayout()
+                    void layoutResult?.refetch()
                     void refetchDetail()
                   } }
                 />
 
-                <CustomLayout />
+                {customLayouts?.ModalContent !== undefined && <CustomLayout />}
               </Flex>
 
               <DetailSave />
             </Toolbar>
           }
         >
-          <Content loading={ isLayoutLoading || isDetailLoading || isLayoutFetching || isDetailFetching }>
+          <Content loading={ layoutResult?.isLoading === true || isDetailLoading || layoutResult?.isFetching === true || isDetailFetching }>
             <ConfigLayout
               leftItem={ {
                 minSize: 250,

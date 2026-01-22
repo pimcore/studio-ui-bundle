@@ -8,26 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCustomLayoutModal } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-provider'
+import { useCustomLayoutModal } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
 import { IconTextButton } from '@sdk/components'
 import React from 'react'
 
 export const CustomLayoutModalTrigger = (): React.JSX.Element => {
   const { openModal } = useCustomLayoutModal()
 
-  const onClick = (): void => {
-    openModal()
-  }
-
-  // @todo translations
-  // @todo check icon
   return (
     <IconTextButton
       icon={ { value: 'layout' } }
-      onClick={ onClick }
+      onClick={ openModal }
       type="link"
     >
-      Configure Custom Layouts
+      Custom layouts
     </IconTextButton>
   )
 }
