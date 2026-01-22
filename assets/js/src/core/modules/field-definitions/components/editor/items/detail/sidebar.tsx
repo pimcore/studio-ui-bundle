@@ -9,22 +9,23 @@
  */
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
-import { type FieldDefinition, useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
+import { type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, Draggable, Droppable } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable } from '@sdk/components'
 import React, { useMemo } from 'react'
 
 export interface DetailSidebarProps {
-  allowExternalDrag?: boolean
   allowExternalDrop?: boolean
 }
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
+  const { useLayout } = useSettings()
+
   const {
-    allowExternalDrag = false,
     allowExternalDrop = false
   } = props
 
@@ -47,36 +48,44 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   const titleRender: ITreeElementProps['titleRender'] = useMemo(() => {
     /* eslint-disable react/display-name */
-    if (allowExternalDrag) {
-      return (node, initialComponent) => (
-        <Draggable info={ {
-          type: 'field-definition',
-          data: fieldDefinitions[node.key.toString()],
-          // @todo icon
-          icon: { value: 'folder' },
-          title: node.title as string
-        } }
-        >
-          {initialComponent}
-        </Draggable>
-      )
-    }
-
     if (allowExternalDrop) {
       return (node, initialComponent) => (
-        <Droppable
-          isValidContext={ () => true }
-          onDrop={ (info) => {
-            addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
-          } }
+        <HotspotDroppable
+          hotspots={ [
+            {
+              id: 'sorting-top',
+              className: 'dnd__sorting dnd__sorting--top',
+              position: { x: 0, y: 0, width: '100%', height: '30%' },
+              isValidContext: true,
+              onDrop: (info) => {
+                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
+              }
+            },
+            {
+              id: 'drop-middle',
+              position: { x: '0', y: '30%', width: '100%', height: '40%' },
+              isValidContext: true,
+              onDrop: (info) => {
+                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
+              }
+            },
+            {
+              id: 'sorting-bottom',
+              position: { x: 0, y: '70%', width: '100%', height: '30%' },
+              isValidContext: true,
+              onDrop: (info) => {
+                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
+              }
+            }
+          ] }
         >
           {initialComponent}
-        </Droppable>
+        </HotspotDroppable>
       )
     }
 
     return undefined
-  }, [allowExternalDrag, fieldDefinitions])
+  }, [allowExternalDrop, fieldDefinitions])
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
     if (structure === undefined) {
@@ -113,7 +122,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
         return {
           ...initialTreeItem,
-          className: invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined,
+          className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions,
           allowDrag (params) {
             // Prevent dragging of root node
@@ -191,7 +200,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     >
       <TreeElement
         defaultExpandAll
-        draggable={ !allowExternalDrag }
+        draggable
         onActionsClick={ onActionsClick }
         onDragAndDrop={ ({ node, dragNode, dropPosition }) => {
           moveFieldDefinition(dragNode.key as string, node.key as string, dropPosition)

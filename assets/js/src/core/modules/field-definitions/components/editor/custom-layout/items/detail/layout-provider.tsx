@@ -10,4 +10,7 @@
 
 import { create } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 
-export const { LayoutProvider, useLayout } = create()
+export const {
+  LayoutProvider: CustomLayoutLayoutProvider,
+  useLayout: useCustomLayoutLayout
+} = create()

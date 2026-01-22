@@ -9,11 +9,12 @@
  */
 
 import { CustomLayout } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout'
+import { DetailParentTree } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/parent-tree'
 import { DetailContent } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content'
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
-import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -21,21 +22,19 @@ import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from 
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect, useState } from 'react'
 
-export interface ItemDetailProps {
-  configuration: ConfigurationPartial
-}
-
-export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
+export const ItemDetail = (): React.JSX.Element => {
+  const { activeConfiguration } = useItems()
+  const configuration = activeConfiguration!
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
   const layoutResult = useDetailLayoutQuery?.({
-    id: props.configuration.id
+    id: configuration.id
   })
   const layoutError = layoutResult?.error as FetchBaseQueryError | undefined
 
   const layoutAccessor = useDetailLayoutAccessor?.()
 
   const detailResult = useDetailGeneralSettingsQuery({
-    id: props.configuration.id
+    id: configuration.id
   })
   const { isLoading: isDetailLoading, isFetching: isDetailFetching, refetch: refetchDetail, data: detailData } = detailResult
   const detailError = detailResult.error as FetchBaseQueryError | undefined
@@ -97,20 +96,26 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
         <ContentLayout
           className="absolute-stretch"
           renderToolbar={
-            <Toolbar>
+            <Toolbar
+              justify='flex-end'
+              padding={ { x: 'none' } }
+              theme='secondary'
+            >
               <Flex gap={ 'mini' }>
-                <IconButton
-                  icon={ { value: 'refresh' } }
-                  onClick={ () => {
-                    void layoutResult?.refetch()
-                    void refetchDetail()
-                  } }
-                />
+                <Flex gap={ 'mini' }>
+                  <IconButton
+                    icon={ { value: 'refresh' } }
+                    onClick={ () => {
+                      void layoutResult?.refetch()
+                      void refetchDetail()
+                    } }
+                  />
 
-                {customLayouts?.ModalContent !== undefined && <CustomLayout />}
+                  {customLayouts?.ModalContent !== undefined && <CustomLayout />}
+                </Flex>
+
+                <DetailSave />
               </Flex>
-
-              <DetailSave />
             </Toolbar>
           }
         >
@@ -121,13 +126,29 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                 maxSize: 350,
                 size: 250,
                 children: (
-                  <DetailSidebar />
+                  <DetailParentTree />
                 )
               } }
               resizeAble
 
               rightItem={ {
-                children: <DetailContent />
+                children: (
+                  <ConfigLayout
+                    leftItem={ {
+                      minSize: 250,
+                      maxSize: 350,
+                      size: 250,
+                      children: (
+                        <DetailSidebar allowExternalDrop />
+                      )
+                    } }
+                    resizeAble
+
+                    rightItem={ {
+                      children: <DetailContent />
+                    } }
+                  />
+                )
               } }
             />
           </Content>
