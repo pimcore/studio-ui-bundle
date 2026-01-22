@@ -26,6 +26,7 @@ import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alertOutline from '@Pimcore/assets/icons/alert-outline.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import alternativeElementTree from '@Pimcore/assets/icons/alternative-element-tree.inline.svg?react'
+import appearanceBranding from '@Pimcore/assets/icons/appearance-branding.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
 import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
@@ -323,6 +324,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alternative-element-tree',
       component: alternativeElementTree
+    })
+    iconLibrary.register({
+      name: 'appearance-branding',
+      component: appearanceBranding
     })
     iconLibrary.register({
       name: 'application-logger',
