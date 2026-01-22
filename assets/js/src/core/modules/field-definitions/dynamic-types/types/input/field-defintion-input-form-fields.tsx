@@ -12,23 +12,25 @@ import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/fi
 import { FieldDefinitionRegexValidation } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-regex-validation/field-definition-regex-validation'
 import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title="Specific Settings">
+    <FormKit.Panel title={ t('specific-settings') }>
       {!isCustomLayout && (
         <>
           <Form.Item
-            label="default_value"
+            label={ t('default-value') }
             name="defaultValue"
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="default_value_generator"
+            label={ t('default-value-generator') }
             name="defaultValueGenerator"
           >
             <Input />
@@ -37,21 +39,21 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
       )}
 
       <Form.Item
-        label="width"
+        label={ t('width') }
         name="width"
-        tooltip="width_tooltip"
+        tooltip={ t('width-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item name="showCharCount">
-        <Switch labelRight="show_char_count" />
+        <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
       {!isCustomLayout && (
         <>
           <Form.Item
-            label="column_length"
+            label={ t('column-length') }
             name="columnLength"
             rules={ [{ min: 0, type: 'number' }] }
           >

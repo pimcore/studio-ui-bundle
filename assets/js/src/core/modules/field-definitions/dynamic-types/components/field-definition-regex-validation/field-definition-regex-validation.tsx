@@ -11,8 +11,10 @@
 import { Form, FormKit, Input, Select } from '@sdk/components'
 import { isArray, toString } from 'lodash'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const regex = Form.useWatch('regex')
   const regexFlags = Form.useWatch('regexFlags')
 
@@ -28,19 +30,19 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
     <FormKit.Panel
       border
       theme="fieldset"
-      title="Regular Expression Validation"
+      title={ t('regex-validation') }
     >
       <Form.Item
-        label="regex"
+        label={ t('regex') }
         name="regex"
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="regex_flags"
+        label={ t('regex-flags') }
         name="regexFlags"
-        tooltip="regex_flags_tooltip"
+        tooltip={ t('regex-flags-tooltip') }
       >
         <Select
           defaultValue=""
@@ -51,7 +53,7 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
 
       <Form.Item
         dependencies={ ['regex', 'regexFlags'] }
-        label="test_string"
+        label={ t('test-string') }
         name="regexTestString"
         rules={ [
           () => ({
@@ -66,7 +68,7 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
                 // Fallback for invalid regex
               }
 
-              throw new Error('regex_validation_error_message')
+              throw new Error(t('regex-validation-error-message'))
             }
           })
         ] }

@@ -11,36 +11,38 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title="Specific Settings">
+    <FormKit.Panel title={ t('specific-settings') }>
       {!isCustomLayout}
 
       <Form.Item
-        label="width"
+        label={ t('width') }
         name="width"
-        tooltip="width_tooltip"
+        tooltip={ t('width-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="height"
+        label={ t('height') }
         name="height"
-        tooltip="height_tooltip"
+        tooltip={ t('height-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item name="showCharCount">
-        <Switch labelRight="show_char_count" />
+        <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
       <Form.Item
-        label="max_length"
+        label={ t('max-length') }
         name="maxLength"
         rules={ [{ min: 0, type: 'number' }] }
       >
@@ -51,7 +53,7 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
       </Form.Item>
 
       <Form.Item name="excludeFromSearchIndex">
-        <Switch labelRight="exclude_from_search_index" />
+        <Switch labelRight={ t('exclude-from-search-index') } />
       </Form.Item>
     </FormKit.Panel>
   )
