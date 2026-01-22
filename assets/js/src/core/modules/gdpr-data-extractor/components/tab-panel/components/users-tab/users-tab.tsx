@@ -26,7 +26,7 @@ export interface UsersTabProps extends GDPRProviderTabProps<UserRow> {
   data: UserRow[]
 }
 
-export const UsersTab = ({ data, isLoading, providerKey }: UsersTabProps): React.JSX.Element => {
+export const UsersTab = ({ data, isLoading, providerKey, refresh }: UsersTabProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const columnHelper = createColumnHelper<UserTable>()
@@ -64,6 +64,7 @@ export const UsersTab = ({ data, isLoading, providerKey }: UsersTabProps): React
               id={data.id}
               label={data.firstname + ' ' + data.lastname}
               disabled={data.__gdprIsDeletable !== true}
+              onFinish={refresh}
             />
           </Flex>
         )

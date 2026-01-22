@@ -1,4 +1,4 @@
-import { ColumnFilter, StringColumnFilter } from "@Pimcore/modules/app/types/column-filter"
+import { ColumnFilter, NumberColumnFilter, StringColumnFilter } from "@Pimcore/modules/app/types/column-filter"
 import { Button, Flex, Form, FormKit, Input } from "@sdk/components"
 import _, { isNil } from "lodash"
 import React from "react"
@@ -27,12 +27,12 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
   const createSearchFilters = (values: GdprSearchFormValues): ColumnFilter[] => {
     const newSearchFilters: ColumnFilter[] = []
     Object.entries(values).forEach(([key, value]) => {
-      if (!isNil(value)) {
-        const stringFilter: StringColumnFilter = {
-          type: key,
-          filterValue: value
-        }
-        newSearchFilters.push(stringFilter)
+      if (!isNil(value) && value.length > 0) {
+        const columnFilter: ColumnFilter = key === 'id'
+          ? { type: key, filterValue: Number(value) } satisfies NumberColumnFilter
+          : { type: key, filterValue: value } satisfies StringColumnFilter
+
+        newSearchFilters.push(columnFilter)
       }
     })
 

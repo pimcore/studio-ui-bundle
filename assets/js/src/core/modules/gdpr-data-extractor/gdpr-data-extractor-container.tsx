@@ -16,6 +16,11 @@ import { Tabpanel } from "./components/tab-panel/tab-panel"
 import { useLazyGdprSearchDataQuery } from "./gdpr-data-extractor-slice-enhanced"
 import { isEmpty } from "lodash"
 
+export interface SearchOverrides {
+  provider?: string,
+  columnFilters?: ColumnFilter[]
+}
+
 export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [page, setPage] = useState<number>(1)
@@ -33,7 +38,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
     []
   )
 
-  const executeSearch = (overrides?: { provider?: string, columnFilters?: ColumnFilter[] }): void => {
+  const executeSearch = (overrides?: SearchOverrides): void => {
     const currentProvider = overrides?.provider ?? provider
     const currentColumnFilters = overrides?.columnFilters ?? columnFilters
 
@@ -127,6 +132,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
             setProvider(providerKey)
             executeSearch({ provider: providerKey })
           }}
+          refresh={executeSearch}
         />
       </Content>
     </ContentLayout>

@@ -7,7 +7,7 @@ import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 interface UseUserReturn {
-  deleteUser: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
+  deleteUser: (id: number, label: string, onFinish?: () => void) => void
   isLoading: boolean
 }
 
@@ -17,7 +17,7 @@ export const useUser = () => {
   const executionEngine = useExecutionEngine()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const deleteUser = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
+  const deleteUser = (id: number, label: string, onFinish?: () => void): void => {
     modal.confirm({
       title: t('user-management.remove-user'),
       content: <>
