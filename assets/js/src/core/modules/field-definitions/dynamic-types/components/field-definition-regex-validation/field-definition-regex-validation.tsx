@@ -9,6 +9,7 @@
  */
 
 import { Form, FormKit, Input, Select } from '@sdk/components'
+import { isArray, toString } from 'lodash'
 import React from 'react'
 
 export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
@@ -57,7 +58,7 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
             () => ({
               async validator (_, value: string) {
                 try {
-                  const flags = typeof regexFlags === 'string' ? regexFlags : (Array.isArray(regexFlags) ? regexFlags.join('') : '')
+                  const flags = isArray(regexFlags) ? regexFlags.join('') : toString(regexFlags)
                   const re = new RegExp(regex as string, flags)
                   if (re.test(value)) {
                     return
