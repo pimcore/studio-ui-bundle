@@ -18,61 +18,61 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
-  const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
+  const panelTitle = props.id !== '' ? `${props.id} (${t('type')}: ${typeTranslation})` : `${t('type')}: ${typeTranslation}`
 
   return (
     <>
       <FormKit.Panel title={ panelTitle }>
         <Form.Item
-          label="name"
+          label={ t('name') }
           name="name"
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="title"
+          label={ t('title') }
           name="title"
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="tooltip"
+          label={ t('tooltip') }
           name="tooltip"
         >
           <TextArea />
         </Form.Item>
 
         <Form.Item name="mandatory">
-          <Switch labelRight="mandatoryfield" />
+          <Switch labelRight={ t('mandatory') } />
         </Form.Item>
 
         <Form.Item name="index">
-          <Switch labelRight="index" />
+          <Switch labelRight={ t('index') } />
         </Form.Item>
 
         {/* @todo check behavior for unique fields */}
         <Form.Item name="unique">
-          <Switch labelRight="unique" />
+          <Switch labelRight={ t('unique') } />
         </Form.Item>
 
         <Form.Item name="noteditable">
-          <Switch labelRight="not_editable" />
+          <Switch labelRight={ t('not-editable') } />
         </Form.Item>
 
         <Form.Item name="invisible">
-          <Switch labelRight="invisible" />
+          <Switch labelRight={ t('invisible') } />
         </Form.Item>
 
         {!isCustomLayout && (
         <>
           <Form.Item name="visibleGridView">
-            <Switch labelRight="visible_in_gridview" />
+            <Switch labelRight={ t('visible-in-gridview') } />
           </Form.Item>
 
           <Form.Item name="visibleSearch">
-            <Switch labelRight="visible_in_searchresult" />
+            <Switch labelRight={ t('visible-in-searchresult') } />
           </Form.Item>
         </>
         )}
