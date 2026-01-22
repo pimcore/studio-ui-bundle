@@ -18,7 +18,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
-  const panelTitle = props.id !== '' ? `${props.id} (${t('type')}: ${typeTranslation})` : `${t('type')}: ${typeTranslation}`
+  const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
   return (
     <>
