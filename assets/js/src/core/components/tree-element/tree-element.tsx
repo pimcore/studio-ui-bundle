@@ -14,7 +14,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
 import { useStyles } from './tree-element.styles'
-import { IconColorGroup } from '@sdk/components'
+import { type IconColorGroup } from '@sdk/components'
 
 export interface TreeAction {
   key: string
