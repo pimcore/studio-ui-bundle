@@ -8,16 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { CustomLayoutModal } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
-import { CustomLayoutModalProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-provider'
+import { CurrentConfigurationProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
+import { CustomLayoutModal, CustomLayoutModalProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
 import { CustomLayoutModalTrigger } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-trigger'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import React from 'react'
 
 export const CustomLayout = (): React.JSX.Element => {
+  const { activeConfiguration } = useItems()
+
   return (
-    <CustomLayoutModalProvider>
-      <CustomLayoutModalTrigger />
-      <CustomLayoutModal />
-    </CustomLayoutModalProvider>
+    <CurrentConfigurationProvider configuration={ activeConfiguration }>
+      <CustomLayoutModalProvider>
+        <CustomLayoutModal />
+        <CustomLayoutModalTrigger />
+      </CustomLayoutModalProvider>
+    </CurrentConfigurationProvider>
   )
 }

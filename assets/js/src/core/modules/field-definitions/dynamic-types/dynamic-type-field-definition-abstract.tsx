@@ -9,7 +9,7 @@
  */
 
 import type React from 'react'
-import { type ILayoutContext } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { type ILayoutContext } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { DynamicTypeAbstract } from '@sdk/modules/element'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { container, serviceIds } from '@sdk/app'

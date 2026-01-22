@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinition, type ILayoutContext, type Layout, type StructureNode } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { type FieldDefinition, type ILayoutContext, type Layout, type StructureNode } from './layout-provider-factory'
 import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { container, serviceIds } from '@sdk/app'
@@ -87,7 +87,7 @@ export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][
         ? (
           <Icon
             { ...dynType.getIcon() }
-            iconColorGroup="fieldDefinition"
+            iconColorGroup={ ['fieldDefinition_' + dynType.id, 'fieldDefinition'] }
           />
           )
         : undefined,

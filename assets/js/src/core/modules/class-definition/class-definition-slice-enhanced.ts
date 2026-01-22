@@ -39,7 +39,7 @@ export const {
   usePimcoreStudioApiClassCustomLayoutDeleteMutation,
   useClassCustomLayoutEditorCollectionQuery,
   usePimcoreStudioApiClassCustomLayoutExportQuery,
-  usePimcoreStudioApiClassCustomLayoutImportMutation,
+  useClassCustomLayoutImportMutation,
   useClassFieldCollectionObjectLayoutQuery,
   useClassDefinitionGetQuery,
   useClassObjectBrickObjectLayoutQuery,
@@ -49,7 +49,8 @@ export const {
   useClassDefinitionGetTreeQuery,
   useClassDefinitionGetByIdQuery,
   useClassDefinitionUpdateMutation,
-  useClassDefinitionDeleteMutation
+  useClassDefinitionDeleteMutation,
+  useClassCustomLayoutGetIdentifierDataQuery
 } = api
 
 export { api }
