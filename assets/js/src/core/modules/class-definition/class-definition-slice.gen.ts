@@ -419,7 +419,7 @@ export type ClassGetSelectedVisibleFieldsApiResponse =
 export type ClassGetSelectedVisibleFieldsApiArg = {
     /** Class definition unique identifier */
     id: string;
-    /** Relation field name for which the selected fields should be retrieved. */
+    /** Relation field name for which the selected fields should be retrieved as dot notation. */
     relationField?: string;
 };
 export type ClassDefinitionGetTextLayoutPreviewApiResponse = /** status 200 Text layout preview as HTML */ Blob;
