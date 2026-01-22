@@ -8,6 +8,8 @@ import { DynamicTypeGDPRProviderRegistry } from "./dynamic-types/registry/dynami
 import { DynamicTypeDataObjectGDPRProvider } from "./dynamic-types/definitions/dynamic-type-data-object-gdpr-provider"
 import { DynamicTypeAssetsGDPRProvider } from "./dynamic-types/definitions/dynamic-type-assets-gdpr-provider"
 import { DynamicTypeUsersGDPRProvider } from "./dynamic-types/definitions/dynamic-type-users-gdpr-provider"
+import { UserPermission } from "../auth/enums/user-permission"
+import { NavPermission } from "../perspectives/enums/nav-permission"
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -17,15 +19,14 @@ moduleSystem.registerModule({
       component: GDPRDataExtractorContainer
     })
 
-    //TODO: entry has to be on position 5. Double check the others
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
     mainNavRegistryService.registerMainNavItem({
       path: 'DataManagement/GDPR Extractor',
       label: 'navigation.gdpr-extractor',
       order: 500,
       className: 'item-style-modifier',
-      //permission: UserPermission.Emails,
-      //perspectivePermission: NavPermission.Mails,
+      permission: UserPermission.GDPRDataExtractor,
+      perspectivePermission: NavPermission.GDPRDataExtractor,
       widgetConfig: {
         name: 'gdpr-extractor',
         id: 'gdpr-extractor',
