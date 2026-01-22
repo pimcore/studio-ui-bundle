@@ -36,6 +36,7 @@ export interface UseDeleteHookReturn {
   deleteTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   deleteGridContextMenuItem: (row: any) => ItemType | undefined
+  isLoading: boolean
 }
 
 export const useDelete = (elementType: ElementType, cacheKey?: string): UseDeleteHookReturn => {
@@ -152,6 +153,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     deleteElement,
     deleteTreeContextMenuItem,
     deleteContextMenuItem,
-    deleteGridContextMenuItem
+    deleteGridContextMenuItem,
+    isLoading
   }
 }
