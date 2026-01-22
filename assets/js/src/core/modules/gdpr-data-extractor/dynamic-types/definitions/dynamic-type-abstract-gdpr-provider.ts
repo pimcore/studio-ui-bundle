@@ -6,5 +6,5 @@ import { GDPRProviderTabProps } from "../../components/tab-panel/tab-panel";
 export abstract class DynamicTypeAbstractGDPRProvider implements DynamicTypeAbstract {
   abstract readonly id: string;
 
-  abstract getTabContent(tabProps: GDPRProviderTabProps): React.JSX.Element;
+  abstract getTabContent<T>(tabProps: GDPRProviderTabProps<T>): React.JSX.Element;
 }

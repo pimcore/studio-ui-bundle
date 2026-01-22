@@ -80,12 +80,6 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type GdprDataColumn = {
-    /** Unique key of the column */
-    key: string;
-    /** Translated label of the column (for the header) */
-    label: string;
-};
 export type GdprDataProvider = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -96,9 +90,7 @@ export type GdprDataProvider = {
     /** Label of the provider */
     label: string;
     /** The Operation ID to call when deleting an item. */
-    deleteOperationId?: string;
-    /** List of column definitions for the result grid */
-    columns: GdprDataColumn[];
+    deleteOperationId: string;
 };
 export type GdprDataRow = {
     /** Data row values */
