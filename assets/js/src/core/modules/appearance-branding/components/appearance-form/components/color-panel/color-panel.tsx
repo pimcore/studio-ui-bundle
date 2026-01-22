@@ -21,16 +21,16 @@ export const ColorPanel = (): React.JSX.Element => {
   const form = Form.useFormInstance()
 
   const formatColor = (color: any): string | null => {
-    if (color?.cleared) {
+    if (color?.cleared === true) {
       return null
     }
-    
-    if (color?.metaColor) {
+
+    if (color?.metaColor != null) {
       const { r, g, b, a = 1 } = color.metaColor
       return new FastColor({ r, g, b, a }).toHexString()
     }
 
-    return color ? new FastColor(color).toHexString() : null
+    return color != null ? new FastColor(color as string).toHexString() : null
   }
 
   return (

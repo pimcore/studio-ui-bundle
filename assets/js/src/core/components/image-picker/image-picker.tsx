@@ -60,7 +60,7 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
     }
   }
 
-  const footerValue = imageValue
+  const footerValue = imageValue !== null
     ? {
         type: imageValue.type,
         id: imageValue.id,
@@ -88,15 +88,15 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) =>
-          info.type === 'asset' && allowedTypes.includes(info.data.type)
+          info.type === 'asset' && allowedTypes.includes(String(info.data.type))
         }
         onDrop={ (info: DragAndDropInfo) => {
           console.log('info', info)
 
           props.onChange?.({
             type: 'asset',
-            id: info.data.id as number,
-            fullPath: info.data.fullPath
+            id: Number(info.data.id),
+            fullPath: String(info.data.fullPath)
           })
         } }
         variant="outline"

@@ -59,7 +59,7 @@ export const AppearanceForm = (): React.JSX.Element => {
               disable_tree_preview: initialValues.assets.disable_tree_preview
             }
           }
-          
+
           const result = await updateSettings(completeValues)
 
           if (result.success) {
@@ -74,7 +74,7 @@ export const AppearanceForm = (): React.JSX.Element => {
         vertical
       >
         <Content
-        loading={isSettingsLoading}
+          loading={ isSettingsLoading }
           padded
           padding={ {
             x: 'extra-small',

@@ -45,17 +45,18 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
 
       <Form.Item
         getValueFromEvent={ (value: ImagePickerValue | null) => {
-          return value ? {
-            id: value.id,
-            type: value.type || 'asset',
-            subtype: 'image', // Default subtype for images
-            fullPath: value.fullPath,
-            isPublished: true // Default to published
-          } : null
+          return value !== null
+            ? {
+                id: value.id,
+                type: value.type ?? 'asset',
+                subtype: 'image', // Default subtype for images
+                fullPath: value.fullPath,
+              }
+            : null
         } }
         getValueProps={ (value: RelatedElementData | null) => {
           return {
-            value: value
+            value: value !== null
               ? {
                   type: 'asset' as const,
                   id: value.id,
