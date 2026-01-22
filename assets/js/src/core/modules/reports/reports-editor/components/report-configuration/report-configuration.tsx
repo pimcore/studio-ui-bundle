@@ -69,6 +69,16 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   }, [data])
 
   useEffect(() => {
+    if (!isNull(currentData) && !isUndefined(dataSourceConfig?.type)) {
+      form.resetFields()
+      updateFormData?.({
+        ...currentData,
+        columnConfigurations: []
+      })
+    }
+  }, [dataSourceConfig?.type])
+
+  useEffect(() => {
     if (isDirty) {
       setModifiedReports([...modifiedReports, report.id])
     } else {
