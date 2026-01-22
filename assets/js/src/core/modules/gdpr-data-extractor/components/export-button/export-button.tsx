@@ -31,7 +31,7 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
       link.download = `gdpr-export-${providerKey}-${id}.json`
       document.body.appendChild(link)
       link.click()
-      document.body.removeChild(link)
+      link.remove()
       URL.revokeObjectURL(url)
 
       onClick?.(e)
@@ -42,10 +42,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
 
   return (
     <IconButton
-      { ...iconButtonProps }
-      icon={ { value: 'export' } }
-      loading={ isLoading || loading }
-      onClick={ handleExport }
+      {...iconButtonProps}
+      icon={{ value: 'export' }}
+      loading={isLoading || loading}
+      onClick={handleExport}
     />
   )
 }
