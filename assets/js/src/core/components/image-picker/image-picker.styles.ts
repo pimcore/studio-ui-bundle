@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles, css } from 'antd-style'
 
 export const useStyles = createStyles(() => ({
-  imageUpload: {
-    '& .ant-card-body': {
+  imagePicker: css`
+    & .ant-card-body {
       padding: 0
     }
-  }
+  `
 }))

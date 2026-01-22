@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
-import { ImageUpload, type ImageUploadValue } from '@Pimcore/components/image-upload/image-upload'
+import { ImagePicker, type ImagePickerValue } from '@Pimcore/components/image-picker/image-picker'
 import { type RelatedElementData } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 interface ImagePanelProps {
@@ -44,7 +44,7 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
       </Text>
 
       <Form.Item
-        getValueFromEvent={ (value: ImageUploadValue | null) => {
+        getValueFromEvent={ (value: ImagePickerValue | null) => {
           return value ? {
             id: value.id,
             type: value.type || 'asset',
@@ -66,7 +66,7 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         } }
         name={ fieldName }
       >
-        <ImageUpload
+        <ImagePicker
           allowedTypes={ ['image'] }
           height={ height }
           width={ width }

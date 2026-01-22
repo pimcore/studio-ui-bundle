@@ -17,27 +17,27 @@ import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@sdk/components'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { useStyles } from './image-upload.styles'
+import { useStyles } from './image-picker.styles'
 import { ImageFooter, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/footer'
 
-export interface ImageUploadValue {
+export interface ImagePickerValue {
   type: 'asset'
   id: number
   fullPath: string
 }
 
-export interface ImageUploadProps {
+export interface ImagePickerProps {
   width?: string | number | null
   height?: string | number | null
   disabled?: boolean
-  value?: ImageUploadValue | null
-  onChange?: (value: ImageUploadValue | null) => void
+  value?: ImagePickerValue | null
+  onChange?: (value: ImagePickerValue | null) => void
   className?: string
   placeholder?: string
   allowedTypes?: string[]
 }
 
-export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
+export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
   const imageValue = props.value ?? null
   const allowedTypes = props.allowedTypes ?? ['image']
 
@@ -46,10 +46,6 @@ export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
 
   const clearValue = (): void => {
     props.onChange?.(null)
-  }
-
-  const handleChange = (value: ImageUploadValue | null): void => {
-    props.onChange?.(value)
   }
 
   const handleFooterChange = (value: ImageValue | null): void => {
@@ -77,13 +73,13 @@ export const ImageUpload = (props: ImageUploadProps): React.JSX.Element => {
 
   return (
     <Card
-      className={ cn('max-w-full', styles.imageUpload, props.className) }
+      className={ cn('max-w-full', styles.imagePicker, props.className) }
       fitContent
       footer={ (
         <ImageFooter
           disabled={ props.disabled }
           emptyValue={ clearValue }
-          key="image-upload-footer"
+          key="image-picker-footer"
           setValue={ handleFooterChange }
           value={ footerValue }
         />
