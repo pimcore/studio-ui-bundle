@@ -26,7 +26,7 @@ export class DynamicTypeFieldDefinitionTextarea extends DynamicTypeFieldDefiniti
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    const id = context.path[context.path.length - 1]
+    const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
