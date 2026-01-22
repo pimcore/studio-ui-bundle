@@ -296,6 +296,7 @@ import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
+import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
 import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
@@ -1451,6 +1452,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'text-field',
       component: textField
+    })
+    iconLibrary.register({
+      name: 'text-input',
+      component: textInput
     })
     iconLibrary.register({
       name: 'time',

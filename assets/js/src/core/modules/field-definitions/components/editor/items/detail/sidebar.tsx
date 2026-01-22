@@ -99,7 +99,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
           if (dynType !== undefined) {
             const allowedChildTags = dynType.getValidDropdownTags({ area, path: currentPath, fieldDefinitions })
             fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-              actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: 'fieldDefinition' })
+              actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'] })
             })
           }
 
@@ -107,7 +107,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
           actions.push({ key: 'delete', icon: 'delete' })
         } else {
           fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-            actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: 'fieldDefinition'})
+            actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition']})
           })
         }
 

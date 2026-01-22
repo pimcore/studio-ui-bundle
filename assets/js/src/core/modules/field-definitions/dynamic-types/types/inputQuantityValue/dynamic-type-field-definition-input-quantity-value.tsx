@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionInputQuantityValue extends DynamicTypeFie
   id: string = 'inputQuantityValue'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'input-quantity-value' }
+    return { type: 'name', value: 'quantity-value' }
   }
 
   getGroup (): string[] {
