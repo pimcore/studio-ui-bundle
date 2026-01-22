@@ -40,7 +40,7 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
           return {
             key: action.key,
             label: t(`tree.actions.${action.key}`),
-            icon: <Icon value={ action.icon } />,
+            icon: <Icon value={ action.icon } iconColorGroup={ action.iconColorGroup } />,
             onClick: () => {
               onActionsClick?.(action.key, title)
             }
