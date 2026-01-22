@@ -27,6 +27,8 @@ export interface FieldDefinitionContext extends Record<string, any> {
 
 export interface FieldDefinitionAbstractFormFieldsProps {
   context: FieldDefinitionContext
+  id: string
+  type: string
 }
 
 export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbstract {
