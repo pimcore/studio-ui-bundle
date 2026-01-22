@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionD
   id: string = 'input'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'text-field' }
+    return { type: 'name', value: 'text-input' }
   }
 
   getGroup (): string[] {

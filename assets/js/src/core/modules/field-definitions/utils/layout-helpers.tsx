@@ -83,7 +83,14 @@ export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][
 
     const item = {
       title: fieldDef?.name,
-      icon: dynType !== undefined ? <Icon { ...dynType.getIcon() } /> : undefined,
+      icon: dynType !== undefined
+        ? (
+          <Icon
+            { ...dynType.getIcon() }
+            iconColorGroup="fieldDefinition"
+          />
+          )
+        : undefined,
       key: node.id,
       meta: { currentPath },
       children: node.children.map((child) => buildTreeItems(child, currentPath))
