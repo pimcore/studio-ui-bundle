@@ -20,33 +20,20 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Title } from '@Pimcore/components/title/title'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type UpdateAdminSettings, type RelatedElementData } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
-
-interface AppearanceFormValues {
-  branding: {
-    brandColor: string
-    backgroundShade: string
-    loginScreenCustomBackgroundImage: RelatedElementData | null
-    loginScreenCustomImage: RelatedElementData | null
-  }
-  assets: {
-    hide_edit_image: boolean
-    disable_tree_preview: boolean
-  }
-}
 
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
-  const [form] = Form.useForm<AppearanceFormValues>()
+  const [form] = Form.useForm<UpdateAdminSettings>()
 
   const isWriteable = adminSettings?.writeable ?? false
 
-  const initialValues: AppearanceFormValues = {
+  const initialValues: UpdateAdminSettings = {
     branding: {
       brandColor: adminSettings?.branding?.brandColor ?? '',
       backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
@@ -64,21 +51,16 @@ export const AppearanceForm = (): React.JSX.Element => {
       formProps={ {
         form,
         initialValues,
-        onFinish: async (values: AppearanceFormValues) => {
-          const apiValues: UpdateAdminSettings = {
-            branding: {
-              brandColor: values.branding.brandColor || '',
-              backgroundShade: values.branding.backgroundShade || '',
-              loginScreenCustomBackgroundImage: values.branding?.loginScreenCustomBackgroundImage || null,
-              loginScreenCustomImage: values.branding?.loginScreenCustomImage || null
-            },
+        onFinish: async (values: UpdateAdminSettings) => {
+          const completeValues: UpdateAdminSettings = {
+            ...values,
             assets: {
               hide_edit_image: initialValues.assets.hide_edit_image,
               disable_tree_preview: initialValues.assets.disable_tree_preview
             }
           }
-
-          const result = await updateSettings(apiValues)
+          
+          const result = await updateSettings(completeValues)
 
           if (result.success) {
             void success(t('appearance-branding.update.success'))
