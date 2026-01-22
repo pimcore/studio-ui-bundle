@@ -77,8 +77,8 @@ export const AppearanceForm = (): React.JSX.Element => {
         loading={isSettingsLoading}
           padded
           padding={ {
-            x: 'small',
-            y: 'small'
+            x: 'extra-small',
+            y: 'extra-small'
           } }
         >
           <Title level={ 2 }>

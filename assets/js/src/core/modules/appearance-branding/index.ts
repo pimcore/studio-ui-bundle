@@ -15,8 +15,8 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-import { AppearanceBrandingWrapper } from './appearance-branding-wrapper'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { AppearanceForm } from './components/appearance-form/appearance-form'
 
 export const APPEARANCE_BRANDING_WIDGET: WidgetManagerTabConfig = {
   name: 'Appearance & Branding',
@@ -49,7 +49,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'appearance-branding',
-      component: AppearanceBrandingWrapper
+      component: AppearanceForm
     })
   }
 })
