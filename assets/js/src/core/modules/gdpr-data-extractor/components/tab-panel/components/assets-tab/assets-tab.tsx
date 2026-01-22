@@ -27,7 +27,7 @@ export interface AssetsTabProps extends GDPRProviderTabProps<AssetRow> {
   data: AssetRow[]
 }
 
-export const AssetsTab = ({ data, providerKey, isLoading }: AssetsTabProps): React.JSX.Element => {
+export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const columnHelper = createColumnHelper<AssetTable>()
@@ -60,6 +60,7 @@ export const AssetsTab = ({ data, providerKey, isLoading }: AssetsTabProps): Rea
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
       size: 100,
+      enableSorting: false,
       cell: ({ row }) => {
         const data = row.original
 
@@ -90,9 +91,10 @@ export const AssetsTab = ({ data, providerKey, isLoading }: AssetsTabProps): Rea
   return (
     <Grid
       autoWidth
-      isLoading={isLoading}
       columns={columns}
       data={data.map((item) => item.data)}
+      enableSorting
+      {...props}
     />
   )
 }

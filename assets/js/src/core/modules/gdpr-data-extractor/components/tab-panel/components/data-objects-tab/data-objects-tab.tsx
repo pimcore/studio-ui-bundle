@@ -27,7 +27,7 @@ type DataObjectTable = DataObjectRow['data'] & {
 export interface DataObjectsTabProps extends GDPRProviderTabProps<DataObjectRow> {
 }
 
-export const DataObjectsTab = ({ data, providerKey, isLoading }: DataObjectsTabProps): React.JSX.Element => {
+export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const columnHelper = createColumnHelper<DataObjectTable>()
@@ -60,6 +60,7 @@ export const DataObjectsTab = ({ data, providerKey, isLoading }: DataObjectsTabP
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
       size: 100,
+      enableSorting: false,
       cell: ({ row }) => {
         const data = row.original
 
@@ -90,9 +91,10 @@ export const DataObjectsTab = ({ data, providerKey, isLoading }: DataObjectsTabP
   return (
     <Grid
       autoWidth
-      isLoading={isLoading}
       columns={columns}
       data={data.map((item) => item.data)}
+      enableSorting
+      {...props}
     />
   )
 }

@@ -19,6 +19,7 @@ import { isEmpty } from "lodash"
 export interface SearchOverrides {
   provider?: string,
   columnFilters?: ColumnFilter[]
+  sortFilter?: SortFilter
 }
 
 export const GDPRDataExtractorContainer = (): React.JSX.Element => {
@@ -41,6 +42,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const executeSearch = (overrides?: SearchOverrides): void => {
     const currentProvider = overrides?.provider ?? provider
     const currentColumnFilters = overrides?.columnFilters ?? columnFilters
+    const currentSortFilter = overrides?.sortFilter ?? sortFilter
 
     if (currentProvider === '' || isEmpty(currentColumnFilters)) return
 
@@ -51,7 +53,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           page,
           pageSize,
           columnFilters: currentColumnFilters,
-          sortFilter
+          sortFilter: currentSortFilter
         }
       }
     })
@@ -133,6 +135,11 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
             executeSearch({ provider: providerKey })
           }}
           refresh={executeSearch}
+          sortFilter={sortFilter}
+          onSortingChange={(sortFilter) => {
+            setSortFilter(sortFilter!)
+            executeSearch({ sortFilter: sortFilter! })
+          }}
         />
       </Content>
     </ContentLayout>
