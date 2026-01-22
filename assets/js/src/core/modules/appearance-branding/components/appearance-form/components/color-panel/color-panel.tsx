@@ -14,6 +14,7 @@ import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { FastColor } from '@ant-design/fast-color'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -23,12 +24,13 @@ export const ColorPanel = (): React.JSX.Element => {
     if (color?.cleared) {
       return null
     }
+    
     if (color?.metaColor) {
-      const { r, g, b } = color.metaColor
-      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+      const { r, g, b, a = 1 } = color.metaColor
+      return new FastColor({ r, g, b, a }).toHexString()
     }
 
-    return color || null
+    return color ? new FastColor(color).toHexString() : null
   }
 
   return (
