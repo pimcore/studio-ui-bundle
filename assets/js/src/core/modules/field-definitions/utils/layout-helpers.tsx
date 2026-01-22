@@ -87,7 +87,7 @@ export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][
         ? (
           <Icon
             { ...dynType.getIcon() }
-            iconColorGroup="fieldDefinition"
+            iconColorGroup={['fieldDefinition_' + dynType.id, 'fieldDefinition']}
           />
           )
         : undefined,
