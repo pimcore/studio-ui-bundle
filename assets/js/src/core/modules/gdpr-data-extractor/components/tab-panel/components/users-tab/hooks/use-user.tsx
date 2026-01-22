@@ -30,9 +30,7 @@ export const useUser = (): UseUserReturn => {
   const deleteUser = (id: number, label: string, onFinish?: () => void): void => {
     modal.confirm({
       title: t('user-management.remove-user'),
-      content: <>
-        <span>{t('user-management.remove-user.text', { name: label })}</span>
-      </>,
+      content: <span>{t('user-management.remove-user.text', { name: label })}</span>,
       okText: t('element.delete.confirmation.ok'),
       onOk: async () => {
         setIsLoading(true)

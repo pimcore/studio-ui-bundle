@@ -31,14 +31,15 @@ export interface GDPRProviderTabProps<T> {
 
 interface TabpanelProps {
   sortFilter: SortFilter
-  data?: GdprSearchDataApiResponse['items']
+  providerKey: string
+  data: GdprSearchDataApiResponse['items']
   onProviderChange?: (providerKey: string) => void
   onSortingChange?: (sortFilter: SortFilter | null) => void
   isLoading?: boolean
   refresh?: (overrides?: SearchOverrides) => void
 }
 
-export const Tabpanel = ({ data, onProviderChange, isLoading, onSortingChange, sortFilter, ...props }: TabpanelProps): React.JSX.Element => {
+export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, onSortingChange, sortFilter, ...props }: TabpanelProps): React.JSX.Element => {
   const gdprProviderRegistry = container.get<DynamicTypeGDPRProviderRegistry>(serviceIds['DynamicTypes/GDPRProviderRegistry'])
   const { data: providerData, isLoading: isProvidersLoading } = useGdprListProvidersQuery()
 
@@ -50,7 +51,9 @@ export const Tabpanel = ({ data, onProviderChange, isLoading, onSortingChange, s
         return null
       }
 
-      const tabData = data?.find((d) => d.providerKey === provider.key)?.results ?? []
+      const tabData = provider.key === providerKey
+        ? data
+        : []
 
       const item: TabpanelItem = {
         key: provider.key,

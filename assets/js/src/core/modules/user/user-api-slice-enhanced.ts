@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags, providingTags, Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
@@ -65,7 +65,6 @@ const api = baseApi.enhanceEndpoints({
         let detailTags: Tag[] = []
         if (result !== undefined) {
           detailTags = result?.items.flatMap((item) => providingTags.USER_DETAIL(item.id))
-
         }
 
         return [

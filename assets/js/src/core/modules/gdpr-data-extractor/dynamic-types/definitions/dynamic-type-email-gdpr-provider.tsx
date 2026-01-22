@@ -9,9 +9,8 @@
  */
 
 import React from 'react'
-import { AssetsTab, type AssetsTabProps } from '../../components/tab-panel/components/assets-tab/assets-tab'
-import { DynamicTypeAbstractGDPRProvider } from './dynamic-type-abstract-gdpr-provider'
 import { type GDPRProviderTabProps } from '../../components/tab-panel/tab-panel'
+import { DynamicTypeAbstractGDPRProvider } from './dynamic-type-abstract-gdpr-provider'
 
 export class DynamicTypeEmailsGDPRProvider extends DynamicTypeAbstractGDPRProvider {
   readonly id: string = 'sent_mails'
