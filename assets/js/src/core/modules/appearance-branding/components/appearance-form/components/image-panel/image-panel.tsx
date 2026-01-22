@@ -50,7 +50,7 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
                 id: value.id,
                 type: value.type ?? 'asset',
                 subtype: 'image', // Default subtype for images
-                fullPath: value.fullPath,
+                fullPath: value.fullPath
               }
             : null
         } }
