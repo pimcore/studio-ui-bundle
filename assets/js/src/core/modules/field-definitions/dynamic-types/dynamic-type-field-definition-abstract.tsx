@@ -27,6 +27,8 @@ export interface FieldDefinitionContext extends Record<string, any> {
 
 export interface FieldDefinitionAbstractFormFieldsProps {
   context: FieldDefinitionContext
+  id: string
+  type: string
 }
 
 export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbstract {
@@ -52,6 +54,16 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return []
   }
 
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    const isCustomLayout = props.area.includes('custom-layout')
+
+    if (isCustomLayout) {
+      return ['group:layout']
+    }
+
+    return this.getAllowedChildTags(props)
+  }
+
   getValidChildTags (props: FieldDefinitionContext): string[] {
     const allowedChildTags = this.getAllowedChildTags(props)
     const validChildTags = this.computeValidTags(allowedChildTags, props)
@@ -62,6 +74,12 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     const convertibleTags = this.getConvertibleTags(props)
     const validConvertibleTags = this.computeValidTags(convertibleTags, props).filter(tag => tag !== this.id)
     return validConvertibleTags
+  }
+
+  getValidDropdownTags (props: FieldDefinitionContext): string[] {
+    const dropdownTags = this.getDropdownTags(props)
+    const validDropdownTags = this.computeValidTags(dropdownTags, props)
+    return validDropdownTags
   }
 
   isValid (data: FieldDefinitionDataAbstract, context: FieldDefinitionContext): boolean {

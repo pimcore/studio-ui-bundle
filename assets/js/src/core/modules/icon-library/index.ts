@@ -85,6 +85,7 @@ import cut from '@Pimcore/assets/icons/cut.inline.svg?react'
 import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg?react'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg?react'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg?react'
+import dataObjectsImporter from '@Pimcore/assets/icons/data-objects-importer.inline.svg?react'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg?react'
 import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg?react'
 import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
@@ -120,6 +121,7 @@ import eye from '@Pimcore/assets/icons/eye.inline.svg?react'
 import factory from '@Pimcore/assets/icons/factory.inline.svg?react'
 import favorites from '@Pimcore/assets/icons/favorites.inline.svg?react'
 import fieldCollectionField from '@Pimcore/assets/icons/field-collection-field.inline.svg?react'
+import fileExport from '@Pimcore/assets/icons/file-export.inline.svg?react'
 import fileLocked from '@Pimcore/assets/icons/file-locked.inline.svg?react'
 import filter from '@Pimcore/assets/icons/filter.inline.svg?react'
 import flag from '@Pimcore/assets/icons/flag.inline.svg?react'
@@ -129,6 +131,7 @@ import folderPlus from '@Pimcore/assets/icons/folder-plus.inline.svg?react'
 import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg?react'
 import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
+import graphql from '@Pimcore/assets/icons/graphql.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
 import group from '@Pimcore/assets/icons/group.inline.svg?react'
 import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
@@ -204,6 +207,7 @@ import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inlin
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
+import productsup from '@Pimcore/assets/icons/productsup.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
@@ -234,6 +238,7 @@ import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shieldPlus from '@Pimcore/assets/icons/shield-plus.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
+import simpleRestService from '@Pimcore/assets/icons/simple-rest-service.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
@@ -557,6 +562,10 @@ moduleSystem.registerModule({
       component: dataObject
     })
     iconLibrary.register({
+      name: 'data-objects-importer',
+      component: dataObjectsImporter
+    })
+    iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
     })
@@ -697,6 +706,10 @@ moduleSystem.registerModule({
       component: fieldCollectionField
     })
     iconLibrary.register({
+      name: 'file-export',
+      component: fileExport
+    })
+    iconLibrary.register({
       name: 'file-locked',
       component: fileLocked
     })
@@ -731,6 +744,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'graph',
       component: graph
+    })
+    iconLibrary.register({
+      name: 'graphql',
+      component: graphql
     })
     iconLibrary.register({
       name: 'group-by-keys',
@@ -1033,6 +1050,10 @@ moduleSystem.registerModule({
       component: printpage
     })
     iconLibrary.register({
+      name: 'productsup',
+      component: productsup
+    })
+    iconLibrary.register({
       name: 'properties',
       component: properties
     })
@@ -1151,6 +1172,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'show-details',
       component: showDetails
+    })
+    iconLibrary.register({
+      name: 'simple-rest-service',
+      component: simpleRestService
     })
     iconLibrary.register({
       name: 'snippet',

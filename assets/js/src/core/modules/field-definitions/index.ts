@@ -18,6 +18,10 @@ moduleSystem.registerModule({
 
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Block'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Input'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Textarea'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Wysiwyg'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Password'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/InputQuantityValue'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Panel'))
   }
 })
