@@ -49,15 +49,15 @@ export type GdprListProvidersApiResponse = /** status 200 Successfully retrieved
 export type GdprListProvidersApiArg = void;
 export type GdprSearchDataApiResponse =
     /** status 200 Successfully retrieved the list of matching data from all searched providers. */ {
-    totalItems: number;
-    /** List of search results, grouped by provider */
-    items: {
-        /** The key of the provider these results came from */
-        providerKey: string;
-        /** The list of results found by this provider */
-        results: GdprDataRow[];
-    }[];
-};
+        totalItems: number;
+        /** List of search results, grouped by provider */
+        items: {
+            /** The key of the provider these results came from */
+            providerKey: string;
+            /** The list of results found by this provider */
+            results: GdprDataRow[];
+        }[];
+    };
 export type GdprSearchDataApiArg = {
     /** Define the data provider to search in. */
     provider?: string;
