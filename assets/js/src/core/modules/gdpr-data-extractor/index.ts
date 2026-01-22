@@ -20,7 +20,7 @@ import { type DynamicTypeAssetsGDPRProvider } from './dynamic-types/definitions/
 import { type DynamicTypeUsersGDPRProvider } from './dynamic-types/definitions/dynamic-type-users-gdpr-provider'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import { DynamicTypeEmailsGDPRProvider } from './dynamic-types/definitions/dynamic-type-email-gdpr-provider'
+import { type DynamicTypeEmailsGDPRProvider } from './dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 
 moduleSystem.registerModule({
   onInit: () => {

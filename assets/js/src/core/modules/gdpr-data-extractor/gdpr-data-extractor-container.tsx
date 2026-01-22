@@ -29,6 +29,8 @@ export interface SearchOverrides {
   provider?: string
   columnFilters?: ColumnFilter[]
   sortFilter?: SortFilter
+  page?: number
+  pageSize?: number
 }
 
 export const GDPRDataExtractorContainer = (): React.JSX.Element => {
@@ -52,6 +54,8 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
     const currentProvider = overrides?.provider ?? provider
     const currentColumnFilters = overrides?.columnFilters ?? columnFilters
     const currentSortFilter = overrides?.sortFilter ?? sortFilter
+    const currentPage = overrides?.page ?? page
+    const currentPageSize = overrides?.pageSize ?? pageSize
 
     if (currentProvider === '' || isEmpty(currentColumnFilters)) return
 
@@ -59,8 +63,8 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       provider: currentProvider,
       body: {
         filters: {
-          page,
-          pageSize,
+          page: currentPage,
+          pageSize: currentPageSize,
           columnFilters: currentColumnFilters,
           sortFilter: currentSortFilter
         }
@@ -73,29 +77,30 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar
           justify="end"
-          padding={ {
+          padding={{
             x: 'small',
             y: 'extra-small'
-          } }
+          }}
           theme="secondary"
         >
           <Flex align="center">
             <Split>
               <IconButton
-                disabled={ isLoading || isFetching || provider === '' }
-                icon={ { value: 'refresh' } }
-                onClick={ () => { executeSearch() } }
+                disabled={isLoading || isFetching || provider === ''}
+                icon={{ value: 'refresh' }}
+                onClick={() => { executeSearch() }}
               />
               <Pagination
-                current={ page }
+                current={page}
                 hideOnSinglePage
-                onChange={ (page, pageSize) => {
+                onChange={(page, pageSize) => {
                   setPage(page)
                   setPageSize(pageSize)
-                } }
+                  executeSearch({ page, pageSize })
+                }}
                 showSizeChanger
-                showTotal={ (total) => t('pagination.show-total', { total }) }
-                total={ data?.totalItems ?? 0 }
+                showTotal={(total) => t('pagination.show-total', { total })}
+                total={data?.totalItems ?? 0}
               />
             </Split>
           </Flex>
@@ -104,13 +109,13 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 4 }>
+          <Flex gap={4}>
             <Title>
               {t('gdpr-extractor.title')}
             </Title>
@@ -119,36 +124,37 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        gap={ 'extra-small' }
+        gap={'extra-small'}
         padded
-        padding={ {
+        padding={{
           x: 'extra-small',
           y: 'extra-small'
-        } }
+        }}
       >
         <SearchForm
-          isLoading={ isLoading || isFetching }
-          onSearch={ (columnFilters) => {
+          isLoading={isLoading || isFetching}
+          onSearch={(columnFilters) => {
             setColumnFilters(columnFilters)
             executeSearch({ columnFilters })
-          } }
-          onValueChange={ (filters) => {
+          }}
+          onValueChange={(filters) => {
             debouncedSetColumnFilters(filters)
-          } }
+          }}
         />
         <Tabpanel
-          data={ data?.items }
-          isLoading={ isLoading || isFetching }
-          onProviderChange={ (providerKey) => {
+          data={data?.items ?? []}
+          isLoading={isLoading || isFetching}
+          providerKey={provider}
+          onProviderChange={(providerKey) => {
             setProvider(providerKey)
             executeSearch({ provider: providerKey })
-          } }
-          onSortingChange={ (sortFilter) => {
+          }}
+          onSortingChange={(sortFilter) => {
             setSortFilter(sortFilter!)
             executeSearch({ sortFilter: sortFilter! })
-          } }
-          refresh={ executeSearch }
-          sortFilter={ sortFilter }
+          }}
+          refresh={executeSearch}
+          sortFilter={sortFilter}
         />
       </Content>
     </ContentLayout>

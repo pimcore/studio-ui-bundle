@@ -50,13 +50,7 @@ export type GdprListProvidersApiArg = void;
 export type GdprSearchDataApiResponse =
     /** status 200 Successfully retrieved the list of matching data from all searched providers. */ {
         totalItems: number;
-        /** List of search results, grouped by provider */
-        items: {
-            /** The key of the provider these results came from */
-            providerKey: string;
-            /** The list of results found by this provider */
-            results: GdprDataRow[];
-        }[];
+        items: GdprDataRow[];
     };
 export type GdprSearchDataApiArg = {
     /** Define the data provider to search in. */
@@ -93,6 +87,10 @@ export type GdprDataProvider = {
     deleteOperationId: string;
 };
 export type GdprDataRow = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Data row values */
     data: object;
 };
