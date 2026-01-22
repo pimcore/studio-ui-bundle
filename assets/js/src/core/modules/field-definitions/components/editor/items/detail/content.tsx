@@ -9,11 +9,12 @@
  */
 
 import { LayoutForm } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content/layout-form'
-import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content } from '@sdk/components'
 import React from 'react'
 
 export const DetailContent = (): React.JSX.Element => {
+  const { useLayout } = useSettings()
   const { currentFieldDefinitionId } = useLayout()
 
   return (

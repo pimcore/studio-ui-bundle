@@ -8,59 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCustomLayoutModal } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-provider'
-import { LayoutProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
-import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
-import { type Layout } from '@sdk/api/class-definition'
-import { ConfigLayout, Modal } from '@sdk/components'
+import { create } from '@Pimcore/components/modal/factory/modal-factory'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import React from 'react'
 
-export const CustomLayoutModal = (): React.JSX.Element => {
-  const { isOpen, closeModal } = useCustomLayoutModal()
+const {
+  Modal: ModalTemplate,
+  Provider: CustomLayoutModalProvider,
+  useModal: useCustomLayoutModal
+} = create({ defaultProps: { title: 'Custom Layouts', children: <></>, size: 'XXL', footer: null } })
 
-  const defaultLayout = {
-    name: 'pimcore_root',
-    children: [],
-    fieldType: 'panel',
-    bodyStyle: '',
-    border: false,
-    collapsible: false,
-    title: '',
-    dataType: 'layout',
-    collapsed: false,
-    height: 0,
-    width: 0,
-    icon: { type: 'name', value: 'none' },
-    labelAlign: 'left',
-    labelWidth: 100,
-    layout: null,
-    locked: false,
-    region: '',
-    type: 'layout',
-    additionalAttributes: {}
-  }
+export { CustomLayoutModalProvider, useCustomLayoutModal }
+
+export const CustomLayoutModal = (): React.JSX.Element => {
+  const settings = useSettings()
+  const { open } = useCustomLayoutModal()
 
   return (
-    <Modal
-      onCancel={ closeModal }
-      open={ isOpen }
-      size="XXL"
-    >
-      <ConfigLayout
-        leftItem={ {
-          children: (
-            <DetailSidebar allowExternalDrag />
-          )
-        } }
-
-        rightItem={ {
-          children: (
-            <LayoutProvider layout={ defaultLayout as Layout }>
-              <DetailSidebar allowExternalDrop />
-            </LayoutProvider>
-          )
-        } }
-      />
-    </Modal>
+    <>
+      { open && (
+        <ModalTemplate>
+          {settings.customLayouts?.ModalContent}
+        </ModalTemplate>
+      )}
+    </>
   )
 }

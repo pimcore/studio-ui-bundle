@@ -240,7 +240,8 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           docTypeId: null,
           language: values.language,
           translationsSourceId: Number(document.id),
-          inheritanceSourceId: useInheritance ? Number(document.id) : null
+          inheritanceSourceId: useInheritance ? Number(document.id) : null,
+          template: null
         }
       }).unwrap()
 

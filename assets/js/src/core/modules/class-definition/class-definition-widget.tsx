@@ -13,12 +13,16 @@ import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import { useClassDefinitionCollectionQuery, useClassDefinitionDeleteMutation, useClassDefinitionGetByIdQuery, useClassDefinitionGetLayoutByIdQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { ClassDefinitionsAddModal } from '@Pimcore/modules/class-definition/components/class-editor/add-modal'
 import { useClassDefinitionUpdate } from '@Pimcore/modules/class-definition/components/class-editor/use-class-definition-update'
+import { CustomLayoutEditor } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/custom-layout-editor'
 
 export const ClassDefinitionWidget = (): React.JSX.Element => {
   return (
     <Editor
       AddModal={ ClassDefinitionsAddModal }
       area={ ['class'] }
+      customLayouts={ {
+        ModalContent: <CustomLayoutEditor />
+      } }
       useDetailGeneralSettingsQuery={ useClassDefinitionGetByIdQuery }
       useDetailLayoutQuery={ useClassDefinitionGetLayoutByIdQuery }
       useDetailUpdateMutation={ useClassDefinitionUpdate }
