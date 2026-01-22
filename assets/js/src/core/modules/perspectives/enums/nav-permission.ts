@@ -30,6 +30,7 @@ export enum NavPermission {
 
   TranslationsHidden = 'translations.hidden',
   Translations = 'translations.translations',
+  Appearance = 'system.appearanceBranding',
 
   ReportingHidden = 'reporting.hidden',
   Reports = 'reporting.reports',

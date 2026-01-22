@@ -49,6 +49,15 @@ export const useStyles = createStyles(({ css, token }) => {
     gridTable: css`
       min-height: 300px;
       overflow: auto;
+    `,
+
+    stackItem: css`
+      display: block;
+      max-width: 100%;
+      width: min-content;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     `
   }
 })
