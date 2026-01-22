@@ -397,7 +397,7 @@ export type DataObjectGetAvailableGridColumnsForRelationApiResponse =
 export type DataObjectGetAvailableGridColumnsForRelationApiArg = {
     /** Identifies the class name for which the columns should be retrieved. */
     classId?: string;
-    /** relationField as dot notation, e.g. "myBlock.mySubRelationField" */
+    /** relationField */
     relationField?: string;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
