@@ -53,6 +53,6 @@ export const ReportSidebar = (): React.JSX.Element => {
   }
 
   return (
-    <Sidebar { ...sidebarProps } />
+    <Sidebar sizing='medium' { ...sidebarProps } />
   )
 }
