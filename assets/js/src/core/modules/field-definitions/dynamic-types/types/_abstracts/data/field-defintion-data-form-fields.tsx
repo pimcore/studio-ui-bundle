@@ -11,13 +11,18 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { kebabCase } from 'lodash'
 
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
+  const typeTranslation = t('field-definition.' + kebabCase(props.type))
+  const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
   return (
     <>
-      <FormKit.Panel title={ `${props.id} (Type: ${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }>
+      <FormKit.Panel title={ panelTitle }>
         <Form.Item
           label="name"
           name="name"

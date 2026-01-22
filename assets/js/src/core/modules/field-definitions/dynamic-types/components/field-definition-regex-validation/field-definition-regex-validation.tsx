@@ -9,25 +9,11 @@
  */
 
 import { Form, FormKit, Input, Select } from '@sdk/components'
-import React, { useMemo } from 'react'
-import { useStyles } from './field-definition-regex-validation.styles'
+import React from 'react'
 
 export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
-  const { styles } = useStyles()
   const regex = Form.useWatch('regex')
   const regexFlags = Form.useWatch('regexFlags')
-  const regexTestString = Form.useWatch('regexTestString')
-
-  const validationClass = useMemo(() => {
-    try {
-      const flags = typeof regexFlags === 'string' ? regexFlags : ''
-
-      const re = new RegExp(regex as string, flags)
-      return re.test(regexTestString as string) ? styles.testStringSuccess : styles.testStringError
-    } catch (e) {
-      return styles.testStringError
-    }
-  }, [regex, regexFlags, regexTestString, styles])
 
   const flagOptions = [
     { label: 'global', value: 'g' },
@@ -39,7 +25,11 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
 
   return (
     <>
-      <FormKit.Panel title="Regular Expression Validation">
+      <FormKit.Panel
+        border
+        theme="fieldset"
+        title="Regular Expression Validation"
+      >
         <Form.Item
           label="regex"
           name="regex"
@@ -60,10 +50,29 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
         </Form.Item>
 
         <Form.Item
+          dependencies={ ['regex', 'regexFlags'] }
           label="test_string"
           name="regexTestString"
+          rules={ [
+            () => ({
+              async validator (_, value: string) {
+                try {
+                  const flags = typeof regexFlags === 'string' ? regexFlags : (Array.isArray(regexFlags) ? regexFlags.join('') : '')
+                  const re = new RegExp(regex as string, flags)
+                  if (re.test(value)) {
+                    return
+                  }
+                } catch (e) {
+                  // Fallback for invalid regex
+                }
+
+                throw new Error('regex_validation_error_message')
+              }
+            })
+          ] }
+          validateTrigger={ ['onChange', 'onBlur'] }
         >
-          <Input className={ validationClass } />
+          <Input />
         </Form.Item>
       </FormKit.Panel>
     </>

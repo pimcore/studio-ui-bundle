@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { FieldDefinitionRegexValidation } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-regex-validation'
+import { FieldDefinitionRegexValidation } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-regex-validation/field-definition-regex-validation'
 import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
 
@@ -63,13 +63,10 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
           </Form.Item>
         </>
         )}
-      </FormKit.Panel>
 
-      {!isCustomLayout && (
-      <>
         <FieldDefinitionRegexValidation />
-      </>
-      )}
+
+      </FormKit.Panel>
 
     </>
   )

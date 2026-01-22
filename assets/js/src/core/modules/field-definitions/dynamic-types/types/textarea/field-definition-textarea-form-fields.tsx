@@ -54,12 +54,6 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
         <Form.Item name="excludeFromSearchIndex">
           <Switch labelRight="exclude_from_search_index" />
         </Form.Item>
-
-        {!isCustomLayout && (
-        <>
-
-        </>
-        )}
       </FormKit.Panel>
     </>
   )
