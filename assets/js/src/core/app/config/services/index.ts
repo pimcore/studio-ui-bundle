@@ -281,6 +281,7 @@ import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extr
 import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
+import { DynamicTypeEmailsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -642,3 +643,4 @@ container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGD
 container.bind(serviceIds['DynamicTypes/GDPRProvider/DataObjects']).to(DynamicTypeDataObjectGDPRProvider).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GDPRProvider/Assets']).to(DynamicTypeAssetsGDPRProvider).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GDPRProvider/Users']).to(DynamicTypeUsersGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Emails']).to(DynamicTypeEmailsGDPRProvider).inSingletonScope()

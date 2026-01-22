@@ -1,15 +1,26 @@
-import { serviceIds } from "@Pimcore/app/config/services/service-ids"
-import { container } from "@Pimcore/app/depency-injection"
-import { moduleSystem } from "@Pimcore/app/module-system/module-system"
-import { WidgetRegistry } from "@sdk/modules/widget-manager"
-import { GDPRDataExtractorContainer } from "./gdpr-data-extractor-container"
-import { MainNavRegistry } from "../app/base-layout/main-nav/services/main-nav-registry"
-import { DynamicTypeGDPRProviderRegistry } from "./dynamic-types/registry/dynamic-type-gdpr-provider-registry"
-import { DynamicTypeDataObjectGDPRProvider } from "./dynamic-types/definitions/dynamic-type-data-object-gdpr-provider"
-import { DynamicTypeAssetsGDPRProvider } from "./dynamic-types/definitions/dynamic-type-assets-gdpr-provider"
-import { DynamicTypeUsersGDPRProvider } from "./dynamic-types/definitions/dynamic-type-users-gdpr-provider"
-import { UserPermission } from "../auth/enums/user-permission"
-import { NavPermission } from "../perspectives/enums/nav-permission"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { type WidgetRegistry } from '@sdk/modules/widget-manager'
+import { GDPRDataExtractorContainer } from './gdpr-data-extractor-container'
+import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { type DynamicTypeGDPRProviderRegistry } from './dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { type DynamicTypeDataObjectGDPRProvider } from './dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
+import { type DynamicTypeAssetsGDPRProvider } from './dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
+import { type DynamicTypeUsersGDPRProvider } from './dynamic-types/definitions/dynamic-type-users-gdpr-provider'
+import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
+import { DynamicTypeEmailsGDPRProvider } from './dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -52,6 +63,10 @@ moduleSystem.registerModule({
 
     gdprProviderRegistry.registerDynamicType(
       container.get<DynamicTypeUsersGDPRProvider>(serviceIds['DynamicTypes/GDPRProvider/Users'])
+    )
+
+    gdprProviderRegistry.registerDynamicType(
+      container.get<DynamicTypeEmailsGDPRProvider>(serviceIds['DynamicTypes/GDPRProvider/Emails'])
     )
   }
 })

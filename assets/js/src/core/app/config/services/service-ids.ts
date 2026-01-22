@@ -32,7 +32,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
   'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
   'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry',
-  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry',
+  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry'
 }
 
 export const serviceIds = {
@@ -370,5 +370,6 @@ export const serviceIds = {
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',
   'DynamicTypes/GDPRProvider/Assets': 'DynamicTypes/GDPRProvider/Assets',
-  'DynamicTypes/GDPRProvider/Users': 'DynamicTypes/GDPRProvider/Users'
+  'DynamicTypes/GDPRProvider/Users': 'DynamicTypes/GDPRProvider/Users',
+  'DynamicTypes/GDPRProvider/Emails': 'DynamicTypes/GDPRProvider/Emails'
 }

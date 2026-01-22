@@ -64,7 +64,7 @@ export const tagNames = {
   WIDGET_DETAIL: 'WIDGET_DETAIL',
   USERS: 'USERS',
   USER_DETAIL: 'USER_DETAIL',
-  USER_TREE: 'USER_TREE',
+  USER_TREE: 'USER_TREE'
 }
 
 export const providingTags = {

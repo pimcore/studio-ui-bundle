@@ -23,11 +23,11 @@ export interface UserDeleteJobOptions {
 export class UserDeleteJob implements JobInterface {
   private readonly id: number
 
-  constructor(options: UserDeleteJobOptions) {
+  constructor (options: UserDeleteJobOptions) {
     this.id = options.id
   }
 
-  async run(options: JobRunOptions): Promise<void> {
+  async run (options: JobRunOptions): Promise<void> {
     try {
       await this.executeDeleteRequest()
       await this.handleCompletion()
@@ -37,7 +37,7 @@ export class UserDeleteJob implements JobInterface {
     }
   }
 
-  private async executeDeleteRequest(): Promise<null> {
+  private async executeDeleteRequest (): Promise<null> {
     const response = await store.dispatch(
       userApi.endpoints.userDeleteById.initiate({
         id: this.id
@@ -51,7 +51,7 @@ export class UserDeleteJob implements JobInterface {
     return null
   }
 
-  private async handleCompletion(): Promise<void> {
+  private async handleCompletion (): Promise<void> {
     store.dispatch(
       userApi.util.invalidateTags(
         invalidatingTags.USERS()
@@ -64,14 +64,14 @@ export class UserDeleteJob implements JobInterface {
       )
     )
 
-    //clear caches -> close user tab
+    // clear caches -> close user tab
     store.dispatch(userClosed({
       id: this.id,
       allIds: store.getState().user.ids
     }))
   }
 
-  private async handleJobFailure(error: any): Promise<void> {
+  private async handleJobFailure (error: any): Promise<void> {
     console.error('User Delete job failed:', error)
   }
 }
