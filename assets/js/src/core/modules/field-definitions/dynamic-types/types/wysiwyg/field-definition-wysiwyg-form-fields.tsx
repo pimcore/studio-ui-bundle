@@ -9,10 +9,10 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, FormKit, Input, InputNumber, Switch, TextArea } from '@sdk/components'
 import React from 'react'
 
-export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionWysiwygFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
     <FormKit.Panel title="Specific Settings">
       <Form.Item
@@ -24,8 +24,29 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
       </Form.Item>
 
       <Form.Item
-        label="min_length"
-        name="minimumLength"
+        label="height"
+        name="height"
+        tooltip="height_tooltip"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="toolbar_config"
+        name="toolbarConfig"
+      >
+        <TextArea />
+      </Form.Item>
+
+      <Form.Item
+        name="excludeFromSearchIndex"
+      >
+        <Switch labelRight="exclude_from_search_index" />
+      </Form.Item>
+
+      <Form.Item
+        label="max_length"
+        name="maxCharacters"
         rules={ [{ min: 0, type: 'number' }] }
       >
         <InputNumber

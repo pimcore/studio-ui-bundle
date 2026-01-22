@@ -17,9 +17,8 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <>
-      <FormKit.Panel title="Specific Settings">
-        {!isCustomLayout && (
+    <FormKit.Panel title="Specific Settings">
+      {!isCustomLayout && (
         <>
           <Form.Item
             label="default_value"
@@ -35,21 +34,21 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
             <Input />
           </Form.Item>
         </>
-        )}
+      )}
 
-        <Form.Item
-          label="width"
-          name="width"
-          tooltip="width_tooltip"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label="width"
+        name="width"
+        tooltip="width_tooltip"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item name="showCharCount">
-          <Switch labelRight="show_char_count" />
-        </Form.Item>
+      <Form.Item name="showCharCount">
+        <Switch labelRight="show_char_count" />
+      </Form.Item>
 
-        {!isCustomLayout && (
+      {!isCustomLayout && (
         <>
           <Form.Item
             label="column_length"
@@ -62,12 +61,10 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
             />
           </Form.Item>
         </>
-        )}
+      )}
 
-        <FieldDefinitionRegexValidation />
+      <FieldDefinitionRegexValidation />
 
-      </FormKit.Panel>
-
-    </>
+    </FormKit.Panel>
   )
 }

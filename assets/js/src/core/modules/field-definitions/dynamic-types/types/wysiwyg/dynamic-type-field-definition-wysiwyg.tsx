@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionWysiwygFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/wysiwyg/field-defintion-wysiwyg-form-fields'
+import { FieldDefinitionWysiwygFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/wysiwyg/field-definition-wysiwyg-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 

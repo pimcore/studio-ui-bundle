@@ -25,57 +25,55 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
   ]
 
   return (
-    <>
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title="Regular Expression Validation"
+    <FormKit.Panel
+      border
+      theme="fieldset"
+      title="Regular Expression Validation"
+    >
+      <Form.Item
+        label="regex"
+        name="regex"
       >
-        <Form.Item
-          label="regex"
-          name="regex"
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label="regex_flags"
-          name="regexFlags"
-          tooltip="regex_flags_tooltip"
-        >
-          <Select
-            defaultValue=""
-            mode="multiple"
-            options={ flagOptions }
-          />
-        </Form.Item>
+      <Form.Item
+        label="regex_flags"
+        name="regexFlags"
+        tooltip="regex_flags_tooltip"
+      >
+        <Select
+          defaultValue=""
+          mode="multiple"
+          options={ flagOptions }
+        />
+      </Form.Item>
 
-        <Form.Item
-          dependencies={ ['regex', 'regexFlags'] }
-          label="test_string"
-          name="regexTestString"
-          rules={ [
-            () => ({
-              async validator (_, value: string) {
-                try {
-                  const flags = isArray(regexFlags) ? regexFlags.join('') : toString(regexFlags)
-                  const re = new RegExp(regex as string, flags)
-                  if (re.test(value)) {
-                    return
-                  }
-                } catch (e) {
-                  // Fallback for invalid regex
+      <Form.Item
+        dependencies={ ['regex', 'regexFlags'] }
+        label="test_string"
+        name="regexTestString"
+        rules={ [
+          () => ({
+            async validator (_, value: string) {
+              try {
+                const flags = isArray(regexFlags) ? regexFlags.join('') : toString(regexFlags)
+                const re = new RegExp(regex as string, flags)
+                if (re.test(value)) {
+                  return
                 }
-
-                throw new Error('regex_validation_error_message')
+              } catch {
+                // Fallback for invalid regex
               }
-            })
-          ] }
-          validateTrigger={ ['onChange', 'onBlur'] }
-        >
-          <Input />
-        </Form.Item>
-      </FormKit.Panel>
-    </>
+
+              throw new Error('regex_validation_error_message')
+            }
+          })
+        ] }
+        validateTrigger={ ['onChange', 'onBlur'] }
+      >
+        <Input />
+      </Form.Item>
+    </FormKit.Panel>
   )
 }

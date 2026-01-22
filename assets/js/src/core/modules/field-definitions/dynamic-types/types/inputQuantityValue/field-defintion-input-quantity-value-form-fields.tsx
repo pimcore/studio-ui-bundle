@@ -18,50 +18,48 @@ export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefiniti
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
-    <>
-      <FormKit.Panel title="Specific Settings">
-        {!isCustomLayout && (
-          <>
-            <Form.Item
-              label="width"
-              name="width"
-              tooltip="width_tooltip"
-            >
-              <Input />
-            </Form.Item>
+    <FormKit.Panel title="Specific Settings">
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label="width"
+          name="width"
+          tooltip="width_tooltip"
+        >
+          <Input />
+        </Form.Item>
 
-            <Form.Item
-              label="default_value"
-              name="defaultValue"
-            >
-              <InputNumber />
-            </Form.Item>
+        <Form.Item
+          label="default_value"
+          name="defaultValue"
+        >
+          <InputNumber />
+        </Form.Item>
 
-            <Form.Item
-              label="default_unit"
-              name="defaultUnit"
-            >
-              <Select
-                allowClear
-                options={ getSelectOptions() }
-                showSearch
-              />
-            </Form.Item>
+        <Form.Item
+          label="default_unit"
+          name="defaultUnit"
+        >
+          <Select
+            allowClear
+            options={ getSelectOptions() }
+            showSearch
+          />
+        </Form.Item>
 
-            <Form.Item
-              label="valid_units"
-              name="validUnits"
-            >
-              <Select
-                mode="multiple"
-                options={ getSelectOptions() }
-                showSearch
-              />
-            </Form.Item>
-          </>
-        )}
+        <Form.Item
+          label="valid_units"
+          name="validUnits"
+        >
+          <Select
+            mode="multiple"
+            options={ getSelectOptions() }
+            showSearch
+          />
+        </Form.Item>
+      </>
+      )}
 
-      </FormKit.Panel>
-    </>
+    </FormKit.Panel>
   )
 }
