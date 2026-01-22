@@ -1,6 +1,16 @@
-import { IconButton } from "@sdk/components"
-import React from "react"
-import { useLazyGdprExportQuery } from "../../gdpr-data-extractor-slice-enhanced"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { IconButton } from '@sdk/components'
+import React from 'react'
+import { useLazyGdprExportQuery } from '../../gdpr-data-extractor-slice-enhanced'
 
 interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
@@ -32,10 +42,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'export' }}
-      loading={isLoading || loading}
-      onClick={handleExport}
+      { ...iconButtonProps }
+      icon={ { value: 'export' } }
+      loading={ isLoading || loading }
+      onClick={ handleExport }
     />
   )
 }

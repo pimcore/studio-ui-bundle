@@ -1,23 +1,32 @@
-import { ContentLayout } from "@Pimcore/components/content-layout/content-layout"
-import { Content } from "@Pimcore/components/content/content"
-import { Flex } from "@Pimcore/components/flex/flex"
-import { IconButton } from "@Pimcore/components/icon-button/icon-button"
-import { Pagination } from "@Pimcore/components/pagination/pagination"
-import { Split } from "@Pimcore/components/split/split"
-import { Title } from "@Pimcore/components/title/title"
-import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import React, { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { debounce } from "lodash"
-import { ColumnFilter } from "../app/types/column-filter"
-import { SortFilter } from "../app/types/sort-filter"
-import { SearchForm } from "./components/search-form/search-form"
-import { Tabpanel } from "./components/tab-panel/tab-panel"
-import { useLazyGdprSearchDataQuery } from "./gdpr-data-extractor-slice-enhanced"
-import { isEmpty } from "lodash"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
+import { Split } from '@Pimcore/components/split/split'
+import { Title } from '@Pimcore/components/title/title'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { debounce, isEmpty } from 'lodash'
+import { type ColumnFilter } from '../app/types/column-filter'
+import { type SortFilter } from '../app/types/sort-filter'
+import { SearchForm } from './components/search-form/search-form'
+import { Tabpanel } from './components/tab-panel/tab-panel'
+import { useLazyGdprSearchDataQuery } from './gdpr-data-extractor-slice-enhanced'
 
 export interface SearchOverrides {
-  provider?: string,
+  provider?: string
   columnFilters?: ColumnFilter[]
   sortFilter?: SortFilter
 }
@@ -46,7 +55,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
 
     if (currentProvider === '' || isEmpty(currentColumnFilters)) return
 
-    trigger({
+    void trigger({
       provider: currentProvider,
       body: {
         filters: {
@@ -63,30 +72,30 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar
-          padding={{
+          justify="end"
+          padding={ {
             x: 'small',
             y: 'extra-small'
-          }}
+          } }
           theme="secondary"
-          justify="end"
         >
           <Flex align="center">
             <Split>
               <IconButton
-                disabled={isLoading || isFetching || provider === ''}
-                icon={{ value: 'refresh' }}
-                onClick={() => executeSearch()}
+                disabled={ isLoading || isFetching || provider === '' }
+                icon={ { value: 'refresh' } }
+                onClick={ () => { executeSearch() } }
               />
               <Pagination
-                current={page}
-                onChange={(page, pageSize) => {
+                current={ page }
+                hideOnSinglePage
+                onChange={ (page, pageSize) => {
                   setPage(page)
                   setPageSize(pageSize)
-                }}
+                } }
                 showSizeChanger
-                showTotal={(total) => t('pagination.show-total', { total })}
-                total={data?.totalItems ?? 0}
-                hideOnSinglePage
+                showTotal={ (total) => t('pagination.show-total', { total }) }
+                total={ data?.totalItems ?? 0 }
               />
             </Split>
           </Flex>
@@ -95,13 +104,13 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={{
+          margin={ {
             x: 'mini',
             y: 'none'
-          }}
+          } }
           theme='secondary'
         >
-          <Flex gap={4}>
+          <Flex gap={ 4 }>
             <Title>
               {t('gdpr-extractor.title')}
             </Title>
@@ -110,36 +119,36 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        gap={'extra-small'}
+        gap={ 'extra-small' }
         padded
-        padding={{
+        padding={ {
           x: 'extra-small',
           y: 'extra-small'
-        }}
+        } }
       >
         <SearchForm
-          isLoading={isLoading || isFetching}
-          onValueChange={(filters) => {
-            debouncedSetColumnFilters(filters)
-          }}
-          onSearch={(columnFilters) => {
+          isLoading={ isLoading || isFetching }
+          onSearch={ (columnFilters) => {
             setColumnFilters(columnFilters)
             executeSearch({ columnFilters })
-          }}
+          } }
+          onValueChange={ (filters) => {
+            debouncedSetColumnFilters(filters)
+          } }
         />
         <Tabpanel
-          isLoading={isLoading || isFetching}
-          data={data?.items}
-          onProviderChange={(providerKey) => {
+          data={ data?.items }
+          isLoading={ isLoading || isFetching }
+          onProviderChange={ (providerKey) => {
             setProvider(providerKey)
             executeSearch({ provider: providerKey })
-          }}
-          refresh={executeSearch}
-          sortFilter={sortFilter}
-          onSortingChange={(sortFilter) => {
+          } }
+          onSortingChange={ (sortFilter) => {
             setSortFilter(sortFilter!)
             executeSearch({ sortFilter: sortFilter! })
-          }}
+          } }
+          refresh={ executeSearch }
+          sortFilter={ sortFilter }
         />
       </Content>
     </ContentLayout>

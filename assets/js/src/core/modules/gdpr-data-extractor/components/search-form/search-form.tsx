@@ -1,9 +1,19 @@
-import { ColumnFilter, NumberColumnFilter, StringColumnFilter } from "@Pimcore/modules/app/types/column-filter"
-import { Button, Flex, Form, FormKit, Input } from "@sdk/components"
-import _, { isNil } from "lodash"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { useStyle } from "./search-form.styles"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type ColumnFilter, type NumberColumnFilter, type StringColumnFilter } from '@Pimcore/modules/app/types/column-filter'
+import { Button, Flex, Form, FormKit, Input } from '@sdk/components'
+import { isNil } from 'lodash'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useStyle } from './search-form.styles'
 
 interface GdprSearchFormValues {
   id?: string
@@ -47,7 +57,7 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
         layout: 'horizontal',
         className: styles.form,
         onValuesChange: (_, values) => {
-          onValueChange?.(createSearchFilters(values))
+          onValueChange?.(createSearchFilters(values as GdprSearchFormValues))
         },
         onFinish: (values: GdprSearchFormValues) => {
           onSearch?.(createSearchFilters(values))
@@ -76,8 +86,8 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
       </Form.Item>
 
       <Flex
-        gap={'extra-small'}
         align="end"
+        gap={'extra-small'}
       >
         <Form.Item
           label={t('gdpr-extractor.search-form.field.email')}
@@ -88,8 +98,8 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
 
         <Button
           htmlType="submit"
-          type="primary"
           loading={isLoading}
+          type="primary"
         >
           {t('gdpr-extractor.search-form.submit')}
         </Button>

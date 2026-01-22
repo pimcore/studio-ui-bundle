@@ -1,14 +1,23 @@
-import { Grid } from "@Pimcore/components/grid/grid"
-import { GdprDataRow } from "@Pimcore/modules/gdpr-data-extractor/gdpr-data-extractor-slice-enhanced"
-import { createColumnHelper } from "@tanstack/react-table"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { GDPRProviderTabProps } from "../../tab-panel"
-import { Flex } from "@Pimcore/components/flex/flex"
-import { ExportButton } from "../../../export-button/export-button"
-import { OpenButton } from "../../../open-button/open-button"
-import { elementTypes } from "@sdk/modules/data-object"
-import { DeleteButton } from "../../../delete-button/delete-button"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { elementTypes } from '@sdk/modules/data-object'
+import { createColumnHelper } from '@tanstack/react-table'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { DeleteButton } from '../../../delete-button/delete-button'
+import { ExportButton } from '../../../export-button/export-button'
+import { OpenButton } from '../../../open-button/open-button'
+import { type GDPRProviderTabProps } from '../../tab-panel'
 
 interface DataObjectRow {
   data: {
@@ -72,15 +81,15 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
             />
 
             <OpenButton
-              id={data.id}
               elementType={elementTypes.dataObject}
+              id={data.id}
             />
 
             <DeleteButton
-              id={data.id}
+              disabled={!data.__gdprIsDeletable}
               elementType={elementTypes.dataObject}
+              id={data.id}
               label={data.fullPath}
-              disabled={data.__gdprIsDeletable !== true}
             />
           </Flex>
         )

@@ -1,13 +1,23 @@
-import { Grid } from "@Pimcore/components/grid/grid"
-import { createColumnHelper } from "@tanstack/react-table"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { GDPRProviderTabProps } from "../../tab-panel"
-import { Flex } from "@Pimcore/components/flex/flex"
-import { ExportButton } from "../../../export-button/export-button"
-import { OpenButton } from "../../../open-button/open-button"
-import { DeleteButton } from "../../../delete-button/delete-button"
-import { elementTypes } from "@Pimcore/types/enums/element/element-type"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Grid } from '@Pimcore/components/grid/grid'
+import { createColumnHelper } from '@tanstack/react-table'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type GDPRProviderTabProps } from '../../tab-panel'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { ExportButton } from '../../../export-button/export-button'
+import { OpenButton } from '../../../open-button/open-button'
+import { DeleteButton } from '../../../delete-button/delete-button'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 interface AssetRow {
   data: {
@@ -67,20 +77,20 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
         return (
           <Flex>
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
+              id={ data.id }
+              providerKey={ providerKey }
             />
 
             <OpenButton
-              id={data.id}
-              elementType={elementTypes.asset}
+              elementType={ elementTypes.asset }
+              id={ data.id }
             />
 
             <DeleteButton
-              id={data.id}
-              elementType={elementTypes.asset}
-              label={data.fullPath}
-              disabled={data.__gdprIsDeletable !== true}
+              disabled={ !data.__gdprIsDeletable }
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              label={ data.fullPath }
             />
           </Flex>
         )
@@ -91,10 +101,10 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      {...props}
+      { ...props }
     />
   )
 }
