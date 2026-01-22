@@ -8,11 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-<<<<<<< HEAD
 import { type FieldDefinition, type ILayoutContext, type Layout, type StructureNode } from './layout-provider-factory'
-=======
-import { type FieldDefinition, type ILayoutContext, type Layout, type StructureNode } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
->>>>>>> 5950321b024cace478ffbf8086381ed0d83732d6
 import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { container, serviceIds } from '@sdk/app'
