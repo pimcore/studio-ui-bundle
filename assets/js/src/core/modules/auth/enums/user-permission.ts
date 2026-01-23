@@ -11,6 +11,7 @@
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
   Translations = 'translations',
+  Appearance = 'system_appearance_settings',
   Documents = 'documents',
   DocumentTypes = 'document_types',
   Objects = 'objects',
@@ -29,4 +30,5 @@ export enum UserPermission {
   ApplicationLogger = 'application_logging',
   PerspectiveEditor = 'studio_perspective_editor',
   WidgetEditor = 'studio_perspective_widget_editor',
+  GDPRDataExtractor = 'gdpr_data_extractor'
 }

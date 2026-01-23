@@ -271,7 +271,8 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         docTypeId,
         language: null,
         translationsSourceId: null,
-        inheritanceSourceId: null
+        inheritanceSourceId: null,
+        template: null
       }
     })
 

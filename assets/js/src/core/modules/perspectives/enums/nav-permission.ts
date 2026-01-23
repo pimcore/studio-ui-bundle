@@ -20,6 +20,7 @@ export enum NavPermission {
   SearchReplaceAssignments = 'dataManagement.searchReplaceAssignments',
   PredefinedProperties = 'dataManagement.predefinedProperties',
   TagConfiguration = 'dataManagement.tagConfiguration',
+  GDPRDataExtractor = 'dataManagement.gdprDataExtractor',
 
   ExperienceEcommerceHidden = 'experienceEcommerce.hidden',
   Mails = 'experienceEcommerce.emails',
@@ -29,6 +30,7 @@ export enum NavPermission {
 
   TranslationsHidden = 'translations.hidden',
   Translations = 'translations.translations',
+  Appearance = 'system.appearanceBranding',
 
   ReportingHidden = 'reporting.hidden',
   Reports = 'reporting.reports',

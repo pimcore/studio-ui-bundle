@@ -31,6 +31,7 @@ import { SelectionType } from '@Pimcore/modules/element/element-selector/provide
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
+import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -41,9 +42,12 @@ interface ImageGalleryImagePreviewProps {
   disabled?: boolean
   width: string
   height: string
+  ratioX?: number
+  ratioY?: number
+  predefinedDataTemplates?: DataTemplates | string | null
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { openAsset } = useAssetHelper()
@@ -52,6 +56,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const { openModal: openCropModal } = useCropModal({
     disabled,
+    ratioX,
+    ratioY,
     onChange: (crop) => {
       if (!isNil(item.image?.id)) {
         const newValue = value.map((v, i) => i === index ? { ...v, crop: crop ?? {} } : v)
@@ -62,6 +68,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
     disabled,
+    predefinedDataTemplates,
     onChange: (hotspots) => {
       const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
       const newValue = value.map((v, i) => i === index ? { ...v, hotspots: newHotspots, marker: newMarkers } : v)
@@ -133,7 +140,10 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const handleOpenCropModal = (): void => {
     if (!isNil(item.image?.id)) {
-      openCropModal(item.image.id, item.crop)
+      openCropModal(
+        item.image.id,
+        item.crop
+      )
     }
   }
 

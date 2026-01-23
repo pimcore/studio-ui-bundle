@@ -274,9 +274,18 @@ import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-typ
 import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 import { DynamicTypeFieldDefinitionInput } from '@Pimcore/modules/field-definitions/dynamic-types/types/input/dynamic-type-field-definition-input'
+import { DynamicTypeFieldDefinitionTextarea } from '@Pimcore/modules/field-definitions/dynamic-types/types/textarea/dynamic-type-field-definition-textarea'
+import { DynamicTypeFieldDefinitionWysiwyg } from '@Pimcore/modules/field-definitions/dynamic-types/types/wysiwyg/dynamic-type-field-definition-wysiwyg'
+import { DynamicTypeFieldDefinitionPassword } from '@Pimcore/modules/field-definitions/dynamic-types/types/password/dynamic-type-field-definition-password'
+import { DynamicTypeFieldDefinitionInputQuantityValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/inputQuantityValue/dynamic-type-field-definition-input-quantity-value'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
+import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
+import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
+import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
+import { DynamicTypeEmailsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -631,4 +640,15 @@ container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSinglet
 container.bind(serviceIds['DynamicTypes/FieldDefinitionRegistry']).to(DynamicTypeFieldDefinitionRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Block']).to(DynamicTypeFieldDefinitionBlock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Input']).to(DynamicTypeFieldDefinitionInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Textarea']).to(DynamicTypeFieldDefinitionTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Wysiwyg']).to(DynamicTypeFieldDefinitionWysiwyg).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Password']).to(DynamicTypeFieldDefinitionPassword).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/InputQuantityValue']).to(DynamicTypeFieldDefinitionInputQuantityValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
+
+// GDPR Provider
+container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/DataObjects']).to(DynamicTypeDataObjectGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Assets']).to(DynamicTypeAssetsGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Users']).to(DynamicTypeUsersGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Emails']).to(DynamicTypeEmailsGDPRProvider).inSingletonScope()

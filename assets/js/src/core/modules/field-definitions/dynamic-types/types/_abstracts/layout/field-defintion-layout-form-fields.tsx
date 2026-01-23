@@ -21,7 +21,7 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
     <>
       <FormKit.Panel
         contentPadding={ { bottom: 'none', top: 'small', x: 'small' } }
-        title="panel"
+        title={ `${props.id} (${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }
       >
         <Form.Item
           label="name"

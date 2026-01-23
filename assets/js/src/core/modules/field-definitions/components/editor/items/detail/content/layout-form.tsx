@@ -9,15 +9,16 @@
  */
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
-import { type FieldDefinition as FieldDefinitionType } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
-import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { type FieldDefinition as FieldDefinitionType } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Content, FormKit } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 
 export const LayoutForm = (): React.JSX.Element => {
+  const { useLayout } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
   const [values, setValues] = useState<FieldDefinitionType>(fieldDefinition)

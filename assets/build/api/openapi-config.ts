@@ -104,6 +104,10 @@ const config: ConfigFile = {
     {
       pattern: 'userTokenLinkGet',
       type: 'query'
+    },
+    {
+      pattern: 'gdprSearchData',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -205,6 +209,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)
+    },
+    '../../js/src/core/modules/gdpr-data-extractor/gdpr-data-extractor-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/gdpr\/?/i)
     }
   },
   exportName: 'api',

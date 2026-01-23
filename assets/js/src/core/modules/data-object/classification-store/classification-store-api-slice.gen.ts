@@ -96,6 +96,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Classification Store"],
             }),
+            classificationStoreGetConfigCollection: build.query<
+                ClassificationStoreGetConfigCollectionApiResponse,
+                ClassificationStoreGetConfigCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/classification-store/config/collection` }),
+                providesTags: ["Classification Store"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -185,6 +192,12 @@ export type ClassificationStoreGetLayoutByKeyApiArg = {
     /** Field Name */
     fieldName: string;
 };
+export type ClassificationStoreGetConfigCollectionApiResponse =
+    /** status 200 List of classification store configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfiguration[];
+    };
+export type ClassificationStoreGetConfigCollectionApiArg = void;
 export type ClassificationStoreCollection = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -267,6 +280,16 @@ export type ClassificationStoreGroupLayout = {
     /** Groups */
     groups: ClassificationStoreGroupLayout2[];
 };
+export type ClassificationStoreConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+};
 export const {
     useClassificationStoreGetCollectionsQuery,
     useClassificationStoreGetGroupsQuery,
@@ -274,4 +297,5 @@ export const {
     useClassificationStoreGetLayoutByCollectionQuery,
     useClassificationStoreGetLayoutByGroupQuery,
     useClassificationStoreGetLayoutByKeyQuery,
+    useClassificationStoreGetConfigCollectionQuery,
 } = injectedRtkApi;
