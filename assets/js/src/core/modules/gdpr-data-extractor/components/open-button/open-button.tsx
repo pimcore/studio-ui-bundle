@@ -23,12 +23,12 @@ export const OpenButton = ({ id, elementType, onClick, ...iconButtonProps }: Ope
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'open-folder' }}
-      onClick={async (e) => {
+      { ...iconButtonProps }
+      icon={ { value: 'open-folder' } }
+      onClick={ async (e) => {
         await openElement({ id, type: elementType })
         onClick?.(e)
-      }}
+      } }
     />
   )
 }

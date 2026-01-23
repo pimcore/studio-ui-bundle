@@ -78,10 +78,10 @@ export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, onSor
 
   return (
     <BaseTabPanel
-      items={items}
-      onChange={(tabKey) => {
+      items={ items }
+      onChange={ (tabKey) => {
         onProviderChange?.(providerData?.items[tabKey]?.key as string)
-      }}
+      } }
     />
   )
 }

@@ -42,10 +42,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'export' }}
-      loading={isLoading || loading}
-      onClick={handleExport}
+      { ...iconButtonProps }
+      icon={ { value: 'export' } }
+      loading={ isLoading || loading }
+      onClick={ handleExport }
     />
   )
 }

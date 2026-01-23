@@ -51,7 +51,7 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
 
   return (
     <FormKit
-      formProps={{
+      formProps={ {
         form,
         initialValues,
         layout: 'horizontal',
@@ -62,43 +62,43 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
         onFinish: (values: GdprSearchFormValues) => {
           onSearch?.(createSearchFilters(values))
         }
-      }}
+      } }
     >
       <Form.Item
-        label={t('gdpr-extractor.search-form.field.id')}
-        name={['id']}
+        label={ t('gdpr-extractor.search-form.field.id') }
+        name={ ['id'] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label={t('gdpr-extractor.search-form.field.firstname')}
-        name={['firstname']}
+        label={ t('gdpr-extractor.search-form.field.firstname') }
+        name={ ['firstname'] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label={t('gdpr-extractor.search-form.field.lastname')}
-        name={['lastname']}
+        label={ t('gdpr-extractor.search-form.field.lastname') }
+        name={ ['lastname'] }
       >
         <Input />
       </Form.Item>
 
       <Flex
         align="end"
-        gap={'extra-small'}
+        gap={ 'extra-small' }
       >
         <Form.Item
-          label={t('gdpr-extractor.search-form.field.email')}
-          name={['email']}
+          label={ t('gdpr-extractor.search-form.field.email') }
+          name={ ['email'] }
         >
           <Input />
         </Form.Item>
 
         <Button
           htmlType="submit"
-          loading={isLoading}
+          loading={ isLoading }
           type="primary"
         >
           {t('gdpr-extractor.search-form.submit')}
