@@ -178,6 +178,7 @@ import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
 import locationMarker from '@Pimcore/assets/icons/location-marker.inline.svg?react'
+import lockCircle from '@Pimcore/assets/icons/lock-circle.inline.svg?react'
 import lock from '@Pimcore/assets/icons/lock.inline.svg?react'
 import locked from '@Pimcore/assets/icons/locked.inline.svg?react'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
@@ -983,6 +984,10 @@ moduleSystem.registerModule({
       component: locationMarker
     })
     iconLibrary.register({
+      name: 'lock-circle',
+      component: lockCircle
+    })
+    iconLibrary.register({
       name: 'lock',
       component: lock
     })
@@ -1573,6 +1578,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'z-to-a-order',
       component: zToAOrder
+    })
+    iconLibrary.register({
+      name: 'lock-circle',
+      component: lockCircle
     })
   }
 })
