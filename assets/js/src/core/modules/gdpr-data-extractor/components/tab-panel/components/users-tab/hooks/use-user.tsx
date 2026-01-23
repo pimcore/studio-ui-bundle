@@ -11,21 +11,23 @@
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
 import trackError from '@Pimcore/modules/app/error-handler/error-handler'
-import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
-import { UserDeleteJob } from '@Pimcore/modules/execution-engine/jobs/user-delete/user-delete-job'
+import { useUserDeleteByIdMutation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { ApiError } from '@sdk/modules/app'
+import { isUndefined } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface UseUserReturn {
   deleteUser: (id: number, label: string, onFinish?: () => void) => void
+  deleteUserMutation: (id: number, onFinish?: () => void) => Promise<void>
   isLoading: boolean
 }
 
 export const useUser = (): UseUserReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const executionEngine = useExecutionEngine()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userDeleteMutation] = useUserDeleteByIdMutation()
 
   const deleteUser = (id: number, label: string, onFinish?: () => void): void => {
     modal.confirm({
@@ -35,9 +37,7 @@ export const useUser = (): UseUserReturn => {
       onOk: async () => {
         setIsLoading(true)
         try {
-          const job = new UserDeleteJob({ id })
-
-          await executionEngine.runJob(job)
+          await deleteUserMutation(id, onFinish)
 
           onFinish?.()
         } catch (error: any) {
@@ -49,8 +49,25 @@ export const useUser = (): UseUserReturn => {
     })
   }
 
+  const deleteUserMutation = async (id: number, onFinish?: () => void): Promise<void> => {
+    const userDeleteTask = userDeleteMutation({ id })
+
+    try {
+      const response = await userDeleteTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
+      onFinish?.()
+    } catch (error) {
+      trackError(new GeneralError('Error deleting user'))
+    }
+  }
+
   return {
     deleteUser,
+    deleteUserMutation,
     isLoading
   }
 }
