@@ -88,8 +88,6 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
       let fieldValue = property.data
 
       if (['asset', 'document', 'object'].includes(property.type)) {
-        fieldtype = 'input'
-        
         if (property.data && typeof property.data === 'object' && 'id' in property.data) {
           fieldValue = `${property.type} [ID: ${property.data.id}]`
         } else {
@@ -97,8 +95,6 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
         }
       } else if (property.type === 'bool') {
         fieldtype = 'checkbox'
-      } else if (property.type === 'text') {
-        fieldtype = 'input'
       }
 
       return {
