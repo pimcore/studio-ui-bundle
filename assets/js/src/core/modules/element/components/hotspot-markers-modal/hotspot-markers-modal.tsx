@@ -20,8 +20,11 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { HotspotMarkersDataModal } from './hotspot-markers-data-modal'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isString, isUndefined } from 'lodash'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { type ExpandedHotspotMarkerData } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import { usePathToId } from '@Pimcore/modules/element/hooks/use-path-to-id'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface HotspotMarkersModalProps {
   hotspots?: IHotspot[] | null
@@ -31,38 +34,47 @@ export interface HotspotMarkersModalProps {
   onClose?: () => void
   onChange?: (hotspots: IHotspot[]) => void
   crop?: CropSettings
-  predefinedDataTemplates?: string | null
+  predefinedDataTemplates?: DataTemplates | string | null
 }
 
-interface DataTemplateItem {
+export interface DataTemplateItem {
   menuName?: string
   name: string
   data?: any[]
 }
 
-interface DataTemplates {
+export interface DataTemplates {
   marker?: DataTemplateItem[]
   hotspot?: DataTemplateItem[]
 }
 
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { convertPathToId } = usePathToId({ trackErrors: false })
 
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
   const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
 
   const templates: DataTemplates = React.useMemo(() => {
-    if (isNil(props.predefinedDataTemplates) || props.predefinedDataTemplates === '') {
+    if (isNil(props.predefinedDataTemplates)) {
       return {}
     }
-    try {
-      return JSON.parse(props.predefinedDataTemplates)
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to parse predefinedDataTemplates', e)
-      return {}
+
+    if (isString(props.predefinedDataTemplates)) {
+      if (props.predefinedDataTemplates === '') {
+        return {}
+      }
+      try {
+        return JSON.parse(props.predefinedDataTemplates) as DataTemplates
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to parse predefinedDataTemplates', e)
+        return {}
+      }
     }
+
+    return props.predefinedDataTemplates
   }, [props.predefinedDataTemplates])
 
   const width = 952
@@ -108,23 +120,62 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setModalOpened(open)
   }
 
+  const convertPathsToIds = async (data: ExpandedHotspotMarkerData[]): Promise<ExpandedHotspotMarkerData[]> => {
+    const processedData = await Promise.all(
+      data.map(async (item) => {
+        const isRelationType = item.type === 'asset' || item.type === 'document' || item.type === 'object'
+        const itemValue = item.value
+
+        if (isRelationType && isString(itemValue) && itemValue.startsWith('/')) {
+          const elementType = mapToElementType(item.type)
+
+          if (!isNil(elementType)) {
+            const id = await convertPathToId(elementType, itemValue)
+
+            return {
+              ...item,
+              value: id,
+              fullPath: itemValue
+            }
+          }
+        }
+
+        return item
+      })
+    )
+
+    return processedData
+  }
+
   const addHotspot = (type: string, template?: DataTemplateItem): void => {
     const style = defaultStyleOptions[type]
+    const hotspotId = hotspots.length + 1
+
     const newHotspot: IHotspot = {
-      id: hotspots.length + 1,
+      id: hotspotId,
       x: 5,
       y: 5,
       width: style.width,
       height: style.height,
       type,
       name: template?.name,
-      data: !isNil(template?.data) ? [...template.data] : undefined
+      data: template?.data
     }
 
     setHotspots(currentHotspots => [...currentHotspots, newHotspot])
+
+    if (!isNil(template?.data)) {
+      void convertPathsToIds(template.data as ExpandedHotspotMarkerData[]).then(processedData => {
+        setHotspots(currentHotspots =>
+          currentHotspots.map(h =>
+            h.id === hotspotId ? { ...h, data: processedData } : h
+          )
+        )
+      })
+    }
   }
 
-  const renderAddButton = (type: 'marker' | 'hotspot'): React.JSX.Element => {
+  const renderAddButton = (type: 'marker' | 'hotspot'): React.JSX.Element | null => {
     const typeTemplates = templates[type]
     const label = t(type === 'marker' ? 'hotspots.new-marker' : 'hotspots.new-hotspot')
     const iconValue = type === 'marker' ? 'new-marker' : 'new-hotspot'
@@ -193,7 +244,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
             <ButtonGroup items={ [
               renderAddButton('marker'),
               renderAddButton('hotspot')
-            ] }
+            ].filter((item): item is React.JSX.Element => !isNil(item)) }
             />
             <ButtonGroup items={ [
               <CancelBtn key="cancel" />,

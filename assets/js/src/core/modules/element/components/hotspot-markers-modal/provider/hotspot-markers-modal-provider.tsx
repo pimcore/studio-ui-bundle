@@ -14,6 +14,7 @@ import { HotspotDataProvider } from './hotspot-data-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { isNil } from 'lodash'
+import type { DataTemplates } from '../hotspot-markers-modal'
 
 export interface HotspotMarkersModalContextProps {
   openModal: (modalId: string, imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions) => void
@@ -24,7 +25,7 @@ export interface HotspotMarkersModalContextProps {
 export interface HotspotMarkersModalOptions {
   disabled?: boolean
   onChange?: (hotspots: IHotspot[]) => void
-  predefinedDataTemplates?: string | null
+  predefinedDataTemplates?: DataTemplates | string | null
 }
 
 export interface HotspotMarkersModalProviderProps {
