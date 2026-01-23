@@ -41,9 +41,20 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
     return data.name.trim().length > 0
   }
 
+  getId (context: FieldDefinitionContext): string {
+    return context.path.at(-1) ?? ''
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = context.path.at(-1) ?? ''
+    const fieldDefinition = context.fieldDefinitions[id]
+
     return (
-      <FieldDefinitionDataFormFields context={ context } />
+      <FieldDefinitionDataFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionD
   id: string = 'input'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'text-field' }
+    return { type: 'name', value: 'text-input' }
   }
 
   getGroup (): string[] {
@@ -26,10 +26,17 @@ export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionD
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = this.getId(context)
+    const fieldDefinition = context.fieldDefinitions[id]
+
     return (
       <>
         {super.getFormFields(context)}
-        <FieldDefinitionInputFormFields context={ context } />
+        <FieldDefinitionInputFormFields
+          context={ context }
+          id={ fieldDefinition?.name ?? id }
+          type={ this.id }
+        />
       </>
     )
   }

@@ -91,7 +91,8 @@ export class DocumentOpeningService {
         icon: {
           type: icon.type,
           value: icon.value
-        }
+        },
+        iconColorGroup: 'element'
       }
     }
   }

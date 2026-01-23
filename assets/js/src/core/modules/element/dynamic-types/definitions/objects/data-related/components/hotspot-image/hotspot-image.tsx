@@ -57,6 +57,8 @@ export interface HotspotImageProps {
   onChange?: (value: HotspotImageValue | null) => void
   className?: string
   predefinedDataTemplates?: string | null
+  ratioX?: number
+  ratioY?: number
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
@@ -68,6 +70,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
 
   const { openModal: openCropModal } = useCropModal({
     disabled: props.disabled,
+    ratioX: props.ratioX,
+    ratioY: props.ratioY,
     onChange: (crop) => {
       if (!isNil(imageValue?.image?.id)) {
         const newValue: HotspotImageValue = {
@@ -139,7 +143,10 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
 
   const handleOpenCropModal = (): void => {
     if (!isNil(imageValue?.image?.id)) {
-      openCropModal(imageValue.image.id, imageValue.crop)
+      openCropModal(
+        imageValue.image.id,
+        imageValue.crop
+      )
     }
   }
 
@@ -185,6 +192,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 height={ height! }
                 markerModalOpen={ false }
                 onChange={ handleChange }
+                ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
+                ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
                 setMarkerModalOpen={ openHotspotMarkersModal }
                 value={ imageValue }
                 width={ width! }

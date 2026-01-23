@@ -480,6 +480,8 @@ export type DocumentAdd = {
     navigationName: string | null;
     /** Document type ID */
     docTypeId: string | null;
+    /** Document template */
+    template: string | null;
     /** Id of the base document for new translation */
     translationsSourceId: number | null;
     /** Document language when adding a translation */

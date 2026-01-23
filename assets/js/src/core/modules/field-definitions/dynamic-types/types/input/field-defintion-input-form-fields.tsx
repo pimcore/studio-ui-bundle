@@ -9,43 +9,64 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Switch } from '@sdk/components'
+import { FieldDefinitionRegexValidation } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-regex-validation/field-definition-regex-validation'
+import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <>
-      <FormKit.Panel title="Specific Settings">
-        {!isCustomLayout && (
+    <FormKit.Panel title={ t('specific-settings') }>
+      {!isCustomLayout && (
         <>
           <Form.Item
-            label="default_value"
+            label={ t('default-value') }
             name="defaultValue"
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="default_value_generator"
+            label={ t('default-value-generator') }
             name="defaultValueGenerator"
           >
             <Input />
           </Form.Item>
         </>
-        )}
+      )}
 
-        <Form.Item name="showCharCount">
-          <Switch labelRight="show_char_count" />
-        </Form.Item>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        {!isCustomLayout && (
+      <Form.Item name="showCharCount">
+        <Switch labelRight={ t('show-char-count') } />
+      </Form.Item>
+
+      {!isCustomLayout && (
         <>
-          {/* @todo add regex validation */}
+          <Form.Item
+            label={ t('column-length') }
+            name="columnLength"
+            rules={ [{ min: 0, type: 'number' }] }
+          >
+            <InputNumber
+              min={ 0 }
+              precision={ 0 }
+            />
+          </Form.Item>
         </>
-        )}
-      </FormKit.Panel>
-    </>
+      )}
+
+      <FieldDefinitionRegexValidation />
+
+    </FormKit.Panel>
   )
 }
