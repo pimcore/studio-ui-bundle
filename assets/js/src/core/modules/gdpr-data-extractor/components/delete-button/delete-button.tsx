@@ -25,16 +25,16 @@ export const DeleteButton = ({ id, elementType, label, onClick, ...iconButtonPro
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'trash' }}
-      loading={isDeleting || iconButtonProps.loading}
-      onClick={(e) => {
+      { ...iconButtonProps }
+      icon={ { value: 'trash' } }
+      loading={ isDeleting || iconButtonProps.loading }
+      onClick={ (e) => {
         setIsDeleting(true)
         deleteElement(id, label, undefined, () => {
           setIsDeleting(false)
         })
         onClick?.(e)
-      }}
+      } }
     />
   )
 }

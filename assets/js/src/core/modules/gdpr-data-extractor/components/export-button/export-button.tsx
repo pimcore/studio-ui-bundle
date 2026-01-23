@@ -35,9 +35,9 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
       )
 
       onClick?.(e)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Export failed:', error)
-      trackError(new GeneralError(error))
+      trackError(new GeneralError(error.message as string))
     }
   }
 
@@ -49,10 +49,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'export' }}
-      loading={isLoading || loading}
-      onClick={handleExport}
+      { ...iconButtonProps }
+      icon={ { value: 'export' } }
+      loading={ isLoading || loading }
+      onClick={ handleExport }
     />
   )
 }
