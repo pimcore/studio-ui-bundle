@@ -111,6 +111,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
     disabled,
+    predefinedDataTemplates: props.config?.predefinedDataTemplates,
     onChange: (hotspots) => {
       if (!isNil(imageValue?.id)) {
         const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)

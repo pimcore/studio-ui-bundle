@@ -35,6 +35,7 @@ export const {
   useElementFolderCreateMutation,
   useElementGetContextPermissionsQuery,
   useElementGetIdByPathQuery,
+  useLazyElementGetIdByPathQuery,
   useElementGetSubtypeQuery,
   useElementResolveBySearchTermQuery,
   useLazyElementResolveBySearchTermQuery
