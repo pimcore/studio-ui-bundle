@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '@Pimcore/app/store'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentPreviewUrlProcessor } from '@Pimcore/modules/document/hooks/use-document-url-processor'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { Iframe, type IframeRef } from '@Pimcore/components/iframe/iframe'
 import { isNil } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -23,6 +24,7 @@ import { Compact } from '@Pimcore/components/compact/compact'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { selectDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
 interface DocumentPreviewProps {
   id: number
@@ -32,8 +34,11 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
   const { t } = useTranslation()
   const [refreshKey, setRefreshKey] = useState<number>(Date.now())
   const { document } = useDocumentDraft(id)
-  const iframeRef = React.useRef<IframeRef>(null)
+  const iframeRef = useRef<IframeRef>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { width: availableWidth, height: availableHeight } = useElementResize(containerRef)
   const isVisible = useElementVisible(iframeRef.current?.getElementRef(), true)
+  const alertModal = useAlertModal()
   const [mode, setMode] = useState<{
     device: string
     width?: number
@@ -47,6 +52,20 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
       setRefreshKey(Date.now())
     }
   }, [document?.draftData?.modificationDate, isVisible])
+
+  const handleSetMode = (newMode: { device: string, width?: number, height?: number }): void => {
+    if ((newMode.width != null) && availableWidth > 0 && availableWidth - 10 < newMode.width) {
+      alertModal.error({ content: t('preview.screen_size_too_small') })
+      return
+    }
+
+    const updatedMode = { ...newMode }
+    if ((updatedMode.height != null) && availableHeight > 0 && availableHeight - 10 < updatedMode.height) {
+      updatedMode.height = availableHeight - 10
+    }
+
+    setMode(updatedMode)
+  }
 
   const forceDeviceType = mode.device === 'phone-horizontal' ? 'phone' : mode.device
   const previewUrl = useDocumentPreviewUrlProcessor(id, document?.fullPath ?? '', refreshKey, forceDeviceType, previewTimestamp)
@@ -79,19 +98,17 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
           <Flex gap="small">
             <Compact>
               <IconTextButton
-                active={ mode.device === 'desktop' }
                 icon={ { value: 'monitor' } }
                 onClick={ () => {
-                  setMode({ device: 'desktop' })
+                  handleSetMode({ device: 'desktop' })
                 } }
               >
                 { t('preview.desktop') }
               </IconTextButton>
               <IconTextButton
-                active={ mode.device === 'tablet' }
                 icon={ { value: 'tablet' } }
                 onClick={ () => {
-                  setMode({
+                  handleSetMode({
                     device: 'tablet',
                     width: 1024,
                     height: 768
@@ -101,10 +118,9 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
                 { t('preview.tablet') }
               </IconTextButton>
               <IconTextButton
-                active={ mode.device === 'phone' }
                 icon={ { value: 'phone' } }
                 onClick={ () => {
-                  setMode({
+                  handleSetMode({
                     device: 'phone',
                     width: 375,
                     height: 667
@@ -114,10 +130,9 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
                 { t('preview.phone-vertical') }
               </IconTextButton>
               <IconTextButton
-                active={ mode.device === 'phone-horizontal' }
                 icon={ { value: 'phone-horizontal' } }
                 onClick={ () => {
-                  setMode({
+                  handleSetMode({
                     device: 'phone-horizontal',
                     width: 667,
                     height: 375
@@ -148,12 +163,22 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
         </Toolbar>
       ) }
     >
-      <Iframe
-        ref={ iframeRef }
-        src={ previewUrl }
-        style={ iframeStyle }
-        title={ `${t('preview.label')}-${id}` }
-      />
+      <div
+        ref={ containerRef }
+        style={ {
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          overflow: 'auto'
+        } }
+      >
+        <Iframe
+          ref={ iframeRef }
+          src={ previewUrl }
+          style={ iframeStyle }
+          title={ `${t('preview.label')}-${id}` }
+        />
+      </div>
     </ContentLayout>
   )
 }
