@@ -9,9 +9,13 @@
  */
 
 import { IconButton } from '@sdk/components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLazyGdprExportQuery } from '../../gdpr-data-extractor-slice-enhanced'
 import { downloadJsonFile } from '@Pimcore/modules/app/utils/download'
+import { isUndefined } from 'lodash'
+import trackError from '@Pimcore/modules/app/error-handler/error-handler'
+import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { GeneralError } from '@sdk/modules/app'
 
 interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
@@ -19,7 +23,7 @@ interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>
 }
 
 export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonProps }: ExportButtonProps): React.JSX.Element => {
-  const [trigger, { isLoading }] = useLazyGdprExportQuery()
+  const [trigger, { isLoading, error }] = useLazyGdprExportQuery()
 
   const handleExport = async (e: React.MouseEvent<HTMLElement, MouseEvent>): Promise<void> => {
     try {
@@ -33,8 +37,15 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
       onClick?.(e)
     } catch (error) {
       console.error('Export failed:', error)
+      trackError(new GeneralError(error))
     }
   }
+
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
 
   return (
     <IconButton
