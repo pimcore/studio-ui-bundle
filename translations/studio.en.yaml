@@ -533,19 +533,33 @@ width-tooltip: "The width of this component. A numeric value will be interpreted
 height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
 specific-settings: Specific Settings
 default-value: Default value
-default-value-generator: Default value generator
+default-value-generator: Default value generator service / class
 show-char-count: Show character count
 column-length: Column length
 max-length: Maximum length
 exclude-from-search-index: Exclude from search index
 toolbar-config: Toolbar configuration
 min-length: Minimum length
+min-value: Minimum value
+max-value: Maximum value
+decimal-precision: Decimal precision
+decimal-size: Decimal size
+integer: Integer
+unsigned: Only unsigned
 default-unit: Default unit
 valid-units: Valid units
+slider-min: Slider minimum value
+slider-max: Slider maximum value
+slider-step: Slider step
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
 field-definition.password: Password
+field-definition.numeric: Number
+field-definition.numeric-range: Numeric Range
+field-definition.slider: Slider
+field-definition.quantity-value: Quantity Value
+field-definition.quantity-value-range: Quantity Value Range
 field-definition.input-quantity-value: Input Quantity Value
 regex-validation: Regular Expression Validation
 regex: RegEx

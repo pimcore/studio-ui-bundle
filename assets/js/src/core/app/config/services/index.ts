@@ -278,6 +278,11 @@ import { DynamicTypeFieldDefinitionTextarea } from '@Pimcore/modules/field-defin
 import { DynamicTypeFieldDefinitionWysiwyg } from '@Pimcore/modules/field-definitions/dynamic-types/types/wysiwyg/dynamic-type-field-definition-wysiwyg'
 import { DynamicTypeFieldDefinitionPassword } from '@Pimcore/modules/field-definitions/dynamic-types/types/password/dynamic-type-field-definition-password'
 import { DynamicTypeFieldDefinitionInputQuantityValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/inputQuantityValue/dynamic-type-field-definition-input-quantity-value'
+import { DynamicTypeFieldDefinitionNumber } from '@Pimcore/modules/field-definitions/dynamic-types/types/number/dynamic-type-field-definition-number'
+import { DynamicTypeFieldDefinitionNumericRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/numericRange/dynamic-type-field-definition-numeric-range'
+import { DynamicTypeFieldDefinitionSlider } from '@Pimcore/modules/field-definitions/dynamic-types/types/slider/dynamic-type-field-definition-slider'
+import { DynamicTypeFieldDefinitionQuantityValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/quantityValue/dynamic-type-field-definition-quantity-value'
+import { DynamicTypeFieldDefinitionQuantityValueRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/quantityValueRange/dynamic-type-field-definition-quantity-value-range'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -644,6 +649,11 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Textarea']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Wysiwyg']).to(DynamicTypeFieldDefinitionWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Password']).to(DynamicTypeFieldDefinitionPassword).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/InputQuantityValue']).to(DynamicTypeFieldDefinitionInputQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Number']).to(DynamicTypeFieldDefinitionNumber).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/NumericRange']).to(DynamicTypeFieldDefinitionNumericRange).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Slider']).to(DynamicTypeFieldDefinitionSlider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/QuantityValue']).to(DynamicTypeFieldDefinitionQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/QuantityValueRange']).to(DynamicTypeFieldDefinitionQuantityValueRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider
