@@ -11,6 +11,7 @@
 import { IconButton } from '@sdk/components'
 import React from 'react'
 import { useLazyGdprExportQuery } from '../../gdpr-data-extractor-slice-enhanced'
+import { downloadJsonFile } from '@Pimcore/modules/app/utils/download'
 
 interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
@@ -24,15 +25,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
     try {
       const result = await trigger({ id, providerKey }).unwrap()
 
-      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `gdpr-export-${providerKey}-${id}.json`
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-      URL.revokeObjectURL(url)
+      downloadJsonFile(
+        `gdpr-export-${providerKey}-${id}.json`,
+        result
+      )
 
       onClick?.(e)
     } catch (error) {
@@ -42,10 +38,10 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
 
   return (
     <IconButton
-      { ...iconButtonProps }
-      icon={ { value: 'export' } }
-      loading={ isLoading || loading }
-      onClick={ handleExport }
+      {...iconButtonProps}
+      icon={{ value: 'export' }}
+      loading={isLoading || loading}
+      onClick={handleExport}
     />
   )
 }
