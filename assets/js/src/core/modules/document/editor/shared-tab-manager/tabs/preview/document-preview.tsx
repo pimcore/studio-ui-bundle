@@ -111,7 +111,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
                   })
                 } }
               >
-                { t('preview.phone') }
+                { t('preview.phone-vertical') }
               </IconTextButton>
               <IconTextButton
                 active={ mode.device === 'phone-horizontal' }
