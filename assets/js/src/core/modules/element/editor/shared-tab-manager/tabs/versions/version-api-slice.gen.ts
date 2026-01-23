@@ -1,4 +1,5 @@
 import { api } from "@sdk/api";
+import { DataProperty } from "../properties/properties-api-slice-enhanced";
 export const addTagTypes = ["Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -241,6 +242,7 @@ export type DataObjectVersion = Element & {
     objectData: object;
     /** Allow variants */
     allowVariants: boolean | null;
+    properties: DataProperty[];
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */

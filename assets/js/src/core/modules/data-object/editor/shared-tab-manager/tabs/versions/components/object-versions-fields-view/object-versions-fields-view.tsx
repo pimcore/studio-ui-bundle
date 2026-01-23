@@ -29,7 +29,7 @@ interface IObjectVersionsFieldsViewProps {
   isExpandedUnmodifiedFields: boolean
 }
 
-const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
+const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA, VersionCategoryName.PROPERTIES]
 const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK, DynamicTypesList.FIELD_COLLECTIONS]
 
 export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
@@ -64,7 +64,8 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   const renderFieldTitle = ({ key, locale, isCommonSection }: { key: string, locale: string, isCommonSection: boolean }): React.JSX.Element => {
     if (isEmptyValue(key)) return <></>
 
-    const textValue = isCommonSection ? t(`version.${key}`) : t(key)
+    const isSystemDataField = breadcrumbKey === VersionCategoryName.SYSTEM_DATA
+    const textValue = isSystemDataField ? t(`version.${key}`) : t(key)
 
     return (
       <Text className={ styles.fieldTitle }>
@@ -76,7 +77,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   return (
     <>
       {breadcrumbsList?.map((breadcrumb, index) => {
-        const isCommonSection = breadcrumb.key === VersionCategoryName.SYSTEM_DATA
+        const isCommonSection = breadcrumb.key === VersionCategoryName.SYSTEM_DATA || breadcrumb.key === VersionCategoryName.PROPERTIES
 
         return (
           <div key={ `${index}-${breadcrumb.key}` }>

@@ -82,10 +82,45 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
     return result
   }
 
+  const getPropertiesData = (): IFormattedDataStructureData[] => {
+    return versionData.properties.map((property) => {
+      let fieldtype = 'input'
+      let fieldValue = property.data
+
+      if (['asset', 'document', 'object'].includes(property.type)) {
+        fieldtype = 'input'
+        
+        if (property.data && typeof property.data === 'object' && 'id' in property.data) {
+          fieldValue = `${property.type} [ID: ${property.data.id}]`
+        } else {
+          fieldValue = property.data
+        }
+      } else if (property.type === 'bool') {
+        fieldtype = 'checkbox'
+      } else if (property.type === 'text') {
+        fieldtype = 'input'
+      }
+
+      return {
+        fieldBreadcrumbTitle: 'properties',
+        fieldData: {
+          title: property.key,
+          name: property.key,
+          fieldtype,
+          config: property.config
+        } as any,
+        fieldValue,
+        versionId,
+        versionCount
+      }
+    })
+  }
+
   const layoutData = await processLayoutData({ data: layout })
   const generalSystemData = getGeneralSystemData()
+  const propertiesData = getPropertiesData()
 
-  return [...generalSystemData, ...layoutData]
+  return [...generalSystemData, ...propertiesData, ...layoutData]
 }
 
 const getUniqFieldKey = (item: any): string => {
