@@ -41,9 +41,11 @@ interface ImageGalleryImagePreviewProps {
   disabled?: boolean
   width: string
   height: string
+  ratioX?: number
+  ratioY?: number
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { openAsset } = useAssetHelper()
@@ -52,6 +54,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const { openModal: openCropModal } = useCropModal({
     disabled,
+    ratioX,
+    ratioY,
     onChange: (crop) => {
       if (!isNil(item.image?.id)) {
         const newValue = value.map((v, i) => i === index ? { ...v, crop: crop ?? {} } : v)
@@ -133,7 +137,10 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const handleOpenCropModal = (): void => {
     if (!isNil(item.image?.id)) {
-      openCropModal(item.image.id, item.crop)
+      openCropModal(
+        item.image.id,
+        item.crop
+      )
     }
   }
 

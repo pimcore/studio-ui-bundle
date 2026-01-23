@@ -25,10 +25,12 @@ interface HotspotImagePreviewProps {
   markerModalOpen: boolean
   setMarkerModalOpen: (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null) => void
   disabled?: boolean
+  ratioX?: number
+  ratioY?: number
 }
 
 export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
-  { assetId, height, width, value, onChange, markerModalOpen, setMarkerModalOpen, disabled }: HotspotImagePreviewProps,
+  { assetId, height, width, value, onChange, markerModalOpen, setMarkerModalOpen, disabled, ratioX, ratioY }: HotspotImagePreviewProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
   const hasHotspotData = (): boolean => {

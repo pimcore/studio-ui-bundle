@@ -33,9 +33,11 @@ export interface ImageGallerySortableItemProps {
   disabled?: boolean
   width: string
   height: string
+  ratioX?: number
+  ratioY?: number
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height, ratioX, ratioY }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -67,6 +69,8 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             height={ height }
             index={ index }
             item={ item }
+            ratioX={ ratioX }
+            ratioY={ ratioY }
             setInternalValue={ setInternalValue }
             setValue={ setValue }
             value={ value }
