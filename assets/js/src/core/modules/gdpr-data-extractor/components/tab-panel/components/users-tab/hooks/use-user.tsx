@@ -60,7 +60,7 @@ export const useUser = (): UseUserReturn => {
       }
 
       onFinish?.()
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Error deleting user'))
     }
   }
