@@ -21,20 +21,20 @@ interface DeleteButtonProps extends Omit<React.ComponentProps<typeof IconButton>
 
 export const DeleteButton = ({ id, elementType, label, onClick, ...iconButtonProps }: DeleteButtonProps): React.JSX.Element => {
   const { deleteElement } = useDelete(elementType)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   return (
     <IconButton
-      { ...iconButtonProps }
-      icon={ { value: 'trash' } }
-      loading={ isDeleting || iconButtonProps.loading }
-      onClick={ (e) => {
+      {...iconButtonProps}
+      icon={{ value: 'trash' }}
+      loading={isDeleting || iconButtonProps.loading}
+      onClick={(e) => {
         setIsDeleting(true)
         deleteElement(id, label, undefined, () => {
           setIsDeleting(false)
         })
         onClick?.(e)
-      } }
+      }}
     />
   )
 }
