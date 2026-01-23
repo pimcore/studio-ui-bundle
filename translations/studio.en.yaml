@@ -529,6 +529,38 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
+width-tooltip: "The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+specific-settings: Specific Settings
+default-value: Default value
+default-value-generator: Default value generator
+show-char-count: Show character count
+column-length: Column length
+max-length: Maximum length
+exclude-from-search-index: Exclude from search index
+toolbar-config: Toolbar configuration
+min-length: Minimum length
+default-unit: Default unit
+valid-units: Valid units
+field-definition.input: Input
+field-definition.textarea: Textarea
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Password
+field-definition.input-quantity-value: Input Quantity Value
+regex-validation: Regular Expression Validation
+regex: RegEx
+regex-flags: RegEx Flags
+regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
+test-string: Test string
+regex-validation-error-message: "The string does not match the required format."
+name: Name
+tooltip: Tooltip
+mandatory: Mandatory
+unique: Unique
+not-editable: Not editable
+invisible: Invisible
+visible-in-gridview: Visible in grid view
+visible-in-searchresult: Visible in search result
 quality: Quality
 mode: Mode
 format: Format

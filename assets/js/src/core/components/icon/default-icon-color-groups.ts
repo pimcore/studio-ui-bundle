@@ -58,7 +58,6 @@ export const defaultIconColorGroups: IconColorGroups = {
     'content': 'colorCodingMint2',
     'wysiwyg-field': 'colorCodingMint2',
     'password': 'colorCodingMint2',
-    'quantity-value': 'colorCodingMint2',
 
     // Number
     'number-type': 'colorCodingViolet5',
@@ -66,6 +65,7 @@ export const defaultIconColorGroups: IconColorGroups = {
     'number-range': 'colorCodingViolet5',
     'slider': 'colorCodingViolet5',
     'quantity-value-range': 'colorCodingViolet5',
+    'quantity-value': 'colorCodingViolet5',
 
     // Date
     'date': 'colorCodingMagenta4',
@@ -154,6 +154,6 @@ export const defaultIconColorGroups: IconColorGroups = {
 
   // Exception subgroup
   'fieldDefinition_inputQuantityValue': {
-    'quantity-value': 'colorCodingViolet5'
+    'quantity-value': 'colorCodingMint2'
   }
 }
