@@ -13,11 +13,13 @@ import { type TabNode } from 'flexlayout-react'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { TitleView } from './title/title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
+import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 
 export interface WidgetContentTitleContainerProps {
   node: TabNode
   icon: ElementIcon
   title: string
+  iconColorGroup?: IconColorGroup
 }
 
 interface WidgetContentTitleProps {
@@ -25,13 +27,15 @@ interface WidgetContentTitleProps {
   node: TabNode
   icon: ElementIcon
   title: string
+  iconColorGroup?: IconColorGroup
 }
 
 export const WidgetContentTitleContainer = ({
   contentTitleComponent: ContentTitleComponent,
   node,
   icon,
-  title
+  title,
+  iconColorGroup
 }: WidgetContentTitleProps): React.JSX.Element => {
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
@@ -46,6 +50,7 @@ export const WidgetContentTitleContainer = ({
         ? (
           <ContentTitleComponent
             icon={ icon }
+            iconColorGroup={ iconColorGroup }
             node={ node }
             title={ title }
           />
@@ -54,6 +59,7 @@ export const WidgetContentTitleContainer = ({
           <TitleView
             className={ 'widget__title' }
             icon={ icon }
+            iconColorGroup={ iconColorGroup }
             onClose={ isCloseable ? onClose : undefined }
             title={ title }
           />

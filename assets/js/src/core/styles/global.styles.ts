@@ -655,7 +655,7 @@ export const GlobalStyles = createGlobalStyle`
     overflow-x: auto;
   }
 
-  .makeTabsGreatAgain {
+  .absolute-stretch {
     position: absolute;
     inset: 0;
   }

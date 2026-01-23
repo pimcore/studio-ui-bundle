@@ -33,7 +33,11 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
         return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === currentLanguage
       }
 
-      return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === column.locale
+      if (column.localizable) {
+        return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === column.locale
+      }
+
+      return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId
     }
 
     if (column.localizable && (column.locale === null || column.locale === undefined)) {

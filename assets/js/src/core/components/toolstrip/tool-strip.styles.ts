@@ -49,6 +49,10 @@ export const useStyles = createStyles(({ css, token }) => {
             max-width: 1000px;
             transition: max-width 0.3s ease-in-out, opacity 0.2s ease-in-out 0.1s;
           }
+
+          position: relative;
+          z-index: 10000;
+          box-shadow: 2px 0 4px rgba(255, 255, 255, 0.15), 1px 0 0 rgba(255, 255, 255, 0.15);
         }
       }
 
@@ -74,6 +78,10 @@ export const useStyles = createStyles(({ css, token }) => {
       &:active {
         cursor: grabbing;
       }
+    `,
+
+    title: css`
+      white-space: nowrap;
     `
   }
 })

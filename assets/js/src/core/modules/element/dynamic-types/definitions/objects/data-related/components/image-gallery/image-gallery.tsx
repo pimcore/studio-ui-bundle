@@ -26,6 +26,7 @@ import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/defini
 import { uuid } from '@Pimcore/utils/uuid'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-gallery.styles'
+import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -34,6 +35,9 @@ export interface ImageGalleryProps {
   className?: string
   width: string | number | null
   height: string | number | null
+  ratioX?: number
+  ratioY?: number
+  predefinedDataTemplates?: DataTemplates | string | null
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
@@ -157,6 +161,9 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
                 index={ index }
                 item={ item }
                 key={ item.key }
+                predefinedDataTemplates={ props.predefinedDataTemplates }
+                ratioX={ props.ratioX }
+                ratioY={ props.ratioY }
                 setInternalValue={ setInternalValue }
                 setValue={ handleChange }
                 value={ internalValue }

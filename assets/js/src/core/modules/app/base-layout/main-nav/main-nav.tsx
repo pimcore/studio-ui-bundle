@@ -25,7 +25,7 @@ import { PerspectiveSwitch } from './perspective-switch'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
-import { modalTexts } from '@Pimcore/modules/open-element/open-element'
+import { modalTexts } from '@Pimcore/modules/open-element/constants'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { RECYCLE_BIN_WIDGET } from '@Pimcore/modules/recycle-bin'
@@ -70,7 +70,7 @@ export const MainNav = (): React.JSX.Element => {
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const hasChildren = !isEmpty(item.children)
-    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.onClick) || !isUndefined(item.button)
+    const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.useCustomMainNavItem)
 
     const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
 
@@ -97,19 +97,33 @@ export const MainNav = (): React.JSX.Element => {
         data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
         key={ item.path }
       >
-        {!isUndefined(item.button)
-          ? (
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div onClick={ () => { setIsOpen(false) } }>
-              {item.button()}
-              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
-                <Divider
-                  className={ 'main-nav__list-item-divider' }
-                  size={ 'mini' }
-                />
-              )}
-            </div>
-            )
+        {!isUndefined(item.useCustomMainNavItem)
+          ? (() => {
+              const customMainNavItem = item.useCustomMainNavItem()
+
+              return (
+                <>
+                  <button
+                    className="main-nav__list-btn"
+                    data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
+                    onClick={ () => {
+                      customMainNavItem.onClick?.()
+                      setIsOpen(false)
+                    } }
+                  >
+                    {!isUndefined(item.icon) && renderIcon(item.icon)}
+
+                    <SanitizeHtml html={ t(`${item.label}`) } />
+                  </button>
+                  {!isUndefined(item.dividerBottom) && item.dividerBottom && (
+                    <Divider
+                      className={ 'main-nav__list-item-divider' }
+                      size={ 'mini' }
+                    />
+                  )}
+                </>
+              )
+            })()
           : (
             <>
               <button
@@ -118,9 +132,6 @@ export const MainNav = (): React.JSX.Element => {
                 onClick={ () => {
                   if (hasChildren) {
                     handleOpenState(index)
-                  } else if (!isUndefined(item.onClick)) {
-                    item.onClick()
-                    setIsOpen(false)
                   } else if (!isUndefined(item.widgetConfig)) {
                     openMainWidget(item.widgetConfig)
                     setIsOpen(false)

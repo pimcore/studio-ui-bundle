@@ -24,9 +24,6 @@ import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { useUpload } from '../../actions/upload/use-upload'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -43,16 +40,6 @@ moduleSystem.registerModule({
       useMenuItem: (context: AssetTreeContextMenuProps) => {
         const { t } = useTranslation()
         const { uploadContextMenuItem, zipUploadContextMenuItem } = useUpload()
-        const { isTreeActionAllowed } = useTreePermission()
-
-        const isUploadMenuHidden = isTreeActionAllowed(TreePermission.HideAdd) ||
-          (!isTreeActionAllowed(TreePermission.AddUpload) && !isTreeActionAllowed(TreePermission.AddUploadZip)) ||
-          !checkElementPermission(context.target.permissions, 'create') ||
-          context.target?.type !== 'folder'
-
-        if (isUploadMenuHidden) {
-          return null
-        }
 
         return {
           label: t('element.tree.context-menu.new-assets'),

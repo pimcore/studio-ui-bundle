@@ -42,7 +42,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function fetchUser (): Promise<UserGetByIdApiResponse> {
-    const { data, isError: isUserGetByIdError, error } = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    const { data, isError: isUserGetByIdError, error } = await dispatch(api.endpoints.userGetById.initiate({ id }, { forceRefetch: true }))
 
     if (isUserGetByIdError) {
       trackError(new ApiError(error))

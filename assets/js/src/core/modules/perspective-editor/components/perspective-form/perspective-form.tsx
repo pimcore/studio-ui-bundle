@@ -79,7 +79,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       } }
     >
       <Flex
-        className='makeTabsGreatAgain'
+        className='absolute-stretch'
         justify='space-between'
         vertical
       >

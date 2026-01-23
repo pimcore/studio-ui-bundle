@@ -16,7 +16,7 @@ import {
 import type { FormItemProps } from 'antd'
 
 export interface ManyToManyRelationLabelProps {
-  label: ReactNode
+  label: ReactNode | string
   name: FormItemProps['name']
   disabled?: boolean
 }

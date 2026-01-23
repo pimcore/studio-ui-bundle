@@ -9,8 +9,15 @@
  */
 
 import { createStyles } from 'antd-style'
+import { type Sizings, getTokenValue } from '@Pimcore/utils/sizing'
 
-export const useStyles = createStyles(({ token, css }) => {
+interface ContentStylesProps {
+  gap: Sizings
+}
+
+export const useStyles = createStyles(({ token, css }, { gap }: ContentStylesProps) => {
+  const gapValue = getTokenValue(token, gap, 'margin')
+
   return {
     content: css`
       display: flex;
@@ -18,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 100%;
       overflow: auto;
-      gap: 12px;
+      gap: ${gapValue}px;
 
       &.content--overflow-x-hidden {
         overflow-x: hidden;
@@ -61,6 +68,7 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
       }
       
+      &.content--is-default-padded .ant-table-thead,
       &.content--padded .ant-table-thead,
       &.p-t-small .ant-table-thead {
         top: -${token.paddingSM}px;

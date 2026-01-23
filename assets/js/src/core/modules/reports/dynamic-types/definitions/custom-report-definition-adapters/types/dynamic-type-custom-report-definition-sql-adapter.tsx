@@ -21,6 +21,10 @@ export class DynamicTypeCustomReportDefinitionSqlAdapter extends DynamicTypeCust
     return <>Sql</>
   }
 
+  getPagination (): boolean {
+    return true
+  }
+
   getCustomReportData (props: any): ReactElement {
     return <SqlAdapter { ...props } />
   }

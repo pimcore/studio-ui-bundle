@@ -30,7 +30,9 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/IconSetRegistry': 'DynamicTypes/IconSetRegistry',
   'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
   'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
-  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry'
+  'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
+  'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry',
+  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry'
 }
 
 export const serviceIds = {
@@ -43,6 +45,7 @@ export const serviceIds = {
   // Widget manager
   widgetManager: 'WidgetManagerService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',
+  elementTreeWidgetPermissionRegistry: 'ElementTreeWidgetPermissionRegistry',
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
@@ -98,6 +101,7 @@ export const serviceIds = {
 
   // icon library
   iconLibrary: 'IconLibrary',
+  iconColorGroupsRegistry: 'IconColorGroupsRegistry',
 
   // Grid
   'Grid/TypeRegistry': 'Grid/TypeRegistry',
@@ -356,5 +360,20 @@ export const serviceIds = {
   'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor',
 
   // AppLoader Registry
-  'AppLoader/Registry': 'AppLoader/Registry'
+  'AppLoader/Registry': 'AppLoader/Registry',
+
+  // Field Definitions
+  'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
+  'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',
+  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel',
+  'DynamicTypes/FieldDefinition/Textarea': 'DynamicTypes/FieldDefinition/Textarea',
+  'DynamicTypes/FieldDefinition/Wysiwyg': 'DynamicTypes/FieldDefinition/Wysiwyg',
+  'DynamicTypes/FieldDefinition/Password': 'DynamicTypes/FieldDefinition/Password',
+  'DynamicTypes/FieldDefinition/InputQuantityValue': 'DynamicTypes/FieldDefinition/InputQuantityValue',
+
+  // GDPR Providers
+  'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',
+  'DynamicTypes/GDPRProvider/Assets': 'DynamicTypes/GDPRProvider/Assets',
+  'DynamicTypes/GDPRProvider/Users': 'DynamicTypes/GDPRProvider/Users',
+  'DynamicTypes/GDPRProvider/Emails': 'DynamicTypes/GDPRProvider/Emails'
 }

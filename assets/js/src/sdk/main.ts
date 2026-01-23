@@ -34,3 +34,9 @@ export const Pimcore = window.Pimcore
 export const container = window.Pimcore.container
 
 export * from '@Pimcore/lib/event-bus'
+export {
+  ElementTreeWidgetPermissionRegistry,
+  type IElementTreeWidgetPermissionRegistry,
+  type ElementTreeWidgetPermissionItem
+} from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
+export { type ElementType } from '@Pimcore/types/enums/element/element-type'

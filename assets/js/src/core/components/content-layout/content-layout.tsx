@@ -14,6 +14,7 @@ import { Content } from '../content/content'
 
 interface ContentToolbarViewProps {
   children: ReactNode
+  className?: string
   renderTopBar?: ReactNode
   renderSidebar?: ReactNode
   renderToolbar?: ReactNode
@@ -21,7 +22,7 @@ interface ContentToolbarViewProps {
 
 const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout]
+  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout, props.className ?? '']
 
   if (props.renderToolbar !== undefined) {
     classes.push('content-toolbar-sidebar-layout--with-toolbar')

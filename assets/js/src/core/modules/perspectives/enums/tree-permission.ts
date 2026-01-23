@@ -9,7 +9,6 @@
  */
 
 export enum TreePermission {
-  Add = 'add',
   AddFolder = 'addFolder',
   Copy = 'copy',
   Cut = 'cut',
@@ -26,7 +25,6 @@ export enum TreePermission {
   Unpublish = 'unpublish',
 
   // Asset specific
-  HideAdd = 'hideAdd',
   AddUpload = 'addUpload',
   AddUploadZip = 'addUploadZip',
   Download = 'download',
@@ -34,16 +32,16 @@ export enum TreePermission {
   UploadNewVersion = 'uploadNewVersion',
 
   // Data object specific
+  AddObject = 'addObject',
+  AddVariant = 'addVariant',
   ChangeChildrenSortBy = 'changeChildrenSortBy',
 
   // Document specific
+  AddPage = 'addPage',
+  AddSnippet = 'addSnippet',
+  AddLink = 'addLink',
   AddEmail = 'addEmail',
   AddHardlink = 'addHardlink',
-  AddHeadlessDocument = 'addHeadlessDocument',
-  AddLink = 'addLink',
-  AddNewsletter = 'addNewsletter',
-  AddPrintPage = 'addPrintPage',
-  AddSnippet = 'addSnippet',
   Convert = 'convert',
   EditSite = 'editSite',
   Open = 'open',

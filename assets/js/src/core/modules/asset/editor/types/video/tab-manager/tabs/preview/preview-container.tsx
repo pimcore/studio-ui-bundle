@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PreviewView } from './preview-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
@@ -20,40 +20,15 @@ import { Content } from '@Pimcore/components/content/content'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
-
-export interface IVideoContext {
-  thumbnail: string
-  setThumbnail: React.Dispatch<React.SetStateAction<string>>
-  playerPosition: number
-  setPlayerPosition: React.Dispatch<React.SetStateAction<number>>
-
-}
-
-export const VideoContext =
-  createContext<IVideoContext>({
-    thumbnail: '',
-    setThumbnail: () => {
-    },
-    playerPosition: 0,
-    setPlayerPosition: () => {
-    }
-  })
+import { VideoProvider, useVideoContext } from '@Pimcore/components/pimcore-video/video-provider'
 
 const PreviewContainer = (): React.JSX.Element => {
-  const [thumbnail, setThumbnail] = useState<string>('pimcore-system-treepreview')
   const [url, setUrl] = useState<string>('')
-  const [playerPosition, setPlayerPosition] = useState<number>(0)
   const { id } = useContext(AssetContext)
   const { isLoading } = useAssetDraft(id)
+  const { thumbnail } = useVideoContext()
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
-
-  const contextValue = useMemo<IVideoContext>(() => ({
-    thumbnail,
-    setThumbnail,
-    playerPosition,
-    setPlayerPosition
-  }), [thumbnail, playerPosition])
 
   const setUrlByThumbnail = (name: string): void => {
     setUrl('')
@@ -82,7 +57,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const poster = `${getPrefix()}/assets/${id}/video/stream/image-thumbnail?width=500&height=500&aspectRatio=true`
 
   return (
-    <VideoContext.Provider value={ contextValue }>
+    <VideoProvider>
       <ContentLayout renderSidebar={
         <Sidebar
           buttons={ sidebarButtons }
@@ -102,7 +77,7 @@ const PreviewContainer = (): React.JSX.Element => {
             )}
 
       </ContentLayout>
-    </VideoContext.Provider>
+    </VideoProvider>
   )
 }
 

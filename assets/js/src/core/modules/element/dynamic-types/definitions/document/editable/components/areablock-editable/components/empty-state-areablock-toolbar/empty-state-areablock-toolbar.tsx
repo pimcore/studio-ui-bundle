@@ -11,7 +11,7 @@
 import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Dropdown } from 'antd'
+import { Dropdown } from '@sdk/components'
 import { useStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'

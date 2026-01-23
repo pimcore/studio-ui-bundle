@@ -126,7 +126,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap, chartConfig }: 
         )
       }
     }
-  }), [chartWidth])
+  }), [filteredData, chartWidth])
 
   const mergedConfig = chartConfig === undefined ? config : merge({}, config, chartConfig)
 

@@ -39,6 +39,8 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const isWidgetActive = mainWidgetContext?.nodeId === nodeId
   const { setGlobalDefaultContext } = useGlobalDefaultContextActions()
+  const config = node.getConfig()
+  const iconColorGroup = typeof config.iconColorGroup === 'string' ? config.iconColorGroup : undefined
 
   useEffect(() => {
     if (isWidgetActive && defaultGlobalContext) {
@@ -55,6 +57,7 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
         <WidgetView
           contentTitleComponent={ ContentTitleComponent }
           icon={ icon }
+          iconColorGroup={ iconColorGroup }
           node={ node }
           showTitle={ isBorderNode }
           title={ title }

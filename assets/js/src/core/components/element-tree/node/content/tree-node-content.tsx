@@ -75,6 +75,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
           { ...icon }
           className={ cn({ [styles.unpublishedIcon]: isPublished === false && icon.type === 'name', [styles.unpublishedIconPath]: isPublished === false && icon.type === 'path' }) }
           data-testid={ `tree-node-icon-${props.node.id}` }
+          iconColorGroup="element"
           options={ { width: 16, height: 16 } }
           subIconName={ isPublished === false ? 'eye-off' : undefined }
         />

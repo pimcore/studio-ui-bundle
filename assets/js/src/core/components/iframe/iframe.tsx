@@ -24,7 +24,7 @@ export interface IframeRef {
   getElementRef: () => React.RefObject<HTMLIFrameElement>
 }
 
-interface IframeProps extends React.HTMLAttributes<HTMLIFrameElement> {
+export interface IframeProps extends React.HTMLAttributes<HTMLIFrameElement> {
   src: string
   title?: string
   loadingTip?: string

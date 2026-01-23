@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react'
+import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isString } from 'lodash'
+import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
@@ -41,17 +41,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const [isSelected, setIsSelected] = useState(!isEmptyValue(value))
 
   useImperativeHandle(ref, () => selectRef.current!)
-
-  useEffect(() => {
-    if (!isEmpty(value) || !isEmptyValue(value)) {
-      setIsSelected(true)
-    } else {
-      setIsSelected(false)
-    }
-  }, [value])
 
   // Calculate width: explicit width prop takes precedence over fieldWidths
   const getComputedWidth = (): number | undefined => {
@@ -80,7 +71,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const selectContainerClassNames = cn('studio-select', styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError,
-    [styles.selectContainerWithClear]: allowClear === true && isSelected,
+    [styles.selectContainerWithClear]: allowClear === true,
     [styles.selectContainerPrimary]: theme === 'primary'
   })
   const selectClassNames = cn(className, styles.select, {

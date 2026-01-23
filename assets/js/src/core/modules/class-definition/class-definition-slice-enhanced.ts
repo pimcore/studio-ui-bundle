@@ -39,10 +39,18 @@ export const {
   usePimcoreStudioApiClassCustomLayoutDeleteMutation,
   useClassCustomLayoutEditorCollectionQuery,
   usePimcoreStudioApiClassCustomLayoutExportQuery,
-  usePimcoreStudioApiClassCustomLayoutImportMutation,
+  useClassCustomLayoutImportMutation,
   useClassFieldCollectionObjectLayoutQuery,
   useClassDefinitionGetQuery,
-  useClassObjectBrickObjectLayoutQuery
+  useClassObjectBrickObjectLayoutQuery,
+  useClassDefinitionGetIdentifierDataQuery,
+  useClassDefinitionCreateMutation,
+  useClassDefinitionGetLayoutByIdQuery,
+  useClassDefinitionGetTreeQuery,
+  useClassDefinitionGetByIdQuery,
+  useClassDefinitionUpdateMutation,
+  useClassDefinitionDeleteMutation,
+  useClassCustomLayoutGetIdentifierDataQuery
 } = api
 
 export { api }

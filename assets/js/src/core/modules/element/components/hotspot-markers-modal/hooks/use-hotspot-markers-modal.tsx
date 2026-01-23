@@ -16,9 +16,12 @@ import { isInIframe } from '@Pimcore/utils/iframe'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useHotspotMarkersModalContext } from '../provider/use-hotspot-markers-modal-context'
 
+import type { DataTemplates } from '../hotspot-markers-modal'
+
 export interface UseHotspotMarkersModalOptions {
   disabled?: boolean
   onChange?: (hotspots: IHotspot[]) => void
+  predefinedDataTemplates?: DataTemplates | string | null
 }
 
 export interface UseHotspotMarkersModalReturn {

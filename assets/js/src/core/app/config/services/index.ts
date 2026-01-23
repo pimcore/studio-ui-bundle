@@ -250,10 +250,12 @@ import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dy
 import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
+import { IconColorGroupsRegistryService } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor/dynmic-types/definitions/dynamic-type-widget-type-element-tree'
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
+import { ElementTreeWidgetPermissionRegistry } from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
 import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
 import { DocumentUrlProcessorRegistry } from '@Pimcore/modules/document/services/processors/document-url-processor-registry'
@@ -271,6 +273,19 @@ import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
 import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
+import { DynamicTypeFieldDefinitionInput } from '@Pimcore/modules/field-definitions/dynamic-types/types/input/dynamic-type-field-definition-input'
+import { DynamicTypeFieldDefinitionTextarea } from '@Pimcore/modules/field-definitions/dynamic-types/types/textarea/dynamic-type-field-definition-textarea'
+import { DynamicTypeFieldDefinitionWysiwyg } from '@Pimcore/modules/field-definitions/dynamic-types/types/wysiwyg/dynamic-type-field-definition-wysiwyg'
+import { DynamicTypeFieldDefinitionPassword } from '@Pimcore/modules/field-definitions/dynamic-types/types/password/dynamic-type-field-definition-password'
+import { DynamicTypeFieldDefinitionInputQuantityValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/inputQuantityValue/dynamic-type-field-definition-input-quantity-value'
+import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
+import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
+import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
+import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
+import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
+import { DynamicTypeEmailsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -284,6 +299,7 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 container.bind(serviceIds.widgetRestorerRegistry).to(WidgetRestorerRegistry).inSingletonScope()
+container.bind(serviceIds.elementTreeWidgetPermissionRegistry).to(ElementTreeWidgetPermissionRegistry).inSingletonScope()
 container.bind(serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']).to(PerspectiveProcessorRegistry).inSingletonScope()
 
 // Form services
@@ -343,6 +359,7 @@ container.bind(serviceIds['Document/Editor/Sidebar/FolderSidebarManager']).to(Do
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
+container.bind(serviceIds.iconColorGroupsRegistry).to(IconColorGroupsRegistryService).inSingletonScope()
 
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
@@ -618,3 +635,20 @@ container.bind(serviceIds['DynamicTypes/WidgetEditor/ElementTree']).to(DynamicTy
 
 // App Loader
 container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSingletonScope()
+
+// Field Definitions
+container.bind(serviceIds['DynamicTypes/FieldDefinitionRegistry']).to(DynamicTypeFieldDefinitionRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Block']).to(DynamicTypeFieldDefinitionBlock).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Input']).to(DynamicTypeFieldDefinitionInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Textarea']).to(DynamicTypeFieldDefinitionTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Wysiwyg']).to(DynamicTypeFieldDefinitionWysiwyg).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Password']).to(DynamicTypeFieldDefinitionPassword).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/InputQuantityValue']).to(DynamicTypeFieldDefinitionInputQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
+
+// GDPR Provider
+container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/DataObjects']).to(DynamicTypeDataObjectGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Assets']).to(DynamicTypeAssetsGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Users']).to(DynamicTypeUsersGDPRProvider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GDPRProvider/Emails']).to(DynamicTypeEmailsGDPRProvider).inSingletonScope()
