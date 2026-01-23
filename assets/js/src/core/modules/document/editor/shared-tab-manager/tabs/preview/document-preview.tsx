@@ -130,11 +130,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
             { isTimeSliderVisible && (
               <DatePicker
                 onChange={ (value) => {
-                  console.log('value', value);
-                  // if (value instanceof Date) {
-                  //   setPreviewTimestamp(Math.floor(value.getTime() / 1000))
-                  // } else
-                    if (typeof value === 'string') {
+                  if (typeof value === 'string') {
                     setPreviewTimestamp(Math.floor(new Date(value).getTime() / 1000))
                   } else {
                     setPreviewTimestamp(undefined)
@@ -143,8 +139,9 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
                 outputFormat="YYYY-MM-DD HH:mm"
                 outputType="dateString"
                 placeholder={ t('preview.select_date_time') }
-                value={previewTimestamp}
+                showSuffixIcon
                 showTime
+                value={ previewTimestamp }
               />
             ) }
           </Flex>
