@@ -46,7 +46,8 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         &--bottom-right {
-          left: 11%;
+          top: 55%;
+          left: 13%;
           width: 1642px;
           height: 686px;
           transform: rotate(65.637deg);
