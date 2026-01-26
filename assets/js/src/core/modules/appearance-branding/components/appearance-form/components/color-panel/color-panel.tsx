@@ -17,6 +17,19 @@ import { useTranslation } from 'react-i18next'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const form = Form.useFormInstance()
+
+  const formatColor = (color: any): string | null => {
+    if (color?.cleared === true) {
+      return null
+    }
+
+    if (color?.toHexString && typeof color.toHexString === 'function') {
+      return color.toHexString()
+    }
+
+    return null
+  }
 
   return (
     <Panel
@@ -35,11 +48,15 @@ export const ColorPanel = (): React.JSX.Element => {
           <Form.Item name={ ['branding', 'brandColor'] } noStyle>
             <ColorPicker
               format="hex"
+              onChange={ (color) => {
+                const hexValue = formatColor(color)
+                form.setFieldValue(['branding', 'brandColor'], hexValue)
+              } }
               showText
             />
           </Form.Item>
-            <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
-            {t('appearance-branding.color.brand-color.label')}
+          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
+            {t('appearance-branding.color.brand-color.description')}
           </div>
         </Form.Item>
 
@@ -47,10 +64,14 @@ export const ColorPanel = (): React.JSX.Element => {
           <Form.Item name={ ['branding', 'backgroundShade'] } noStyle>
             <ColorPicker
               format="hex"
+              onChange={ (color) => {
+                const hexValue = formatColor(color)
+                form.setFieldValue(['branding', 'backgroundShade'], hexValue)
+              } }
               showText
             />
           </Form.Item>
-          <div style={{ marginTop: 8, fontSize: '12px', color: '#666' }}>
+          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
             {t('appearance-branding.color.background-shade.description')}
           </div>
         </Form.Item>
