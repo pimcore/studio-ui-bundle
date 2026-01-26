@@ -14,9 +14,9 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 
 interface AdminThumbnails {
-  logoUrl: string
-  customLogoSmall: string
-  loginScreenCustomBackgroundImage: string
+  logoUrl: string | null
+  customLogoSmall: string | null
+  loginScreenCustomBackgroundImage: string | null
   isLoading: boolean
 }
 
@@ -24,6 +24,7 @@ export const useAdminThumbnails = (): AdminThumbnails => {
   const { 
     data: thumbnailData, 
     isLoading,
+    isFetching,
     error
   } = useSettingAdminThumbnailQuery()
 
@@ -33,10 +34,12 @@ export const useAdminThumbnails = (): AdminThumbnails => {
     }
   }, [error])
 
+  const isLoadingOrFetching = isLoading || isFetching
+
   return {
-    logoUrl: thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
-    customLogoSmall: thumbnailData?.customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
-    loginScreenCustomBackgroundImage: thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png',
-    isLoading
+    logoUrl: isLoadingOrFetching ? null : (thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg'),
+    customLogoSmall: isLoadingOrFetching ? null : (thumbnailData?.customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg'),
+    loginScreenCustomBackgroundImage: isLoadingOrFetching ? null : (thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'),
+    isLoading: isLoadingOrFetching
   }
 }
