@@ -370,6 +370,11 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/Wysiwyg': 'DynamicTypes/FieldDefinition/Wysiwyg',
   'DynamicTypes/FieldDefinition/Password': 'DynamicTypes/FieldDefinition/Password',
   'DynamicTypes/FieldDefinition/InputQuantityValue': 'DynamicTypes/FieldDefinition/InputQuantityValue',
+  'DynamicTypes/FieldDefinition/Number': 'DynamicTypes/FieldDefinition/Number',
+  'DynamicTypes/FieldDefinition/NumericRange': 'DynamicTypes/FieldDefinition/NumericRange',
+  'DynamicTypes/FieldDefinition/Slider': 'DynamicTypes/FieldDefinition/Slider',
+  'DynamicTypes/FieldDefinition/QuantityValue': 'DynamicTypes/FieldDefinition/QuantityValue',
+  'DynamicTypes/FieldDefinition/QuantityValueRange': 'DynamicTypes/FieldDefinition/QuantityValueRange',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

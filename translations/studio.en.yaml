@@ -530,22 +530,44 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error
 width: Width
 height: Height
 width-tooltip: "The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+width-field: Width field
+width-unit: Width unit
 height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
 specific-settings: Specific Settings
+default-values-settings: Default value settings
+default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
 default-value: Default value
-default-value-generator: Default value generator
+default-value-generator: Default value generator service / class
 show-char-count: Show character count
 column-length: Column length
 max-length: Maximum length
 exclude-from-search-index: Exclude from search index
 toolbar-config: Toolbar configuration
 min-length: Minimum length
+min-value: Minimum value
+max-value: Maximum value
+increment-step: Increment step
+decimal-precision: Decimal precision
+decimal-size: Decimal size
+decimal-settings: Decimal settings
+decimal-settings-tooltip: "If decimal size or precision are specified, DECIMAL(decimalSize, decimalPrecision) MySQL type is used. Default values if missing are 64 as size and 0 as precision. Please note that in MySQL terms, the decimalSize is called precision and the decimalPrecision is called scale."
+integer: Integer
+unsigned: Only unsigned
+auto-convert: Auto convert
 default-unit: Default unit
 valid-units: Valid units
+slider-min: Slider minimum value
+slider-max: Slider maximum value
+slider-step: Slider step
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
 field-definition.password: Password
+field-definition.numeric: Number
+field-definition.numeric-range: Numeric Range
+field-definition.slider: Slider
+field-definition.quantity-value: Quantity Value
+field-definition.quantity-value-range: Quantity Value Range
 field-definition.input-quantity-value: Input Quantity Value
 regex-validation: Regular Expression Validation
 regex: RegEx
