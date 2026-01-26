@@ -30,6 +30,7 @@ export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
+  const [form] = Form.useForm<UpdateAdminSettings>()
 
   if (isSettingsLoading || isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
     return (
@@ -48,7 +49,6 @@ export const AppearanceForm = (): React.JSX.Element => {
     )
   }
 
-  const [form] = Form.useForm<UpdateAdminSettings>()
   const isWriteable = adminSettings.writeable ?? false
 
   const initialValues: UpdateAdminSettings = {
