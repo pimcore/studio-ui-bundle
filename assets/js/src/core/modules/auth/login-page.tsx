@@ -20,7 +20,7 @@ import { isNil } from 'lodash'
 import { useAuthentication } from './hooks/use-authentication'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
-import { useSettingAdminThumbnailQuery } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
 
 export const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate()
@@ -33,13 +33,11 @@ export const LoginPage = (): React.JSX.Element => {
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
   
-  const { data: thumbnailData } = useSettingAdminThumbnailQuery()
+  const { logoUrl, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   
   const backgroundImageUrl = useMemo(() => {
-    return thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'
-  }, [thumbnailData])
-  
-  const logoUrl = thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg'
+    return loginScreenCustomBackgroundImage
+  }, [loginScreenCustomBackgroundImage])
   
   const { styles } = useStyle({ backgroundImageUrl })
 

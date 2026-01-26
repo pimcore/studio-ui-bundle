@@ -10,15 +10,32 @@
 
 import React from 'react'
 import { useStyle } from './background.styles'
+import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
 
 const Background = (): React.JSX.Element => {
   const { styles } = useStyle()
+  
+  const { logoUrl } = useAdminThumbnails()
 
   return (
     <div className={ styles.background }>
       <div className='background-figure background-figure--bottom-left'></div>
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
+      <img
+        alt="Pimcore Logo"
+        src={logoUrl}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '586px',
+          maxHeight: '373px',
+          opacity: 0.7,
+          zIndex: 1
+        }}
+      />
     </div>
   )
 }
