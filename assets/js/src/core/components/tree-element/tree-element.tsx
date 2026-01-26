@@ -156,7 +156,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           selectedKeys={ selectedKeys }
           showIcon
           switcherIcon={ handleCustomSwitcherIcon }
-          titleRender={ (node) => {
+          titleRender={ (node, ...test) => {
             const component = (
               <TreeElementItem
                 actions={ node.actions }

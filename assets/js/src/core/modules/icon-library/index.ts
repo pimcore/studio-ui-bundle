@@ -65,6 +65,7 @@ import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg?react'
 import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg?react'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
+import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
@@ -529,6 +530,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'children-grid',
       component: childrenGrid
+    })
+    iconLibrary.register({
+      name: 'class',
+      component: classIcon
     })
     iconLibrary.register({
       name: 'close-filled',

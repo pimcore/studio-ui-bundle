@@ -23,12 +23,15 @@ moduleSystem.registerModule({
       // @todo translations
       path: 'DataManagement/DataModelDefinitions/ClassDefinitions',
       label: 'classes',
+      icon: 'class',
       order: 100,
       widgetConfig: {
         name: 'classes',
         id: 'class-definitions',
         component: 'class-definitions',
-        config: {}
+        config: {
+          icon: { type: 'name', value: 'class' },
+        }
       }
     })
 

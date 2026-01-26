@@ -18,7 +18,7 @@ export const AddModalTrigger = (): React.JSX.Element => {
   // @todo check icon
   return (
     <IconTextButton
-      icon={ { value: 'layout' } }
+      icon={ { value: 'new-something' } }
       onClick={ openModal }
     >
       Open Add Modal

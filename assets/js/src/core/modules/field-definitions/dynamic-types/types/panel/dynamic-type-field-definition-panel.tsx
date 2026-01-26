@@ -28,6 +28,8 @@ export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionL
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
+    console.log({id, path: context.path})
+
     return (
       <>
         {super.getFormFields(context)}
