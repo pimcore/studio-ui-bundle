@@ -94,6 +94,7 @@ import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg?react'
 import dataObjectsImporter from '@Pimcore/assets/icons/data-objects-importer.inline.svg?react'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg?react'
+import datahub from '@Pimcore/assets/icons/datahub.inline.svg?react'
 import dateRange from '@Pimcore/assets/icons/date-range.inline.svg?react'
 import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg?react'
 import date from '@Pimcore/assets/icons/date.inline.svg?react'
@@ -646,6 +647,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
+    })
+    iconLibrary.register({
+      name: 'datahub',
+      component: datahub
     })
     iconLibrary.register({
       name: 'date-range',
@@ -1578,10 +1583,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'z-to-a-order',
       component: zToAOrder
-    })
-    iconLibrary.register({
-      name: 'lock-circle',
-      component: lockCircle
     })
   }
 })

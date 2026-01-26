@@ -12,9 +12,7 @@ import React, { type ReactNode } from 'react'
 import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { QuestionCircleOutlined } from '@ant-design/icons'
-import { useStyles } from './switch.styles'
+import { TooltipIcon } from '@Pimcore/components/tooltip-icon/tooltip-icon'
 import { isNil } from 'lodash'
 
 export interface SwitchProps extends AntdSwitchProps {
@@ -29,8 +27,6 @@ export const Switch = ({
   tooltip,
   ...props
 }: SwitchProps): React.JSX.Element => {
-  const { styles } = useStyles()
-
   return (
     <Flex
       align={ 'center' }
@@ -42,12 +38,7 @@ export const Switch = ({
       />
       {labelRight}
       {!isNil(tooltip) && (
-        <Tooltip
-          placement="right"
-          title={ tooltip }
-        >
-          <QuestionCircleOutlined className={ styles.tooltipIcon } />
-        </Tooltip>
+        <TooltipIcon tooltip={ tooltip } />
       )}
     </Flex>
   )

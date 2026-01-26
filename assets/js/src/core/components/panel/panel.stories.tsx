@@ -85,6 +85,15 @@ export const CollapsibleCollapsed: Story = {
   }
 }
 
+export const WithTooltip: Story = {
+  args: {
+    title: 'Panel with Tooltip',
+    tooltip: 'This is helpful information about the panel.',
+    theme: 'card-with-highlight',
+    children: 'Hover over the question mark icon next to the title to see the tooltip.'
+  }
+}
+
 export const FieldsetTheme: Story = {
   args: {
     title: 'Fieldset Theme Panel',
