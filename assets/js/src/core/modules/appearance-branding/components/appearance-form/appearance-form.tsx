@@ -29,22 +29,41 @@ export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
-  const [form] = Form.useForm<UpdateAdminSettings>()
 
-  const isWriteable = adminSettings?.writeable ?? false
+  if (isSettingsLoading || !adminSettings || !adminSettings.branding || !adminSettings.assets) {
+    return (
+      <Content
+        loading={true}
+        padded
+        padding={{
+          x: 'extra-small',
+          y: 'extra-small'
+        }}
+      >
+        <Title level={2}>
+          {t('appearance-branding.title')}
+        </Title>
+      </Content>
+    )
+  }
+
+  const [form] = Form.useForm<UpdateAdminSettings>()
+  const isWriteable = adminSettings.writeable ?? false
 
   const initialValues: UpdateAdminSettings = {
     branding: {
-      brandColor: adminSettings?.branding?.brandColor ?? '',
-      backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
-      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage ?? null,
-      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage ?? null
+      brandColor: adminSettings.branding?.brandColor ?? '',
+      backgroundShade: (adminSettings.branding as any)?.backGroundShade ?? '',
+      loginScreenCustomBackgroundImage: adminSettings.branding?.loginScreenCustomBackgroundImage ?? null,
+      loginScreenCustomImage: adminSettings.branding?.loginScreenCustomImage ?? null
     },
     assets: {
-      hide_edit_image: adminSettings?.assets?.hide_edit_image ?? false,
-      disable_tree_preview: adminSettings?.assets?.disable_tree_preview ?? false
+      hide_edit_image: adminSettings.assets?.hide_edit_image ?? false,
+      disable_tree_preview: adminSettings.assets?.disable_tree_preview ?? false
     }
   }
+
+  console.log("initialValues created:", initialValues)
 
   return (
     <FormKit
@@ -74,7 +93,6 @@ export const AppearanceForm = (): React.JSX.Element => {
         vertical
       >
         <Content
-          loading={ isSettingsLoading }
           padded
           padding={ {
             x: 'extra-small',
