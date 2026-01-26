@@ -16,7 +16,7 @@ import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 import { useStyles } from './grid-button.styles'
 import cn from 'classnames'
 
-export interface GridButtonProps extends Omit<ButtonProps, 'children' | 'type' | 'icon' | 'iconPosition' | 'block' | 'size' | 'shape'> {
+export interface GridButtonProps extends Omit<ButtonProps, 'children' | 'type' | 'icon' | 'iconPosition' | 'block' | 'size' | 'shape' | 'danger' | 'color'> {
   icon: Pick<IconProps, 'type' | 'value'>
   label: string
   iconOptions?: IconProps['options']
