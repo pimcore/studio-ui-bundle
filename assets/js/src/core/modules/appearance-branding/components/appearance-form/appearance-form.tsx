@@ -63,8 +63,6 @@ export const AppearanceForm = (): React.JSX.Element => {
     }
   }
 
-  console.log("initialValues created:", initialValues)
-
   return (
     <FormKit
       formProps={ {
