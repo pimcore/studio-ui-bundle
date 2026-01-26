@@ -33,7 +33,7 @@ export const LoginPage = (): React.JSX.Element => {
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
   
-  const { logoUrl, loginScreenCustomBackgroundImage } = useAdminThumbnails()
+  const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   
   const backgroundImageUrl = useMemo(() => {
     return loginScreenCustomBackgroundImage
@@ -73,7 +73,7 @@ export const LoginPage = (): React.JSX.Element => {
       <div className={ styles.loginWidget }>
         <img
           alt={ 'Pimcore Logo' }
-          src={ logoUrl }
+          src={ customLogoSmall }
         />
         <LoginFormContainer />
       </div>
