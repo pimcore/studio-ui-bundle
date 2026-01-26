@@ -53,7 +53,7 @@ export const useStyle = createStyles(({ token, css }) => {
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: color-mix(in srgb, var(--pimcore-branding-color-background, rgba(122, 58, 212, 1)) 42%, transparent);
+          background: var(--pimcore-branding-color-background, rgba(122, 58, 212, 0.42));
           filter: blur(310px);
         }
       }

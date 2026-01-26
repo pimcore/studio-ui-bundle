@@ -27,16 +27,16 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
     const branding = adminSettings.branding
     const documentRoot = document.documentElement
 
-    if (!isEmpty(branding.brandColor)) {
-      documentRoot.style.setProperty('--pimcore-branding-color', branding.brandColor)
-    } else {
+    if (isEmpty(branding.brandColor)) {
       documentRoot.style.removeProperty('--pimcore-branding-color')
+    } else {
+      documentRoot.style.setProperty('--pimcore-branding-color', branding.brandColor)
     }
 
-    if (!isEmpty(branding.backgroundShade)) {
-      documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
-    } else {
+    if (isEmpty(branding.backgroundShade)) {
       documentRoot.style.removeProperty('--pimcore-branding-color-background')
+    } else {
+      documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
     }
   }, [adminSettings, isSettingsLoading])
 

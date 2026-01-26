@@ -21,11 +21,11 @@ export const ColorPanel = (): React.JSX.Element => {
   const form = Form.useFormInstance()
 
   const formatColor = (color: any): string | null => {
-    if (isObject(color) && has(color, 'cleared') && (color as any).cleared === true) {
+    if (isObject(color) && has(color, 'cleared') && color.cleared === true) {
       return null
     }
 
-    if (isObject(color) && has(color, 'toHexString') && isFunction((color as any).toHexString)) {
+    if (isObject(color) && has(color, 'toHexString') && isFunction(color.toHexString)) {
       return (color as any).toHexString()
     }
 
