@@ -9,7 +9,7 @@
  */
 
 import { useEffect } from 'react'
-import { useSettingAdminThumbnailQuery } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useSettingAdminThumbnailQuery } from '@Pimcore/modules/app/settings/settings-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 
