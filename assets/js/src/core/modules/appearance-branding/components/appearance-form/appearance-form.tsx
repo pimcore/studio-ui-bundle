@@ -53,9 +53,9 @@ export const AppearanceForm = (): React.JSX.Element => {
   const initialValues: UpdateAdminSettings = {
     branding: {
       brandColor: adminSettings.branding?.brandColor ?? '',
-      backgroundShade: (adminSettings.branding as any)?.backGroundShade ?? '',
+      backgroundShade: adminSettings.branding?.backgroundShade ?? '',
       loginScreenCustomBackgroundImage: adminSettings.branding?.loginScreenCustomBackgroundImage ?? null,
-      loginScreenCustomImage: adminSettings.branding?.loginScreenCustomImage ?? null
+      customLogo: adminSettings.branding?.customLogo ?? null
     },
     assets: {
       hide_edit_image: adminSettings.assets?.hide_edit_image ?? false,
@@ -109,7 +109,7 @@ export const AppearanceForm = (): React.JSX.Element => {
 
             <ImagePanel
               descriptionKey="appearance-branding.custom-logo.description"
-              fieldName={ ['branding', 'loginScreenCustomImage'] }
+              fieldName={ ['branding', 'customLogo'] }
               height={ 150 }
               titleKey="appearance-branding.custom-logo.title"
               width={ 300 }

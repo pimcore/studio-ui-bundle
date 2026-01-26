@@ -28,9 +28,13 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
 
     if (branding.brandColor) {
       documentRoot.style.setProperty('--pimcore-branding-color', branding.brandColor)
-      documentRoot.style.setProperty('--pimcore-branding-color-background', branding.brandColor)
     } else {
       documentRoot.style.removeProperty('--pimcore-branding-color')
+    }
+
+    if (branding.backgroundShade) {
+      documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
+    } else {
       documentRoot.style.removeProperty('--pimcore-branding-color-background')
     }
 
