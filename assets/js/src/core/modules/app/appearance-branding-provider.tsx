@@ -9,17 +9,17 @@
  */
 
 import React, { useEffect } from 'react'
-import { useAdminSettingsGetQuery } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useAppearanceBranding } from '@Pimcore/modules/appearance-branding/hooks/use-appearance-branding'
 
 interface AppearanceBrandingProviderProps {
   children: React.ReactNode
 }
 
 export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProviderProps): React.JSX.Element => {
-  const { data: adminSettings, isLoading } = useAdminSettingsGetQuery()
+  const { adminSettings, isSettingsLoading } = useAppearanceBranding()
 
   useEffect(() => {
-    if (isLoading || !adminSettings?.branding) {
+    if (isSettingsLoading || !adminSettings?.branding) {
       return
     }
 
@@ -38,7 +38,7 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
       documentRoot.style.removeProperty('--pimcore-branding-color-background')
     }
 
-  }, [adminSettings, isLoading])
+  }, [adminSettings, isSettingsLoading])
 
   return <>{children}</>
 }
