@@ -62,18 +62,18 @@ asset.upload.files.uploaded: "{{successItems}} files are uploaded"
 asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Upload completed successfully
 asset.upload.files.completed-actions: Completed actions
-asset.upload.validation: 'Please add a file'
+asset.upload.validation: "Please add a file"
 asset.upload.file-exists.title: File already exists
 asset.upload.file-exists.message: 'The file "{{fileName}}" already exists in this folder. Do you want to overwrite it?'
 asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
-upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
-upload.error.generic: 'The file could not be uploaded.'
-upload.error.upload-failed: 'Upload failed'
-upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
-asset.select.type.nullable: 'All types'
+upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
+upload.error.generic: "The file could not be uploaded."
+upload.error.upload-failed: "Upload failed"
+upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
+asset.select.type.nullable: "All types"
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
@@ -128,7 +128,7 @@ data-object.tree.context-menu.add-object: New Object
 data-object.tree.context-menu.add-variant: New Variant
 data-object.variant-listing.create-data-variant: New Variant
 data-object.create-data-object: Add new Object of type {{className}}
-data-object.create-variant: Add new Variant of type {{className}} 
+data-object.create-variant: Add new Variant of type {{className}}
 data-object.object-editor-tabs.variants: Variants
 object.object-editor-tabs.children-listing: Children Grid
 workflow.label: Workflow
@@ -529,6 +529,38 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
+width-tooltip: "The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+specific-settings: Specific Settings
+default-value: Default value
+default-value-generator: Default value generator
+show-char-count: Show character count
+column-length: Column length
+max-length: Maximum length
+exclude-from-search-index: Exclude from search index
+toolbar-config: Toolbar configuration
+min-length: Minimum length
+default-unit: Default unit
+valid-units: Valid units
+field-definition.input: Input
+field-definition.textarea: Textarea
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Password
+field-definition.input-quantity-value: Input Quantity Value
+regex-validation: Regular Expression Validation
+regex: RegEx
+regex-flags: RegEx Flags
+regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
+test-string: Test string
+regex-validation-error-message: "The string does not match the required format."
+name: Name
+tooltip: Tooltip
+mandatory: Mandatory
+unique: Unique
+not-editable: Not editable
+invisible: Invisible
+visible-in-gridview: Visible in grid view
+visible-in-searchresult: Visible in search result
 quality: Quality
 mode: Mode
 format: Format
@@ -623,14 +655,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
-element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
+element.tree.copy-success-description: '{{elementType}} "{{name}}" has been copied and is ready to paste'
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
-element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
+element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -642,10 +674,10 @@ element.tree.sorting.keyed-descending: Z to A (Key)
 element.tree.sorting.indexed: Index (Manual)
 element.tree.refresh: Refresh
 element.new-folder: New Folder
-element.new-folder.validation: 'Please enter a valid name'
+element.new-folder.validation: "Please enter a valid name"
 element.rename: Rename
-element.rename.label: 'Please enter the new name'
-element.rename.validation: 'Please enter a valid name'
+element.rename.label: "Please enter the new name"
+element.rename.validation: "Please enter a valid name"
 element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
@@ -698,8 +730,8 @@ latitude: Latitude
 longitude: Longitude
 search-address: Search address
 search: Search
-geocode.address-not-found: 'The entered address was not found'
-geocode.possible-causes: 'Possible causes'
+geocode.address-not-found: "The entered address was not found"
+geocode.possible-causes: "Possible causes"
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: Do you really want to delete {{type}} '{{value}}'?
 relations.id: ID
@@ -1132,12 +1164,12 @@ delete-draft-confirmation: Are you sure you want to delete the draft?
 auto-save.tooltip: This version is auto saved.
 auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.
-detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
+detached-tab.draft-tooltip-addon: You can publish in the associated element/object main/mother tab.
 details: Details
 element: Element
 entries: entries
 entry: entry
-error_element_validation_failed: 'Validation failed'
+error_element_validation_failed: "Validation failed"
 element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}}
 edit-modal.inline-edit: Inline edit
@@ -1241,7 +1273,7 @@ please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
-email-blocklist.new: New 
+email-blocklist.new: New
 email-blocklist.add.validation: Please enter a valid email address
 email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
@@ -1522,7 +1554,7 @@ widget-editor.widget-form.allowed-context-menu.delete: Delete
 widget-editor.widget-form.allowed-context-menu.paste: Paste
 widget-editor.widget-form.allowed-context-menu.rename: Rename
 widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
-widget-editor.widget-form.allowed-context-menu.addUploadZip:  New Asset(s) > Upload Zip
+widget-editor.widget-form.allowed-context-menu.addUploadZip: New Asset(s) > Upload Zip
 widget-editor.widget-form.allowed-context-menu.addUpload: New Asset(s) > Upload Files
 widget-editor.widget-form.allowed-context-menu.download: Download
 widget-editor.widget-form.allowed-context-menu.pasteCut: Paste Cut
@@ -1660,3 +1692,25 @@ login-token-modal.title: Login as this user in a different browser
 login-token-modal.description: The following link is a temporary link that allows you to login as this user in a different browser
 login-token-modal.close: Close
 login-token-modal.copy-and-close: Copy & Close
+navigation.gdpr-extractor: GDPR Data Extractor
+widget.gdpr-extractor: GDPR Data Extractor
+gdpr-extractor.title: GDPR Data Extractor
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: First Name
+gdpr-extractor.search-form.field.lastname: Last Name
+gdpr-extractor.search-form.field.email: Email address
+gdpr-extractor.search-form.submit: Search
+gdpr-extractor.data-objects.table.field.type: Type
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Path
+gdpr-extractor.data-objects.table.field.className: Class
+gdpr-extractor.assets.table.field.type: Type
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Full Path
+gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Username
+gdpr-extractor.users.table.field.firstname: First Name
+gdpr-extractor.users.table.field.lastname: Last Name
+gdpr-extractor.users.table.field.email: Email
+gdpr-extractor.table.field.actions: Actions

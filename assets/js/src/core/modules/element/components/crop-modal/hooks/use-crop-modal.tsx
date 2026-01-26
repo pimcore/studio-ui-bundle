@@ -16,6 +16,8 @@ import { useCropModalContext } from '../provider/use-crop-modal-context'
 
 export interface UseCropModalOptions {
   disabled?: boolean
+  ratioX?: number
+  ratioY?: number
   onChange?: (crop: CropSettings | null) => void
 }
 

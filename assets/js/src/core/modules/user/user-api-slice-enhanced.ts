@@ -8,9 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
+  addTagTypes: [
+    tagNames.USERS,
+    tagNames.USER_DETAIL,
+    tagNames.USER_TREE
+  ],
   endpoints: {
     userUploadImage: (endpoint): void => {
       const originalQuery = endpoint.query
@@ -30,6 +36,42 @@ const api = baseApi.enhanceEndpoints({
             body: formData
           }
         }
+      }
+    },
+    userGetCollection: {
+      providesTags: (result, error, args) => {
+        let detailTags: Tag[] = []
+        if (result !== undefined) {
+          detailTags = result?.items.flatMap((item) => providingTags.USER_DETAIL(item.id))
+        }
+
+        return [
+          ...detailTags,
+          ...providingTags.USERS()
+        ]
+      }
+    },
+    userGetById: {
+      providesTags: (result, error, args) => providingTags.USER_DETAIL(args.id)
+    },
+    userDeleteById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.USER_DETAIL(args.id)
+    },
+    userUpdateById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.USER_DETAIL(args.id)
+    },
+    userGetTree: {
+      providesTags: (result, error, args) => {
+        let detailTags: Tag[] = []
+        if (result !== undefined) {
+          detailTags = result?.items.flatMap((item) => providingTags.USER_DETAIL(item.id))
+        }
+
+        return [
+          ...detailTags,
+          ...providingTags.USER_TREE(),
+          ...providingTags.USERS()
+        ]
       }
     }
   }

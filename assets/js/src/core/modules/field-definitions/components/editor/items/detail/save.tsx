@@ -10,7 +10,6 @@
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
-import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -21,9 +20,9 @@ import React, { useEffect } from 'react'
 
 export const DetailSave = (): React.JSX.Element => {
   // @todo translations
+  const { useDetailUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds } = useLayout()
   const { generalSettings } = useGeneralSettings()
-  const { useDetailUpdateMutation } = useSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
   const error = result.error as FetchBaseQueryError | undefined

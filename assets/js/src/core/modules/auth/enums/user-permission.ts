@@ -30,4 +30,5 @@ export enum UserPermission {
   ApplicationLogger = 'application_logging',
   PerspectiveEditor = 'studio_perspective_editor',
   WidgetEditor = 'studio_perspective_widget_editor',
+  GDPRDataExtractor = 'gdpr_data_extractor'
 }

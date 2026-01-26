@@ -10,10 +10,8 @@
 
 import { AreaProvider, type AreaProviderProps } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { ItemsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { ItemsSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar'
-import { ItemsTabs } from '@Pimcore/modules/field-definitions/components/editor/items/tabs'
 import { SettingsProvider, type SettingsProviderProps } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { ConfigLayout } from '@sdk/components'
+import { EditorView } from '@Pimcore/modules/field-definitions/components/editor/view'
 import React from 'react'
 
 export interface EditorProps {
@@ -22,12 +20,21 @@ export interface EditorProps {
   useItemsQuery: SettingsProviderProps['useItemsQuery']
   useItemsDeleteMutation: SettingsProviderProps['useItemsDeleteMutation']
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
-  useDetailLayoutQuery: SettingsProviderProps['useDetailLayoutQuery']
+  useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
+  useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
   useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
+  LayoutProvider?: SettingsProviderProps['LayoutProvider']
+  useLayout?: SettingsProviderProps['useLayout']
+  customLayouts?: SettingsProviderProps['customLayouts']
+  view?: React.JSX.Element
 }
 
 export const Editor = (props: EditorProps): React.JSX.Element => {
-  const { area, ...rest } = props
+  const {
+    area,
+    view = <EditorView />,
+    ...rest
+  } = props
 
   return (
     <AreaProvider area={ area }>
@@ -35,18 +42,7 @@ export const Editor = (props: EditorProps): React.JSX.Element => {
         { ...rest }
       >
         <ItemsProvider>
-          <ConfigLayout
-            leftItem={ {
-              minSize: 250,
-              maxSize: 350,
-              size: 250,
-              children: <ItemsSidebar />
-            } }
-            resizeAble
-            rightItem={ {
-              children: <ItemsTabs />
-            } }
-          />
+          {view}
         </ItemsProvider>
       </SettingsProvider>
     </AreaProvider>

@@ -11,28 +11,31 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, InputNumber, Switch, TextArea } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionWysiwygFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
-    <FormKit.Panel title="Specific Settings">
+    <FormKit.Panel title={ t('specific-settings') }>
       <Form.Item
-        label="width"
+        label={ t('width') }
         name="width"
-        tooltip="width_tooltip"
+        tooltip={ t('width-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="height"
+        label={ t('height') }
         name="height"
-        tooltip="height_tooltip"
+        tooltip={ t('height-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="toolbar_config"
+        label={ t('toolbar-config') }
         name="toolbarConfig"
       >
         <TextArea />
@@ -41,11 +44,11 @@ export const FieldDefinitionWysiwygFormFields = (props: FieldDefinitionAbstractF
       <Form.Item
         name="excludeFromSearchIndex"
       >
-        <Switch labelRight="exclude_from_search_index" />
+        <Switch labelRight={ t('exclude-from-search-index') } />
       </Form.Item>
 
       <Form.Item
-        label="max_length"
+        label={ t('max-length') }
         name="maxCharacters"
         rules={ [{ min: 0, type: 'number' }] }
       >

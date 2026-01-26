@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionTextarea extends DynamicTypeFieldDefiniti
   id: string = 'textarea'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'textarea' }
+    return { type: 'name', value: 'content' }
   }
 
   getGroup (): string[] {

@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionWysiwyg extends DynamicTypeFieldDefinitio
   id: string = 'wysiwyg'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'wysiwyg' }
+    return { type: 'name', value: 'wysiwyg-field' }
   }
 
   getGroup (): string[] {

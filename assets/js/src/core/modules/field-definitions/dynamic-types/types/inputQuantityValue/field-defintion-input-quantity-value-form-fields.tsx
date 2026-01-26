@@ -12,32 +12,34 @@ import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/fi
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
-    <FormKit.Panel title="Specific Settings">
+    <FormKit.Panel title={ t('specific-settings') }>
       {!isCustomLayout && (
       <>
         <Form.Item
-          label="width"
+          label={ t('width') }
           name="width"
-          tooltip="width_tooltip"
+          tooltip={ t('width-tooltip') }
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="default_value"
+          label={ t('default-value') }
           name="defaultValue"
         >
           <InputNumber />
         </Form.Item>
 
         <Form.Item
-          label="default_unit"
+          label={ t('default-unit') }
           name="defaultUnit"
         >
           <Select
@@ -48,7 +50,7 @@ export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefiniti
         </Form.Item>
 
         <Form.Item
-          label="valid_units"
+          label={ t('valid-units') }
           name="validUnits"
         >
           <Select
