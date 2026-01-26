@@ -12,8 +12,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-
-    typeButton: css`
+    button: css`
       width: 100%;
       height: 100%;
       padding: ${token.paddingXS}px;
@@ -31,12 +30,12 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
-    typeIcon: css`
+    icon: css`
       color: ${token.colorTextSecondary};
       margin-bottom: ${token.marginXS}px;
     `,
 
-    typeName: css`
+    label: css`
       text-align: center;
       color: ${token.colorTextSecondary};
       white-space: normal;
