@@ -95,6 +95,7 @@ import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg?react'
 import dataObjectsImporter from '@Pimcore/assets/icons/data-objects-importer.inline.svg?react'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg?react'
+import datahub from '@Pimcore/assets/icons/datahub.inline.svg?react'
 import dateRange from '@Pimcore/assets/icons/date-range.inline.svg?react'
 import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg?react'
 import date from '@Pimcore/assets/icons/date.inline.svg?react'
@@ -179,6 +180,7 @@ import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
 import locationMarker from '@Pimcore/assets/icons/location-marker.inline.svg?react'
+import lockCircle from '@Pimcore/assets/icons/lock-circle.inline.svg?react'
 import lock from '@Pimcore/assets/icons/lock.inline.svg?react'
 import locked from '@Pimcore/assets/icons/locked.inline.svg?react'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
@@ -652,6 +654,10 @@ moduleSystem.registerModule({
       component: dataQuality
     })
     iconLibrary.register({
+      name: 'datahub',
+      component: datahub
+    })
+    iconLibrary.register({
       name: 'date-range',
       component: dateRange
     })
@@ -986,6 +992,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'location-marker',
       component: locationMarker
+    })
+    iconLibrary.register({
+      name: 'lock-circle',
+      component: lockCircle
     })
     iconLibrary.register({
       name: 'lock',

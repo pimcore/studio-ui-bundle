@@ -100,11 +100,11 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       itemCallback: ({ fieldDefinition, initialTreeItem }) => {
         let dynType: undefined | DynamicTypeFieldDefinitionAbstract
         const currentPath = initialTreeItem.meta!.currentPath!
-        
+
         if (fieldDefinitionRegistry.hasDynamicType(fieldDefinition.fieldtype)) {
           dynType = fieldDefinitionRegistry.getDynamicType(fieldDefinition.fieldtype)
         }
-        
+
         const actions: ITreeElementProps['treeData'][0]['actions'] = fieldDefinitionRegistry.getDropdownActions({ area, path: currentPath, fieldDefinitions })
 
         return {
@@ -164,8 +164,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const type = fieldDefinitionRegistry.getDynamicType(typeId)
 
       const newFieldDefData = type.getDefaultData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions })
-      const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData);
-      setCurrentFieldDefinitionId(newlyAddedFieldId);
+      const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
+      setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node.meta?.currentPath, newlyAddedFieldId])
     }
   }

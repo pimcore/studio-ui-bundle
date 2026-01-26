@@ -42,7 +42,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
         return true
       }
 
-      return configuration.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || configuration.id.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      return (configuration.name as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || (configuration.id as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     })
 
     filteredData.forEach((configuration) => {

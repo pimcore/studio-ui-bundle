@@ -30,7 +30,7 @@ moduleSystem.registerModule({
         id: 'class-definitions',
         component: 'class-definitions',
         config: {
-          icon: { type: 'name', value: 'class' },
+          icon: { type: 'name', value: 'class' }
         }
       }
     })

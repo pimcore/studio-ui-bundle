@@ -11,20 +11,23 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, InputNumber } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
-    <FormKit.Panel title="Specific Settings">
+    <FormKit.Panel title={ t('specific-settings') }>
       <Form.Item
-        label="width"
+        label={ t('width') }
         name="width"
-        tooltip="width_tooltip"
+        tooltip={ t('width-tooltip') }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="min_length"
+        label={ t('min-length') }
         name="minimumLength"
         rules={ [{ min: 0, type: 'number' }] }
       >

@@ -31,7 +31,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/IconSet/PimcoreDefault': 'DynamicTypes/IconSet/PimcoreDefault',
   'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
   'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
-  'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry'
+  'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry',
+  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry'
 }
 
 export const serviceIds = {
@@ -364,9 +365,20 @@ export const serviceIds = {
   // Field Definitions
   'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
   'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',
+  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel',
   'DynamicTypes/FieldDefinition/Textarea': 'DynamicTypes/FieldDefinition/Textarea',
   'DynamicTypes/FieldDefinition/Wysiwyg': 'DynamicTypes/FieldDefinition/Wysiwyg',
   'DynamicTypes/FieldDefinition/Password': 'DynamicTypes/FieldDefinition/Password',
   'DynamicTypes/FieldDefinition/InputQuantityValue': 'DynamicTypes/FieldDefinition/InputQuantityValue',
-  'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel'
+  'DynamicTypes/FieldDefinition/Number': 'DynamicTypes/FieldDefinition/Number',
+  'DynamicTypes/FieldDefinition/NumericRange': 'DynamicTypes/FieldDefinition/NumericRange',
+  'DynamicTypes/FieldDefinition/Slider': 'DynamicTypes/FieldDefinition/Slider',
+  'DynamicTypes/FieldDefinition/QuantityValue': 'DynamicTypes/FieldDefinition/QuantityValue',
+  'DynamicTypes/FieldDefinition/QuantityValueRange': 'DynamicTypes/FieldDefinition/QuantityValueRange',
+
+  // GDPR Providers
+  'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',
+  'DynamicTypes/GDPRProvider/Assets': 'DynamicTypes/GDPRProvider/Assets',
+  'DynamicTypes/GDPRProvider/Users': 'DynamicTypes/GDPRProvider/Users',
+  'DynamicTypes/GDPRProvider/Emails': 'DynamicTypes/GDPRProvider/Emails'
 }

@@ -21,7 +21,7 @@ export const AddModalTrigger = (): React.JSX.Element => {
       icon={ { value: 'new-something' } }
       onClick={ openModal }
     >
-      Open Add Modal
+      New layout
     </IconTextButton>
   )
 }

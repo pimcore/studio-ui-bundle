@@ -9,10 +9,11 @@
  */
 
 import { type DynamicTypeFieldDefinitionAbstract, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { TreeDataItem } from '@sdk/components'
+import { type TreeDataItem } from '@sdk/components'
 import { DynamicTypeRegistryAbstract } from '@sdk/modules/element'
-import { ElementIcon } from '@sdk/modules/widget-manager'
+import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { injectable } from 'inversify'
+import { isNil } from 'lodash'
 
 export interface GroupInfo {
   icon: ElementIcon
@@ -27,97 +28,97 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     })
   }
 
-  getDropdownGroupInfos(): Record<string, GroupInfo> {
+  getDropdownGroupInfos (): Record<string, GroupInfo> {
     return {
-      'layout': { 
+      layout: {
         icon: {
           value: 'new-layout',
           type: 'name'
         }
-       },
-       'data': { 
+      },
+      data: {
         icon: {
           value: 'new-data-component',
           type: 'name'
         }
-       },
-      'data/text': { 
+      },
+      'data/text': {
         icon: {
           value: 'content',
           type: 'name'
         }
-       },
-       'data/number': { 
+      },
+      'data/numeric': {
         icon: {
           value: 'number-type',
           type: 'name'
         }
-       },
-       'data/date': { 
+      },
+      'data/date': {
         icon: {
           value: 'date',
           type: 'name'
         }
-       },
-       'data/select': { 
+      },
+      'data/select': {
         icon: {
           value: 'select-type',
           type: 'name'
         }
-       },
-       'data/media': { 
+      },
+      'data/media': {
         icon: {
           value: 'media',
           type: 'name'
         }
-       },
-       'data/relation': { 
+      },
+      'data/relation': {
         icon: {
           value: 'relation',
           type: 'name'
         }
       },
-       'data/geographic': { 
+      'data/geographic': {
         icon: {
           value: 'location-marker',
           type: 'name'
         }
       },
-      'data/crm': { 
+      'data/crm': {
         icon: {
           value: 'crm',
           type: 'name'
         }
       },
-       'data/structured': { 
+      'data/structured': {
         icon: {
           value: 'batch-selection',
           type: 'name'
         }
       },
-      'data/other': { 
+      'data/other': {
         icon: {
           value: 'other',
           type: 'name'
         }
-      },
-       
+      }
+
     }
   }
 
-  private optimizeActions(actions: TreeDataItem['actions']): TreeDataItem['actions'] {
-    if (!actions) {
+  private optimizeActions (actions: TreeDataItem['actions']): TreeDataItem['actions'] {
+    if (isNil(actions)) {
       return actions
     }
 
     const optimizedActions: NonNullable<TreeDataItem['actions']> = []
 
     actions.forEach((action) => {
-      if (action.actions && action.actions.length > 0) {
+      if (!isNil(action.actions) && action.actions.length > 0) {
         action.actions = this.optimizeActions(action.actions)
       }
 
-      if (action.actions && action.actions.length === 1) {
+      if (!isNil(action.actions) && action.actions.length === 1) {
         optimizedActions.push(action.actions[0])
       } else {
         optimizedActions.push(action)
@@ -136,88 +137,88 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     })
   }
 
-  getDropdownActions(context: FieldDefinitionContext): TreeDataItem['actions'] {
-    const { fieldDefinitions, path, area } = context;
-    const fieldDefinition = fieldDefinitions[path.at(-1)!];
+  getDropdownActions (context: FieldDefinitionContext): TreeDataItem['actions'] {
+    const { fieldDefinitions, path, area } = context
+    const fieldDefinition = fieldDefinitions[path.at(-1)!]
     // @todo remove wrong type of fieldType when backend provides the right typo
-    const dynType = this.getDynamicType(fieldDefinition.fieldType ?? fieldDefinition.fieldtype, false);
+    const dynType = this.getDynamicType((fieldDefinition.fieldType ?? fieldDefinition.fieldtype) as string, false)
 
     if (dynType === undefined) {
-      return [];
+      return []
     }
 
-    const groupInfos = this.getDropdownGroupInfos();
-    const isCloneAllowed = !area.includes('custom-layout');
-    const isRoot = fieldDefinition.name === 'pimcore_root';
-    const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context);
+    const groupInfos = this.getDropdownGroupInfos()
+    const isCloneAllowed = !area.includes('custom-layout')
+    const isRoot = fieldDefinition.name === 'pimcore_root'
+    const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context)
 
-    const typesByTags = this.getTypesByTags(allowedDropdownTags, context);
+    const typesByTags = this.getTypesByTags(allowedDropdownTags, context)
 
-    let actions: TreeDataItem['actions'] = [];
-    const groupedTypes: Record<string, DynamicTypeFieldDefinitionAbstract[]> = {};
+    let actions: TreeDataItem['actions'] = []
+    const groupedTypes: Record<string, DynamicTypeFieldDefinitionAbstract[]> = {}
 
     typesByTags.forEach((type) => {
-      const groups = type.getGroup();
-      const groupKey = groups.join('/');
+      const groups = type.getGroup()
+      const groupKey = groups.join('/')
 
-      if (!groupedTypes[groupKey]) {
-        groupedTypes[groupKey] = [];
+      if (isNil(groupedTypes[groupKey])) {
+        groupedTypes[groupKey] = []
       }
 
-      groupedTypes[groupKey].push(type);
-    });
+      groupedTypes[groupKey].push(type)
+    })
 
     for (const groupPath in groupedTypes) {
-      const groupParts = groupPath.split('/');
-      let currentActions = actions;
-      let currentGroupPath = '';
+      const groupParts = groupPath.split('/')
+      let currentActions = actions
+      let currentGroupPath = ''
 
       groupParts.forEach((group, index) => {
-        currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`;
-        let action = currentActions.find(a => a.key === `group-${group}`);
+        currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`
+        let action = currentActions.find(a => a.key === `group-${group}`)
 
-        if (!action) {
+        if (isNil(action)) {
           action = {
             key: `group-${group}`,
             icon: groupInfos[currentGroupPath]?.icon.value ?? '',
             iconColorGroup: ['fieldDefinition_group_' + group, 'fieldDefinition'],
             actions: []
-          };
-          currentActions.push(action);
+          }
+          currentActions.push(action)
         }
 
         if (index === groupParts.length - 1) {
           // Last part, add types here
           groupedTypes[groupPath].forEach((type) => {
-            action!.actions!.push({
+            action.actions!.push({
               key: `add-${type.id}`,
               icon: type.getIcon().value,
               iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition']
-            });
-          });
+            })
+          })
         } else {
           // Move deeper into the nested structure
-          currentActions = action.actions!;
+          currentActions = action.actions!
         }
-      });
+      })
     }
 
-    actions = this.optimizeActions(actions) ?? [];
+    actions = this.optimizeActions(actions) ?? []
 
     if (!isRoot) {
       if (isCloneAllowed) {
         actions.push({
           key: 'clone',
-          icon: 'content-duplicate',
-        });
+          icon: 'content-duplicate'
+        })
       }
 
       actions.push({
         key: 'delete',
-        icon: 'trash',
-      });
+        icon: 'trash'
+      })
     }
 
-    return actions;
+    return actions
   }
 }

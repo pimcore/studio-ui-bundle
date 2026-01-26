@@ -22,6 +22,11 @@ moduleSystem.registerModule({
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Wysiwyg'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Password'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/InputQuantityValue'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Number'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/NumericRange'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Slider'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/QuantityValue'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/QuantityValueRange'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Panel'))
   }
 })
