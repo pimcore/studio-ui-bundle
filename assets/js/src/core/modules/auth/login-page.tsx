@@ -12,7 +12,7 @@ import { routes } from '@Pimcore/app/router/router'
 import { LoginFormContainer } from '@Pimcore/modules/auth/components/login-form/login-form-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
@@ -20,6 +20,7 @@ import { isNil } from 'lodash'
 import { useAuthentication } from './hooks/use-authentication'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
+import { useSettingAdminThumbnailQuery } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 export const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate()
@@ -31,7 +32,16 @@ export const LoginPage = (): React.JSX.Element => {
   const user = useUser()
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
-  const { styles } = useStyle()
+  
+  const { data: thumbnailData } = useSettingAdminThumbnailQuery()
+  
+  const backgroundImageUrl = useMemo(() => {
+    return thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'
+  }, [thumbnailData])
+  
+  const logoUrl = thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg'
+  
+  const { styles } = useStyle({ backgroundImageUrl })
 
   useEffect(() => {
     if (isAuthenticated === true) {
@@ -65,7 +75,7 @@ export const LoginPage = (): React.JSX.Element => {
       <div className={ styles.loginWidget }>
         <img
           alt={ 'Pimcore Logo' }
-          src={ '/bundles/pimcorestudioui/img/logo-purple.svg' }
+          src={ logoUrl }
         />
         <LoginFormContainer />
       </div>
