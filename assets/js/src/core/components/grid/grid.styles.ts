@@ -40,6 +40,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
       display: flex; 
       width: 100%;
       max-width: 100%;
+      height: 500px;
 
       table {
         table-layout: fixed;
@@ -152,6 +153,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
       }
 
       .ant-table-thead {
+        //display: grid;
         position: sticky;
         top: 0;
         z-index: 1;
@@ -205,7 +207,12 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
           
           .ant-table-tbody {
             position: relative;
+            //display: grid;
             width: 100%;
+              
+            //.ant-table-cell {
+            //  display: flex;
+            //}
               
             .ant-table-row:last-of-type {
               .ant-table-cell:first-of-type {

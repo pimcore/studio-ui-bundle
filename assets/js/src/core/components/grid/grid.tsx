@@ -36,7 +36,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber, isFunction, isNull } from 'lodash'
+import { isEmpty, isNumber, isFunction, isNull, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -120,7 +120,7 @@ export const Grid = ({
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
 
   const tableElement = useRef<HTMLTableElement>(null)
-  const scrollElementRef = useRef<HTMLDivElement>(null) // The row virtualizer will need a reference to the scrollable container element
+  const scrollElementRef = useRef<HTMLDivElement>(null) // The row and column virtualizer will need a reference to the scrollable container element
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
 
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
@@ -288,6 +288,7 @@ export const Grid = ({
   )
 
   const rowsList = table.getRowModel().rows
+  const colsList = table.getVisibleLeafColumns()
 
   const rowVirtualizer = useVirtualizer({
     count: rowsList.length,
@@ -303,6 +304,23 @@ export const Grid = ({
 
     return virtualRows.map(v => rowsList[v.index].id)
   }, [virtualRows, rowsList, enableRowVirtualizer])
+
+  const columnVirtualizer = useVirtualizer({
+    count: colsList.length,
+    getScrollElement: () => scrollElementRef.current,
+    estimateSize: index => colsList[index].getSize(),
+    overscan: 5,
+    horizontal: true,
+    enabled: true // need to add the logic here to enable virtualization for columns
+  })
+  const virtualColumns = columnVirtualizer.getVirtualItems()
+  let virtualPaddingLeft: number | undefined
+  let virtualPaddingRight: number | undefined
+
+  if (virtualColumns.length > 0) {
+    virtualPaddingLeft = virtualColumns[0]?.start ?? 0
+    virtualPaddingRight = columnVirtualizer.getTotalSize() - (virtualColumns[virtualColumns.length - 1]?.end ?? 0)
+  }
 
   const onDragEndInternal = (event: DragEndEvent): void => {
     handleDragEnd?.(event)
@@ -351,10 +369,18 @@ export const Grid = ({
         rowStyle={ rowStyle }
         size={ size }
         tableElement={ tableElement }
+        virtualColumns={ virtualColumns }
         virtualIndex={ virtualIndex }
+        virtualPaddingLeft={ virtualPaddingLeft }
+        virtualPaddingRight={ virtualPaddingRight }
       />
     ))
   }
+
+  console.log('----- virtualPaddingLeft: ', virtualPaddingLeft)
+  console.log('----- virtualPaddingRight: ', virtualPaddingRight)
+  console.log('Visible columns:', virtualColumns)
+  console.log('All columns count:', colsList.length)
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
@@ -377,6 +403,7 @@ export const Grid = ({
                 data-testid={ props.dataTestId }
                 ref={ tableElement }
                 style={ {
+                  // display: 'grid',
                   width: tableAutoWidth ? '100%' : calculateTableWidth(),
                   minWidth: table.getCenterTotalSize()
                 } }
@@ -384,44 +411,58 @@ export const Grid = ({
                 {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={ headerGroup.id }>
-                      {headerGroup.headers.map((header, index) => (
-                        <th
-                          className='ant-table-cell'
-                          key={ header.id }
-                          ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                          style={
-                            header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                              ? {
-                                  width: 'auto',
-                                  minWidth: header.column.getSize()
-                                }
-                              : {
-                                  width: header.column.getSize(),
-                                  maxWidth: header.column.getSize()
-                                }
-                          }
-                        >
-                          <div className='grid__cell-content'>
-                            <span>
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                            </span>
+                    <tr
+                      key={ headerGroup.id }
+                      style={ {
+                        display: 'flex',
+                        width: '100%',
+                        paddingLeft: virtualPaddingLeft,
+                        paddingRight: virtualPaddingRight
+                      } }
+                    >
+                      {virtualColumns.map(virtualColumn => {
+                        const header = headerGroup.headers[virtualColumn.index]
 
-                            {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
-                          </div>
+                        if (isNull(header)) return null
 
-                          {props.resizable === true && header.column.getCanResize() && (
-                            <Resizer
-                              header={ header }
-                              isResizing={ header.column.getIsResizing() }
-                              table={ table }
-                            />
-                          )}
-                        </th>
-                      ))}
+                        return (
+                          <th
+                            className='ant-table-cell'
+                            key={ header.id }
+                            ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
+                            style={
+                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                                ? {
+                                    width: 'auto',
+                                    minWidth: header.column.getSize()
+                                  }
+                                : {
+                                    width: header.column.getSize(),
+                                    maxWidth: header.column.getSize()
+                                  }
+                            }
+                          >
+                            <div className='grid__cell-content'>
+                              <span>
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                              </span>
+
+                              {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
+                            </div>
+
+                            {props.resizable === true && header.column.getCanResize() && (
+                              <Resizer
+                                header={ header }
+                                isResizing={ header.column.getIsResizing() }
+                                table={ table }
+                              />
+                            )}
+                          </th>
+                        )
+                      })}
                     </tr>
                   ))}
                 </thead>
