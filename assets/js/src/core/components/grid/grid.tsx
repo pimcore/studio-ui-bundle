@@ -36,7 +36,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber, isFunction, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNumber, isFunction, isNull } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -108,19 +108,20 @@ export const Grid = ({
   enableRowDrag,
   handleDragEnd,
   enableRowVirtualizer = false,
+  enableColumnVirtualizer = false,
   size = 'normal',
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash()
-  const { styles } = useStyles({ size, enableVirtualizer: enableRowVirtualizer })
+  const { styles } = useStyles({ size, enableRowVirtualizer })
 
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
 
   const tableElement = useRef<HTMLTableElement>(null)
-  const scrollElementRef = useRef<HTMLDivElement>(null) // The row and column virtualizer will need a reference to the scrollable container element
+  const scrollElementRef = useRef<HTMLDivElement>(null) // ref to the scrollable container used by row and column virtualizers
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
 
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
@@ -288,13 +289,13 @@ export const Grid = ({
   )
 
   const rowsList = table.getRowModel().rows
-  const colsList = table.getVisibleLeafColumns()
+  const columnsList = table.getVisibleLeafColumns()
 
   const rowVirtualizer = useVirtualizer({
     count: rowsList.length,
     getScrollElement: () => scrollElementRef.current,
     estimateSize: () => 33, // estimate row height for accurate scrollbar dragging
-    overscan: 5,
+    overscan: 5, // number of extra rows to render outside the viewport for smooth scrolling
     measureElement: (el) => el.getBoundingClientRect().height, // measure dynamic row height
     enabled: enableRowVirtualizer
   })
@@ -306,19 +307,22 @@ export const Grid = ({
   }, [virtualRows, rowsList, enableRowVirtualizer])
 
   const columnVirtualizer = useVirtualizer({
-    count: colsList.length,
+    count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
-    estimateSize: index => colsList[index].getSize(),
-    overscan: 5,
+    estimateSize: index => columnsList[index].getSize(), // estimate the width of each column
+    overscan: 5, // number of extra columns to render outside the viewport for smooth scrolling
     horizontal: true,
-    enabled: true // need to add the logic here to enable virtualization for columns
+    enabled: enableColumnVirtualizer
   })
   const virtualColumns = columnVirtualizer.getVirtualItems()
   let virtualPaddingLeft: number | undefined
   let virtualPaddingRight: number | undefined
 
   if (virtualColumns.length > 0) {
+    // Calculate left padding for the scrollable area based on the first visible column
     virtualPaddingLeft = virtualColumns[0]?.start ?? 0
+
+    // Calculate right padding based on the space after the last visible column
     virtualPaddingRight = columnVirtualizer.getTotalSize() - (virtualColumns[virtualColumns.length - 1]?.end ?? 0)
   }
 
@@ -380,7 +384,7 @@ export const Grid = ({
   console.log('----- virtualPaddingLeft: ', virtualPaddingLeft)
   console.log('----- virtualPaddingRight: ', virtualPaddingRight)
   console.log('Visible columns:', virtualColumns)
-  console.log('All columns count:', colsList.length)
+  console.log('All columns count:', columnsList.length)
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
@@ -403,7 +407,6 @@ export const Grid = ({
                 data-testid={ props.dataTestId }
                 ref={ tableElement }
                 style={ {
-                  // display: 'grid',
                   width: tableAutoWidth ? '100%' : calculateTableWidth(),
                   minWidth: table.getCenterTotalSize()
                 } }

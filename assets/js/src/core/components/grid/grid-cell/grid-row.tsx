@@ -12,7 +12,7 @@ import React, { type CSSProperties, useCallback, useLayoutEffect, useMemo, useRe
 import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { isNull, isUndefined, isEmpty } from 'lodash'
+import { isNull, isEmpty } from 'lodash'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
@@ -71,7 +71,6 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
     position: 'relative',
-    display: 'flex',
     ...rowStyle
   }
 
