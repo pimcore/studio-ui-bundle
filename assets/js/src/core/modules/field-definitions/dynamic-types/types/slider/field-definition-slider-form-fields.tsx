@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -22,6 +22,14 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
         label={ t('width') }
         name="width"
         tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
       >
         <Input />
       </Form.Item>
@@ -41,7 +49,7 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
       </Form.Item>
 
       <Form.Item
-        label={ t('increment') }
+        label={ t('increment-step') }
         name="increment"
       >
         <InputNumber />
@@ -56,6 +64,10 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
           min={ 0 }
           precision={ 0 }
         />
+      </Form.Item>
+
+      <Form.Item name="vertical">
+        <Switch labelRight={ t('vertical') } />
       </Form.Item>
 
     </FormKit.Panel>

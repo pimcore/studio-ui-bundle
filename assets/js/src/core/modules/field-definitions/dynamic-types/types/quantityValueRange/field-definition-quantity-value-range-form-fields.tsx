@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
-import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,12 +21,38 @@ export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefiniti
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('width') }
-        name="width"
+
+      <FormKit.Panel
+        border
+        theme="fieldset"
+        title={ t('width') }
         tooltip={ t('width-tooltip') }
       >
-        <Input />
+
+        <Form.Item
+          label={ t('width-field') }
+          name="width"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('width-unit') }
+          name="unitWidth"
+        >
+          <Input />
+        </Form.Item>
+      </FormKit.Panel>
+
+      <Form.Item
+        label={ t('decimal-precision') }
+        name="decimalPrecision"
+        rules={ [{ min: 0, type: 'number' }] }
+      >
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
       </Form.Item>
 
       {!isCustomLayout && (
@@ -55,15 +81,8 @@ export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefiniti
       </>
       )}
 
-      <Form.Item
-        label={ t('decimal-precision') }
-        name="decimalPrecision"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
+      <Form.Item name="autoConvert">
+        <Switch labelRight={ t('auto-convert') } />
       </Form.Item>
 
     </FormKit.Panel>

@@ -10,9 +10,12 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
-import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  FieldDefinitionDecimalSettings
+} from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-decimal-settings/field-definition-decimal-settings'
 
 export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -21,33 +24,64 @@ export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbs
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('width') }
-        name="width"
+
+      <FormKit.Panel
+        border
+        theme="fieldset"
+        title={ t('width') }
         tooltip={ t('width-tooltip') }
       >
-        <Input />
-      </Form.Item>
+
+        <Form.Item
+          label={ t('width-field') }
+          name="width"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('width-unit') }
+          name="unitWidth"
+        >
+          <Input />
+        </Form.Item>
+      </FormKit.Panel>
 
       {!isCustomLayout && (
       <>
-        <Form.Item
-          label={ t('default-value') }
-          name="defaultValue"
-        >
-          <InputNumber />
-        </Form.Item>
 
-        <Form.Item
-          label={ t('default-unit') }
-          name="defaultUnit"
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('default-values-settings') }
+          tooltip={ t('default-values-tooltip') }
         >
-          <Select
-            allowClear
-            options={ getSelectOptions() }
-            showSearch
-          />
-        </Form.Item>
+
+          <Form.Item
+            label={ t('default-value') }
+            name="defaultValue"
+          >
+            <InputNumber />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('default-unit') }
+            name="defaultUnit"
+          >
+            <Select
+              allowClear
+              options={ getSelectOptions() }
+              showSearch
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('default-value-generator') }
+            name="defaultValueGenerator"
+          >
+            <Input />
+          </Form.Item>
+        </FormKit.Panel>
 
         <Form.Item
           label={ t('valid-units') }
@@ -62,15 +96,32 @@ export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbs
       </>
       )}
 
+      <Form.Item name="autoConvert">
+        <Switch labelRight={ t('auto-convert') } />
+      </Form.Item>
+
+      <FieldDefinitionDecimalSettings />
+
+      <Form.Item name="integer">
+        <Switch labelRight={ t('integer') } />
+      </Form.Item>
+
+      <Form.Item name="unsigned">
+        <Switch labelRight={ t('unsigned') } />
+      </Form.Item>
+
       <Form.Item
-        label={ t('decimal-precision') }
-        name="decimalPrecision"
-        rules={ [{ min: 0, type: 'number' }] }
+        label={ t('min-value') }
+        name="minValue"
       >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
+        <InputNumber />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('max-value') }
+        name="maxValue"
+      >
+        <InputNumber />
       </Form.Item>
 
     </FormKit.Panel>
