@@ -160,7 +160,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/metadata|api\/assets\/\{id\}\/custom-metadata/i)
     },
     '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/settings/i)
+      filterEndpoints: pathMatcher(/api\/settings?/i)
     },
     '../../js/src/core/modules/app/mercure-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/mercure/i)
