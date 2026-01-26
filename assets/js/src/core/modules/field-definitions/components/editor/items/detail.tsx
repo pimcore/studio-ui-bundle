@@ -60,6 +60,9 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
         name: 'pimcore_root',
         children: [],
         fieldType: 'panel',
+        // @todo
+        // @ts-expect-error remove when backend provides the right typo
+        fieldtype: 'panel',
         bodyStyle: '',
         border: false,
         collapsible: false,

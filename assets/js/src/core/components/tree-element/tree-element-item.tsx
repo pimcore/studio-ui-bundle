@@ -33,7 +33,10 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
           return {
             key: action.key,
             label: t(`tree.actions.${action.key}`),
-            icon: <Icon value={ action.icon } />,
+            icon: <Icon
+              iconColorGroup={ action.iconColorGroup }
+              value={ action.icon }
+                  />,
             children: buildMenuItems(action.actions)
           }
         } else {

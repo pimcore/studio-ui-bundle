@@ -21,7 +21,8 @@ export const useStyles = createStyles(({ css, token }) => {
         margin-inline: 0;
       }
 
-      .ant-space-item:empty + .ant-space-item-split {
+      .ant-space-item:empty + .ant-space-item-split,
+      .ant-space-item-split:has(+ .ant-space-item:empty) {
         display: none;
       }
 

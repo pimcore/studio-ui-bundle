@@ -62,7 +62,7 @@ export const DetailParentTree = (): React.JSX.Element => {
       }
     })
 
-    return [treeItems]
+    return [treeItems.children!].flat()
   }, [structure, fieldDefinitions])
 
   return (
