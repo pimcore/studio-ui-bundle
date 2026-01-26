@@ -10,6 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useAppearanceBranding } from '@Pimcore/modules/appearance-branding/hooks/use-appearance-branding'
+import { isUndefined, isEmpty } from 'lodash'
 
 interface AppearanceBrandingProviderProps {
   children: React.ReactNode
@@ -19,25 +20,24 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
   const { adminSettings, isSettingsLoading } = useAppearanceBranding()
 
   useEffect(() => {
-    if (isSettingsLoading || !adminSettings?.branding) {
+    if (isSettingsLoading || isUndefined(adminSettings?.branding)) {
       return
     }
 
     const branding = adminSettings.branding
     const documentRoot = document.documentElement
 
-    if (branding.brandColor) {
+    if (!isEmpty(branding.brandColor)) {
       documentRoot.style.setProperty('--pimcore-branding-color', branding.brandColor)
     } else {
       documentRoot.style.removeProperty('--pimcore-branding-color')
     }
 
-    if (branding.backgroundShade) {
+    if (!isEmpty(branding.backgroundShade)) {
       documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
     } else {
       documentRoot.style.removeProperty('--pimcore-branding-color-background')
     }
-
   }, [adminSettings, isSettingsLoading])
 
   return <>{children}</>

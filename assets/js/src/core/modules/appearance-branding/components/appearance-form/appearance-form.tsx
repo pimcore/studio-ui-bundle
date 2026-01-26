@@ -24,23 +24,24 @@ import { type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings
 import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
+import { isUndefined } from 'lodash'
 
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
   const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
 
-  if (isSettingsLoading || !adminSettings || !adminSettings.branding || !adminSettings.assets) {
+  if (isSettingsLoading || isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
     return (
       <Content
-        loading={true}
+        loading
         padded
-        padding={{
+        padding={ {
           x: 'extra-small',
           y: 'extra-small'
-        }}
+        } }
       >
-        <Title level={2}>
+        <Title level={ 2 }>
           {t('appearance-branding.title')}
         </Title>
       </Content>

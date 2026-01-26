@@ -14,18 +14,19 @@ import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isObject, isFunction, has } from 'lodash'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
 
   const formatColor = (color: any): string | null => {
-    if (color?.cleared === true) {
+    if (isObject(color) && has(color, 'cleared') && (color as any).cleared === true) {
       return null
     }
 
-    if (color?.toHexString && typeof color.toHexString === 'function') {
-      return color.toHexString()
+    if (isObject(color) && has(color, 'toHexString') && isFunction((color as any).toHexString)) {
+      return (color as any).toHexString()
     }
 
     return null
@@ -45,7 +46,10 @@ export const ColorPanel = (): React.JSX.Element => {
         size="large"
       >
         <Form.Item label={ t('appearance-branding.color.brand-color.label') }>
-          <Form.Item name={ ['branding', 'brandColor'] } noStyle>
+          <Form.Item
+            name={ ['branding', 'brandColor'] }
+            noStyle
+          >
             <ColorPicker
               format="hex"
               onChange={ (color) => {
@@ -61,7 +65,10 @@ export const ColorPanel = (): React.JSX.Element => {
         </Form.Item>
 
         <Form.Item label={ t('appearance-branding.color.background-shade.label') }>
-          <Form.Item name={ ['branding', 'backgroundShade'] } noStyle>
+          <Form.Item
+            name={ ['branding', 'backgroundShade'] }
+            noStyle
+          >
             <ColorPicker
               format="hex"
               onChange={ (color) => {
