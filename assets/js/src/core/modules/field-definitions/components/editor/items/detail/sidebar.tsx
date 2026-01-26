@@ -65,7 +65,6 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
               id: 'drop-middle',
               position: { x: '0', y: '30%', width: '100%', height: '40%' },
               isValidContext: true,
-              isValidData: () => false,
               onDrop: (info) => {
                 addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
               }
@@ -166,7 +165,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newFieldDefData = type.getDefaultData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions })
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
-      setCurrentFieldDefinitionIdPath([...node.meta?.currentPath, newlyAddedFieldId])
+      setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
     }
   }
 
