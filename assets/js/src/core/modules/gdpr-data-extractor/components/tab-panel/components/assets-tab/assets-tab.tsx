@@ -45,7 +45,10 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
     columnHelper.accessor('type', {
       header: t('gdpr-extractor.assets.table.field.type'),
       meta: {
-        type: 'element-subtype-icon'
+        type: 'element-subtype-icon',
+        config: {
+          elementType: 'asset'
+        }
       },
       size: 60
     }),

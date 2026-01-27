@@ -46,7 +46,7 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
       meta: {
         type: 'element-subtype-icon',
         config: {
-          subtype: 'data-object'
+          elementType: 'data-object'
         }
       },
       size: 60

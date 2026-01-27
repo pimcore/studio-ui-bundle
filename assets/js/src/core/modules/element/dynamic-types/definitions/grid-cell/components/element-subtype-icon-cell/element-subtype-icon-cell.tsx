@@ -10,9 +10,16 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { IconView } from '@Pimcore/components/grid/columns/views/icon/icon-view'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { capitalize } from 'lodash'
 import React from 'react'
 
-export const ElementSubtypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
+export interface ElementSubtypeIconCellProps extends DefaultCellProps {
+  elementType: ElementType
+}
+
+export const ElementSubtypeIconCell = (props: ElementSubtypeIconCellProps): React.JSX.Element => {
   const subtype = props.getValue() ?? props.row.original.subType
 
   function renderCell (): React.JSX.Element {
@@ -43,13 +50,13 @@ export const ElementSubtypeIconCell = (props: DefaultCellProps): React.JSX.Eleme
       case 'variant':
         return <IconView value={ 'data-object-variant' } />
       default:
-        return <IconView value={ 'file' } />
+        return <IconView value={ props.elementType } />
     }
   }
 
   return (
-    <>
+    <Tooltip title={ capitalize(String(subtype)) }>
       {renderCell()}
-    </>
+    </Tooltip>
   )
 }
