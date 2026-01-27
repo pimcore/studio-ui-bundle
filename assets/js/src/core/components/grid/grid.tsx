@@ -114,7 +114,6 @@ export const Grid = ({
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash()
-  const { styles } = useStyles({ size, enableRowVirtualizer })
 
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
@@ -291,28 +290,30 @@ export const Grid = ({
   const rowsList = table.getRowModel().rows
   const columnsList = table.getVisibleLeafColumns()
 
+  const isEnableRowVirtualizer = useMemo(() => enableRowVirtualizer && rowsList?.length > 20, [enableRowVirtualizer, rowsList])
   const rowVirtualizer = useVirtualizer({
     count: rowsList.length,
     getScrollElement: () => scrollElementRef.current,
     estimateSize: () => 33, // estimate row height for accurate scrollbar dragging
     overscan: 5, // number of extra rows to render outside the viewport for smooth scrolling
     measureElement: (el) => el.getBoundingClientRect().height, // measure dynamic row height
-    enabled: enableRowVirtualizer
+    enabled: isEnableRowVirtualizer
   })
   const virtualRows = rowVirtualizer.getVirtualItems()
   const visibleRowIds = useMemo(() => {
-    if (!enableRowVirtualizer) return rowsList.map(row => row.id)
+    if (!isEnableRowVirtualizer) return rowsList.map(row => row.id)
 
     return virtualRows.map(v => rowsList[v.index].id)
-  }, [virtualRows, rowsList, enableRowVirtualizer])
+  }, [virtualRows, rowsList, isEnableRowVirtualizer])
 
+  const isEnableColumnVirtualizer = useMemo(() => enableColumnVirtualizer && columnsList?.length > 20, [enableColumnVirtualizer, columnsList])
   const columnVirtualizer = useVirtualizer({
     count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
     estimateSize: index => columnsList[index].getSize(), // estimate the width of each column
     overscan: 5, // number of extra columns to render outside the viewport for smooth scrolling
     horizontal: true,
-    enabled: enableColumnVirtualizer
+    enabled: isEnableColumnVirtualizer
   })
   const virtualColumns = columnVirtualizer.getVirtualItems()
   let virtualPaddingLeft: number | undefined
@@ -325,6 +326,8 @@ export const Grid = ({
     // Calculate right padding based on the space after the last visible column
     virtualPaddingRight = columnVirtualizer.getTotalSize() - (virtualColumns[virtualColumns.length - 1]?.end ?? 0)
   }
+
+  const { styles } = useStyles({ size, enableRowVirtualizer: isEnableRowVirtualizer })
 
   const onDragEndInternal = (event: DragEndEvent): void => {
     handleDragEnd?.(event)
@@ -343,7 +346,7 @@ export const Grid = ({
   }
 
   const renderRows = (): React.JSX.Element[] => {
-    const rowsData = enableRowVirtualizer
+    const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
         row: rowsList[vRow.index],
         virtualIndex: vRow.index,
@@ -353,7 +356,7 @@ export const Grid = ({
       : rowsList.map(row => ({
         row,
         virtualIndex: undefined,
-        rowStyle: enableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
+        rowStyle: isEnableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
         measureElement: undefined
       }))
 
@@ -362,7 +365,7 @@ export const Grid = ({
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
         columns={ columns }
         contextMenu={ props.contextMenu }
-        enableColumnVirtualizer={ enableColumnVirtualizer }
+        enableColumnVirtualizer={ isEnableColumnVirtualizer }
         enableRowDrag={ enableRowDrag }
         isSelected={ row.getIsSelected() }
         key={ row.id }
@@ -381,11 +384,6 @@ export const Grid = ({
       />
     ))
   }
-
-  console.log('----- virtualPaddingLeft: ', virtualPaddingLeft)
-  console.log('----- virtualPaddingRight: ', virtualPaddingRight)
-  console.log('Visible columns:', virtualColumns)
-  console.log('All columns count:', columnsList.length)
 
   return useMemo(() => (
     <ConfigProvider componentSize={ size === 'small' ? 'small' : 'middle' }>
@@ -415,13 +413,13 @@ export const Grid = ({
                 {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => {
-                    const visibleHeaders = enableColumnVirtualizer ? virtualColumns.map(virtualColumn => headerGroup.headers[virtualColumn.index]) : headerGroup.headers
+                    const visibleHeaders = isEnableColumnVirtualizer ? virtualColumns.map(virtualColumn => headerGroup.headers[virtualColumn.index]) : headerGroup.headers
 
                     return (
                       <tr
                         key={ headerGroup.id }
                         style={
-                          enableColumnVirtualizer
+                          isEnableColumnVirtualizer
                             ? {
                                 display: 'flex',
                                 width: '100%',
@@ -477,7 +475,7 @@ export const Grid = ({
                 )}
                 <tbody
                   className="ant-table-tbody"
-                  style={ { height: enableRowVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : 'initial' } }
+                  style={ { height: isEnableRowVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : 'initial' } }
                 >
                   {rowsList.length === 0 && (
                   <tr className={ 'ant-table-row' }>

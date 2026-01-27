@@ -223,7 +223,6 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             columns={ columns }
             data={ chartData }
             enableColumnVirtualizer
-            enableRowVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting
