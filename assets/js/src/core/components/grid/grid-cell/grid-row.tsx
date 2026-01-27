@@ -109,71 +109,67 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
     }
   }
 
-  const visibleColumns = useMemo(() => {
-    return enableColumnVirtualizer ? virtualColumns : row.getVisibleCells()
+  const visibleCells = useMemo(() => {
+    return enableColumnVirtualizer ? virtualColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
   }, [enableColumnVirtualizer])
 
-  return useMemo(() => {
-    const visibleCells = enableColumnVirtualizer ? visibleColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
+  return useMemo(() => renderWithContextMenu(
+    <tr
+      className={ [
+        'ant-table-row',
+        row.getIsSelected() ? 'ant-table-row-selected' : '',
+        props.onRowDoubleClick !== undefined ? 'hover' : ''
+      ].join(' ') }
+      data-index={ props?.virtualIndex } // needed for dynamic row height measurement
+      data-testid={ createTableRowTestId(row.index) }
+      onDoubleClick={ onRowDoubleClick }
+      ref={ combinedRef }
+      style={
+        enableColumnVirtualizer
+          ? {
+              ...style,
+              paddingLeft: virtualPaddingLeft,
+              paddingRight: virtualPaddingRight
+            }
+          : { ...style }
+      }
+    >
+      {visibleCells?.map((cell, index) => {
+        if (isEmpty(cell)) return null
 
-    return renderWithContextMenu(
-      <tr
-        className={ [
-          'ant-table-row',
-          row.getIsSelected() ? 'ant-table-row-selected' : '',
-          props.onRowDoubleClick !== undefined ? 'hover' : ''
-        ].join(' ') }
-        data-index={ props?.virtualIndex } // needed for dynamic row height measurement
-        data-testid={ createTableRowTestId(row.index) }
-        onDoubleClick={ onRowDoubleClick }
-        ref={ combinedRef }
-        style={
-          enableColumnVirtualizer
-            ? {
-                ...style,
-                paddingLeft: virtualPaddingLeft,
-                paddingRight: virtualPaddingRight
-              }
-            : { ...style }
-        }
-      >
-        {visibleCells?.map((cell, index) => {
-          if (isEmpty(cell)) return null
-
-          return (
-            <td
-              className='ant-table-cell'
-              key={ cell.id }
-              style={ cell.column.columnDef.meta?.autoWidth === true
-                ? {
-                    width: 'auto',
-                    minWidth: cell.column.getSize()
-                  }
-                : {
-                    width: cell.column.getSize(),
-                    maxWidth: cell.column.getSize()
-                  }
-              }
-            >
-              {enableRowDrag === true && index === 0
-                ? renderRowReorderButton()
-                : (
-                  <GridCell
-                    cell={ cell }
-                    isActive={ props.activeColumId === cell.column.id }
-                    isModified={ isModifiedCell(cell.column.id) }
-                    onFocusCell={ props.onFocusCell }
-                    rowIndex={ row.index }
-                    size={ props.size }
-                    tableElement={ props.tableElement }
-                  />
-                  )}
-            </td>
-          )
-        })}
-      </tr>
-    )
-  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style])
+        return (
+          <td
+            className='ant-table-cell'
+            key={ cell.id }
+            style={ cell.column.columnDef.meta?.autoWidth === true
+              ? {
+                  width: 'auto',
+                  minWidth: cell.column.getSize()
+                }
+              : {
+                  width: cell.column.getSize(),
+                  maxWidth: cell.column.getSize()
+                }
+                      }
+          >
+            {enableRowDrag === true && index === 0
+              ? renderRowReorderButton()
+              : (
+                <GridCell
+                  cell={ cell }
+                  isActive={ props.activeColumId === cell.column.id }
+                  isModified={ isModifiedCell(cell.column.id) }
+                  onFocusCell={ props.onFocusCell }
+                  rowIndex={ row.index }
+                  size={ props.size }
+                  tableElement={ props.tableElement }
+                />
+                )}
+          </td>
+        )
+      })}
+    </tr>
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
