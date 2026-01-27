@@ -82,6 +82,7 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
           <Flex align="center">
             <EmailPreviewButton
               id={data.id}
+              disabled={data.hasHtmlLog === false}
               tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.html')
               }}
@@ -89,6 +90,7 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
 
             <EmailParametersButton
               id={data.id}
+              disabled={data.hasParameters === false}
               tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.parameters')
               }}
