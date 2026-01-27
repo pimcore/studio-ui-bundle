@@ -80,30 +80,30 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
         return (
           <Flex>
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.export')
-              }}
+              } }
             />
 
             <OpenButton
-              elementType={elementTypes.asset}
-              id={data.id}
-              tooltip={{
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.open')
-              }}
+              } }
             />
 
             <DeleteButton
-              disabled={!data.__gdprIsDeletable}
-              elementType={elementTypes.asset}
-              id={data.id}
-              label={data.fullPath}
-              providerKey={providerKey}
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              label={ data.fullPath }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.delete')
-              }}
+              } }
             />
           </Flex>
         )
@@ -114,10 +114,10 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      {...props}
+      { ...props }
     />
   )
 }

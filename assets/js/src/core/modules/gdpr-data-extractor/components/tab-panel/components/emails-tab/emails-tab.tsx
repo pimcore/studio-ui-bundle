@@ -80,37 +80,37 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
         return (
           <Flex align="center">
             <EmailPreviewButton
-              disabled={!data.hasHtmlLog}
-              id={data.id}
-              tooltip={{
+              disabled={ !data.hasHtmlLog }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.html')
-              }}
+              } }
             />
 
             <EmailParametersButton
-              disabled={!data.hasParameters}
-              id={data.id}
-              tooltip={{
+              disabled={ !data.hasParameters }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.parameters')
-              }}
+              } }
             />
 
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.export')
-              }}
+              } }
             />
 
             <DeleteButton
-              disabled={!data.__gdprIsDeletable}
-              id={data.id}
-              label={data.subject ?? data.from}
-              providerKey={providerKey}
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              id={ data.id }
+              label={ data.subject ?? data.from }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('email-log.tooltip.delete')
-              }}
+              } }
             />
           </Flex>
         )
@@ -121,10 +121,10 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      {...props}
+      { ...props }
     />
   )
 }

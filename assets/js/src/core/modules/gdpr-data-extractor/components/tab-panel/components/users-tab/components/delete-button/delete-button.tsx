@@ -28,10 +28,10 @@ export const DeleteButton = ({ id, label, providerKey, onClick, onFinish, ...ico
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'trash' }}
-      loading={isLoading}
-      onClick={(e) => {
+      { ...iconButtonProps }
+      icon={ { value: 'trash' } }
+      loading={ isLoading }
+      onClick={ (e) => {
         deleteUser(id, label, () => {
           dispatch(
             api.util.invalidateTags(
@@ -40,7 +40,7 @@ export const DeleteButton = ({ id, label, providerKey, onClick, onFinish, ...ico
           )
         })
         onClick?.(e)
-      }}
+      } }
     />
   )
 }

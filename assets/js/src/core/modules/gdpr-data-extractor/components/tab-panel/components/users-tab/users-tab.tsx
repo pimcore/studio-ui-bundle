@@ -67,21 +67,21 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
         return (
           <Flex>
             <ExportButton
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.users.table.actions.export')
-              }}
-              id={data.id}
-              providerKey={providerKey}
+              } }
             />
 
             <DeleteButton
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              id={ data.id }
+              label={ data.firstname + ' ' + data.lastname }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.users.table.actions.delete')
-              }}
-              providerKey={providerKey}
-              disabled={!data.__gdprIsDeletable}
-              id={data.id}
-              label={data.firstname + ' ' + data.lastname}
+              } }
             />
           </Flex>
         )
@@ -92,10 +92,10 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      {...props}
+      { ...props }
     />
   )
 }

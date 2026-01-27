@@ -28,10 +28,10 @@ export const DeleteButton = ({ id, providerKey, label, onClick, ...iconButtonPro
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'trash' }}
-      loading={isDeleting || iconButtonProps.loading}
-      onClick={(e) => {
+      { ...iconButtonProps }
+      icon={ { value: 'trash' } }
+      loading={ isDeleting || iconButtonProps.loading }
+      onClick={ (e) => {
         setIsDeleting(true)
         removeWithConfirmation(id, () => {
           dispatch(
@@ -47,7 +47,7 @@ export const DeleteButton = ({ id, providerKey, label, onClick, ...iconButtonPro
           )
         })
         onClick?.(e)
-      }}
+      } }
     />
   )
 }

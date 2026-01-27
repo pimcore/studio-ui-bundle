@@ -37,17 +37,17 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       {
         label: t('widget.email-log.tab.text'),
         key: 'text',
-        children: <TextPreview email={email} />
+        children: <TextPreview email={ email } />
       },
       {
         label: t('widget.email-log.tab.html'),
         key: 'html',
-        children: <EmailPreview id={email.id} />
+        children: <EmailPreview id={ email.id } />
       },
       {
         label: t('widget.email-log.tab.parameters'),
         key: 'parameters',
-        children: <ParametersTab id={email.id} />
+        children: <ParametersTab id={ email.id } />
       }
     ]
 
@@ -56,17 +56,17 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       label: <Flex
         align="center"
         gap="extra-small"
-      >
+             >
         <Icon value="send-03" />
         <span>{email.subject}</span>
       </Flex>,
       subLabel: <Flex
         align="center"
-        gap={'mini'}
-      >
+        gap={ 'mini' }
+                >
         <span>{`${t('widget.email-log.from')}: ${email.from}`}</span>
         <Divider
-          className={styles.divider}
+          className={ styles.divider }
           type="vertical"
         />
         <span>{`${t('widget.email-log.to')}: ${email.to}`}</span>
@@ -75,11 +75,11 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       subLabelPosition: 'inline',
       extra: <Flex
         align="center"
-        gap={4}
-      >
+        gap={ 4 }
+             >
         {email.hasError && (
           <Icon
-            className={styles.errorIcon}
+            className={ styles.errorIcon }
             value="close-filled"
           />
         )}
@@ -88,20 +88,20 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       children: (
         <Flex
           className="email-log-content"
-          gap={'small'}
+          gap={ 'small' }
           vertical
         >
-          <EmailCardHeader email={email} />
+          <EmailCardHeader email={ email } />
 
           {email.hasError && (
             <Flex vertical>
-              <EmailError email={email} />
+              <EmailError email={ email } />
             </Flex>
           )}
 
           <Tabs
             destroyInactiveTabPane
-            items={tabItems}
+            items={ tabItems }
             noPadding
           />
         </Flex>
@@ -115,7 +115,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
 
   return (
     <Collapse
-      items={items}
+      items={ items }
     />
   )
 }

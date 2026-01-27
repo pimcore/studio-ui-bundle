@@ -45,7 +45,7 @@ export const ParametersTab = ({ id }: ParametersTabProps): React.JSX.Element => 
 
         return (
           <DefaultCell
-            {...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' })}
+            { ...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' }) }
           />
         )
       }
@@ -71,13 +71,13 @@ export const ParametersTab = ({ id }: ParametersTabProps): React.JSX.Element => 
 
   return (
     <Content
-      loading={isLoading}
-      none={isUndefined(data?.data) || data.data.length === 0}
+      loading={ isLoading }
+      none={ isUndefined(data?.data) || data.data.length === 0 }
     >
       <Grid
         autoWidth
-        columns={columns}
-        data={extendedData}
+        columns={ columns }
+        data={ extendedData }
       />
     </Content>
   )

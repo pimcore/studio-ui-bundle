@@ -24,30 +24,30 @@ export const EmailParametersButton = ({ id, onClick, ...iconButtonProps }: Email
   return (
     <>
       <IconButton
-        {...iconButtonProps}
-        icon={{ value: 'expand-01' }}
-        onClick={(e) => {
+        { ...iconButtonProps }
+        icon={ { value: 'expand-01' } }
+        onClick={ (e) => {
           setIsOpen(true)
           onClick?.(e)
-        }}
+        } }
       />
 
       <Modal
-        onCancel={() => {
+        onCancel={ () => {
           setIsOpen(false)
-        }}
-        onOk={() => {
+        } }
+        onOk={ () => {
           setIsOpen(false)
-        }}
-        open={isOpen}
+        } }
+        open={ isOpen }
         size="L"
-        title={(
+        title={ (
           <ModalTitle>
             {t('widget.email-log.tab.parameters')}
           </ModalTitle>
-        )}
+        ) }
       >
-        <ParametersTab id={id} />
+        <ParametersTab id={ id } />
       </Modal>
     </>
   )

@@ -27,15 +27,15 @@ export const EmailPreview = ({ id, height = 650 }: EmailPreviewProps): React.JSX
 
   return (
     <Content
-      loading={isLoading}
-      none={isUndefined(data?.data) || data.data.length === 0}
+      loading={ isLoading }
+      none={ isUndefined(data?.data) || data.data.length === 0 }
     >
       <iframe
-        className={styles.iframe}
-        height={height}
+        className={ styles.iframe }
+        height={ height }
         sandbox=""
-        srcDoc={data?.data ?? ''}
-        title={t('aria.email-log.html.preview')}
+        srcDoc={ data?.data ?? '' }
+        title={ t('aria.email-log.html.preview') }
       />
     </Content>
   )

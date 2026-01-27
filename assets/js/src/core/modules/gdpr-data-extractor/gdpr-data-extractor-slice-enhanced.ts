@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './gdpr-data-extractor-api-slice.gen'
 import { isNil } from 'lodash'
 
@@ -29,7 +29,7 @@ const api = baseApi.enhanceEndpoints({
 
             return providingTags.GDPR_DATA_DETAIL(
               args.provider!,
-              item.data.id! as number
+              item.data.id as number
             )
           }).filter(Boolean) ?? []
         }

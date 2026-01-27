@@ -15,7 +15,7 @@ import { Icon, type IconProps } from '../icon/icon'
 import { Tooltip } from '../tooltip/tooltip'
 import { useStyles } from './icon-button.styles'
 import { type SizeType } from 'antd/es/config-provider/SizeContext'
-import { TooltipProps } from 'antd'
+import { type TooltipProps } from 'antd'
 
 export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
   icon: IconProps
@@ -65,18 +65,18 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
 
   const button = (
     <Button
-      type={type}
-      {...buttonProps}
-      className={iconButtonClassNames}
-      ref={ref}
+      type={ type }
+      { ...buttonProps }
+      className={ iconButtonClassNames }
+      ref={ ref }
     >
-      <Icon {...iconWithSize} />
+      <Icon { ...iconWithSize } />
     </Button>
   )
 
   if (tooltip !== undefined) {
     return (
-      <Tooltip {...tooltip}>
+      <Tooltip { ...tooltip }>
         {button}
       </Tooltip>
     )
