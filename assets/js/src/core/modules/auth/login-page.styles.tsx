@@ -39,7 +39,10 @@ export const useStyle = createStyles(({ token, css }, { backgroundImageUrl }: St
       box-shadow: 0px 2px 0px 0px rgba(114, 46, 209, 0.10);
       
       img {
-        margin-bottom: 70px
+        max-height: 200px;
+        max-width: 100%;
+        object-fit: contain;
+        margin-bottom: 70px;
       }
     `
   }
