@@ -228,7 +228,6 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             isLoading={ isLoading }
             manualSorting
             onSortingChange={ handleSortingChange }
-            resizable
             sorting={ sortingValue }
           />
         )}
