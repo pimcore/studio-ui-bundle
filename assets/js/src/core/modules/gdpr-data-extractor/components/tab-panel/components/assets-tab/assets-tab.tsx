@@ -45,10 +45,7 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
     columnHelper.accessor('type', {
       header: t('gdpr-extractor.assets.table.field.type'),
       meta: {
-        type: 'element-subtype-icon',
-        config: {
-          subType: 'image'
-        }
+        type: 'element-subtype-icon'
       },
       size: 60
     }),
@@ -71,7 +68,7 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
       }
     }),
     columnHelper.accessor('subType', {
-      header: t('gdpr-extractor.assets.table.field.subType'),
+      header: t('gdpr-extractor.assets.table.field.subType')
     }),
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
@@ -83,30 +80,30 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
         return (
           <Flex>
             <ExportButton
+              id={data.id}
+              providerKey={providerKey}
               tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.export')
               }}
-              id={data.id}
-              providerKey={providerKey}
             />
 
             <OpenButton
+              elementType={elementTypes.asset}
+              id={data.id}
               tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.open')
               }}
-              elementType={elementTypes.asset}
-              id={data.id}
             />
 
             <DeleteButton
-              tooltip={{
-                title: t('gdpr-extractor.assets.table.actions.delete')
-              }}
-              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
               elementType={elementTypes.asset}
               id={data.id}
               label={data.fullPath}
+              providerKey={providerKey}
+              tooltip={{
+                title: t('gdpr-extractor.assets.table.actions.delete')
+              }}
             />
           </Flex>
         )

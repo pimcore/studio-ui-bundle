@@ -17,7 +17,7 @@ export const ElementSubtypeIconCell = (props: DefaultCellProps): React.JSX.Eleme
   const manualSubType = props.column.columnDef.meta?.config?.subType
   const subtype = isString(manualSubType)
     ? manualSubType
-    : props.row.original.subType ?? props.row.original.type
+    : props.getValue() ?? props.row.original.subType
 
   function renderCell(): React.JSX.Element {
     switch (subtype) {
