@@ -20,7 +20,7 @@ import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-pro
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 export const ItemDetail = (): React.JSX.Element => {
   const { activeConfiguration } = useItems()
@@ -31,7 +31,7 @@ export const ItemDetail = (): React.JSX.Element => {
   })
   const layoutError = layoutResult?.error as FetchBaseQueryError | undefined
 
-  const layoutAccessor = useDetailLayoutAccessor?.()
+  const layoutAccessor = useMemo(() => useDetailLayoutAccessor?.(), [useDetailLayoutAccessor])
 
   const detailResult = useDetailGeneralSettingsQuery({
     id: configuration.id
@@ -48,6 +48,32 @@ export const ItemDetail = (): React.JSX.Element => {
   useEffect(() => {
     if (layoutAccessor !== undefined && detailData !== undefined) {
       const accessedLayout = layoutAccessor.accessor(detailData as Record<string, any>)
+
+      if (accessedLayout === undefined) {
+        setLayout({
+          name: 'pimcore_root',
+          children: [],
+          fieldType: 'panel',
+          bodyStyle: '',
+          border: false,
+          collapsible: false,
+          title: '',
+          dataType: 'layout',
+          collapsed: false,
+          height: 0,
+          width: 0,
+          icon: { type: 'name', value: 'none' },
+          labelAlign: 'left',
+          labelWidth: 100,
+          layout: null,
+          locked: false,
+          region: '',
+          type: 'layout',
+          additionalAttributes: {}
+        })
+        return
+      }
+
       setLayout(accessedLayout)
     }
   }, [detailData, layoutAccessor])

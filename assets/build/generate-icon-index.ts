@@ -21,7 +21,7 @@ import * as path from 'path';
 
 const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
-const protectedNames = new Set(['new', 'package', 'import', 'export']);
+const protectedNames = new Set(['new', 'package', 'import', 'export', 'class']);
 
 if (!fs.existsSync(SVG_FOLDER)) {
     console.error(`Error: Directory ${SVG_FOLDER} does not exist.`);

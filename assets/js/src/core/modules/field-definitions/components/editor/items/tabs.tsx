@@ -10,7 +10,7 @@
 
 import { ItemDetail } from '@Pimcore/modules/field-definitions/components/editor/items/detail'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { type ITabsProps, Tabs } from '@sdk/components'
+import { Icon, type ITabsProps, Tabs } from '@sdk/components'
 import React from 'react'
 
 export const ItemsTabs = (): React.JSX.Element => {
@@ -18,7 +18,8 @@ export const ItemsTabs = (): React.JSX.Element => {
 
   const items: ITabsProps['items'] = configurations.map((configuration) => ({
     key: `${configuration.id}`,
-    label: `${configuration.name} (ID: ${configuration.id})`,
+    label: `${configuration.name} (${configuration.id})`,
+    icon: <Icon { ...(configuration.icon ?? { value: 'class' }) } />,
     closable: true,
     children: (
       <ItemDetail configuration={ configuration } />

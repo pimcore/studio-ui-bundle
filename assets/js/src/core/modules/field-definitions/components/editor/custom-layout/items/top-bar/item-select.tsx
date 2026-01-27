@@ -35,11 +35,13 @@ export const TopBarItemSelect = (): React.JSX.Element => {
   return (
     <>
       {
-        isLoading || data === undefined
-          ? null
+        isLoading || data === undefined || data?.items?.length === 0
+          ? <></>
           : (
             <Dropdown menu={ { items: dropdownItems } }>
-              <IconTextButton icon={ { value: 'edit' } }>
+              <IconTextButton
+                icon={ { value: 'edit' } }
+              >
                 { activeConfiguration !== undefined ? activeConfiguration.name : 'Select Item Configuration' }
               </IconTextButton>
             </Dropdown>
