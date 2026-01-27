@@ -21,6 +21,7 @@ import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
 import { useLanguageLoader } from './loader/language/loader'
 import { useThumbnailsLoader } from './loader/thumbnails/loader'
+import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
@@ -52,6 +53,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadSettings } = useSettingsLoader()
   const { loadAvailableLocales } = useLanguageLoader()
   const { loadThumbnails } = useThumbnailsLoader()
+  const { loadAdminSettings } = useAdminSettingsLoader()
   const { loadPerspective } = usePerspectives()
   const appLoaderRegistry = container.get<AppLoaderRegistry>(serviceIds['AppLoader/Registry'])
 
@@ -89,6 +91,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           fetchMercureCookie(),
           loadTranslations(),
           loadSettings(),
+          loadAdminSettings(),
           loadThumbnails(),
           loadAvailableLocales(),
           initActivePerspective(),
