@@ -6,15 +6,27 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            adminSettingsGet: build.query<AdminSettingsGetApiResponse, AdminSettingsGetApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/settings/admin` }),
+                providesTags: ["Settings Admin"],
+            }),
+            adminSettingsUpdate: build.mutation<AdminSettingsUpdateApiResponse, AdminSettingsUpdateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/settings/admin/save`,
+                    method: "POST",
+                    body: queryArg.updateAdminSettings,
+                }),
+                invalidatesTags: ["Settings Admin"],
+            }),
+            settingAdminThumbnail: build.query<SettingAdminThumbnailApiResponse, SettingAdminThumbnailApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/setting/admin/thumbnail` }),
+                providesTags: ["Settings Admin"],
+            }),
             settingsCountryCollection: build.query<
                 SettingsCountryCollectionApiResponse,
                 SettingsCountryCollectionApiArg
             >({
                 query: () => ({ url: `/pimcore-studio/api/settings/available-countries` }),
-                providesTags: ["Settings"],
-            }),
-            adminSettingsGet: build.query<AdminSettingsGetApiResponse, AdminSettingsGetApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/settings/admin` }),
                 providesTags: ["Settings"],
             }),
             systemSettingsGet: build.query<SystemSettingsGetApiResponse, SystemSettingsGetApiArg>({
@@ -29,25 +41,23 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/settings/ping` }),
                 providesTags: ["Settings"],
             }),
-            adminSettingsUpdate: build.mutation<AdminSettingsUpdateApiResponse, AdminSettingsUpdateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/settings/admin/save`,
-                    method: "POST",
-                    body: queryArg.updateAdminSettings,
-                }),
-                invalidatesTags: ["Settings"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type AdminSettingsGetApiResponse = /** status 200 Admin system settings data */ AdminSettings;
+export type AdminSettingsGetApiArg = void;
+export type AdminSettingsUpdateApiResponse = unknown;
+export type AdminSettingsUpdateApiArg = {
+    updateAdminSettings: UpdateAdminSettings;
+};
+export type SettingAdminThumbnailApiResponse = /** status 200 Success */ AdminSettingsThumbnailPath;
+export type SettingAdminThumbnailApiArg = void;
 export type SettingsCountryCollectionApiResponse = /** status 200 List of available countries */ {
     totalItems: number;
     items: AvailableCountry[];
 };
 export type SettingsCountryCollectionApiArg = void;
-export type AdminSettingsGetApiResponse = /** status 200 Admin system settings data */ AdminSettings;
-export type AdminSettingsGetApiArg = void;
 export type SystemSettingsGetApiResponse = /** status 200 System settings data */ {
     [key: string]: any;
 };
@@ -78,8 +88,8 @@ export type Branding = {
     brandColor: string;
     /** Custom image for login screen */
     loginScreenCustomBackgroundImage: RelatedElementData | null;
-    /** Custom image for login screen */
-    loginScreenCustomImage: RelatedElementData | null;
+    /** Custom logo */
+    customLogo?: RelatedElementData | null;
 };
 export type Assets = {
     /** Hide edit image button */
@@ -95,6 +105,40 @@ export type AdminSettings = {
     /** Whether the settings are writeable */
     writeable: boolean;
 };
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type UpdateAdminSettings = {
+    /** Branding configuration */
+    branding: Branding;
+    /** Assets configuration */
+    assets: Assets;
+};
+export type AdminSettingsThumbnailPath = {
+    /** Path to custom logo thumbnail */
+    customLogoSmall: string | null;
+    /** Path to custom logo thumbnail */
+    customLogo: string | null;
+    /** Path to custom background image */
+    loginScreenCustomBackgroundImage: string | null;
+};
+export type AvailableCountry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Country name */
+    name: string;
+    /** Country ISO 3166-1 code */
+    code: string;
+};
 export type ActiveBundle = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -103,13 +147,10 @@ export type ActiveBundle = {
     /** Bundle name */
     name: string;
 };
-export type UpdateAdminSettings = {
-    /** Branding configuration */
-    branding: Branding;
-    /** Assets configuration */
-    assets: Assets;
-};
 export const {
+    useAdminSettingsGetQuery,
+    useAdminSettingsUpdateMutation,
+    useSettingAdminThumbnailQuery,
     useSettingsCountryCollectionQuery,
     useSystemSettingsGetQuery,
     useActiveBundlesGetQuery,
