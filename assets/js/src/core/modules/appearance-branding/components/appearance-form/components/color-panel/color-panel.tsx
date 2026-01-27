@@ -25,7 +25,7 @@ export const ColorPanel = (): React.JSX.Element => {
       return null
     }
 
-    if (isObject(color) && has(color, 'toHexString') && isFunction(color.toHexString)) {
+    if (isObject(color)) {
       return (color as any).toHexString()
     }
 
