@@ -35,6 +35,7 @@ export const {
   useSystemSettingsGetQuery,
   useActiveBundlesGetQuery,
   usePingActionQuery,
+  useLazyPingActionQuery,
   useSettingsCountryCollectionQuery
 } = api
 

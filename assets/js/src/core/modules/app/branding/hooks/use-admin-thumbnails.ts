@@ -26,7 +26,9 @@ export const useAdminThumbnails = (): AdminThumbnails => {
     isLoading,
     isFetching,
     error
-  } = useSettingAdminThumbnailQuery()
+  } = useSettingAdminThumbnailQuery(undefined, {
+    skip: false
+  })
 
   useEffect(() => {
     if (!isUndefined(error)) {

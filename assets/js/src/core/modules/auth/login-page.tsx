@@ -36,8 +36,12 @@ export const LoginPage = (): React.JSX.Element => {
   const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   
   const backgroundImageUrl = useMemo(() => {
-    return loginScreenCustomBackgroundImage
+    return loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'
   }, [loginScreenCustomBackgroundImage])
+  
+  const logoUrl = useMemo(() => {
+    return customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg'
+  }, [customLogoSmall])
   
   const { styles } = useStyle({ backgroundImageUrl })
 
@@ -73,7 +77,7 @@ export const LoginPage = (): React.JSX.Element => {
       <div className={ styles.loginWidget }>
         <img
           alt={ 'Pimcore Logo' }
-          src={ customLogoSmall }
+          src={ logoUrl }
         />
         <LoginFormContainer />
       </div>
