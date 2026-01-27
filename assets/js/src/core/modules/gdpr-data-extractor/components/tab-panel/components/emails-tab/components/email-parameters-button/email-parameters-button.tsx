@@ -1,8 +1,17 @@
-import { EmailPreview } from "@Pimcore/modules/email/log/components/email-preview/email-preview"
-import { ParametersTab } from "@Pimcore/modules/email/log/components/parameters-tab/parameters-tab"
-import { IconButton, Modal, ModalTitle } from "@sdk/components"
-import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { ParametersTab } from '@Pimcore/modules/email/log/components/parameters-tab/parameters-tab'
+import { IconButton, Modal, ModalTitle } from '@sdk/components'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface EmailParametersButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
@@ -24,13 +33,13 @@ export const EmailParametersButton = ({ id, onClick, ...iconButtonProps }: Email
       />
 
       <Modal
-        open={isOpen}
-        onOk={() => {
-          setIsOpen(false)
-        }}
         onCancel={() => {
           setIsOpen(false)
         }}
+        onOk={() => {
+          setIsOpen(false)
+        }}
+        open={isOpen}
         size="L"
         title={(
           <ModalTitle>

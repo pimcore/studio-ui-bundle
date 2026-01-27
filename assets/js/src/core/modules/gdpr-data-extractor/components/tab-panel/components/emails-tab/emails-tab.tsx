@@ -10,15 +10,14 @@
 
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { elementTypes } from '@sdk/modules/data-object'
 import { createColumnHelper } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExportButton } from '../../../export-button/export-button'
 import { type GDPRProviderTabProps } from '../../tab-panel'
+import { DeleteButton } from './components/delete-button/delete-button'
 import { EmailParametersButton } from './components/email-parameters-button/email-parameters-button'
 import { EmailPreviewButton } from './components/email-preview-button/email-preview-button'
-import { DeleteButton } from './components/delete-button/delete-button'
 
 interface EmailsRow {
   data: {
@@ -57,19 +56,19 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
       }
     }),
     columnHelper.accessor('from', {
-      header: t('gdpr-extractor.emails.table.field.from'),
+      header: t('gdpr-extractor.emails.table.field.from')
     }),
     columnHelper.accessor('to', {
-      header: t('gdpr-extractor.emails.table.field.to'),
+      header: t('gdpr-extractor.emails.table.field.to')
     }),
     columnHelper.accessor('cc', {
-      header: t('gdpr-extractor.emails.table.field.cc'),
+      header: t('gdpr-extractor.emails.table.field.cc')
     }),
     columnHelper.accessor('bcc', {
-      header: t('gdpr-extractor.emails.table.field.bcc'),
+      header: t('gdpr-extractor.emails.table.field.bcc')
     }),
     columnHelper.accessor('subject', {
-      header: t('gdpr-extractor.emails.table.field.subject'),
+      header: t('gdpr-extractor.emails.table.field.subject')
     }),
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
@@ -81,37 +80,37 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
         return (
           <Flex align="center">
             <EmailPreviewButton
+              disabled={!data.hasHtmlLog}
               id={data.id}
-              disabled={data.hasHtmlLog === false}
               tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.html')
               }}
             />
 
             <EmailParametersButton
+              disabled={!data.hasParameters}
               id={data.id}
-              disabled={data.hasParameters === false}
               tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.parameters')
               }}
             />
 
             <ExportButton
+              id={data.id}
+              providerKey={providerKey}
               tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.export')
               }}
-              id={data.id}
-              providerKey={providerKey}
             />
 
             <DeleteButton
-              tooltip={{
-                title: t('email-log.tooltip.delete')
-              }}
-              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
               id={data.id}
               label={data.subject ?? data.from}
+              providerKey={providerKey}
+              tooltip={{
+                title: t('email-log.tooltip.delete')
+              }}
             />
           </Flex>
         )
