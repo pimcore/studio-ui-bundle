@@ -362,6 +362,7 @@ export const Grid = ({
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
         columns={ columns }
         contextMenu={ props.contextMenu }
+        enableColumnVirtualizer={ enableColumnVirtualizer }
         enableRowDrag={ enableRowDrag }
         isSelected={ row.getIsSelected() }
         key={ row.id }
@@ -413,61 +414,67 @@ export const Grid = ({
               >
                 {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr
-                      key={ headerGroup.id }
-                      style={ {
-                        display: 'flex',
-                        width: '100%',
-                        paddingLeft: virtualPaddingLeft,
-                        paddingRight: virtualPaddingRight
-                      } }
-                    >
-                      {virtualColumns.map(virtualColumn => {
-                        const header = headerGroup.headers[virtualColumn.index]
+                  {table.getHeaderGroups().map(headerGroup => {
+                    const visibleHeaders = enableColumnVirtualizer ? virtualColumns.map(virtualColumn => headerGroup.headers[virtualColumn.index]) : headerGroup.headers
 
-                        if (isNull(header)) return null
+                    return (
+                      <tr
+                        key={ headerGroup.id }
+                        style={
+                          enableColumnVirtualizer
+                            ? {
+                                display: 'flex',
+                                width: '100%',
+                                paddingLeft: virtualPaddingLeft,
+                                paddingRight: virtualPaddingRight
+                              }
+                            : undefined
+                        }
+                      >
+                        {visibleHeaders.map(header => {
+                          if (isNull(header)) return null
 
-                        return (
-                          <th
-                            className='ant-table-cell'
-                            key={ header.id }
-                            ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                            style={
-                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                ? {
-                                    width: 'auto',
-                                    minWidth: header.column.getSize()
-                                  }
-                                : {
-                                    width: header.column.getSize(),
-                                    maxWidth: header.column.getSize()
-                                  }
-                            }
-                          >
-                            <div className='grid__cell-content'>
-                              <span>
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                              </span>
+                          return (
+                            <th
+                              className='ant-table-cell'
+                              key={ header.id }
+                              ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
+                              style={
+                                header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                                  ? {
+                                      width: 'auto',
+                                      minWidth: header.column.getSize()
+                                    }
+                                  : {
+                                      width: header.column.getSize(),
+                                      maxWidth: header.column.getSize()
+                                    }
+                              }
+                            >
+                              <div className='grid__cell-content'>
+                                <span>
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                </span>
 
-                              {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
-                            </div>
+                                {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
+                              </div>
 
-                            {props.resizable === true && header.column.getCanResize() && (
+                              {props.resizable === true && header.column.getCanResize() && (
                               <Resizer
                                 header={ header }
                                 isResizing={ header.column.getIsResizing() }
                                 table={ table }
                               />
-                            )}
-                          </th>
-                        )
-                      })}
-                    </tr>
-                  ))}
+                              )}
+                            </th>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
                 </thead>
                 )}
                 <tbody

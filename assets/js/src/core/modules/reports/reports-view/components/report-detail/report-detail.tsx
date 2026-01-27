@@ -222,10 +222,13 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableColumnVirtualizer
+            enableRowVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting
             onSortingChange={ handleSortingChange }
+            resizable
             sorting={ sortingValue }
           />
         )}

@@ -33,6 +33,7 @@ export interface GridRowProps {
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
   enableRowDrag?: boolean
+  enableColumnVirtualizer: boolean
   size?: GridProps['size']
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
@@ -42,7 +43,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -108,61 +109,71 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
     }
   }
 
-  return useMemo(() => renderWithContextMenu(
-    <tr
-      className={ [
-        'ant-table-row',
-        row.getIsSelected() ? 'ant-table-row-selected' : '',
-        props.onRowDoubleClick !== undefined ? 'hover' : ''
-      ].join(' ') }
-      data-index={ props?.virtualIndex } // needed for dynamic row height measurement
-      data-testid={ createTableRowTestId(row.index) }
-      onDoubleClick={ onRowDoubleClick }
-      ref={ combinedRef }
-      style={ {
-        ...style,
-        paddingLeft: virtualPaddingLeft,
-        paddingRight: virtualPaddingRight
-      } }
-    >
-      {virtualColumns?.map((virtualColumn, index) => {
-        const cell = row.getVisibleCells()[virtualColumn.index]
+  const visibleColumns = useMemo(() => {
+    return enableColumnVirtualizer ? virtualColumns : row.getVisibleCells()
+  }, [enableColumnVirtualizer])
 
-        if (isEmpty(cell)) return null
+  return useMemo(() => {
+    const visibleCells = enableColumnVirtualizer ? visibleColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
 
-        return (
-          <td
-            className='ant-table-cell'
-            key={ cell.id }
-            style={ cell.column.columnDef.meta?.autoWidth === true
-              ? {
-                  width: 'auto',
-                  minWidth: cell.column.getSize()
-                }
-              : {
-                  width: cell.column.getSize(),
-                  maxWidth: cell.column.getSize()
-                }
+    return renderWithContextMenu(
+      <tr
+        className={ [
+          'ant-table-row',
+          row.getIsSelected() ? 'ant-table-row-selected' : '',
+          props.onRowDoubleClick !== undefined ? 'hover' : ''
+        ].join(' ') }
+        data-index={ props?.virtualIndex } // needed for dynamic row height measurement
+        data-testid={ createTableRowTestId(row.index) }
+        onDoubleClick={ onRowDoubleClick }
+        ref={ combinedRef }
+        style={
+          enableColumnVirtualizer
+            ? {
+                ...style,
+                paddingLeft: virtualPaddingLeft,
+                paddingRight: virtualPaddingRight
+              }
+            : { ...style }
+        }
+      >
+        {visibleCells?.map((cell, index) => {
+          if (isEmpty(cell)) return null
+
+          return (
+            <td
+              className='ant-table-cell'
+              key={ cell.id }
+              style={ cell.column.columnDef.meta?.autoWidth === true
+                ? {
+                    width: 'auto',
+                    minWidth: cell.column.getSize()
                   }
-          >
-            {enableRowDrag === true && index === 0
-              ? renderRowReorderButton()
-              : (
-                <GridCell
-                  cell={ cell }
-                  isActive={ props.activeColumId === cell.column.id }
-                  isModified={ isModifiedCell(cell.column.id) }
-                  onFocusCell={ props.onFocusCell }
-                  rowIndex={ row.index }
-                  size={ props.size }
-                  tableElement={ props.tableElement }
-                />
-                )}
-          </td>
-        )
-      })}
-    </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style])
+                : {
+                    width: cell.column.getSize(),
+                    maxWidth: cell.column.getSize()
+                  }
+              }
+            >
+              {enableRowDrag === true && index === 0
+                ? renderRowReorderButton()
+                : (
+                  <GridCell
+                    cell={ cell }
+                    isActive={ props.activeColumId === cell.column.id }
+                    isModified={ isModifiedCell(cell.column.id) }
+                    onFocusCell={ props.onFocusCell }
+                    rowIndex={ row.index }
+                    size={ props.size }
+                    tableElement={ props.tableElement }
+                  />
+                  )}
+            </td>
+          )
+        })}
+      </tr>
+    )
+  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
