@@ -24,6 +24,7 @@ import { type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings
 import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
+import { isUndefined } from 'lodash'
 
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -31,18 +32,35 @@ export const AppearanceForm = (): React.JSX.Element => {
   const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
   const [form] = Form.useForm<UpdateAdminSettings>()
 
-  const isWriteable = adminSettings?.writeable ?? false
+  if (isSettingsLoading || isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
+    return (
+      <Content
+        loading
+        padded
+        padding={ {
+          x: 'extra-small',
+          y: 'extra-small'
+        } }
+      >
+        <Title level={ 2 }>
+          {t('appearance-branding.title')}
+        </Title>
+      </Content>
+    )
+  }
+
+  const isWriteable = adminSettings.writeable ?? false
 
   const initialValues: UpdateAdminSettings = {
     branding: {
-      brandColor: adminSettings?.branding?.brandColor ?? '',
-      backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
-      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage ?? null,
-      loginScreenCustomImage: adminSettings?.branding?.loginScreenCustomImage ?? null
+      brandColor: adminSettings.branding?.brandColor ?? '',
+      backgroundShade: adminSettings.branding?.backgroundShade ?? '',
+      loginScreenCustomBackgroundImage: adminSettings.branding?.loginScreenCustomBackgroundImage ?? null,
+      customLogo: adminSettings.branding?.customLogo ?? null
     },
     assets: {
-      hide_edit_image: adminSettings?.assets?.hide_edit_image ?? false,
-      disable_tree_preview: adminSettings?.assets?.disable_tree_preview ?? false
+      hide_edit_image: adminSettings.assets?.hide_edit_image ?? false,
+      disable_tree_preview: adminSettings.assets?.disable_tree_preview ?? false
     }
   }
 
@@ -74,7 +92,6 @@ export const AppearanceForm = (): React.JSX.Element => {
         vertical
       >
         <Content
-          loading={ isSettingsLoading }
           padded
           padding={ {
             x: 'extra-small',
@@ -93,7 +110,7 @@ export const AppearanceForm = (): React.JSX.Element => {
 
             <ImagePanel
               descriptionKey="appearance-branding.custom-logo.description"
-              fieldName={ ['branding', 'loginScreenCustomImage'] }
+              fieldName={ ['branding', 'customLogo'] }
               height={ 150 }
               titleKey="appearance-branding.custom-logo.title"
               width={ 300 }

@@ -10,6 +10,7 @@
 
 import { ContainerProvider } from '@Pimcore/app/depency-injection'
 import { store } from '@Pimcore/app/store'
+import { AppearanceBrandingProvider } from '@Pimcore/modules/app/appearance-branding-provider'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
@@ -23,13 +24,15 @@ export interface GlobalProviderProps {
 export const GlobalProvider = ({ children, themeId }: GlobalProviderProps): React.JSX.Element => {
   return (
     <ContainerProvider>
-      <ThemeProvider id={ themeId }>
-        <Provider store={ store }>
-          <ElementSelectorProvider>
-            {children}
-          </ElementSelectorProvider>
-        </Provider>
-      </ThemeProvider>
+      <Provider store={ store }>
+        <ThemeProvider id={ themeId }>
+          <AppearanceBrandingProvider>
+            <ElementSelectorProvider>
+              {children}
+            </ElementSelectorProvider>
+          </AppearanceBrandingProvider>
+        </ThemeProvider>
+      </Provider>
     </ContainerProvider>
   )
 }

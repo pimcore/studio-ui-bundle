@@ -46,13 +46,14 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         &--bottom-right {
-          left: 11%;
+          top: 55%;
+          left: 13%;
           width: 1642px;
           height: 686px;
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: rgba(122, 58, 212, 0.42);
+          background: var(--pimcore-branding-color-background, rgba(122, 58, 212, 0.42));
           filter: blur(310px);
         }
       }
