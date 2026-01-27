@@ -1303,6 +1303,7 @@ email-log.forward.label: Forward Email
 email-log.send.label: Send
 email-log.forward.email-address.label: Email Address
 email-log.delete.email.success: Email has been deleted successfully
+email-log.html.preview: HTML Preview
 aria.email-log.html.preview: HTML Preview
 user-profile.label: My Profile
 user-profile.general: General Data
@@ -1714,3 +1715,12 @@ gdpr-extractor.users.table.field.firstname: First Name
 gdpr-extractor.users.table.field.lastname: Last Name
 gdpr-extractor.users.table.field.email: Email
 gdpr-extractor.table.field.actions: Actions
+gdpr-extractor.emails.table.field.sentDate: Sent Date
+gdpr-extractor.emails.table.field.from: From
+gdpr-extractor.emails.table.field.to: To
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Subject
+gdpr-extractor.emails.table.actions.export: Export Email
+gdpr-extractor.emails.table.actions.parameters: Expand Parameters
+gdpr-extractor.emails.table.actions.html: View HTML
