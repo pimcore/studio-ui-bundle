@@ -64,7 +64,9 @@ export const tagNames = {
   WIDGET_DETAIL: 'WIDGET_DETAIL',
   USERS: 'USERS',
   USER_DETAIL: 'USER_DETAIL',
-  USER_TREE: 'USER_TREE'
+  USER_TREE: 'USER_TREE',
+  GDPR_DATA: 'GDPR_DATA',
+  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL'
 }
 
 export const providingTags = {
@@ -134,7 +136,9 @@ export const providingTags = {
   WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }],
   USERS: () => [tagNames.USERS],
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
-  USER_TREE: () => [tagNames.USER_TREE]
+  USER_TREE: () => [tagNames.USER_TREE],
+  GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
 }
 
 export const invalidatingTags = {
@@ -194,7 +198,9 @@ export const invalidatingTags = {
   WIDGETS: () => [tagNames.WIDGETS],
   USERS: () => [tagNames.USERS],
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
-  USER_TREE: () => [tagNames.USER_TREE]
+  USER_TREE: () => [tagNames.USER_TREE],
+  GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

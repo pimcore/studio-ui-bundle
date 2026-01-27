@@ -101,6 +101,7 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
               tooltip={{
                 title: t('gdpr-extractor.data-objects.table.actions.delete')
               }}
+              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
               elementType={elementTypes.dataObject}
               id={data.id}

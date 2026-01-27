@@ -12,17 +12,16 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { useEmailLog } from '@Pimcore/modules/email/log/hooks/use-email-log'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { IconButton } from '@sdk/components'
 import React, { useState } from 'react'
 
 interface DeleteButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
-  elementType: ElementType
+  providerKey: string
   label: string
 }
 
-export const DeleteButton = ({ id, elementType, label, onClick, ...iconButtonProps }: DeleteButtonProps): React.JSX.Element => {
+export const DeleteButton = ({ id, providerKey, label, onClick, ...iconButtonProps }: DeleteButtonProps): React.JSX.Element => {
   const { removeWithConfirmation } = useEmailLog()
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const dispatch = useAppDispatch()
@@ -38,6 +37,12 @@ export const DeleteButton = ({ id, elementType, label, onClick, ...iconButtonPro
           dispatch(
             api.util.invalidateTags(
               invalidatingTags.EMAIL_LOG()
+            )
+          )
+
+          dispatch(
+            api.util.invalidateTags(
+              invalidatingTags.GDPR_DATA(providerKey)
             )
           )
         })

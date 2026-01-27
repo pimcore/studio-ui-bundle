@@ -59,7 +59,7 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
     }),
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),
-      size: 100,
+      size: 60,
       enableSorting: false,
       cell: ({ row }) => {
         const data = row.original
@@ -78,10 +78,10 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
               tooltip={{
                 title: t('gdpr-extractor.users.table.actions.delete')
               }}
+              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
               id={data.id}
               label={data.firstname + ' ' + data.lastname}
-              onFinish={refresh}
             />
           </Flex>
         )

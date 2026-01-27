@@ -102,6 +102,7 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
               tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.delete')
               }}
+              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
               elementType={elementTypes.asset}
               id={data.id}

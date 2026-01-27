@@ -108,8 +108,8 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
               tooltip={{
                 title: t('email-log.tooltip.delete')
               }}
+              providerKey={providerKey}
               disabled={!data.__gdprIsDeletable}
-              elementType={elementTypes.dataObject}
               id={data.id}
               label={data.subject ?? data.from}
             />
