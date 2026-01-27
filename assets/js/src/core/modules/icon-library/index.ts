@@ -80,6 +80,7 @@ import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
+import counter from '@Pimcore/assets/icons/counter.inline.svg?react'
 import countiesMultiple from '@Pimcore/assets/icons/counties-multiple.inline.svg?react'
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
@@ -96,6 +97,7 @@ import dataObject from '@Pimcore/assets/icons/data-object.inline.svg?react'
 import dataObjectsImporter from '@Pimcore/assets/icons/data-objects-importer.inline.svg?react'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg?react'
 import datahub from '@Pimcore/assets/icons/datahub.inline.svg?react'
+import dateFormatter from '@Pimcore/assets/icons/date-formatter.inline.svg?react'
 import dateRange from '@Pimcore/assets/icons/date-range.inline.svg?react'
 import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg?react'
 import date from '@Pimcore/assets/icons/date.inline.svg?react'
@@ -145,6 +147,7 @@ import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg?react'
 import folderPlus from '@Pimcore/assets/icons/folder-plus.inline.svg?react'
 import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg?react'
 import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
+import formatters from '@Pimcore/assets/icons/formatters.inline.svg?react'
 import gender from '@Pimcore/assets/icons/gender.inline.svg?react'
 import geographicalBounds from '@Pimcore/assets/icons/geographical-bounds.inline.svg?react'
 import geographicalPolygon from '@Pimcore/assets/icons/geographical-polygon.inline.svg?react'
@@ -161,6 +164,7 @@ import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?re
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
 import imageExternal from '@Pimcore/assets/icons/image-external.inline.svg?react'
 import imageGallery from '@Pimcore/assets/icons/image-gallery.inline.svg?react'
+import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
@@ -225,6 +229,8 @@ import numberField from '@Pimcore/assets/icons/number-field.inline.svg?react'
 import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
+import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
+import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
@@ -292,6 +298,7 @@ import structuredTable from '@Pimcore/assets/icons/structured-table.inline.svg?r
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
 import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
+import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
@@ -301,8 +308,10 @@ import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
+import thumbnailHtml from '@Pimcore/assets/icons/thumbnail-html.inline.svg?react'
 import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
+import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
 import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
@@ -594,6 +603,10 @@ moduleSystem.registerModule({
       component: copy
     })
     iconLibrary.register({
+      name: 'counter',
+      component: counter
+    })
+    iconLibrary.register({
       name: 'counties-multiple',
       component: countiesMultiple
     })
@@ -656,6 +669,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'datahub',
       component: datahub
+    })
+    iconLibrary.register({
+      name: 'date-formatter',
+      component: dateFormatter
     })
     iconLibrary.register({
       name: 'date-range',
@@ -854,6 +871,10 @@ moduleSystem.registerModule({
       component: folder
     })
     iconLibrary.register({
+      name: 'formatters',
+      component: formatters
+    })
+    iconLibrary.register({
       name: 'gender',
       component: gender
     })
@@ -916,6 +937,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image-gallery',
       component: imageGallery
+    })
+    iconLibrary.register({
+      name: 'image-thumbnail',
+      component: imageThumbnail
     })
     iconLibrary.register({
       name: 'image',
@@ -1172,6 +1197,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'open-folder',
       component: openFolder
+    })
+    iconLibrary.register({
+      name: 'operator-concatenator',
+      component: operatorConcatenator
+    })
+    iconLibrary.register({
+      name: 'other-operators',
+      component: otherOperators
     })
     iconLibrary.register({
       name: 'other',
@@ -1442,6 +1475,10 @@ moduleSystem.registerModule({
       component: subscriptionEnterprise
     })
     iconLibrary.register({
+      name: 'substring',
+      component: substring
+    })
+    iconLibrary.register({
       name: 'tab-panel',
       component: tabPanel
     })
@@ -1478,12 +1515,20 @@ moduleSystem.registerModule({
       component: textInput
     })
     iconLibrary.register({
+      name: 'thumbnail-html',
+      component: thumbnailHtml
+    })
+    iconLibrary.register({
       name: 'time',
       component: time
     })
     iconLibrary.register({
       name: 'transfer',
       component: transfer
+    })
+    iconLibrary.register({
+      name: 'transformers',
+      component: transformers
     })
     iconLibrary.register({
       name: 'translate',
