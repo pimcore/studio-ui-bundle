@@ -53,10 +53,21 @@ export const useStyle = createStyles(({ token, css }) => {
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: var(--pimcore-branding-color-background, rgba(122, 58, 212, 0.42));
+          background: var(--pimcore-branding-color-background, rgb(122, 58, 212));
+          opacity: 0.42;
           filter: blur(310px);
         }
       }
+    `,
+    logoImage: css`
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 586px;
+      max-height: 373px;
+      opacity: 0.7;
+      z-index: 1;
     `
   }
 }, { hashPriority: 'low' })

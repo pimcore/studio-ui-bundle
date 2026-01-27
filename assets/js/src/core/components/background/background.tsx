@@ -25,16 +25,7 @@ const Background = (): React.JSX.Element => {
       <img
         alt="Pimcore Logo"
         src={logoUrl}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          maxWidth: '586px',
-          maxHeight: '373px',
-          opacity: 0.7,
-          zIndex: 1
-        }}
+        className={ styles.logoImage }
       />
     </div>
   )
