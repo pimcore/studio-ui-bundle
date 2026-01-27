@@ -12,11 +12,14 @@ import React, { forwardRef } from 'react'
 import cn from 'classnames'
 import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
+import { Tooltip } from '../tooltip/tooltip'
 import { useStyles } from './icon-button.styles'
 import { type SizeType } from 'antd/es/config-provider/SizeContext'
+import { TooltipProps } from 'antd'
 
 export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
   icon: IconProps
+  tooltip?: TooltipProps
   theme?: 'primary' | 'secondary'
   variant?: 'minimal' | 'static'
   size?: SizeType
@@ -33,6 +36,7 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     variant,
     size,
     className,
+    tooltip,
     ...buttonProps
   } = props
 
@@ -59,16 +63,26 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     }
   }
 
-  return (
+  const button = (
     <Button
-      type={ type }
-      { ...buttonProps }
-      className={ iconButtonClassNames }
-      ref={ ref }
+      type={type}
+      {...buttonProps}
+      className={iconButtonClassNames}
+      ref={ref}
     >
-      <Icon { ...iconWithSize } />
+      <Icon {...iconWithSize} />
     </Button>
   )
+
+  if (tooltip !== undefined) {
+    return (
+      <Tooltip {...tooltip}>
+        {button}
+      </Tooltip>
+    )
+  }
+
+  return button
 }
 
 export const IconButton = forwardRef(Component)
