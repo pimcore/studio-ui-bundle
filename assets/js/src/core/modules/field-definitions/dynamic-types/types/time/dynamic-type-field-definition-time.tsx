@@ -10,19 +10,19 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionNumberFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/number/field-definition-number-form-fields'
+import { FieldDefinitionTimeFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/field-definition-time-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionNumber extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'numeric'
+export class DynamicTypeFieldDefinitionTime extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'time'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'number-type' }
+    return { type: 'name', value: 'time' }
   }
 
   getGroup (): string[] {
-    return [...super.getGroup(), 'numeric']
+    return [...super.getGroup(), 'date']
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
@@ -32,7 +32,7 @@ export class DynamicTypeFieldDefinitionNumber extends DynamicTypeFieldDefinition
     return (
       <>
         {super.getFormFields(context)}
-        <FieldDefinitionNumberFormFields
+        <FieldDefinitionTimeFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }
