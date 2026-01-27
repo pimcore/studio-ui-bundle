@@ -306,13 +306,21 @@ export const Grid = ({
     return virtualRows.map(v => rowsList[v.index].id)
   }, [virtualRows, rowsList, enableRowVirtualizer])
 
+  const shouldUseColumnVirtualization = useMemo(() => {
+    if (!enableColumnVirtualizer) return false
+
+    const totalColumnsWidth = table.getCenterTotalSize()
+    const containerWidth = scrollElementRef.current?.clientWidth ?? 0
+
+    return totalColumnsWidth > containerWidth
+  }, [enableColumnVirtualizer, table.getCenterTotalSize(), scrollElementRef.current?.clientWidth])
   const columnVirtualizer = useVirtualizer({
     count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
     estimateSize: index => columnsList[index].getSize(), // estimate the width of each column
     overscan: 5, // number of extra columns to render outside the viewport for smooth scrolling
     horizontal: true,
-    enabled: enableColumnVirtualizer
+    enabled: shouldUseColumnVirtualization
   })
   const virtualColumns = columnVirtualizer.getVirtualItems()
   let virtualPaddingLeft: number | undefined
@@ -362,7 +370,7 @@ export const Grid = ({
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
         columns={ columns }
         contextMenu={ props.contextMenu }
-        enableColumnVirtualizer={ enableColumnVirtualizer }
+        enableColumnVirtualizer={ shouldUseColumnVirtualization }
         enableRowDrag={ enableRowDrag }
         isSelected={ row.getIsSelected() }
         key={ row.id }
@@ -415,13 +423,13 @@ export const Grid = ({
                 {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => {
-                    const visibleHeaders = enableColumnVirtualizer ? virtualColumns.map(virtualColumn => headerGroup.headers[virtualColumn.index]) : headerGroup.headers
+                    const visibleHeaders = shouldUseColumnVirtualization ? virtualColumns.map(virtualColumn => headerGroup.headers[virtualColumn.index]) : headerGroup.headers
 
                     return (
                       <tr
                         key={ headerGroup.id }
                         style={
-                          enableColumnVirtualizer
+                          shouldUseColumnVirtualization
                             ? {
                                 display: 'flex',
                                 width: '100%',
@@ -432,8 +440,6 @@ export const Grid = ({
                         }
                       >
                         {visibleHeaders.map(header => {
-                          if (isNull(header)) return null
-
                           return (
                             <th
                               className='ant-table-cell'
@@ -517,7 +523,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds])
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, shouldUseColumnVirtualization, virtualColumns])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

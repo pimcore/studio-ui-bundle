@@ -12,7 +12,7 @@ import React, { type CSSProperties, useCallback, useLayoutEffect, useMemo, useRe
 import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { isNull, isEmpty } from 'lodash'
+import { isNull } from 'lodash'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
@@ -111,7 +111,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
 
   const visibleCells = useMemo(() => {
     return enableColumnVirtualizer ? virtualColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
-  }, [enableColumnVirtualizer])
+  }, [enableColumnVirtualizer, virtualColumns, JSON.stringify(row)])
 
   return useMemo(() => renderWithContextMenu(
     <tr
@@ -135,8 +135,6 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
       }
     >
       {visibleCells?.map((cell, index) => {
-        if (isEmpty(cell)) return null
-
         return (
           <td
             className='ant-table-cell'
