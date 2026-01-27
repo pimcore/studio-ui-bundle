@@ -76,20 +76,29 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
         return (
           <Flex>
             <ExportButton
-              id={ data.id }
-              providerKey={ providerKey }
+              tooltip={{
+                title: t('gdpr-extractor.data-objects.table.actions.export')
+              }}
+              id={data.id}
+              providerKey={providerKey}
             />
 
             <OpenButton
-              elementType={ elementTypes.dataObject }
-              id={ data.id }
+              tooltip={{
+                title: t('gdpr-extractor.data-objects.table.actions.open')
+              }}
+              elementType={elementTypes.dataObject}
+              id={data.id}
             />
 
             <DeleteButton
-              disabled={ !data.__gdprIsDeletable }
-              elementType={ elementTypes.dataObject }
-              id={ data.id }
-              label={ data.fullPath }
+              tooltip={{
+                title: t('gdpr-extractor.data-objects.table.actions.delete')
+              }}
+              disabled={!data.__gdprIsDeletable}
+              elementType={elementTypes.dataObject}
+              id={data.id}
+              label={data.fullPath}
             />
           </Flex>
         )
@@ -100,10 +109,10 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ data.map((item) => item.data) }
+      columns={columns}
+      data={data.map((item) => item.data)}
       enableSorting
-      { ...props }
+      {...props}
     />
   )
 }
