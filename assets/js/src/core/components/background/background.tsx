@@ -22,11 +22,11 @@ const Background = (): React.JSX.Element => {
       <div className='background-figure background-figure--bottom-left'></div>
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
-      <img
+      {logoUrl !== null && <img
         alt="Pimcore Logo"
         src={logoUrl}
         className={ styles.logoImage }
-      />
+      />}
     </div>
   )
 }
