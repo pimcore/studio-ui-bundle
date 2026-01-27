@@ -44,7 +44,13 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
   const columns = [
     columnHelper.accessor('type', {
       header: t('gdpr-extractor.assets.table.field.type'),
-      size: 80
+      meta: {
+        type: 'element-subtype-icon',
+        config: {
+          subType: 'image'
+        }
+      },
+      size: 60
     }),
     columnHelper.accessor('id', {
       header: t('gdpr-extractor.assets.table.field.id'),
@@ -65,7 +71,7 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
       }
     }),
     columnHelper.accessor('subType', {
-      header: t('gdpr-extractor.assets.table.field.subType')
+      header: t('gdpr-extractor.assets.table.field.subType'),
     }),
     columnHelper.accessor('actions', {
       header: t('gdpr-extractor.table.field.actions'),

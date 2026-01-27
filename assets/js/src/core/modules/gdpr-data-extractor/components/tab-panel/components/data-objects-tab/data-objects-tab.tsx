@@ -43,7 +43,13 @@ export const DataObjectsTab = ({ data, providerKey, ...props }: DataObjectsTabPr
   const columns = [
     columnHelper.accessor('type', {
       header: t('gdpr-extractor.data-objects.table.field.type'),
-      size: 80
+      meta: {
+        type: 'element-subtype-icon',
+        config: {
+          subtype: 'data-object'
+        }
+      },
+      size: 60
     }),
     columnHelper.accessor('id', {
       header: t('gdpr-extractor.data-objects.table.field.id'),
