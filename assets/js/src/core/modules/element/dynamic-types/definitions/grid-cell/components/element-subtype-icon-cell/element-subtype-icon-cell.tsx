@@ -15,35 +15,35 @@ import React from 'react'
 export const ElementSubtypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
   const subtype = props.getValue() ?? props.row.original.subType
 
-  function renderCell(): React.JSX.Element {
+  function renderCell (): React.JSX.Element {
     switch (subtype) {
       case 'image':
-        return <IconView value={'image'} />
+        return <IconView value={ 'image' } />
       case 'video':
-        return <IconView value={'video'} />
+        return <IconView value={ 'video' } />
       case 'audio':
-        return <IconView value={'audio'} />
+        return <IconView value={ 'audio' } />
       case 'document':
-        return <IconView value={'document'} />
+        return <IconView value={ 'document' } />
       case 'archive':
       case 'folder':
-        return <IconView value={'folder'} />
+        return <IconView value={ 'folder' } />
       case 'page':
-        return <IconView value={'file'} />
+        return <IconView value={ 'file' } />
       case 'snippet':
-        return <IconView value={'snippet'} />
+        return <IconView value={ 'snippet' } />
       case 'email':
-        return <IconView value={'mail'} />
+        return <IconView value={ 'mail' } />
       case 'link':
-        return <IconView value={'hardlink'} />
+        return <IconView value={ 'hardlink' } />
       case 'object':
       case 'dataObject':
       case 'data-object':
-        return <IconView value={'data-object'} />
+        return <IconView value={ 'data-object' } />
       case 'variant':
-        return <IconView value={'data-object-variant'} />
+        return <IconView value={ 'data-object-variant' } />
       default:
-        return <IconView value={'file'} />
+        return <IconView value={ 'file' } />
     }
   }
 
