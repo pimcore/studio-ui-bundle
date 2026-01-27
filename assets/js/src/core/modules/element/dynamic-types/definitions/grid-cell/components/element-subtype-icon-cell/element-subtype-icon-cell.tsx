@@ -44,6 +44,8 @@ export const ElementSubtypeIconCell = (props: DefaultCellProps): React.JSX.Eleme
       case 'dataObject':
       case 'data-object':
         return <IconView value={'data-object'} />
+      case 'variant':
+        return <IconView value={'data-object-variant'} />
       default:
         return <IconView value={'file'} />
     }
