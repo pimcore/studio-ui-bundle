@@ -598,6 +598,7 @@ default: default
 resize: Resize
 scaleByWidth: Scale By Width
 scaleByHeight: Scale By Height
+min-max-settings: Min-Max Times
 download: Download
 asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format

@@ -9,18 +9,13 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Button, Form, FormKit, Input, InputNumber, TimePicker } from '@sdk/components'
-import React, { useEffect } from 'react'
+import { Button, DatePicker, Form, FormKit, Input, InputNumber } from '@sdk/components'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
-  const reset = form.getFieldInstance('reset')
-  useEffect(() => {
-    form.setFieldValue('minValue', null)
-    form.setFieldValue('maxValue', null)
-  }, [reset, form])
 
   function resetMinMax (): void {
     form.setFieldValue('minValue', null)
@@ -54,14 +49,22 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
           label={ t('min-value') }
           name="minValue"
         >
-          <TimePicker />
+          <DatePicker.TimePicker
+            outputFormat="HH:mm"
+            outputType="dateString"
+            showSecond={ false }
+          />
         </Form.Item>
 
         <Form.Item
           label={ t('max-value') }
           name="maxValue"
         >
-          <TimePicker />
+          <DatePicker.TimePicker
+            outputFormat="HH:mm"
+            outputType="dateString"
+            showSecond={ false }
+          />
         </Form.Item>
 
         <Button onClick={ () => {

@@ -10,12 +10,23 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Switch, Select, DatePicker } from '@sdk/components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const form = Form.useFormInstance()
   const useCurrentDate = Form.useWatch('useCurrentDate')
+  const useRespectTimezone = Form.useWatch('respectTimezone')
+  useEffect(() => {
+    if (useCurrentDate === true) {
+      form.setFieldValue('defaultValue', null)
+    }
+    if (useRespectTimezone === false) {
+      form.setFieldValue('columnType', 'datetime')
+    }
+  }, [useCurrentDate, useRespectTimezone, form])
+
   return (
     <FormKit.Panel title={ t('specific-settings') }>
 
@@ -26,6 +37,7 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
         <DatePicker
           disabled={ useCurrentDate === true }
           outputFormat="YYYY-MM-DD HH:mm"
+          showTime
         />
       </Form.Item>
 
@@ -50,7 +62,7 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
         name="columnType"
       >
         <Select
-          disabled
+          disabled={ useRespectTimezone === false }
           options={ [
             { label: 'DATETIME', value: 'datetime' },
             { label: 'BIGINT', value: 'bigint(20)' }
