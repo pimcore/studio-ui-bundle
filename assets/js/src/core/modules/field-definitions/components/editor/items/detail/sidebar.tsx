@@ -15,7 +15,7 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon } from '@sdk/components'
 import React, { useMemo } from 'react'
 
 export interface DetailSidebarProps {
@@ -73,6 +73,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
               id: 'sorting-bottom',
               position: { x: 0, y: '70%', width: '100%', height: '30%' },
               isValidContext: true,
+              isValidData: () => false,
               onDrop: (info) => {
                 addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
               }
@@ -96,7 +97,6 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       structure,
       fieldDefinitions,
       itemCallback: ({ fieldDefinition, initialTreeItem }) => {
-        const actions: ITreeElementProps['treeData'][0]['actions'] = []
         let dynType: undefined | DynamicTypeFieldDefinitionAbstract
         const currentPath = initialTreeItem.meta!.currentPath!
 
@@ -104,24 +104,11 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
           dynType = fieldDefinitionRegistry.getDynamicType(fieldDefinition.fieldtype)
         }
 
-        if (fieldDefinition.name !== 'pimcore_root') {
-          if (dynType !== undefined) {
-            const allowedChildTags = dynType.getValidDropdownTags({ area, path: currentPath, fieldDefinitions })
-            fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-              actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'] })
-            })
-          }
-
-          actions.push({ key: 'clone', icon: 'clone' })
-          actions.push({ key: 'delete', icon: 'delete' })
-        } else {
-          fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-            actions.push({ key: `add-${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'] })
-          })
-        }
+        const actions: ITreeElementProps['treeData'][0]['actions'] = fieldDefinitionRegistry.getDropdownActions({ area, path: currentPath, fieldDefinitions })
 
         return {
           ...initialTreeItem,
+          ...(fieldDefinition.name === 'pimcore_root' ? { title: 'Base', icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions,
           allowDrag (params) {
@@ -176,7 +163,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const type = fieldDefinitionRegistry.getDynamicType(typeId)
 
       const newFieldDefData = type.getDefaultData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions })
-      addFieldDefinition(nodeKey, newFieldDefData)
+      const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
+      setCurrentFieldDefinitionId(newlyAddedFieldId)
+      setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
     }
   }
 

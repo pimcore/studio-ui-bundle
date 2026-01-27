@@ -17,7 +17,7 @@ export const CustomLayoutModalTrigger = (): React.JSX.Element => {
 
   return (
     <IconTextButton
-      icon={ { value: 'layout' } }
+      icon={ { value: 'new-something' } }
       onClick={ openModal }
       type="link"
     >
