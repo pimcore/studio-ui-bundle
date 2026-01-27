@@ -1705,15 +1705,23 @@ gdpr-extractor.data-objects.table.field.type: Type
 gdpr-extractor.data-objects.table.field.id: ID
 gdpr-extractor.data-objects.table.field.fullPath: Path
 gdpr-extractor.data-objects.table.field.className: Class
+gdpr-extractor.data-objects.table.actions.export: Export DataObject Data
+gdpr-extractor.data-objects.table.actions.open: Open DataObject
+gdpr-extractor.data-objects.table.actions.delete: Delete DataObject
 gdpr-extractor.assets.table.field.type: Type
 gdpr-extractor.assets.table.field.id: ID
 gdpr-extractor.assets.table.field.fullPath: Full Path
 gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.assets.table.actions.export: Export Asset Data
+gdpr-extractor.assets.table.actions.open: Open Asset
+gdpr-extractor.assets.table.actions.delete: Delete Asset
 gdpr-extractor.users.table.field.id: ID
 gdpr-extractor.users.table.field.name: Username
 gdpr-extractor.users.table.field.firstname: First Name
 gdpr-extractor.users.table.field.lastname: Last Name
 gdpr-extractor.users.table.field.email: Email
+gdpr-extractor.users.table.actions.export: Export User Data
+gdpr-extractor.users.table.actions.delete: Delete User
 gdpr-extractor.table.field.actions: Actions
 gdpr-extractor.emails.table.field.sentDate: Sent Date
 gdpr-extractor.emails.table.field.from: From
@@ -1721,6 +1729,6 @@ gdpr-extractor.emails.table.field.to: To
 gdpr-extractor.emails.table.field.cc: CC
 gdpr-extractor.emails.table.field.bcc: BCC
 gdpr-extractor.emails.table.field.subject: Subject
-gdpr-extractor.emails.table.actions.export: Export Email
+gdpr-extractor.emails.table.actions.export: Export Email Data
 gdpr-extractor.emails.table.actions.parameters: Expand Parameters
 gdpr-extractor.emails.table.actions.html: View HTML
