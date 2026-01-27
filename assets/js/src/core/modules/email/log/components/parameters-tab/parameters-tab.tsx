@@ -18,16 +18,16 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface ParametersTabProps {
-  email: EmailLog
+  id: EmailLog['id']
 }
 
 interface ExtendedEmailLogParameters extends EmailLogParameters {
   computedValue: string | EmailLogObjectParameterData | null
 }
 
-export const ParametersTab = ({ email }: ParametersTabProps): React.JSX.Element => {
+export const ParametersTab = ({ id }: ParametersTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { data, isLoading } = useEmailLogGetParamsQuery({ id: email.id })
+  const { data, isLoading } = useEmailLogGetParamsQuery({ id })
 
   const columnHelper = createColumnHelper<ExtendedEmailLogParameters>()
   const columns: Array<ColumnDef<ExtendedEmailLogParameters>> = [
@@ -45,7 +45,7 @@ export const ParametersTab = ({ email }: ParametersTabProps): React.JSX.Element 
 
         return (
           <DefaultCell
-            { ...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' }) }
+            {...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' })}
           />
         )
       }
@@ -71,13 +71,13 @@ export const ParametersTab = ({ email }: ParametersTabProps): React.JSX.Element 
 
   return (
     <Content
-      loading={ isLoading }
-      none={ isUndefined(data?.data) || data.data.length === 0 }
+      loading={isLoading}
+      none={isUndefined(data?.data) || data.data.length === 0}
     >
       <Grid
         autoWidth
-        columns={ columns }
-        data={ extendedData }
+        columns={columns}
+        data={extendedData}
       />
     </Content>
   )

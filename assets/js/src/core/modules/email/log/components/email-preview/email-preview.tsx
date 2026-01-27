@@ -16,26 +16,26 @@ import { useStyles } from './email-preview.styles'
 import { useTranslation } from 'react-i18next'
 
 interface EmailPreviewProps {
-  email: EmailLog
+  id: EmailLog['id']
   height?: number
 }
 
-export const EmailPreview = ({ email, height = 650 }: EmailPreviewProps): React.JSX.Element => {
+export const EmailPreview = ({ id, height = 650 }: EmailPreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { data, isLoading } = useEmailLogGetHtmlQuery({ id: email.id })
+  const { data, isLoading } = useEmailLogGetHtmlQuery({ id })
 
   return (
     <Content
-      loading={ isLoading }
-      none={ isUndefined(data?.data) || data.data.length === 0 }
+      loading={isLoading}
+      none={isUndefined(data?.data) || data.data.length === 0}
     >
       <iframe
-        className={ styles.iframe }
-        height={ height }
+        className={styles.iframe}
+        height={height}
         sandbox=""
-        srcDoc={ data?.data ?? '' }
-        title={ t('aria.email-log.html.preview') }
+        srcDoc={data?.data ?? ''}
+        title={t('aria.email-log.html.preview')}
       />
     </Content>
   )
