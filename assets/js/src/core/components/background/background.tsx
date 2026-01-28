@@ -14,7 +14,7 @@ import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admi
 
 const Background = (): React.JSX.Element => {
   const { styles } = useStyle()
-  
+
   const { logoUrl } = useAdminThumbnails()
 
   return (
@@ -22,11 +22,13 @@ const Background = (): React.JSX.Element => {
       <div className='background-figure background-figure--bottom-left'></div>
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
-      {logoUrl !== null && <img
+      {logoUrl !== null && (
+      <img
         alt="Pimcore Logo"
-        src={logoUrl}
         className={ styles.logoImage }
-      />}
+        src={ logoUrl }
+      />
+      )}
     </div>
   )
 }

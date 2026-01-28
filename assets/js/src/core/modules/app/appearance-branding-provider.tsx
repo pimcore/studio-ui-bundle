@@ -21,7 +21,7 @@ const LOADING_BRANDING_COLOR = '#C5C0CC'
 
 export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProviderProps): React.JSX.Element => {
   const { isAuthenticated } = useIsAuthenticated()
-  const { adminSettings, isSettingsLoadingOrFetching, isError } = useAppearanceBranding()
+  const { adminSettings, isSettingsLoading, isSettingsFetching, isError } = useAppearanceBranding()
 
   useEffect(() => {
     const documentRoot = document.documentElement
@@ -30,7 +30,7 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
       return
     }
 
-    if (isSettingsLoadingOrFetching) {
+    if (isSettingsLoading || isSettingsFetching) {
       documentRoot.style.setProperty('--pimcore-branding-color', LOADING_BRANDING_COLOR)
       documentRoot.style.setProperty('--pimcore-branding-color-background', LOADING_BRANDING_COLOR)
       return
@@ -55,7 +55,7 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
     } else {
       documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
     }
-  }, [isAuthenticated, adminSettings, isSettingsLoadingOrFetching, isError])
+  }, [isAuthenticated, adminSettings, isSettingsLoading, isSettingsFetching, isError])
 
   return <>{children}</>
 }

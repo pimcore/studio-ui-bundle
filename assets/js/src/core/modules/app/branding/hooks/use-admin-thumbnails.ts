@@ -21,8 +21,8 @@ interface AdminThumbnails {
 }
 
 export const useAdminThumbnails = (): AdminThumbnails => {
-  const { 
-    data: thumbnailData, 
+  const {
+    data: thumbnailData,
     isLoading,
     isFetching,
     error

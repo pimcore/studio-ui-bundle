@@ -26,7 +26,7 @@ export const useAdminSettingsLoader = (): UseAdminSettingsLoaderReturn => {
       .then(({ isError, error }) => {
         isError && trackError(new ApiError(error))
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('Error loading admin settings'))
       })
   }

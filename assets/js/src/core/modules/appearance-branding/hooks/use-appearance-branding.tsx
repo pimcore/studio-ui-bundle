@@ -32,7 +32,7 @@ interface UseAppearanceBrandingReturn {
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
   const { isAuthenticated } = useIsAuthenticated()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
-  
+
   const {
     data: adminSettings,
     isLoading: isSettingsLoading,
@@ -43,11 +43,11 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     skip: isAuthenticated !== true
   })
 
-    useEffect(() => {
-      if (!isUndefined(error)) {
-        trackError(new ApiError(error))
-      }
-    }, [error])
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
 
   const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
     try {

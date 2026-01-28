@@ -32,17 +32,17 @@ export const LoginPage = (): React.JSX.Element => {
   const user = useUser()
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
-  
+
   const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
-  
+
   const backgroundImageUrl = useMemo(() => {
     return loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'
   }, [loginScreenCustomBackgroundImage])
-  
+
   const logoUrl = useMemo(() => {
     return customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg'
   }, [customLogoSmall])
-  
+
   const { styles } = useStyle({ backgroundImageUrl })
 
   useEffect(() => {

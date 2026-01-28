@@ -14,7 +14,7 @@ import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, isFunction, has } from 'lodash'
+import { isObject, has } from 'lodash'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
