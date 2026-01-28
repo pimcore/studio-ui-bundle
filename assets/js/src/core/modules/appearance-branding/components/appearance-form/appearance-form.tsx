@@ -29,10 +29,10 @@ import { isUndefined } from 'lodash'
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
-  const { updateSettings, isLoading, adminSettings, isSettingsLoading } = useAppearanceBranding()
+  const { updateSettings, isLoading, adminSettings, isSettingsLoadingOrFetching } = useAppearanceBranding()
   const [form] = Form.useForm<UpdateAdminSettings>()
 
-  if (isSettingsLoading || isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
+  if (isSettingsLoadingOrFetching || isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
     return (
       <Content
         loading

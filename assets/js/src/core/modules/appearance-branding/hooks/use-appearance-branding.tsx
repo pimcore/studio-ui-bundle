@@ -16,23 +16,39 @@ import {
   type UpdateAdminSettings,
   type AdminSettings
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { isUndefined } from 'lodash'
+import { useEffect } from 'react'
 
 interface UseAppearanceBrandingReturn {
   updateSettings: (settings: UpdateAdminSettings) => Promise<{ success: boolean }>
   isLoading: boolean
   adminSettings: AdminSettings | undefined
-  isSettingsLoading: boolean
+  isSettingsLoadingOrFetching: boolean
   isError: boolean
 }
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
+  const { isAuthenticated } = useIsAuthenticated()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
+  
   const {
     data: adminSettings,
     isLoading: isSettingsLoading,
-    isError
-  } = useAdminSettingsGetQuery()
+    isFetching: isSettingsFetching,
+    isError,
+    error
+  } = useAdminSettingsGetQuery(undefined, {
+    skip: isAuthenticated !== true
+  })
+
+    useEffect(() => {
+      if (!isUndefined(error)) {
+        trackError(new ApiError(error))
+      }
+    }, [error])
+
+  const isSettingsLoadingOrFetching = isSettingsLoading || isSettingsFetching
 
   const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
     try {
@@ -58,7 +74,7 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     updateSettings,
     isLoading,
     adminSettings,
-    isSettingsLoading,
+    isSettingsLoadingOrFetching,
     isError
   }
 }

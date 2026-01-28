@@ -10,22 +10,39 @@
 
 import React, { useEffect } from 'react'
 import { useAppearanceBranding } from '@Pimcore/modules/appearance-branding/hooks/use-appearance-branding'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { isUndefined, isEmpty } from 'lodash'
 
 interface AppearanceBrandingProviderProps {
   children: React.ReactNode
 }
 
+const LOADING_BRANDING_COLOR = '#C5C0CC'
+
 export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProviderProps): React.JSX.Element => {
-  const { adminSettings, isSettingsLoading } = useAppearanceBranding()
+  const { isAuthenticated } = useIsAuthenticated()
+  const { adminSettings, isSettingsLoadingOrFetching, isError } = useAppearanceBranding()
 
   useEffect(() => {
-    if (isSettingsLoading || isUndefined(adminSettings?.branding)) {
+    const documentRoot = document.documentElement
+
+    if (isAuthenticated === undefined) {
+      return
+    }
+
+    if (isSettingsLoadingOrFetching) {
+      documentRoot.style.setProperty('--pimcore-branding-color', LOADING_BRANDING_COLOR)
+      documentRoot.style.setProperty('--pimcore-branding-color-background', LOADING_BRANDING_COLOR)
+      return
+    }
+
+    if (isError || isUndefined(adminSettings?.branding)) {
+      documentRoot.style.removeProperty('--pimcore-branding-color')
+      documentRoot.style.removeProperty('--pimcore-branding-color-background')
       return
     }
 
     const branding = adminSettings.branding
-    const documentRoot = document.documentElement
 
     if (isEmpty(branding.brandColor)) {
       documentRoot.style.removeProperty('--pimcore-branding-color')
@@ -38,7 +55,7 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
     } else {
       documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
     }
-  }, [adminSettings, isSettingsLoading])
+  }, [isAuthenticated, adminSettings, isSettingsLoadingOrFetching, isError])
 
   return <>{children}</>
 }

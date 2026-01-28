@@ -9,7 +9,7 @@
  */
 
 import { useAppDispatch } from '@Pimcore/app/store'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 export interface UseAdminSettingsLoaderReturn {
@@ -26,7 +26,9 @@ export const useAdminSettingsLoader = (): UseAdminSettingsLoaderReturn => {
       .then(({ isError, error }) => {
         isError && trackError(new ApiError(error))
       })
-      .catch(() => { })
+      .catch((err) => {
+        trackError(new GeneralError('Error loading admin settings'))
+      })
   }
 
   return { loadAdminSettings }
