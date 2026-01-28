@@ -10,8 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { useAppearanceBranding } from '@Pimcore/modules/appearance-branding/hooks/use-appearance-branding'
-import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
-import { isUndefined, isEmpty } from 'lodash'
+import { isUndefined } from 'lodash'
 
 interface AppearanceBrandingProviderProps {
   children: React.ReactNode
@@ -20,15 +19,10 @@ interface AppearanceBrandingProviderProps {
 const LOADING_BRANDING_COLOR = '#C5C0CC'
 
 export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProviderProps): React.JSX.Element => {
-  const { isAuthenticated } = useIsAuthenticated()
-  const { adminSettings, isSettingsLoading, isSettingsFetching, isError } = useAppearanceBranding()
+  const { adminSettings, isSettingsLoading, isSettingsFetching } = useAppearanceBranding()
 
   useEffect(() => {
     const documentRoot = document.documentElement
-
-    if (isAuthenticated === undefined) {
-      return
-    }
 
     if (isSettingsLoading || isSettingsFetching) {
       documentRoot.style.setProperty('--pimcore-branding-color', LOADING_BRANDING_COLOR)
@@ -36,26 +30,18 @@ export const AppearanceBrandingProvider = ({ children }: AppearanceBrandingProvi
       return
     }
 
-    if (isError || isUndefined(adminSettings?.branding)) {
-      documentRoot.style.removeProperty('--pimcore-branding-color')
-      documentRoot.style.removeProperty('--pimcore-branding-color-background')
-      return
-    }
-
-    const branding = adminSettings.branding
-
-    if (isEmpty(branding.brandColor)) {
+    if (isUndefined(adminSettings?.branding.brandColor)) {
       documentRoot.style.removeProperty('--pimcore-branding-color')
     } else {
-      documentRoot.style.setProperty('--pimcore-branding-color', branding.brandColor)
+      documentRoot.style.setProperty('--pimcore-branding-color', adminSettings?.branding.brandColor)
     }
 
-    if (isEmpty(branding.backgroundShade)) {
+    if (isUndefined(adminSettings?.branding.backgroundShade)) {
       documentRoot.style.removeProperty('--pimcore-branding-color-background')
     } else {
-      documentRoot.style.setProperty('--pimcore-branding-color-background', branding.backgroundShade)
+      documentRoot.style.setProperty('--pimcore-branding-color-background', adminSettings?.branding.backgroundShade)
     }
-  }, [isAuthenticated, adminSettings, isSettingsLoading, isSettingsFetching, isError])
+  }, [adminSettings, isSettingsLoading, isSettingsFetching])
 
   return <>{children}</>
 }

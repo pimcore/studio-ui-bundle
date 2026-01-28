@@ -16,7 +16,6 @@ import {
   type UpdateAdminSettings,
   type AdminSettings
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { isUndefined } from 'lodash'
 import { useEffect } from 'react'
 
@@ -30,7 +29,6 @@ interface UseAppearanceBrandingReturn {
 }
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
-  const { isAuthenticated } = useIsAuthenticated()
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
 
   const {
@@ -39,9 +37,7 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     isFetching: isSettingsFetching,
     isError,
     error
-  } = useAdminSettingsGetQuery(undefined, {
-    skip: isAuthenticated !== true
-  })
+  } = useAdminSettingsGetQuery()
 
   useEffect(() => {
     if (!isUndefined(error)) {

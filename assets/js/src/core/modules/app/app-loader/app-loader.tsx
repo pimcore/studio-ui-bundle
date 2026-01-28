@@ -21,7 +21,7 @@ import { useUserLoader } from './loader/user/loader'
 import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
 import { useLanguageLoader } from './loader/language/loader'
-import { useThumbnailsLoader } from './loader/thumbnails/loader'
+import { useBrandThumbnailUrlLoader } from './loader/thumbnails/loader'
 import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
@@ -54,7 +54,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
   const { loadAvailableLocales } = useLanguageLoader()
-  const { loadThumbnails } = useThumbnailsLoader()
+  const { loadBrandThumbnailUrls } = useBrandThumbnailUrlLoader()
   const { loadAdminSettings } = useAdminSettingsLoader()
   const { loadPerspective } = usePerspectives()
   const { initGlobalMessageBus } = useGlobalMessageBusLoader()
@@ -77,7 +77,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       if (!isAuthenticated) {
         await Promise.all([
           loadPublicTranslations(),
-          loadThumbnails()
+          loadBrandThumbnailUrls()
         ]).then(() => {
           setIsLoading(() => false)
         }).catch((error) => {
@@ -100,7 +100,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadTranslations(),
           loadSettings(),
           loadAdminSettings(),
-          loadThumbnails(),
           loadAvailableLocales(),
           initActivePerspective(),
           loadReportsMenuItems()

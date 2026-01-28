@@ -12,14 +12,14 @@ import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/app/settings/settings-slice-enhanced'
 
-export interface UseThumbnailsLoaderReturn {
-  loadThumbnails: () => Promise<void>
+export interface UseBrandThumbnailUrlLoaderReturn {
+  loadBrandThumbnailUrls: () => Promise<void>
 }
 
-export const useThumbnailsLoader = (): UseThumbnailsLoaderReturn => {
+export const useBrandThumbnailUrlLoader = (): UseBrandThumbnailUrlLoaderReturn => {
   const dispatch = useAppDispatch()
 
-  const loadThumbnails = async (): Promise<void> => {
+  const loadBrandThumbnailUrls = async (): Promise<void> => {
     const thumbnailsFetcher = dispatch(api.endpoints.settingAdminThumbnail.initiate())
 
     thumbnailsFetcher
@@ -29,5 +29,5 @@ export const useThumbnailsLoader = (): UseThumbnailsLoaderReturn => {
       .catch(() => { })
   }
 
-  return { loadThumbnails }
+  return { loadBrandThumbnailUrls }
 }
