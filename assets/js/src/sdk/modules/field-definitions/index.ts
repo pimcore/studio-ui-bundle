@@ -11,3 +11,5 @@
 export * from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+export * from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
+export * from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/dynamic-type-field-defintion-layout-abstract'
