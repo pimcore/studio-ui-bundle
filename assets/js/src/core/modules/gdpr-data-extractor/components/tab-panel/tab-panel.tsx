@@ -17,8 +17,6 @@ import React from 'react'
 import { type DynamicTypeGDPRProviderRegistry } from '../../dynamic-types/registry/dynamic-type-gdpr-provider-registry'
 import { type GdprSearchDataApiResponse, useGdprListProvidersQuery } from '../../gdpr-data-extractor-api-slice.gen'
 import { type SearchOverrides } from '../../gdpr-data-extractor-container'
-import { type SortingState } from '@tanstack/react-table'
-import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 export interface GDPRProviderTabProps<T> {
   data: T[]
