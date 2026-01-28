@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
@@ -29,6 +30,7 @@ import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
+import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -55,6 +57,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadThumbnails } = useThumbnailsLoader()
   const { loadAdminSettings } = useAdminSettingsLoader()
   const { loadPerspective } = usePerspectives()
+  const { initGlobalMessageBus } = useGlobalMessageBusLoader()
   const appLoaderRegistry = container.get<AppLoaderRegistry>(serviceIds['AppLoader/Registry'])
 
   async function initActivePerspective (): Promise<any> {
@@ -86,6 +89,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         await Promise.all([
           loadUser()
         ])
+
+        const user = selectCurrentUser(store.getState())
+        if (!isNil(user?.id)) {
+          initGlobalMessageBus(user.id)
+        }
 
         await Promise.all([
           fetchMercureCookie(),

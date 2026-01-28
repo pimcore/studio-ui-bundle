@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionNumber extends DynamicTypeFieldDefinition
   id: string = 'numeric'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'number-field' }
+    return { type: 'name', value: 'number-type' }
   }
 
   getGroup (): string[] {

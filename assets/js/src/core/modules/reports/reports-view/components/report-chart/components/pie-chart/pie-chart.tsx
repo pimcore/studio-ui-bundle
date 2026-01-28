@@ -26,7 +26,7 @@ const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_FIELD_COLOR_KEY = 'color'
 
-export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): React.JSX.Element => {
+export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
@@ -119,26 +119,31 @@ export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): R
   return (
     <div>
       <Pie { ...mergedConfig } />
-      <Flex
-        gap="mini"
-        justify="center"
-        wrap="wrap"
-      >
-        {visibleItems?.map((item, index) => {
-          const isDisabled = disabledItems.includes(item.type)
 
-          return (
-            <LegendItem
-              disabled={ isDisabled }
-              handleClick={ () => { handleLegendItemClick(item.type) } }
-              key={ `${index}-${item.type}` }
-              label={ item.type }
-              markerColor={ item.color }
-              value={ item.value }
-            />
+      {showLegend
+        ? (
+          <Flex
+            gap="mini"
+            justify="center"
+            wrap="wrap"
+          >
+            {visibleItems?.map((item, index) => {
+              const isDisabled = disabledItems.includes(item.type)
+
+              return (
+                <LegendItem
+                  disabled={ isDisabled }
+                  handleClick={ () => { handleLegendItemClick(item.type) } }
+                  key={ `${index}-${item.type}` }
+                  label={ item.type }
+                  markerColor={ item.color }
+                  value={ item.value }
+                />
+              )
+            })}
+          </Flex>
           )
-        })}
-      </Flex>
+        : null}
 
       {reportChartData?.length > initialVisibleCount && (
         <ShowMoreBtn

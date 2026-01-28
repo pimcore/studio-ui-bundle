@@ -17,16 +17,16 @@ import { useStudioModal } from '@sdk/components'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
-interface ContentAware {
+interface IAlertModalProps extends Omit<ModalFuncProps, 'content' | 'title'> {
   content: string | React.ReactNode
   title?: string
 }
 
 export interface UseAlertModalResponse {
-  info: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  error: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  warn: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  success: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  info: (props: IAlertModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  error: (props: IAlertModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  warn: (props: IAlertModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  success: (props: IAlertModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
 export const useAlertModal = (): UseAlertModalResponse => {
@@ -35,30 +35,34 @@ export const useAlertModal = (): UseAlertModalResponse => {
 
   return useMemo<UseAlertModalResponse>(
     () => ({
-      info: ({ title, content }) => (
+      info: ({ title, content, ...rest }) => (
         modal.info({
           title: !isUndefined(title) ? t(title) : t('info'),
-          content
+          content,
+          ...rest
         })
       ),
-      error: ({ title, content }) => {
+      error: ({ title, content, ...rest }) => {
         return (
           modal.error({
             title: !isUndefined(title) ? t(title) : t('error'),
-            content
+            content,
+            ...rest
           })
         )
       },
-      warn: ({ title, content }) => (
+      warn: ({ title, content, ...rest }) => (
         modal.warning({
           title: !isUndefined(title) ? t(title) : t('warning'),
-          content
+          content,
+          ...rest
         })
       ),
-      success: ({ title, content }) => (
+      success: ({ title, content, ...rest }) => (
         modal.success({
           title: !isUndefined(title) ? t(title) : t('success'),
-          content
+          content,
+          ...rest
         })
       )
     }),

@@ -27,6 +27,10 @@ moduleSystem.registerModule({
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Slider'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/QuantityValue'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/QuantityValueRange'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Date'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/DateTime'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/DateRange'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Time'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Panel'))
   }
 })
