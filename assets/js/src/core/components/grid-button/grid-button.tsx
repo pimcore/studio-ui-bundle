@@ -17,7 +17,7 @@ import { useStyles } from './grid-button.styles'
 import cn from 'classnames'
 
 export interface GridButtonProps extends Omit<ButtonProps, 'children' | 'type' | 'icon' | 'iconPosition' | 'block' | 'size' | 'shape' | 'danger' | 'color'> {
-  icon: Pick<IconProps, 'type' | 'value'>
+  icon: Pick<IconProps, 'type' | 'value' | 'colorToken'>
   label: string
   iconOptions?: IconProps['options']
 }
@@ -47,6 +47,7 @@ export const GridButton = ({
           options={ iconOptions }
           type={ icon.type }
           value={ icon.value }
+          colorToken={ icon.colorToken }
         />
         <Text className={ styles.label }>
           {label}
