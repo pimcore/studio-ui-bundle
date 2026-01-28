@@ -10,7 +10,6 @@
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type DynamicTypeFieldDefinitionAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
@@ -36,13 +35,18 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     fieldDefinitions,
     invalidFieldDefinitionIds,
     currentFieldDefinitionId,
+    copiedPath,
     addFieldDefinition,
     updateFieldDefinition,
     setCurrentFieldDefinitionIdPath,
     setCurrentFieldDefinitionId,
     moveFieldDefinition,
     removeFieldDefinition,
-    cloneFieldDefinition
+    removeChildren,
+    cloneFieldDefinition,
+    isValidChildFieldDefinition,
+    copyFieldDefinition,
+    pasteFieldDefinition
   } = useLayout()
 
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
@@ -94,24 +98,49 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       return []
     }
 
+    console.log('rerender sidebar')
+
     const treeItems = buildTree({
       structure,
       fieldDefinitions,
       itemCallback: ({ fieldDefinition, initialTreeItem }) => {
-        let dynType: undefined | DynamicTypeFieldDefinitionAbstract
         const currentPath = initialTreeItem.meta!.currentPath!
 
-        if (fieldDefinitionRegistry.hasDynamicType(fieldDefinition.fieldtype)) {
-          dynType = fieldDefinitionRegistry.getDynamicType(fieldDefinition.fieldtype)
-        }
-
         const actions: ITreeElementProps['treeData'][0]['actions'] = fieldDefinitionRegistry.getDropdownActions({ area, path: currentPath, fieldDefinitions })
+        const isCustomLayout = area.includes('custom-layout')
 
         return {
           ...initialTreeItem,
           ...(fieldDefinition.name === 'pimcore_root' ? { title: 'Base', icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
-          actions,
+          actions: [
+            ...(actions ?? []),
+
+            ...(fieldDefinition.name !== 'pimcore_root' && !isCustomLayout
+              ? [
+                  {
+                    key: 'copy',
+                    icon: 'copy'
+                  }
+                ]
+              : []),
+
+            ...(!isCustomLayout && copiedPath !== undefined && isValidChildFieldDefinition(currentPath as string[], copiedPath)
+              ? [{
+                  key: 'paste',
+                  icon: 'paste'
+                }]
+              : []),
+
+            ...(fieldDefinition.name !== 'pimcore_root'
+              ? [
+                  {
+                    key: 'delete',
+                    icon: 'trash'
+                  }
+                ]
+              : [])
+          ],
           allowDrag (params) {
             // Prevent dragging of root node
             if (fieldDefinition.name === 'pimcore_root') {
@@ -120,9 +149,14 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
             return true
           },
-          allowDrop: ({ dropNode, dragNode }) => {
+          allowDrop: ({ dropNode, dragNode, dropPosition }) => {
+            console.log({ title: dropNode.title, dropPosition })
             const dragFieldDef = fieldDefinitions[dragNode.key as string]
             let isValid = false
+
+            if (dropPosition === -1) {
+              return false
+            }
 
             if (fieldDefinition.name === 'pimcore_root') {
               fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
@@ -132,13 +166,14 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
               })
             }
 
-            if (dynType !== undefined) {
-              const allowedChildTags = dynType.getValidChildTags({ area, path: currentPath, fieldDefinitions })
-              fieldDefinitionRegistry.getTypesByTags(allowedChildTags, { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-                if (type.id === dragFieldDef.fieldtype) {
-                  isValid = true
-                }
-              })
+            if (dropPosition === 0 && isValidChildFieldDefinition(dropNode.meta?.currentPath as string[] ?? [], dragNode.meta?.currentPath as string[] ?? [])) {
+              isValid = true
+            }
+
+            const parentPath = [...(dropNode.meta?.currentPath as string[] ?? [])].slice(0, -1)
+
+            if (dropPosition === 1 && parentPath.length !== 0 && isValidChildFieldDefinition(parentPath, dragNode.meta?.currentPath as string[] ?? [])) {
+              isValid = true
             }
 
             return isValid
@@ -148,7 +183,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     })
 
     return [treeItems]
-  }, [structure, fieldDefinitions, invalidFieldDefinitionIds])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
@@ -157,6 +192,14 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
     if (actionKey === 'delete') {
       removeFieldDefinition(nodeKey)
+    }
+
+    if (actionKey === 'copy') {
+      copyFieldDefinition(node.meta?.currentPath as string[] ?? [])
+    }
+
+    if (actionKey === 'paste') {
+      pasteFieldDefinition(node.meta?.currentPath as string[] ?? [])
     }
 
     if (actionKey.startsWith('add-')) {
@@ -193,15 +236,10 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         children: []
       }
 
-      if (existingFieldDef.children !== undefined) {
-        for (const childId of existingFieldDef.children) {
-          removeFieldDefinition(childId as string)
-        }
-      }
-
       setCurrentFieldDefinitionId(nodeKey)
       setCurrentFieldDefinitionIdPath(node.meta?.currentPath as string[] ?? null)
       updateFieldDefinition(nodeKey, mergedData, true)
+      removeChildren(nodeKey)
     }
   }
 
@@ -227,8 +265,15 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         defaultExpandAll
         draggable
         onActionsClick={ onActionsClick }
-        onDragAndDrop={ ({ node, dragNode, dropPosition }) => {
-          moveFieldDefinition(dragNode.key as string, node.key as string, dropPosition)
+        onDragAndDrop={ ({ node, dragNode, dropPosition, dropToGap }) => {
+          console.log({ title: node.title, dropPosition, dropToGap })
+          let nodeId = node.key as string
+
+          if (dropToGap) {
+            nodeId = node.meta!.currentPath!.at(-2)!
+          }
+
+          moveFieldDefinition(dragNode.key as string, nodeId, dropToGap ? dropPosition : 0)
         } }
         onSelected={ onSelected }
         selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }

@@ -19,7 +19,7 @@ export interface FieldDefinitionLayout extends FieldDefinitionDataAbstract {
 }
 
 export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTypeFieldDefinitionAbstract {
-  protected getAllowedChildTags (props: FieldDefinitionContext): string[] {
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
   }
 
