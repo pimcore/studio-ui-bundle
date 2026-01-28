@@ -24,7 +24,7 @@ const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_HEIGHT = 250
 
-export const BarChart = ({ chartData, reportData, chartLabelMap, chartConfig }: IChartProps): React.JSX.Element => {
+export const BarChart = ({ chartData, reportData, chartLabelMap, chartConfig, showLegend = true }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const chartRef = useRef<HTMLDivElement>(null)
@@ -139,27 +139,31 @@ export const BarChart = ({ chartData, reportData, chartLabelMap, chartConfig }: 
         <Column { ...mergedConfig } />
       </div>
 
-      <Flex
-        gap="mini"
-        justify="center"
-        wrap="wrap"
-      >
-        {visibleItems.map((key, index) => {
-          const isActive = activeSeries.includes(key)
+      {showLegend
+        ? (
+          <Flex
+            gap="mini"
+            justify="center"
+            wrap="wrap"
+          >
+            {visibleItems.map((key, index) => {
+              const isActive = activeSeries.includes(key)
 
-          return (
-            <LegendItem
-              disabled={ !isActive }
-              handleClick={ () => {
-                handleLegendItemClick(key)
-              } }
-              key={ `${index}-${key}` }
-              label={ chartLabelMap[key] ?? key }
-              markerColor={ colorMap[key] }
-            />
+              return (
+                <LegendItem
+                  disabled={ !isActive }
+                  handleClick={ () => {
+                    handleLegendItemClick(key)
+                  } }
+                  key={ `${index}-${key}` }
+                  label={ chartLabelMap[key] ?? key }
+                  markerColor={ colorMap[key] }
+                />
+              )
+            })}
+          </Flex>
           )
-        })}
-      </Flex>
+        : null}
 
       {seriesKeys?.length > initialVisibleCount && (
         <ShowMoreBtn
