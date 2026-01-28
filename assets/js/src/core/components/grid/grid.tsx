@@ -91,6 +91,9 @@ export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['item
   id: number
 }
 
+const DEFAULT_GRID_COLUMN_COUNT = 20
+const DEFAULT_GRID_ROW_COUNT = 20
+
 export const Grid = ({
   enableMultipleRowSelection = false,
   modifiedCells = [],
@@ -290,7 +293,7 @@ export const Grid = ({
   const rowsList = table.getRowModel().rows
   const columnsList = table.getVisibleLeafColumns()
 
-  const isEnableRowVirtualizer = useMemo(() => enableRowVirtualizer && rowsList?.length > 20, [enableRowVirtualizer, rowsList])
+  const isEnableRowVirtualizer = useMemo(() => enableRowVirtualizer && rowsList?.length > DEFAULT_GRID_ROW_COUNT, [enableRowVirtualizer, rowsList])
   const rowVirtualizer = useVirtualizer({
     count: rowsList.length,
     getScrollElement: () => scrollElementRef.current,
@@ -306,7 +309,7 @@ export const Grid = ({
     return virtualRows.map(v => rowsList[v.index].id)
   }, [virtualRows, rowsList, isEnableRowVirtualizer])
 
-  const isEnableColumnVirtualizer = useMemo(() => enableColumnVirtualizer && columnsList?.length > 20, [enableColumnVirtualizer, columnsList])
+  const isEnableColumnVirtualizer = useMemo(() => enableColumnVirtualizer && columnsList?.length > DEFAULT_GRID_COLUMN_COUNT, [enableColumnVirtualizer, columnsList])
   const columnVirtualizer = useVirtualizer({
     count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
@@ -327,7 +330,7 @@ export const Grid = ({
     virtualPaddingRight = columnVirtualizer.getTotalSize() - (virtualColumns[virtualColumns.length - 1]?.end ?? 0)
   }
 
-  const { styles } = useStyles({ size, enableRowVirtualizer: isEnableRowVirtualizer })
+  const { styles } = useStyles({ size, enableRowVirtualizer: isEnableRowVirtualizer, enableColumnVirtualizer: isEnableColumnVirtualizer })
 
   const onDragEndInternal = (event: DragEndEvent): void => {
     handleDragEnd?.(event)
@@ -417,12 +420,11 @@ export const Grid = ({
 
                     return (
                       <tr
+                        className={ styles.headerRow }
                         key={ headerGroup.id }
                         style={
                           isEnableColumnVirtualizer
                             ? {
-                                display: 'flex',
-                                width: '100%',
                                 paddingLeft: virtualPaddingLeft,
                                 paddingRight: virtualPaddingRight
                               }
