@@ -184,6 +184,8 @@ import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
+import localeCollector from '@Pimcore/assets/icons/locale-collector.inline.svg?react'
+import localeSwitcher from '@Pimcore/assets/icons/locale-switcher.inline.svg?react'
 import locationMarker from '@Pimcore/assets/icons/location-marker.inline.svg?react'
 import lockCircle from '@Pimcore/assets/icons/lock-circle.inline.svg?react'
 import lock from '@Pimcore/assets/icons/lock.inline.svg?react'
@@ -283,6 +285,7 @@ import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?rea
 import selectType from '@Pimcore/assets/icons/select-type.inline.svg?react'
 import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
+import settingsBrightness from '@Pimcore/assets/icons/settings-brightness.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import shareWithUsers from '@Pimcore/assets/icons/share-with-users.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
@@ -300,6 +303,7 @@ import style from '@Pimcore/assets/icons/style.inline.svg?react'
 import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.inline.svg?react'
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
+import systemColumns from '@Pimcore/assets/icons/system-columns.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
@@ -316,6 +320,7 @@ import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
 import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
+import trimmer from '@Pimcore/assets/icons/trimmer.inline.svg?react'
 import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
@@ -1020,6 +1025,14 @@ moduleSystem.registerModule({
       component: loading
     })
     iconLibrary.register({
+      name: 'locale-collector',
+      component: localeCollector
+    })
+    iconLibrary.register({
+      name: 'locale-switcher',
+      component: localeSwitcher
+    })
+    iconLibrary.register({
       name: 'location-marker',
       component: locationMarker
     })
@@ -1416,6 +1429,10 @@ moduleSystem.registerModule({
       component: seo
     })
     iconLibrary.register({
+      name: 'settings-brightness',
+      component: settingsBrightness
+    })
+    iconLibrary.register({
       name: 'settings',
       component: settings
     })
@@ -1484,6 +1501,10 @@ moduleSystem.registerModule({
       component: substring
     })
     iconLibrary.register({
+      name: 'system-columns',
+      component: systemColumns
+    })
+    iconLibrary.register({
       name: 'tab-panel',
       component: tabPanel
     })
@@ -1546,6 +1567,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tree',
       component: tree
+    })
+    iconLibrary.register({
+      name: 'trimmer',
+      component: trimmer
     })
     iconLibrary.register({
       name: 'txt-docs',
