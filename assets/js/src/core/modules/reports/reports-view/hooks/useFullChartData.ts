@@ -14,6 +14,7 @@ import {
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { PAGE_INITIAL } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 
 interface IUseFullChartDataProps {
   name: string
@@ -27,10 +28,12 @@ export interface IUseFullChartDataReturn {
 }
 
 export const useFullChartData = ({ name }: IUseFullChartDataProps): IUseFullChartDataReturn => {
+  const { filters } = useGridFilterContext()
+
   const {
     isLoading,
     data
-  } = useCustomReportsChartQuery({ body: { name, page: PAGE_INITIAL, pageSize: 9999999999 } }, { skip: isEmptyValue(name) })
+  } = useCustomReportsChartQuery({ body: { name, page: PAGE_INITIAL, pageSize: 9999999999, filters } }, { skip: isEmptyValue(name) })
 
   return {
     isLoading,
