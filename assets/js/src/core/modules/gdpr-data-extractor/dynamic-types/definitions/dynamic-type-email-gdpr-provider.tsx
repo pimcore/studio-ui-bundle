@@ -17,6 +17,6 @@ export class DynamicTypeEmailsGDPRProvider extends DynamicTypeAbstractGDPRProvid
   readonly id: string = 'sent_mails'
 
   getTabContent<T>(tabProps: GDPRProviderTabProps<T>): React.JSX.Element {
-    return <EmailsTab {...tabProps as unknown as EmailsTabProps} />
+    return <EmailsTab { ...tabProps as unknown as EmailsTabProps } />
   }
 }

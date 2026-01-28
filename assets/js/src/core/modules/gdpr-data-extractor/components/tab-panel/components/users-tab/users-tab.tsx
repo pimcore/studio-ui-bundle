@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { ExportButton } from '../../../export-button/export-button'
 import { type GDPRProviderTabProps } from '../../tab-panel'
 import { DeleteButton } from './components/delete-button/delete-button'
-import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { type SortFilter } from '@Pimcore/modules/app/types/sort-filter'
 import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 interface UserRow {
@@ -70,21 +70,21 @@ export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props
         return (
           <Flex>
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.users.table.actions.export')
-              }}
+              } }
             />
 
             <DeleteButton
-              disabled={!data.__gdprIsDeletable}
-              id={data.id}
-              label={data.firstname + ' ' + data.lastname}
-              providerKey={providerKey}
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              id={ data.id }
+              label={ data.firstname + ' ' + data.lastname }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.users.table.actions.delete')
-              }}
+              } }
             />
           </Flex>
         )
@@ -95,16 +95,16 @@ export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      sorting={transformToSortFilter(sortFilter)}
-      onSortingChange={(sorting) => {
+      onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
         setSortFilter(newSorting)
         onSortingChange?.(newSorting)
-      }}
-      {...props}
+      } }
+      sorting={ transformToSortFilter(sortFilter) }
+      { ...props }
     />
   )
 }

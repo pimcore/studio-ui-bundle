@@ -10,7 +10,7 @@
 
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { type SortFilter } from '@Pimcore/modules/app/types/sort-filter'
 import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -86,30 +86,30 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.export')
-              }}
+              } }
             />
 
             <OpenButton
-              elementType={elementTypes.asset}
-              id={data.id}
-              tooltip={{
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.open')
-              }}
+              } }
             />
 
             <DeleteButton
-              disabled={!data.__gdprIsDeletable}
-              elementType={elementTypes.asset}
-              id={data.id}
-              label={data.fullPath}
-              providerKey={providerKey}
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              label={ data.fullPath }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.delete')
-              }}
+              } }
             />
           </Flex>
         )
@@ -120,16 +120,16 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      sorting={transformToSortFilter(sortFilter)}
-      onSortingChange={(sorting) => {
+      onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
         setSortFilter(newSorting)
         onSortingChange?.(newSorting)
-      }}
-      {...props}
+      } }
+      sorting={ transformToSortFilter(sortFilter) }
+      { ...props }
     />
   )
 }

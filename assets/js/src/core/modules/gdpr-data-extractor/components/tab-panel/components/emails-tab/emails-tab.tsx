@@ -18,7 +18,7 @@ import { type GDPRProviderTabProps } from '../../tab-panel'
 import { DeleteButton } from './components/delete-button/delete-button'
 import { EmailParametersButton } from './components/email-parameters-button/email-parameters-button'
 import { EmailPreviewButton } from './components/email-preview-button/email-preview-button'
-import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { type SortFilter } from '@Pimcore/modules/app/types/sort-filter'
 import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 interface EmailsRow {
@@ -82,37 +82,37 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
         return (
           <Flex align="center">
             <EmailPreviewButton
-              disabled={!data.hasHtmlLog}
-              id={data.id}
-              tooltip={{
+              disabled={ !data.hasHtmlLog }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.html')
-              }}
+              } }
             />
 
             <EmailParametersButton
-              disabled={!data.hasParameters}
-              id={data.id}
-              tooltip={{
+              disabled={ !data.hasParameters }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.parameters')
-              }}
+              } }
             />
 
             <ExportButton
-              id={data.id}
-              providerKey={providerKey}
-              tooltip={{
+              id={ data.id }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.emails.table.actions.export')
-              }}
+              } }
             />
 
             <DeleteButton
-              disabled={!data.__gdprIsDeletable}
-              id={data.id}
-              label={data.subject ?? data.from}
-              providerKey={providerKey}
-              tooltip={{
+              disabled={ !data.__gdprIsDeletable }
+              id={ data.id }
+              label={ data.subject ?? data.from }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('email-log.tooltip.delete')
-              }}
+              } }
             />
           </Flex>
         )
@@ -123,16 +123,16 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       enableSorting
-      sorting={transformToSortFilter(sortFilter)}
-      onSortingChange={(sorting) => {
+      onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
         setSortFilter(newSorting)
         onSortingChange?.(newSorting)
-      }}
-      {...props}
+      } }
+      sorting={ transformToSortFilter(sortFilter) }
+      { ...props }
     />
   )
 }
