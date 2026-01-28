@@ -8,16 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { type GDPRProviderTabProps } from '../../tab-panel'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { createColumnHelper } from '@tanstack/react-table'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { DeleteButton } from '../../../delete-button/delete-button'
 import { ExportButton } from '../../../export-button/export-button'
 import { OpenButton } from '../../../open-button/open-button'
-import { DeleteButton } from '../../../delete-button/delete-button'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type GDPRProviderTabProps } from '../../tab-panel'
 
 interface AssetRow {
   data: {
@@ -37,8 +39,9 @@ export interface AssetsTabProps extends GDPRProviderTabProps<AssetRow> {
   data: AssetRow[]
 }
 
-export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): React.JSX.Element => {
+export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: AssetsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [sortFilter, setSortFilter] = useState<SortFilter>({ key: 'id', direction: 'ASC' })
 
   const columnHelper = createColumnHelper<AssetTable>()
   const columns = [
@@ -83,30 +86,30 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
         return (
           <Flex>
             <ExportButton
-              id={ data.id }
-              providerKey={ providerKey }
-              tooltip={ {
+              id={data.id}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.export')
-              } }
+              }}
             />
 
             <OpenButton
-              elementType={ elementTypes.asset }
-              id={ data.id }
-              tooltip={ {
+              elementType={elementTypes.asset}
+              id={data.id}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.open')
-              } }
+              }}
             />
 
             <DeleteButton
-              disabled={ !data.__gdprIsDeletable }
-              elementType={ elementTypes.asset }
-              id={ data.id }
-              label={ data.fullPath }
-              providerKey={ providerKey }
-              tooltip={ {
+              disabled={!data.__gdprIsDeletable}
+              elementType={elementTypes.asset}
+              id={data.id}
+              label={data.fullPath}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.delete')
-              } }
+              }}
             />
           </Flex>
         )
@@ -117,10 +120,16 @@ export const AssetsTab = ({ data, providerKey, ...props }: AssetsTabProps): Reac
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ data.map((item) => item.data) }
+      columns={columns}
+      data={data.map((item) => item.data)}
       enableSorting
-      { ...props }
+      sorting={transformToSortFilter(sortFilter)}
+      onSortingChange={(sorting) => {
+        const newSorting = transformToSortingState(sorting)!
+        setSortFilter(newSorting)
+        onSortingChange?.(newSorting)
+      }}
+      {...props}
     />
   )
 }

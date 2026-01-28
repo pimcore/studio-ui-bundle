@@ -27,9 +27,9 @@ import { useLazyGdprSearchDataQuery } from './gdpr-data-extractor-slice-enhanced
 import { ApiError, trackError } from '@sdk/modules/app'
 
 export interface SearchOverrides {
+  sortFilter?: SortFilter
   provider?: string
   columnFilters?: ColumnFilter[]
-  sortFilter?: SortFilter
   page?: number
   pageSize?: number
 }
@@ -39,7 +39,6 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([])
-  const [sortFilter, setSortFilter] = useState<SortFilter>({ key: 'id', direction: 'ASC' })
   const [provider, setProvider] = useState<string>('data_objects')
 
   const [trigger, { data, isLoading, isFetching, error }] = useLazyGdprSearchDataQuery()
@@ -60,7 +59,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const executeSearch = (overrides?: SearchOverrides): void => {
     const currentProvider = overrides?.provider ?? provider
     const currentColumnFilters = overrides?.columnFilters ?? columnFilters
-    const currentSortFilter = overrides?.sortFilter ?? sortFilter
+    const currentSortFilter = overrides?.sortFilter
     const currentPage = overrides?.page ?? page
     const currentPageSize = overrides?.pageSize ?? pageSize
 
@@ -84,30 +83,30 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar
           justify="end"
-          padding={ {
+          padding={{
             x: 'small',
             y: 'extra-small'
-          } }
+          }}
           theme="secondary"
         >
           <Flex align="center">
             <Split>
               <IconButton
-                disabled={ isLoading || isFetching || provider === '' }
-                icon={ { value: 'refresh' } }
-                onClick={ () => { executeSearch() } }
+                disabled={isLoading || isFetching || provider === ''}
+                icon={{ value: 'refresh' }}
+                onClick={() => { executeSearch() }}
               />
               <Pagination
-                current={ page }
+                current={page}
                 hideOnSinglePage
-                onChange={ (page, pageSize) => {
+                onChange={(page, pageSize) => {
                   setPage(page)
                   setPageSize(pageSize)
                   executeSearch({ page, pageSize })
-                } }
+                }}
                 showSizeChanger
-                showTotal={ (total) => t('pagination.show-total', { total }) }
-                total={ data?.totalItems ?? 0 }
+                showTotal={(total) => t('pagination.show-total', { total })}
+                total={data?.totalItems ?? 0}
               />
             </Split>
           </Flex>
@@ -116,13 +115,13 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 4 }>
+          <Flex gap={4}>
             <Title>
               {t('gdpr-extractor.title')}
             </Title>
@@ -131,37 +130,33 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        gap={ 'extra-small' }
+        gap={'extra-small'}
         padded
-        padding={ {
+        padding={{
           x: 'extra-small',
           y: 'extra-small'
-        } }
+        }}
       >
         <SearchForm
-          isLoading={ isLoading || isFetching }
-          onSearch={ (columnFilters) => {
+          isLoading={isLoading || isFetching}
+          onSearch={(columnFilters) => {
             setColumnFilters(columnFilters)
             executeSearch({ columnFilters })
-          } }
-          onValueChange={ (filters) => {
+          }}
+          onValueChange={(filters) => {
             debouncedSetColumnFilters(filters)
-          } }
+          }}
         />
         <Tabpanel
-          data={ data?.items ?? [] }
-          isLoading={ isLoading || isFetching }
-          onProviderChange={ (providerKey) => {
+          data={data?.items ?? []}
+          isLoading={isLoading || isFetching}
+          onProviderChange={(providerKey) => {
             setProvider(providerKey)
             executeSearch({ provider: providerKey })
-          } }
-          onSortingChange={ (sortFilter) => {
-            setSortFilter(sortFilter!)
-            executeSearch({ sortFilter: sortFilter! })
-          } }
-          providerKey={ provider }
-          refresh={ executeSearch }
-          sortFilter={ sortFilter }
+          }}
+          executeSearch={executeSearch}
+          providerKey={provider}
+          refresh={executeSearch}
         />
       </Content>
     </ContentLayout>

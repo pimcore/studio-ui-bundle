@@ -11,13 +11,15 @@
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExportButton } from '../../../export-button/export-button'
 import { type GDPRProviderTabProps } from '../../tab-panel'
 import { DeleteButton } from './components/delete-button/delete-button'
 import { EmailParametersButton } from './components/email-parameters-button/email-parameters-button'
 import { EmailPreviewButton } from './components/email-preview-button/email-preview-button'
+import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 interface EmailsRow {
   data: {
@@ -34,15 +36,14 @@ interface EmailsRow {
   }
 }
 
-type EmailsTable = EmailsRow['data'] & {
-  actions: React.JSX.Element
-}
+type EmailsTable = EmailsRow['data']
 
 export interface EmailsTabProps extends GDPRProviderTabProps<EmailsRow> {
 }
 
-export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): React.JSX.Element => {
+export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: EmailsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [sortFilter, setSortFilter] = useState<SortFilter>({ key: 'sentDate', direction: 'ASC' })
 
   const columnHelper = createColumnHelper<EmailsTable>()
   const columns = [
@@ -70,7 +71,8 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
     columnHelper.accessor('subject', {
       header: t('gdpr-extractor.emails.table.field.subject')
     }),
-    columnHelper.accessor('actions', {
+    columnHelper.display({
+      id: 'actions',
       header: t('gdpr-extractor.table.field.actions'),
       size: 120,
       enableSorting: false,
@@ -80,37 +82,37 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
         return (
           <Flex align="center">
             <EmailPreviewButton
-              disabled={ !data.hasHtmlLog }
-              id={ data.id }
-              tooltip={ {
+              disabled={!data.hasHtmlLog}
+              id={data.id}
+              tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.html')
-              } }
+              }}
             />
 
             <EmailParametersButton
-              disabled={ !data.hasParameters }
-              id={ data.id }
-              tooltip={ {
+              disabled={!data.hasParameters}
+              id={data.id}
+              tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.parameters')
-              } }
+              }}
             />
 
             <ExportButton
-              id={ data.id }
-              providerKey={ providerKey }
-              tooltip={ {
+              id={data.id}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.emails.table.actions.export')
-              } }
+              }}
             />
 
             <DeleteButton
-              disabled={ !data.__gdprIsDeletable }
-              id={ data.id }
-              label={ data.subject ?? data.from }
-              providerKey={ providerKey }
-              tooltip={ {
+              disabled={!data.__gdprIsDeletable}
+              id={data.id}
+              label={data.subject ?? data.from}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('email-log.tooltip.delete')
-              } }
+              }}
             />
           </Flex>
         )
@@ -121,10 +123,16 @@ export const EmailsTab = ({ data, providerKey, ...props }: EmailsTabProps): Reac
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ data.map((item) => item.data) }
+      columns={columns}
+      data={data.map((item) => item.data)}
       enableSorting
-      { ...props }
+      sorting={transformToSortFilter(sortFilter)}
+      onSortingChange={(sorting) => {
+        const newSorting = transformToSortingState(sorting)!
+        setSortFilter(newSorting)
+        onSortingChange?.(newSorting)
+      }}
+      {...props}
     />
   )
 }

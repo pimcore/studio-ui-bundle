@@ -11,11 +11,13 @@
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExportButton } from '../../../export-button/export-button'
 import { type GDPRProviderTabProps } from '../../tab-panel'
 import { DeleteButton } from './components/delete-button/delete-button'
+import { SortFilter } from '@Pimcore/modules/app/types/sort-filter'
+import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 interface UserRow {
   data: {
@@ -36,8 +38,9 @@ export interface UsersTabProps extends GDPRProviderTabProps<UserRow> {
   data: UserRow[]
 }
 
-export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps): React.JSX.Element => {
+export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props }: UsersTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [sortFilter, setSortFilter] = useState<SortFilter>({ key: 'id', direction: 'ASC' })
 
   const columnHelper = createColumnHelper<UserTable>()
   const columns = [
@@ -67,21 +70,21 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
         return (
           <Flex>
             <ExportButton
-              id={ data.id }
-              providerKey={ providerKey }
-              tooltip={ {
+              id={data.id}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.users.table.actions.export')
-              } }
+              }}
             />
 
             <DeleteButton
-              disabled={ !data.__gdprIsDeletable }
-              id={ data.id }
-              label={ data.firstname + ' ' + data.lastname }
-              providerKey={ providerKey }
-              tooltip={ {
+              disabled={!data.__gdprIsDeletable}
+              id={data.id}
+              label={data.firstname + ' ' + data.lastname}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.users.table.actions.delete')
-              } }
+              }}
             />
           </Flex>
         )
@@ -92,10 +95,16 @@ export const UsersTab = ({ data, providerKey, refresh, ...props }: UsersTabProps
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ data.map((item) => item.data) }
+      columns={columns}
+      data={data.map((item) => item.data)}
       enableSorting
-      { ...props }
+      sorting={transformToSortFilter(sortFilter)}
+      onSortingChange={(sorting) => {
+        const newSorting = transformToSortingState(sorting)!
+        setSortFilter(newSorting)
+        onSortingChange?.(newSorting)
+      }}
+      {...props}
     />
   )
 }
