@@ -64,6 +64,46 @@ export interface LayoutProviderFactoryReturn {
 export const create = (): LayoutProviderFactoryReturn => {
   const LayoutContext = createContext<ILayoutContext | undefined>(undefined)
 
+  const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
+    if (node.id === targetId) {
+      return node
+    }
+
+    for (const child of node.children) {
+      const found = findNode(child, targetId)
+      if (found !== undefined) return found
+    }
+
+    return undefined
+  }
+
+  const collectChildIds = (node: StructureNode): string[] => {
+    let ids: string[] = []
+    node.children.forEach((child) => {
+      ids.push(child.id)
+      ids = ids.concat(collectChildIds(child))
+    })
+    return ids
+  }
+
+  const collectAllIds = (node: StructureNode): string[] => {
+    const ids: string[] = [node.id]
+    node.children.forEach((child) => {
+      ids.push(...collectAllIds(child))
+    })
+    return ids
+  }
+
+  const cloneNodeWithIdMapping = (node: StructureNode, idMap: Record<string, string>): StructureNode => {
+    const newId = uuid()
+    idMap[node.id] = newId
+
+    return {
+      id: newId,
+      children: node.children.map(child => cloneNodeWithIdMapping(child, idMap))
+    }
+  }
+
   const LayoutProvider = (props: LayoutProviderProps): React.JSX.Element => {
     const [structure, setStructure] = useState<ILayoutContext['structure']>(undefined)
     const [fieldDefinitions, setFieldDefinitions] = useState<ILayoutContext['fieldDefinitions']>({})
@@ -176,72 +216,25 @@ export const create = (): LayoutProviderFactoryReturn => {
       setStructure((prevStructure) => prevStructure !== undefined ? removeChildrenRecursively(prevStructure) : prevStructure)
 
       setFieldDefinitions((prevDefs) => {
+        if (structure === undefined) return prevDefs
+
+        const targetNode = findNode(structure, structureNodeId)
+        if (targetNode === undefined) return prevDefs
+
+        const childIds = collectChildIds(targetNode)
         const newDefs = { ...prevDefs }
 
-        const collectChildIds = (node: StructureNode): string[] => {
-          let ids: string[] = []
-          node.children.forEach((child) => {
-            ids.push(child.id)
-            ids = ids.concat(collectChildIds(child))
-          })
-          return ids
-        }
-
-        const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
-          if (node.id === targetId) {
-            return node
-          }
-
-          for (const child of node.children) {
-            const found = findNode(child, targetId)
-            if (found !== undefined) return found
-          }
-
-          return undefined
-        }
-
-        if (structure !== undefined) {
-          const targetNode = findNode(structure, structureNodeId)
-          if (targetNode !== undefined) {
-            const childIds = collectChildIds(targetNode)
-            childIds.forEach((id) => {
-              /* eslint-disable @typescript-eslint/no-dynamic-delete */
-              delete newDefs[id]
-              /* eslint-enable @typescript-eslint/no-dynamic-delete */
-            })
-          }
-        }
+        childIds.forEach((id) => {
+          /* eslint-disable @typescript-eslint/no-dynamic-delete */
+          delete newDefs[id]
+          /* eslint-enable @typescript-eslint/no-dynamic-delete */
+        })
 
         return newDefs
       })
     }
 
     const cloneFieldDefinition = (structureNodeId: StructureNode['id']): StructureNode['id'] => {
-      const oldToNewIdMap: Record<string, string> = {}
-
-      const cloneNodeRecursively = (node: StructureNode): StructureNode => {
-        const newId = uuid()
-        oldToNewIdMap[node.id] = newId
-
-        return {
-          id: newId,
-          children: node.children.map(cloneNodeRecursively)
-        }
-      }
-
-      const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
-        if (node.id === targetId) {
-          return node
-        }
-
-        for (const child of node.children) {
-          const found = findNode(child, targetId)
-          if (found !== undefined) return found
-        }
-
-        return undefined
-      }
-
       const insertClonedNodeAsSibling = (node: StructureNode, targetId: string, clonedNode: StructureNode): StructureNode => {
         const childIndex = node.children.findIndex(child => child.id === targetId)
 
@@ -271,7 +264,8 @@ export const create = (): LayoutProviderFactoryReturn => {
         return structureNodeId
       }
 
-      const clonedNode = cloneNodeRecursively(nodeToClone)
+      const oldToNewIdMap: Record<string, string> = {}
+      const clonedNode = cloneNodeWithIdMapping(nodeToClone, oldToNewIdMap)
 
       setStructure((prevStructure) =>
         prevStructure !== undefined ? insertClonedNodeAsSibling(prevStructure, structureNodeId, clonedNode) : prevStructure
@@ -344,20 +338,6 @@ export const create = (): LayoutProviderFactoryReturn => {
 
       const sourceId = copiedPath[copiedPath.length - 1]
       const targetId = path[path.length - 1]
-      const oldToNewIdMap: Record<string, string> = {}
-
-      const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
-        if (node.id === targetId) {
-          return node
-        }
-
-        for (const child of node.children) {
-          const found = findNode(child, targetId)
-          if (found !== undefined) return found
-        }
-
-        return undefined
-      }
 
       const sourceNode = findNode(structure, sourceId)
 
@@ -365,17 +345,8 @@ export const create = (): LayoutProviderFactoryReturn => {
         return
       }
 
-      const cloneNodeRecursively = (node: StructureNode): StructureNode => {
-        const newId = uuid()
-        oldToNewIdMap[node.id] = newId
-
-        return {
-          id: newId,
-          children: node.children.map(cloneNodeRecursively)
-        }
-      }
-
-      const clonedNode = cloneNodeRecursively(sourceNode)
+      const oldToNewIdMap: Record<string, string> = {}
+      const clonedNode = cloneNodeWithIdMapping(sourceNode, oldToNewIdMap)
 
       const attachNodeRecursively = (node: StructureNode): StructureNode => {
         if (node.id === targetId) {
@@ -507,37 +478,10 @@ export const create = (): LayoutProviderFactoryReturn => {
     }
 
     function getRecursiveChildrenIdsFromPath (path: string[]): string[] {
-      const ids: string[] = []
+      if (structure === undefined) return []
 
-      // get All children under the givin path
-      const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
-        if (node.id === targetId) {
-          return node
-        }
-
-        for (const child of node.children) {
-          const found = findNode(child, targetId)
-          if (found !== undefined) return found
-        }
-
-        return undefined
-      }
-
-      const collectChildIds = (node: StructureNode): void => {
-        ids.push(node.id)
-        node.children.forEach((child) => {
-          collectChildIds(child)
-        })
-      }
-
-      if (structure !== undefined) {
-        const targetNode = findNode(structure, path[path.length - 1])
-        if (targetNode !== undefined) {
-          collectChildIds(targetNode)
-        }
-      }
-
-      return ids
+      const targetNode = findNode(structure, path[path.length - 1])
+      return targetNode !== undefined ? collectAllIds(targetNode) : []
     };
 
     return useMemo(() => (
