@@ -52,7 +52,6 @@ export const LayoutForm = (): React.JSX.Element => {
       {dynamicType !== null
         ? (
           <Content
-            key={ currentFieldDefinitionId }
             padded
             padding={ { x: 'small', bottom: 'small', top: 'none' } }
           >
@@ -63,6 +62,7 @@ export const LayoutForm = (): React.JSX.Element => {
                   setValues(changedValues as FieldDefinitionType)
                 }
               } }
+              key={ `${currentFieldDefinitionId}-${dynamicType.id}` }
             >
               {dynamicType.getFormFields({ area, fieldDefinitions, path: currentFieldDefinitionIdPath! })}
             </FormKit>

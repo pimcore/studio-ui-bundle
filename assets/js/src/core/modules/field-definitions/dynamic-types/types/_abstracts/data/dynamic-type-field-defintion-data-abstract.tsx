@@ -23,6 +23,20 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
     return [...super.getTags(props), 'group:data']
   }
 
+  getConvertibleTags (props: FieldDefinitionContext): string[] {
+    return ['group:data']
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    const isCustomLayout = props.area.includes('custom-layout')
+
+    if (isCustomLayout) {
+      return []
+    }
+
+    return this.getAllowedChildTags(props)
+  }
+
   getGroup (): string[] {
     return ['data']
   }

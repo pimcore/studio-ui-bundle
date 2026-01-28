@@ -34,7 +34,7 @@ export interface ILayoutContext {
   setInvalidFieldDefinitionIds: (ids: string[]) => void
   setCurrentFieldDefinitionId: (id: StructureNode['id'] | null) => void
   setCurrentFieldDefinitionIdPath: (path: string[] | null) => void
-  updateFieldDefinition: (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition) => void
+  updateFieldDefinition: (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition, overwriteValues?: boolean) => void
   addFieldDefinition: (structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition) => StructureNode['id']
   removeFieldDefinition: (structureNodeId: StructureNode['id']) => void
   cloneFieldDefinition: (structureNodeId: StructureNode['id']) => StructureNode['id']
@@ -81,12 +81,11 @@ export const create = (): LayoutProviderFactoryReturn => {
       setFieldDefinitions(initialFieldDefinitions)
     }, [props.layout])
 
-    const updateFieldDefinition = (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition): void => {
+    const updateFieldDefinition = (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition, overwriteValues: boolean = false): void => {
       setFieldDefinitions((prevDefs) => ({
         ...prevDefs,
         [structureNodeId]: {
-          ...prevDefs[structureNodeId],
-          ...updatedFieldDefinition
+          ...(overwriteValues ? updatedFieldDefinition : { ...prevDefs[structureNodeId], ...updatedFieldDefinition })
         }
       }))
     }
@@ -111,6 +110,10 @@ export const create = (): LayoutProviderFactoryReturn => {
       setStructure((prevStructure) => prevStructure !== undefined ? addNodeRecursively(prevStructure) : prevStructure)
       setFieldDefinitions((prevDefs) => ({
         ...prevDefs,
+        [structureNodeId]: {
+          ...prevDefs[structureNodeId],
+          children: [...(prevDefs[structureNodeId].children ?? []), newId]
+        },
         [newId]: newFieldDefinition
       }))
 
@@ -238,6 +241,30 @@ export const create = (): LayoutProviderFactoryReturn => {
           .filter((child): child is StructureNode => child !== null)
 
         return { updatedNode: { ...node, children: updatedChildren }, removedNode }
+      }
+
+      // set new children id in the parent field definition
+      const parentFieldDef = { ...fieldDefinitions[newParentId] }
+
+      parentFieldDef.children = [
+        ...(parentFieldDef.children ?? []),
+        structureNodeId
+      ]
+
+      updateFieldDefinition(newParentId, parentFieldDef)
+
+      // remove id from old parent field definition
+      const oldParentFieldDefEntry = Object.entries(fieldDefinitions).find(([_, def]) => {
+        return def.children?.includes(structureNodeId)
+      })
+
+      if (oldParentFieldDefEntry !== undefined) {
+        const [oldParentId, oldParentFieldDef] = oldParentFieldDefEntry
+
+        const updatedOldParentFieldDef = { ...oldParentFieldDef }
+        updatedOldParentFieldDef.children = updatedOldParentFieldDef.children!.filter(id => id !== structureNodeId)
+
+        updateFieldDefinition(oldParentId, oldParentFieldDef)
       }
 
       const insertNodeAtNewPosition = (node: StructureNode, targetParentId: string, nodeToInsert: StructureNode, index: number): StructureNode => {

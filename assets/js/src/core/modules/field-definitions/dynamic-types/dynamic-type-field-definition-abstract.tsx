@@ -25,6 +25,10 @@ export interface FieldDefinitionContext extends Record<string, any> {
   fieldDefinitions: ILayoutContext['fieldDefinitions']
 }
 
+export interface FieldDefinitionConvertibleContext extends FieldDefinitionContext {
+  newTypeId: string
+}
+
 export interface FieldDefinitionAbstractFormFieldsProps {
   context: FieldDefinitionContext
   id: string
@@ -87,6 +91,10 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
   }
 
   abstract getDefaultData (context: FieldDefinitionContext): FieldDefinitionDataAbstract
+
+  getConvertibleData (context: FieldDefinitionConvertibleContext): Partial<FieldDefinitionDataAbstract> {
+    return {}
+  }
 
   abstract getFormFields (context: FieldDefinitionContext): React.JSX.Element
 
