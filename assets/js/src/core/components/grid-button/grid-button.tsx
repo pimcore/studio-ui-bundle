@@ -44,10 +44,10 @@ export const GridButton = ({
       >
         <Icon
           className={ styles.icon }
+          colorToken={ icon.colorToken }
           options={ iconOptions }
           type={ icon.type }
           value={ icon.value }
-          colorToken={ icon.colorToken }
         />
         <Text className={ styles.label }>
           {label}
