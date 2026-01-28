@@ -42,12 +42,12 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       {
         label: t('widget.email-log.tab.html'),
         key: 'html',
-        children: <EmailPreview email={ email } />
+        children: <EmailPreview id={ email.id } />
       },
       {
         label: t('widget.email-log.tab.parameters'),
         key: 'parameters',
-        children: <ParametersTab email={ email } />
+        children: <ParametersTab id={ email.id } />
       }
     ]
 
@@ -78,10 +78,10 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         gap={ 4 }
              >
         {email.hasError && (
-        <Icon
-          className={ styles.errorIcon }
-          value="close-filled"
-        />
+          <Icon
+            className={ styles.errorIcon }
+            value="close-filled"
+          />
         )}
         <span>{formatDateTime({ timestamp: email.sentDate, dateStyle: 'short', timeStyle: 'short' })}</span>
       </Flex>,

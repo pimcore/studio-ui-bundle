@@ -112,8 +112,8 @@ export const ForwardModal = ({ email, ...props }: ForwardModalProps): React.JSX.
         </Form>
 
         <EmailPreview
-          email={ email }
           height={ 300 }
+          id={ email.id }
         />
       </Flex>
     </Modal>

@@ -17,29 +17,25 @@ import React from 'react'
 import { type DynamicTypeGDPRProviderRegistry } from '../../dynamic-types/registry/dynamic-type-gdpr-provider-registry'
 import { type GdprSearchDataApiResponse, useGdprListProvidersQuery } from '../../gdpr-data-extractor-api-slice.gen'
 import { type SearchOverrides } from '../../gdpr-data-extractor-container'
-import { type SortingState } from '@tanstack/react-table'
-import { transformToSortFilter, transformToSortingState } from '@Pimcore/modules/app/utils/sort-filter-helper'
 
 export interface GDPRProviderTabProps<T> {
   data: T[]
   providerKey: string
-  sorting: SortingState
   isLoading?: boolean
   refresh?: (overrides?: SearchOverrides) => void
-  onSortingChange?: (sorting: SortingState) => void
+  onSortingChange?: (sorting: SortFilter) => void
 }
 
 interface TabpanelProps {
-  sortFilter: SortFilter
   providerKey: string
   data: GdprSearchDataApiResponse['items']
+  executeSearch: (overrides?: SearchOverrides) => void
   onProviderChange?: (providerKey: string) => void
-  onSortingChange?: (sortFilter: SortFilter | null) => void
   isLoading?: boolean
   refresh?: (overrides?: SearchOverrides) => void
 }
 
-export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, onSortingChange, sortFilter, ...props }: TabpanelProps): React.JSX.Element => {
+export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, executeSearch, ...props }: TabpanelProps): React.JSX.Element => {
   const gdprProviderRegistry = container.get<DynamicTypeGDPRProviderRegistry>(serviceIds['DynamicTypes/GDPRProviderRegistry'])
   const { data: providerData, isLoading: isProvidersLoading } = useGdprListProvidersQuery()
 
@@ -62,11 +58,8 @@ export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, onSor
           data: tabData,
           providerKey: provider.key,
           isLoading: isLoading ?? isProvidersLoading,
-          sorting: transformToSortingState(sortFilter),
-          onSortingChange: (sorting) => {
-            onSortingChange?.(
-              transformToSortFilter(sorting)
-            )
+          onSortingChange: (sortFilter) => {
+            executeSearch({ sortFilter })
           },
           ...props
         })

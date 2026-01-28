@@ -69,6 +69,7 @@ import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
+import code from '@Pimcore/assets/icons/code.inline.svg?react'
 import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
@@ -563,6 +564,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'cms',
       component: cms
+    })
+    iconLibrary.register({
+      name: 'code',
+      component: code
     })
     iconLibrary.register({
       name: 'collapse',
