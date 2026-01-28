@@ -116,6 +116,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
       if (isShowColumn) {
         const columnId = !isEmptyValue(item?.name) ? item.name : `id-${index}`
+        const columnType = !isEmptyValue(item.displayType) ? item.displayType! : 'text'
 
         if (item.displayType !== 'hide') {
           list.push(
@@ -127,8 +128,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 enableSorting: item.order,
                 ...(!isNull(item.width) && { size: item.width }),
                 meta: {
-                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-                  ...(item.displayType === 'date' && { config: { showTime: true } }),
+                  type: columnType,
+                  ...(columnType === 'date' && { config: { showTime: true } }),
+                  ...(columnType === 'text' && { config: { renderAsHtml: true } }),
                   ...(isNull(item.width) && { autoWidth: true })
                 }
               }
