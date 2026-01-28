@@ -533,6 +533,9 @@ width-tooltip: "The width of this component. A numeric value will be interpreted
 width-field: Width field
 width-unit: Width unit
 height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+use-current-date: Use current date
+respect-timezone: Respect timezone
+column-type: Column type
 specific-settings: Specific Settings
 default-values-settings: Default value settings
 default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
@@ -569,12 +572,17 @@ field-definition.slider: Slider
 field-definition.quantity-value: Quantity Value
 field-definition.quantity-value-range: Quantity Value Range
 field-definition.input-quantity-value: Input Quantity Value
+field-definition.date: Date
+field-definition.datetime: Date Time
+field-definition.date-range: Date Range
+field-definition.time: Time
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
 regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
 test-string: Test string
 regex-validation-error-message: "The string does not match the required format."
+reset: Reset
 name: Name
 tooltip: Tooltip
 mandatory: Mandatory
@@ -590,6 +598,7 @@ default: default
 resize: Resize
 scaleByWidth: Scale By Width
 scaleByHeight: Scale By Height
+min-max-settings: Min-Max Times
 download: Download
 asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format

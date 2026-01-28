@@ -283,6 +283,10 @@ import { DynamicTypeFieldDefinitionNumericRange } from '@Pimcore/modules/field-d
 import { DynamicTypeFieldDefinitionSlider } from '@Pimcore/modules/field-definitions/dynamic-types/types/slider/dynamic-type-field-definition-slider'
 import { DynamicTypeFieldDefinitionQuantityValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/quantityValue/dynamic-type-field-definition-quantity-value'
 import { DynamicTypeFieldDefinitionQuantityValueRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/quantityValueRange/dynamic-type-field-definition-quantity-value-range'
+import { DynamicTypeFieldDefinitionDate } from '@Pimcore/modules/field-definitions/dynamic-types/types/date/dynamic-type-field-definition-date'
+import { DynamicTypeFieldDefinitionDateTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateTime/dynamic-type-field-definition-date-time'
+import { DynamicTypeFieldDefinitionDateRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateRange/dynamic-type-field-definition-date-range'
+import { DynamicTypeFieldDefinitionTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/dynamic-type-field-definition-time'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -654,6 +658,10 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/NumericRange']).to(Dynam
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Slider']).to(DynamicTypeFieldDefinitionSlider).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/QuantityValue']).to(DynamicTypeFieldDefinitionQuantityValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/QuantityValueRange']).to(DynamicTypeFieldDefinitionQuantityValueRange).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Date']).to(DynamicTypeFieldDefinitionDate).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/DateTime']).to(DynamicTypeFieldDefinitionDateTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/DateRange']).to(DynamicTypeFieldDefinitionDateRange).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Time']).to(DynamicTypeFieldDefinitionTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider
