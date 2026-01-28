@@ -24,7 +24,8 @@ interface UseAppearanceBrandingReturn {
   updateSettings: (settings: UpdateAdminSettings) => Promise<{ success: boolean }>
   isLoading: boolean
   adminSettings: AdminSettings | undefined
-  isSettingsLoadingOrFetching: boolean
+  isSettingsLoading: boolean
+  isSettingsFetching: boolean
   isError: boolean
 }
 
@@ -47,8 +48,6 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
         trackError(new ApiError(error))
       }
     }, [error])
-
-  const isSettingsLoadingOrFetching = isSettingsLoading || isSettingsFetching
 
   const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
     try {
@@ -74,7 +73,8 @@ export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
     updateSettings,
     isLoading,
     adminSettings,
-    isSettingsLoadingOrFetching,
+    isSettingsLoading,
+    isSettingsFetching,
     isError
   }
 }
