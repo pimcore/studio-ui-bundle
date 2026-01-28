@@ -13,7 +13,7 @@ import { type TreeDataItem } from '@sdk/components'
 import { DynamicTypeRegistryAbstract } from '@sdk/modules/element'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { injectable } from 'inversify'
-import { isNil } from 'lodash'
+import { isNil, uniq } from 'lodash'
 
 export interface GroupInfo {
   icon: ElementIcon
@@ -26,6 +26,11 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       const typeTags = type.getTags(context)
       return tags.some(tag => typeTags.includes(tag))
     })
+  }
+
+  resolveTags (tags: string[], context: FieldDefinitionContext): string[] {
+    const types = this.getTypesByTags(tags, context)
+    return uniq(types.map(type => type.id))
   }
 
   getDropdownGroupInfos (): Record<string, GroupInfo> {
@@ -231,11 +236,6 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
           icon: 'content-duplicate'
         })
       }
-
-      actions?.push({
-        key: 'delete',
-        icon: 'trash'
-      })
     }
 
     return actions ?? []

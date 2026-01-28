@@ -9,8 +9,12 @@
  */
 
 /* eslint-disable max-lines */
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
+import { useInjection } from '@sdk/app'
 import { uuid } from '@sdk/utils'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
@@ -28,6 +32,7 @@ export interface FieldDefinition extends Record<string, any> {
 export interface ILayoutContext {
   structure: StructureNode | undefined
   fieldDefinitions: Record<string, FieldDefinition>
+  copiedPath?: string[]
   currentFieldDefinitionId: StructureNode['id'] | null
   currentFieldDefinitionIdPath: string[] | null
   invalidFieldDefinitionIds: string[]
@@ -37,8 +42,12 @@ export interface ILayoutContext {
   updateFieldDefinition: (structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition, overwriteValues?: boolean) => void
   addFieldDefinition: (structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition) => StructureNode['id']
   removeFieldDefinition: (structureNodeId: StructureNode['id']) => void
+  removeChildren: (structureNodeId: StructureNode['id']) => void
   cloneFieldDefinition: (structureNodeId: StructureNode['id']) => StructureNode['id']
   moveFieldDefinition: (structureNodeId: StructureNode['id'], newParentId: StructureNode['id'], newIndex: number) => void
+  copyFieldDefinition: (path: string[]) => void
+  pasteFieldDefinition: (path: string[]) => void
+  isValidChildFieldDefinition: (targetPath: string[], childPath: string[]) => boolean
   getLayout: () => Layout
 }
 
@@ -61,6 +70,9 @@ export const create = (): LayoutProviderFactoryReturn => {
     const [currentFieldDefinitionId, setCurrentFieldDefinitionId] = useState<ILayoutContext['currentFieldDefinitionId']>(null)
     const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<ILayoutContext['currentFieldDefinitionIdPath']>(null)
     const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<ILayoutContext['invalidFieldDefinitionIds']>([])
+    const [copiedPath, setCopiedPath] = useState<ILayoutContext['copiedPath']>(undefined)
+    const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+    const { area } = useArea()
 
     useEffect(() => {
       if (props.layout === undefined) {
@@ -69,6 +81,7 @@ export const create = (): LayoutProviderFactoryReturn => {
         setInvalidFieldDefinitionIds([])
         setCurrentFieldDefinitionId(null)
         setCurrentFieldDefinitionIdPath(null)
+        setCopiedPath(undefined)
         return
       }
 
@@ -110,10 +123,6 @@ export const create = (): LayoutProviderFactoryReturn => {
       setStructure((prevStructure) => prevStructure !== undefined ? addNodeRecursively(prevStructure) : prevStructure)
       setFieldDefinitions((prevDefs) => ({
         ...prevDefs,
-        [structureNodeId]: {
-          ...prevDefs[structureNodeId],
-          children: [...(prevDefs[structureNodeId].children ?? []), newId]
-        },
         [newId]: newFieldDefinition
       }))
 
@@ -146,6 +155,64 @@ export const create = (): LayoutProviderFactoryReturn => {
       setFieldDefinitions((prevDefs) => {
         const { [structureNodeId]: _, ...rest } = prevDefs
         return rest
+      })
+    }
+
+    const removeChildren = (structureNodeId: StructureNode['id']): void => {
+      const removeChildrenRecursively = (node: StructureNode): StructureNode => {
+        if (node.id === structureNodeId) {
+          return {
+            ...node,
+            children: []
+          }
+        }
+
+        return {
+          ...node,
+          children: node.children.map(removeChildrenRecursively)
+        }
+      }
+
+      setStructure((prevStructure) => prevStructure !== undefined ? removeChildrenRecursively(prevStructure) : prevStructure)
+
+      setFieldDefinitions((prevDefs) => {
+        const newDefs = { ...prevDefs }
+
+        const collectChildIds = (node: StructureNode): string[] => {
+          let ids: string[] = []
+          node.children.forEach((child) => {
+            ids.push(child.id)
+            ids = ids.concat(collectChildIds(child))
+          })
+          return ids
+        }
+
+        const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
+          if (node.id === targetId) {
+            return node
+          }
+
+          for (const child of node.children) {
+            const found = findNode(child, targetId)
+            if (found !== undefined) return found
+          }
+
+          return undefined
+        }
+
+        if (structure !== undefined) {
+          const targetNode = findNode(structure, structureNodeId)
+          if (targetNode !== undefined) {
+            const childIds = collectChildIds(targetNode)
+            childIds.forEach((id) => {
+              /* eslint-disable @typescript-eslint/no-dynamic-delete */
+              delete newDefs[id]
+              /* eslint-enable @typescript-eslint/no-dynamic-delete */
+            })
+          }
+        }
+
+        return newDefs
       })
     }
 
@@ -243,30 +310,6 @@ export const create = (): LayoutProviderFactoryReturn => {
         return { updatedNode: { ...node, children: updatedChildren }, removedNode }
       }
 
-      // set new children id in the parent field definition
-      const parentFieldDef = { ...fieldDefinitions[newParentId] }
-
-      parentFieldDef.children = [
-        ...(parentFieldDef.children ?? []),
-        structureNodeId
-      ]
-
-      updateFieldDefinition(newParentId, parentFieldDef)
-
-      // remove id from old parent field definition
-      const oldParentFieldDefEntry = Object.entries(fieldDefinitions).find(([_, def]) => {
-        return def.children?.includes(structureNodeId)
-      })
-
-      if (oldParentFieldDefEntry !== undefined) {
-        const [oldParentId, oldParentFieldDef] = oldParentFieldDefEntry
-
-        const updatedOldParentFieldDef = { ...oldParentFieldDef }
-        updatedOldParentFieldDef.children = updatedOldParentFieldDef.children!.filter(id => id !== structureNodeId)
-
-        updateFieldDefinition(oldParentId, oldParentFieldDef)
-      }
-
       const insertNodeAtNewPosition = (node: StructureNode, targetParentId: string, nodeToInsert: StructureNode, index: number): StructureNode => {
         if (node.id === targetParentId) {
           const newChildren = [...node.children]
@@ -290,6 +333,81 @@ export const create = (): LayoutProviderFactoryReturn => {
       })
     }
 
+    const copyFieldDefinition = (path: string[]): void => {
+      setCopiedPath(path)
+    }
+
+    const pasteFieldDefinition = (path: string[]): void => {
+      if (copiedPath === undefined || structure === undefined) {
+        return
+      }
+
+      const sourceId = copiedPath[copiedPath.length - 1]
+      const targetId = path[path.length - 1]
+      const oldToNewIdMap: Record<string, string> = {}
+
+      const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        if (node.id === targetId) {
+          return node
+        }
+
+        for (const child of node.children) {
+          const found = findNode(child, targetId)
+          if (found !== undefined) return found
+        }
+
+        return undefined
+      }
+
+      const sourceNode = findNode(structure, sourceId)
+
+      if (sourceNode === undefined) {
+        return
+      }
+
+      const cloneNodeRecursively = (node: StructureNode): StructureNode => {
+        const newId = uuid()
+        oldToNewIdMap[node.id] = newId
+
+        return {
+          id: newId,
+          children: node.children.map(cloneNodeRecursively)
+        }
+      }
+
+      const clonedNode = cloneNodeRecursively(sourceNode)
+
+      const attachNodeRecursively = (node: StructureNode): StructureNode => {
+        if (node.id === targetId) {
+          return {
+            ...node,
+            children: [...node.children, clonedNode]
+          }
+        }
+
+        return {
+          ...node,
+          children: node.children.map(attachNodeRecursively)
+        }
+      }
+
+      setStructure((prevStructure) =>
+        prevStructure !== undefined ? attachNodeRecursively(prevStructure) : prevStructure
+      )
+
+      setFieldDefinitions((prevDefs) => {
+        const newDefs = { ...prevDefs }
+
+        Object.entries(oldToNewIdMap).forEach(([oldId, newId]) => {
+          if (prevDefs[oldId] !== undefined) {
+            newDefs[newId] = { ...prevDefs[oldId] }
+          }
+        })
+
+        return newDefs
+      })
+    }
+
     const getLayout: ILayoutContext['getLayout'] = () => {
       const buildLayoutRecursively = (node: StructureNode): Layout => {
         const fieldDef = fieldDefinitions[node.id]
@@ -309,12 +427,126 @@ export const create = (): LayoutProviderFactoryReturn => {
       return buildLayoutRecursively(structure!)
     }
 
+    const isValidChildFieldDefinition = (targetPath: string[], childPath: string[]): boolean => {
+      if (targetPath.includes(childPath[childPath.length - 1])) {
+        return false
+      }
+
+      const currentFieldDef = fieldDefinitions[targetPath[targetPath.length - 1]]
+      const childFieldDef = fieldDefinitions[childPath[childPath.length - 1]]
+
+      const childDynType = fieldDefinitionRegistry.getDynamicType(childFieldDef.fieldtype, false)
+      const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
+
+      if ((currentDynType === undefined || childDynType === undefined) && targetPath.length > 1) {
+        return false
+      }
+
+      const targetContext = {
+        area,
+        fieldDefinitions,
+        path: targetPath
+      }
+
+      const validChildTags = fieldDefinitionRegistry.resolveTags(
+        currentDynType?.getValidChildTags(targetContext) ?? ['group:root'],
+        targetContext
+      )
+
+      if (!validChildTags.includes(childDynType.id)) {
+        return false
+      }
+
+      const targetFieldDefinitions = targetPath.map((id) => fieldDefinitions[id])
+      let blockedChildTags: string[] = []
+
+      for (const currentFieldDef of targetFieldDefinitions) {
+        const dynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
+
+        if (dynType === undefined) {
+          continue
+        }
+
+        blockedChildTags.push(...dynType.getDisallowedRecursiveChildTags({
+          area,
+          fieldDefinitions,
+          path: targetPath
+        }))
+      }
+
+      blockedChildTags = fieldDefinitionRegistry.resolveTags(blockedChildTags, {
+        area,
+        fieldDefinitions,
+        path: targetPath
+      })
+
+      const childFieldDefinitions: FieldDefinition[] = []
+      const childNodes = getRecursiveChildrenIdsFromPath(childPath)
+
+      for (const childNodeId of childNodes) {
+        if (childNodeId === childPath[childPath.length - 1]) {
+          continue
+        }
+
+        const childFieldDef = fieldDefinitions[childNodeId]
+
+        if (childFieldDef !== undefined) {
+          childFieldDefinitions.push(childFieldDef)
+        }
+      }
+
+      const childrenTags = childFieldDefinitions.map((def) => {
+        return def.fieldtype
+      })
+
+      if (childrenTags.some((tag) => blockedChildTags.includes(tag))) {
+        return false
+      }
+
+      return true
+    }
+
+    function getRecursiveChildrenIdsFromPath (path: string[]): string[] {
+      const ids: string[] = []
+
+      // get All children under the givin path
+      const findNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        if (node.id === targetId) {
+          return node
+        }
+
+        for (const child of node.children) {
+          const found = findNode(child, targetId)
+          if (found !== undefined) return found
+        }
+
+        return undefined
+      }
+
+      const collectChildIds = (node: StructureNode): void => {
+        ids.push(node.id)
+        node.children.forEach((child) => {
+          collectChildIds(child)
+        })
+      }
+
+      if (structure !== undefined) {
+        const targetNode = findNode(structure, path[path.length - 1])
+        if (targetNode !== undefined) {
+          collectChildIds(targetNode)
+        }
+      }
+
+      return ids
+    };
+
     return useMemo(() => (
       <LayoutContext.Provider
         value={
           {
             structure,
             fieldDefinitions,
+            copiedPath,
             currentFieldDefinitionId,
             currentFieldDefinitionIdPath,
             invalidFieldDefinitionIds,
@@ -324,15 +556,19 @@ export const create = (): LayoutProviderFactoryReturn => {
             updateFieldDefinition,
             addFieldDefinition,
             removeFieldDefinition,
+            removeChildren,
+            copyFieldDefinition,
+            pasteFieldDefinition,
             cloneFieldDefinition,
             moveFieldDefinition,
+            isValidChildFieldDefinition,
             getLayout
           }
         }
       >
         {props.children}
       </LayoutContext.Provider>
-    ), [structure, fieldDefinitions, currentFieldDefinitionId, invalidFieldDefinitionIds, props.children])
+    ), [structure, fieldDefinitions, currentFieldDefinitionId, invalidFieldDefinitionIds, copiedPath, props.children])
   }
 
   const useLayout = (): ILayoutContext => {

@@ -46,11 +46,11 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return [this.id]
   }
 
-  protected getAllowedChildTags (props: FieldDefinitionContext): string[] {
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return []
   }
 
-  protected getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
+  getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
     return []
   }
 
