@@ -21,6 +21,6 @@ export class DynamicTypeEmailsGDPRProvider extends DynamicTypeAbstractGDPRProvid
       tabProps.sorting[0].id = 'sentDate'
     }
 
-    return <EmailsTab {...tabProps as unknown as EmailsTabProps} />
+    return <EmailsTab { ...tabProps as unknown as EmailsTabProps } />
   }
 }
