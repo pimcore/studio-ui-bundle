@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token }) => {
   return {
     contentEditable: {
-      outline: '0 auto',
+      outline: 'none',
       overflowY: 'visible',
 
       '&[data-empty=true]': {
