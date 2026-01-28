@@ -309,7 +309,11 @@ export const Grid = ({
     return virtualRows.map(v => rowsList[v.index].id)
   }, [virtualRows, rowsList, isEnableRowVirtualizer])
 
-  const isEnableColumnVirtualizer = useMemo(() => enableColumnVirtualizer && columnsList?.length > DEFAULT_GRID_COLUMN_COUNT, [enableColumnVirtualizer, columnsList])
+  const isEnableColumnVirtualizer = useMemo(() => {
+    if (props.isLoading === true) return false
+
+    return enableColumnVirtualizer && columnsList?.length > DEFAULT_GRID_COLUMN_COUNT
+  }, [enableColumnVirtualizer, columnsList, props.isLoading])
   const columnVirtualizer = useVirtualizer({
     count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
@@ -515,7 +519,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, enableColumnVirtualizer, virtualColumns])
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []
