@@ -106,9 +106,68 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     }
   }
 
-  private optimizeActions (actions: TreeDataItem['actions']): TreeDataItem['actions'] {
+  protected buildGroupedActions (
+    types: DynamicTypeFieldDefinitionAbstract[],
+    actionKeyPrefix: string
+  ): TreeDataItem['actions'] {
+    const groupInfos = this.getDropdownGroupInfos()
+    const actions: TreeDataItem['actions'] = []
+    const groupedTypes: Record<string, DynamicTypeFieldDefinitionAbstract[]> = {}
+
+    types.forEach((type) => {
+      const groups = type.getGroup()
+      const groupKey = groups.join('/')
+
+      if (isNil(groupedTypes[groupKey])) {
+        groupedTypes[groupKey] = []
+      }
+
+      groupedTypes[groupKey].push(type)
+    })
+
+    for (const groupPath in groupedTypes) {
+      const groupParts = groupPath.split('/')
+      let currentActions = actions
+      let currentGroupPath = ''
+
+      groupParts.forEach((group, index) => {
+        currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`
+        let action = currentActions.find(a => a.key === `group-${group}`)
+
+        if (isNil(action)) {
+          action = {
+            key: `group-${group}`,
+            icon: groupInfos[currentGroupPath]?.icon.value ?? '',
+            iconColorGroup: ['fieldDefinition_group_' + group, 'fieldDefinition'],
+            actions: []
+          }
+          currentActions.push(action)
+        }
+
+        if (index === groupParts.length - 1) {
+          groupedTypes[groupPath].forEach((type) => {
+            action.actions!.push({
+              key: `${actionKeyPrefix}${type.id}`,
+              icon: type.getIcon().value,
+              iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition']
+            })
+          })
+        } else {
+          currentActions = action.actions!
+        }
+      })
+    }
+
+    return this.optimizeActions(actions) ?? []
+  }
+
+  protected optimizeActions (actions: TreeDataItem['actions']): TreeDataItem['actions'] {
     if (isNil(actions)) {
       return actions
+    }
+
+    if (actions.length === 1 && !isNil(actions[0].actions) && actions[0].actions.length > 0) {
+      return this.optimizeActions(actions[0].actions)
     }
 
     const optimizedActions: NonNullable<TreeDataItem['actions']> = []
@@ -147,78 +206,38 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       return []
     }
 
-    const groupInfos = this.getDropdownGroupInfos()
-    const isCloneAllowed = !area.includes('custom-layout')
+    const isCustomLayout = area.includes('custom-layout')
     const isRoot = fieldDefinition.name === 'pimcore_root'
     const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context)
 
-    const typesByTags = this.getTypesByTags(allowedDropdownTags, context)
-
-    let actions: TreeDataItem['actions'] = []
-    const groupedTypes: Record<string, DynamicTypeFieldDefinitionAbstract[]> = {}
-
-    typesByTags.forEach((type) => {
-      const groups = type.getGroup()
-      const groupKey = groups.join('/')
-
-      if (isNil(groupedTypes[groupKey])) {
-        groupedTypes[groupKey] = []
-      }
-
-      groupedTypes[groupKey].push(type)
-    })
-
-    for (const groupPath in groupedTypes) {
-      const groupParts = groupPath.split('/')
-      let currentActions = actions
-      let currentGroupPath = ''
-
-      groupParts.forEach((group, index) => {
-        currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`
-        let action = currentActions.find(a => a.key === `group-${group}`)
-
-        if (isNil(action)) {
-          action = {
-            key: `group-${group}`,
-            icon: groupInfos[currentGroupPath]?.icon.value ?? '',
-            iconColorGroup: ['fieldDefinition_group_' + group, 'fieldDefinition'],
-            actions: []
-          }
-          currentActions.push(action)
-        }
-
-        if (index === groupParts.length - 1) {
-          // Last part, add types here
-          groupedTypes[groupPath].forEach((type) => {
-            action.actions!.push({
-              key: `add-${type.id}`,
-              icon: type.getIcon().value,
-              iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition']
-            })
-          })
-        } else {
-          // Move deeper into the nested structure
-          currentActions = action.actions!
-        }
-      })
-    }
-
-    actions = this.optimizeActions(actions) ?? []
+    const dropdownTagTypes = this.getTypesByTags(allowedDropdownTags, context)
+    const actions = this.buildGroupedActions(dropdownTagTypes, 'add-')
 
     if (!isRoot) {
-      if (isCloneAllowed) {
-        actions.push({
+      if (!isCustomLayout) {
+        const convertibleTagTypes = this.getTypesByTags(dynType.getValidConvertibleTags(context), context)
+        const convertibleActions = this.buildGroupedActions(convertibleTagTypes, 'convert-')
+
+        if ((convertibleActions?.length ?? 0) > 0) {
+          actions?.push({
+            key: 'convert',
+            icon: 'convert',
+            actions: convertibleActions
+          })
+        }
+
+        actions?.push({
           key: 'clone',
           icon: 'content-duplicate'
         })
       }
 
-      actions.push({
+      actions?.push({
         key: 'delete',
         icon: 'trash'
       })
     }
 
-    return actions
+    return actions ?? []
   }
 }

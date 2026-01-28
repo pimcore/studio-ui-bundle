@@ -37,6 +37,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     invalidFieldDefinitionIds,
     currentFieldDefinitionId,
     addFieldDefinition,
+    updateFieldDefinition,
     setCurrentFieldDefinitionIdPath,
     setCurrentFieldDefinitionId,
     moveFieldDefinition,
@@ -166,6 +167,41 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
+    }
+
+    if (actionKey.startsWith('convert-')) {
+      const typeId = actionKey.replace('convert-', '')
+      const type = fieldDefinitionRegistry.getDynamicType(typeId)
+
+      const existingFieldDef = fieldDefinitions[nodeKey]
+      const convertibleData = type.getConvertibleData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions, newTypeId: typeId })
+
+      const defaultData = type.getDefaultData({ area, path: node.meta?.currentPath ?? [], fieldDefinitions })
+      const newData: Partial<FieldDefinition> = {}
+
+      for (const [key] of Object.entries(defaultData)) {
+        if (key in existingFieldDef) {
+          newData[key] = (existingFieldDef as any)[key]
+        }
+      }
+
+      const mergedData: FieldDefinition = {
+        ...defaultData,
+        ...newData,
+        ...convertibleData,
+        fieldtype: typeId,
+        children: []
+      }
+
+      if (existingFieldDef.children !== undefined) {
+        for (const childId of existingFieldDef.children) {
+          removeFieldDefinition(childId as string)
+        }
+      }
+
+      setCurrentFieldDefinitionId(nodeKey)
+      setCurrentFieldDefinitionIdPath(node.meta?.currentPath as string[] ?? null)
+      updateFieldDefinition(nodeKey, mergedData, true)
     }
   }
 

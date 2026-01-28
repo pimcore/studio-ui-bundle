@@ -77,6 +77,7 @@ import comboboxField from '@Pimcore/assets/icons/combobox-field.inline.svg?react
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
 import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?react'
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
+import convert from '@Pimcore/assets/icons/convert.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
@@ -589,6 +590,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'content',
       component: content
+    })
+    iconLibrary.register({
+      name: 'convert',
+      component: convert
     })
     iconLibrary.register({
       name: 'copilot',

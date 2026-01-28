@@ -19,6 +19,16 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
     return { type: 'name', value: 'alert' }
   }
 
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    const isCustomLayout = props.area.includes('custom-layout')
+
+    if (isCustomLayout) {
+      return ['group:layout']
+    }
+
+    return this.getAllowedChildTags(props)
+  }
+
   protected getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
   }
