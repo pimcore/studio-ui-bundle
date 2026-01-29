@@ -9,8 +9,6 @@
  */
 
 import React, { createContext, useContext, useEffect, useMemo, useRef } from 'react'
-import { type FormInstance } from 'antd'
-import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import _, { debounce, isEmpty } from 'lodash'
@@ -18,9 +16,10 @@ import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { Form, type formInstanceType } from '@sdk/components'
 
 interface EditFormContextProps {
-  form: FormInstance
+  form: formInstanceType
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
   resetModifiedDataObjectAttributes: () => void
   updateDraft: () => Promise<void>
@@ -40,7 +39,7 @@ export const useEditFormContext = (): EditFormContextProps => {
 }
 
 export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const modifiedRef = useRef<boolean>(false)
   const { id } = useElementContext()
