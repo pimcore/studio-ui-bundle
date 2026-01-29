@@ -32,7 +32,6 @@ export const LoginPage = (): React.JSX.Element => {
   const user = useUser()
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
-
   const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   const { styles } = useStyle({ backgroundImageUrl: loginScreenCustomBackgroundImage })
 
