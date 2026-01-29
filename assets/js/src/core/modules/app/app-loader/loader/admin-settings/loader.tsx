@@ -33,7 +33,6 @@ export const useAdminSettingsLoader = (): UseAdminSettingsLoaderReturn => {
       })
       .catch((err) => {
         trackError(new GeneralError('Error loading admin settings'))
-        throw new Error('Error loading admin settings', { cause: err })
       })
   }
 

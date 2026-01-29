@@ -38,8 +38,7 @@ export class SettingsApi {
     }
 
     try {
-      const settings = getSettings(this.store.getState())
-      return settings ?? null
+      return getSettings(this.store.getState())
     } catch (error) {
       console.error('Failed to get settings from store:', error)
       return null
@@ -50,11 +49,7 @@ export class SettingsApi {
    * Check if settings are available
    */
   public areSettingsAvailable (): boolean {
-    if (this.store === null) {
-      return false
-    }
-    const settings = getSettings(this.store.getState())
-    return settings !== undefined && settings !== null
+    return this.store !== null && getSettings(this.store.getState()) !== null
   }
 }
 

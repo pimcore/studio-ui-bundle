@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
-import { useSettingAdminThumbnailQuery } from '@Pimcore/modules/app/settings/settings-slice-enhanced'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useSelector } from 'react-redux'
+import { getThumbnails } from '@Pimcore/modules/app/settings/settings-slice'
 import { isUndefined } from 'lodash'
 
 interface AdminThumbnails {
@@ -21,22 +20,9 @@ interface AdminThumbnails {
 }
 
 export const useAdminThumbnails = (): AdminThumbnails => {
-  const {
-    data: thumbnailData,
-    isLoading,
-    isFetching,
-    error
-  } = useSettingAdminThumbnailQuery(undefined, {
-    skip: false
-  })
+  const thumbnailData = useSelector(getThumbnails)
 
-  useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
-
-  const isLoadingOrFetching = isLoading || isFetching
+  const isLoadingOrFetching = isUndefined(thumbnailData) || Object.keys(thumbnailData).length === 0
 
   return {
     logoUrl: thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg',

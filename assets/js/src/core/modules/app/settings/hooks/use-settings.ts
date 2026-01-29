@@ -36,7 +36,7 @@ export const useSettings = (): SystemSettingsGetApiResponse => {
       }
     }
 
-    return localSettings ?? {} as SystemSettingsGetApiResponse
+    return localSettings
   }, [isIframe, localSettings])
 
   return result
