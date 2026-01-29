@@ -66,7 +66,10 @@ export const FieldDefinitionMultiselectionFormFields = (props: FieldDefinitionAb
             <Input />
           </Form.Item>
 
-          <Form.Item name="enforceValidation">
+          <Form.Item
+            name="enforceValidation"
+            tooltip={ t('enforce-validation-tooltip') }
+          >
             <Switch labelRight={ t('enforce-validation') } />
           </Form.Item>
         </>

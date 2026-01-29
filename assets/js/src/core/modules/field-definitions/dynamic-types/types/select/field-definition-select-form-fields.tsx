@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Switch, Select, Space } from '@sdk/components'
+import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -61,7 +61,10 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
             </Form.Item>
           </FormKit.Panel>
 
-          <Form.Item name="enforceValidation">
+          <Form.Item
+            name="enforceValidation"
+            tooltip={ t('enforce-validation-tooltip') }
+          >
             <Switch labelRight={ t('enforce-validation') } />
           </Form.Item>
         </>

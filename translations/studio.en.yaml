@@ -550,6 +550,7 @@ default-values-settings: Default value settings
 default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
 default-value: Default value
 default-value-generator: Default value generator service / class
+enforce-validation-tooltip: "When enabled, it prevents invalid options from being saved. By default, the API allows saving invalid options"
 show-char-count: Show character count
 column-length: Column length
 max-length: Maximum length
