@@ -19,7 +19,6 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
-import { AppearanceBrandingProvider } from '@Pimcore/modules/app/appearance-branding-provider'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -32,9 +31,7 @@ export const AppView = (): React.JSX.Element => {
                 { <ApiGateway /> }
                 <DateTimeConfig>
                   <AppLoader>
-                    <AppearanceBrandingProvider>
                       <RouterProvider router={ router } />
-                    </AppearanceBrandingProvider>
                   </AppLoader>
                 </DateTimeConfig>
               </ModalsProvider>

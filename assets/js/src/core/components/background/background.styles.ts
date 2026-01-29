@@ -53,7 +53,7 @@ export const useStyle = createStyles(({ token, css }) => {
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: var(--pimcore-branding-color-background, rgb(122, 58, 212));
+          background: var(--pimcore-brand-background-color, rgb(122, 58, 212));
           opacity: 0.42;
           filter: blur(310px);
         }

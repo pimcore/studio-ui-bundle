@@ -11,6 +11,7 @@
 import { useAppDispatch } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { setAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
 
 export interface UseAdminSettingsLoaderReturn {
   loadAdminSettings: () => Promise<void>
@@ -22,12 +23,17 @@ export const useAdminSettingsLoader = (): UseAdminSettingsLoaderReturn => {
   const loadAdminSettings = async (): Promise<void> => {
     const adminSettingsFetcher = dispatch(api.endpoints.adminSettingsGet.initiate())
 
-    adminSettingsFetcher
-      .then(({ isError, error }) => {
-        isError && trackError(new ApiError(error))
+    await adminSettingsFetcher
+      .then(({ data, isSuccess, isError, error }) => {
+        if (isError) {
+          trackError(new ApiError(error))
+        } else if (isSuccess && data !== undefined) {        
+          dispatch(setAdminSettings(data))
+        }
       })
-      .catch(() => {
+      .catch((err) => {
         trackError(new GeneralError('Error loading admin settings'))
+        throw new Error('Error loading admin settings', { cause: err })
       })
   }
 
