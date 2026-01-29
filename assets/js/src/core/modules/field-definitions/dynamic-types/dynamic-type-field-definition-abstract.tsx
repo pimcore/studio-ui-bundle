@@ -33,6 +33,8 @@ export interface FieldDefinitionAbstractFormFieldsProps {
   context: FieldDefinitionContext
   id: string
   type: string
+  disableMandatory?: boolean
+  disableIndex?: boolean
 }
 
 export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbstract {
@@ -96,7 +98,7 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return {}
   }
 
-  abstract getFormFields (context: FieldDefinitionContext): React.JSX.Element
+  abstract getFormFields (context: FieldDefinitionContext, props?: Partial<FieldDefinitionAbstractFormFieldsProps>): React.JSX.Element
 
   getAdditionalFormFields (context: FieldDefinitionContext): React.JSX.Element | null {
     return null

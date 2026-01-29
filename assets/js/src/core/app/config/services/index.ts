@@ -287,6 +287,14 @@ import { DynamicTypeFieldDefinitionDate } from '@Pimcore/modules/field-definitio
 import { DynamicTypeFieldDefinitionDateTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateTime/dynamic-type-field-definition-date-time'
 import { DynamicTypeFieldDefinitionDateRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateRange/dynamic-type-field-definition-date-range'
 import { DynamicTypeFieldDefinitionTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/dynamic-type-field-definition-time'
+import { DynamicTypeFieldDefinitionSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/select/dynamic-type-field-definition-select'
+import { DynamicTypeFieldDefinitionBooleanSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/booleanSelect/dynamic-type-field-definition-boolean-select'
+import { DynamicTypeFieldDefinitionMultiselection } from '@Pimcore/modules/field-definitions/dynamic-types/types/multiselection/dynamic-type-field-definition-multiselection'
+import { DynamicTypeFieldDefinitionUser } from '@Pimcore/modules/field-definitions/dynamic-types/types/user/dynamic-type-field-definition-user'
+import { DynamicTypeFieldDefinitionCountry } from '@Pimcore/modules/field-definitions/dynamic-types/types/country/dynamic-type-field-definition-country'
+import { DynamicTypeFieldDefinitionLanguage } from '@Pimcore/modules/field-definitions/dynamic-types/types/language/dynamic-type-field-definition-language'
+import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/countrymultiselect/dynamic-type-field-definition-countrymultiselect'
+import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -662,6 +670,14 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Date']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateTime']).to(DynamicTypeFieldDefinitionDateTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateRange']).to(DynamicTypeFieldDefinitionDateRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Time']).to(DynamicTypeFieldDefinitionTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Select']).to(DynamicTypeFieldDefinitionSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/BooleanSelect']).to(DynamicTypeFieldDefinitionBooleanSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Multiselect']).to(DynamicTypeFieldDefinitionMultiselection).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/User']).to(DynamicTypeFieldDefinitionUser).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Country']).to(DynamicTypeFieldDefinitionCountry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTypeFieldDefinitionLanguage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider

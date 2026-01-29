@@ -537,6 +537,15 @@ use-current-date: Use current date
 respect-timezone: Respect timezone
 column-type: Column type
 specific-settings: Specific Settings
+restrict-selection-to: "Restrict selection to"
+only-configured-languages: Show only in system settings configured languages
+multiselect-render-type: Render Type
+maximum-items: Maximum Items
+enforce-validation: Enforce Validation
+options-source: Options Source
+options: Options
+value: Value
+display-name: Display Name
 default-values-settings: Default value settings
 default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
 default-value: Default value

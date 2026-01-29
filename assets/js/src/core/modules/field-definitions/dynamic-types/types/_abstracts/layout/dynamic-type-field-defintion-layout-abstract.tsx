@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext, type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionLayoutFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/field-defintion-layout-form-fields'
 import React from 'react'
 
@@ -41,7 +41,7 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
     }
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getFormFields (context: FieldDefinitionContext, props?: Partial<FieldDefinitionAbstractFormFieldsProps>): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
@@ -50,6 +50,7 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
         context={ context }
         id={ fieldDefinition?.name ?? id }
         type={ this.id }
+        { ...props }
       />
     )
   }

@@ -20,7 +20,9 @@ export const {
   useActiveBundlesGetQuery,
   useLazyActiveBundlesGetQuery,
   usePingActionQuery,
-  useLazyPingActionQuery
+  useLazyPingActionQuery,
+  useSettingsCountryCollectionQuery,
+  useLazySettingsCountryCollectionQuery
 } = api
 
 export { api }
