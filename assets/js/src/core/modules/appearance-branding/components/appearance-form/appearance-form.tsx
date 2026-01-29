@@ -24,7 +24,6 @@ import { type UpdateAdminSettings } from '@Pimcore/modules/app/settings/settings
 import { useAppearanceBranding } from '../../hooks/use-appearance-branding'
 import { ColorPanel } from './components/color-panel/color-panel'
 import { ImagePanel } from './components/image-panel/image-panel'
-import { isUndefined } from 'lodash'
 
 export const AppearanceForm = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,35 +31,18 @@ export const AppearanceForm = (): React.JSX.Element => {
   const { updateSettings, isLoading, adminSettings } = useAppearanceBranding()
   const [form] = Form.useForm<UpdateAdminSettings>()
 
-  if (isUndefined(adminSettings?.branding) || isUndefined(adminSettings?.assets)) {
-    return (
-      <Content
-        none
-        padded
-        padding={ {
-          x: 'extra-small',
-          y: 'extra-small'
-        } }
-      >
-        <Title level={ 2 }>
-          {t('appearance-branding.title')}
-        </Title>
-      </Content>
-    )
-  }
-
-  const isWriteable = adminSettings.writeable ?? false
+  const isWriteable = adminSettings?.writeable ?? false
 
   const initialValues: UpdateAdminSettings = {
     branding: {
-      brandColor: adminSettings.branding?.brandColor ?? '',
-      backgroundShade: adminSettings.branding?.backgroundShade ?? '',
-      loginScreenCustomBackgroundImage: adminSettings.branding?.loginScreenCustomBackgroundImage ?? null,
-      customLogo: adminSettings.branding?.customLogo ?? null
+      brandColor: adminSettings?.branding?.brandColor ?? '',
+      backgroundShade: adminSettings?.branding?.backgroundShade ?? '',
+      loginScreenCustomBackgroundImage: adminSettings?.branding?.loginScreenCustomBackgroundImage ?? null,
+      customLogo: adminSettings?.branding?.customLogo ?? null
     },
     assets: {
-      hide_edit_image: adminSettings.assets?.hide_edit_image ?? false,
-      disable_tree_preview: adminSettings.assets?.disable_tree_preview ?? false
+      hide_edit_image: adminSettings?.assets?.hide_edit_image ?? false,
+      disable_tree_preview: adminSettings?.assets?.disable_tree_preview ?? false
     }
   }
 

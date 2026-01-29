@@ -100,6 +100,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadTranslations(),
           loadSettings(),
           loadAdminSettings(),
+          loadBrandThumbnailUrls(),
           loadAvailableLocales(),
           initActivePerspective(),
           loadReportsMenuItems()
