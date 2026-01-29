@@ -234,6 +234,7 @@ import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
+import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
@@ -1224,6 +1225,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'operator-concatenator',
       component: operatorConcatenator
+    })
+    iconLibrary.register({
+      name: 'order',
+      component: order
     })
     iconLibrary.register({
       name: 'other-operators',
