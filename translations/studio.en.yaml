@@ -25,6 +25,10 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
+import-modal.title: Import
+import-modal.upload: Upload
+import-modal.browse-files: Browse Files
+import-modal.drag-drop: Drag and drop file here or click to browse
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -70,9 +74,11 @@ asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
 upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
+upload.error.max-file-size-exceeded: 'File size exceeds the maximum allowed size of {{maxSize}}'
 upload.error.generic: "The file could not be uploaded."
 upload.error.upload-failed: "Upload failed"
 upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
+upload.success: "File uploaded successfully"
 asset.select.type.nullable: "All types"
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
