@@ -38,7 +38,7 @@ moduleSystem.registerModule({
       path: 'ExperienceEcommerce/Redirects',
       label: 'navigation.redirects',
       className: 'item-style-modifier',
-      order: 200,
+      order: 600,
       permission: UserPermission.Redirects,
       perspectivePermission: NavPermission.Redirects,
       widgetConfig: REDIRECTS_WIDGET
