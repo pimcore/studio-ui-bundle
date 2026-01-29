@@ -18,7 +18,7 @@ import { isInIframe } from '@Pimcore/utils/iframe'
 /**
  * Hook to get system settings that works in both main app and iframe contexts
  */
-export const useSettings = (): SystemSettingsGetApiResponse | undefined => {
+export const useSettings = (): SystemSettingsGetApiResponse => {
   const localSettings = useSelector(getSettings)
   const [isIframe] = useState(() => isInIframe())
 
@@ -36,7 +36,7 @@ export const useSettings = (): SystemSettingsGetApiResponse | undefined => {
       }
     }
 
-    return localSettings
+    return localSettings ?? {} as SystemSettingsGetApiResponse
   }, [isIframe, localSettings])
 
   return result
