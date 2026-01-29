@@ -52,7 +52,8 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
       expanded: perspective.expandedRight
     },
     widgetsBottom: {
-      widgets: perspective.widgetsBottom
+      widgets: perspective.widgetsBottom,
+      expanded: null
     }
   }
   const isWriteable = perspective.isWriteable
