@@ -69,7 +69,7 @@ export const useForm = <Values = any>(form?: FormInstance<Values>): [formInstanc
   return [newFormInstance]
 }
 
-export const FormInstanceContext = createContext<formInstanceType | null>(null);
+export const FormInstanceContext = createContext<formInstanceType | null>(null)
 
 export interface FormInstanceProviderProps {
   formInstance: formInstanceType
@@ -78,7 +78,7 @@ export interface FormInstanceProviderProps {
 
 export const FormInstanceProvider: React.FC<FormInstanceProviderProps> = ({ formInstance, children }) => {
   return useMemo(() => (
-    <FormInstanceContext.Provider value={formInstance}>
+    <FormInstanceContext.Provider value={ formInstance }>
       {children}
     </FormInstanceContext.Provider>
   ), [formInstance, children])
