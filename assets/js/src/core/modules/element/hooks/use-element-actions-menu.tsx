@@ -18,6 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type Element, getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ISystemInfoModalProps, SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
+import { copyToClipboard } from '@Pimcore/utils/clipboard'
 
 export type IElement = Element & {
   fileSize: number
@@ -73,9 +74,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void navigator.clipboard.writeText(
-          element.id.toString()
-        )
+        void copyToClipboard(element.id.toString())
       }
     },
     {
@@ -84,9 +83,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void navigator.clipboard.writeText(
-          element.fullPath
-        )
+        void copyToClipboard(element.fullPath)
       }
     },
     {
@@ -95,7 +92,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void navigator.clipboard.writeText(deeplinkUrl)
+        void copyToClipboard(deeplinkUrl)
       }
     },
     {
@@ -131,9 +128,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void navigator.clipboard.writeText(
-          element.className
-        )
+        void copyToClipboard(element.className)
       }
     })
   }
