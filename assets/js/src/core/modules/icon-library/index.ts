@@ -1599,5 +1599,9 @@ moduleSystem.registerModule({
       name: 'z-to-a-order',
       component: zToAOrder
     })
+    iconLibrary.register({
+      name: 'lock-circle',
+      component: lockCircle
+    })
   }
 })
