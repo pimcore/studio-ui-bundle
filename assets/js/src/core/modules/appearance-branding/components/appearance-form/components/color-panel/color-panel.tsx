@@ -14,7 +14,7 @@ import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, isFunction, has } from 'lodash'
+import { isObject, has } from 'lodash'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -25,7 +25,7 @@ export const ColorPanel = (): React.JSX.Element => {
       return null
     }
 
-    if (isObject(color) && has(color, 'toHexString') && isFunction(color.toHexString)) {
+    if (isObject(color)) {
       return (color as any).toHexString()
     }
 

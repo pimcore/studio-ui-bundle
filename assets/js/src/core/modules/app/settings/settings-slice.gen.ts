@@ -18,6 +18,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Settings Admin"],
             }),
+            settingAdminThumbnail: build.query<SettingAdminThumbnailApiResponse, SettingAdminThumbnailApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/setting/admin/thumbnail` }),
+                providesTags: ["Settings Admin"],
+            }),
             settingsCountryCollection: build.query<
                 SettingsCountryCollectionApiResponse,
                 SettingsCountryCollectionApiArg
@@ -47,6 +51,8 @@ export type AdminSettingsUpdateApiResponse = unknown;
 export type AdminSettingsUpdateApiArg = {
     updateAdminSettings: UpdateAdminSettings;
 };
+export type SettingAdminThumbnailApiResponse = /** status 200 Success */ AdminSettingsThumbnailPath;
+export type SettingAdminThumbnailApiArg = void;
 export type SettingsCountryCollectionApiResponse = /** status 200 List of available countries */ {
     totalItems: number;
     items: AvailableCountry[];
@@ -115,6 +121,14 @@ export type UpdateAdminSettings = {
     /** Assets configuration */
     assets: Assets;
 };
+export type AdminSettingsThumbnailPath = {
+    /** Path to custom logo thumbnail */
+    customLogoSmall: string | null;
+    /** Path to custom logo thumbnail */
+    customLogo: string | null;
+    /** Path to custom background image */
+    loginScreenCustomBackgroundImage: string | null;
+};
 export type AvailableCountry = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -136,6 +150,7 @@ export type ActiveBundle = {
 export const {
     useAdminSettingsGetQuery,
     useAdminSettingsUpdateMutation,
+    useSettingAdminThumbnailQuery,
     useSettingsCountryCollectionQuery,
     useSystemSettingsGetQuery,
     useActiveBundlesGetQuery,
