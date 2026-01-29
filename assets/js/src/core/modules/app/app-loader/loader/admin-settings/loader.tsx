@@ -27,7 +27,7 @@ export const useAdminSettingsLoader = (): UseAdminSettingsLoaderReturn => {
       .then(({ data, isSuccess, isError, error }) => {
         if (isError) {
           trackError(new ApiError(error))
-        } else if (isSuccess && data !== undefined) {        
+        } else if (isSuccess && data !== undefined) {
           dispatch(setAdminSettings(data))
         }
       })

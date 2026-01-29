@@ -14,9 +14,9 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 
 interface AdminThumbnails {
-  logoUrl: string 
-  customLogoSmall: string 
-  loginScreenCustomBackgroundImage: string 
+  logoUrl: string
+  customLogoSmall: string
+  loginScreenCustomBackgroundImage: string
   isLoadingOrFetching: boolean
 }
 
@@ -42,6 +42,6 @@ export const useAdminThumbnails = (): AdminThumbnails => {
     logoUrl: thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
     customLogoSmall: thumbnailData?.customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
     loginScreenCustomBackgroundImage: thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png',
-    isLoadingOrFetching: isLoadingOrFetching
+    isLoadingOrFetching
   }
 }

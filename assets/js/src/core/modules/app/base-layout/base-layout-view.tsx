@@ -18,15 +18,13 @@ import { useSelector } from 'react-redux'
 import { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { isUndefined } from 'lodash'
 
-const LOADING_BRANDING_COLOR = '#C5C0CC'
-
 export const BaseLayoutView = (): React.JSX.Element => {
   const { styles } = useStlyes()
   const adminSettings = useSelector(getAdminSettings)
-  
+
   useEffect(() => {
     const root = document.documentElement
-    
+
     if (isUndefined(adminSettings)) return
 
     const brandColor = adminSettings.branding.brandColor

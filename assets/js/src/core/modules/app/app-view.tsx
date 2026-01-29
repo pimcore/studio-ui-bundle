@@ -31,7 +31,7 @@ export const AppView = (): React.JSX.Element => {
                 { <ApiGateway /> }
                 <DateTimeConfig>
                   <AppLoader>
-                      <RouterProvider router={ router } />
+                    <RouterProvider router={ router } />
                   </AppLoader>
                 </DateTimeConfig>
               </ModalsProvider>

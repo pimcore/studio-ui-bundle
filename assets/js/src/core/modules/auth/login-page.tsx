@@ -12,7 +12,7 @@ import { routes } from '@Pimcore/app/router/router'
 import { LoginFormContainer } from '@Pimcore/modules/auth/components/login-form/login-form-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
@@ -68,7 +68,7 @@ export const LoginPage = (): React.JSX.Element => {
     <div className={ styles.loginPage }>
       <div className={ styles.loginWidget }>
         <img
-          alt={ 'Pimcore Logo' }
+          alt={ 'Logo' }
           src={ customLogoSmall }
         />
         <LoginFormContainer />

@@ -23,7 +23,7 @@ const Background = (): React.JSX.Element => {
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
       <img
-        alt="Pimcore Logo"
+        alt="Logo"
         className={ styles.logoImage }
         src={ logoUrl }
       />

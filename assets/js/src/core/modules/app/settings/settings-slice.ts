@@ -11,8 +11,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { 
-  type SystemSettingsGetApiResponse, 
+import {
+  type SystemSettingsGetApiResponse,
   type AdminSettings,
   api
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
