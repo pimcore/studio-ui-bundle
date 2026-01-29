@@ -31,7 +31,7 @@ export const useBrandThumbnailUrlLoader = (): UseBrandThumbnailUrlLoaderReturn =
           dispatch(setThumbnails(data))
         }
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('Error loading brand thumbnail URLs'))
       })
   }
