@@ -23,16 +23,18 @@ import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/forma
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 
+interface DocumentConfigurationFormValues {
+  predefinedDocumentType: string
+  controller: string
+  template: string
+  staticGeneratorEnabled: boolean
+  staticGeneratorLifetime: number | null
+}
+
 interface DocumentConfigurationFormProps {
   documentId: number
   documentType: string | undefined
-  initialValues: {
-    predefinedDocumentType: string
-    controller: string
-    template: string
-    staticGeneratorEnabled: boolean
-    staticGeneratorLifetime: number | null
-  }
+  initialValues: DocumentConfigurationFormValues
   apiData: {
     controllers: Array<{ name: string }>
     templates: Array<{ path: string }>
@@ -51,7 +53,7 @@ export const DocumentConfigurationForm = ({
   const { t } = useTranslation()
   const { updateSettingsData, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
-  const [form] = Form.useForm()
+  const [form] = Form.useForm<DocumentConfigurationFormValues>()
 
   const canEdit = hasSavePermission
 
@@ -83,7 +85,7 @@ export const DocumentConfigurationForm = ({
     }))
   ], [predefinedDocTypes])
 
-  const handleFormChange = useCallback((changedValues: any, allValues: any) => {
+  const handleFormChange = useCallback((changedValues: Partial<DocumentConfigurationFormValues>, allValues: DocumentConfigurationFormValues) => {
     if (!canEdit) return
 
     const settingsUpdates: Record<string, any> = {}
@@ -102,7 +104,7 @@ export const DocumentConfigurationForm = ({
       }
     }
 
-    Object.entries(changedValues as Record<string, unknown>).forEach(([key, value]) => {
+    Object.entries(changedValues).forEach(([key, value]) => {
       if (key !== 'predefinedDocumentType') {
         settingsUpdates[key] = value ?? null
       }

@@ -8,36 +8,32 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form, type FormInstance } from 'antd'
+import { Form, type FormInstance, type FormProps } from 'antd'
 import { type NamePath } from 'antd/es/form/interface'
-import { type FormProps } from 'antd/lib'
 import { set } from 'lodash'
 import React, { createContext, useMemo } from 'react'
-
-type SetFieldValueParameters = Parameters<FormInstance['setFieldValue']>
-type SetFieldsValueParameters = Parameters<FormInstance['setFieldsValue']>
 
 export interface CustomSetFieldValueOptions {
   triggerChange?: boolean
 }
 
 export type formInstanceType<Values = any> = Omit<FormInstance<Values>, 'setFieldValue' | 'setFieldsValue'> & {
-  setOnValuesChangeHandler: (handler: FormProps['onValuesChange']) => void
-  _onValuesChangeHandler?: FormProps['onValuesChange']
-  setFieldValue: (name: NamePath, value: SetFieldValueParameters[1], options?: CustomSetFieldValueOptions) => void
-  setFieldsValue: (values: SetFieldsValueParameters[0], options?: CustomSetFieldValueOptions) => void
+  setOnValuesChangeHandler: (handler: FormProps<Values>['onValuesChange']) => void
+  _onValuesChangeHandler?: FormProps<Values>['onValuesChange']
+  setFieldValue: (name: NamePath<Values>, value: any, options?: CustomSetFieldValueOptions) => void
+  setFieldsValue: (values: Partial<Values>, options?: CustomSetFieldValueOptions) => void
 }
 
 export const useForm = <Values = any>(form?: FormInstance<Values>): [formInstanceType<Values>] => {
-  const [formInstance] = Form.useForm(form) as [formInstanceType<Values>]
+  const [formInstance] = Form.useForm<Values>(form) as [formInstanceType<Values>]
   const originalSetFieldValue = formInstance.setFieldValue
   const originalSetFieldsValue = formInstance.setFieldsValue
 
-  const setOnValuesChangeHandler = (handler: FormProps['onValuesChange']): void => {
+  const setOnValuesChangeHandler = (handler: FormProps<Values>['onValuesChange']): void => {
     formInstance._onValuesChangeHandler = handler
   }
 
-  const setFieldValue = (name: NamePath, value: SetFieldValueParameters['1'], options?: CustomSetFieldValueOptions): void => {
+  const setFieldValue = (name: NamePath<Values>, value: any, options?: CustomSetFieldValueOptions): void => {
     const { triggerChange = false } = options ?? {}
 
     originalSetFieldValue(name, value)
@@ -45,11 +41,11 @@ export const useForm = <Values = any>(form?: FormInstance<Values>): [formInstanc
     if (triggerChange && formInstance._onValuesChangeHandler !== undefined) {
       const update = {}
       set(update, name as string, value)
-      formInstance._onValuesChangeHandler(update, formInstance.getFieldsValue())
+      formInstance._onValuesChangeHandler(update as Partial<Values>, formInstance.getFieldsValue())
     }
   }
 
-  const setFieldsValue = (values: SetFieldsValueParameters[0], options?: CustomSetFieldValueOptions): void => {
+  const setFieldsValue = (values: Partial<Values>, options?: CustomSetFieldValueOptions): void => {
     const { triggerChange = false } = options ?? {}
 
     originalSetFieldsValue(values)

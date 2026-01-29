@@ -24,13 +24,13 @@ import { useStyles } from './form.styles'
 import { Conditional } from './conditional/conditional'
 import { FormInstanceProvider, type formInstanceType, useForm, useFormInstance } from '@Pimcore/components/form/use-form'
 
-export interface FormProps extends Omit<AntFormProps, 'children' | 'defaultValue' | 'form'> {
+export interface FormProps<Values = any> extends Omit<AntFormProps<Values>, 'children' | 'defaultValue' | 'form'> {
   children?: React.ReactNode
-  form?: formInstanceType
+  form?: formInstanceType<Values>
 }
 
 interface FormComponent {
-  (props: FormProps): React.JSX.Element
+  <Values = any>(props: FormProps<Values>): React.JSX.Element
   Item: typeof AntForm.Item
   List: typeof AntForm.List
   Provider: typeof AntForm.Provider
