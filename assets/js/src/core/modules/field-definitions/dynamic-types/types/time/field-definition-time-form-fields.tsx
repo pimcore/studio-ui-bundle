@@ -18,8 +18,8 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
   const form = Form.useFormInstance()
 
   function resetMinMax (): void {
-    form.setFieldValue('minValue', null)
-    form.setFieldValue('maxValue', null)
+    form.setFieldValue('minValue', null, { triggerChange: true })
+    form.setFieldValue('maxValue', null, { triggerChange: true })
   }
 
   return (

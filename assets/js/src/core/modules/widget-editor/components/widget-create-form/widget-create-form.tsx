@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Input } from '@sdk/components'
-import { type FormInstance, type InputRef } from 'antd'
+import { type InputRef } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { WidgetTypeSelect } from '../widget-type-select/widget-type-select'
@@ -21,7 +21,7 @@ export interface WidgetForm {
 }
 
 interface CreateWidgetFormProps {
-  form: FormInstance<WidgetForm>
+  form: formInstanceType<WidgetForm>
   inputRef?: React.RefObject<InputRef>
   initialValues?: Partial<WidgetForm>
 }
