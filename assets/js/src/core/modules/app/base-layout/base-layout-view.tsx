@@ -27,11 +27,7 @@ export const BaseLayoutView = (): React.JSX.Element => {
   useEffect(() => {
     const root = document.documentElement
     
-    if (isUndefined(adminSettings) || isUndefined(adminSettings.branding)) {
-      root.style.setProperty('--pimcore-brand-color', LOADING_BRANDING_COLOR)
-      root.style.setProperty('--pimcore-brand-background-color', LOADING_BRANDING_COLOR)
-      return
-    }
+    if (isUndefined(adminSettings)) return
 
     const brandColor = adminSettings.branding.brandColor
     const brandBackgroundColor = adminSettings.branding.backgroundShade
