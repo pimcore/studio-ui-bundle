@@ -29,7 +29,6 @@ export const BaseLayoutView = (): React.JSX.Element => {
 
     const brandColor = adminSettings.branding.brandColor
     const brandBackgroundColor = adminSettings.branding.backgroundShade
-
     root.style.setProperty('--pimcore-brand-color', brandColor)
     root.style.setProperty('--pimcore-brand-background-color', brandBackgroundColor)
   }, [adminSettings])
