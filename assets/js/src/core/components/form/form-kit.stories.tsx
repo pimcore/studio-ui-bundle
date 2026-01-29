@@ -694,8 +694,8 @@ const AllControlsExample = (): React.JSX.Element => {
                 noStyle
               >
                 <InputNumber
-                  min={ 0 }
                   max={ 86400 }
+                  min={ 0 }
                   onChange={ (value) => { handleFormChange('inputNumber', value ?? 0) } }
                   placeholder="placeholder..."
                   value={ formData.inputNumber }
@@ -1076,8 +1076,8 @@ const PanelThemesExample = (): React.JSX.Element => {
                 noStyle
               >
                 <InputNumber
-                  min={ 1 }
                   max={ 10 }
+                  min={ 1 }
                   onChange={ (value) => {
                     handleChange('cardWithHighlight', 'priorityLevel', value ?? 1)
                   } }
