@@ -20,11 +20,9 @@ export const FieldDefinitionLanguageFormFields = (props: FieldDefinitionAbstract
   return (
     <FormKit.Panel title={ t('specific-settings') }>
       {!isCustomLayout && (
-        <>
-          <Form.Item name="onlySystemLanguages">
-            <Switch labelRight={ t('only-configured-languages') } />
-          </Form.Item>
-        </>
+      <Form.Item name="onlySystemLanguages">
+        <Switch labelRight={ t('only-configured-languages') } />
+      </Form.Item>
       )}
 
     </FormKit.Panel>
