@@ -543,6 +543,13 @@ multiselect-render-type: Render Type
 maximum-items: Maximum Items
 enforce-validation: Enforce Validation
 options-source: Options Source
+options-source-configure: "Configure"
+options-source-select-options: "Select Options"
+options-source-options-provider: "Options Provider"
+options-provider-class: "Options Provider Class or Service Name"
+options-provider-data: "Options Provider Data"
+switch-to-selection-mode: Switch to selection mode
+switch-to-drag-mode: Switch to drag mode
 options: Options
 value: Value
 display-name: Display Name
@@ -586,6 +593,14 @@ field-definition.date: Date
 field-definition.datetime: Date Time
 field-definition.date-range: Date Range
 field-definition.time: Time
+field-definition.select: Select
+field-definition.multiselect: Multiselect
+field-definition.boolean-select: Boolean Select
+field-definition.country: Country
+field-definition.countrymultiselect: Country Multiselect
+field-definition.language: Language
+field-definition.languagemultiselect: Language Multiselect
+field-definition.user: User
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags

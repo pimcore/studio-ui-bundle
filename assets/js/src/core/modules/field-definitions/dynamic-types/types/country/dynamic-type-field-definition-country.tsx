@@ -25,10 +25,6 @@ export class DynamicTypeFieldDefinitionCountry extends DynamicTypeFieldDefinitio
     return [...super.getGroup(), 'select']
   }
 
-  getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:select']
-  }
-
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]

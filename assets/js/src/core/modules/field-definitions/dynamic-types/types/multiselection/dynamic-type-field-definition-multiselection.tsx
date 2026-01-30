@@ -25,6 +25,17 @@ export class DynamicTypeFieldDefinitionMultiselection extends DynamicTypeFieldDe
     return [...super.getGroup(), 'select']
   }
 
+  getDefaultData (): any {
+    return {
+      ...super.getDefaultData(),
+      optionsProviderType: 'configure',
+      options: [],
+      defaultValue: '',
+      optionsProviderClass: '',
+      optionsProviderData: ''
+    }
+  }
+
   getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'group:select']
   }
