@@ -24,7 +24,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'ExperienceEcommerce/Website Settings',
       label: 'navigation.website-settings',
-      order: 400,
+      order: 1000,
       className: 'item-style-modifier',
       permission: UserPermission.WebsiteSettings,
       perspectivePermission: NavPermission.WebsiteSettings,
