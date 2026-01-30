@@ -13,11 +13,10 @@ import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/compon
 import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from '@sdk/api/class-definition'
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import { useForm } from 'antd/es/form/Form'
 import React, { useEffect } from 'react'
 
 export const ClassDefinitionsAddModal = (): React.JSX.Element => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const { closeModal } = useAddModal()
   const { data, isLoading, error } = useClassDefinitionGetIdentifierDataQuery()
   const [createClassDefinition] = useClassDefinitionCreateMutation()

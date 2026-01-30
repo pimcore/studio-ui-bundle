@@ -16,7 +16,6 @@ import { useGridConfig as useTabGridConfig } from './hooks/use-grid-config'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { EditView } from './views/edit-view'
 import { SaveView } from './views/save-view'
-import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
@@ -33,6 +32,7 @@ import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listin
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { Form } from '@sdk/components'
 
 enum ViewState {
   Edit = 'edit',
@@ -68,7 +68,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
-  const [form] = useForm()
+  const [form] = Form.useForm()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
 

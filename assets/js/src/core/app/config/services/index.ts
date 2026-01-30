@@ -57,6 +57,7 @@ import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dyna
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellDependencyTypeIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
+import { DynamicTypeGridCellElementSubtypeIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/element-subtype-icon/dynamic-type-grid-cell-element-subtype-icon'
 import { DynamicTypeGridCellAssetCustomMetadataIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-icon'
 import { DynamicTypeGridCellAssetCustomMetadataValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
 import { DynamicTypeGridCellPropertyIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
@@ -429,6 +430,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/AssetPreview']).to(DynamicTypeG
 container.bind(serviceIds['DynamicTypes/GridCell/AssetActions']).to(DynamicTypeGridCellAssetActions).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectActions']).to(DynamicTypeGridCellDataObjectActions).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DependencyTypeIcon']).to(DynamicTypeGridCellDependencyTypeIcon).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/ElementSubtypeIcon']).to(DynamicTypeGridCellElementSubtypeIcon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataIcon']).to(DynamicTypeGridCellAssetCustomMetadataIcon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']).to(DynamicTypeGridCellAssetCustomMetadataValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/PropertyIcon']).to(DynamicTypeGridCellPropertyIcon).inSingletonScope()

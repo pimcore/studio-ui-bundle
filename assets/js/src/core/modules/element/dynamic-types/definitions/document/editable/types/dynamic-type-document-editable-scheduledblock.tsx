@@ -14,6 +14,7 @@ import { ScheduledblockEditable, type ScheduledblockValue } from '../components/
 import { ScheduledblockManager } from '../components/scheduledblock-editable/utils/scheduledblock-manager'
 import { scheduledblockValueUtils } from '../components/scheduledblock-editable/utils/scheduledblock-utils'
 import { isNil } from 'lodash'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 export interface ScheduledblockEditableDefinition extends AbstractDocumentEditableDefinition {
 }
@@ -49,6 +50,17 @@ export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocume
     const scheduledblockManager = new ScheduledblockManager(props.name, props.containerRef)
     const elements = scheduledblockManager.queryElements()
     return scheduledblockValueUtils.elementsToScheduledblockValue(elements)
+  }
+
+  onDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
+    const hasScheduledBlock = editableDefinitions.some(editable => editable.type === this.id)
+
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.notifyTimeSliderVisible(documentId, hasScheduledBlock)
+    } catch (error) {
+      console.warn('Could not notify parent about time slider visibility:', error)
+    }
   }
 
   reloadOnChange (props: ScheduledblockEditableDefinition): boolean {

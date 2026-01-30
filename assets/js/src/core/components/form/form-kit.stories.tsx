@@ -687,6 +687,24 @@ const AllControlsExample = (): React.JSX.Element => {
                 value={ formData.inputNumber }
               />
             </Form.Item>
+
+            <Form.Item label="Input with Description - complex form control for multiple children">
+              <Form.Item
+                name="inputValue"
+                noStyle
+              >
+                <InputNumber
+                  max={ 86400 }
+                  min={ 0 }
+                  onChange={ (value) => { handleFormChange('inputNumber', value ?? 0) } }
+                  placeholder="placeholder..."
+                  value={ formData.inputNumber }
+                />
+              </Form.Item>
+              <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
+                This demonstrates how to bind the form value to one of several children.
+              </div>
+            </Form.Item>
           </FormKit.Panel>
 
           <FormKit.Panel
@@ -1050,6 +1068,26 @@ const PanelThemesExample = (): React.JSX.Element => {
                 labelRight="Subscribe to our newsletter"
                 onChange={ (checked) => { handleChange('cardWithHighlight', 'newsletter', checked) } }
               />
+            </Form.Item>
+
+            <Form.Item label="Priority Level with Description">
+              <Form.Item
+                name="priorityLevel"
+                noStyle
+              >
+                <InputNumber
+                  max={ 10 }
+                  min={ 1 }
+                  onChange={ (value) => {
+                    handleChange('cardWithHighlight', 'priorityLevel', value ?? 1)
+                  } }
+                  placeholder="Enter priority level (1-10)"
+                  value={ 5 }
+                />
+              </Form.Item>
+              <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
+                This demonstrates the noStyle pattern for complex form items with nested components and description text.
+              </div>
             </Form.Item>
           </FormKit.Panel>
 

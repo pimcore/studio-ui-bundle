@@ -9,11 +9,11 @@
  */
 
 import React, { forwardRef, type RefObject } from 'react'
-import { type FormInstance, Input, type InputRef } from 'antd'
-import { Form } from '@Pimcore/components/form/form'
+import { Input, type InputRef } from 'antd'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 
 export interface TextareaFormProps {
-  form: FormInstance<any>
+  form: formInstanceType<any>
   initialValues: object
   fieldName: string
   placeholder?: string

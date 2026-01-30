@@ -10,12 +10,16 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+interface StyleProps {
+  backgroundImageUrl: string
+}
+
+export const useStyle = createStyles(({ token, css }, { backgroundImageUrl }: StyleProps) => {
   return {
     loginPage: css`
       display: flex;
       align-items: center;
-      background: url(/bundles/pimcorestudioui/img/login-bg.png) lightgray 50% / cover no-repeat;
+      background: url(${backgroundImageUrl}) lightgray 50% / cover no-repeat;
       position: absolute;
       inset: 0;
       overflow: hidden;
@@ -35,7 +39,10 @@ export const useStyle = createStyles(({ token, css }) => {
       box-shadow: 0px 2px 0px 0px rgba(114, 46, 209, 0.10);
       
       img {
-        margin-bottom: 70px
+        max-height: 200px;
+        max-width: 100%;
+        object-fit: contain;
+        margin-bottom: 70px;
       }
     `
   }

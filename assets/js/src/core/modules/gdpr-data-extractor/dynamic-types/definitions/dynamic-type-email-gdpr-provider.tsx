@@ -11,11 +11,12 @@
 import React from 'react'
 import { type GDPRProviderTabProps } from '../../components/tab-panel/tab-panel'
 import { DynamicTypeAbstractGDPRProvider } from './dynamic-type-abstract-gdpr-provider'
+import { EmailsTab, type EmailsTabProps } from '../../components/tab-panel/components/emails-tab/emails-tab'
 
 export class DynamicTypeEmailsGDPRProvider extends DynamicTypeAbstractGDPRProvider {
   readonly id: string = 'sent_mails'
 
   getTabContent<T>(tabProps: GDPRProviderTabProps<T>): React.JSX.Element {
-    return <>TBI</>
+    return <EmailsTab { ...tabProps as unknown as EmailsTabProps } />
   }
 }

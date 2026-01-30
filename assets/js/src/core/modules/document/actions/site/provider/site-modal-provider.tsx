@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import React, { createContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type SiteFormValues } from '../site-form'
-import { App, type FormInstance } from 'antd'
+import { App } from 'antd'
 import { isNull } from 'lodash'
 import { SiteModal } from './site-modal'
 
@@ -37,7 +37,7 @@ export interface SiteModalConfig {
 
 interface CurrentModal {
   config: SiteModalConfig
-  form: FormInstance<SiteFormValues>
+  form: formInstanceType<SiteFormValues>
   isLoading: boolean
   hasUnsavedChanges: boolean
 }

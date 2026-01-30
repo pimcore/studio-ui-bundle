@@ -22,6 +22,7 @@ import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -45,6 +46,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const reportName = reportDetailData?.name ?? ''
 
   const { sorting, setSorting } = useReportDataContext()
+  const { data: fullChartDataList } = useFullChartData({ name: reportName })
 
   useEffect(() => {
     if (currentReport !== prevReportRef.current) {
@@ -116,6 +118,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
       if (isShowColumn) {
         const columnId = !isEmptyValue(item?.name) ? item.name : `id-${index}`
+        const columnType = !isEmptyValue(item.displayType) ? item.displayType! : 'text'
 
         if (item.displayType !== 'hide') {
           list.push(
@@ -127,8 +130,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 enableSorting: item.order,
                 ...(!isNull(item.width) && { size: item.width }),
                 meta: {
-                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-                  ...(item.displayType === 'date' && { config: { showTime: true } }),
+                  type: columnType,
+                  ...(columnType === 'date' && { config: { showTime: true } }),
+                  ...(columnType === 'text' && { config: { renderAsHtml: true } }),
                   ...(isNull(item.width) && { autoWidth: true })
                 }
               }
@@ -178,6 +182,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
+  const fullChartData = fullChartDataList?.items?.map((item) => item.data)
 
   if (isLoading && isShowLoading) {
     return <Content loading />
@@ -211,7 +216,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       >
         {isShowChart && (
           <ReportChart
-            chartData={ chartData }
+            chartData={ fullChartData }
             reportData={ reportDetailData }
           />
         )}
@@ -222,6 +227,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableColumnVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting

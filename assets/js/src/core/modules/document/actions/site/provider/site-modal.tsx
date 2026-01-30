@@ -10,17 +10,18 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flex, type FormInstance } from 'antd'
+import { Flex } from 'antd'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { SiteForm, type SiteFormValues } from '../site-form'
 import { type SiteModalConfig } from './site-modal-provider'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { type formInstanceType } from '@sdk/components'
 
 interface CurrentModal {
   config: SiteModalConfig
-  form: FormInstance<SiteFormValues>
+  form: formInstanceType<SiteFormValues>
   isLoading: boolean
   hasUnsavedChanges: boolean
 }

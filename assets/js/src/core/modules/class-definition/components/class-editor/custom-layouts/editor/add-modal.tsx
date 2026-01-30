@@ -14,11 +14,10 @@ import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/compon
 import { useClassCustomLayoutGetIdentifierDataQuery, usePimcoreStudioApiClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import { useForm } from 'antd/es/form/Form'
 import React, { useEffect } from 'react'
 
 export const CustomLayoutAddModal = (): React.JSX.Element => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const { closeModal } = useAddModal()
   const { configuration } = useCurrentConfiguration()
   const { data, isLoading, error } = useClassCustomLayoutGetIdentifierDataQuery({ classDefinitionId: configuration!.id })

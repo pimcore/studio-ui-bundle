@@ -21,6 +21,12 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-picker-suffix {
         display: none;
       }
+
+      &.showSuffixIcon {
+        .ant-picker-suffix {
+          display: flex;
+        }
+      }
       
       &.versionFieldItemHighlight {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;

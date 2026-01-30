@@ -9,10 +9,12 @@
  */
 
 import React, { useEffect, useRef } from 'react'
+import { type InputRef } from 'antd'
+import { isString } from 'lodash'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { Input } from '@sdk/components'
-import { type InputRef } from 'antd'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { Input } from '@Pimcore/components/input/input'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -43,9 +45,16 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
 
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
+      const cellValue = props.getValue()
+      const renderAsHtml = props.column.columnDef.meta?.config?.renderAsHtml === true
+
+      if (renderAsHtml && isString(cellValue)) {
+        return <SanitizeHtml html={ cellValue } />
+      }
+
       return (
         <>
-          { props.getValue() }
+          { cellValue }
         </>
       )
     }

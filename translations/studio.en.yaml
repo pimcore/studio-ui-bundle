@@ -25,6 +25,10 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
+import-modal.title: Import
+import-modal.upload: Upload
+import-modal.browse-files: Browse Files
+import-modal.drag-drop: Drag and drop file here or click to browse
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -70,9 +74,11 @@ asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
 upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
+upload.error.max-file-size-exceeded: 'File size exceeds the maximum allowed size of {{maxSize}}'
 upload.error.generic: "The file could not be uploaded."
 upload.error.upload-failed: "Upload failed"
 upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
+upload.success: "File uploaded successfully"
 asset.select.type.nullable: "All types"
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
@@ -1208,6 +1214,12 @@ classification-store.column.name: Name
 classification-store.column.description: Description
 home: Home
 preview.label: Preview
+preview.desktop: Desktop
+preview.tablet: Tablet
+preview.phone-vertical: Phone vertical
+preview.phone-horizontal: Phone horizontal
+preview.select_date_time: Select date & time
+preview.screen_size_too_small: The available space is too small to display the selected preview mode.
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
 main: Main
@@ -1359,6 +1371,7 @@ email-log.forward.label: Forward Email
 email-log.send.label: Send
 email-log.forward.email-address.label: Email Address
 email-log.delete.email.success: Email has been deleted successfully
+email-log.html.preview: HTML Preview
 aria.email-log.html.preview: HTML Preview
 user-profile.label: My Profile
 user-profile.general: General Data
@@ -1760,13 +1773,30 @@ gdpr-extractor.data-objects.table.field.type: Type
 gdpr-extractor.data-objects.table.field.id: ID
 gdpr-extractor.data-objects.table.field.fullPath: Path
 gdpr-extractor.data-objects.table.field.className: Class
+gdpr-extractor.data-objects.table.actions.export: Export DataObject Data
+gdpr-extractor.data-objects.table.actions.open: Open DataObject
+gdpr-extractor.data-objects.table.actions.delete: Delete DataObject
 gdpr-extractor.assets.table.field.type: Type
 gdpr-extractor.assets.table.field.id: ID
 gdpr-extractor.assets.table.field.fullPath: Full Path
 gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.assets.table.actions.export: Export Asset Data
+gdpr-extractor.assets.table.actions.open: Open Asset
+gdpr-extractor.assets.table.actions.delete: Delete Asset
 gdpr-extractor.users.table.field.id: ID
 gdpr-extractor.users.table.field.name: Username
 gdpr-extractor.users.table.field.firstname: First Name
 gdpr-extractor.users.table.field.lastname: Last Name
 gdpr-extractor.users.table.field.email: Email
+gdpr-extractor.users.table.actions.export: Export User Data
+gdpr-extractor.users.table.actions.delete: Delete User
 gdpr-extractor.table.field.actions: Actions
+gdpr-extractor.emails.table.field.sentDate: Sent Date
+gdpr-extractor.emails.table.field.from: From
+gdpr-extractor.emails.table.field.to: To
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Subject
+gdpr-extractor.emails.table.actions.export: Export Email Data
+gdpr-extractor.emails.table.actions.parameters: Expand Parameters
+gdpr-extractor.emails.table.actions.html: View HTML

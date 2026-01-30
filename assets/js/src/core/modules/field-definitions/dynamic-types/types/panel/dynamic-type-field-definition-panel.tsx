@@ -11,6 +11,7 @@
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionLayoutAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/dynamic-type-field-defintion-layout-abstract'
 import { FieldDefinitionPanelFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/field-definition-panel-form-fields'
+import { type ElementIcon } from '@sdk/components'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionLayoutAbstract {
@@ -20,6 +21,10 @@ export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionL
     return [...super.getGroup(), 'panel']
   }
 
+  getIcon (): ElementIcon {
+    return { type: 'name', value: 'panel' }
+  }
+
   getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'group:root']
   }
@@ -27,8 +32,6 @@ export class DynamicTypeFieldDefinitionPanel extends DynamicTypeFieldDefinitionL
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
-
-    console.log({ id, path: context.path })
 
     return (
       <>

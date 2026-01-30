@@ -16,7 +16,7 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
   id: string = 'block'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'alert' }
+    return { type: 'name', value: 'block' }
   }
 
   getDropdownTags (props: FieldDefinitionContext): string[] {
@@ -29,11 +29,11 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
     return this.getAllowedChildTags(props)
   }
 
-  protected getAllowedChildTags (props: FieldDefinitionContext): string[] {
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
   }
 
-  protected getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
+  getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
     // @todo check other types here as well
     return [...super.getDisallowedRecursiveChildTags(props), 'block']
   }

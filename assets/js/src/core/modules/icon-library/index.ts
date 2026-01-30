@@ -69,6 +69,7 @@ import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
+import code from '@Pimcore/assets/icons/code.inline.svg?react'
 import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
@@ -159,6 +160,8 @@ import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
 import group from '@Pimcore/assets/icons/group.inline.svg?react'
 import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
 import heading from '@Pimcore/assets/icons/heading.inline.svg?react'
+import headlessBrick from '@Pimcore/assets/icons/headless-brick.inline.svg?react'
+import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
@@ -203,6 +206,7 @@ import menuShortcut from '@Pimcore/assets/icons/menu-shortcut.inline.svg?react'
 import menu from '@Pimcore/assets/icons/menu.inline.svg?react'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg?react'
 import minus from '@Pimcore/assets/icons/minus.inline.svg?react'
+import monitor from '@Pimcore/assets/icons/monitor.inline.svg?react'
 import more from '@Pimcore/assets/icons/more.inline.svg?react'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg?react'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg?react'
@@ -233,6 +237,7 @@ import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
+import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
@@ -244,6 +249,8 @@ import permissionManyToOne from '@Pimcore/assets/icons/permission-many-to-one.in
 import permissionObject from '@Pimcore/assets/icons/permission-object.inline.svg?react'
 import permissionResource from '@Pimcore/assets/icons/permission-resource.inline.svg?react'
 import personalUser from '@Pimcore/assets/icons/personal-user.inline.svg?react'
+import phoneHorizontal from '@Pimcore/assets/icons/phone-horizontal.inline.svg?react'
+import phone from '@Pimcore/assets/icons/phone.inline.svg?react'
 import pieChart from '@Pimcore/assets/icons/pie-chart.inline.svg?react'
 import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg?react'
 import pin from '@Pimcore/assets/icons/pin.inline.svg?react'
@@ -306,6 +313,7 @@ import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
 import systemColumns from '@Pimcore/assets/icons/system-columns.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
+import tablet from '@Pimcore/assets/icons/tablet.inline.svg?react'
 import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg?react'
 import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
@@ -563,6 +571,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'cms',
       component: cms
+    })
+    iconLibrary.register({
+      name: 'code',
+      component: code
     })
     iconLibrary.register({
       name: 'collapse',
@@ -925,6 +937,14 @@ moduleSystem.registerModule({
       component: heading
     })
     iconLibrary.register({
+      name: 'headless-brick',
+      component: headlessBrick
+    })
+    iconLibrary.register({
+      name: 'headless-template',
+      component: headlessTemplate
+    })
+    iconLibrary.register({
       name: 'help-circle',
       component: helpCircle
     })
@@ -1101,6 +1121,10 @@ moduleSystem.registerModule({
       component: minus
     })
     iconLibrary.register({
+      name: 'monitor',
+      component: monitor
+    })
+    iconLibrary.register({
       name: 'more',
       component: more
     })
@@ -1221,6 +1245,10 @@ moduleSystem.registerModule({
       component: operatorConcatenator
     })
     iconLibrary.register({
+      name: 'order',
+      component: order
+    })
+    iconLibrary.register({
       name: 'other-operators',
       component: otherOperators
     })
@@ -1263,6 +1291,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'personal-user',
       component: personalUser
+    })
+    iconLibrary.register({
+      name: 'phone-horizontal',
+      component: phoneHorizontal
+    })
+    iconLibrary.register({
+      name: 'phone',
+      component: phone
     })
     iconLibrary.register({
       name: 'pie-chart',
@@ -1511,6 +1547,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'table',
       component: table
+    })
+    iconLibrary.register({
+      name: 'tablet',
+      component: tablet
     })
     iconLibrary.register({
       name: 'tag-configuration',
