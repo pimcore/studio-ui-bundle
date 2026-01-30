@@ -24,7 +24,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'DataManagement/Predefined Properties',
       label: 'navigation.predefined-properties',
-      order: 400,
+      order: 900,
       className: 'item-style-modifier',
       permission: UserPermission.PredefinedProperties,
       perspectivePermission: NavPermission.PredefinedProperties,
