@@ -60,11 +60,11 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         name={ fieldName }
       >
         <ImagePicker
-          type='add'
           allowedTypes={ ['image'] }
-          height={ height }
-          width={ width }
           description={ descriptionKey }
+          height={ height }
+          type='add'
+          width={ width }
         />
       </Form.Item>
     </Panel>

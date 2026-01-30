@@ -10,7 +10,7 @@
 
 import { createStyles, css } from 'antd-style'
 
-export const useStyles = createStyles(({token}) => ({
+export const useStyles = createStyles(({ token }) => ({
   imagePicker: css`
     & .ant-card-body {
       padding: 0
@@ -18,5 +18,5 @@ export const useStyles = createStyles(({token}) => ({
   `,
   icon: css`
       color: ${token.colorIcon};
-    `,
+    `
 }))

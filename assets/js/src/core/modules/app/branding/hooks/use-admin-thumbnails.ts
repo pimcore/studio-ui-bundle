@@ -10,7 +10,6 @@
 
 import { useSelector } from 'react-redux'
 import { getThumbnails } from '@Pimcore/modules/app/settings/settings-slice'
-import { isUndefined } from 'lodash'
 
 interface AdminThumbnails {
   logoUrl: string
@@ -24,6 +23,6 @@ export const useAdminThumbnails = (): AdminThumbnails => {
   return {
     logoUrl: thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
     customLogoSmall: thumbnailData?.customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
-    loginScreenCustomBackgroundImage: thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png',
+    loginScreenCustomBackgroundImage: thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png'
   }
 }
