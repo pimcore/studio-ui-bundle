@@ -227,6 +227,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableColumnVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting

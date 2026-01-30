@@ -15,13 +15,14 @@ const BORDER_WIDTH = 1
 
 export interface UseStylesProps {
   size?: GridProps['size']
-  enableVirtualizer?: boolean
+  enableRowVirtualizer: boolean
+  enableColumnVirtualizer: boolean
 }
 
-export const useStyles = createStyles(({ token, css }, { size = 'normal', enableVirtualizer = false }: UseStylesProps) => {
+export const useStyles = createStyles(({ token, css }, { size = 'normal', enableRowVirtualizer = false, enableColumnVirtualizer = false }: UseStylesProps) => {
   const rowHeight = size === 'small' ? 32 : 41
-  const rowHeightValue = enableVirtualizer ? 'auto' : `${rowHeight}px`
-  const paddingValue = size !== 'small' && enableVirtualizer ? `${token.paddingXXS}px 0 !important` : 0
+  const rowHeightValue = enableRowVirtualizer ? 'auto' : `${rowHeight}px`
+  const paddingValue = size !== 'small' && enableRowVirtualizer ? `${token.paddingXXS}px 0 !important` : 0
 
   const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
     content: '';
@@ -268,6 +269,11 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
       .ant-table-row-selected td {
         background-color: ${token.controlItemBgActive};
       }
+    `,
+
+    headerRow: css`
+      display: ${(enableRowVirtualizer || enableColumnVirtualizer) && 'flex'};
+      width: ${enableColumnVirtualizer && '100%'};
     `,
 
     disabledGrid: css`
