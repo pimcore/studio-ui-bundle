@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DefaultCell, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { IconButton, OperationalGrid, Space } from '@sdk/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -35,12 +35,10 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
   const columns = useMemo(() => [
     columnHelper.accessor('key', {
       header: t('key'),
-      cell: info => <DefaultCell { ...info } />,
       meta: { editable: true }
     }),
     columnHelper.accessor('value', {
       header: t('value'),
-      cell: info => <DefaultCell { ...info } />,
       meta: { editable: true }
     })
   ], [t, columnHelper])
