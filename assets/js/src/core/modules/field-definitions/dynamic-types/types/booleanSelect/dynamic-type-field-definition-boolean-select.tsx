@@ -13,7 +13,6 @@ import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from
 import { FieldDefinitionBooleanSelectFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/booleanSelect/field-definition-boolean-select-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 export class DynamicTypeFieldDefinitionBooleanSelect extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'booleanSelect'
@@ -27,12 +26,11 @@ export class DynamicTypeFieldDefinitionBooleanSelect extends DynamicTypeFieldDef
   }
 
   getDefaultData (): FieldDefinitionData {
-    const { t } = useTranslation()
     return {
       ...super.getDefaultData(),
-      yesLabel: t('yes'),
-      noLabel: t('no'),
-      emptyLabel: t('empty')
+      yesLabel: 'yes',
+      noLabel: 'no',
+      emptyLabel: 'empty'
     }
   }
 
