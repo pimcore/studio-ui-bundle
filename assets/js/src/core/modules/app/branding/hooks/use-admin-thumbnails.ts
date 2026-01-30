@@ -16,18 +16,14 @@ interface AdminThumbnails {
   logoUrl: string
   customLogoSmall: string
   loginScreenCustomBackgroundImage: string
-  isLoadingOrFetching: boolean
 }
 
 export const useAdminThumbnails = (): AdminThumbnails => {
   const thumbnailData = useSelector(getThumbnails)
 
-  const isLoadingOrFetching = isUndefined(thumbnailData) || Object.keys(thumbnailData).length === 0
-
   return {
     logoUrl: thumbnailData?.customLogo ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
     customLogoSmall: thumbnailData?.customLogoSmall ?? '/bundles/pimcorestudioui/img/logo-purple.svg',
     loginScreenCustomBackgroundImage: thumbnailData?.loginScreenCustomBackgroundImage ?? '/bundles/pimcorestudioui/img/login-bg.png',
-    isLoadingOrFetching
   }
 }
