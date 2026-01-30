@@ -37,13 +37,13 @@ export const ColorPanel = (): React.JSX.Element => {
       border={ false }
       collapsed={ false }
       collapsible
-      contentPadding="small"
+      contentPadding="extra-small"
       theme="card-with-highlight"
       title={ t('appearance-branding.color.title') }
     >
       <Space
         direction="vertical"
-        size="large"
+        size="extra-small"
       >
         <Form.Item label={ t('appearance-branding.color.brand-color.label') }>
           <Form.Item

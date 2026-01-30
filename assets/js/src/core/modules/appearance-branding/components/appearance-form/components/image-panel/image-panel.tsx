@@ -12,7 +12,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Form } from '@Pimcore/components/form/form'
-import { Text } from '@Pimcore/components/text/text'
 import { ImagePicker, type ImagePickerValue } from '@Pimcore/components/image-picker/image-picker'
 import { type RelatedElementData } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
@@ -36,13 +35,6 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
       theme="card-with-highlight"
       title={ t(titleKey) }
     >
-      <Text
-        className="mb-4"
-        type="secondary"
-      >
-        {t(descriptionKey)}
-      </Text>
-
       <Form.Item
         getValueFromEvent={ (value: ImagePickerValue | null) => {
           return value !== null
@@ -68,9 +60,11 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         name={ fieldName }
       >
         <ImagePicker
+          type='add'
           allowedTypes={ ['image'] }
           height={ height }
           width={ width }
+          description={ descriptionKey }
         />
       </Form.Item>
     </Panel>

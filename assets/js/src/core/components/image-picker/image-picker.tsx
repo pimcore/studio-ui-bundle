@@ -10,15 +10,15 @@
 
 import React from 'react'
 import cn from 'classnames'
-import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import type { DragAndDropInfo } from '@sdk/components'
+import { Flex, Icon, Space, Text, type DragAndDropInfo } from '@sdk/components'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-picker.styles'
 import { ImageFooter, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/footer'
+import { useTranslation } from '@sdk/app'
 
 export interface ImagePickerValue {
   type: 'asset'
@@ -32,6 +32,8 @@ export interface ImagePickerProps {
   disabled?: boolean
   value?: ImagePickerValue | null
   onChange?: (value: ImagePickerValue | null) => void
+  type: "upload" | "add"
+  description?: string
   className?: string
   placeholder?: string
   allowedTypes?: string[]
@@ -72,6 +74,15 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
   const height = toCssDimension(props.height, 150)
 
   return (
+    <Flex vertical={true} gap={"mini"}>
+    {props.description &&
+    <Space size={"mini"}>
+    <Icon
+    options={ { height: 16, width: 16 } }
+    value={ 'drop-target' }
+    className={styles.icon} />
+    <Text type='secondary'>{t(props.description)}</Text>
+    </Space>}
     <Card
       className={ cn('max-w-full', styles.imagePicker, props.className) }
       fitContent
@@ -91,8 +102,6 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
           info.type === 'asset' && allowedTypes.includes(String(info.data.type))
         }
         onDrop={ (info: DragAndDropInfo) => {
-          console.log('info', info)
-
           props.onChange?.({
             type: 'asset',
             id: Number(info.data.id),
@@ -114,11 +123,13 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
               dndIcon={ props.disabled !== true }
               height={ height }
               title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
-              uploadIcon={ props.disabled !== true }
+              uploadIcon={ props.disabled !== true && props.type === "upload" }
+              addIcon={ props.disabled !== true && props.type === "add" }
               width={ width }
             />
             )}
       </Droppable>
     </Card>
+    </Flex>
   )
 }
