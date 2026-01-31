@@ -49,7 +49,10 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         </Form.Item>
 
         <Form.Item name="index">
-          <Switch labelRight={ t('index') } />
+          <Switch
+            disabled={ props.type === 'hotspotimage' }
+            labelRight={ t('index') }
+          />
         </Form.Item>
 
         {/* @todo check behavior for unique fields */}

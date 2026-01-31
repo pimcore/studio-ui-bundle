@@ -288,6 +288,11 @@ import { DynamicTypeFieldDefinitionDate } from '@Pimcore/modules/field-definitio
 import { DynamicTypeFieldDefinitionDateTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateTime/dynamic-type-field-definition-date-time'
 import { DynamicTypeFieldDefinitionDateRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateRange/dynamic-type-field-definition-date-range'
 import { DynamicTypeFieldDefinitionTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/dynamic-type-field-definition-time'
+import { DynamicTypeFieldDefinitionImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/image/dynamic-type-field-definition-image'
+import { DynamicTypeFieldDefinitionExternalImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/externalImage/dynamic-type-field-definition-external-image'
+import { DynamicTypeFieldDefinitionImageGallery } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageGallery/dynamic-type-field-definition-image-gallery'
+import { DynamicTypeFieldDefinitionVideo } from '@Pimcore/modules/field-definitions/dynamic-types/types/video/dynamic-type-field-definition-video'
+import { DynamicTypeFieldDefinitionHotspotImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageAdvanced/dynamic-type-field-definition-hotspot-image'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -664,6 +669,11 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Date']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateTime']).to(DynamicTypeFieldDefinitionDateTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateRange']).to(DynamicTypeFieldDefinitionDateRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Time']).to(DynamicTypeFieldDefinitionTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Image']).to(DynamicTypeFieldDefinitionImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ExternalImage']).to(DynamicTypeFieldDefinitionExternalImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ImageGallery']).to(DynamicTypeFieldDefinitionImageGallery).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Video']).to(DynamicTypeFieldDefinitionVideo).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/HotspotImage']).to(DynamicTypeFieldDefinitionHotspotImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider

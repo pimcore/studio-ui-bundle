@@ -380,6 +380,11 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/DateTime': 'DynamicTypes/FieldDefinition/DateTime',
   'DynamicTypes/FieldDefinition/DateRange': 'DynamicTypes/FieldDefinition/DateRange',
   'DynamicTypes/FieldDefinition/Time': 'DynamicTypes/FieldDefinition/Time',
+  'DynamicTypes/FieldDefinition/Image': 'DynamicTypes/FieldDefinition/Image',
+  'DynamicTypes/FieldDefinition/ExternalImage': 'DynamicTypes/FieldDefinition/ExternalImage',
+  'DynamicTypes/FieldDefinition/ImageGallery': 'DynamicTypes/FieldDefinition/ImageGallery',
+  'DynamicTypes/FieldDefinition/Video': 'DynamicTypes/FieldDefinition/Video',
+  'DynamicTypes/FieldDefinition/HotspotImage': 'DynamicTypes/FieldDefinition/HotspotImage',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',
