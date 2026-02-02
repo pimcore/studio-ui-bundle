@@ -66,8 +66,8 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
     const csvValue = value.map((item) => item.value).join('\n')
 
     textarea({
-      title: t('field-definitions.grid.csv-separated-values'),
-      label: t('field-definitions.grid.csv-separated-values.info'),
+      title: t('csv-separated-values'),
+      label: t('csv-separated-values-info'),
       initialValue: csvValue,
       onOk: (newValue) => {
         if (typeof newValue === 'string') {
@@ -117,6 +117,7 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                       value: ''
                     })
                   } }
+                  title={ t('add') }
                 >
                   {t('add')}
                 </IconButton>
@@ -124,6 +125,7 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                   disabled={ !hasSelection }
                   icon={ { value: 'trash' } }
                   onClick={ () => { operations.deleteSelectedRows() } }
+                  title={ t('remove') }
                 >
                   {t('remove')}
                 </IconButton>
@@ -137,7 +139,7 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
-                  title={ t('field-definitions.grid.csv-separated-values') }
+                  title={ t('csv-separated-options') }
                 />
               </Space>
             )

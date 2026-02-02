@@ -71,8 +71,8 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
     const csvValue = value.map((option) => `${option.key},${option.value}`).join('\n')
 
     textarea({
-      title: t('field-definitions.grid.csv-separated-options'),
-      label: t('field-definitions.grid.csv-separated-options.info'),
+      title: t('csv-separated-options'),
+      label: t('csv-separated-options-info'),
       initialValue: csvValue,
       onOk: (newValue) => {
         if (typeof newValue === 'string') {
@@ -125,6 +125,7 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                       value: ''
                     })
                   } }
+                  title={ t('add') }
                 >
                   {t('add')}
                 </IconButton>
@@ -132,6 +133,7 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                   disabled={ !hasSelection }
                   icon={ { value: 'trash' } }
                   onClick={ () => { operations.deleteSelectedRows() } }
+                  title={ t('remove') }
                 >
                   {t('remove')}
                 </IconButton>
@@ -145,7 +147,7 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
-                  title={ t('field-definitions.grid.csv-separated-options') }
+                  title={ t('csv-separated-options') }
                 />
 
               </Space>

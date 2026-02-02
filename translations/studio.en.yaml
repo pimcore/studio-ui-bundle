@@ -510,10 +510,8 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
-field-definitions.grid.csv-separated-options: CSV separated options
-field-definitions.grid.csv-separated-options.info: "Please enter the options in CSV format (key,value). Each line represents one option."
-field-definitions.grid.csv-separated-values: CSV separated values
-field-definitions.grid.csv-separated-values.info: "Please enter the values in CSV format. Each line represents one value."
+csv-separated-options: CSV separated options
+csv-separated-options-info: "The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value."
 add: Add
 new: New
 save: Save
@@ -560,7 +558,7 @@ options-provider-class: "Options Provider Class or Service Name"
 options-provider-data: "Options Provider Data"
 switch-to-selection-mode: Switch to selection mode
 switch-to-drag-mode: Switch to drag mode
-options: Options
+selection-options: Selection Options
 value: Value
 display-name: Display Name
 default-values-settings: Default value settings

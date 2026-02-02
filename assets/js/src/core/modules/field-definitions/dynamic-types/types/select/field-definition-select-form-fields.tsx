@@ -107,7 +107,7 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
 
           <Form.Conditional condition={ (values) => values.optionsProviderType === 'configure' || values.optionsProviderType === undefined || values.optionsProviderType === '' }>
             <Form.Item
-              label={ t('options') }
+              label={ t('selection-options') }
               name="options"
             >
               <FieldDefinitionSelectOptionsGrid />
