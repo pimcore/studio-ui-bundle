@@ -54,7 +54,7 @@ export const FieldDefinitionVideoFormFields = (props: FieldDefinitionAbstractFor
 
       <Form.Item
         label={ t('allowed-video-types') }
-        name="video"
+        name="allowedTypes"
         tooltip={ t('allowed-video-types-tooltip') }
       >
         <Select
