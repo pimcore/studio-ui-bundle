@@ -12,11 +12,7 @@ import { Form, FormKit, Input, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export interface FieldDefinitionGeoSettingsProps {
-  type: string
-}
-
-export const FieldDefinitionGeoSettings = (props: FieldDefinitionGeoSettingsProps): React.JSX.Element => {
+export const FieldDefinitionGeoSettings = (): React.JSX.Element => {
   const { t } = useTranslation()
   return (
     <FormKit.Panel title={ t('specific-settings') }>
