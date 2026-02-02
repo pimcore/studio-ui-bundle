@@ -586,6 +586,21 @@ field-definition.date: Date
 field-definition.datetime: Date Time
 field-definition.date-range: Date Range
 field-definition.time: Time
+field-definition.image: Image
+field-definition.external-image: External Image
+field-definition.image-gallery: Image Gallery
+field-definition.video: Video
+field-definition.hotspotimage: Image Advanced
+crop-settings: Crop Settings
+ratio-x: Ratio X
+ratio-y: Ratio Y
+predefined-data-templates: Predefined data templates
+upload-path: Upload Path
+preview-width: Preview width
+preview-height: Preview height
+url-width: URL width
+allowed-video-types: Allowed video types
+allowed-video-types-tooltip: Empty = allow all
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
