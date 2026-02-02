@@ -568,6 +568,10 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+field-definition.geopoint: Geo Point
+field-definition.geobounds: Geo Bounds
+field-definition.geopolygon: Geo Polygon
+field-definition.geopolyline: Geo Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -765,6 +769,9 @@ jobs.document-clone-job.title: Cloning documents
 jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
+zoom_level: Zoom Level
+width_explanation: In px or %
+height_explanation: In px
 search-address: Search address
 search: Search
 geocode.address-not-found: "The entered address was not found"

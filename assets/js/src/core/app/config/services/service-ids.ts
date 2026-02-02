@@ -380,6 +380,10 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/DateTime': 'DynamicTypes/FieldDefinition/DateTime',
   'DynamicTypes/FieldDefinition/DateRange': 'DynamicTypes/FieldDefinition/DateRange',
   'DynamicTypes/FieldDefinition/Time': 'DynamicTypes/FieldDefinition/Time',
+  'DynamicTypes/FieldDefinition/Geopoint': 'DynamicTypes/FieldDefinition/Geopoint',
+  'DynamicTypes/FieldDefinition/Geobounds': 'DynamicTypes/FieldDefinition/Geobounds',
+  'DynamicTypes/FieldDefinition/Geopolygon': 'DynamicTypes/FieldDefinition/Geopolygon',
+  'DynamicTypes/FieldDefinition/Geopolyline': 'DynamicTypes/FieldDefinition/Geopolyline',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

@@ -31,6 +31,10 @@ moduleSystem.registerModule({
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/DateTime'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/DateRange'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Time'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Geopoint'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Geobounds'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Geopolygon'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Geopolyline'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Panel'))
   }
 })
