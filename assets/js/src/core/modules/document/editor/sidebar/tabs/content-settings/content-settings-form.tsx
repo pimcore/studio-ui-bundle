@@ -48,6 +48,8 @@ interface ContentSettingsFormProps {
   hasPropertiesPermission?: boolean
   hasSavePermission?: boolean
   allowedContentMainDocumentTypes?: string[]
+  enableTitleDescription?: boolean
+  enablePrettyUrl?: boolean
 }
 
 export const ContentSettingsForm = ({
@@ -55,7 +57,9 @@ export const ContentSettingsForm = ({
   initialValues,
   hasPropertiesPermission = true,
   hasSavePermission = true,
-  allowedContentMainDocumentTypes
+  allowedContentMainDocumentTypes,
+  enableTitleDescription,
+  enablePrettyUrl
 }: ContentSettingsFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
@@ -186,7 +190,7 @@ export const ContentSettingsForm = ({
         onValuesChange: handleFormChangeDebounced
       } }
     >
-      {document?.type === 'page' && (
+      {(document?.type === 'page' || enableTitleDescription === true) && (
         <>
           <Form.Item
             label={ <span>{t('title')} <span ref={ titleCountRef }>({(initialValues.title?.length ?? 0)})</span></span> }
@@ -222,7 +226,7 @@ export const ContentSettingsForm = ({
       {hasPropertiesPermission && (
         <Form.Item
           label={
-            document?.type === 'page'
+            document?.type === 'page' || enableTitleDescription === true
               ? (
                 <SidebarHeadline
                   asFormLabel
@@ -247,7 +251,7 @@ export const ContentSettingsForm = ({
         </Form.Item>
       )}
 
-      {document?.type === 'page' && (
+      {(document?.type === 'page' || enablePrettyUrl === true) && (
         <Form.Item
           extra={ t('pretty-url-override-notice') }
           label={

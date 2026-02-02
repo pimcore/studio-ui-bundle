@@ -34,6 +34,7 @@ interface AssetTargetProps {
   height?: number | string
   dndIcon?: boolean
   uploadIcon?: boolean
+  addIcon?: boolean
   dropClass?: string
 }
 
@@ -44,6 +45,7 @@ export const AssetTarget = ({
   height = 200,
   dndIcon,
   uploadIcon,
+  addIcon,
   onRemove,
   onSearch,
   onUpload,
@@ -120,23 +122,29 @@ export const AssetTarget = ({
               gap="mini"
               justify="center"
             >
-              { dndIcon === true && (
+              { (addIcon === true || onUpload !== undefined) && (
                 <Icon
-                  options={ { height: 30, width: 30 } }
-                  value={ 'drop-target' }
+                  options={ { height: 20, width: 20 } }
+                  value={ 'plus-circle' }
                 />
               )}
               { (uploadIcon === true || onUpload !== undefined) && (
                 <Icon
-                  options={ { height: 30, width: 30 } }
+                  options={ { height: 20, width: 20 } }
                   value={ 'upload-cloud' }
+                />
+              )}
+              { dndIcon === true && (
+                <Icon
+                  options={ { height: 20, width: 21 } }
+                  value={ 'drop-target' }
                 />
               )}
             </Flex>
           </div>
           )}
           <div className="image-target-title">
-            <Text>{ title }</Text>
+            <Text type='secondary'>{ title }</Text>
           </div>
         </Flex>
 

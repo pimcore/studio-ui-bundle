@@ -12,7 +12,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import React from 'react'
 import { Tooltip } from 'antd'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@sdk/components'
 
 interface BorderTitleViewProps {
   icon: ElementIcon

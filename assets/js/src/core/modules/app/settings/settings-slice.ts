@@ -55,12 +55,6 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      api.endpoints.adminSettingsGet.matchFulfilled,
-      (state, { payload }) => {
-        state.adminSettings = payload
-      }
-    )
-    builder.addMatcher(
       api.endpoints.settingAdminThumbnail.matchFulfilled,
       (state, { payload }) => {
         state.thumbnails = payload

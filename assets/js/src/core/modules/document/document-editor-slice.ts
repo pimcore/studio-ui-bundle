@@ -10,6 +10,7 @@
 
 import { injectSliceWithState } from '@sdk/app'
 import { createSlice, createSelector, type PayloadAction } from '@reduxjs/toolkit'
+import { isNil, mergeWith, isArray } from 'lodash'
 
 export interface AreablockTypeEntry {
   name: string
@@ -22,7 +23,7 @@ export interface AreablockTypeEntry {
 export type AreablockGroupedTypes = Record<string, AreablockTypeEntry[]>
 
 export interface DocumentEditorState {
-  documentAreablocks: Record<number, AreablockGroupedTypes>
+  documentAreablocks: Record<number, Record<string, AreablockGroupedTypes>>
   timeSliderVisible: Record<number, boolean>
 }
 
@@ -35,8 +36,11 @@ const documentEditorSlice = createSlice({
   name: 'document-editor',
   initialState,
   reducers: {
-    setDocumentAreablockTypes: (state, action: PayloadAction<{ documentId: number, areablockTypes: AreablockGroupedTypes }>) => {
-      state.documentAreablocks[action.payload.documentId] = action.payload.areablockTypes
+    setDocumentAreablockTypes: (state, action: PayloadAction<{ documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes }>) => {
+      if (isNil(state.documentAreablocks[action.payload.documentId])) {
+        state.documentAreablocks[action.payload.documentId] = {}
+      }
+      state.documentAreablocks[action.payload.documentId][action.payload.editableTypeId] = action.payload.areablockTypes
     },
     setDocumentTimeSliderVisible: (state, action: PayloadAction<{ documentId: number, visible: boolean }>) => {
       state.timeSliderVisible[action.payload.documentId] = action.payload.visible
@@ -66,7 +70,13 @@ export const selectDocumentEditorState = (state: any): DocumentEditorState => st
 export const selectDocumentAreablockGroupedTypes = createSelector(
   [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
   (documentEditorState, documentId) => {
-    return documentEditorState.documentAreablocks[documentId] ?? {}
+    const editableTypeCollections = documentEditorState.documentAreablocks[documentId] ?? {}
+
+    return mergeWith({}, ...Object.values(editableTypeCollections), (objValue, srcValue) => {
+      if (isArray(objValue)) {
+        return objValue.concat(srcValue)
+      }
+    }) as AreablockGroupedTypes
   }
 )
 

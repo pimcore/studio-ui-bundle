@@ -585,6 +585,10 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+field-definition.geopoint: Geo Point
+field-definition.geobounds: Geo Bounds
+field-definition.geopolygon: Geo Polygon
+field-definition.geopolyline: Geo Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -599,6 +603,21 @@ field-definition.date: Date
 field-definition.datetime: Date Time
 field-definition.date-range: Date Range
 field-definition.time: Time
+field-definition.image: Image
+field-definition.external-image: External Image
+field-definition.image-gallery: Image Gallery
+field-definition.video: Video
+field-definition.hotspotimage: Image Advanced
+crop-settings: Crop Settings
+ratio-x: Ratio X
+ratio-y: Ratio Y
+predefined-data-templates: Predefined data templates
+upload-path: Upload Path
+preview-width: Preview width
+preview-height: Preview height
+url-width: URL width
+allowed-video-types: Allowed video types
+allowed-video-types-tooltip: Empty = allow all
 field-definition.select: Select
 field-definition.multiselect: Multiselect
 field-definition.boolean-select: Boolean Select
