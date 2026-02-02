@@ -10,7 +10,7 @@
 
 import React, { type ComponentType } from 'react'
 import { type TabNode } from 'flexlayout-react'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@sdk/components'
 import { TitleView } from './title/title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'

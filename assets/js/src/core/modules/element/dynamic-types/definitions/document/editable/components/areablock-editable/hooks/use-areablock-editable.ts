@@ -15,13 +15,12 @@ import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-m
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
-import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
+import { type AreablockEditableConfig, type AreablockValue, type AreablockRenderTrigger } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 import { areablockValueUtils, configUtils } from '../utils/areablock-utils'
 import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
-import { useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { useStyles } from '../areablock-editable.styles'
 
 export interface UseAreablockEditableParams {
@@ -30,6 +29,7 @@ export interface UseAreablockEditableParams {
   onChange?: (value: AreablockValue) => void
   config?: AreablockEditableConfig
   disabled?: boolean
+  renderTrigger: AreablockRenderTrigger
 }
 
 export interface UseAreablockEditableReturn {
@@ -45,13 +45,13 @@ export const useAreablockEditable = ({
   areablockManager,
   onChange,
   config,
-  disabled = false
+  disabled = false,
+  renderTrigger
 }: UseAreablockEditableParams): UseAreablockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
-  const [triggerAreaBlockRender] = useLazyDocumentPageSnippetAreaBlockRenderQuery()
   const { styles } = useStyles()
 
   const applyStylesToAreaEntries = useCallback(() => {
@@ -131,7 +131,7 @@ export const useAreablockEditable = ({
         hidden: false
       })
 
-      const { error, data } = await triggerAreaBlockRender({
+      const { error, data } = await renderTrigger({
         id: documentId,
         body: {
           name: areablockManager.getEditableName(),
