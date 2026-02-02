@@ -46,7 +46,7 @@ export class DynamicTypeFieldDefinitionMultiselection extends DynamicTypeFieldDe
 
     return (
       <>
-        { super.getFormFields(context, { disableIndex: true }) }
+        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
         <FieldDefinitionMultiselectionFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

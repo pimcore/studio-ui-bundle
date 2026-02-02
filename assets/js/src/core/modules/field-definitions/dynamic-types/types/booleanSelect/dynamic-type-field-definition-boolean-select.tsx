@@ -40,7 +40,7 @@ export class DynamicTypeFieldDefinitionBooleanSelect extends DynamicTypeFieldDef
 
     return (
       <>
-        { super.getFormFields(context, { disableMandatory: true }) }
+        {super.getFormFields({ ...context, hideUnique: true, disableMandatory: true })}
         <FieldDefinitionBooleanSelectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

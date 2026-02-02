@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionCountryMultiselect extends DynamicTypeFie
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionCountryMultiselectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

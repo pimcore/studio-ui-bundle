@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionLanguageMultiselect extends DynamicTypeFi
   id: string = 'languagemultiselect'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'languages-multiple' }
+    return { type: 'name', value: 'language-overview' }
   }
 
   getGroup (): string[] {
@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionLanguageMultiselect extends DynamicTypeFi
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionLanguageMultiselectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

@@ -13,6 +13,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 interface DefaultValueItem {
   value: string
@@ -25,6 +26,7 @@ interface FieldDefinitionDefaultValueGridProps {
 
 export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldDefinitionDefaultValueGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
   const [isDragEnabled, setIsDragEnabled] = useState<boolean>(false)
@@ -58,6 +60,26 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
     setIsDragEnabled(!isDragEnabled)
     // Clear selections when switching modes
     setSelectedRows({})
+  }
+
+  const openCsvModal = (): void => {
+    const csvValue = value.map((item) => item.value).join('\n')
+
+    textarea({
+      title: t('field-definitions.grid.csv-separated-values'),
+      label: t('field-definitions.grid.csv-separated-values.info'),
+      initialValue: csvValue,
+      onOk: (newValue) => {
+        if (typeof newValue === 'string') {
+          const newItems = newValue.split('\n').filter((line) => line.trim() !== '').map((line) => {
+            return {
+              value: line.trim()
+            }
+          })
+          onChange?.(newItems)
+        }
+      }
+    })
   }
 
   return (
@@ -110,6 +132,12 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                   icon={ { value: isDragEnabled ? 'drag-option' : 'transfer' } }
                   onClick={ toggleDragMode }
                   title={ isDragEnabled ? t('switch-to-selection-mode') : t('switch-to-drag-mode') }
+                />
+
+                <IconButton
+                  icon={ { value: 'edit' } }
+                  onClick={ openCsvModal }
+                  title={ t('field-definitions.grid.csv-separated-values') }
                 />
               </Space>
             )

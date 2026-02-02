@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionLanguage extends DynamicTypeFieldDefiniti
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionLanguageFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

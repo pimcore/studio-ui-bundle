@@ -13,6 +13,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 interface SelectOption {
   key: string
@@ -26,6 +27,7 @@ interface FieldDefinitionSelectOptionsGridProps {
 
 export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
   const [isDragEnabled, setIsDragEnabled] = useState<boolean>(false)
@@ -34,7 +36,7 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
 
   const columns = useMemo(() => [
     columnHelper.accessor('key', {
-      header: t('key'),
+      header: t('display-name'),
       meta: { editable: true }
     }),
     columnHelper.accessor('value', {
@@ -63,6 +65,28 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
     setIsDragEnabled(!isDragEnabled)
     // Clear selections when switching modes
     setSelectedRows({})
+  }
+
+  const openCsvModal = (): void => {
+    const csvValue = value.map((option) => `${option.key},${option.value}`).join('\n')
+
+    textarea({
+      title: t('field-definitions.grid.csv-separated-options'),
+      label: t('field-definitions.grid.csv-separated-options.info'),
+      initialValue: csvValue,
+      onOk: (newValue) => {
+        if (typeof newValue === 'string') {
+          const newOptions = newValue.split('\n').filter((line) => line.trim() !== '').map((line) => {
+            const [key, ...valueParts] = line.split(',')
+            return {
+              key: key?.trim() ?? '',
+              value: valueParts.join(',')?.trim() ?? ''
+            }
+          })
+          onChange?.(newOptions)
+        }
+      }
+    })
   }
 
   return (
@@ -116,6 +140,12 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                   icon={ { value: isDragEnabled ? 'drag-option' : 'transfer' } }
                   onClick={ toggleDragMode }
                   title={ isDragEnabled ? t('switch-to-selection-mode') : t('switch-to-drag-mode') }
+                />
+
+                <IconButton
+                  icon={ { value: 'edit' } }
+                  onClick={ openCsvModal }
+                  title={ t('field-definitions.grid.csv-separated-options') }
                 />
 
               </Space>

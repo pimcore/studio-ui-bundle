@@ -41,7 +41,7 @@ export class DynamicTypeFieldDefinitionSelect extends DynamicTypeFieldDefinition
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionSelectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
