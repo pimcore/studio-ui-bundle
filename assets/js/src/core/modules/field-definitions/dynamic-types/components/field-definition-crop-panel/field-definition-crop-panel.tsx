@@ -39,7 +39,7 @@ export const FieldDefinitionCropPanel = (): React.JSX.Element => {
         label={ t('predefined-data-templates') }
         name="predefinedDataTemplates"
       >
-        <TextArea />
+        <TextArea autoSize />
       </Form.Item>
     </FormKit.Panel>
   )
