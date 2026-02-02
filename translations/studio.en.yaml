@@ -1008,6 +1008,7 @@ navigation.quick-access: Quick Access
 navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
+navigation.image-thumbnails: Image Thumbnails
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
 navigation.appearance-branding: Appearance & Branding
@@ -1097,7 +1098,18 @@ widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
 widget.appearance-branding: Appearance & Branding
+widget.image-thumbnails: Image Thumbnails
 appearance-branding.title: "Appearance & Branding"
+image-thumbnails.title: "Image Thumbnails"
+image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
+image-thumbnails.search.placeholder: "Search thumbnails..."
+image-thumbnails.tree.empty: "No thumbnails found"
+image-thumbnails.configuration.title: "Configuration"
+image-thumbnails.configuration.description: "Configure thumbnail settings"
+image-thumbnails.preview.title: "Preview"
+image-thumbnails.preview.description: "Preview thumbnail configuration"
+image-thumbnails.editor.empty.title: "Select a thumbnail"
+image-thumbnails.editor.empty.description: "Select a thumbnail from the tree to view or edit its configuration"
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
