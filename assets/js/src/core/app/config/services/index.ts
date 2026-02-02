@@ -288,6 +288,10 @@ import { DynamicTypeFieldDefinitionDate } from '@Pimcore/modules/field-definitio
 import { DynamicTypeFieldDefinitionDateTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateTime/dynamic-type-field-definition-date-time'
 import { DynamicTypeFieldDefinitionDateRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateRange/dynamic-type-field-definition-date-range'
 import { DynamicTypeFieldDefinitionTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/dynamic-type-field-definition-time'
+import { DynamicTypeFieldDefinitionGeopoint } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopoint/dynamic-type-field-definition-geopoint'
+import { DynamicTypeFieldDefinitionGeobounds } from '@Pimcore/modules/field-definitions/dynamic-types/types/geobounds/dynamic-type-field-definition-geobounds'
+import { DynamicTypeFieldDefinitionGeopolygon } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolygon/dynamic-type-field-definition-geopolygon'
+import { DynamicTypeFieldDefinitionGeopolyline } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolyline/dynamic-type-field-definition-geopolyline'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -664,6 +668,10 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Date']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateTime']).to(DynamicTypeFieldDefinitionDateTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateRange']).to(DynamicTypeFieldDefinitionDateRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Time']).to(DynamicTypeFieldDefinitionTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopoint']).to(DynamicTypeFieldDefinitionGeopoint).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geobounds']).to(DynamicTypeFieldDefinitionGeobounds).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolygon']).to(DynamicTypeFieldDefinitionGeopolygon).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolyline']).to(DynamicTypeFieldDefinitionGeopolyline).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider
