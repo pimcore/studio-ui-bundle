@@ -1117,7 +1117,8 @@ search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
 hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
-image.dnd-target: Drop an image here
+image.dnd-target: Add or drop an image directly here.
+image.upload-target: Upload, add or drop an image directly here.
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
