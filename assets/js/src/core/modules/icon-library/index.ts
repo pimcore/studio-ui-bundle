@@ -163,6 +163,7 @@ import group from '@Pimcore/assets/icons/group.inline.svg?react'
 import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
 import heading from '@Pimcore/assets/icons/heading.inline.svg?react'
 import headlessBrick from '@Pimcore/assets/icons/headless-brick.inline.svg?react'
+import headlessDocument from '@Pimcore/assets/icons/headless-document.inline.svg?react'
 import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
@@ -951,6 +952,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'headless-brick',
       component: headlessBrick
+    })
+    iconLibrary.register({
+      name: 'headless-document',
+      component: headlessDocument
     })
     iconLibrary.register({
       name: 'headless-template',

@@ -28,7 +28,7 @@ export interface DocumentApi {
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
   triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
-  notifyAreablockTypes: (documentId: number, areablockTypes: AreablockGroupedTypes) => void
+  notifyAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   notifyTimeSliderVisible: (documentId: number, visible: boolean) => void
   isIframeReady: (documentId: number) => boolean
   onReady: (documentId: number, callback: () => void) => void
@@ -102,8 +102,9 @@ class DocumentApiImpl implements DocumentApi {
     iframeDocumentEditorRegistry.markAsReady(documentId)
   }
 
-  notifyAreablockTypes (documentId: number, areablockTypes: AreablockGroupedTypes): void {
-    store.dispatch(setDocumentAreablockTypes({ documentId, areablockTypes }))
+  notifyAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
+    console.log('Notifying areablock types for document', documentId, editableTypeId, areablockTypes)
+    store.dispatch(setDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
   }
 
   notifyTimeSliderVisible (documentId: number, visible: boolean): void {
