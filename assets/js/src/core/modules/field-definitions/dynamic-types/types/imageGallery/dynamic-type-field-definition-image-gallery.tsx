@@ -33,7 +33,7 @@ export class DynamicTypeFieldDefinitionImageGallery extends DynamicTypeFieldDefi
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields(context, { disableIndex: true })}
         <FieldDefinitionImageGalleryFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

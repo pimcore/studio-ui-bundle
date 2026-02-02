@@ -33,7 +33,7 @@ export class DynamicTypeFieldDefinitionHotspotImage extends DynamicTypeFieldDefi
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields(context, { disableIndex: true })}
         <FieldDefinitionImageAdvancedFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import {
+  DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext
+} from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionLayoutFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/layout/field-defintion-layout-form-fields'
 import React from 'react'
 
