@@ -88,6 +88,8 @@ import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg?react'
+import customerDuplicate from '@Pimcore/assets/icons/customer-duplicate.inline.svg?react'
+import customerManagement from '@Pimcore/assets/icons/customer-management.inline.svg?react'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg?react'
 import customerSegment from '@Pimcore/assets/icons/customer-segment.inline.svg?react'
 import customer from '@Pimcore/assets/icons/customer.inline.svg?react'
@@ -647,6 +649,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'custom-metadata',
       component: customMetadata
+    })
+    iconLibrary.register({
+      name: 'customer-duplicate',
+      component: customerDuplicate
+    })
+    iconLibrary.register({
+      name: 'customer-management',
+      component: customerManagement
     })
     iconLibrary.register({
       name: 'customer-segment-group',
