@@ -170,6 +170,7 @@ import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?re
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
 import imageExternal from '@Pimcore/assets/icons/image-external.inline.svg?react'
 import imageGallery from '@Pimcore/assets/icons/image-gallery.inline.svg?react'
+import imageThumbnailClear from '@Pimcore/assets/icons/image-thumbnail-clear.inline.svg?react'
 import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
@@ -979,6 +980,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image-gallery',
       component: imageGallery
+    })
+    iconLibrary.register({
+      name: 'image-thumbnail-clear',
+      component: imageThumbnailClear
     })
     iconLibrary.register({
       name: 'image-thumbnail',
