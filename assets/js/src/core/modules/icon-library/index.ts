@@ -178,6 +178,7 @@ import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
+import inlineHelp from '@Pimcore/assets/icons/inline-help.inline.svg?react'
 import inputQuantityValue from '@Pimcore/assets/icons/input-quantity-value.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
 import key from '@Pimcore/assets/icons/key.inline.svg?react'
@@ -1009,6 +1010,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'inheritance-broken',
       component: inheritanceBroken
+    })
+    iconLibrary.register({
+      name: 'inline-help',
+      component: inlineHelp
     })
     iconLibrary.register({
       name: 'input-quantity-value',
