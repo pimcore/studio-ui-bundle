@@ -46,14 +46,14 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
 
         <Form.Item name="mandatory">
           <Switch
-            disabled={ props.disableMandatory }
+            disabled={ props.context.disableMandatory }
             labelRight={ t('mandatory') }
           />
         </Form.Item>
 
         <Form.Item name="index">
           <Switch
-            disabled={ props.disableIndex }
+            disabled={ props.context.disableIndex }
             labelRight={ t('index') }
           />
         </Form.Item>

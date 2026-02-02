@@ -30,10 +30,10 @@ export class DynamicTypeFieldDefinitionImageGallery extends DynamicTypeFieldDefi
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
-
+    context.disableIndex = true
     return (
       <>
-        {super.getFormFields(context, { disableIndex: true })}
+        {super.getFormFields(context)}
         <FieldDefinitionImageGalleryFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

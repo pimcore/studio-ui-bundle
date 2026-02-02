@@ -71,7 +71,6 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
         context={ context }
         id={ fieldDefinition?.name ?? id }
         type={ this.id }
-        { ...props }
       />
     )
   }

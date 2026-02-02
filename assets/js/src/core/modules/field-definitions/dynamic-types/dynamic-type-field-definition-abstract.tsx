@@ -33,8 +33,6 @@ export interface FieldDefinitionAbstractFormFieldsProps {
   context: FieldDefinitionContext
   id: string
   type: string
-  disableMandatory?: boolean
-  disableIndex?: boolean
 }
 
 export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbstract {

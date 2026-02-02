@@ -30,10 +30,11 @@ export class DynamicTypeFieldDefinitionHotspotImage extends DynamicTypeFieldDefi
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
+    context.disableIndex = true
 
     return (
       <>
-        {super.getFormFields(context, { disableIndex: true })}
+        {super.getFormFields(context)}
         <FieldDefinitionImageAdvancedFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
