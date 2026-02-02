@@ -9,8 +9,7 @@
  */
 
 import {
-  DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext,
-  type FieldDefinitionAbstractFormFieldsProps
+  DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext
 } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionDataFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/field-defintion-data-form-fields'
 import React from 'react'
@@ -62,7 +61,7 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
     return context.path.at(-1) ?? ''
   }
 
-  getFormFields (context: FieldDefinitionContext, props?: Partial<FieldDefinitionAbstractFormFieldsProps>): React.JSX.Element {
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 

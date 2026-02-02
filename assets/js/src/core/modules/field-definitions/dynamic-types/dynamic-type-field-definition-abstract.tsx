@@ -96,7 +96,7 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return {}
   }
 
-  abstract getFormFields (context: FieldDefinitionContext, props?: Partial<FieldDefinitionAbstractFormFieldsProps>): React.JSX.Element
+  abstract getFormFields (context: FieldDefinitionContext): React.JSX.Element
 
   getAdditionalFormFields (context: FieldDefinitionContext): React.JSX.Element | null {
     return null
