@@ -53,7 +53,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
     </Tooltip>
   ]
   if (props.disabled !== true) {
-    buttons.push(
+    buttons.unshift(
       <ElementSelectorButton elementSelectorConfig={ {
         selectionType: SelectionType.Single,
         areas: {
