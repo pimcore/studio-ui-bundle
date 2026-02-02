@@ -17,7 +17,8 @@ import {
   type AdminSettings
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useSelector } from 'react-redux'
-import { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
+import { getAdminSettings, setAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 import { isUndefined } from 'lodash'
 
 interface UseAppearanceBrandingReturn {
@@ -28,22 +29,39 @@ interface UseAppearanceBrandingReturn {
 
 export const useAppearanceBranding = (): UseAppearanceBrandingReturn => {
   const [adminSettingsUpdateMutation, { isLoading: isUpdateLoading }] = useAdminSettingsUpdateMutation()
+  const dispatch = useAppDispatch()
   useAdminSettingsGetQuery()
   const adminSettings = useSelector(getAdminSettings)
 
   const updateSettings = async (settings: UpdateAdminSettings): Promise<{ success: boolean }> => {
+    const originalSettings = adminSettings
+
+    if (!isUndefined(adminSettings)) {
+      const optimisticSettings: AdminSettings = {
+        ...adminSettings,
+        ...settings
+      }
+      dispatch(setAdminSettings(optimisticSettings))
+    }
+
     try {
       const response = await adminSettingsUpdateMutation({
         updateAdminSettings: settings
       })
 
       if (!isUndefined(response.error)) {
+        if (!isUndefined(originalSettings)) {
+          dispatch(setAdminSettings(originalSettings))
+        }
         trackError(new ApiError(response.error as ApiErrorData))
         return { success: false }
       }
 
       return { success: 'data' in response }
     } catch {
+      if (!isUndefined(originalSettings)) {
+        dispatch(setAdminSettings(originalSettings))
+      }
       trackError(new GeneralError('Failed to update appearance settings.'))
       return { success: false }
     }

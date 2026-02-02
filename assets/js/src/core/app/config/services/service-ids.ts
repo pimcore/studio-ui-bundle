@@ -385,6 +385,10 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/ImageGallery': 'DynamicTypes/FieldDefinition/ImageGallery',
   'DynamicTypes/FieldDefinition/Video': 'DynamicTypes/FieldDefinition/Video',
   'DynamicTypes/FieldDefinition/HotspotImage': 'DynamicTypes/FieldDefinition/HotspotImage',
+  'DynamicTypes/FieldDefinition/Geopoint': 'DynamicTypes/FieldDefinition/Geopoint',
+  'DynamicTypes/FieldDefinition/Geobounds': 'DynamicTypes/FieldDefinition/Geobounds',
+  'DynamicTypes/FieldDefinition/Geopolygon': 'DynamicTypes/FieldDefinition/Geopolygon',
+  'DynamicTypes/FieldDefinition/Geopolyline': 'DynamicTypes/FieldDefinition/Geopolyline',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

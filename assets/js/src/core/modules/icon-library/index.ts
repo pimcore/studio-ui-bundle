@@ -83,11 +83,13 @@ import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
 import counter from '@Pimcore/assets/icons/counter.inline.svg?react'
-import countiesMultiple from '@Pimcore/assets/icons/counties-multiple.inline.svg?react'
+import countriesMultiple from '@Pimcore/assets/icons/countries-multiple.inline.svg?react'
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg?react'
+import customerDuplicate from '@Pimcore/assets/icons/customer-duplicate.inline.svg?react'
+import customerManagement from '@Pimcore/assets/icons/customer-management.inline.svg?react'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg?react'
 import customerSegment from '@Pimcore/assets/icons/customer-segment.inline.svg?react'
 import customer from '@Pimcore/assets/icons/customer.inline.svg?react'
@@ -176,11 +178,13 @@ import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
+import inlineHelp from '@Pimcore/assets/icons/inline-help.inline.svg?react'
 import inputQuantityValue from '@Pimcore/assets/icons/input-quantity-value.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
 import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
+import languageOverview from '@Pimcore/assets/icons/language-overview.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
 import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
@@ -629,8 +633,8 @@ moduleSystem.registerModule({
       component: counter
     })
     iconLibrary.register({
-      name: 'counties-multiple',
-      component: countiesMultiple
+      name: 'countries-multiple',
+      component: countriesMultiple
     })
     iconLibrary.register({
       name: 'country-select',
@@ -647,6 +651,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'custom-metadata',
       component: customMetadata
+    })
+    iconLibrary.register({
+      name: 'customer-duplicate',
+      component: customerDuplicate
+    })
+    iconLibrary.register({
+      name: 'customer-management',
+      component: customerManagement
     })
     iconLibrary.register({
       name: 'customer-segment-group',
@@ -1001,6 +1013,10 @@ moduleSystem.registerModule({
       component: inheritanceBroken
     })
     iconLibrary.register({
+      name: 'inline-help',
+      component: inlineHelp
+    })
+    iconLibrary.register({
       name: 'input-quantity-value',
       component: inputQuantityValue
     })
@@ -1019,6 +1035,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'keys',
       component: keys
+    })
+    iconLibrary.register({
+      name: 'language-overview',
+      component: languageOverview
     })
     iconLibrary.register({
       name: 'language-select',

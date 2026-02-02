@@ -568,6 +568,10 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+field-definition.geopoint: Geo Point
+field-definition.geobounds: Geo Bounds
+field-definition.geopolygon: Geo Polygon
+field-definition.geopolyline: Geo Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -780,6 +784,9 @@ jobs.document-clone-job.title: Cloning documents
 jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
+zoom_level: Zoom Level
+width_explanation: In px or %
+height_explanation: In px
 search-address: Search address
 search: Search
 geocode.address-not-found: "The entered address was not found"
@@ -1132,7 +1139,8 @@ search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
 hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
-image.dnd-target: Drop an image here
+image.dnd-target: Add or drop an image directly here.
+image.upload-target: Upload, add or drop an image directly here.
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')

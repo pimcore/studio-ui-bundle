@@ -293,6 +293,10 @@ import { DynamicTypeFieldDefinitionExternalImage } from '@Pimcore/modules/field-
 import { DynamicTypeFieldDefinitionImageGallery } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageGallery/dynamic-type-field-definition-image-gallery'
 import { DynamicTypeFieldDefinitionVideo } from '@Pimcore/modules/field-definitions/dynamic-types/types/video/dynamic-type-field-definition-video'
 import { DynamicTypeFieldDefinitionHotspotImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageAdvanced/dynamic-type-field-definition-hotspot-image'
+import { DynamicTypeFieldDefinitionGeopoint } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopoint/dynamic-type-field-definition-geopoint'
+import { DynamicTypeFieldDefinitionGeobounds } from '@Pimcore/modules/field-definitions/dynamic-types/types/geobounds/dynamic-type-field-definition-geobounds'
+import { DynamicTypeFieldDefinitionGeopolygon } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolygon/dynamic-type-field-definition-geopolygon'
+import { DynamicTypeFieldDefinitionGeopolyline } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolyline/dynamic-type-field-definition-geopolyline'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -674,6 +678,10 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/ExternalImage']).to(Dyna
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ImageGallery']).to(DynamicTypeFieldDefinitionImageGallery).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Video']).to(DynamicTypeFieldDefinitionVideo).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/HotspotImage']).to(DynamicTypeFieldDefinitionHotspotImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopoint']).to(DynamicTypeFieldDefinitionGeopoint).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geobounds']).to(DynamicTypeFieldDefinitionGeobounds).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolygon']).to(DynamicTypeFieldDefinitionGeopolygon).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolyline']).to(DynamicTypeFieldDefinitionGeopolyline).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider
