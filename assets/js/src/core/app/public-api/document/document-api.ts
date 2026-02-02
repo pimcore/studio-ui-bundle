@@ -103,7 +103,6 @@ class DocumentApiImpl implements DocumentApi {
   }
 
   notifyAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
-    console.log('Notifying areablock types for document', documentId, editableTypeId, areablockTypes)
     store.dispatch(setDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
   }
 
