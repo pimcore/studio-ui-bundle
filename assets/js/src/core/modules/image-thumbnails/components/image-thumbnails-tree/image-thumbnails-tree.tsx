@@ -22,6 +22,7 @@ import { useThumbnailImageGetTreeQuery, type ThumbnailConfigurationData, type Th
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
 import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
+import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
@@ -36,6 +37,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
+  const { handleDelete: deleteThumbnail } = useThumbnailConfig({ refetch })
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
@@ -101,18 +103,18 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     console.log('Add thumbnail configuration')
   }
 
-  const handleDelete = (key: string): void => {
+  const handleDelete = async (key: string): Promise<void> => {
     const thumbnail = findThumbnailById(key, thumbnailsListData)
     if (!isNil(thumbnail) && 'writeable' in thumbnail) {
-      console.log('Delete thumbnail:', thumbnail)
+      await deleteThumbnail(thumbnail as ThumbnailConfigurationData)
     }
   }
 
 
-  const handleActionsClick = (key: string, action: string): void => {
+  const handleActionsClick = async (key: string, action: string): Promise<void> => {
     switch (action) {
       case 'delete':
-        handleDelete(key)
+        await handleDelete(key)
         break
     }
   }
