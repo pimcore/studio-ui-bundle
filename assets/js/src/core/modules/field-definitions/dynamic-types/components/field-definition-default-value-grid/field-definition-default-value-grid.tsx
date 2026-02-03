@@ -29,16 +29,30 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
   const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const [isDragEnabled, setIsDragEnabled] = useState<boolean>(false)
-
   const columnHelper = createColumnHelper<DefaultValueItem>()
 
   const columns = useMemo(() => [
     columnHelper.accessor('value', {
       header: t('value'),
       meta: { editable: true }
+    }),
+    columnHelper.display({
+      cell: (info) => (
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ () => {
+            const newValue = [...value]
+            newValue.splice(info.row.index, 1)
+            onChange?.(newValue)
+          } }
+          size="small"
+          tooltip={ { title: t('remove') } }
+          type="text"
+        />
+      ),
+      id: 'actions'
     })
-  ], [t, columnHelper])
+  ], [t, columnHelper, value, onChange])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
@@ -55,12 +69,6 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
       }
     }
   }, [value, onChange])
-
-  const toggleDragMode = (): void => {
-    setIsDragEnabled(!isDragEnabled)
-    // Clear selections when switching modes
-    setSelectedRows({})
-  }
 
   const openCsvModal = (): void => {
     const csvValue = value.map((item) => item.value).join('\n')
@@ -85,8 +93,7 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
   return (
     <OperationalGrid
       columns={ columns }
-      enableMultipleRowSelection={ !isDragEnabled }
-      enableRowDrag={ isDragEnabled }
+      enableRowDrag
       enableRowSelection
       enableSorting={ false } // Disable sorting to avoid conflicts with drag
       handleDragEnd={ handleDragEnd }
@@ -105,9 +112,6 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
 
         <OperationalGrid.Operations>
           {(operations) => {
-            const selectedCount = Object.keys(selectedRows).filter(key => (selectedRows as any)[key]).length
-            const hasSelection = selectedCount > 0
-
             return (
               <Space>
                 <IconButton
@@ -119,19 +123,6 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                   } }
                   tooltip={ { title: t('add') } }
                 />
-                <IconButton
-                  disabled={ !hasSelection }
-                  icon={ { value: 'trash' } }
-                  onClick={ () => { operations.deleteSelectedRows() } }
-                  tooltip={ { title: t('remove') } }
-                />
-
-                <IconButton
-                  icon={ { value: isDragEnabled ? 'drag-option' : 'transfer' } }
-                  onClick={ toggleDragMode }
-                  tooltip={ { title: isDragEnabled ? t('switch-to-selection-mode') : t('switch-to-drag-mode') } }
-                />
-
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
