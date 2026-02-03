@@ -77,8 +77,6 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
         const actions = isFolder
           ? []
           : [
-              { key: 'clone', icon: 'copy-03' },
-              { key: 'export', icon: 'download' },
               { key: 'delete', icon: 'trash' }
             ]
 
@@ -98,14 +96,12 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData])
 
   const handleAdd = (): void => {
-    // TODO: Implement add functionality
     console.log('Add thumbnail configuration')
   }
 
   const handleDelete = (key: string): void => {
     const thumbnail = findThumbnailById(key, thumbnailsListData)
     if (!isNil(thumbnail) && 'writeable' in thumbnail) {
-      // TODO: Implement delete functionality
       console.log('Delete thumbnail:', thumbnail)
     }
   }
