@@ -10,9 +10,7 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionUserFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/user/field-definition-user-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
-import React from 'react'
 
 export class DynamicTypeFieldDefinitionUser extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'user'
@@ -27,21 +25,5 @@ export class DynamicTypeFieldDefinitionUser extends DynamicTypeFieldDefinitionDa
 
   getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'group:select']
-  }
-
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    const id = this.getId(context)
-    const fieldDefinition = context.fieldDefinitions[id]
-
-    return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionUserFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
-    )
   }
 }
