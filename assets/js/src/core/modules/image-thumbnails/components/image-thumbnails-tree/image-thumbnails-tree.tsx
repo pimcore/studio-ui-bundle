@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { useThumbnailImageGetTreeQuery, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
 import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
+import { useStyles } from './image-thumbnails-tree.styles'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
@@ -34,6 +35,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const [searchValue, setSearchValue] = useState('')
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
   const [treeKey, setTreeKey] = useState(0)
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
@@ -57,10 +59,10 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     const isFolder = 'children' in item && Array.isArray(item.children)
     
     if (isFolder) {
-      return <Icon value="folder" />
+      return <Icon value="folder" className={ styles.icon } />
     }
 
-    return <Icon value="image-thumbnail-clear" />
+    return <Icon value="image-thumbnail-clear" className={ styles.icon }/>
   }
 
   const transformToTreeData = (items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[] | null): TreeDataItem[] => {

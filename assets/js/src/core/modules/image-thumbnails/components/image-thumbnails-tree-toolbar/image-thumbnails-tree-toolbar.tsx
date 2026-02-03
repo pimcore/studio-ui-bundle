@@ -10,9 +10,10 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { IconTextButton } from '@sdk/components'
 
 export interface ImageThumbnailsTreeToolbarProps {
   isFetching: boolean
@@ -28,28 +29,23 @@ export const ImageThumbnailsTreeToolbar = ({
   const { t } = useTranslation()
 
   return (
-    <Toolbar>
-      <Flex
-        gap="extra-small"
-        justify="flex-end"
-      >
+    <Toolbar justify='space-between'>
+      <Tooltip title={ t('refresh') }>
         <IconButton
           disabled={ isFetching }
           icon={ { value: 'refresh' } }
           onClick={ onRefresh }
-          size="small"
           title={ t('refresh') }
-          type="text"
+          type="link"
         />
-        
-        <IconButton
-          icon={ { value: 'add' } }
-          onClick={ onAdd }
-          size="small" 
-          title={ t('new') }
-          type="text"
-        />
-      </Flex>
+      </Tooltip>
+            <IconTextButton
+              icon={ { value: 'new' } }
+              onClick={ onAdd }
+              type="link"
+            >
+              {t('new')}
+            </IconTextButton>
     </Toolbar>
   )
 }
