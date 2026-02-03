@@ -125,29 +125,26 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                       value: ''
                     })
                   } }
-                  title={ t('add') }
-                >
-                  {t('add')}
-                </IconButton>
+                  tooltip={ { title: t('add') } }
+                />
+
                 <IconButton
                   disabled={ !hasSelection }
                   icon={ { value: 'trash' } }
                   onClick={ () => { operations.deleteSelectedRows() } }
-                  title={ t('remove') }
-                >
-                  {t('remove')}
-                </IconButton>
+                  tooltip={ { title: t('remove') } }
+                />
 
                 <IconButton
                   icon={ { value: isDragEnabled ? 'drag-option' : 'transfer' } }
                   onClick={ toggleDragMode }
-                  title={ isDragEnabled ? t('switch-to-selection-mode') : t('switch-to-drag-mode') }
+                  tooltip={ { title: isDragEnabled ? t('switch-to-selection-mode') : t('switch-to-drag-mode') } }
                 />
 
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
-                  title={ t('csv-separated-options') }
+                  tooltip={ { title: t('csv-separated-options') } }
                 />
 
               </Space>
