@@ -627,6 +627,12 @@ field-definition.country: Country
 field-definition.countrymultiselect: Country Multiselect
 field-definition.language: Language
 field-definition.languagemultiselect: Language Multiselect
+field-definition.rgbaColor: RGBA Color
+field-definition.encryptedField: Encrypted Field
+field-definition.urlSlug: URL Slug
+field-definition.checkbox: Checkbox
+field-definition.link: Link
+field-definition.calculatedValue: Calculated Value
 field-definition.user: User
 regex-validation: Regular Expression Validation
 regex: RegEx
@@ -634,6 +640,8 @@ regex-flags: RegEx Flags
 regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
 test-string: Test string
 regex-validation-error-message: "The string does not match the required format."
+calculator-class: Calculator Class
+calculator-expression: Calculator Expression
 reset: Reset
 name: Name
 tooltip: Tooltip
