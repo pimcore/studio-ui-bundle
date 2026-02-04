@@ -10,15 +10,15 @@
 
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 
-export function findThumbnailById(
+export function findThumbnailById (
   id: string,
-  items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[]
+  items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>
 ): ThumbnailConfigurationData | ThumbnailConfigurationFolderData | null {
   for (const item of items) {
     if (item.id === id) {
       return item
     }
-    
+
     if ('children' in item && Array.isArray(item.children)) {
       const found = findThumbnailById(id, item.children)
       if (found !== null) {
@@ -26,34 +26,35 @@ export function findThumbnailById(
       }
     }
   }
-  
+
   return null
 }
 
-export function filterThumbnailsRecursive(
-  items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[],
+export function filterThumbnailsRecursive (
+  items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>,
   searchTerm: string
-): (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[] {
+): Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> {
   const searchLower = searchTerm.toLowerCase()
-  
+
   return items.filter(item => {
     const nameMatches = item.name.toLowerCase().includes(searchLower)
-    
+
     if ('children' in item && Array.isArray(item.children)) {
       const hasMatchingChildren = filterThumbnailsRecursive(item.children, searchTerm).length > 0
       return nameMatches || hasMatchingChildren
     }
-    
+
     return nameMatches
   }).map(item => {
     if ('children' in item && Array.isArray(item.children)) {
-      const folderItem = item as ThumbnailConfigurationFolderData
-      return {
+      const folderItem = item
+      const result: ThumbnailConfigurationFolderData = {
         ...folderItem,
         children: filterThumbnailsRecursive(folderItem.children, searchTerm) as ThumbnailConfigurationData[]
-      } as ThumbnailConfigurationFolderData
+      }
+      return result
     }
-    
+
     return item
   })
 }

@@ -24,8 +24,8 @@ interface UseThumbnailConfigProps {
 }
 
 export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThumbnailConfigReturn => {
-    const modal = useFormModal()
-const { t } = useTranslation()
+  const modal = useFormModal()
+  const { t } = useTranslation()
   const [deleteThumbnailMutation] = useThumbnailImageDeleteMutation()
 
   const handleDelete = useCallback(async (
@@ -44,7 +44,7 @@ const { t } = useTranslation()
           return
         }
 
-        await refetch()
+        refetch()
 
         if (!isNil(onSuccess)) {
           onSuccess()

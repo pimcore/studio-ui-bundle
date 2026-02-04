@@ -39,13 +39,13 @@ export const ImageThumbnailsTreeToolbar = ({
           type="link"
         />
       </Tooltip>
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ onAdd }
-              type="link"
-            >
-              {t('new')}
-            </IconTextButton>
+      <IconTextButton
+        icon={ { value: 'new' } }
+        onClick={ onAdd }
+        type="link"
+      >
+        {t('new')}
+      </IconTextButton>
     </Toolbar>
   )
 }

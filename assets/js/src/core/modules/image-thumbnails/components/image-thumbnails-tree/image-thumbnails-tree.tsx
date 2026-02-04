@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -32,8 +32,8 @@ export interface ImageThumbnailsTreeProps {
 
 export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: ImageThumbnailsTreeProps): React.JSX.Element => {
   const { data: thumbnailsData, isLoading, isFetching, refetch } = useThumbnailImageGetTreeQuery()
-  const [thumbnailsListData, setThumbnailsListData] = useState<(ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[]>([])
-  const [filteredData, setFilteredData] = useState<(ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[]>([])
+  const [thumbnailsListData, setThumbnailsListData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
+  const [filteredData, setFilteredData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
   const [searchValue, setSearchValue] = useState('')
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
   const [treeKey, setTreeKey] = useState(0)
@@ -62,15 +62,25 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
 
   const getTreeItemIcon = (item: ThumbnailConfigurationData | ThumbnailConfigurationFolderData): React.JSX.Element | undefined => {
     const isFolder = 'children' in item && Array.isArray(item.children)
-    
+
     if (isFolder) {
-      return <Icon value="folder" className={ styles.icon } />
+      return (
+        <Icon
+          className={ styles.icon }
+          value="folder"
+        />
+      )
     }
 
-    return <Icon value="image-thumbnail-clear" className={ styles.icon }/>
+    return (
+      <Icon
+        className={ styles.icon }
+        value="image-thumbnail-clear"
+      />
+    )
   }
 
-  const transformToTreeData = (items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[] | null): TreeDataItem[] => {
+  const transformToTreeData = (items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> | null): TreeDataItem[] => {
     if (isNil(items)) {
       return []
     }
@@ -91,7 +101,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
           key: isUndefined(item.id) ? '' : String(item.id),
           title: item.name,
           icon: getTreeItemIcon(item),
-          children: isFolder ? transformToTreeData((item as ThumbnailConfigurationFolderData).children) : undefined,
+          children: isFolder ? transformToTreeData((item).children) : undefined,
           isLeaf: !isFolder,
           actions,
           allowDrag: false,
@@ -115,12 +125,12 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
         const { data: updatedData } = await refetch()
 
         if (!isNil(updatedData?.items)) {
-          const addedThumbnail = updatedData.items.find((item) => 
+          const addedThumbnail = updatedData.items.find((item) =>
             'name' in item && item.name === value
           )
 
           if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
-            onThumbnailSelect(addedThumbnail as ThumbnailConfigurationData)
+            onThumbnailSelect(addedThumbnail)
           }
         }
       }
@@ -130,10 +140,9 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const handleDelete = async (key: string): Promise<void> => {
     const thumbnail = findThumbnailById(key, thumbnailsListData)
     if (!isNil(thumbnail) && 'writeable' in thumbnail) {
-      await deleteThumbnail(thumbnail as ThumbnailConfigurationData)
+      await deleteThumbnail(thumbnail)
     }
   }
-
 
   const handleActionsClick = async (key: string, action: string): Promise<void> => {
     switch (action) {
@@ -147,7 +156,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     const thumbnail = findThumbnailById(key, thumbnailsListData)
     if (!isNil(thumbnail)) {
       const isFolder = 'children' in thumbnail && Array.isArray(thumbnail.children)
-      
+
       if (isFolder) {
         const currentKeys = expandedKeys
         if (!isNil(currentKeys) && currentKeys.includes(key)) {
@@ -161,7 +170,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     }
   }
 
-  const selectedKeys = selectedThumbnail ? [selectedThumbnail.id] : []
+  const selectedKeys = !isEmpty(selectedThumbnail) ? [selectedThumbnail.id] : []
 
   return (
     <ContentLayout

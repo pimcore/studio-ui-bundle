@@ -30,7 +30,7 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
       style={ { height: '100%' } }
     >
       <SplitLayout
-        leftItem={{
+        leftItem={ {
           size: 25,
           minSize: 200,
           children: (
@@ -39,17 +39,16 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
               selectedThumbnail={ selectedThumbnail }
             />
           )
-        }}
-        rightItem={{
+        } }
+        rightItem={ {
           size: 75,
           children: (
             <ImageThumbnailsEditor
               selectedThumbnail={ selectedThumbnail }
             />
           )
-        }}
+        } }
         withDivider
-        resizeAble
       />
     </Flex>
   )

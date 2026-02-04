@@ -21,8 +21,8 @@ export interface ImageThumbnailsEditorProps {
 export const ImageThumbnailsEditor = ({ selectedThumbnail }: ImageThumbnailsEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  console.log('Selected thumbnail in editor:', selectedThumbnail);
-  
+  console.log('Selected thumbnail in editor:', selectedThumbnail)
+
   const tabItems = []
 
   return (
