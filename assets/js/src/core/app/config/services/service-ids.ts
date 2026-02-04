@@ -389,6 +389,14 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/Geobounds': 'DynamicTypes/FieldDefinition/Geobounds',
   'DynamicTypes/FieldDefinition/Geopolygon': 'DynamicTypes/FieldDefinition/Geopolygon',
   'DynamicTypes/FieldDefinition/Geopolyline': 'DynamicTypes/FieldDefinition/Geopolyline',
+  'DynamicTypes/FieldDefinition/Select': 'DynamicTypes/FieldDefinition/Select',
+  'DynamicTypes/FieldDefinition/BooleanSelect': 'DynamicTypes/FieldDefinition/BooleanSelect',
+  'DynamicTypes/FieldDefinition/Multiselect': 'DynamicTypes/FieldDefinition/Multiselect',
+  'DynamicTypes/FieldDefinition/User': 'DynamicTypes/FieldDefinition/User',
+  'DynamicTypes/FieldDefinition/Country': 'DynamicTypes/FieldDefinition/Country',
+  'DynamicTypes/FieldDefinition/Language': 'DynamicTypes/FieldDefinition/Language',
+  'DynamicTypes/FieldDefinition/CountryMultiselect': 'DynamicTypes/FieldDefinition/CountryMultiselect',
+  'DynamicTypes/FieldDefinition/LanguageMultiselect': 'DynamicTypes/FieldDefinition/LanguageMultiselect',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

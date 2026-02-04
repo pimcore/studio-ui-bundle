@@ -510,6 +510,8 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
+csv-separated-options: CSV separated options
+csv-separated-options-info: "The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value."
 add: Add
 new: New
 save: Save
@@ -543,10 +545,27 @@ use-current-date: Use current date
 respect-timezone: Respect timezone
 column-type: Column type
 specific-settings: Specific Settings
+restrict-selection-to: "Restrict selection to"
+only-configured-languages: Show only in system settings configured languages
+multiselect-render-type: Render Type
+maximum-items: Maximum Items
+enforce-validation: Enforce Validation
+options-source: Options Source
+options-source-configure: "Configure"
+options-source-select-options: "Select Options"
+options-source-options-provider: "Options Provider"
+options-provider-class: "Options Provider Class or Service Name"
+options-provider-data: "Options Provider Data"
+switch-to-selection-mode: Switch to selection mode
+switch-to-drag-mode: Switch to drag mode
+selection-options: Selection Options
+value: Value
+display-name: Display Name
 default-values-settings: Default value settings
 default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
 default-value: Default value
 default-value-generator: Default value generator service / class
+enforce-validation-tooltip: "When enabled, it prevents invalid options from being saved. By default, the API allows saving invalid options"
 show-char-count: Show character count
 column-length: Column length
 max-length: Maximum length
@@ -601,6 +620,14 @@ preview-height: Preview height
 url-width: URL width
 allowed-video-types: Allowed video types
 allowed-video-types-tooltip: Empty = allow all
+field-definition.select: Select
+field-definition.multiselect: Multiselect
+field-definition.boolean-select: Boolean Select
+field-definition.country: Country
+field-definition.countrymultiselect: Country Multiselect
+field-definition.language: Language
+field-definition.languagemultiselect: Language Multiselect
+field-definition.user: User
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
@@ -784,9 +811,6 @@ jobs.document-clone-job.title: Cloning documents
 jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
-zoom_level: Zoom Level
-width_explanation: In px or %
-height_explanation: In px
 search-address: Search address
 search: Search
 geocode.address-not-found: "The entered address was not found"
@@ -1139,8 +1163,7 @@ search-replace-assignments.job.title-selection: Replace {{count}} assignment(s)
 hidden-dependencies-warning: There are additional dependencies your user does not have the permissions to see.
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
-image.dnd-target: Add or drop an image directly here.
-image.upload-target: Upload, add or drop an image directly here.
+image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')

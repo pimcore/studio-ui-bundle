@@ -297,6 +297,14 @@ import { DynamicTypeFieldDefinitionGeopoint } from '@Pimcore/modules/field-defin
 import { DynamicTypeFieldDefinitionGeobounds } from '@Pimcore/modules/field-definitions/dynamic-types/types/geobounds/dynamic-type-field-definition-geobounds'
 import { DynamicTypeFieldDefinitionGeopolygon } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolygon/dynamic-type-field-definition-geopolygon'
 import { DynamicTypeFieldDefinitionGeopolyline } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolyline/dynamic-type-field-definition-geopolyline'
+import { DynamicTypeFieldDefinitionSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/select/dynamic-type-field-definition-select'
+import { DynamicTypeFieldDefinitionBooleanSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/booleanSelect/dynamic-type-field-definition-boolean-select'
+import { DynamicTypeFieldDefinitionMultiselection } from '@Pimcore/modules/field-definitions/dynamic-types/types/multiselection/dynamic-type-field-definition-multiselection'
+import { DynamicTypeFieldDefinitionUser } from '@Pimcore/modules/field-definitions/dynamic-types/types/user/dynamic-type-field-definition-user'
+import { DynamicTypeFieldDefinitionCountry } from '@Pimcore/modules/field-definitions/dynamic-types/types/country/dynamic-type-field-definition-country'
+import { DynamicTypeFieldDefinitionLanguage } from '@Pimcore/modules/field-definitions/dynamic-types/types/language/dynamic-type-field-definition-language'
+import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/countrymultiselect/dynamic-type-field-definition-countrymultiselect'
+import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -682,6 +690,14 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopoint']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geobounds']).to(DynamicTypeFieldDefinitionGeobounds).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolygon']).to(DynamicTypeFieldDefinitionGeopolygon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolyline']).to(DynamicTypeFieldDefinitionGeopolyline).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Select']).to(DynamicTypeFieldDefinitionSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/BooleanSelect']).to(DynamicTypeFieldDefinitionBooleanSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Multiselect']).to(DynamicTypeFieldDefinitionMultiselection).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/User']).to(DynamicTypeFieldDefinitionUser).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Country']).to(DynamicTypeFieldDefinitionCountry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTypeFieldDefinitionLanguage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider
