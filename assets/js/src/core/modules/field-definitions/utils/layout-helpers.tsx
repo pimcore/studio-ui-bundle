@@ -37,7 +37,7 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
 
     const node: StructureNode = {
       id,
-      children: layoutItem.children !== undefined ? layoutItem.children.map((child) => buildStructure(child as Layout)) : []
+      children: (layoutItem.children !== undefined && layoutItem.children !== null) ? layoutItem.children.map((child) => buildStructure(child as Layout)) : []
     }
 
     const { children, ...fieldDef } = layoutItem

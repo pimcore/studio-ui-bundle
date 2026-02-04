@@ -27,6 +27,7 @@ export const CustomLayoutEditor = (): React.JSX.Element => {
       area={ ['class', 'custom-layout'] }
       customLayouts={ {
         parent: {
+          area: ['class'],
           useLayout
         }
       } }

@@ -12,13 +12,29 @@ import { useArea } from '@Pimcore/modules/field-definitions/components/editor/ar
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
-import { type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { Layout, type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, DragAndDropInfo, Draggable } from '@sdk/components'
+import { isEqual } from 'lodash'
 import React, { useMemo } from 'react'
+import { type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { isUndefined } from 'lodash'
 
 export interface DetailSidebarProps {
   allowExternalDrop?: boolean
+}
+
+export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
+  type: 'field-definition'
+  data: {
+    area: string[]
+    internal: {
+      id: string
+      fieldDefinition: FieldDefinition
+      path: string[]
+    }
+    external: Layout
+  }
 }
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
@@ -37,6 +53,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     currentFieldDefinitionId,
     copiedPath,
     addFieldDefinition,
+    addExternalFieldDefinition,
     updateFieldDefinition,
     setCurrentFieldDefinitionIdPath,
     setCurrentFieldDefinitionId,
@@ -45,60 +62,169 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     removeChildren,
     cloneFieldDefinition,
     isValidChildFieldDefinition,
+    isValidExternalChildFieldDefinition,
     copyFieldDefinition,
-    pasteFieldDefinition
+    pasteFieldDefinition,
+    getLayout
   } = useLayout()
 
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const titleRender: ITreeElementProps['titleRender'] = useMemo(() => {
-    /* eslint-disable react/display-name */
-    if (allowExternalDrop) {
-      return (node, initialComponent) => (
-        <HotspotDroppable
-          hotspots={ [
-            {
-              id: 'sorting-top',
-              className: 'dnd__sorting dnd__sorting--top',
-              position: { x: 0, y: 0, width: '100%', height: '30%' },
-              isValidContext: true,
-              onDrop: (info) => {
-                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
-              }
-            },
-            {
-              id: 'drop-middle',
-              position: { x: '0', y: '30%', width: '100%', height: '40%' },
-              isValidContext: true,
-              onDrop: (info) => {
-                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
-              }
-            },
-            {
-              id: 'sorting-bottom',
-              position: { x: 0, y: '70%', width: '100%', height: '30%' },
-              isValidContext: true,
-              isValidData: () => false,
-              onDrop: (info) => {
-                addFieldDefinition(node.key.toString(), info.data as FieldDefinition)
-              }
-            }
-          ] }
-        >
-          {initialComponent}
-        </HotspotDroppable>
-      )
+    const resolveParentAndIndexFromPath = (root: StructureNode | undefined, path: string[]): { parentId: string, index: number, siblingsCount: number } | undefined => {
+      if (isUndefined(root) || path.length < 2) return undefined
+
+      let cursor: StructureNode | undefined = root
+      // Walk down following the path up to the parent
+      for (let i = 0; i < path.length - 1; i++) {
+        if (isUndefined(cursor)) return undefined
+        if (cursor.id !== path[i]) {
+          cursor = cursor.children.find((c) => c.id === path[i])
+        }
+      }
+
+      if (isUndefined(cursor)) return undefined
+
+      const targetId = path[path.length - 1]
+      const index = cursor.children.findIndex((c) => c.id === targetId)
+      return { parentId: cursor.id, index: Math.max(index, 0), siblingsCount: cursor.children.length }
     }
 
-    return undefined
-  }, [allowExternalDrop, fieldDefinitions])
+    return (node, initialComponent) => {
+      let titleComponent = initialComponent;
+      const currentFieldDefinition = fieldDefinitions[node.key as string]
+
+      if (currentFieldDefinition === undefined) {
+        return titleComponent
+      }
+
+      if (currentFieldDefinition.name !== 'pimcore_root') {
+        const info: FieldDefinitionDragDropInfo = {
+          type: 'field-definition',
+          icon: { ...currentFieldDefinition.icon },
+          title: currentFieldDefinition.title || currentFieldDefinition.name,
+          data: {
+            area,
+            internal: {
+              id: node.key as string,
+              fieldDefinition: currentFieldDefinition,
+              path: ((node as any).meta?.currentPath as string[]) ?? []
+            },
+            external: getLayout({ startNode: node.key.toString() })!
+          }
+        }
+
+        return (
+          <Draggable info={info}>
+            <HotspotDroppable
+              hotspots={ [
+                {
+                  id: 'sorting-top',
+                  className: 'dnd__sorting dnd__sorting--top',
+                  position: { x: 0, y: 0, width: '100%', height: '30%' },
+                  isValidContext: (info) => {
+                    if (info.type !== 'field-definition') return false
+                    const currentPath = ((node as any).meta?.currentPath as string[]) ?? []
+                    const parentPath = currentPath.slice(0, -1)
+                    if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                      return isValidChildFieldDefinition(parentPath, (info as FieldDefinitionDragDropInfo).data.internal.path)
+                    }
+                    const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+                    return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(parentPath, externalLayout)
+                  },
+                  onDrop: (info: FieldDefinitionDragDropInfo) => {
+                    const currentPath = ((node as any).meta?.currentPath as string[]) ?? []
+                    const ctx = resolveParentAndIndexFromPath(structure, currentPath)
+                    if (!isUndefined(ctx)) {
+                      const { parentId, index: targetIndex } = ctx
+
+                      if (isEqual(info.data.area, area)) {
+                        const draggedCtx = resolveParentAndIndexFromPath(structure, (info.data.internal.path ?? []))
+                        const sameParent = !isUndefined(draggedCtx) && draggedCtx.parentId === parentId
+                        const insertIndex = sameParent && !isUndefined(draggedCtx)
+                          ? (draggedCtx.index < targetIndex ? Math.max(targetIndex - 1, 0) : targetIndex)
+                          : targetIndex
+
+                        moveFieldDefinition(info.data.internal.id, parentId, insertIndex)
+                        return
+                      }
+
+                      addExternalFieldDefinition(parentId, info.data.external, targetIndex)
+                    }
+                  }
+                },
+                {
+                  id: 'drop-middle',
+                  position: { x: '0', y: '30%', width: '100%', height: '40%' },
+                  isValidContext: (info) => {
+                    if (info.type !== 'field-definition') return false
+                    const targetPath = ((node as any).meta?.currentPath as string[]) ?? []
+                    if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                      return isValidChildFieldDefinition(targetPath, (info as FieldDefinitionDragDropInfo).data.internal.path)
+                    }
+                    const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+                    return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(targetPath, externalLayout)
+                  },
+                  onDrop: (info) => {
+                    if (isEqual(info.data.area, area)) {
+                      moveFieldDefinition(info.data.internal.id, node.key.toString(), 0)
+                      return;
+                    }
+
+                    addExternalFieldDefinition(node.key.toString(), info.data.external, 0)
+                  }
+                },
+                {
+                  id: 'sorting-bottom',
+                  position: { x: 0, y: '70%', width: '100%', height: '30%' },
+                  isValidContext: (info) => {
+                    if (info.type !== 'field-definition') return false
+                    const currentPath = ((node as any).meta?.currentPath as string[]) ?? []
+                    const parentPath = currentPath.slice(0, -1)
+                    if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                      return isValidChildFieldDefinition(parentPath, (info as FieldDefinitionDragDropInfo).data.internal.path)
+                    }
+                    const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+                    return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(parentPath, externalLayout)
+                  },
+                  onDrop: (info) => {
+                    const currentPath = ((node as any).meta?.currentPath as string[]) ?? []
+                    const ctx = resolveParentAndIndexFromPath(structure, currentPath)
+                    if (!isUndefined(ctx)) {
+                      const { parentId, index: targetIndex, siblingsCount } = ctx
+                      let insertIndex = Math.min(targetIndex + 1, siblingsCount)
+
+                      if (isEqual(info.data.area, area)) {
+                        const draggedCtx = resolveParentAndIndexFromPath(structure, (info as FieldDefinitionDragDropInfo).data.internal.path ?? [])
+                        const sameParent = !isUndefined(draggedCtx) && draggedCtx.parentId === parentId
+                        if (sameParent && !isUndefined(draggedCtx)) {
+                          insertIndex = draggedCtx.index < targetIndex ? targetIndex : Math.min(targetIndex + 1, siblingsCount)
+                        }
+
+                        moveFieldDefinition((info as FieldDefinitionDragDropInfo).data.internal.id, parentId, insertIndex)
+                        return
+                      }
+
+                      addExternalFieldDefinition(parentId, (info as FieldDefinitionDragDropInfo).data.external, insertIndex)
+                    }
+                  }
+                }
+              ] }
+            >
+              {titleComponent}
+            </HotspotDroppable>
+          </Draggable>
+        )
+      }
+
+      return titleComponent
+    }
+  }, [allowExternalDrop, fieldDefinitions, structure, area, moveFieldDefinition, addExternalFieldDefinition, isValidChildFieldDefinition, isValidExternalChildFieldDefinition, getLayout])
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
     if (structure === undefined) {
       return []
     }
-
-    console.log('rerender sidebar')
 
     const treeItems = buildTree({
       structure,
@@ -141,43 +267,6 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 ]
               : [])
           ],
-          allowDrag (params) {
-            // Prevent dragging of root node
-            if (fieldDefinition.name === 'pimcore_root') {
-              return false
-            }
-
-            return true
-          },
-          allowDrop: ({ dropNode, dragNode, dropPosition }) => {
-            console.log({ title: dropNode.title, dropPosition })
-            const dragFieldDef = fieldDefinitions[dragNode.key as string]
-            let isValid = false
-
-            if (dropPosition === -1) {
-              return false
-            }
-
-            if (fieldDefinition.name === 'pimcore_root') {
-              fieldDefinitionRegistry.getTypesByTags(['group:root'], { area, path: currentPath, fieldDefinitions }).forEach((type) => {
-                if (type.id === dragFieldDef.fieldtype) {
-                  isValid = true
-                }
-              })
-            }
-
-            if (dropPosition === 0 && isValidChildFieldDefinition(dropNode.meta?.currentPath as string[] ?? [], dragNode.meta?.currentPath as string[] ?? [])) {
-              isValid = true
-            }
-
-            const parentPath = [...(dropNode.meta?.currentPath as string[] ?? [])].slice(0, -1)
-
-            if (dropPosition === 1 && parentPath.length !== 0 && isValidChildFieldDefinition(parentPath, dragNode.meta?.currentPath as string[] ?? [])) {
-              isValid = true
-            }
-
-            return isValid
-          }
         }
       }
     })
@@ -263,18 +352,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     >
       <TreeElement
         defaultExpandAll
-        draggable
         onActionsClick={ onActionsClick }
-        onDragAndDrop={ ({ node, dragNode, dropPosition, dropToGap }) => {
-          console.log({ title: node.title, dropPosition, dropToGap })
-          let nodeId = node.key as string
-
-          if (dropToGap) {
-            nodeId = node.meta!.currentPath!.at(-2)!
-          }
-
-          moveFieldDefinition(dragNode.key as string, nodeId, dropToGap ? dropPosition : 0)
-        } }
         onSelected={ onSelected }
         selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }
         titleRender={ titleRender }

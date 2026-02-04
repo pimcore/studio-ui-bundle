@@ -32,6 +32,7 @@ export interface ISettingsContext {
     ModalContent?: React.JSX.Element
 
     parent?: {
+      area: string[]
       useLayout: typeof useDefaultLayout
     }
   }
