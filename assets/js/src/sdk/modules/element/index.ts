@@ -265,3 +265,6 @@ export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/pro
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
