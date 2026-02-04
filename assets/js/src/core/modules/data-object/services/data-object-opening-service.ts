@@ -91,10 +91,7 @@ export class DataObjectOpeningService {
       config: {
         id,
         elementType: 'data-object',
-        icon: {
-          type: icon.type,
-          value: icon.value
-        },
+        icon,
         iconColorGroup: 'element'
       }
     }

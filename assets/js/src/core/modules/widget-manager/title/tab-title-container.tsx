@@ -14,7 +14,7 @@ import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
 import { createTabTitleTestId, createBorderTestId } from '@Pimcore/utils/test-id-generator'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@sdk/components'
 import { useWidgetTitle } from '../hooks/use-widget-title'
 
 export interface TabTitleContainerProps {
