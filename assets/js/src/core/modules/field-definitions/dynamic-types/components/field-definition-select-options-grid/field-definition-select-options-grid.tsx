@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { IconButton, OperationalGrid, Space } from '@sdk/components'
+import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,20 +42,30 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
       meta: { editable: true }
     }),
     columnHelper.display({
+      header: t('delete'),
       cell: (info) => (
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => {
-            const newValue = [...value]
-            newValue.splice(info.row.index, 1)
-            onChange?.(newValue)
-          } }
-          size="small"
-          tooltip={ { title: t('remove') } }
-          type="text"
-        />
+        <Box padding="mini">
+          <ButtonGroup
+            items={ [
+              <IconButton
+                icon={ { value: 'trash' } }
+                key="delete"
+                onClick={ () => {
+                  const newValue = [...value]
+                  newValue.splice(info.row.index, 1)
+                  onChange?.(newValue)
+                } }
+                size="small"
+                tooltip={ { title: t('delete') } }
+                type="link"
+              />
+            ] }
+            noSpacing
+          />
+        </Box>
       ),
-      id: 'actions'
+      id: 'actions',
+      size: 70
     })
   ], [t, columnHelper, value, onChange])
 
@@ -130,12 +140,14 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
                     })
                   } }
                   tooltip={ { title: t('add') } }
+                  type="default"
                 />
 
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
                   tooltip={ { title: t('csv-separated-options') } }
+                  type="default"
                 />
 
               </Space>

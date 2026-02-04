@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form, Input, Select } from '@sdk/components'
+import { Form, FormKit, Input, Select } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { FieldDefinitionSelectOptionsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-select-options-grid/field-definition-select-options-grid'
@@ -38,7 +38,7 @@ export const FieldDefinitionOptionsSourceFields = (props: FieldDefinitionOptions
       </Form.Item>
 
       <Form.Conditional condition={ (values) => values.optionsProviderType === 'configure' || values.optionsProviderType === undefined || values.optionsProviderType === '' }>
-        <>
+        <FormKit.Panel contentPadding={ { top: 'extra-small' } }>
           <Form.Item
             label={ t('selection-options') }
             name="options"
@@ -46,20 +46,24 @@ export const FieldDefinitionOptionsSourceFields = (props: FieldDefinitionOptions
             <FieldDefinitionSelectOptionsGrid />
           </Form.Item>
           {props.renderAdditionalConfigureFields?.()}
-        </>
+        </FormKit.Panel>
       </Form.Conditional>
 
       <Form.Conditional condition={ (values) => values.optionsProviderType === 'select_options' }>
-        <Form.Item
-          label={ t('options') }
-          name="optionsProviderData"
-        >
-          <Select options={ selectOptions } />
-        </Form.Item>
+        <FormKit.Panel contentPadding={ { top: 'extra-small' } }>
+          <Form.Item
+            label={ t('options') }
+            name="optionsProviderData"
+          >
+            <Select options={ selectOptions } />
+          </Form.Item>
+        </FormKit.Panel>
       </Form.Conditional>
 
       <Form.Conditional condition={ (values) => values.optionsProviderType === 'class' }>
-        <>
+        <FormKit.Panel
+          contentPadding={ { top: 'extra-small' } }
+        >
           <Form.Item
             label={ t('options-provider-class') }
             name="optionsProviderClass"
@@ -72,7 +76,7 @@ export const FieldDefinitionOptionsSourceFields = (props: FieldDefinitionOptions
           >
             <Input />
           </Form.Item>
-        </>
+        </FormKit.Panel>
       </Form.Conditional>
     </>
   )
