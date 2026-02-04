@@ -9,7 +9,7 @@
  */
 
 import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
-import { createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
@@ -25,14 +25,12 @@ interface FieldDefinitionSelectOptionsGridProps {
   onChange?: (value: SelectOption[]) => void
 }
 
-export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
+const columnHelper = createColumnHelper<SelectOption>()
+
+const useColumns = (value: SelectOption[], onChange?: (value: SelectOption[]) => void): Array<ColumnDef<SelectOption, any>> => {
   const { t } = useTranslation()
-  const { textarea } = useFormModal()
-  const [selectedRows, setSelectedRows] = useState({})
 
-  const columnHelper = createColumnHelper<SelectOption>()
-
-  const columns = useMemo(() => [
+  return useMemo(() => [
     columnHelper.accessor('key', {
       header: t('display-name'),
       meta: { editable: true }
@@ -67,7 +65,15 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
       id: 'actions',
       size: 70
     })
-  ], [t, columnHelper, value, onChange])
+  ], [t, value, onChange])
+}
+
+export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { textarea } = useFormModal()
+  const [selectedRows, setSelectedRows] = useState({})
+
+  const columns = useColumns(value, onChange)
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event

@@ -9,7 +9,7 @@
  */
 
 import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
-import { createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
@@ -24,14 +24,12 @@ interface FieldDefinitionDefaultValueGridProps {
   onChange?: (value: DefaultValueItem[]) => void
 }
 
-export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldDefinitionDefaultValueGridProps): React.JSX.Element => {
+const columnHelper = createColumnHelper<DefaultValueItem>()
+
+const useColumns = (value: DefaultValueItem[], onChange?: (value: DefaultValueItem[]) => void): Array<ColumnDef<DefaultValueItem, any>> => {
   const { t } = useTranslation()
-  const { textarea } = useFormModal()
-  const [selectedRows, setSelectedRows] = useState({})
 
-  const columnHelper = createColumnHelper<DefaultValueItem>()
-
-  const columns = useMemo(() => [
+  return useMemo(() => [
     columnHelper.accessor('value', {
       header: t('value'),
       meta: { editable: true }
@@ -62,7 +60,15 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
       id: 'actions',
       size: 70
     })
-  ], [t, columnHelper, value, onChange])
+  ], [t, value, onChange])
+}
+
+export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldDefinitionDefaultValueGridProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { textarea } = useFormModal()
+  const [selectedRows, setSelectedRows] = useState({})
+
+  const columns = useColumns(value, onChange)
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
