@@ -18,11 +18,12 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { useTranslation } from 'react-i18next'
-import { useThumbnailImageGetTreeQuery, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { useThumbnailImageGetTreeQuery, useThumbnailImageCreateMutation, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
 import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
@@ -38,6 +39,8 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
   const { handleDelete: deleteThumbnail } = useThumbnailConfig({ refetch })
+  const modal = useFormModal()
+  const [createThumbnail] = useThumbnailImageCreateMutation()
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
@@ -100,7 +103,28 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData])
 
   const handleAdd = (): void => {
-    console.log('Add thumbnail configuration')
+    modal.input({
+      label: t('image-thumbnails.add.content'),
+      rule: {
+        pattern: /^[a-zA-Z0-9_-]+$/,
+        message: t('image-thumbnails.add.validation.message')
+      },
+      onOk: async (value: string) => {
+        await createThumbnail({ createThumbnailConfig: { name: value } })
+
+        const { data: updatedData } = await refetch()
+
+        if (!isNil(updatedData?.items)) {
+          const addedThumbnail = updatedData.items.find((item) => 
+            'name' in item && item.name === value
+          )
+
+          if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
+            onThumbnailSelect(addedThumbnail as ThumbnailConfigurationData)
+          }
+        }
+      }
+    })
   }
 
   const handleDelete = async (key: string): Promise<void> => {
