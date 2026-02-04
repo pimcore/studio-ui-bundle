@@ -22,6 +22,8 @@ export enum NavPermission {
   TagConfiguration = 'dataManagement.tagConfiguration',
   GDPRDataExtractor = 'dataManagement.gdprDataExtractor',
 
+  AssetThumbnails = 'assetManagement.assetThumbnails',
+
   ExperienceEcommerceHidden = 'experienceEcommerce.hidden',
   Mails = 'experienceEcommerce.emails',
   DocumentTypes = 'experienceEcommerce.documentTypes',

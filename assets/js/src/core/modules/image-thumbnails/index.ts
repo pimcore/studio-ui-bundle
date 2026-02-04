@@ -16,6 +16,7 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { UserPermission } from '../auth/enums/user-permission'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { ImageThumbnailsContainer } from './image-thumbnails-container'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 export const IMAGE_THUMBNAILS_WIDGET: WidgetManagerTabConfig = {
   name: 'Image Thumbnails',
@@ -39,7 +40,8 @@ moduleSystem.registerModule({
       label: 'navigation.image-thumbnails',
       className: 'item-style-modifier',
       order: 100,
-      permission: UserPermission.Assets,
+      permission: UserPermission.Thumbnails,
+      perspectivePermission: NavPermission.AssetThumbnails,
       widgetConfig: IMAGE_THUMBNAILS_WIDGET
     })
 
