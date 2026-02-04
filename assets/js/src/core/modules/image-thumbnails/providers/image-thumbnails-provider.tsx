@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, useState, type ReactNode } from 'react'
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useThumbnailImageGetTreeQuery, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { isUndefined } from 'lodash'
+import { ApiError, trackError } from '@sdk/modules/app'
 
 interface ImageThumbnailsContextValue {
   thumbnailsData: {
@@ -29,8 +31,14 @@ interface ImageThumbnailsProviderProps {
 }
 
 export const ImageThumbnailsProvider = ({ children }: ImageThumbnailsProviderProps): React.JSX.Element => {
-  const { data: thumbnailsData, isLoading, isFetching, refetch } = useThumbnailImageGetTreeQuery()
+  const { data: thumbnailsData, isLoading, isFetching, refetch, error } = useThumbnailImageGetTreeQuery()
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
 
   const contextValue: ImageThumbnailsContextValue = {
     thumbnailsData,

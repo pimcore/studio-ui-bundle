@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil, has } from 'lodash'
+import { isNil, has, isUndefined } from 'lodash'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageDeleteMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseThumbnailConfigReturn {
   handleDelete: (thumbnail: ThumbnailConfigurationData, onSuccess?: () => void) => Promise<void>
@@ -26,8 +27,14 @@ interface UseThumbnailConfigProps {
 export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThumbnailConfigReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
-  const [deleteThumbnailMutation] = useThumbnailImageDeleteMutation()
+  const [deleteThumbnailMutation, {error}] = useThumbnailImageDeleteMutation()
 
+    useEffect(() => {
+      if (!isUndefined(error)) {
+        trackError(new ApiError(error))
+      }
+    }, [error])
+    
   const handleDelete = useCallback(async (
     thumbnail: ThumbnailConfigurationData,
     onSuccess?: () => void
