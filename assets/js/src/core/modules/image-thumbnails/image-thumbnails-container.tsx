@@ -15,6 +15,7 @@ import { ImageThumbnailsEditor } from './components/image-thumbnails-editor/imag
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { useStyles } from './image-thumbnails-container.styles'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { ImageThumbnailsProvider } from './providers/image-thumbnails-provider'
 
 export const ImageThumbnailsContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -25,31 +26,33 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
   }
 
   return (
-    <Flex
-      className={ styles.container }
-      style={ { height: '100%' } }
-    >
-      <SplitLayout
-        leftItem={ {
-          size: 25,
-          minSize: 200,
-          children: (
-            <ImageThumbnailsTree
-              onThumbnailSelect={ handleThumbnailSelect }
-              selectedThumbnail={ selectedThumbnail }
-            />
-          )
-        } }
-        rightItem={ {
-          size: 75,
-          children: (
-            <ImageThumbnailsEditor
-              selectedThumbnail={ selectedThumbnail }
-            />
-          )
-        } }
-        withDivider
-      />
-    </Flex>
+    <ImageThumbnailsProvider>
+      <Flex
+        className={ styles.container }
+        style={ { height: '100%' } }
+      >
+        <SplitLayout
+          leftItem={ {
+            size: 25,
+            minSize: 200,
+            children: (
+              <ImageThumbnailsTree
+                onThumbnailSelect={ handleThumbnailSelect }
+                selectedThumbnail={ selectedThumbnail }
+              />
+            )
+          } }
+          rightItem={ {
+            size: 75,
+            children: (
+              <ImageThumbnailsEditor
+                selectedThumbnail={ selectedThumbnail }
+              />
+            )
+          } }
+          withDivider
+        />
+      </Flex>
+    </ImageThumbnailsProvider>
   )
 }

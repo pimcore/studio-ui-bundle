@@ -18,12 +18,13 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { useTranslation } from 'react-i18next'
-import { useThumbnailImageGetTreeQuery, useThumbnailImageCreateMutation, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { useThumbnailImageCreateMutation, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
 import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
@@ -31,11 +32,10 @@ export interface ImageThumbnailsTreeProps {
 }
 
 export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: ImageThumbnailsTreeProps): React.JSX.Element => {
-  const { data: thumbnailsData, isLoading, isFetching, refetch } = useThumbnailImageGetTreeQuery()
+  const { thumbnailsData, isLoading, isFetching, refetch, expandedKeys, setExpandedKeys } = useImageThumbnailsContext()
   const [thumbnailsListData, setThumbnailsListData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
   const [filteredData, setFilteredData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
   const [searchValue, setSearchValue] = useState('')
-  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
   const { handleDelete: deleteThumbnail } = useThumbnailConfig({ refetch })
@@ -122,10 +122,10 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       onOk: async (value: string) => {
         await createThumbnail({ createThumbnailConfig: { name: value } })
 
-        const { data: updatedData } = await refetch()
+        refetch()
 
-        if (!isNil(updatedData?.items)) {
-          const addedThumbnail = updatedData.items.find((item) =>
+        if (!isNil(thumbnailsData?.items)) {
+          const addedThumbnail = thumbnailsData.items.find((item) =>
             'name' in item && item.name === value
           )
 
