@@ -9,21 +9,47 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Switch } from '@sdk/components'
-import React from 'react'
+import { Form, FormKit, Select, Input } from '@sdk/components'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
+  const form = Form.useFormInstance()
+  const useDefaultValue = Form.useWatch('defaultValue')
+
+  useEffect(() => {
+    if (useDefaultValue === null) {
+      form.setFieldValue('defaultValue', 'empty')
+    }
+  }, [useDefaultValue, form])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('default-value') }
-        name="defaultValue"
-      >
-        <Switch />
-      </Form.Item>
+      {!isCustomLayout && (
+        <>
+          <Form.Item
+            label={ t('default-value') }
+            name="defaultValue"
+          >
+            <Select
+              options={ [
+                { label: t('empty'), value: 'empty' },
+                { label: t('no'), value: 0 },
+                { label: t('yes'), value: 1 }
+              ] }
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('default-value-generator') }
+            name="defaultValueGenerator"
+          >
+            <Input />
+          </Form.Item>
+        </>
+      )}
     </FormKit.Panel>
   )
 }

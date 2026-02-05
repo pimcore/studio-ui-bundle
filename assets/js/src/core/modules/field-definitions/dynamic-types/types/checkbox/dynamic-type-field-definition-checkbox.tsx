@@ -25,6 +25,13 @@ export class DynamicTypeFieldDefinitionCheckbox extends DynamicTypeFieldDefiniti
     return [...super.getGroup(), 'other']
   }
 
+  getDefaultData (): any {
+    return {
+      ...super.getDefaultData(),
+      defaultValue: 'empty'
+    }
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
