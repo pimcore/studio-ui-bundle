@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import React, { createContext, useContext, useEffect, useState, useMemo, type ReactNode } from 'react'
 import { useThumbnailImageGetTreeQuery, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { isUndefined } from 'lodash'
 import { ApiError, trackError } from '@sdk/modules/app'
@@ -40,14 +40,14 @@ export const ImageThumbnailsProvider = ({ children }: ImageThumbnailsProviderPro
     }
   }, [error])
 
-  const contextValue: ImageThumbnailsContextValue = {
+  const contextValue: ImageThumbnailsContextValue = useMemo(() => ({
     thumbnailsData,
     isLoading,
     isFetching,
     refetch,
     expandedKeys,
     setExpandedKeys
-  }
+  }), [thumbnailsData, isLoading, isFetching, refetch, expandedKeys, setExpandedKeys])
 
   return (
     <ImageThumbnailsContext.Provider value={contextValue}>

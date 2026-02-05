@@ -149,10 +149,8 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   }
 
   const handleActionsClick = async (key: string, action: string): Promise<void> => {
-    switch (action) {
-      case 'delete':
-        await handleDelete(key)
-        break
+    if (action === 'delete') {
+      await handleDelete(key)
     }
   }
 
@@ -174,7 +172,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     }
   }
 
-  const selectedKeys = !isEmpty(selectedThumbnail) ? [selectedThumbnail.id] : []
+  const selectedKeys = isEmpty(selectedThumbnail) ? [] : [selectedThumbnail.id]
 
   return (
     <ContentLayout
