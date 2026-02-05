@@ -240,9 +240,9 @@ export type BundleCustomReportsDrillDownOption = {
         [key: string]: string | number | boolean | object;
     };
     /** name */
-    name: string | number;
+    name: string | number | any;
     /** value */
-    value: string | number | null;
+    value: string | number | any | null;
 };
 export type Error = {
     /** Message */
