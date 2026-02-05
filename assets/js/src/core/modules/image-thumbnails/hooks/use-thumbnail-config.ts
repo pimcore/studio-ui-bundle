@@ -12,12 +12,13 @@ import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil, has, isUndefined } from 'lodash'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { useThumbnailImageDeleteMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { useThumbnailImageDeleteMutation, useThumbnailImageCreateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseThumbnailConfigReturn {
   handleDelete: (thumbnail: ThumbnailConfigurationData, onSuccess?: () => void) => Promise<void>
+  handleAdd: (onSuccess?: (thumbnailName: string) => void) => void
 }
 
 interface UseThumbnailConfigProps {
@@ -27,13 +28,20 @@ interface UseThumbnailConfigProps {
 export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThumbnailConfigReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
-  const [deleteThumbnailMutation, { error }] = useThumbnailImageDeleteMutation()
+  const [deleteThumbnailMutation, { error: deleteError }] = useThumbnailImageDeleteMutation()
+  const [createThumbnail, { error: createError }] = useThumbnailImageCreateMutation()
 
   useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
+    if (!isUndefined(deleteError)) {
+      trackError(new ApiError(deleteError))
     }
-  }, [error])
+  }, [deleteError])
+
+  useEffect(() => {
+    if (!isUndefined(createError)) {
+      trackError(new ApiError(createError))
+    }
+  }, [createError])
 
   const handleDelete = useCallback(async (
     thumbnail: ThumbnailConfigurationData,
@@ -60,7 +68,33 @@ export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThu
     })
   }, [refetch, t, deleteThumbnailMutation, modal])
 
+  const handleAdd = useCallback((
+    onSuccess?: (thumbnailName: string) => void
+  ): void => {
+    modal.input({
+      label: t('image-thumbnails.add.content'),
+      rule: {
+        pattern: /^[a-zA-Z0-9_-]+$/,
+        message: t('image-thumbnails.add.validation.message')
+      },
+      onOk: async (value: string) => {
+        const result = await createThumbnail({ createThumbnailConfig: { name: value } })
+
+        if (has(result, 'error')) {
+          return
+        }
+
+        refetch()
+
+        if (!isNil(onSuccess)) {
+          onSuccess(value)
+        }
+      }
+    })
+  }, [createThumbnail, refetch, t, modal])
+
   return {
-    handleDelete
+    handleDelete,
+    handleAdd
   }
 }

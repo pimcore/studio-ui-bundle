@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { isEmpty, isNil, isUndefined, has } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,12 +18,11 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { useTranslation } from 'react-i18next'
-import { useThumbnailImageCreateMutation, type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
 import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
 
 export interface ImageThumbnailsTreeProps {
@@ -38,9 +37,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const [searchValue, setSearchValue] = useState('')
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
-  const { handleDelete: deleteThumbnail } = useThumbnailConfig({ refetch })
-  const modal = useFormModal()
-  const [createThumbnail] = useThumbnailImageCreateMutation()
+  const { handleDelete: deleteThumbnail, handleAdd } = useThumbnailConfig({ refetch })
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
@@ -112,30 +109,15 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
 
   const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData])
 
-  const handleAdd = (): void => {
-    modal.input({
-      label: t('image-thumbnails.add.content'),
-      rule: {
-        pattern: /^[a-zA-Z0-9_-]+$/,
-        message: t('image-thumbnails.add.validation.message')
-      },
-      onOk: async (value: string) => {
-        const result = await createThumbnail({ createThumbnailConfig: { name: value } })
+  const handleAddWithSelection = (): void => {
+    handleAdd((thumbnailName: string) => {
+      if (!isNil(thumbnailsData?.items)) {
+        const addedThumbnail = thumbnailsData.items.find((item) =>
+          'name' in item && item.name === thumbnailName
+        )
 
-        if (has(result, 'error')) {
-          return
-        }
-
-        refetch()
-
-        if (!isNil(thumbnailsData?.items)) {
-          const addedThumbnail = thumbnailsData.items.find((item) =>
-            'name' in item && item.name === value
-          )
-
-          if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
-            onThumbnailSelect(addedThumbnail)
-          }
+        if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
+          onThumbnailSelect(addedThumbnail)
         }
       }
     })
@@ -179,7 +161,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       renderToolbar={
         <ImageThumbnailsTreeToolbar
           isFetching={ isFetching }
-          onAdd={ handleAdd }
+          onAdd={ handleAddWithSelection }
           onRefresh={ refetch }
         />
       }
