@@ -17,6 +17,9 @@ import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { Switch } from '@Pimcore/components/switch/switch'
+import { Panel } from '@Pimcore/components/panel/panel'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -37,6 +40,17 @@ interface ThumbnailFormData {
   description: string
   format: string
   group: string
+  // Advanced settings
+  quality: number
+  highResolution: number | null
+  // Boolean configuration settings
+  preserveColor: boolean
+  forceProcessICCProfiles: boolean
+  preserveMetaData: boolean
+  rasterizeSVG: boolean
+  useCropBox: boolean
+  downloadable: boolean
+  preserveAnimation: boolean
 }
 
 const formatOptions = [
@@ -120,7 +134,18 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         name: configData.settings.name || '',
         description: configData.settings.description || '',
         format: configData.settings.format || 'auto',
-        group: configData.settings.group || ''
+        group: configData.settings.group || '',
+        // Advanced settings with sensible defaults
+        quality: configData.settings.quality || 85,
+        highResolution: configData.settings.highResolution || null,
+        // Boolean configuration settings with defaults from backend or false
+        preserveColor: configData.settings.preserveColor || false,
+        forceProcessICCProfiles: configData.settings.forceProcessICCProfiles || false,
+        preserveMetaData: configData.settings.preserveMetaData || false,
+        rasterizeSVG: configData.settings.rasterizeSVG || false,
+        useCropBox: configData.settings.useCropBox || false,
+        downloadable: configData.settings.downloadable || false,
+        preserveAnimation: configData.settings.preserveAnimation || false
       }
       
       setInitialFormData({ ...formData })
@@ -149,7 +174,18 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           name: values.name,
           description: values.description,
           format: values.format,
-          group: values.group || ''
+          group: values.group || '',
+          // Include advanced settings
+          quality: values.quality,
+          highResolution: values.highResolution,
+          // Include all boolean configuration settings
+          preserveColor: values.preserveColor || false,
+          forceProcessICCProfiles: values.forceProcessICCProfiles || false,
+          preserveMetaData: values.preserveMetaData || false,
+          rasterizeSVG: values.rasterizeSVG || false,
+          useCropBox: values.useCropBox || false,
+          downloadable: values.downloadable || false,
+          preserveAnimation: values.preserveAnimation || false
         }
 
         const { data: response } = await updateThumbnail({
@@ -221,7 +257,6 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
       >
         <FormKit.Panel
           contentPadding="extra-small"
-          title={t('image-thumbnails.editor.general-settings')}
         >
           <Form.Item
             label={t('image-thumbnails.editor.name')}
@@ -263,6 +298,90 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
             />
           </Form.Item>
         </FormKit.Panel>
+
+        {/* Advanced Settings Panel */}
+        <Panel
+          title={t('image-thumbnails.editor.advanced')}
+          collapsible={true}
+          collapsed={true}
+          border={true}
+          theme="card-with-highlight"
+          contentPadding="extra-small"
+        >
+          <Form.Item
+            label={t('image-thumbnails.editor.quality')}
+            name="quality"
+            tooltip={t('image-thumbnails.editor.quality.tooltip')}
+          >
+            <InputNumber
+              min={1}
+              max={100}
+              placeholder="85"
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={t('image-thumbnails.editor.high-resolution')}
+            name="highResolution"
+            tooltip={t('image-thumbnails.editor.high-resolution.tooltip')}
+          >
+            <InputNumber
+              min={1}
+              max={10}
+              step={0.1}
+              placeholder="2.0"
+            />
+          </Form.Item>
+
+          <Form.Item name="preserveColor" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.preserve-color')}
+              tooltip={t('image-thumbnails.editor.preserve-color.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="forceProcessICCProfiles" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.force-process-icc')}
+              tooltip={t('image-thumbnails.editor.force-process-icc.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="preserveMetaData" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.preserve-metadata')}
+              tooltip={t('image-thumbnails.editor.preserve-metadata.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="rasterizeSVG" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.rasterize-svg')}
+              tooltip={t('image-thumbnails.editor.rasterize-svg.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="useCropBox" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.use-cropbox')}
+              tooltip={t('image-thumbnails.editor.use-cropbox.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="downloadable" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.downloadable')}
+              tooltip={t('image-thumbnails.editor.downloadable.tooltip')}
+            />
+          </Form.Item>
+
+          <Form.Item name="preserveAnimation" valuePropName="checked">
+            <Switch
+              labelRight={t('image-thumbnails.editor.preserve-animation')}
+              tooltip={t('image-thumbnails.editor.preserve-animation.tooltip')}
+            />
+          </Form.Item>
+        </Panel>
       </FormKit>
       )}
       {renderSaveButton()}
