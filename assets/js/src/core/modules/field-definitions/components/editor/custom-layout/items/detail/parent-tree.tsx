@@ -62,7 +62,7 @@ export const DetailParentTree = (): React.JSX.Element => {
       }
 
       return (
-        <Draggable info={info}>
+        <Draggable info={ info }>
           {initialComponent}
         </Draggable>
       )

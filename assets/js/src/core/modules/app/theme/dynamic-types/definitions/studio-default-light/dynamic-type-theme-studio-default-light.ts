@@ -269,7 +269,7 @@ export const studioDefaultLightThemeConfig = {
     },
 
     Radio: {
-      "fontFamily": "Lato"
+      fontFamily: 'Lato'
     },
 
     Tag: {

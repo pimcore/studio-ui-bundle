@@ -1,12 +1,5 @@
 {
   "entrypoints": {
-    "main": {
-      "js": [
-        "http://localhost:3031/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-bcb3a9.js",
-        "http://localhost:3031/static/js/main.js"
-      ],
-      "css": []
-    },
     "documentEditorIframe": {
       "js": [
         "http://localhost:3031/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-bcb3a9.js",
@@ -14,9 +7,16 @@
       ],
       "css": []
     },
+    "main": {
+      "js": [
+        "http://localhost:3031/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-bcb3a9.js",
+        "http://localhost:3031/static/js/main.js"
+      ],
+      "css": []
+    },
     "exposeRemote": {
       "js": [
-        "/bundles/pimcorestudioui/build/f322ddf2-aa36-4d24-a918-510ef924adcf/exposeRemote.js"
+        "/bundles/pimcorestudioui/build/1839a6fe-71e4-4219-a858-2ba11836396a/exposeRemote.js"
       ],
       "css": []
     }

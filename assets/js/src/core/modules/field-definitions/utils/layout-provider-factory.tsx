@@ -102,7 +102,7 @@ export const create = (): LayoutProviderFactoryReturn => {
 
   const findPathToNode = (node: StructureNode, targetId: string, currentPath: string[] = []): string[] | undefined => {
     const newPath = [...currentPath, node.id]
-    
+
     if (node.id === targetId) {
       return newPath
     }
@@ -250,9 +250,9 @@ export const create = (): LayoutProviderFactoryReturn => {
 
       setStructure((prevStructure) => {
         if (prevStructure === undefined) return prevStructure
-        
+
         const updatedStructure = removeChildrenRecursively(prevStructure)
-        
+
         setFieldDefinitions((prevDefs) => {
           const targetNode = findNode(prevStructure, structureNodeId)
           if (targetNode === undefined) return prevDefs
@@ -268,7 +268,7 @@ export const create = (): LayoutProviderFactoryReturn => {
 
           return newDefs
         })
-        
+
         return updatedStructure
       })
     }, [])
@@ -494,7 +494,7 @@ export const create = (): LayoutProviderFactoryReturn => {
       const fieldDefs = fieldDefinitionsRef.current
       const currentFieldDef = fieldDefs[targetId]
       const childFieldDef = fieldDefs[childId]
-      
+
       if (currentFieldDef === undefined) {
         return false
       }
@@ -588,13 +588,13 @@ export const create = (): LayoutProviderFactoryReturn => {
 
       const fieldDefs = fieldDefinitionsRef.current
       const currentFieldDef = fieldDefs[targetId]
-      
+
       if (currentFieldDef === undefined || externalLayout === undefined) {
         return false
       }
 
       const externalFieldtype = externalLayout.fieldType ?? (externalLayout as any).fieldtype
-      
+
       if (externalFieldtype === undefined) {
         return false
       }
@@ -628,7 +628,6 @@ export const create = (): LayoutProviderFactoryReturn => {
 
     const addExternalFieldDefinition: ILayoutContext['addExternalFieldDefinition'] = useCallback((structureNodeId, layout, insertIndex) => {
       const { structure: externalStructure, fieldDefinitions: externalFieldDefinitions } = reduce({ layout })!
-      const newId = externalStructure.id
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {
         if (node.id === structureNodeId) {

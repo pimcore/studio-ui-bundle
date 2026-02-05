@@ -8,17 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+/* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
-import { Layout, type FieldDefinition } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, DragAndDropInfo, Draggable } from '@sdk/components'
-import { isEqual } from 'lodash'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem } from '@sdk/components'
+import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
-import { type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
-import { isUndefined } from 'lodash'
 
 export interface DetailSidebarProps {
   allowExternalDrop?: boolean
@@ -92,10 +101,10 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   // Controlled state for expanded keys
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
-  
+
   // Track if we've set initial keys
   const hasInitializedRef = React.useRef(false)
-  
+
   // Set initial expanded keys once when data arrives
   useEffect(() => {
     if (!hasInitializedRef.current && allAvailableKeys.length > 0) {
@@ -104,7 +113,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       hasInitializedRef.current = true
     }
   }, [allAvailableKeys])
-  
+
   // Ref for expanded keys (needed in sorting-bottom isValidContext)
   const expandedKeysRef = React.useRef<string[]>(expandedKeys)
   const structureRef = React.useRef(structure)
@@ -137,8 +146,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   // Handle expand/collapse from user interactions
   const handleExpand = (keys: string[]): void => {
-    setExpandedKeys(keys as string[])
-    expandedKeysRef.current = keys as string[]
+    setExpandedKeys(keys)
+    expandedKeysRef.current = keys
   }
 
   // Helper to expand a node after dropping into it
@@ -173,7 +182,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   }
 
   const titleRender: ITreeElementProps['titleRender'] = (node, initialComponent) => {
-    const titleComponent = initialComponent;
+    const titleComponent = initialComponent
     const currentFieldDefinition = fieldDefinitions[node.key as string]
 
     if (currentFieldDefinition === undefined) {
@@ -181,23 +190,30 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     }
 
     if (currentFieldDefinition.name !== 'pimcore_root') {
+      const treeNode = node as TreeDataItem
+      const currentPath = Array.isArray(treeNode.meta?.currentPath) ? treeNode.meta.currentPath as string[] : []
+      const layout = getLayout({ startNode: node.key.toString() })
+      if (layout === undefined) {
+        return <></>
+      }
+
       const info: FieldDefinitionDragDropInfo = {
         type: 'field-definition',
         icon: { ...currentFieldDefinition.icon },
-        title: currentFieldDefinition.title || currentFieldDefinition.name,
+        title: currentFieldDefinition.title ?? currentFieldDefinition.name,
         data: {
           area,
           internal: {
             id: node.key as string,
             fieldDefinition: currentFieldDefinition,
-            path: ((node as any).meta?.currentPath as string[]) ?? []
+            path: currentPath
           },
-          external: getLayout({ startNode: node.key.toString() })!
+          external: layout
         }
       }
 
       return (
-        <Draggable info={info}>
+        <Draggable info={ info }>
           <HotspotDroppable
             hotspots={ [
               {
@@ -208,11 +224,11 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                   if (info.type !== 'field-definition') return false
                   const currentPath = findCurrentPath(node.key as string) ?? []
                   const parentPath = currentPath.slice(0, -1)
-                  if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                  if (isEqual((info).data.area, area)) {
                     const draggedCurrentPath = findCurrentPath(info.data.internal.id) ?? []
                     return isValidChildFieldDefinition(parentPath, draggedCurrentPath)
                   }
-                  const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+                  const externalLayout = (info).data.external
                   return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(parentPath, externalLayout)
                 },
                 onDrop: (info: FieldDefinitionDragDropInfo) => {
@@ -253,9 +269,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 onDrop: (info) => {
                   const targetNodeId = node.key.toString()
                   if (isEqual(info.data.area, area)) {
-                    moveFieldDefinition(info.data.internal.id, targetNodeId, 0)
+                    moveFieldDefinition(info.data.internal.id as string, targetNodeId, 0)
                   } else {
-                    addExternalFieldDefinition(targetNodeId, info.data.external, 0)
+                    addExternalFieldDefinition(targetNodeId, info.data.external as Layout, 0)
                   }
                   expandNode(targetNodeId)
                 }
@@ -264,7 +280,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 id: 'sorting-bottom',
                 position: { x: 0, y: '70%', width: '100%', height: '30%' },
                 isValidContext: (info) => {
-                  if (expandedKeysRef.current.includes(node.key as string)) return false;
+                  if (expandedKeysRef.current.includes(node.key as string)) return false
                   if (info.type !== 'field-definition') return false
                   const currentPath = findCurrentPath(node.key as string) ?? []
                   const parentPath = currentPath.slice(0, -1)
@@ -283,7 +299,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                     let insertIndex = Math.min(targetIndex + 1, siblingsCount)
 
                     if (isEqual(info.data.area, area)) {
-                      const draggedCurrentPath = findCurrentPath(info.data.internal.id) ?? []
+                      const draggedCurrentPath = findCurrentPath(info.data.internal.id as string) ?? []
                       const draggedCtx = resolveParentAndIndexFromPath(structureRef.current, draggedCurrentPath)
                       const sameParent = !isUndefined(draggedCtx) && draggedCtx.parentId === parentId
                       if (sameParent && !isUndefined(draggedCtx)) {
@@ -354,7 +370,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                   }
                 ]
               : [])
-          ],
+          ]
         }
       }
     })
@@ -440,8 +456,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     >
       <TreeElement
         defaultExpandedKeys={ expandedKeys }
-        onExpand={ handleExpand }
         onActionsClick={ onActionsClick }
+        onExpand={ handleExpand }
         onSelected={ onSelected }
         selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }
         titleRender={ titleRender }

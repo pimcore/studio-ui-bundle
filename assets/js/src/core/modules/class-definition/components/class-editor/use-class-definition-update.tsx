@@ -23,7 +23,7 @@ export const useClassDefinitionUpdate: AnyMutationHook = (options) => {
       id: generalSettings!.id,
       classDefinitionUpdate: {
         configuration: {
-          children: getLayout().children ?? []
+          children: getLayout()!.children ?? []
         },
         values: {
           ...generalSettings!,
