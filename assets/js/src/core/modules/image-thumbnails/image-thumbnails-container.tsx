@@ -11,7 +11,6 @@
 import React, { useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ImageThumbnailsTree } from './components/image-thumbnails-tree/image-thumbnails-tree'
-import { ImageThumbnailsEditor } from './components/image-thumbnails-editor/image-thumbnails-editor'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { useStyles } from './image-thumbnails-container.styles'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
@@ -29,7 +28,6 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
     <ImageThumbnailsProvider>
       <Flex
         className={ styles.container }
-        style={ { height: '100%' } }
       >
         <SplitLayout
           leftItem={ {
@@ -45,9 +43,7 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
           rightItem={ {
             size: 75,
             children: (
-              <ImageThumbnailsEditor
-                selectedThumbnail={ selectedThumbnail }
-              />
+              <></>
             )
           } }
           withDivider
