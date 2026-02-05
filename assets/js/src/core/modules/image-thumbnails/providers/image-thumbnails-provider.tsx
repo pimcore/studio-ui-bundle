@@ -50,7 +50,7 @@ export const ImageThumbnailsProvider = ({ children }: ImageThumbnailsProviderPro
   }), [thumbnailsData, isLoading, isFetching, refetch, expandedKeys, setExpandedKeys])
 
   return (
-    <ImageThumbnailsContext.Provider value={contextValue}>
+    <ImageThumbnailsContext.Provider value={ contextValue }>
       {children}
     </ImageThumbnailsContext.Provider>
   )

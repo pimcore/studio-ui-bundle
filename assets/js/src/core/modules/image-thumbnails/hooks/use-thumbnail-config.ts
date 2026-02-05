@@ -27,14 +27,14 @@ interface UseThumbnailConfigProps {
 export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThumbnailConfigReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
-  const [deleteThumbnailMutation, {error}] = useThumbnailImageDeleteMutation()
+  const [deleteThumbnailMutation, { error }] = useThumbnailImageDeleteMutation()
 
-    useEffect(() => {
-      if (!isUndefined(error)) {
-        trackError(new ApiError(error))
-      }
-    }, [error])
-    
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
+
   const handleDelete = useCallback(async (
     thumbnail: ThumbnailConfigurationData,
     onSuccess?: () => void
