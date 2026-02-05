@@ -83,7 +83,6 @@ export const ItemsSidebar = (): React.JSX.Element => {
       groupMap[groupName].children!.push(treeDataItem)
     })
 
-    // @todo check sorting logic
     formattedTreeData.sort((a, b) => {
       if ((a.children?.length ?? 0) !== 0 && (b.children?.length ?? 0) === 0) {
         return -1
