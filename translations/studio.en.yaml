@@ -642,6 +642,10 @@ test-string: Test string
 regex-validation-error-message: "The string does not match the required format."
 calculator-class: Calculator Class
 calculator-expression: Calculator Expression
+domain-label-width: Domain label width
+controller-action: Controller action
+controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
+available-sites: "Available sites"
 reset: Reset
 name: Name
 tooltip: Tooltip

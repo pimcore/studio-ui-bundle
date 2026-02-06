@@ -9,12 +9,22 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
-import React from 'react'
+import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
+import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
+  const { getAllSites } = useSites({ excludeMainSite: true })
+
+  const siteOptions = useMemo(() => {
+    return getAllSites().map((site) => ({
+      label: site.domain,
+      value: site.id
+    }))
+  }, [getAllSites])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -26,16 +36,35 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('column-length') }
-        name="columnLength"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
+      { !isCustomLayout && (
+        <>
+          <Form.Item
+            label={ t('domain-label-width') }
+            name="domainLabelWidth"
+          >
+            <InputNumber />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('controller-action') }
+            name="action"
+            tooltip={ t('controller-action-tooltip') }
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('available-sites') }
+            name="availableSites"
+          >
+            <Select
+              mode="multiple"
+              options={ siteOptions }
+            />
+          </Form.Item>
+        </>
+      ) }
+
     </FormKit.Panel>
   )
 }

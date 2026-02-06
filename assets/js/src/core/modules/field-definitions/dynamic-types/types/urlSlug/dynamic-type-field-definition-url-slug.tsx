@@ -25,13 +25,24 @@ export class DynamicTypeFieldDefinitionUrlSlug extends DynamicTypeFieldDefinitio
     return [...super.getGroup(), 'other']
   }
 
+  getDefaultData (): any {
+    return {
+      ...super.getDefaultData(),
+      width: '',
+      domainLabelWidth: '',
+      action: '',
+      availableSites: [],
+      defaultValueGenerator: ''
+    }
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionUrlSlugFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
