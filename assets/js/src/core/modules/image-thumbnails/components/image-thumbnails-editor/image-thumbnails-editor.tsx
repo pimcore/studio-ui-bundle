@@ -20,6 +20,9 @@ import { Portal } from '@Pimcore/components/portal/portal'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Panel } from '@Pimcore/components/panel/panel'
+import type { MediaQuery } from '../../types/media-query.types'
+import { MediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
+import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -40,10 +43,8 @@ interface ThumbnailFormData {
   description: string
   format: string
   group: string
-  // Advanced settings
   quality: number
   highResolution: number | null
-  // Boolean configuration settings
   preserveColor: boolean
   forceProcessICCProfiles: boolean
   preserveMetaData: boolean
@@ -51,6 +52,8 @@ interface ThumbnailFormData {
   useCropBox: boolean
   downloadable: boolean
   preserveAnimation: boolean
+  mediaQueries: MediaQuery[]
+  mediaQueriesPanelCollapsed: boolean
 }
 
 const formatOptions = [
@@ -101,6 +104,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   
   const [initialFormData, setInitialFormData] = useState<ThumbnailFormData | null>(null)
   const [currentFormData, setCurrentFormData] = useState<ThumbnailFormData | null>(null)
+  const [mediaQueries, setMediaQueries] = useState<MediaQuery[]>([])
   
   const { data: configData, isLoading, error } = useThumbnailImageGetByNameQuery(
     { name: selectedThumbnail?.name ?? '' },
@@ -135,21 +139,22 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         description: configData.settings.description || '',
         format: configData.settings.format || 'auto',
         group: configData.settings.group || '',
-        // Advanced settings with sensible defaults
         quality: configData.settings.quality || 85,
         highResolution: configData.settings.highResolution || null,
-        // Boolean configuration settings with defaults from backend or false
         preserveColor: configData.settings.preserveColor || false,
         forceProcessICCProfiles: configData.settings.forceProcessICCProfiles || false,
         preserveMetaData: configData.settings.preserveMetaData || false,
         rasterizeSVG: configData.settings.rasterizeSVG || false,
         useCropBox: configData.settings.useCropBox || false,
         downloadable: configData.settings.downloadable || false,
-        preserveAnimation: configData.settings.preserveAnimation || false
+        preserveAnimation: configData.settings.preserveAnimation || false,
+        mediaQueries: convertFromBackendFormat(configData.medias, {}),
+        mediaQueriesPanelCollapsed: true
       }
       
       setInitialFormData({ ...formData })
       setCurrentFormData({ ...formData })
+      setMediaQueries(formData.mediaQueries)
       
       form.setFieldsValue(formData)
       
@@ -165,6 +170,13 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     setCurrentFormData(prev => !isNull(prev) ? { ...prev, ...allValues } : null)
   }, [])
 
+  const handleMediaQueriesChange = useCallback((updatedMediaQueries: MediaQuery[]): void => {
+    setMediaQueries(updatedMediaQueries)
+    setCurrentFormData(prev => 
+      !isNull(prev) ? { ...prev, mediaQueries: updatedMediaQueries } : null
+    )
+  }, [])
+
   const handleSave = useCallback((): void => {
     if (!selectedThumbnail?.name || !currentFormData) return
 
@@ -175,10 +187,8 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           description: values.description,
           format: values.format,
           group: values.group || '',
-          // Include advanced settings
           quality: values.quality,
           highResolution: values.highResolution,
-          // Include all boolean configuration settings
           preserveColor: values.preserveColor || false,
           forceProcessICCProfiles: values.forceProcessICCProfiles || false,
           preserveMetaData: values.preserveMetaData || false,
@@ -188,12 +198,14 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           preserveAnimation: values.preserveAnimation || false
         }
 
+        const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries || [])
+
         const { data: response } = await updateThumbnail({
           name: selectedThumbnail.name,
           updateThumbnailConfig: {
             settings: updatedSettings,
-            medias: configData?.medias || {},
-            mediaOrder: {}
+            medias,
+            mediaOrder
           }
         })
 
@@ -382,6 +394,18 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
             />
           </Form.Item>
         </Panel>
+
+        <MediaQueriesPanel
+          mediaQueries={mediaQueries}
+          onChange={handleMediaQueriesChange}
+          collapsed={currentFormData?.mediaQueriesPanelCollapsed ?? true}
+          onCollapsedChange={(collapsed) => {
+            if (currentFormData) {
+              const updatedFormData = { ...currentFormData, mediaQueriesPanelCollapsed: collapsed }
+              setCurrentFormData(updatedFormData)
+            }
+          }}
+        />
       </FormKit>
       )}
       {renderSaveButton()}
