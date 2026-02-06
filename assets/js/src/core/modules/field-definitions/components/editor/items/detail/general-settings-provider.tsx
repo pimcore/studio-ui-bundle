@@ -30,9 +30,18 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
   useEffect(() => {
     setGeneralSettings(props.generalSettings)
   }, [props.generalSettings])
+
+  const updateGeneralSettings = (settings: GeneralSettings | undefined): void => {
+    setGeneralSettings((oldSettings) => {
+      return {
+        ...oldSettings,
+        ...settings
+      } as GeneralSettings
+    })
+  }
   
   return useMemo(() => (
-    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings } }>
+    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings } }>
       {props.children}
     </GeneralSettingsContext.Provider>
   ), [generalSettings, props.children])

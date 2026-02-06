@@ -10,7 +10,7 @@
 
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Content, FormKit } from '@sdk/components'
+import { Content, FormKit, FormProps } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -22,41 +22,33 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
   const { GeneralSettingsFormFields } = useSettings()
   const [formValues, setFormValues] = useState(generalSettings)
   const debouncedValues = useDebounce(formValues, 300)
-  const isUpdatingFromFormRef = useRef(false)
 
-  useEffect(() => {
-    if (!isNil(debouncedValues) && debouncedValues !== generalSettings) {
-      isUpdatingFromFormRef.current = true
-      setGeneralSettings(debouncedValues)
-    }
-  }, [debouncedValues, generalSettings, setGeneralSettings])
-
-  useEffect(() => {
-    if (!isUpdatingFromFormRef.current && generalSettings !== formValues) {
-      setFormValues(generalSettings)
-    }
-    isUpdatingFromFormRef.current = false
-  }, [generalSettings])
-
-  const handleValuesChange = useCallback((_, changedValues) => {
-    setFormValues(changedValues)
+  const handleValuesChange: FormProps['onValuesChange'] = useCallback((changedValues, allValues) => {
+    setFormValues(allValues)
   }, [])
 
-  const formProps = useMemo(() => ({
-    initialValues: formValues,
-    onValuesChange: handleValuesChange
-  }), [formValues, handleValuesChange])
+  useEffect(() => {
+    if (debouncedValues !== generalSettings) {
+      setGeneralSettings(debouncedValues)
+    }
+   }, [debouncedValues]);
 
-  if (isNil(generalSettings)) {
-    return (
-      <Content
-        centered
-        padded
-      >
-        Loading general settings...
-      </Content>
-    )
-  }
+  const formProps = useMemo(() => ({
+    initialValues: generalSettings,
+    onValuesChange: handleValuesChange
+  }), [generalSettings])
+
+  return useMemo(() => {
+    if (isNil(generalSettings)) {
+      return (
+        <Content
+          centered
+          padded
+        >
+          Loading general settings...
+        </Content>
+      )
+    }
 
   return (
     <Content
@@ -67,5 +59,5 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
         <GeneralSettingsFormFields />
       </FormKit>
     </Content>
-  )
+  )}, [generalSettings])
 }

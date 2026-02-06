@@ -11,7 +11,7 @@
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { FormKit } from '@sdk/components'
 import { isNil, isString, upperFirst } from 'lodash'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -27,11 +27,9 @@ const getPhpClassName = (name: string): string => {
 }
 
 export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element => {
-  const { generalSettings } = useGeneralSettings()
-  const { t } = useTranslation()
   const form = Form.useFormInstance()
   const nameValue = Form.useWatch('name', form)
-  const classId = Form.useWatch('id', form)
+  const classId = form.getFieldValue('id');
 
   useEffect(() => {
     if (isString(nameValue)) {
@@ -44,24 +42,13 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
     }
   }, [nameValue])
 
-  if (isNil(generalSettings)) {
-    return <></>
-  }
-
-  return (
+  return useMemo(() => (
     <>
       <FormKit.Panel title="General">
       <Form.Item
         label="Name"
         name="name"
         rules={[{ required: true, message: 'Please enter a name' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Title"
-        name="title"
       >
         <Input />
       </Form.Item>
@@ -278,14 +265,14 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
         >
           <Form.Item
             label="Index Name"
-            name="index"
+            name="index_key"
           >
             <Input placeholder="Enter index name" />
           </Form.Item>
 
           <Form.Item
             label="Type"
-            name="type"
+            name="index_type"
           >
             <Select
               options={[
@@ -300,7 +287,7 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
 
           <Form.Item
             label="Columns"
-            name="columns"
+            name="index_columns"
           >
             <Input placeholder="Enter column names (comma-separated)" />
           </Form.Item>
@@ -313,5 +300,5 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
         </FormKit.Panel>
       )}
     </>
-  )
+  ), [])
 }

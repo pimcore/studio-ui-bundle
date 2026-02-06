@@ -39,7 +39,7 @@ export const LayoutForm = (): React.JSX.Element => {
     }
   }, [debouncedValues])
 
-  return (
+  return useMemo(() => (
     <>
       {dynamicType === null
         ? (
@@ -70,5 +70,5 @@ export const LayoutForm = (): React.JSX.Element => {
           )
         : null}
     </>
-  )
+  ), [fieldDefinition])
 }
