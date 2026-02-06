@@ -408,6 +408,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
+      expandNode(nodeKey)
     }
 
     if (actionKey.startsWith('convert-')) {
