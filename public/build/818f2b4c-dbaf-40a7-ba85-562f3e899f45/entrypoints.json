@@ -1,0 +1,26 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "http://localhost:3031/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js",
+        "http://localhost:3031/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fdev_2Fpimcore_2-f0629e.js",
+        "http://localhost:3031/static/js/main.js"
+      ],
+      "css": []
+    },
+    "documentEditorIframe": {
+      "js": [
+        "http://localhost:3031/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js",
+        "http://localhost:3031/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fdev_2Fpimcore_2-f0629e.js",
+        "http://localhost:3031/static/js/documentEditorIframe.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/818f2b4c-dbaf-40a7-ba85-562f3e899f45/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}
