@@ -51,7 +51,8 @@ export const {
   useClassDefinitionUpdateMutation,
   useClassDefinitionDeleteMutation,
   useClassCustomLayoutGetIdentifierDataQuery,
-  useClassSelectOptionGetTreeQuery
+  useClassSelectOptionGetTreeQuery,
+  useClassDefinitionGetBricksUsagesQuery
 } = api
 
 export { api }

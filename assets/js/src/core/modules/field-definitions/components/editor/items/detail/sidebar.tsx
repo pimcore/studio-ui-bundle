@@ -20,14 +20,17 @@
 
 /* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button } from '@sdk/components'
+import { Divider } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface DetailSidebarProps {
   allowExternalDrop?: boolean
@@ -48,6 +51,8 @@ export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   const { useLayout } = useSettings()
+  const { detailView, setDetailView } = useItems()
+  const { t } = useTranslation()
 
   const {
     allowExternalDrop = false
@@ -447,6 +452,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
     setCurrentFieldDefinitionId(key)
     setCurrentFieldDefinitionIdPath(node.meta?.currentPath as string[] ?? null)
+    setDetailView('layout')
   }
 
   return (
@@ -454,6 +460,35 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
+      <div
+        onClick={ () => { setDetailView('general') } }
+        style={ {
+          padding: '0 4px',
+          marginBottom: '4px',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          backgroundColor: detailView === 'general' ? 'var(--ant-color-primary-bg)' : 'transparent',
+          color: detailView === 'general' ? 'var(--ant-color-primary)' : 'inherit',
+          transition: 'background-color 0.2s'
+        } }
+      >
+        <div style={ {
+          display: 'flex',
+          alignItems: 'center',
+          padding: '4px 0',
+          fontSize: '14px',
+          lineHeight: '22px'
+        } }
+        >
+          <span style={ { marginRight: '8px', fontSize: '14px', display: 'inline-flex' } }>
+            <Icon value={ 'settings' } />
+          </span>
+          {t('field-definitions.general-settings')}
+        </div>
+      </div>
+
+      <Divider style={ { margin: '4px 0 8px 0' } } />
+
       <TreeElement
         defaultExpandedKeys={ expandedKeys }
         onActionsClick={ onActionsClick }

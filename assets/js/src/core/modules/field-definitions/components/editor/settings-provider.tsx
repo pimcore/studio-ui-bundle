@@ -28,6 +28,7 @@ export interface ISettingsContext {
   useDetailUpdateMutation: AnyMutationHook
   LayoutProvider: typeof DefaultLayoutProvider
   useLayout: typeof useDefaultLayout
+  GeneralSettingsFormFields: React.ComponentType
   customLayouts?: {
     ModalContent?: React.JSX.Element
 
@@ -54,11 +55,11 @@ export const SettingsProvider = (props: SettingsProviderProps): React.JSX.Elemen
     ...rest
   } = props
 
-  const providerProps = {
+  const providerProps = useMemo(() => ({
     LayoutProvider,
     useLayout,
     ...rest
-  }
+  }), [LayoutProvider, useLayout, rest])
 
   return useMemo(() => (
     <SettingsContext.Provider value={ providerProps }>

@@ -23,6 +23,7 @@ export interface EditorProps {
   useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
   useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
   useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
+  GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
   LayoutProvider?: SettingsProviderProps['LayoutProvider']
   useLayout?: SettingsProviderProps['useLayout']
   customLayouts?: SettingsProviderProps['customLayouts']

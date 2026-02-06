@@ -11,6 +11,7 @@
 import React from 'react'
 import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import { CustomLayoutAddModal } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/editor/add-modal'
+import { CustomLayoutGeneralSettingsFormFields } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/custom-layout-general-settings-form-fields'
 import { usePimcoreStudioApiClassCustomLayoutDeleteMutation, usePimcoreStudioApiClassCustomLayoutUpdateMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useCustomLayoutLayoutAccessor } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/editor/use-custom-layout-layout-accessor'
 import { useDecoratedClassCustomLayoutCollectionQuery } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/editor/use-custom-layout-collection-query'
@@ -23,6 +24,7 @@ export const CustomLayoutEditor = (): React.JSX.Element => {
   return (
     <Editor
       AddModal={ CustomLayoutAddModal }
+      GeneralSettingsFormFields={ CustomLayoutGeneralSettingsFormFields }
       LayoutProvider={ CustomLayoutLayoutProvider }
       area={ ['class', 'custom-layout'] }
       customLayouts={ {

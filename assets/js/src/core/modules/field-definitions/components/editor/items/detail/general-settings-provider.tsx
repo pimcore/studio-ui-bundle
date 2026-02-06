@@ -15,6 +15,7 @@ export type GeneralSettings = ClassDefinition | CustomLayouts
 
 export interface IGeneralSettingsContext {
   generalSettings: GeneralSettings | undefined
+  setGeneralSettings: (settings: GeneralSettings | undefined) => void
 }
 
 export const GeneralSettingsContext = createContext<IGeneralSettingsContext | undefined>(undefined)
@@ -29,8 +30,9 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
   useEffect(() => {
     setGeneralSettings(props.generalSettings)
   }, [props.generalSettings])
+  
   return useMemo(() => (
-    <GeneralSettingsContext.Provider value={ { generalSettings } }>
+    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings } }>
       {props.children}
     </GeneralSettingsContext.Provider>
   ), [generalSettings, props.children])

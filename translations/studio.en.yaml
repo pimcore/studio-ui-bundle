@@ -587,6 +587,7 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+field-definitions.general-settings: General Settings
 field-definition.geopoint: Geo Point
 field-definition.geobounds: Geo Bounds
 field-definition.geopolygon: Geo Polygon
