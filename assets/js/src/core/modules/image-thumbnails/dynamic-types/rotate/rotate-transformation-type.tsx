@@ -14,24 +14,22 @@
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
 
-export interface ScaleByWidthTransformationConfig {
-  width?: number
-  forceResize?: boolean
+export interface RotateTransformationConfig {
+  angle?: number
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class RotateTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'rotate'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Rotate'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createNumberFieldConfig('angle', 'Angle', 'Enter rotation angle in degrees')
     ]
   }
 }

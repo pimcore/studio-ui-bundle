@@ -13,18 +13,12 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
-import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
 
 export interface TrimTransformationConfig {
-  trim?: 'disabled' | 'left' | 'right' | 'both'
+  tolerance?: number
 }
 
 export class TrimTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
-  getSubGroup (): string {
-    return 'trim'
-  }
-
   getName (): string {
     return 'trim'
   }
@@ -33,18 +27,9 @@ export class TrimTransformationType extends TransformationDynamicTypeAbstract im
     return 'Trim'
   }
 
-  getIcon (): React.ReactNode {
-    return <Icon value="cut" />
-  }
-
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createSelectFieldConfig('trim', 'Trim Mode', [
-        { value: 'disabled', label: 'Disabled' },
-        { value: 'left', label: 'Left' },
-        { value: 'right', label: 'Right' },
-        { value: 'both', label: 'Both' }
-      ], 'disabled')
+      this.createNumberFieldConfig('tolerance', 'Tolerance', 'Enter tolerance value')
     ]
   }
 }

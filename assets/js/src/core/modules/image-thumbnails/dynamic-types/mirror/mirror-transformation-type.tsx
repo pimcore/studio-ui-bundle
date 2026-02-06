@@ -14,24 +14,25 @@
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
 
-export interface ScaleByWidthTransformationConfig {
-  width?: number
-  forceResize?: boolean
+export interface MirrorTransformationConfig {
+  mode?: 'horizontal' | 'vertical'
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class MirrorTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'mirror'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Mirror'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createSelectFieldConfig('mode', 'Mode', [
+        { value: 'horizontal', label: 'Horizontal' },
+        { value: 'vertical', label: 'Vertical' }
+      ], 'horizontal')
     ]
   }
 }

@@ -18,16 +18,7 @@ import { type TransformationDynamicTypeInterface, type FieldConfig } from './tra
 export abstract class TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   abstract getName(): string
   abstract getLabel(): string  
-  abstract getIcon(): React.ReactNode
   abstract getFieldConfig(): FieldConfig[]
-
-  getGroup(): string { 
-    return 'main' 
-  }
-
-  getSubGroup(): string { 
-    return 'transformations' 
-  }
 
   validateConfig(config: any): boolean { 
     return true 

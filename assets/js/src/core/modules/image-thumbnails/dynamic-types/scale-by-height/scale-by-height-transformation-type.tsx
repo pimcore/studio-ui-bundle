@@ -13,8 +13,6 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
-import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
 
 export interface ScaleByHeightTransformationConfig {
   height?: number
@@ -22,20 +20,12 @@ export interface ScaleByHeightTransformationConfig {
 }
 
 export class ScaleByHeightTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
-  getSubGroup (): string {
-    return 'scaling'
-  }
-
   getName (): string {
     return 'scaleByHeight'
   }
 
   getLabel (): string {
     return 'Scale by Height'
-  }
-
-  getIcon (): React.ReactNode {
-    return <Icon value="arrows-alt-v" />
   }
 
   getFieldConfig (): FieldConfig[] {

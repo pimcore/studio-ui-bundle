@@ -13,25 +13,27 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
+import React from 'react'
 
-export interface ScaleByWidthTransformationConfig {
-  width?: number
-  forceResize?: boolean
+export interface GrayscaleTransformationConfig {
+  // No configuration needed
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class GrayscaleTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'grayscale'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Grayscale'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createFieldConfig('info', 'text', 'Information', {
+        defaultValue: 'Nothing to configure',
+        props: { readOnly: true, disabled: true, title: 'This transformation converts the image to grayscale automatically' }
+      })
     ]
   }
 }

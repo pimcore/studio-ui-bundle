@@ -26,9 +26,6 @@ export interface FieldConfig {
 export interface TransformationDynamicTypeInterface {
   getName(): string
   getLabel(): string
-  getGroup(): string
-  getSubGroup(): string
-  getIcon(): React.ReactNode
   getFieldConfig(): FieldConfig[]
   createDefaultConfig(): any
   validateConfig(config: any): boolean

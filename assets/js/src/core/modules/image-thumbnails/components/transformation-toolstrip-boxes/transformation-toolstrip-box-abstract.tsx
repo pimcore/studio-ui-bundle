@@ -24,6 +24,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import type { Transformation } from '../types/media-query.types'
 import type { TransformationDynamicTypeInterface, FieldConfig } from '../dynamic-types/transformation-dynamic-type-interface'
+import { Box } from '@sdk/components'
 
 interface BaseTransformationToolStripBoxProps {
   transformation: Transformation
@@ -189,7 +190,7 @@ export function createTransformationToolStripBox(
 
     const fieldConfigs = transformationType.getFieldConfig()
 
-    return (
+    return (<Box padding='small'>
       <ToolStripBox
         onClick={() => handleBoxClick(onFocus)}
         renderToolStripStart={renderSharedToolStrip(
@@ -204,6 +205,7 @@ export function createTransformationToolStripBox(
           {renderFields(fieldConfigs, mediaQueryId, transformationIndex, firstInputRef)}
         </FormKit.Panel>
       </ToolStripBox>
+      </Box>
     )
   })
 }

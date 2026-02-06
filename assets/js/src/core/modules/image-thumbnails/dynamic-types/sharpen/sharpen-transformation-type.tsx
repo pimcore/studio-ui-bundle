@@ -14,24 +14,28 @@
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
 
-export interface ScaleByWidthTransformationConfig {
-  width?: number
-  forceResize?: boolean
+export interface SharpenTransformationConfig {
+  radius?: number
+  sigma?: number
+  amount?: number
+  threshold?: number
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class SharpenTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'sharpen'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Sharpen'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createNumberFieldConfig('radius', 'Radius', 'Enter radius value'),
+      this.createNumberFieldConfig('sigma', 'Sigma', 'Enter sigma value'),
+      this.createNumberFieldConfig('amount', 'Amount', 'Enter amount value'),
+      this.createNumberFieldConfig('threshold', 'Threshold', 'Enter threshold value', 0.0)
     ]
   }
 }

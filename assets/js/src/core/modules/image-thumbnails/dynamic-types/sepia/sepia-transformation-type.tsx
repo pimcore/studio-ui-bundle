@@ -13,25 +13,27 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
+import React from 'react'
 
-export interface ScaleByWidthTransformationConfig {
-  width?: number
-  forceResize?: boolean
+export interface SepiaTransformationConfig {
+  // No configuration needed
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class SepiaTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'sepia'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Sepia'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createFieldConfig('info', 'text', 'Information', {
+        defaultValue: 'Nothing to configure',
+        props: { readOnly: true, disabled: true, title: 'This transformation applies a sepia effect automatically' }
+      })
     ]
   }
 }

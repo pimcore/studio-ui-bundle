@@ -26,8 +26,6 @@ export interface Transformation {
   id: string
   /** Type of transformation */
   type: TransformationType
-  /** Subtype for effects transformations */
-  subtype?: EffectSubtype
   /** Configuration arguments for the transformation */
   config: TransformationConfig
   /** Display label for the transformation */
@@ -40,12 +38,16 @@ export type TransformationType =
   | 'scaleByWidth'
   | 'scale-by-height' 
   | 'trim' 
-  | 'effects'
-
-export type EffectSubtype = 
-  | 'sepia' 
-  | 'grayscale' 
+  | 'sepia'
+  | 'grayscale'
   | 'sharpen'
+  | 'contain'
+  | 'crop'
+  | 'frame'
+  | 'rotate'
+  | 'mirror'
+
+
 
 export interface TransformationConfig {
   [key: string]: any
@@ -65,12 +67,49 @@ export interface ScaleByHeightConfig extends TransformationConfig {
 }
 
 export interface TrimConfig extends TransformationConfig {
-  trim: 0 | 1 | 2 | 3 // disabled, left, right, both
+  tolerance?: number
 }
 
-export interface EffectsConfig extends TransformationConfig {
-  intensity?: number
-  additionalParams?: Record<string, any>
+export interface SepiaConfig extends TransformationConfig {
+  // No additional configuration needed
+}
+
+export interface GrayscaleConfig extends TransformationConfig {
+  // No additional configuration needed
+}
+
+export interface SharpenConfig extends TransformationConfig {
+  radius?: number
+  sigma?: number
+  amount?: number
+  threshold?: number
+}
+
+export interface ContainConfig extends TransformationConfig {
+  width?: number
+  height?: number
+  forceResize?: boolean
+}
+
+export interface CropConfig extends TransformationConfig {
+  width?: number
+  height?: number
+  x?: number
+  y?: number
+}
+
+export interface FrameConfig extends TransformationConfig {
+  width?: number
+  height?: number
+  forceResize?: boolean
+}
+
+export interface RotateConfig extends TransformationConfig {
+  angle?: number
+}
+
+export interface MirrorConfig extends TransformationConfig {
+  mode?: 'horizontal' | 'vertical'
 }
 
 // Backend API format (matches existing medias/mediaOrder structure)

@@ -47,36 +47,11 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
 
   const transformationTypes = transformationDynamicTypeRegistry.getAll()
 
-  const mainGroupTypes = transformationTypes.filter(type => type.getGroup() === 'main')
-  const effectsGroupTypes = transformationTypes.filter(type => type.getGroup() === 'effects')
-
-  const menuItems = [
-    ...mainGroupTypes.map(type => ({
-      key: type.getName(),
-      label: (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {type.getIcon()}
-          <span>{type.getLabel()}</span>
-        </div>
-      ),
-      onClick: () => handleTransformationClick(type)
-    })),
-    
-    ...(effectsGroupTypes.length > 0 ? [{
-      key: 'effects',
-      label: t('image-thumbnails.transformations.groups.effects'),
-      children: effectsGroupTypes.map(type => ({
-        key: type.getName(),
-        label: (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            {type.getIcon()}
-            <span>{type.getLabel()}</span>
-          </div>
-        ),
-        onClick: () => handleTransformationClick(type)
-      }))
-    }] : [])
-  ]
+  const menuItems = transformationTypes.map(type => ({
+    key: type.getName(),
+    label: type.getLabel(),
+    onClick: () => handleTransformationClick(type)
+  }))
 
   return (
     <Dropdown

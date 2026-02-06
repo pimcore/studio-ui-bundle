@@ -13,8 +13,6 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
-import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
 
 export interface CoverTransformationConfig {
   width?: number
@@ -24,20 +22,12 @@ export interface CoverTransformationConfig {
 }
 
 export class CoverTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
-  getSubGroup (): string {
-    return 'sizing'
-  }
-
   getName (): string {
     return 'cover'
   }
 
   getLabel (): string {
     return 'Cover'
-  }
-
-  getIcon (): React.ReactNode {
-    return <Icon value="crop" />
   }
 
   getFieldConfig (): FieldConfig[] {
@@ -51,7 +41,11 @@ export class CoverTransformationType extends TransformationDynamicTypeAbstract i
         { value: 'bottomleft', label: 'Bottom Left' },
         { value: 'bottomright', label: 'Bottom Right' }
       ], 'center'),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createBooleanFieldConfig('forceResize', 'Force Resize', false),
+      this.createFieldConfig('description', 'text', 'Focal Point', {
+        defaultValue: 'The positioning determines which part of the image remains visible when cropping.',
+        props: { readOnly: true, disabled: true }
+      })
     ]
   }
 }

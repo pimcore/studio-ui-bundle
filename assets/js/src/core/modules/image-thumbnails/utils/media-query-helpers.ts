@@ -56,19 +56,18 @@ export function convertFromBackendFormat(
       return
     }
 
-    const mediaQuery: MediaQuery = {
-      id: generateMediaQueryId(),
-      query: queryName,
-      displayName: getDisplayName(queryName),
-      transformations: transformations.map((t, index) => ({
-        id: generateTransformationId(),
-        type: getFrontendTransformationType(t.method),
-        subtype: getEffectSubtype(t.method),
-        config: t.arguments || {},
-        label: getTransformationLabel(t.method, t.arguments)
-      })),
-      order: mediaOrder[queryName] || 0
-    }
+      const mediaQuery: MediaQuery = {
+        id: generateMediaQueryId(),
+        query: queryName,
+        displayName: getDisplayName(queryName),
+        transformations: transformations.map((t, index) => ({
+          id: generateTransformationId(),
+          type: getFrontendTransformationType(t.method),
+          config: t.arguments || {},
+          label: getTransformationLabel(t.method, t.arguments)
+        })),
+        order: mediaOrder[queryName] || 0
+      }
 
     mediaQueries.push(mediaQuery)
   })
@@ -99,7 +98,14 @@ function getBackendMethodName(transformation: Transformation): string {
     'scaleByWidth': 'scaleByWidth',
     'scale-by-height': 'scaleByHeight', 
     'trim': 'trim',
-    'effects': getEffectMethodName(transformation.subtype)
+    'sepia': 'sepia',
+    'grayscale': 'grayscale',
+    'sharpen': 'sharpen',
+    'contain': 'contain',
+    'crop': 'crop',
+    'frame': 'frame',
+    'rotate': 'rotate',
+    'mirror': 'mirror'
   }
 
   return typeMap[transformation.type] || transformation.type
@@ -113,28 +119,20 @@ function getFrontendTransformationType(method: string): TransformationType {
     'scaleByHeight': 'scale-by-height',
     'scaleByWidth': 'scaleByWidth',
     'trim': 'trim',
-    'sepia': 'effects',
-    'grayscale': 'effects', 
-    'sharpen': 'effects'
+    'sepia': 'sepia',
+    'grayscale': 'grayscale', 
+    'sharpen': 'sharpen',
+    'contain': 'contain',
+    'crop': 'crop',
+    'frame': 'frame',
+    'rotate': 'rotate',
+    'mirror': 'mirror'
   }
 
   return methodMap[method] || 'resize'
 }
 
-function getEffectSubtype(method: string): 'sepia' | 'grayscale' | 'sharpen' | undefined {
-  const effectsMap: Record<string, 'sepia' | 'grayscale' | 'sharpen'> = {
-    'sepia': 'sepia',
-    'grayscale': 'grayscale',
-    'sharpen': 'sharpen'
-  }
 
-  return effectsMap[method]
-}
-
-
-function getEffectMethodName(subtype?: string): string {
-  return subtype || 'sepia' // Default to sepia if no subtype
-}
 
 
 function getTransformationLabel(method: string, args: Record<string, any> = {}): string {
@@ -143,21 +141,33 @@ function getTransformationLabel(method: string, args: Record<string, any> = {}):
       return `Resize ${args.width || '?'}x${args.height || '?'}`
     case 'scaleByHeight':
       return `Scale by Height ${args.height || '?'}px`
+    case 'cover':
+      return `Cover ${args.width || '?'}x${args.height || '?'}`
     case 'trim':
-      const trimTypes = ['Disabled', 'Left', 'Right', 'Both']
-      return `Trim ${trimTypes[args.trim] || 'Unknown'}`
+      return `Trim (tolerance: ${args.tolerance || 'not set'})`
     case 'sepia':
       return 'Sepia Effect'
     case 'grayscale':
       return 'Grayscale Effect'
     case 'sharpen':
       return 'Sharpen Effect'
+    case 'contain':
+      return `Contain ${args.width || '?'}x${args.height || '?'}`
+    case 'crop':
+      return `Crop ${args.width || '?'}x${args.height || '?'} at (${args.x || '?'}, ${args.y || '?'})`
+    case 'frame':
+      return `Frame ${args.width || '?'}x${args.height || '?'}`
+    case 'rotate':
+      return `Rotate ${args.angle || '?'}°`
+    case 'mirror':
+      return `Mirror ${args.mode || 'horizontal'}`
     default:
       return method
   }
 }
-
-/
+/**
+ * Generate unique ID for media query
+ */
 export function generateMediaQueryId(): string {
   return `mq-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 }

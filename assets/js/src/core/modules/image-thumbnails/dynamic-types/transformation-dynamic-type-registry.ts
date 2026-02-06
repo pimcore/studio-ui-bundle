@@ -36,14 +36,6 @@ class TransformationDynamicTypeRegistry {
   getAll(): TransformationDynamicTypeInterface[] {
     return Array.from(this.types.values())
   }
-
-  getByGroup(group: string): TransformationDynamicTypeInterface[] {
-    return this.getAll().filter(type => type.getGroup() === group)
-  }
-
-  getBySubGroup(subGroup: string): TransformationDynamicTypeInterface[] {
-    return this.getAll().filter(type => type.getSubGroup() === subGroup)
-  }
 }
 
 export const transformationDynamicTypeRegistry = new TransformationDynamicTypeRegistry()
@@ -54,9 +46,16 @@ let isRegistered = false
 import { ResizeTransformationType } from './resize/resize-transformation-type'
 import { ScaleByHeightTransformationType } from './scale-by-height/scale-by-height-transformation-type'
 import { TrimTransformationType } from './trim/trim-transformation-type'
-import { EffectsTransformationType } from './effects/effects-transformation-type'
 import { CoverTransformationType } from './cover/cover-transformation-type'
 import { ScaleByWidthTransformationType } from './scale-by-width/scale-by-width-transformation-type'
+import { SepiaTransformationType } from './sepia/sepia-transformation-type'
+import { GrayscaleTransformationType } from './grayscale/grayscale-transformation-type'
+import { SharpenTransformationType } from './sharpen/sharpen-transformation-type'
+import { ContainTransformationType } from './contain/contain-transformation-type'
+import { CropTransformationType } from './crop/crop-transformation-type'
+import { FrameTransformationType } from './frame/frame-transformation-type'
+import { RotateTransformationType } from './rotate/rotate-transformation-type'
+import { MirrorTransformationType } from './mirror/mirror-transformation-type'
 
 export function initializeTransformationTypes(): void {
   if (isRegistered) return
@@ -67,7 +66,14 @@ export function initializeTransformationTypes(): void {
     transformationDynamicTypeRegistry.register(new ScaleByWidthTransformationType())
     transformationDynamicTypeRegistry.register(new ScaleByHeightTransformationType())
     transformationDynamicTypeRegistry.register(new TrimTransformationType())
-    transformationDynamicTypeRegistry.register(new EffectsTransformationType())
+    transformationDynamicTypeRegistry.register(new SepiaTransformationType())
+    transformationDynamicTypeRegistry.register(new GrayscaleTransformationType())
+    transformationDynamicTypeRegistry.register(new SharpenTransformationType())
+    transformationDynamicTypeRegistry.register(new ContainTransformationType())
+    transformationDynamicTypeRegistry.register(new CropTransformationType())
+    transformationDynamicTypeRegistry.register(new FrameTransformationType())
+    transformationDynamicTypeRegistry.register(new RotateTransformationType())
+    transformationDynamicTypeRegistry.register(new MirrorTransformationType())
     
     isRegistered = true
   } catch (error) {

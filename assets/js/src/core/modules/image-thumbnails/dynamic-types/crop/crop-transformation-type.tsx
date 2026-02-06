@@ -14,24 +14,28 @@
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
 
-export interface ScaleByWidthTransformationConfig {
+export interface CropTransformationConfig {
   width?: number
-  forceResize?: boolean
+  height?: number
+  x?: number
+  y?: number
 }
 
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export class CropTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
   getName (): string {
-    return 'scaleByWidth'
+    return 'crop'
   }
 
   getLabel (): string {
-    return 'Scale by Width'
+    return 'Crop'
   }
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
+      this.createNumberFieldConfig('width', 'Width', 'Enter width value'),
+      this.createNumberFieldConfig('height', 'Height', 'Enter height value'),
+      this.createNumberFieldConfig('x', 'X Position', 'Enter X coordinate'),
+      this.createNumberFieldConfig('y', 'Y Position', 'Enter Y coordinate')
     ]
   }
 }

@@ -13,8 +13,6 @@
 
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
-import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
 
 export interface ResizeTransformationConfig {
   width?: number
@@ -24,20 +22,12 @@ export interface ResizeTransformationConfig {
 }
 
 export class ResizeTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
-  getSubGroup (): string {
-    return 'resize'
-  }
-
   getName (): string {
     return 'resize'
   }
 
   getLabel (): string {
     return 'Resize'
-  }
-
-  getIcon (): React.ReactNode {
-    return <Icon value="expand" />
   }
 
   getFieldConfig (): FieldConfig[] {
