@@ -587,6 +587,14 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+allowed-types: Allowed types
+allowed-targets: Allowed targets
+disabled-fields: Disabled fields
+accesskey: Access key
+rel: Rel
+tabindex: Tab index
+attributes: Attributes
+class: Class
 field-definition.geopoint: Geo Point
 field-definition.geobounds: Geo Bounds
 field-definition.geopolygon: Geo Polygon
@@ -646,6 +654,7 @@ domain-label-width: Domain label width
 controller-action: Controller action
 controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
 available-sites: "Available sites"
+empty-equals-allow-all-tooltip: "Empty = allow all"
 reset: Reset
 name: Name
 tooltip: Tooltip

@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionLink extends DynamicTypeFieldDefinitionDa
   id: string = 'link'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'url-slug' }
+    return { type: 'name', value: 'hardlink' }
   }
 
   getGroup (): string[] {
@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionLink extends DynamicTypeFieldDefinitionDa
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionLinkFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
