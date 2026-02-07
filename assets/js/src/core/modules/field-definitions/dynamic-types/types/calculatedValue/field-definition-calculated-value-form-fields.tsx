@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
-  const calculatorType = Form.useWatch('calculatorType')
 
   const form = Form.useFormInstance()
   const useCalculatorType = Form.useWatch('calculatorType')
@@ -81,23 +80,23 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
           />
         </Form.Item>
 
-        {calculatorType !== 'expression' && (
-        <Form.Item
-          label={ t('calculator-class') }
-          name="calculatorClass"
-        >
-          <Input />
-        </Form.Item>
-        )}
+        <Form.Conditional condition={ (values) => values.calculatorType !== 'expression' }>
+          <Form.Item
+            label={ t('calculator-class') }
+            name="calculatorClass"
+          >
+            <Input />
+          </Form.Item>
+        </Form.Conditional>
 
-        {calculatorType === 'expression' && (
-        <Form.Item
-          label={ t('calculator-expression') }
-          name="calculatorExpression"
-        >
-          <Input />
-        </Form.Item>
-        )}
+        <Form.Conditional condition={ (values) => values.calculatorType === 'expression' }>
+          <Form.Item
+            label={ t('calculator-expression') }
+            name="calculatorExpression"
+          >
+            <Input />
+          </Form.Item>
+        </Form.Conditional>
       </>
       )}
     </FormKit.Panel>
