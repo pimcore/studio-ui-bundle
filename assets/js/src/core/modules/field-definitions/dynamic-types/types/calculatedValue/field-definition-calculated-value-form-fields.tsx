@@ -9,28 +9,43 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
-import React from 'react'
+import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
+  const calculatorType = Form.useWatch('calculatorType')
+
+  const form = Form.useFormInstance()
+  const useCalculatorType = Form.useWatch('calculatorType')
+
+  useEffect(() => {
+    if (useCalculatorType === null) {
+      form.setFieldValue('calculatorType', 'class')
+    }
+  }, [useCalculatorType, form])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('calculator-class') }
-        name="calculatorClass"
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('calculator-expression') }
-        name="calculatorExpression"
-      >
-        <Input />
-      </Form.Item>
+      {!isCustomLayout && (
+        <Form.Item
+          label={ t('type') }
+          name="elementType"
+        >
+          <Select
+            options={ [
+              { label: t('input'), value: 'input' },
+              { label: t('textarea'), value: 'textarea' },
+              { label: t('html'), value: 'html' },
+              { label: t('number'), value: 'numeric' },
+              { label: t('date'), value: 'date' },
+              { label: t('bool'), value: 'boolean' }
+            ] }
+          />
+        </Form.Item>
+      )}
 
       <Form.Item
         label={ t('width') }
@@ -40,16 +55,51 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('column-length') }
-        name="columnLength"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('column-length') }
+          name="columnLength"
+          rules={ [{ min: 0, type: 'number' }] }
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('calculator-type') }
+          name="calculatorType"
+          tooltip={ t('calculator-type-tooltip') }
+        >
+          <Select
+            options={ [
+              { label: t('class'), value: 'class' },
+              { label: t('expression'), value: 'expression' }
+            ] }
+          />
+        </Form.Item>
+
+        {calculatorType !== 'expression' && (
+        <Form.Item
+          label={ t('calculator-class') }
+          name="calculatorClass"
+        >
+          <Input />
+        </Form.Item>
+        )}
+
+        {calculatorType === 'expression' && (
+        <Form.Item
+          label={ t('calculator-expression') }
+          name="calculatorExpression"
+        >
+          <Input />
+        </Form.Item>
+        )}
+      </>
+      )}
     </FormKit.Panel>
   )
 }

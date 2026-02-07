@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionCalculatedValue extends DynamicTypeFieldD
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionCalculatedValueFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
