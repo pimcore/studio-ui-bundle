@@ -110,6 +110,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   // Track if we've set initial keys
   const hasInitializedRef = React.useRef(false)
 
+  // Track cloned node IDs to expand them when they appear in structure
+  const pendingClonedNodeIdRef = React.useRef<string | null>(null)
+
   // Set initial expanded keys once when data arrives
   useEffect(() => {
     if (!hasInitializedRef.current && allAvailableKeys.length > 0) {
@@ -118,6 +121,34 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       hasInitializedRef.current = true
     }
   }, [allAvailableKeys])
+
+  // Expand cloned nodes when they appear in structure
+  useEffect(() => {
+    if (pendingClonedNodeIdRef.current !== null && structure !== undefined) {
+      const clonedNodeId = pendingClonedNodeIdRef.current
+      const findNodeInStructure = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        if (node.id === targetId) return node
+        for (const child of node.children) {
+          const found = findNodeInStructure(child, targetId)
+          if (found !== undefined) return found
+        }
+        return undefined
+      }
+
+      const clonedNode = findNodeInStructure(structure, clonedNodeId)
+      if (clonedNode !== undefined) {
+        const keysToExpand = getAllKeys(clonedNode)
+        if (keysToExpand.length > 0) {
+          setExpandedKeys(prev => {
+            const newKeys = [...new Set([...prev, ...keysToExpand])]
+            expandedKeysRef.current = newKeys
+            return newKeys
+          })
+        }
+        pendingClonedNodeIdRef.current = null
+      }
+    }
+  }, [structure])
 
   // Ref for expanded keys (needed in sorting-bottom isValidContext)
   const expandedKeysRef = React.useRef<string[]>(expandedKeys)
@@ -387,7 +418,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
-      cloneFieldDefinition(nodeKey)
+      const clonedNodeId = cloneFieldDefinition(nodeKey)
+      pendingClonedNodeIdRef.current = clonedNodeId
     }
 
     if (actionKey === 'delete') {

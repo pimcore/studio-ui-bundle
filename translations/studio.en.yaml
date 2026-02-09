@@ -724,10 +724,10 @@ field-definition.calculated-value: Calculated Value
 field-definition.user: User
 field-definition.block: Block
 field-definition.panel: Panel
-field-definition.groups.layout: Layout
+field-definition.groups.layout: Layout Component
 field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
 field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
-field-definition.groups.data: Data
+field-definition.groups.data: Data Component
 field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
 field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
 field-definition.groups.data.text: Text
@@ -1044,9 +1044,11 @@ table.empty: Empty
 table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
 tree.actions.prefix.add: "Add "
-tree.actions.prefix.convert: "Convert to "
-tree.actions.convert: Convert
+tree.actions.convert: "Convert to "
 tree.actions.clone: Clone
+tree.actions.copy: Copy
+tree.actions.paste: Paste
+tree.actions.delete: Delete
 tree.actions.add-user: Add User
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
