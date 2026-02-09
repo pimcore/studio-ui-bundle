@@ -20,16 +20,22 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      // @todo translations
+      path: 'DataManagement/DataModelDefinitions',
+      label: 'navigation.data-model-definitions',
+      order: 1200
+    })
+
+    mainNavRegistryService.registerMainNavItem({
       path: 'DataManagement/DataModelDefinitions/ClassDefinitions',
-      label: 'classes',
-      icon: 'class',
+      label: 'navigation.class-definitions',
+      className: 'class',
       order: 100,
       widgetConfig: {
         name: 'classes',
         id: 'class-definitions',
         component: 'class-definitions',
         config: {
+          translationKey: 'widget.class-definitions',
           icon: { type: 'name', value: 'class' }
         }
       }
