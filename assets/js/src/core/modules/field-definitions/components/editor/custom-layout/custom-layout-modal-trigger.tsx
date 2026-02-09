@@ -11,17 +11,19 @@
 import { useCustomLayoutModal } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
 import { IconTextButton } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const CustomLayoutModalTrigger = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { openModal } = useCustomLayoutModal()
 
   return (
     <IconTextButton
-      icon={ { value: 'layout' } }
+      icon={ { value: 'new-something' } }
       onClick={ openModal }
       type="link"
     >
-      Custom layouts
+      {t('field-definitions.custom-layouts')}
     </IconTextButton>
   )
 }

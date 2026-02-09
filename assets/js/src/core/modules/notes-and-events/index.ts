@@ -39,7 +39,7 @@ moduleSystem.registerModule({
       path: 'DataManagement/Notes & Events',
       label: 'navigation.notes-and-events',
       dividerBottom: true,
-      order: 100,
+      order: 400,
       className: 'item-style-modifier',
       permission: UserPermission.NotesAndEvents,
       perspectivePermission: NavPermission.NotesAndEvents,

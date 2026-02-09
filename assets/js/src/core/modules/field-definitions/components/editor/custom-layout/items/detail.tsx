@@ -12,6 +12,7 @@ import { CustomLayout } from '@Pimcore/modules/field-definitions/components/edit
 import { DetailParentTree } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/parent-tree'
 import { DetailContent } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content'
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
+import { CustomLayoutActions } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/custom-layout-actions'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
@@ -20,10 +21,10 @@ import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-pro
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 export const ItemDetail = (): React.JSX.Element => {
-  const { activeConfiguration } = useItems()
+  const { activeConfiguration, setDetailView } = useItems()
   const configuration = activeConfiguration!
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
   const layoutResult = useDetailLayoutQuery?.({
@@ -31,7 +32,7 @@ export const ItemDetail = (): React.JSX.Element => {
   })
   const layoutError = layoutResult?.error as FetchBaseQueryError | undefined
 
-  const layoutAccessor = useDetailLayoutAccessor?.()
+  const layoutAccessor = useMemo(() => useDetailLayoutAccessor?.(), [useDetailLayoutAccessor])
 
   const detailResult = useDetailGeneralSettingsQuery({
     id: configuration.id
@@ -40,6 +41,7 @@ export const ItemDetail = (): React.JSX.Element => {
   const detailError = detailResult.error as FetchBaseQueryError | undefined
 
   const [layout, setLayout] = useState<Layout | undefined>(layoutResult?.data as Layout | undefined)
+  const [layoutKey, setLayoutKey] = useState(0)
 
   useEffect(() => {
     setLayout(layoutResult?.data as Layout | undefined)
@@ -48,6 +50,32 @@ export const ItemDetail = (): React.JSX.Element => {
   useEffect(() => {
     if (layoutAccessor !== undefined && detailData !== undefined) {
       const accessedLayout = layoutAccessor.accessor(detailData as Record<string, any>)
+
+      if (accessedLayout === undefined) {
+        setLayout({
+          name: 'pimcore_root',
+          children: [],
+          fieldType: 'panel',
+          bodyStyle: '',
+          border: false,
+          collapsible: false,
+          title: '',
+          dataType: 'layout',
+          collapsed: false,
+          height: 0,
+          width: 0,
+          icon: { type: 'name', value: 'none' },
+          labelAlign: 'left',
+          labelWidth: 100,
+          layout: null,
+          locked: false,
+          region: '',
+          type: 'layout',
+          additionalAttributes: {}
+        })
+        return
+      }
+
       setLayout(accessedLayout)
     }
   }, [detailData, layoutAccessor])
@@ -92,15 +120,20 @@ export const ItemDetail = (): React.JSX.Element => {
 
   return (
     <GeneralSettingsProvider generalSettings={ detailData }>
-      <LayoutProvider layout={ layout }>
+      <LayoutProvider
+        key={ layoutKey }
+        layout={ layout }
+      >
         <ContentLayout
           className="absolute-stretch"
           renderToolbar={
             <Toolbar
-              justify='flex-end'
+              justify='space-between'
               padding={ { x: 'none' } }
               theme='secondary'
             >
+              <CustomLayoutActions />
+
               <Flex gap={ 'mini' }>
                 <Flex gap={ 'mini' }>
                   <IconButton
@@ -108,6 +141,8 @@ export const ItemDetail = (): React.JSX.Element => {
                     onClick={ () => {
                       void layoutResult?.refetch()
                       void refetchDetail()
+                      setLayoutKey((prev) => prev + 1)
+                      setDetailView('general')
                     } }
                   />
 

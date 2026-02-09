@@ -23,13 +23,13 @@ export interface GlobalProviderProps {
 export const GlobalProvider = ({ children, themeId }: GlobalProviderProps): React.JSX.Element => {
   return (
     <ContainerProvider>
-      <ThemeProvider id={ themeId }>
-        <Provider store={ store }>
+      <Provider store={ store }>
+        <ThemeProvider id={ themeId }>
           <ElementSelectorProvider>
             {children}
           </ElementSelectorProvider>
-        </Provider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
     </ContainerProvider>
   )
 }

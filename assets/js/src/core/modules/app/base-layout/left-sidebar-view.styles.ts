@@ -31,7 +31,7 @@ export const useStyles = createStyles(({
       }
 
       .ant-avatar {
-        background-color: rgba(114, 46, 209, 0.66);
+        background-color: var(--pimcore-brand-color, ${token.colorPrimary});
 
         .anticon {
           vertical-align: 0;

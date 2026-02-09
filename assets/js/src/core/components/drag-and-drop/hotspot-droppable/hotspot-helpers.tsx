@@ -70,7 +70,13 @@ export const createHotspotHandlers = (
     e.preventDefault()
     updateHotspotDragState(hotspot.id, 'inactive')
     if (isInfoValidForHotspot(hotspot.id)) {
-      hotspot.onDrop(dragInfoRef.current!)
+      const dragInfo = dragInfoRef.current!
+      // Delay the onDrop callback to allow the drag cycle to complete
+      // This ensures handleDragEnd fires and cleans up the overlay before
+      // any state changes from onDrop cause component re-renders
+      setTimeout(() => {
+        hotspot.onDrop(dragInfo)
+      }, 0)
     }
   }
 

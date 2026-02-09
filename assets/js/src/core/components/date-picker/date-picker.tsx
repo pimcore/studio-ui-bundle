@@ -31,6 +31,7 @@ export type DatePickerProps = PickerProps & {
   outputFormat?: string
   disabled?: boolean
   inherited?: boolean
+  showSuffixIcon?: boolean
 }
 
 const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
@@ -55,7 +56,10 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
       format={ props.outputFormat }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
-      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
+      rootClassName={ cn(styles.datePicker, props.className, {
+        [styles.inherited]: props.inherited,
+        showSuffixIcon: props.showSuffixIcon
+      }) }
       showTime={ props.showTime }
       style={ computedStyle }
       value={ value }

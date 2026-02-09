@@ -12,15 +12,18 @@ import { AddModalTrigger } from '@Pimcore/modules/field-definitions/components/e
 import { TopBarItemSelect } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/top-bar/item-select'
 import { Header, Split, Toolbar } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const ItemsTopBar = (): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
     <Toolbar
       padding={ { x: 'none' } }
       position="content"
       theme="secondary"
     >
-      <Header title="Custom Layout">
+      <Header title={ t('field-definitions.custom-layout-title') }>
         <Split>
           <AddModalTrigger />
           <TopBarItemSelect />

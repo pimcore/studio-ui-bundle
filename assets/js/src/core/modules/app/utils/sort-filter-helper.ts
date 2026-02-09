@@ -12,16 +12,16 @@ import { type SortingState } from '@tanstack/react-table'
 import { type SortFilter } from '../types/sort-filter'
 import { isNil } from 'lodash'
 
-export function transformToSortingState (sortFilter: SortFilter): SortingState {
+export function transformToSortFilter (sortFilter: SortFilter): SortingState {
   return [{
     id: sortFilter.key,
     desc: sortFilter.direction === 'DESC'
   }]
 }
 
-export function transformToSortFilter (sorting: SortingState | null): SortFilter | null {
+export function transformToSortingState (sorting: SortingState | null): SortFilter | undefined {
   if (isNil(sorting) || sorting.length === 0) {
-    return null
+    return undefined
   }
 
   return {

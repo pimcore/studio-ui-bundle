@@ -40,7 +40,7 @@ moduleSystem.registerModule({
       path: 'DataManagement/Search & Replace Assignments',
       label: 'navigation.search-replace-assignments',
       className: 'item-style-modifier',
-      order: 300,
+      order: 700,
       hidden: () => {
         return !isAllowed(UserPermission.Assets) && !isAllowed(UserPermission.Documents) && !isAllowed(UserPermission.Objects)
       },

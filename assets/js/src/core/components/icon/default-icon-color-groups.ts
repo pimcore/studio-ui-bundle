@@ -149,7 +149,8 @@ export const defaultIconColorGroups: IconColorGroups = {
     'url-slug': 'colorCodingRed3',
     'checkbox': 'colorCodingRed3',
     'hardlink': 'colorCodingRed3',
-    'data-quality': 'colorCodingRed3'
+    'data-quality': 'colorCodingRed3',
+    'calculator': 'colorCodingRed3'
   },
 
   // Exception subgroup

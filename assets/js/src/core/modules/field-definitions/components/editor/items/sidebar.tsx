@@ -17,8 +17,10 @@ import { ApiError, trackError } from '@sdk/modules/app'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const ItemsSidebar = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { useItemsQuery, useItemsDeleteMutation } = useSettings()
   const { isLoading, isFetching, data, refetch } = useItemsQuery()
   const [deleteConfigurationMutation] = useItemsDeleteMutation()
@@ -42,14 +44,14 @@ export const ItemsSidebar = (): React.JSX.Element => {
         return true
       }
 
-      return configuration.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      return (configuration.name as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || (configuration.id as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     })
 
     filteredData.forEach((configuration) => {
       const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
-          title: configuration.name,
+          title: `${configuration.name} (${configuration.id})`,
           key: `${configuration.id}`,
           icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
           meta: { configuration },
@@ -71,9 +73,9 @@ export const ItemsSidebar = (): React.JSX.Element => {
       }
 
       const treeDataItem: TreeDataItem = {
-        title: configuration.name,
+        title: `${configuration.name} (${configuration.id})`,
         key: `${configuration.id}`,
-        icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
+        icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
         meta: { configuration },
         actions: [
           { key: 'delete', icon: 'delete' }
@@ -83,7 +85,6 @@ export const ItemsSidebar = (): React.JSX.Element => {
       groupMap[groupName].children!.push(treeDataItem)
     })
 
-    // @todo check sorting logic
     formattedTreeData.sort((a, b) => {
       if ((a.children?.length ?? 0) !== 0 && (b.children?.length ?? 0) === 0) {
         return -1
@@ -112,7 +113,6 @@ export const ItemsSidebar = (): React.JSX.Element => {
     })
   }
 
-  // @todo Translations!!
   return (
     <AddModalProvider
       onOpenChange={ setShowNewModal }
@@ -135,7 +135,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
               } }
               type="link"
             >
-              New
+              {t('new')}
             </IconTextButton>
           </Toolbar>
         }
@@ -146,7 +146,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
         >
           <SearchInput
             onChange={ (e) => { setSearchTerm(e.target.value) } }
-            placeholder="Search"
+            placeholder={ t('search') }
             value={ searchTerm }
             withoutAddon
           />

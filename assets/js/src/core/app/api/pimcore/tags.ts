@@ -42,6 +42,7 @@ export const tagNames = {
   NOTIFICATIONS: 'NOTIFICATIONS',
   NOTIFICATION_DETAILS: 'NOTIFICATION_DETAILS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
+  SETTINGS_ADMIN: 'SETTINGS_ADMIN',
   WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
   REDIRECTS: 'REDIRECTS',
   ELEMENT_TAGS: 'TAGS',
@@ -64,7 +65,15 @@ export const tagNames = {
   WIDGET_DETAIL: 'WIDGET_DETAIL',
   USERS: 'USERS',
   USER_DETAIL: 'USER_DETAIL',
-  USER_TREE: 'USER_TREE'
+  USER_TREE: 'USER_TREE',
+  GDPR_DATA: 'GDPR_DATA',
+  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL',
+  CLASS_DEFINITION: 'CLASS_DEFINITION',
+  CLASS_DEFINITION_DETAIL: 'CLASS_DEFINITION_DETAIL',
+  CLASS_DEFINITION_COLLECTION: 'CLASS_DEFINITION_COLLECTION',
+  CUSTOM_LAYOUT: 'CUSTOM_LAYOUT',
+  CUSTOM_LAYOUT_DETAIL: 'CUSTOM_LAYOUT_DETAIL',
+  CUSTOM_LAYOUT_COLLECTION: 'CUSTOM_LAYOUT_COLLECTION'
 }
 
 export const providingTags = {
@@ -104,6 +113,7 @@ export const providingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
@@ -134,7 +144,15 @@ export const providingTags = {
   WIDGET_DETAIL: (id: string, widgetType: string) => [{ type: tagNames.WIDGET_DETAIL, id, widgetType }],
   USERS: () => [tagNames.USERS],
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
-  USER_TREE: () => [tagNames.USER_TREE]
+  USER_TREE: () => [tagNames.USER_TREE],
+  GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [tagNames.CLASS_DEFINITION, { type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [tagNames.CUSTOM_LAYOUT, { type: tagNames.CUSTOM_LAYOUT_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -168,6 +186,7 @@ export const invalidatingTags = {
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
@@ -194,7 +213,15 @@ export const invalidatingTags = {
   WIDGETS: () => [tagNames.WIDGETS],
   USERS: () => [tagNames.USERS],
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
-  USER_TREE: () => [tagNames.USER_TREE]
+  USER_TREE: () => [tagNames.USER_TREE],
+  GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [{ type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [{ type: tagNames.CUSTOM_LAYOUT_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

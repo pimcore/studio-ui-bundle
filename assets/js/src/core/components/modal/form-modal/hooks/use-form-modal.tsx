@@ -9,11 +9,11 @@
  */
 
 import React from 'react'
-import { type FormInstance, type InputRef, type ModalFuncProps } from 'antd'
+import { type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { isDontAskAgainEnabled, setDontAskAgain } from '@Pimcore/utils/local-storage'
 import { DontAskAgainSwitch } from '@Pimcore/components/modal/form-modal/components/dont-ask-again-switch'
@@ -24,7 +24,7 @@ import { noop } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Flex } from '@sdk/components'
 
-let form: FormInstance<any> | null = null
+let form: formInstanceType | null = null
 
 export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 

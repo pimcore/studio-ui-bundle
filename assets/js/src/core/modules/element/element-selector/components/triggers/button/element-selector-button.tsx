@@ -28,7 +28,7 @@ export const ElementSelectorButton = (props: ElementSelectorButtonProps): React.
   return (
     <IconButton
       { ...baseProps }
-      icon={ { value: 'search' } }
+      icon={ { value: 'folder-search' } }
       onClick={ onClick }
     />
   )

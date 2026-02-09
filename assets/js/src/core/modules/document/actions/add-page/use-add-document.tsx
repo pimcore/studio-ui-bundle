@@ -24,9 +24,9 @@ import { useTranslation } from 'react-i18next'
 import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { type InputRef, type FormInstance } from 'antd'
+import { type InputRef } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -142,7 +142,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Full form component (3 inputs: title, navigationName, key)
-  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, buttonId: string }> = ({ form, firstInputRef, buttonId }) => {
+  const FullFormContent: React.FC<{ form: formInstanceType<any>, firstInputRef: React.RefObject<InputRef>, buttonId: string }> = ({ form, firstInputRef, buttonId }) => {
     const handleEnterPress = (): void => {
       // Click the OK button using the unique ID
       const okButton = document.getElementById(buttonId) as HTMLButtonElement

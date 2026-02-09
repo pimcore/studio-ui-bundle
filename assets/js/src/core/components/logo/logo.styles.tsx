@@ -16,7 +16,7 @@ export const useStlyes = createStyles(({ token, css }) => {
       padding: 4px 0 4px 0;
       height: 32px;
       width: 40px;
-      color: #5520A6;
+      color: var(--pimcore-brand-color, ${token.colorLogo ?? '#5520A6'});
     `
   }
 }, { hashPriority: 'low' })

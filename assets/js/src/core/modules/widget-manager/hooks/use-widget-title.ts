@@ -10,8 +10,8 @@
 
 import { type TabNode } from 'flexlayout-react'
 import { useTranslation } from 'react-i18next'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { type ElementIcon } from '@sdk/components'
 
 interface UseWidgetTitleReturn {
   title: string

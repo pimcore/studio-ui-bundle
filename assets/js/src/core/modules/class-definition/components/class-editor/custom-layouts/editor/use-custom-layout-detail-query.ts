@@ -12,6 +12,5 @@ import { usePimcoreStudioApiClassCustomLayoutGetQuery } from '@sdk/api/class-def
 import { type AnyQueryHook } from 'types/react-query'
 
 export const useDecoratedCustomLayoutDetailQuery: AnyQueryHook = (data) => {
-  console.log({ data })
   return usePimcoreStudioApiClassCustomLayoutGetQuery({ customLayoutId: data.id })
 }

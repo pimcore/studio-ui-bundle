@@ -13,9 +13,9 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
+import { type ElementIcon } from '@sdk/components'
 
 export interface IMainWidgetContext {
   nodeId: string

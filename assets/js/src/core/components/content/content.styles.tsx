@@ -26,7 +26,7 @@ export const useStyles = createStyles(({ token, css }, { gap }: ContentStylesPro
       height: 100%;
       overflow: auto;
       gap: ${gapValue}px;
-
+      
       &.content--overflow-x-hidden {
         overflow-x: hidden;
       }

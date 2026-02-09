@@ -45,17 +45,25 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         </Form.Item>
 
         <Form.Item name="mandatory">
-          <Switch labelRight={ t('mandatory') } />
+          <Switch
+            disabled={ props.context.disableMandatory }
+            labelRight={ t('mandatory') }
+          />
         </Form.Item>
 
         <Form.Item name="index">
-          <Switch labelRight={ t('index') } />
+          <Switch
+            disabled={ props.context.disableIndex }
+            labelRight={ t('index') }
+          />
         </Form.Item>
 
         {/* @todo check behavior for unique fields */}
-        <Form.Item name="unique">
-          <Switch labelRight={ t('unique') } />
-        </Form.Item>
+        {props.context.hideUnique !== true && (
+          <Form.Item name="unique">
+            <Switch labelRight={ t('unique') } />
+          </Form.Item>
+        )}
 
         <Form.Item name="noteditable">
           <Switch labelRight={ t('not-editable') } />

@@ -135,7 +135,9 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/areablock-editable/areablock-editable'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-areablock'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-date'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
@@ -263,3 +265,6 @@ export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/pro
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'

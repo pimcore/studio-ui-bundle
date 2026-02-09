@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Pie } from '@ant-design/plots'
-import { isEmpty, isNil, merge } from 'lodash'
+import { isEmpty, merge } from 'lodash'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -26,52 +26,53 @@ const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_FIELD_COLOR_KEY = 'color'
 
-export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): React.JSX.Element => {
+export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
   const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
-  const reportChartData: IChartPieDataItem[] = chartData.map(((item, index) => ({
-    [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
-    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
-    [CHART_FIELD_COLOR_KEY]: colorList[index]
-  })))
+  const reportChartData: IChartPieDataItem[] = useMemo(() => {
+    return chartData.map((item, index) => ({
+      [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
+      [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
+      [CHART_FIELD_COLOR_KEY]: colorList[index]
+    }))
+  }, [chartData, pieLabelColumn, pieColumn, colorList])
   const { isExpanded, visibleItems, toggle, initialVisibleCount } = useShowMore(reportChartData)
 
-  const [disabledItems, setDisabledItems] = useState<string[]>([])
   const [chartRef, setChartRef] = useState<any>(null)
-  const [totalCount, setTotalCount] = useState<number>(0)
+  const [disabledItems, setDisabledItems] = useState<string[]>([])
+
+  const visibleChartData = useMemo(() => {
+    if (isEmpty(disabledItems)) {
+      return reportChartData
+    }
+
+    return reportChartData.filter(
+      item => !disabledItems.includes(item[CHART_FIELD_TYPE_KEY])
+    )
+  }, [reportChartData, disabledItems])
+
+  const totalCount = useMemo(() => {
+    return visibleChartData.reduce(
+      (sum, item) => sum + item[CHART_FIELD_VALUE_KEY],
+      0
+    )
+  }, [visibleChartData])
 
   useEffect(() => {
-    if (chartRef !== null && !isNil(reportChartData)) {
-      chartRef.chart.changeData(reportChartData)
+    if (chartRef === null) return
 
-      const totalValue =
-          reportChartData
-            .filter(item => !disabledItems.includes(item[CHART_FIELD_TYPE_KEY]))
-            .reduce((sum, item) => sum + item[CHART_FIELD_VALUE_KEY], 0)
-      setTotalCount(totalValue ?? 0)
-    }
-  }, [reportChartData])
+    chartRef.chart.changeData(visibleChartData)
+  }, [visibleChartData, chartRef])
 
   const handleLegendItemClick = (itemKey: string): void => {
-    const newDisabledItems = disabledItems?.includes(itemKey)
-      ? disabledItems.filter(item => item !== itemKey)
-      : [...disabledItems, itemKey]
-
-    setDisabledItems(newDisabledItems)
-
-    if (chartRef !== null) {
-      const chart = chartRef.chart
-
-      const filteredData = isEmpty(newDisabledItems)
-        ? reportChartData
-        : reportChartData.filter((item: IChartDataItem) => !newDisabledItems.includes(item[CHART_FIELD_TYPE_KEY]))
-      setTotalCount(filteredData.reduce((sum, item) => sum + item[CHART_FIELD_VALUE_KEY], 0))
-
-      chart.changeData(filteredData)
-    }
+    setDisabledItems(prev =>
+      prev.includes(itemKey)
+        ? prev.filter(item => item !== itemKey)
+        : [...prev, itemKey]
+    )
   }
 
   const config = {
@@ -119,26 +120,31 @@ export const PieChart = ({ reportData, chartData, chartConfig }: IChartProps): R
   return (
     <div>
       <Pie { ...mergedConfig } />
-      <Flex
-        gap="mini"
-        justify="center"
-        wrap="wrap"
-      >
-        {visibleItems?.map((item, index) => {
-          const isDisabled = disabledItems.includes(item.type)
 
-          return (
-            <LegendItem
-              disabled={ isDisabled }
-              handleClick={ () => { handleLegendItemClick(item.type) } }
-              key={ `${index}-${item.type}` }
-              label={ item.type }
-              markerColor={ item.color }
-              value={ item.value }
-            />
+      {showLegend
+        ? (
+          <Flex
+            gap="mini"
+            justify="center"
+            wrap="wrap"
+          >
+            {visibleItems?.map((item, index) => {
+              const isDisabled = disabledItems.includes(item.type)
+
+              return (
+                <LegendItem
+                  disabled={ isDisabled }
+                  handleClick={ () => { handleLegendItemClick(item.type) } }
+                  key={ `${index}-${item.type}` }
+                  label={ item.type }
+                  markerColor={ item.color }
+                  value={ item.value }
+                />
+              )
+            })}
+          </Flex>
           )
-        })}
-      </Flex>
+        : null}
 
       {reportChartData?.length > initialVisibleCount && (
         <ShowMoreBtn

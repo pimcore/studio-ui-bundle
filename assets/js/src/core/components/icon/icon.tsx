@@ -15,11 +15,15 @@ import { theme } from 'antd'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon as GeneratedElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useStyles } from './icon.styles'
 import { type IconColorGroupsRegistry, type IconColorGroup } from './icon-color-groups-registry'
 
 type SubIconVariant = 'default' | 'green'
+
+export interface ElementIcon extends GeneratedElementIcon {
+  colorToken?: string
+}
 
 export interface IconProps extends Omit<ElementIcon, 'type'> {
   type?: ElementIcon['type']
@@ -32,7 +36,7 @@ export interface IconProps extends Omit<ElementIcon, 'type'> {
   iconColorGroup?: IconColorGroup
 }
 
-export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, onLoadError, iconColorGroup, ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, onLoadError, iconColorGroup, colorToken, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const iconColorGroupsRegistry = useInjection<IconColorGroupsRegistry>(serviceIds.iconColorGroupsRegistry)
 
@@ -51,6 +55,10 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
   const shouldHideIcon = isNameType && (isNil(value) || isUndefined(SvgIcon))
 
   const getIconColor = (): string | undefined => {
+    if (!isUndefined(colorToken)) {
+      return token[colorToken as keyof typeof token] as string ?? colorToken
+    }
+
     if (isUndefined(iconColorGroup) || !isNameType) {
       return undefined
     }

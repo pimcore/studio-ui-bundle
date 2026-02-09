@@ -13,7 +13,8 @@ import { DetailContent } from '@Pimcore/modules/field-definitions/components/edi
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
-import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { ImportExportActions } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
+import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -27,6 +28,7 @@ export interface ItemDetailProps {
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
+  const { setDetailView } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
   })
@@ -41,6 +43,7 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const detailError = detailResult.error as FetchBaseQueryError | undefined
 
   const [layout, setLayout] = useState<Layout | undefined>(layoutResult?.data as Layout | undefined)
+  const [layoutKey, setLayoutKey] = useState(0)
 
   useEffect(() => {
     setLayout(layoutResult?.data as Layout | undefined)
@@ -60,6 +63,9 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
         name: 'pimcore_root',
         children: [],
         fieldType: 'panel',
+        // @todo
+        // @ts-expect-error remove when backend provides the right typo
+        fieldtype: 'panel',
         bodyStyle: '',
         border: false,
         collapsible: false,
@@ -93,7 +99,10 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
 
   return (
     <GeneralSettingsProvider generalSettings={ detailData }>
-      <LayoutProvider layout={ layout }>
+      <LayoutProvider
+        key={ layoutKey }
+        layout={ layout }
+      >
         <ContentLayout
           className="absolute-stretch"
           renderToolbar={
@@ -104,8 +113,12 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                   onClick={ () => {
                     void layoutResult?.refetch()
                     void refetchDetail()
+                    setLayoutKey((prev) => prev + 1)
+                    setDetailView('general')
                   } }
                 />
+
+                <ImportExportActions />
 
                 {customLayouts?.ModalContent !== undefined && <CustomLayout />}
               </Flex>

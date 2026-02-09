@@ -17,7 +17,7 @@ export * from '@Pimcore/modules/widget-manager/services/widget-registry'
 export * from '@Pimcore/modules/widget-manager/widget-manager-slice'
 // Additional types
 export type { Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
-export type { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+export type { ElementIcon } from '@Pimcore/components/icon/icon'
 export type { ElementType } from '@Pimcore/types/enums/element/element-type'
 export * from '@Pimcore/modules/widget-manager/events'
 
