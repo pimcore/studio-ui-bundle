@@ -34,6 +34,8 @@ import { useTranslationDomain } from './hooks/translation-domain-provider'
 import { type SortingState } from '@tanstack/react-table'
 import { TranslationErrorModals } from './components/translation-error-modals'
 
+const TESTID_PREFIX = 'translations'
+
 interface FormValues {
   translationKey: string
 }
@@ -160,6 +162,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
+            data-testid={ `${TESTID_PREFIX}-refresh-button` }
             disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
             onClick={ reload }
@@ -197,10 +200,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 <Form.Item
                   name="translationKey"
                 >
-                  <Input placeholder={ t('translations.add-translation.key') } />
+                  <Input
+                    data-testid={ `${TESTID_PREFIX}-key-input` }
+                    placeholder={ t('translations.add-translation.key') }
+                  />
                 </Form.Item>
                 <Form.Item>
                   <IconTextButton
+                    data-testid={ `${TESTID_PREFIX}-add-button` }
                     htmlType="submit"
                     icon={ { value: 'new' } }
                     loading={ createLoading }
@@ -211,6 +218,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               </Flex>
             </Form>
             <Select
+              data-testid={ `${TESTID_PREFIX}-domain-select` }
               loading={ domainsLoading }
               onChange={ (value: string) => {
                 setDomain(value)
@@ -228,6 +236,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Flex gap="small">
             <Select
               allowClear
+              data-testid={ `${TESTID_PREFIX}-locale-select` }
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
@@ -250,6 +259,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               value={ visibleLocales ?? [] }
             />
             <SearchInput
+              data-testid={ `${TESTID_PREFIX}-search-input` }
               loading={ translationsLoading }
               onSearch={ (value) => {
                 handleSearch(value)
