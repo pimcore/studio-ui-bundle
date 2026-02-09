@@ -17,7 +17,7 @@ import {
 } from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
 import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
@@ -39,7 +39,7 @@ export interface PathTargetProps {
   allowElementTagClose?: boolean
 }
 
-export const PathTarget = forwardRef(function PathTarget (
+export const PathTarget = forwardRef(function PathTarget(
   props: PathTargetProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
@@ -55,7 +55,7 @@ export const PathTarget = forwardRef(function PathTarget (
 
   const hasPathFormatterClass = isNonEmptyString(props.pathFormatterClass)
 
-  function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
+  function mapNewValue(value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
     return value.map((item) => ({
       ...item,
       fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
@@ -88,7 +88,7 @@ export const PathTarget = forwardRef(function PathTarget (
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
-    if (value === null) {
+    if (isEmpty(value)) {
       return undefined
     }
 
@@ -112,21 +112,21 @@ export const PathTarget = forwardRef(function PathTarget (
   let inputPrefix: React.ReactNode
   if (showElementTagPrefix) {
     if (hasPathFormatterClass) {
-      inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={ displayPath } />
+      inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={displayPath} />
     } else {
       inputPrefix = (
         <ElementTag
-          disabled={ props.disabled === true || props.inherited === true }
-          elementType={ mapToElementType(value.type) }
-          id={ value.id }
-          onClose={ props.allowElementTagClose === true
+          disabled={props.disabled === true || props.inherited === true}
+          elementType={mapToElementType(value.type)}
+          id={value.id}
+          onClose={props.allowElementTagClose === true
             ? () => {
-                setValue(null)
-                props.onChange?.(null)
-              }
-            : undefined }
-          path={ elementTagPath }
-          published={ value.isPublished ?? undefined }
+              setValue(null)
+              props.onChange?.(null)
+            }
+            : undefined}
+          path={elementTagPath}
+          published={value.isPublished ?? undefined}
         />
       )
     }
@@ -136,15 +136,15 @@ export const PathTarget = forwardRef(function PathTarget (
   const searchProps = isUndefined(props.onSearch)
     ? {}
     : {
-        onSearch: props.onSearch,
-        searchButtonIcon: 'folder-search',
-        maxWidth: '100%'
-      }
+      onSearch: props.onSearch,
+      searchButtonIcon: 'folder-search',
+      maxWidth: '100%'
+    }
 
   return (
     <div
-      ref={ ref }
-      style={ { flexGrow: 1 } }
+      ref={ref}
+      style={{ flexGrow: 1 }}
     >
       {showElementTag
         ? (
@@ -152,34 +152,34 @@ export const PathTarget = forwardRef(function PathTarget (
             align="center"
           >
             <InputComponent
-              className={ styles.input }
-              disabled={ props.disabled }
-              inherited={ props.inherited }
+              className={styles.input}
+              disabled={props.disabled}
+              inherited={props.inherited}
               prefix={
                 <ElementTag
-                  disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ mapToElementType(value.type) }
-                  id={ value.id }
+                  disabled={props.disabled === true || props.inherited === true}
+                  elementType={mapToElementType(value.type)}
+                  id={value.id}
                   inline
-                  onClose={ () => {
+                  onClose={() => {
                     setValue(null)
                     props.onChange?.(null)
-                  } }
-                  path={ elementTagPath }
-                  published={ value.isPublished ?? undefined }
+                  }}
+                  path={elementTagPath}
+                  published={value.isPublished ?? undefined}
                 />
               }
               readOnly
-              { ...searchProps }
+              {...searchProps}
             />
           </Flex>
-          )
+        )
         : (
           <InputComponent
-            className={ styles.input }
-            disabled={ props.disabled }
-            inherited={ props.inherited }
-            onChange={ (e) => {
+            className={styles.input}
+            disabled={props.disabled}
+            inherited={props.inherited}
+            onChange={(e) => {
               const newValue: { textInput: true, fullPath: string } = {
                 textInput: true,
                 fullPath: e.currentTarget.value
@@ -187,14 +187,14 @@ export const PathTarget = forwardRef(function PathTarget (
 
               setValue(newValue)
               props.onChange?.(newValue)
-            } }
-            placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
-            prefix={ inputPrefix }
-            readOnly={ props.allowPathTextInput !== true }
-            value={ showElementTagPrefix ? undefined : displayText }
-            { ...searchProps }
+            }}
+            placeholder={showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder')}
+            prefix={inputPrefix}
+            readOnly={props.allowPathTextInput !== true}
+            value={showElementTagPrefix ? undefined : displayText}
+            {...searchProps}
           />
-          )}
+        )}
     </div>
   )
 })
