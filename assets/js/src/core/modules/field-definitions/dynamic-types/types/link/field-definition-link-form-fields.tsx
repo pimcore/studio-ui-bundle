@@ -19,30 +19,8 @@ export const FieldDefinitionLinkFormFields = (props: FieldDefinitionAbstractForm
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('width') }
-        name="width"
-        tooltip={ t('width-tooltip') }
-      >
-        <Input />
-      </Form.Item>
-
       {!isCustomLayout && (
         <>
-          <Form.Item
-            label={ t('default-value') }
-            name="defaultValue"
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label={ t('default-value-generator') }
-            name="defaultValueGenerator"
-          >
-            <Input />
-          </Form.Item>
-
           <Form.Item
             label={ t('allowed-types') }
             name="allowedTypes"

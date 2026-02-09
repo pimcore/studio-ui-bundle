@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, FormKit, Input } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,7 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <FormKit.Panel title={ t('specific-settings') } >
       <Form.Item
         label={ t('width') }
         name="width"
@@ -26,16 +26,8 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('column-length') }
-        name="columnLength"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
+        /* @todo - replace with datatype field and implement it. */
+
     </FormKit.Panel>
   )
 }
