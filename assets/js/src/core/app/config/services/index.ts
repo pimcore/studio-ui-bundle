@@ -305,6 +305,12 @@ import { DynamicTypeFieldDefinitionCountry } from '@Pimcore/modules/field-defini
 import { DynamicTypeFieldDefinitionLanguage } from '@Pimcore/modules/field-definitions/dynamic-types/types/language/dynamic-type-field-definition-language'
 import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/countrymultiselect/dynamic-type-field-definition-countrymultiselect'
 import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
+import { DynamicTypeFieldDefinitionManyToOne } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToOne/dynamic-type-field-definition-many-to-one'
+import { DynamicTypeFieldDefinitionManyToMany } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToMany/dynamic-type-field-definition-many-to-many'
+import { DynamicTypeFieldDefinitionManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyObject/dynamic-type-field-definition-many-to-many-object'
+import { DynamicTypeFieldDefinitionAdvancedManyToMany } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToMany/dynamic-type-field-definition-advanced-many-to-many'
+import { DynamicTypeFieldDefinitionAdvancedManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToManyObject/dynamic-type-field-definition-advanced-many-to-many-object'
+import { DynamicTypeFieldDefinitionReverseObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/reverseObject/dynamic-type-field-definition-reverse-object'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -698,6 +704,12 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Country']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTypeFieldDefinitionLanguage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToOne']).to(DynamicTypeFieldDefinitionManyToOne).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToMany']).to(DynamicTypeFieldDefinitionManyToMany).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToManyObject']).to(DynamicTypeFieldDefinitionManyToManyObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToMany']).to(DynamicTypeFieldDefinitionAdvancedManyToMany).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToManyObject']).to(DynamicTypeFieldDefinitionAdvancedManyToManyObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ReverseObject']).to(DynamicTypeFieldDefinitionReverseObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider

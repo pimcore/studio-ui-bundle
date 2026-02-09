@@ -610,6 +610,31 @@ field-definition.external-image: External Image
 field-definition.image-gallery: Image Gallery
 field-definition.video: Video
 field-definition.hotspotimage: Image Advanced
+field-definition.many-to-one-relation: Many-to-One Relation
+field-definition.many-to-many-relation: Many-to-Many Relation
+field-definition.many-to-many-object-relation: Many-to-Many Object Relation
+field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
+field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
+field-definition.reverse-object-relation: Reverse Object Relation
+field-definition.block: Block
+field-definition.panel: Panel
+allowed-classes: Allowed classes
+allowed-asset-types: Allowed asset types
+allowed-document-types: Allowed document types
+path-formatter-service: "Formatter Service / Class"
+allow-to-clear-relation: Allow to clear relations of this field
+layout: "Layout"
+allow-documents: Allow documents
+allow-assets: Allow assets
+asset-inline-download-allowed: Allow asset inline download
+allow-objects: Allow objects
+path-restriction: Path restriction
+result-limit: Result limit
+remote-owner: Remote owner
+allowed-column-names: Allowed column names
+enable-batch-edit: Enable batch edit
+owner-class: Owner class
+owner-field-name: Owner field name
 crop-settings: Crop Settings
 ratio-x: Ratio X
 ratio-y: Ratio Y
@@ -1836,3 +1861,9 @@ gdpr-extractor.emails.table.field.subject: Subject
 gdpr-extractor.emails.table.actions.export: Export Email Data
 gdpr-extractor.emails.table.actions.parameters: Expand Parameters
 gdpr-extractor.emails.table.actions.html: View HTML
+document-restrictions: Document restrictions
+asset-restrictions: Asset restrictions
+object-restrictions: Object restrictions
+display-mode: Display mode
+display-mode-display: Grid
+display-mode-inline-search: Inline search
