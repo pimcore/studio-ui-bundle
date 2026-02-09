@@ -376,6 +376,9 @@ listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
+data-type.html: HTML
+data-type.number: Number
+data-type.boolean: Boolean
 data-type.date: Date
 data-type.text: Text
 data-type.document: Document
@@ -587,14 +590,6 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
-allowed-types: Allowed types
-allowed-targets: Allowed targets
-disabled-fields: Disabled fields
-accesskey: Access key
-rel: Rel
-tabindex: Tab index
-attributes: Attributes
-class: Class
 field-definition.geopoint: Geo Point
 field-definition.geobounds: Geo Bounds
 field-definition.geopolygon: Geo Polygon

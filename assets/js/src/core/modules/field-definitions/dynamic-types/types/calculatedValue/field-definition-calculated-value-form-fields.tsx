@@ -35,12 +35,12 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
         >
           <Select
             options={ [
-              { label: t('input'), value: 'input' },
-              { label: t('textarea'), value: 'textarea' },
-              { label: t('html'), value: 'html' },
-              { label: t('number'), value: 'numeric' },
-              { label: t('date'), value: 'date' },
-              { label: t('bool'), value: 'boolean' }
+              { label: t('data-type.input'), value: 'input' },
+              { label: t('data-type.textarea'), value: 'textarea' },
+              { label: t('data-type.html'), value: 'html' },
+              { label: t('data-type.number'), value: 'numeric' },
+              { label: t('data-type.date'), value: 'date' },
+              { label: t('data-type.boolean'), value: 'boolean' }
             ] }
           />
         </Form.Item>
