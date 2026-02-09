@@ -23,6 +23,7 @@ import { UploadForm } from '@Pimcore/components/modal/form-modal/components/uplo
 import { noop } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Flex } from '@sdk/components'
+import { createModalButtonTestId } from '@Pimcore/utils/test-id-generator'
 
 let form: formInstanceType | null = null
 
@@ -128,6 +129,14 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    },
     onOk: async () => {
       await submit(fieldName)
     },
@@ -165,6 +174,14 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
     width: 700,
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    },
     onOk: async () => {
       const value = form!.getFieldValue(fieldName)
       props.onOk?.(value)
@@ -194,7 +211,15 @@ export function withConfirm (props: ConfirmFormModalProps, dontAskAgainRef: Reac
     ...modalProps,
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
-    cancelText: props.cancelText ?? i18n.t('no')
+    cancelText: props.cancelText ?? i18n.t('no'),
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    }
   }
 
   if (!isNonEmptyString(dontAskAgainKey)) {
@@ -245,6 +270,14 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    },
     onOk: async () => {
       return await new Promise((resolve, reject) => {
         form!.validateFields()

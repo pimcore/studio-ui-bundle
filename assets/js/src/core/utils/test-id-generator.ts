@@ -297,3 +297,26 @@ export const createContextMenuContainerTestId = (elementType: ElementType, nodeI
 export const createContextMenuItemTestId = (key: string): string => {
   return buildTestId(['context-menu-item', key])
 }
+
+/**
+ * Creates a test ID for modal buttons (form modals, confirmation modals, etc.).
+ * @param buttonType - Button type ('ok', 'cancel', 'submit', 'close', etc.)
+ * @param modalType - Optional modal type identifier for specificity ('form', 'confirmation', 'alert', etc.)
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createModalButtonTestId('ok')
+ * // Returns: 'modal-ok-button'
+ *
+ * createModalButtonTestId('ok', 'form')
+ * // Returns: 'form-modal-ok-button'
+ *
+ * createModalButtonTestId('cancel', 'confirmation')
+ * // Returns: 'confirmation-modal-cancel-button'
+ */
+export const createModalButtonTestId = (buttonType: string, modalType?: string): string => {
+  if (modalType !== undefined && modalType !== '') {
+    return buildTestId([modalType, 'modal', buttonType, 'button'])
+  }
+  return buildTestId(['modal', buttonType, 'button'])
+}
