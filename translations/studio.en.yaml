@@ -442,6 +442,9 @@ listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
+data-type.html: HTML
+data-type.number: Number
+data-type.boolean: Boolean
 data-type.date: Date
 data-type.text: Text
 data-type.document: Document
@@ -712,6 +715,12 @@ field-definition.country: Country
 field-definition.countrymultiselect: Country Multiselect
 field-definition.language: Language
 field-definition.languagemultiselect: Language Multiselect
+field-definition.rgba-color: RGBA Color
+field-definition.encrypted-field: Encrypted Field
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Checkbox
+field-definition.link: Link
+field-definition.calculated-value: Calculated Value
 field-definition.user: User
 field-definition.block: Block
 field-definition.panel: Panel
@@ -803,6 +812,16 @@ regex-flags: RegEx Flags
 regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
 test-string: Test string
 regex-validation-error-message: "The string does not match the required format."
+calculator-class: Calculator Class
+calculator-expression: Calculator Expression
+calculator-type: Calculator Type
+calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
+expression: Expression
+domain-label-width: Domain label width
+controller-action: Controller action
+controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
+available-sites: "Available sites"
+empty-equals-allow-all-tooltip: "Empty = allow all"
 reset: Reset
 name: Name
 tooltip: Tooltip
@@ -1220,6 +1239,7 @@ navigation.quick-access: Quick Access
 navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
+navigation.image-thumbnails: Image Thumbnails
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
 navigation.appearance-branding: Appearance & Branding
@@ -1309,7 +1329,21 @@ widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
 widget.appearance-branding: Appearance & Branding
+widget.image-thumbnails: Image Thumbnails
 appearance-branding.title: "Appearance & Branding"
+image-thumbnails.title: "Image Thumbnails"
+image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
+image-thumbnails.search.placeholder: "Search thumbnails..."
+image-thumbnails.tree.empty: "No thumbnails found"
+image-thumbnails.configuration.title: "Configuration"
+image-thumbnails.configuration.description: "Configure thumbnail settings"
+image-thumbnails.preview.title: "Preview"
+image-thumbnails.preview.description: "Preview thumbnail configuration"
+image-thumbnails.editor.empty.title: "Select a thumbnail"
+image-thumbnails.editor.empty.description: "Select a thumbnail from the tree to view or edit its configuration"
+image-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
+image-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
+image-thumbnails.add.validation.message: "The thumbnail name is invalid"
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."

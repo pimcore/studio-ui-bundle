@@ -31,6 +31,7 @@ import appearanceBranding from '@Pimcore/assets/icons/appearance-branding.inline
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
 import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
+import arrowSquareRight from '@Pimcore/assets/icons/arrow-square-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
@@ -75,13 +76,16 @@ import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
 import comboboxField from '@Pimcore/assets/icons/combobox-field.inline.svg?react'
+import compare from '@Pimcore/assets/icons/compare.inline.svg?react'
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
 import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?react'
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
+import contrast01 from '@Pimcore/assets/icons/contrast-01.inline.svg?react'
 import convert from '@Pimcore/assets/icons/convert.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
+import cornerUpLeft from '@Pimcore/assets/icons/corner-up-left.inline.svg?react'
 import counter from '@Pimcore/assets/icons/counter.inline.svg?react'
 import countriesMultiple from '@Pimcore/assets/icons/countries-multiple.inline.svg?react'
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
@@ -171,6 +175,7 @@ import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?re
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
 import imageExternal from '@Pimcore/assets/icons/image-external.inline.svg?react'
 import imageGallery from '@Pimcore/assets/icons/image-gallery.inline.svg?react'
+import imageThumbnailClear from '@Pimcore/assets/icons/image-thumbnail-clear.inline.svg?react'
 import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
@@ -426,6 +431,10 @@ moduleSystem.registerModule({
       component: arrowNarrowRight
     })
     iconLibrary.register({
+      name: 'arrow-square-right',
+      component: arrowSquareRight
+    })
+    iconLibrary.register({
       name: 'asset',
       component: asset
     })
@@ -602,6 +611,10 @@ moduleSystem.registerModule({
       component: comboboxField
     })
     iconLibrary.register({
+      name: 'compare',
+      component: compare
+    })
+    iconLibrary.register({
       name: 'content-duplicate',
       component: contentDuplicate
     })
@@ -612,6 +625,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'content',
       component: content
+    })
+    iconLibrary.register({
+      name: 'contrast-01',
+      component: contrast01
     })
     iconLibrary.register({
       name: 'convert',
@@ -628,6 +645,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'copy',
       component: copy
+    })
+    iconLibrary.register({
+      name: 'corner-up-left',
+      component: cornerUpLeft
     })
     iconLibrary.register({
       name: 'counter',
@@ -984,6 +1005,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image-gallery',
       component: imageGallery
+    })
+    iconLibrary.register({
+      name: 'image-thumbnail-clear',
+      component: imageThumbnailClear
     })
     iconLibrary.register({
       name: 'image-thumbnail',

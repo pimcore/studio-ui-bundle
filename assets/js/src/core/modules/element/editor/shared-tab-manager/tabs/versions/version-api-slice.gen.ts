@@ -210,6 +210,28 @@ export type Element = {
     /** elementType */
     elementType: string;
 };
+export type DataProperty = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** key */
+    key: string;
+    /** data */
+    data: any | null;
+    /** type */
+    type: string;
+    /** inheritable */
+    inheritable: boolean;
+    /** inherited */
+    inherited: boolean;
+    /** config */
+    config?: string | null;
+    /** predefinedName */
+    predefinedName?: string | null;
+    /** description */
+    description?: string | null;
+};
 export type DataObjectVersion = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -241,6 +263,8 @@ export type DataObjectVersion = Element & {
     objectData: object;
     /** Allow variants */
     allowVariants: boolean | null;
+    /** Properties */
+    properties?: DataProperty[];
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */
