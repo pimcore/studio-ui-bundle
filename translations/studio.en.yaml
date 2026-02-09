@@ -635,12 +635,12 @@ field-definition.country: Country
 field-definition.countrymultiselect: Country Multiselect
 field-definition.language: Language
 field-definition.languagemultiselect: Language Multiselect
-field-definition.rgbaColor: RGBA Color
-field-definition.encryptedField: Encrypted Field
-field-definition.urlSlug: URL Slug
+field-definition.rgba-color: RGBA Color
+field-definition.encrypted-field: Encrypted Field
+field-definition.url-slug: URL Slug
 field-definition.checkbox: Checkbox
 field-definition.link: Link
-field-definition.calculatedValue: Calculated Value
+field-definition.calculated-value: Calculated Value
 field-definition.user: User
 regex-validation: Regular Expression Validation
 regex: RegEx
