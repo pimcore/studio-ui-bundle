@@ -14,10 +14,12 @@ import { Content, FormKit, FormProps } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const PADDING = { x: 'small', bottom: 'small', top: 'none' } as const
 
 export const GeneralSettingsForm = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { generalSettings, setGeneralSettings } = useGeneralSettings()
   const { GeneralSettingsFormFields } = useSettings()
   const [formValues, setFormValues] = useState(generalSettings)
@@ -45,7 +47,7 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
           centered
           padded
         >
-          Loading general settings...
+          {t('field-definitions.loading-general-settings')}
         </Content>
       )
     }

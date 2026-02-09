@@ -15,8 +15,10 @@ import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { isNil, isString } from 'lodash'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const CompositeIndicesBlock = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const layout = useLayout()
 
   const fieldOptions = useMemo(() => {
@@ -37,39 +39,39 @@ export const CompositeIndicesBlock = (): React.JSX.Element => {
   return (
     <Form.Item name="compositeIndices">
       <Block
-        getItemTitle={(item, index) => item?.index_key ?? `Index ${index + 1}`}
-        title="Composite Indices"
+        getItemTitle={(item, index) => item?.index_key ?? `${t('class-definition.composite-indices.index-label')} ${index + 1}`}
+        title={ t('class-definition.composite-indices.title') }
       >
         <Form.Item
-          label="Index Name"
+          label={ t('class-definition.composite-indices.index-name') }
           name="index_key"
         >
-          <Input placeholder="Enter index name" />
+          <Input placeholder={ t('class-definition.composite-indices.enter-index-name') } />
         </Form.Item>
 
         <Form.Item
-          label="Type"
+          label={ t('class-definition.composite-indices.type') }
           name="index_type"
         >
           <Select
             options={[
-              { label: 'Query', value: 'query' },
-              { label: 'Localized Query', value: 'localized_query' },
-              { label: 'Store', value: 'store' },
-              { label: 'Localized Store', value: 'localized_store' }
+              { label: t('class-definition.composite-indices.type-query'), value: 'query' },
+              { label: t('class-definition.composite-indices.type-localized-query'), value: 'localized_query' },
+              { label: t('class-definition.composite-indices.type-store'), value: 'store' },
+              { label: t('class-definition.composite-indices.type-localized-store'), value: 'localized_store' }
             ]}
-            placeholder="Select index type"
+            placeholder={ t('class-definition.composite-indices.select-index-type') }
           />
         </Form.Item>
 
         <Form.Item
-          label="Columns"
+          label={ t('class-definition.composite-indices.columns') }
           name="index_columns"
         >
           <Select
             mode="tags"
             options={fieldOptions}
-            placeholder="Select or enter column names"
+            placeholder={ t('class-definition.composite-indices.select-column-names') }
           />
         </Form.Item>
       </Block>

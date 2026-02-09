@@ -348,7 +348,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
         return {
           ...initialTreeItem,
-          ...(fieldDefinition.name === 'pimcore_root' ? { title: 'Base', icon: <Icon value="folder" /> } : {}),
+          ...(fieldDefinition.name === 'pimcore_root' ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions: [
             ...(actions ?? []),

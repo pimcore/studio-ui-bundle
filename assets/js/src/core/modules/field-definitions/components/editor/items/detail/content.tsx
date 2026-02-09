@@ -14,8 +14,10 @@ import { useItems } from '@Pimcore/modules/field-definitions/components/editor/i
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DetailContent = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { useLayout } = useSettings()
   const { currentFieldDefinitionId } = useLayout()
   const { detailView } = useItems()
@@ -34,7 +36,7 @@ export const DetailContent = (): React.JSX.Element => {
             centered
             padded
           >
-            Please select a field from the tree to edit its properties.
+            {t('field-definitions.select-field-message')}
           </Content>
           )
         : null}

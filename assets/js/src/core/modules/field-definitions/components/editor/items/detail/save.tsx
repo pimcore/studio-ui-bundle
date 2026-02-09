@@ -17,9 +17,10 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DetailSave = (): React.JSX.Element => {
-  // @todo translations
+  const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds } = useLayout()
   const { generalSettings } = useGeneralSettings()
@@ -57,14 +58,14 @@ export const DetailSave = (): React.JSX.Element => {
 
     if (invalidDefinitions.length > 0) {
       /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-      messageApi.error('Configuration contains invalid field definitions.')
+      messageApi.error(t('field-definitions.configuration-invalid'))
       return
     }
 
     updateDetailMutation({}).unwrap()
       .then(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        messageApi.success('Saved successfully.')
+        messageApi.success(t('field-definitions.saved-successfully'))
       })
       .catch((e) => {
         trackError(new ApiError(e as FetchBaseQueryError))
@@ -78,7 +79,7 @@ export const DetailSave = (): React.JSX.Element => {
       onClick={ onClick }
       type="primary"
     >
-      Save
+      {t('save')}
     </Button>
   )
 }
