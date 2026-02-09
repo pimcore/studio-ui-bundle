@@ -1,0 +1,3 @@
+
+      window.StudioUIBundleRemoteUrl = '/bundles/pimcorestudioui/build/c743c48a-3cca-4149-a4bb-7822ae7e9e23/static/js/remoteEntry.js'
+    
