@@ -1239,6 +1239,8 @@ roles.add-role.label: Enter the name of the new role
 roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
+navigation.data-model-definitions: Data Model Definitions
+navigation.class-definitions: Classes
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
@@ -1330,6 +1332,7 @@ widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+widget.class-definitions: Classes
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
 appearance-branding.title: "Appearance & Branding"
