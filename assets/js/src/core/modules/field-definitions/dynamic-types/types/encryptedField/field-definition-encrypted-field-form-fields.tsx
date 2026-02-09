@@ -26,8 +26,6 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
         <Input />
       </Form.Item>
 
-      { /* @todo - replace with datatype field and implement it. */ }
-
     </FormKit.Panel>
   )
 }
