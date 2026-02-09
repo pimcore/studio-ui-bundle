@@ -22,9 +22,9 @@ export const DebugCollapse = (): React.JSX.Element => {
 
       <Form.Item
         label={t('system-settings.form.debug.field.email-addresses')}
-      //name={['general', 'debug_admin_translations']}
+        name={['email', 'debug', 'email_addresses']}
       >
-        <Input disabled />
+        <Input />
       </Form.Item>
     </CollapseItem>
   )
