@@ -39,6 +39,10 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
       </Form.Item>
 
       <Form.Item
+        getValueFromEvent={ (value: string[]) => value.map(val => ({ assetTypes: val })) }
+        getValueProps={ (value: Array<{ assetTypes: string }>) => ({
+          value: Array.isArray(value) ? value.map(item => item.assetTypes) : []
+        }) }
         label={ t('allowed-asset-types') }
         name="assetTypes"
       >
@@ -49,6 +53,10 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
       </Form.Item>
 
       <Form.Item
+        getValueFromEvent={ (value: string[]) => value.map(val => ({ documentTypes: val })) }
+        getValueProps={ (value: Array<{ documentTypes: string }>) => ({
+          value: Array.isArray(value) ? value.map(item => item.documentTypes) : []
+        }) }
         label={ t('allowed-document-types') }
         name="documentTypes"
       >
@@ -59,6 +67,10 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
       </Form.Item>
 
       <Form.Item
+        getValueFromEvent={ (value: string[]) => value.map(val => ({ classes: val })) }
+        getValueProps={ (value: Array<{ classes: string }>) => ({
+          value: Array.isArray(value) ? value.map(item => item.classes) : []
+        }) }
         label={ t('allowed-classes') }
         name="classes"
       >

@@ -35,6 +35,10 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
       </Form.Item>
 
       <Form.Item
+        getValueFromEvent={ (value: string[]) => value.map(val => ({ classes: val })) }
+        getValueProps={ (value: Array<{ classes: string }>) => ({
+          value: Array.isArray(value) ? value.map(item => item.classes) : []
+        }) }
         label={ t('allowed-classes') }
         name="classes"
       >
