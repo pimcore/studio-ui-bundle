@@ -205,4 +205,6 @@ export * from '@Pimcore/components/creatable-select/creatable-select'
 
 export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
+export * from '@Pimcore/components/rule-condition/rule-condition'
+
 export { type InputRef, type RefSelectProps } from 'antd'
