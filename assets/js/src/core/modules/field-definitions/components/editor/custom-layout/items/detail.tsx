@@ -12,7 +12,7 @@ import { CustomLayout } from '@Pimcore/modules/field-definitions/components/edit
 import { DetailParentTree } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/parent-tree'
 import { DetailContent } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content'
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
-import { ImportExportActions } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
+import { CustomLayoutActions } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/custom-layout-actions'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
@@ -24,7 +24,7 @@ import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect, useMemo, useState } from 'react'
 
 export const ItemDetail = (): React.JSX.Element => {
-  const { activeConfiguration } = useItems()
+  const { activeConfiguration, setDetailView } = useItems()
   const configuration = activeConfiguration!
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
   const layoutResult = useDetailLayoutQuery?.({
@@ -41,6 +41,7 @@ export const ItemDetail = (): React.JSX.Element => {
   const detailError = detailResult.error as FetchBaseQueryError | undefined
 
   const [layout, setLayout] = useState<Layout | undefined>(layoutResult?.data as Layout | undefined)
+  const [layoutKey, setLayoutKey] = useState(0)
 
   useEffect(() => {
     setLayout(layoutResult?.data as Layout | undefined)
@@ -119,7 +120,10 @@ export const ItemDetail = (): React.JSX.Element => {
 
   return (
     <GeneralSettingsProvider generalSettings={ detailData }>
-      <LayoutProvider layout={ layout }>
+      <LayoutProvider
+        key={ layoutKey }
+        layout={ layout }
+      >
         <ContentLayout
           className="absolute-stretch"
           renderToolbar={
@@ -128,7 +132,7 @@ export const ItemDetail = (): React.JSX.Element => {
               padding={ { x: 'none' } }
               theme='secondary'
             >
-              <ImportExportActions />
+              <CustomLayoutActions />
 
               <Flex gap={ 'mini' }>
                 <Flex gap={ 'mini' }>
@@ -137,6 +141,8 @@ export const ItemDetail = (): React.JSX.Element => {
                     onClick={ () => {
                       void layoutResult?.refetch()
                       void refetchDetail()
+                      setLayoutKey((prev) => prev + 1)
+                      setDetailView('general')
                     } }
                   />
 

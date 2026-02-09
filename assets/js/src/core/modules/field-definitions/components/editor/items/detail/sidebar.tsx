@@ -410,6 +410,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
+      setDetailView('layout')
       expandNode(nodeKey)
     }
 
@@ -472,7 +473,11 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
           <Button
             className='w-full'
             type={ detailView === 'general' ? 'link' : 'text' }
-            onClick={ () => { setDetailView('general') } }
+            onClick={ () => {
+              setDetailView('general')
+              setCurrentFieldDefinitionId(null)
+              setCurrentFieldDefinitionIdPath(null)
+            } }
             style={{justifyContent: 'flex-start'}}
           >
             <div style={ { paddingLeft: '16px' } }>

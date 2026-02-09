@@ -10,23 +10,28 @@
 
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { IconButton, useMessage, useFormModal, ButtonGroup } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { isNil } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 const defaultValidateFile = (file: File): boolean => {
   return file.type === 'application/json' || file.name.endsWith('.json')
 }
 
-export const ImportExportActions = (): React.JSX.Element => {
+export const CustomLayoutActions = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { generalSettings } = useGeneralSettings()
-  const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig } = useSettings()
+  const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig, useItemsDeleteMutation } = useSettings()
+  const { activeConfiguration, closeConfiguration } = useItems()
   const messageApi = useMessage()
+  const modal = useFormModal()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [deleteItem, { isLoading: isDeleting }] = useItemsDeleteMutation()
 
   if (isNil(importExportConfig)) {
     return <></>
@@ -72,36 +77,59 @@ export const ImportExportActions = (): React.JSX.Element => {
     void generalSettingsResult?.refetch()
   }
 
+  const handleDelete = (): void => {
+    if (isNil(itemId) || isNil(activeConfiguration)) {
+      return
+    }
+
+    modal.confirm({
+      title: t('delete'),
+      content: t('custom-layout.delete.confirmation'),
+      okText: t('delete'),
+      onOk: async () => {
+        try {
+          await deleteItem({ id: itemId })
+          closeConfiguration(activeConfiguration)
+          void messageApi.success(t('custom-layout.delete.success'))
+        } catch (error: any) {
+          trackError(new ApiError(error))
+        }
+      }
+    })
+  }
+
   const uploadUrl = !isNil(itemId) 
     ? getImportUrl(itemId)
     : ''
 
-  const menuItems: DropdownMenuProps['items'] = [
-    {
-      key: 'export',
-      icon: <Icon value="export" />,
-      label: t('export'),
-      onClick: handleExport
-    },
-    {
-      key: 'import',
-      icon: <Icon value="upload-import" />,
-      label: t('import'),
-      onClick: () => { setIsImportModalOpen(true) }
-    }
-  ]
-
   return (
     <>
-      <Dropdown menu={ { items: menuItems } }>
-        <IconTextButton
-          icon={ { value: 'chevron-down' } }
-          iconPlacement='right'
-          type='link'
-        >
-          {t('toolbar.more')}
-        </IconTextButton>
-      </Dropdown>
+      <ButtonGroup
+        items={ [
+          <IconButton
+            icon={ { value: 'export' } }
+            key="export"
+            onClick={ handleExport }
+            title={ t('export') }
+            type="link"
+          />,
+          <IconButton
+            icon={ { value: 'upload-import' } }
+            key="import"
+            onClick={ () => { setIsImportModalOpen(true) } }
+            title={ t('import') }
+            type="link"
+          />,
+          <IconButton
+            icon={ { value: 'trash' } }
+            key="delete"
+            loading={ isDeleting }
+            onClick={ handleDelete }
+            title={ t('delete') }
+            type="link"
+          />
+        ] }
+      />
 
       <ImportModal
         accept={ acceptFileTypes }
