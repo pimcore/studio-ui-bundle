@@ -38,7 +38,7 @@ export class DynamicTypeFieldDefinitionCheckbox extends DynamicTypeFieldDefiniti
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionCheckboxFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

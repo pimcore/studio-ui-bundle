@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionEncryptedFieldFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

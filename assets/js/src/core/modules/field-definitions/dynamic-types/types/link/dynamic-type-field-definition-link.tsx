@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionLink extends DynamicTypeFieldDefinitionDa
 
     return (
       <>
-        {super.getFormFields({ ...context, hideUnique: true })}
+        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true, disableMandatory: true })}
         <FieldDefinitionLinkFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
