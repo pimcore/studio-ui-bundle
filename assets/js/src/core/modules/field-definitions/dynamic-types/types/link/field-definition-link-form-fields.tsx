@@ -44,7 +44,6 @@ export const FieldDefinitionLinkFormFields = (props: FieldDefinitionAbstractForm
             <Select
               mode="multiple"
               options={ [
-                { label: t('empty'), value: '' },
                 { label: '_blank', value: '_blank' },
                 { label: '_self', value: '_self' },
                 { label: '_top', value: '_top' },
@@ -61,16 +60,16 @@ export const FieldDefinitionLinkFormFields = (props: FieldDefinitionAbstractForm
             <Select
               mode="multiple"
               options={ [
-                { label: t('text'), value: 'text' },
-                { label: t('target'), value: 'target' },
-                { label: t('parameters'), value: 'parameters' },
-                { label: t('anchor'), value: 'anchor' },
-                { label: t('title'), value: 'title' },
-                { label: t('accesskey'), value: 'accesskey' },
-                { label: t('rel'), value: 'rel' },
-                { label: t('tabindex'), value: 'tabindex' },
-                { label: t('class'), value: 'class' },
-                { label: t('attributes'), value: 'attributes' }
+                { label: t('link.text'), value: 'text' },
+                { label: t('link.target'), value: 'target' },
+                { label: t('link.parameters'), value: 'parameters' },
+                { label: t('link.anchor'), value: 'anchor' },
+                { label: t('link.title'), value: 'title' },
+                { label: t('link.accesskey'), value: 'accesskey' },
+                { label: t('link.rel'), value: 'rel' },
+                { label: t('link.tabindex'), value: 'tabindex' },
+                { label: t('link.class'), value: 'class' },
+                { label: t('link.attributes'), value: 'attributes' }
               ] }
             />
           </Form.Item>
