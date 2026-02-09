@@ -648,9 +648,6 @@ calculator-expression: Calculator Expression
 calculator-type: Calculator Type
 calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
 expression: Expression
-input: Input
-html: HTML
-bool: Bool
 domain-label-width: Domain label width
 controller-action: Controller action
 controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
