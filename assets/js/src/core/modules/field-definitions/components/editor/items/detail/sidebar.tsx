@@ -26,7 +26,7 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
 import { Divider } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
@@ -202,10 +202,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         return <></>
       }
 
+      const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDefinition.fieldtype, false)
+
       const info: FieldDefinitionDragDropInfo = {
         type: 'field-definition',
-        icon: { ...currentFieldDefinition.icon },
-        title: currentFieldDefinition.title ?? currentFieldDefinition.name,
+        icon: (currentDynType !== undefined) ? {...currentDynType.getIcon(), iconColorGroup: ['fieldDefinition_' + currentDynType.id, 'fieldDefinition']} : { value: 'unknown' },
+        title: currentFieldDefinition.name,
         data: {
           area,
           internal: {
@@ -461,34 +463,27 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
-      <div
-        onClick={ () => { setDetailView('general') } }
-        style={ {
-          padding: '0 4px',
-          marginBottom: '4px',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          backgroundColor: detailView === 'general' ? 'var(--ant-color-primary-bg)' : 'transparent',
-          color: detailView === 'general' ? 'var(--ant-color-primary)' : 'inherit',
-          transition: 'background-color 0.2s'
-        } }
+      <Content 
+        padded={ true } 
+        style={ { height: 'fit-content' } }
+        padding={{ top: 'none', x: 'extra-small'}}
       >
-        <div style={ {
-          display: 'flex',
-          alignItems: 'center',
-          padding: '4px 0',
-          fontSize: '14px',
-          lineHeight: '22px'
-        } }
-        >
-          <span style={ { marginRight: '8px', fontSize: '14px', display: 'inline-flex' } }>
-            <Icon value={ 'settings' } />
-          </span>
-          {t('field-definitions.general-settings')}
-        </div>
-      </div>
+        <Space className='w-full' direction='vertical' size='none'>
+          <Button
+            className='w-full'
+            type={ detailView === 'general' ? 'link' : 'text' }
+            onClick={ () => { setDetailView('general') } }
+            style={{justifyContent: 'flex-start'}}
+          >
+            <div style={ { paddingLeft: '16px' } }>
+              {t('field-definitions.general-settings')}
+            </div>
+          </Button>
+          
+          <Divider style={{margin: "0"}} />
+        </Space>
+      </Content>
 
-      <Divider style={ { margin: '4px 0 8px 0' } } />
 
       <TreeElement
         defaultExpandedKeys={ expandedKeys }

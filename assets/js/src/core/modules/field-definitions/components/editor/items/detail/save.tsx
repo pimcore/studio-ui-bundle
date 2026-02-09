@@ -16,7 +16,7 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export const DetailSave = (): React.JSX.Element => {
   // @todo translations
@@ -25,16 +25,9 @@ export const DetailSave = (): React.JSX.Element => {
   const { generalSettings } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
-  const error = result.error as FetchBaseQueryError | undefined
   const messageApi = useMessage()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
   const { area } = useArea()
-
-  useEffect(() => {
-    if (error !== undefined) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
 
   const onClick: ButtonProps['onClick'] = () => {
     if (generalSettings === undefined) {
@@ -68,12 +61,14 @@ export const DetailSave = (): React.JSX.Element => {
       return
     }
 
-    updateDetailMutation({}).then(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success('Saved successfully.')
-    }).catch((e) => {
-      trackError(new ApiError(e as FetchBaseQueryError))
-    })
+    updateDetailMutation({}).unwrap()
+      .then(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        messageApi.success('Saved successfully.')
+      })
+      .catch((e) => {
+        trackError(new ApiError(e as FetchBaseQueryError))
+      })
   }
 
   return (
