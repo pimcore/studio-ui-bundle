@@ -621,6 +621,11 @@ field-definition.panel: Panel
 allowed-classes: Allowed classes
 allowed-asset-types: Allowed asset types
 allowed-document-types: Allowed document types
+visible-fields: Visible fields
+enable-text-selection: Enable text selection
+allow-to-create-new-object: Allow to create a new object in relation field
+enable-async-load-in-admin: Enable async load in admin
+enable-async-load-in-admin-tooltip: This is especially useful for many relations, it increases performance in the admin interface.
 path-formatter-service: "Formatter Service / Class"
 allow-to-clear-relation: Allow to clear relations of this field
 layout: "Layout"
