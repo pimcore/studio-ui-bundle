@@ -15,6 +15,14 @@ import { ClassDefinitionsAddModal } from '@Pimcore/modules/class-definition/comp
 import { ClassDefinitionGeneralSettingsFormFields } from '@Pimcore/modules/class-definition/components/class-editor/general-settings-form-fields'
 import { useClassDefinitionUpdate } from '@Pimcore/modules/class-definition/components/class-editor/use-class-definition-update'
 import { CustomLayoutEditor } from '@Pimcore/modules/class-definition/components/class-editor/custom-layouts/custom-layout-editor'
+import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+
+const classDefinitionImportExportConfig: ImportExportConfig = {
+  getExportUrl: (id) => `${getPrefix()}/class/definition/configuration-view/detail/${id}/export`,
+  getImportUrl: (id) => `${getPrefix()}/class/definition/configuration-view/detail/${id}/import`,
+  getIdFromGeneralSettings: (generalSettings) => generalSettings?.id as number | undefined
+}
 
 export const ClassDefinitionWidget = (): React.JSX.Element => {
   return (
@@ -25,6 +33,7 @@ export const ClassDefinitionWidget = (): React.JSX.Element => {
       customLayouts={ {
         ModalContent: <CustomLayoutEditor />
       } }
+      importExportConfig={ classDefinitionImportExportConfig }
       useDetailGeneralSettingsQuery={ useClassDefinitionGetByIdQuery }
       useDetailLayoutQuery={ useClassDefinitionGetLayoutByIdQuery }
       useDetailUpdateMutation={ useClassDefinitionUpdate }

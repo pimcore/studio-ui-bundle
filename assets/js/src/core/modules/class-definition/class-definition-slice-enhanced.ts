@@ -44,6 +44,12 @@ const api = baseApi.enhanceEndpoints({
     classDefinitionDelete: {
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
     },
+    classDefinitionImport: {
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.CLASS_DEFINITION_DETAIL(args.id),
+        ...invalidatingTags.CLASS_DEFINITION_COLLECTION()
+      ]
+    },
     pimcoreStudioApiClassCustomLayoutGet: {
       providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.customLayoutId)
     },
@@ -103,6 +109,9 @@ export const {
   useClassDefinitionGetByIdQuery,
   useClassDefinitionUpdateMutation,
   useClassDefinitionDeleteMutation,
+  useClassDefinitionExportQuery,
+  useLazyClassDefinitionExportQuery,
+  useClassDefinitionImportMutation,
   useClassCustomLayoutGetIdentifierDataQuery,
   useClassSelectOptionGetTreeQuery,
   useClassDefinitionGetBricksUsagesQuery

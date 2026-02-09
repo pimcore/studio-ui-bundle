@@ -27,6 +27,7 @@ export interface EditorProps {
   LayoutProvider?: SettingsProviderProps['LayoutProvider']
   useLayout?: SettingsProviderProps['useLayout']
   customLayouts?: SettingsProviderProps['customLayouts']
+  importExportConfig?: SettingsProviderProps['importExportConfig']
   view?: React.JSX.Element
 }
 

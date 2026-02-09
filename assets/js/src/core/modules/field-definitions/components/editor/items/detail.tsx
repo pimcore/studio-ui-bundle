@@ -13,6 +13,7 @@ import { DetailContent } from '@Pimcore/modules/field-definitions/components/edi
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
+import { ImportExportActions } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
@@ -109,6 +110,8 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                     void refetchDetail()
                   } }
                 />
+
+                <ImportExportActions />
 
                 {customLayouts?.ModalContent !== undefined && <CustomLayout />}
               </Flex>

@@ -151,6 +151,15 @@ toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
 toolbar.switch-layout: Switch custom layout
+import: Import
+export: Export
+more-actions: More Actions
+class-definition.import: Import Class Definition
+class-definition.export: Export Class Definition
+class-definition.import-file-label: Select JSON file
+class-definition.import-success: Class definition imported successfully
+class-definition.export-success: Class definition exported successfully
+custom-layout.import-success: Custom layout imported successfully
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page

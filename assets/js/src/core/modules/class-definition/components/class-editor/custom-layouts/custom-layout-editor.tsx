@@ -19,6 +19,15 @@ import { useDecoratedCustomLayoutDetailQuery } from '@Pimcore/modules/class-defi
 import { CustomLayoutView } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/view'
 import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { CustomLayoutLayoutProvider, useCustomLayoutLayout } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/layout-provider'
+import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+
+const customLayoutImportExportConfig: ImportExportConfig = {
+  getExportUrl: (id) => `${getPrefix()}/class/custom-layout/export/${id}`,
+  getImportUrl: (id) => `${getPrefix()}/class/custom-layout/import/${id}`,
+  getIdFromGeneralSettings: (generalSettings) => generalSettings?.id as number | undefined,
+  successMessageKey: 'custom-layout.import-success'
+}
 
 export const CustomLayoutEditor = (): React.JSX.Element => {
   return (
@@ -33,6 +42,7 @@ export const CustomLayoutEditor = (): React.JSX.Element => {
           useLayout
         }
       } }
+      importExportConfig={ customLayoutImportExportConfig }
       useDetailGeneralSettingsQuery={ useDecoratedCustomLayoutDetailQuery }
       useDetailLayoutAccessor={ useCustomLayoutLayoutAccessor }
       useDetailUpdateMutation={ usePimcoreStudioApiClassCustomLayoutUpdateMutation }

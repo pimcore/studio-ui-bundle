@@ -12,6 +12,7 @@ import { CustomLayout } from '@Pimcore/modules/field-definitions/components/edit
 import { DetailParentTree } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/parent-tree'
 import { DetailContent } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content'
 import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
+import { ImportExportActions } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
@@ -123,10 +124,12 @@ export const ItemDetail = (): React.JSX.Element => {
           className="absolute-stretch"
           renderToolbar={
             <Toolbar
-              justify='flex-end'
+              justify='space-between'
               padding={ { x: 'none' } }
               theme='secondary'
             >
+              <ImportExportActions />
+
               <Flex gap={ 'mini' }>
                 <Flex gap={ 'mini' }>
                   <IconButton
