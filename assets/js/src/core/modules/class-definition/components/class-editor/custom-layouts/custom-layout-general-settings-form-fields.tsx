@@ -9,8 +9,8 @@
  */
 
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
-import { FormKit } from '@sdk/components'
-import { Form, Input } from 'antd'
+import { FormKit, Input, Switch, TextArea } from '@sdk/components'
+import { Form } from 'antd'
 import { isNil } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -33,17 +33,18 @@ export const CustomLayoutGeneralSettingsFormFields = (): React.JSX.Element => {
       </Form.Item>
 
       <Form.Item
-        label={ t('tooltip') }
-        name="description"
+        label={ t('class-definition.custom-layouts.default-layout') }
+        name="default_layout"
+        valuePropName="checked"
       >
-        <Input.TextArea rows={ 3 } />
+        <Switch />
       </Form.Item>
 
       <Form.Item
-        label="ID"
-        name="id"
+        label={ t('description') }
+        name="description"
       >
-        <Input disabled />
+        <TextArea rows={ 3 } />
       </Form.Item>
     </FormKit.Panel>
   )

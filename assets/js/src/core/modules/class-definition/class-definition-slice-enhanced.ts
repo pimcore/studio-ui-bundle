@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimc
 import { api as baseApi } from './class-definition-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -22,6 +22,9 @@ const api = baseApi.enhanceEndpoints({
     },
     classDefinitionGetLayoutById: {
       providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.id)
+    },
+    classCustomLayoutCollection: {
+      providesTags: () => providingTags.CUSTOM_LAYOUT_COLLECTION()
     },
     classDefinitionUpdate: {
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION(),
@@ -51,7 +54,7 @@ const api = baseApi.enhanceEndpoints({
       ]
     },
     pimcoreStudioApiClassCustomLayoutGet: {
-      providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.customLayoutId)
+      providesTags: (result, error, args) => providingTags.CUSTOM_LAYOUT_DETAIL(args.customLayoutId)
     },
     pimcoreStudioApiClassCustomLayoutUpdate: {
       invalidatesTags: () => [],
@@ -69,10 +72,22 @@ const api = baseApi.enhanceEndpoints({
       }
     },
     pimcoreStudioApiClassCustomLayoutCreate: {
-      invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
+      invalidatesTags: () => invalidatingTags.CUSTOM_LAYOUT_COLLECTION()
     },
     pimcoreStudioApiClassCustomLayoutDelete: {
-      invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
+      invalidatesTags: () => invalidatingTags.CUSTOM_LAYOUT_COLLECTION()
+    },
+    pimcoreStudioApiClassCustomLayoutExport: {
+      providesTags: (result, error, args) => providingTags.CUSTOM_LAYOUT_DETAIL(args.customLayoutId)
+    },
+    classCustomLayoutGetIdentifierData: {
+      providesTags: () => providingTags.CUSTOM_LAYOUT_COLLECTION()
+    },
+    classCustomLayoutImport: {
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.CUSTOM_LAYOUT_DETAIL(args.customLayoutId),
+        ...invalidatingTags.CUSTOM_LAYOUT_COLLECTION()
+      ]
     },
     classCustomLayoutEditorCollection: {
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.objectId)

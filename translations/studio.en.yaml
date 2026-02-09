@@ -159,6 +159,7 @@ class-definition.export: Export Class Definition
 class-definition.import-file-label: Select JSON file
 class-definition.import-success: Class definition imported successfully
 class-definition.export-success: Class definition exported successfully
+class-definition.custom-layouts.default-layout: Default Layout
 custom-layout.import-success: Custom layout imported successfully
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
