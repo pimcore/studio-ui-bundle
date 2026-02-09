@@ -237,7 +237,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
       const info: FieldDefinitionDragDropInfo = {
         type: 'field-definition',
-        icon: (currentDynType !== undefined) ? {...currentDynType.getIcon(), iconColorGroup: ['fieldDefinition_' + currentDynType.id, 'fieldDefinition']} : { value: 'unknown' },
+        icon: (currentDynType !== undefined) ? { ...currentDynType.getIcon(), iconColorGroup: ['fieldDefinition_' + currentDynType.id, 'fieldDefinition'] } : { value: 'unknown' },
         title: currentFieldDefinition.name,
         data: {
           area,
@@ -496,31 +496,34 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
-      <Content 
-        padded={ true } 
+      <Content
+        padded
+        padding={ { top: 'none', x: 'extra-small' } }
         style={ { height: 'fit-content' } }
-        padding={{ top: 'none', x: 'extra-small'}}
       >
-        <Space className='w-full' direction='vertical' size='none'>
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='none'
+        >
           <Button
             className='w-full'
-            type={ detailView === 'general' ? 'link' : 'text' }
             onClick={ () => {
               setDetailView('general')
               setCurrentFieldDefinitionId(null)
               setCurrentFieldDefinitionIdPath(null)
             } }
-            style={{justifyContent: 'flex-start'}}
+            style={ { justifyContent: 'flex-start' } }
+            type={ detailView === 'general' ? 'link' : 'text' }
           >
             <div style={ { paddingLeft: '16px' } }>
               {t('field-definitions.general-settings')}
             </div>
           </Button>
-          
-          <Divider style={{margin: "0"}} />
+
+          <Divider style={ { margin: '0' } } />
         </Space>
       </Content>
-
 
       <TreeElement
         defaultExpandedKeys={ expandedKeys }

@@ -39,7 +39,7 @@ export const CompositeIndicesBlock = (): React.JSX.Element => {
   return (
     <Form.Item name="compositeIndices">
       <Block
-        getItemTitle={(item, index) => item?.index_key ?? `${t('class-definition.composite-indices.index-label')} ${index + 1}`}
+        getItemTitle={ (item, index) => item?.index_key ?? `${t('class-definition.composite-indices.index-label')} ${index + 1}` }
         title={ t('class-definition.composite-indices.title') }
       >
         <Form.Item
@@ -54,12 +54,12 @@ export const CompositeIndicesBlock = (): React.JSX.Element => {
           name="index_type"
         >
           <Select
-            options={[
+            options={ [
               { label: t('class-definition.composite-indices.type-query'), value: 'query' },
               { label: t('class-definition.composite-indices.type-localized-query'), value: 'localized_query' },
               { label: t('class-definition.composite-indices.type-store'), value: 'store' },
               { label: t('class-definition.composite-indices.type-localized-store'), value: 'localized_store' }
-            ]}
+            ] }
             placeholder={ t('class-definition.composite-indices.select-index-type') }
           />
         </Form.Item>
@@ -70,7 +70,7 @@ export const CompositeIndicesBlock = (): React.JSX.Element => {
         >
           <Select
             mode="tags"
-            options={fieldOptions}
+            options={ fieldOptions }
             placeholder={ t('class-definition.composite-indices.select-column-names') }
           />
         </Form.Item>

@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 
 export const ItemsTopBar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  
+
   return (
     <Toolbar
       padding={ { x: 'none' } }

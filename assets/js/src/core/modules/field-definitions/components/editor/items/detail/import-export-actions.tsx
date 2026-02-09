@@ -72,7 +72,7 @@ export const ImportExportActions = (): React.JSX.Element => {
     void generalSettingsResult?.refetch()
   }
 
-  const uploadUrl = !isNil(itemId) 
+  const uploadUrl = !isNil(itemId)
     ? getImportUrl(itemId)
     : ''
 

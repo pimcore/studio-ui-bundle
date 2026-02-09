@@ -32,14 +32,16 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
   }, [props.generalSettings])
 
   const updateGeneralSettings = (settings: GeneralSettings | undefined): void => {
+    /* eslint-disable  @typescript-eslint/consistent-type-assertions */
     setGeneralSettings((oldSettings) => {
       return {
         ...oldSettings,
         ...settings
       } as GeneralSettings
     })
+    /* eslint-enable  @typescript-eslint/consistent-type-assertions */
   }
-  
+
   return useMemo(() => (
     <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings } }>
       {props.children}

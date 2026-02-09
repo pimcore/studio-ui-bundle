@@ -10,10 +10,10 @@
 
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Content, FormKit, FormProps } from '@sdk/components'
+import { Content, FormKit, type FormProps } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const PADDING = { x: 'small', bottom: 'small', top: 'none' } as const
@@ -26,14 +26,14 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
   const debouncedValues = useDebounce(formValues, 300)
 
   const handleValuesChange: FormProps['onValuesChange'] = useCallback((changedValues, allValues) => {
-    setFormValues(allValues)
+    setFormValues(allValues as typeof generalSettings)
   }, [])
 
   useEffect(() => {
     if (debouncedValues !== generalSettings) {
       setGeneralSettings(debouncedValues)
     }
-   }, [debouncedValues]);
+  }, [debouncedValues])
 
   const formProps = useMemo(() => ({
     initialValues: generalSettings,
@@ -52,14 +52,15 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
       )
     }
 
-  return (
-    <Content
-      padded
-      padding={ PADDING }
-    >
-      <FormKit formProps={ formProps }>
-        <GeneralSettingsFormFields />
-      </FormKit>
-    </Content>
-  )}, [generalSettings])
+    return (
+      <Content
+        padded
+        padding={ PADDING }
+      >
+        <FormKit formProps={ formProps }>
+          <GeneralSettingsFormFields />
+        </FormKit>
+      </Content>
+    )
+  }, [generalSettings])
 }

@@ -17,6 +17,7 @@ import { isNil } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 const defaultValidateFile = (file: File): boolean => {
   return file.type === 'application/json' || file.name.endsWith('.json')
@@ -92,13 +93,13 @@ export const CustomLayoutActions = (): React.JSX.Element => {
           closeConfiguration(activeConfiguration)
           void messageApi.success(t('custom-layout.delete.success'))
         } catch (error: any) {
-          trackError(new ApiError(error))
+          trackError(new ApiError(error as FetchBaseQueryError))
         }
       }
     })
   }
 
-  const uploadUrl = !isNil(itemId) 
+  const uploadUrl = !isNil(itemId)
     ? getImportUrl(itemId)
     : ''
 

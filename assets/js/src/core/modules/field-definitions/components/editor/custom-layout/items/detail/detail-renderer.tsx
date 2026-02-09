@@ -25,6 +25,6 @@ export const DetailRenderer = (): React.JSX.Element => {
   }
 
   return (
-    <ItemDetail key={String(activeConfiguration.id)} />
+    <ItemDetail key={ String(activeConfiguration.id) } />
   )
 }

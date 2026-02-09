@@ -353,12 +353,12 @@ export const create = (): LayoutProviderFactoryReturn => {
 
           Object.entries(oldToNewIdMap).forEach(([oldId, newId]) => {
             const clonedDef = { ...prevDefs[oldId] }
-            
+
             // Update the name with index only for the root cloned node
-            if (oldId === structureNodeId && clonedDef.name !== undefined) {
-              clonedDef.name = getNextIndexedName(clonedDef.name, siblingNames)
+            if (oldId === structureNodeId && clonedDef.name !== undefined && typeof clonedDef.name === 'string') {
+              clonedDef.name = getNextIndexedName(clonedDef.name, siblingNames as string[])
             }
-            
+
             newDefs[newId] = clonedDef
           })
 
