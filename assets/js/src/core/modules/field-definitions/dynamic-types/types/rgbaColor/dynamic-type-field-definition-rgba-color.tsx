@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionRgbaColor extends DynamicTypeFieldDefinit
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true })}
         <FieldDefinitionRgbaColorFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
