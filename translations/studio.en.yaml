@@ -349,6 +349,7 @@ predefined_metadata: Predefined Metadata
 preview: Preview
 id: ID
 type: Type
+position: Position
 filename: Filename
 fullpath: Full path
 modificationDate: Modification date
@@ -628,6 +629,11 @@ enable-async-load-in-admin: Enable async load in admin
 enable-async-load-in-admin-tooltip: This is especially useful for many relations, it increases performance in the admin interface.
 path-formatter-service: "Formatter Service / Class"
 allow-to-clear-relation: Allow to clear relations of this field
+allow-multiple-assignments: Allow multiple assignments
+number: Number
+bool: Bool
+column-bool: Column Bool
+multiselect: Multiselect
 layout: "Layout"
 allow-documents: Allow documents
 allow-assets: Allow assets
@@ -637,7 +643,7 @@ path-restriction: Path restriction
 result-limit: Result limit
 remote-owner: Remote owner
 allowed-column-names: Allowed column names
-enable-batch-edit: Enable batch edit
+enable-batch-edit: Enable batch edit for columns
 owner-class: Owner class
 owner-field-name: Owner field name
 crop-settings: Crop Settings

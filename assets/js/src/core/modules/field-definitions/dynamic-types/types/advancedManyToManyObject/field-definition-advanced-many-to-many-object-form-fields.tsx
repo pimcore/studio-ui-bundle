@@ -13,6 +13,7 @@ import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassSelectOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-select-options'
+import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 
 export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -53,12 +54,21 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
         label={ t('allowed-column-names') }
         name="allowedColumns"
       >
-        <Input />
+        <FieldDefinitionAllowedColumnsGrid />
       </Form.Item>
 
       <Form.Item name="enableBatchEdit">
         <Switch labelRight={ t('enable-batch-edit') } />
       </Form.Item>
+
+      <Form.Item name="allowMultipleAssignments">
+        <Switch labelRight={ t('allow-multiple-assignments') } />
+      </Form.Item>
+
+      <Form.Item name="allowToClearRelation">
+        <Switch labelRight={ t('allow-to-clear-relation') } />
+      </Form.Item>
+
     </FormKit.Panel>
   )
 }
