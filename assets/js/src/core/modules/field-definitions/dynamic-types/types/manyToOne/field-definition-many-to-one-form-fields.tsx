@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
+import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 
 export const FieldDefinitionManyToOneFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -71,10 +72,7 @@ export const FieldDefinitionManyToOneFormFields = (props: FieldDefinitionAbstrac
 
         <Form.Conditional condition={ (values) => values.documentsAllowed === true }>
           <Form.Item
-            getValueFromEvent={ (value: string[]) => value.map(val => ({ documentTypes: val })) }
-            getValueProps={ (value: Array<{ documentTypes: string }>) => ({
-              value: Array.isArray(value) ? value.map(item => item.documentTypes) : []
-            }) }
+            { ...relationSelectFormItemTransformation('documentTypes') }
             label={ t('allowed-document-types') }
             name="documentTypes"
           >
@@ -104,10 +102,7 @@ export const FieldDefinitionManyToOneFormFields = (props: FieldDefinitionAbstrac
             </Form.Item>
 
             <Form.Item
-              getValueFromEvent={ (value: string[]) => value.map(val => ({ assetTypes: val })) }
-              getValueProps={ (value: Array<{ assetTypes: string }>) => ({
-                value: Array.isArray(value) ? value.map(item => item.assetTypes) : []
-              }) }
+              { ...relationSelectFormItemTransformation('assetTypes') }
               label={ t('allowed-asset-types') }
               name="assetTypes"
             >
@@ -139,10 +134,7 @@ export const FieldDefinitionManyToOneFormFields = (props: FieldDefinitionAbstrac
 
         <Form.Conditional condition={ (values) => values.objectsAllowed === true }>
           <Form.Item
-            getValueFromEvent={ (value: string[]) => value.map(val => ({ classes: val })) }
-            getValueProps={ (value: Array<{ classes: string }>) => ({
-              value: Array.isArray(value) ? value.map(item => item.classes) : []
-            }) }
+            { ...relationSelectFormItemTransformation('classes') }
             label={ t('allowed-classes') }
             name="classes"
           >

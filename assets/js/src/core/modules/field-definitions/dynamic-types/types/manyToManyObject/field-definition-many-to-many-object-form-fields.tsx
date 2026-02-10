@@ -14,6 +14,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 
 export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -73,10 +74,7 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
       </Form.Item>
 
       <Form.Item
-        getValueFromEvent={ (value: string[]) => value.map(val => ({ classes: val })) }
-        getValueProps={ (value: Array<{ classes: string }>) => ({
-          value: Array.isArray(value) ? value.map(item => item.classes) : []
-        }) }
+        { ...relationSelectFormItemTransformation('classes') }
         label={ t('allowed-classes') }
         name="classes"
       >
@@ -88,9 +86,10 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
       </Form.Item>
 
       <Form.Item
-        getValueFromEvent={ (value: string[]) => value.map(val => ({ visibleFields: val })) }
-        getValueProps={ (value: Array<{ visibleFields: string }>) => ({
-          value: Array.isArray(value) ? value.map(item => item.visibleFields) : []
+        { ...relationSelectFormItemTransformation('visibleFields') }
+        getValueFromEvent={ (value: string[]) => value.join(',') }
+        getValueProps={ (value: string | string[]) => ({
+          value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
         }) }
         label={ t('visible-fields') }
         name="visibleFields"
@@ -108,8 +107,8 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
       >
         <Select
           options={ [
-            { label: t('display-mode-display'), value: 'grid' },
-            { label: t('display-mode-inline-search'), value: 'dropdown' }
+            { label: t('display-mode-grid-view'), value: 'grid' },
+            { label: t('display-mode-tag-field'), value: 'combo' }
           ] }
         />
       </Form.Item>

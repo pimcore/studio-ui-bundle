@@ -1870,5 +1870,7 @@ document-restrictions: Document restrictions
 asset-restrictions: Asset restrictions
 object-restrictions: Object restrictions
 display-mode: Display mode
-display-mode-display: Grid
+display-mode-display: Display path reference
 display-mode-inline-search: Inline search
+display-mode-grid-view: "Grid view"
+display-mode-tag-field: "Tag field"
