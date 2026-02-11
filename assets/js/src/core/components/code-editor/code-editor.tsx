@@ -10,8 +10,6 @@
 
 import React from 'react'
 import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { yaml } from '@codemirror/lang-yaml'
-import { html } from '@codemirror/lang-html'
 import { type LanguageSupport } from '@codemirror/language'
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
@@ -23,18 +21,6 @@ export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions'
   extensions?: ReactCodeMirrorProps['extensions']
   value?: string
   onChange?: (value: string) => void
-}
-
-const getPresetExtensions = (preset: CodeEditorPreset): LanguageSupport[] => {
-  switch (preset) {
-    case 'yaml':
-      return [yaml()]
-    case 'html':
-      return [html()]
-    case 'text':
-    default:
-      return []
-  }
 }
 
 export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: CodeEditorProps): React.JSX.Element => {
