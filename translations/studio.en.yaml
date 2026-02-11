@@ -385,6 +385,7 @@ by: By
 field: Field
 no-data-available: No Data Available
 no-data-available-yet: No data available yet.
+no-items: No items
 schedule.label: Schedule
 schedule.headline: Schedule
 schedule.columns.datetime: Date & Time
@@ -2033,3 +2034,20 @@ gdpr-extractor.emails.table.field.subject: Subject
 gdpr-extractor.emails.table.actions.export: Export Email Data
 gdpr-extractor.emails.table.actions.parameters: Expand Parameters
 gdpr-extractor.emails.table.actions.html: View HTML
+rule-condition.operator.and: "AND"
+rule-condition.operator.or: "OR"
+rule-condition.operator.and-not: "AND NOT"
+rule-condition.add-condition: "Add condition"
+rule-condition.move-up: "Move up"
+rule-condition.move-down: "Move down"
+rule-condition.remove: "Remove"
+rule-condition.bracket.toggle-left: "Toggle left bracket"
+rule-condition.bracket.toggle-right: "Toggle right bracket"
+rule-condition.validation.brackets-closing-without-opening: "Closing bracket ')' found without a matching opening bracket '('"
+rule-condition.validation.brackets-missing-closing: "Opening bracket '(' found without a matching closing bracket ')'"
+rule-condition.validation.brackets-invalid: "Brackets are not properly balanced"
+rule-builder.add-action: "Add action"
+rule-builder.add-trigger: "Add trigger"
+rule-builder.move-up: "Move up"
+rule-builder.move-down: "Move down"
+rule-builder.remove: "Remove"

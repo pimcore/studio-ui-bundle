@@ -11,12 +11,13 @@
 import React from 'react'
 import { useStyles } from './tool-strip.styles'
 import cn from 'classnames'
-import { Box } from '../box/box'
+import { Box, type SizeDefinition } from '../box/box'
 import { ThemeProvider } from 'antd-style'
-import { Icon } from '../icon/icon'
+import { Icon, type ElementIcon } from '../icon/icon'
 import { Split } from '../split/split'
 import { Text } from '../text/text'
 import { Flex } from '@sdk/components'
+import { getToolStripIconColor } from './utils/get-icon-color'
 
 export interface DragHandleProps {
   listeners?: Record<string, any>
@@ -31,7 +32,13 @@ export interface ToolStripProps {
   activateOnHover?: boolean
   rounded?: boolean
   disabled?: boolean
-  additionalIcon?: string
+  additionalIcon?: string | ElementIcon
+  additionalIconPosition?: 'before' | 'after'
+  /**
+   * Enable automatic theme-based icon coloring (matches title text).
+   * Defaults to `false` (uses button default color). Ignored when ElementIcon.colorToken is set.
+   */
+  additionalIconAutoColor?: boolean
 }
 
 export const ToolStrip = ({
@@ -43,7 +50,9 @@ export const ToolStrip = ({
   activateOnHover = false,
   rounded = false,
   disabled = false,
-  additionalIcon
+  additionalIcon,
+  additionalIconPosition = 'after',
+  additionalIconAutoColor = false
 }: ToolStripProps): React.JSX.Element => {
   const { styles, theme: token } = useStyles()
   const [isHovered, setIsHovered] = React.useState(false)
@@ -169,11 +178,34 @@ export const ToolStrip = ({
   const renderAdditionalIcon = (): React.ReactNode => {
     if (additionalIcon === undefined) return null
 
+    // Determine if icon is an ElementIcon object
+    const isElementIcon = typeof additionalIcon === 'object'
+    const iconValue = isElementIcon ? additionalIcon.value : additionalIcon
+
+    // Get the appropriate icon color
+    const iconColor = getToolStripIconColor({
+      additionalIcon,
+      additionalIconAutoColor,
+      disabled,
+      toolStripTheme,
+      isActivated,
+      token
+    })
+
+    // Add margin based on position
+    const margin: SizeDefinition = additionalIconPosition === 'before'
+      ? { left: 'mini', right: 'extra-small' }
+      : { left: 'mini', right: 'mini' }
+
+    // Extract ElementIcon props (exclude value as we handle it separately)
+    const elementIconProps = isElementIcon ? { ...additionalIcon, value: undefined } : {}
+
     return (
-      <Box margin={ { left: 'mini', right: 'mini' } }>
+      <Box margin={ margin }>
         <Icon
-          options={ { width: 16, height: 16, color: token.Button?.defaultColor } }
-          value={ additionalIcon }
+          { ...elementIconProps }
+          options={ { width: 16, height: 16, ...(iconColor !== undefined && { color: iconColor }) } }
+          value={ iconValue }
         />
       </Box>
     )
@@ -189,12 +221,13 @@ export const ToolStrip = ({
           { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
         >
           {renderDragger()}
+          {additionalIconPosition === 'before' && renderAdditionalIcon()}
           {title !== undefined && (
             <Box margin={ { right: 'mini' } }>
               <Text className={ styles.title }>{title}</Text>
             </Box>
           )}
-          {renderAdditionalIcon()}
+          {additionalIconPosition === 'after' && renderAdditionalIcon()}
           {children !== undefined && !disabled && (
             <div className="tool-strip__children-container">
               <Split
@@ -223,12 +256,13 @@ export const ToolStrip = ({
         { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
       >
         {renderDragger()}
+        {additionalIconPosition === 'before' && renderAdditionalIcon()}
         {title !== undefined && (
           <Box margin={ { right: 'mini' } }>
             <Text className={ styles.title }>{title}</Text>
           </Box>
         )}
-        {renderAdditionalIcon()}
+        {additionalIconPosition === 'after' && renderAdditionalIcon()}
       </Flex>
     )
 
