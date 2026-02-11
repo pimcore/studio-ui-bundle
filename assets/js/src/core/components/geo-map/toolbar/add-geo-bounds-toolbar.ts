@@ -70,7 +70,7 @@ export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGr
   leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
     for (const layerId in e.target._layers) {
       if (Object.prototype.hasOwnProperty.call(e.target._layers, layerId) === true) {
-        const layer = e.target._layers[layerId]
+        const layer = e.target._layers[layerId] as L.Rectangle
         if (Object.prototype.hasOwnProperty.call(layer, 'edited') === true) {
           if (onChange !== undefined) {
             onChange(convertLatLngBoundsToGeoBounds(layer.getBounds()))
