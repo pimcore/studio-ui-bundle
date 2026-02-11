@@ -66,7 +66,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const { styles } = useStyles({ width: computedWidth, theme })
 
   // Show skeleton if loading
-  if (loadingSkeleton === true) {
+  if (loadingSkeleton) {
     // Map Select size to Skeleton size
     const getSkeletonSize = (): 'small' | 'default' | 'large' => {
       if (antdSelectProps.size === 'small') return 'small'
