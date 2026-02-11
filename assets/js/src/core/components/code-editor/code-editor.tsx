@@ -10,7 +10,6 @@
 
 import React from 'react'
 import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { type LanguageSupport } from '@codemirror/language'
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
