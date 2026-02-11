@@ -1,0 +1,36 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+@font-face {
+  font-family: Lato;
+  src: url(/bundles/pimcorestudioui/build/877bd036-0c38-44da-995d-a11eb0053834/static/font/Lato-Regular.4291f48c.ttf);
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(/bundles/pimcorestudioui/build/877bd036-0c38-44da-995d-a11eb0053834/static/font/Lato-Light.bec6f0ae.ttf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(/bundles/pimcorestudioui/build/877bd036-0c38-44da-995d-a11eb0053834/static/font/Lato-Bold.2c00c297.ttf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(/bundles/pimcorestudioui/build/877bd036-0c38-44da-995d-a11eb0053834/static/font/Lato-Bold.2c00c297.ttf);
+  font-weight: 700;
+}
+
