@@ -17,6 +17,7 @@ export * from '@Pimcore/modules/rule-builder/components/rule-actions/rule-action
 export * from '@Pimcore/modules/rule-builder/components/rule-triggers/rule-triggers'
 export * from '@Pimcore/modules/rule-builder/components/rule-conditions/rule-conditions'
 export * from '@Pimcore/modules/rule-builder/components/sortable-rules-list'
+export * from '@Pimcore/modules/rule-builder/components/rule-config-form'
 
 // Dynamic Type Abstracts
 export * from '@Pimcore/modules/rule-builder/dynamic-types/rule-action/dynamic-type-rule-action-abstract'
