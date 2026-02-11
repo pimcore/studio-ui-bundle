@@ -117,7 +117,7 @@ export const PathTarget = forwardRef(function PathTarget (
       inputPrefix = (
         <ElementTag
           disabled={ props.disabled === true || props.inherited === true }
-          elementType={ mapToElementType(value.type) }
+          elementType={ mapToElementType(value.type, true) }
           id={ value.id }
           onClose={ props.allowElementTagClose === true
             ? () => {
@@ -158,7 +158,7 @@ export const PathTarget = forwardRef(function PathTarget (
               prefix={
                 <ElementTag
                   disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ mapToElementType(value.type) }
+                  elementType={ mapToElementType(value.type, true) }
                   id={ value.id }
                   inline
                   onClose={ () => {
