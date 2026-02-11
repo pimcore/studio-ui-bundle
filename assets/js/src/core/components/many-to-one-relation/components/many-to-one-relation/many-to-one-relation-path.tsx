@@ -41,9 +41,9 @@ export const ManyToOneRelationPath = (props: ManyToOneRelationPathProps): React.
     <ManyToOneRelation
       { ...restProps }
       allowPathTextInput={ allowPathTextInput }
+      hideOpenButton
       onChange={ handleChange }
       value={ memoizedValue }
-      hideOpenButton
     />
   )
 }
