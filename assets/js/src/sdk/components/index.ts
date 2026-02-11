@@ -139,6 +139,7 @@ export * from '@Pimcore/components/progress/progress'
 export * from '@Pimcore/components/progressbar/progressbar'
 export * from '@Pimcore/components/region/region'
 export * from '@Pimcore/components/reload-popconfirm/reload-popconfirm'
+export * from '@Pimcore/components/rule-condition/rule-condition'
 export * from '@Pimcore/components/sanitize-html/sanitize-html'
 export * from '@Pimcore/components/search-input/search-input'
 export * from '@Pimcore/components/segmented/segmented'
@@ -204,7 +205,5 @@ export * from '@Pimcore/components/data-object-preview/data-object-preview'
 export * from '@Pimcore/components/creatable-select/creatable-select'
 
 export * from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
-
-export * from '@Pimcore/components/rule-condition/rule-condition'
 
 export { type InputRef, type RefSelectProps } from 'antd'

@@ -9,11 +9,11 @@
  */
 
 import type { DynamicTypeRuleConditionRegistry } from '@Pimcore/modules/rule-builder/dynamic-types/rule-condition/dynamic-type-rule-condition-registry'
-import type { RuleConditionGroup } from '@Pimcore/components/rule-condition/types/rule-condition.types'
+import type { RuleBaseCondition } from '@Pimcore/components/rule-condition/types/rule-condition.types'
 
 export interface RuleConditionsProps {
-  value?: RuleConditionGroup
-  onChange?: (value: RuleConditionGroup) => void
+  value?: RuleBaseCondition[]
+  onChange?: (value: RuleBaseCondition[]) => void
   registry: DynamicTypeRuleConditionRegistry
   disabled?: boolean
 }

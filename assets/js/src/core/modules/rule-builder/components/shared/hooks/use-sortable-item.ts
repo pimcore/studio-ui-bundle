@@ -12,6 +12,10 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { CSSProperties } from 'react'
 
+export interface UseSortableItemOptions {
+  disabled?: boolean
+}
+
 export interface UseSortableItemReturn {
   attributes: ReturnType<typeof useSortable>['attributes']
   listeners: ReturnType<typeof useSortable>['listeners']
@@ -19,7 +23,7 @@ export interface UseSortableItemReturn {
   style: CSSProperties
 }
 
-export function useSortableItem (id: string): UseSortableItemReturn {
+export function useSortableItem (id: string, options?: UseSortableItemOptions): UseSortableItemReturn {
   const {
     attributes,
     listeners,
@@ -27,12 +31,16 @@ export function useSortableItem (id: string): UseSortableItemReturn {
     transform,
     transition,
     isDragging
-  } = useSortable({ id })
+  } = useSortable({ 
+    id,
+    disabled: options?.disabled
+  })
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    cursor: options?.disabled === true ? 'default' : 'grab'
   }
 
   return {

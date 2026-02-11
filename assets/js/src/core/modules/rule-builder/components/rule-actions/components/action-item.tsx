@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { RuleItemToolStrip } from '@Pimcore/modules/rule-builder/components/shared/rule-item-tool-strip'
 import type { RuleAction } from '../types/rule-actions.types'
 import { useRuleActions } from '../provider/rule-actions-provider/use-rule-actions'
@@ -33,11 +34,17 @@ export const ActionItem = ({
     canMoveDown
   } = useRuleActions()
 
-  const dynamicType = registry.getDynamicType(action.type)
+  const dynamicType = registry.getDynamicType(action.type, false)
   const { attributes, listeners, setNodeRef, style } = useSortableItem(action.id)
 
   if (dynamicType === undefined) {
-    return <div>Unknown action type: {action.type}</div>
+    return (
+      <Alert
+        banner
+        message={ `Unknown action type: ${action.type}` }
+        type="warning"
+      />
+    )
   }
 
   return (

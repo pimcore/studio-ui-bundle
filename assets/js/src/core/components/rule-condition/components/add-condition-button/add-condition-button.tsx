@@ -20,11 +20,11 @@ interface AddConditionButtonProps {
   children?: React.ReactNode
 }
 
-export const AddConditionButton: React.FC<AddConditionButtonProps> = ({
+export const AddConditionButton = ({
   afterIndex,
   disabled = false,
   children
-}) => {
+}: AddConditionButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const menuItems = useAddConditionMenuItems(afterIndex)
 

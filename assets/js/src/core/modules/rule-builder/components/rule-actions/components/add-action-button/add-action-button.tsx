@@ -19,10 +19,10 @@ interface AddActionButtonProps {
   children?: React.ReactNode
 }
 
-export const AddActionButton: React.FC<AddActionButtonProps> = ({
+export const AddActionButton = ({
   disabled = false,
   children
-}) => {
+}: AddActionButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const menuItems = useAddActionMenuItems()
 

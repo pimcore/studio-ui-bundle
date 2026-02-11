@@ -28,11 +28,11 @@ const OPERATORS: Array<{ value: RuleConditionOperator, labelKey: string }> = [
 /**
  * Radio button group for selecting and/or/and_not operators
  */
-export const OperatorSelector: React.FC<OperatorSelectorProps> = ({
+export const OperatorSelector = ({
   value,
   onChange,
   disabled = false
-}) => {
+}: OperatorSelectorProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (

@@ -10,11 +10,12 @@
 
 import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { yaml } from '@codemirror/lang-yaml'
+import { html } from '@codemirror/lang-html'
 import { type LanguageSupport } from '@codemirror/language'
 import React from 'react'
 import { useStyles } from './code-editor.styles'
 
-export type CodeEditorPreset = 'text' | 'yaml'
+export type CodeEditorPreset = 'text' | 'yaml' | 'html'
 
 export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions' | 'value' | 'onChange'> {
   preset?: CodeEditorPreset
@@ -27,6 +28,8 @@ const getPresetExtensions = (preset: CodeEditorPreset): LanguageSupport[] => {
   switch (preset) {
     case 'yaml':
       return [yaml()]
+    case 'html':
+      return [html()]
     case 'text':
     default:
       return []

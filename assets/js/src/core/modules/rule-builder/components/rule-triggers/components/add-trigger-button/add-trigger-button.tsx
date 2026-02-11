@@ -19,10 +19,10 @@ interface AddTriggerButtonProps {
   children?: React.ReactNode
 }
 
-export const AddTriggerButton: React.FC<AddTriggerButtonProps> = ({
+export const AddTriggerButton = ({
   disabled = false,
   children
-}) => {
+}: AddTriggerButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const menuItems = useAddTriggerMenuItems()
 

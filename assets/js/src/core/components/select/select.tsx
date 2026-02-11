@@ -10,7 +10,7 @@
 
 import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
-import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps, Skeleton } from 'antd'
 import cn from 'classnames'
 import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -32,9 +32,10 @@ export interface SelectProps extends AntdSelectProps {
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
+  loadingSkeleton?: boolean
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', loadingSkeleton = false, ...antdSelectProps }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
@@ -63,6 +64,24 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const computedWidth = getComputedWidth()
 
   const { styles } = useStyles({ width: computedWidth, theme })
+
+  // Show skeleton if loading
+  if (loadingSkeleton === true) {
+    // Map Select size to Skeleton size
+    const getSkeletonSize = (): 'small' | 'default' | 'large' => {
+      if (antdSelectProps.size === 'small') return 'small'
+      if (antdSelectProps.size === 'large') return 'large'
+      return 'default'
+    }
+
+    return (
+      <Skeleton.Input
+        active
+        size={ getSkeletonSize() }
+        style={ { width: computedWidth } }
+      />
+    )
+  }
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'

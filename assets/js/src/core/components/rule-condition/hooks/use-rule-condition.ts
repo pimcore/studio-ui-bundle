@@ -10,7 +10,6 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import {
-  type RuleConditionGroup,
   type RuleBaseCondition,
   type RuleConditionOperator
 } from '../types/rule-condition.types'
@@ -24,8 +23,8 @@ import {
 import { uuid } from '@Pimcore/utils/uuid'
 
 interface UseRuleConditionProps {
-  initialValue: RuleConditionGroup
-  onChange?: (value: RuleConditionGroup) => void
+  initialValue: RuleBaseCondition[]
+  onChange?: (value: RuleBaseCondition[]) => void
 }
 
 interface UseRuleConditionReturn {
@@ -43,7 +42,7 @@ export function useRuleCondition ({
   initialValue,
   onChange
 }: UseRuleConditionProps): UseRuleConditionReturn {
-  const [conditions, setConditions] = useState<RuleBaseCondition[]>(initialValue.conditions)
+  const [conditions, setConditions] = useState<RuleBaseCondition[]>(initialValue)
   const onChangeRef = useRef(onChange)
 
   useEffect(() => {
@@ -51,12 +50,12 @@ export function useRuleCondition ({
   }, [onChange])
 
   useEffect(() => {
-    setConditions(initialValue.conditions)
-  }, [initialValue.conditions])
+    setConditions(initialValue)
+  }, [initialValue])
 
   const propagateChange = useCallback((newConditions: RuleBaseCondition[]) => {
     setConditions(newConditions)
-    onChangeRef.current?.({ conditions: newConditions })
+    onChangeRef.current?.(newConditions)
   }, [])
 
   const handleConditionChange = useCallback((id: string, value: RuleBaseCondition) => {

@@ -29,7 +29,7 @@ interface ConditionListProps {
   conditions: RuleBaseCondition[]
 }
 
-export const ConditionList: React.FC<ConditionListProps> = ({ conditions }) => {
+export const ConditionList = ({ conditions }: ConditionListProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { disabled } = useRuleConditionContext()
 

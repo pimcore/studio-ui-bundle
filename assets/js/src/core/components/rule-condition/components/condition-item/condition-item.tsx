@@ -17,6 +17,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
 import { Split } from '@Pimcore/components/split/split'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { type RuleBaseCondition } from '../../types/rule-condition.types'
 import { useRuleConditionContext } from '../../provider/rule-condition-provider/use-rule-condition-context'
 import { useAddConditionMenuItems } from '../../hooks/use-add-condition-menu-items'
@@ -38,7 +39,7 @@ interface ConditionItemProps {
   isLast: boolean
 }
 
-export const ConditionItem: React.FC<ConditionItemProps> = ({
+export const ConditionItem = ({
   condition,
   currentIndex,
   indentationLevel,
@@ -46,7 +47,7 @@ export const ConditionItem: React.FC<ConditionItemProps> = ({
   showOperator,
   isFirst,
   isLast
-}) => {
+}: ConditionItemProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const {
@@ -154,18 +155,14 @@ export const ConditionItem: React.FC<ConditionItemProps> = ({
           side="left"
         />
 
-        <div
-          className={ styles.conditionBoxWrapper }
-          { ...listeners }
-          style={ { cursor: disabled ? 'default' : 'grab' } }
-        >
+        <div className={ styles.conditionBoxWrapper }>
           <ToolStripBox
             renderToolStripStart={
               <ToolStrip
                 additionalIcon={ currentTypeConfig?.icon }
                 additionalIconAutoColor
                 additionalIconPosition="before"
-                dragger
+                dragger={ disabled ? false : { listeners: { ...attributes, ...listeners } } }
                 theme="default"
                 title={ conditionTitle }
               >
@@ -214,17 +211,25 @@ export const ConditionItem: React.FC<ConditionItemProps> = ({
               </ToolStrip>
             }
           >
-            {currentTypeConfig !== undefined && (
-              <div className={ styles.conditionFormContainer }>
-                <ErrorBoundary>
-                  {currentTypeConfig.renderForm({
-                    value: condition,
-                    onChange: handleValueChange,
-                    disabled
-                  })}
-                </ErrorBoundary>
-              </div>
-            )}
+            {currentTypeConfig !== undefined
+              ? (
+                <div className={ styles.conditionFormContainer }>
+                  <ErrorBoundary>
+                    {currentTypeConfig.renderForm({
+                      value: condition,
+                      onChange: handleValueChange,
+                      disabled
+                    })}
+                  </ErrorBoundary>
+                </div>
+                )
+              : (
+                <Alert
+                  banner
+                  message={ `Unknown condition type: ${condition.type}` }
+                  type="warning"
+                />
+                )}
           </ToolStripBox>
         </div>
 

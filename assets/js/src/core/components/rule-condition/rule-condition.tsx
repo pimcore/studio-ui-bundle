@@ -17,7 +17,7 @@ import { useStyles } from './rule-condition.styles'
 import { RuleConditionProvider } from './provider/rule-condition-provider/rule-condition-provider'
 import { useRuleItemDragDrop } from '@Pimcore/modules/rule-builder/components/shared/hooks/use-rule-item-drag-drop'
 
-export const RuleCondition: React.FC<RuleConditionProps> = (props) => {
+export const RuleCondition = (props: RuleConditionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { strategy, ...dndConfig } = useRuleItemDragDrop()
 

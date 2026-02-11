@@ -12,7 +12,6 @@ import React, { createContext, useMemo, useCallback } from 'react'
 import type {
   RuleConditionContextValue,
   RuleConditionProps,
-  RuleConditionGroup,
   RuleBaseCondition
 } from '../../types/rule-condition.types'
 import { useRuleCondition } from '../../hooks/use-rule-condition'
@@ -35,8 +34,8 @@ export const RuleConditionProvider = (props: RuleConditionProviderProps): React.
   const { children, value, onChange, conditionTypes, disabled = false } = props
   const [newlyAddedId, setNewlyAddedId] = React.useState<string | null>(null)
 
-  const initialValue = useMemo<RuleConditionGroup>(() => {
-    return value ?? { conditions: [] }
+  const initialValue = useMemo<RuleBaseCondition[]>(() => {
+    return value ?? []
   }, [value])
 
   const {

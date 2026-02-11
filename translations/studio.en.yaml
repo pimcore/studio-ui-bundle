@@ -319,6 +319,7 @@ by: By
 field: Field
 no-data-available: No Data Available
 no-data-available-yet: No data available yet.
+no-items: No items
 schedule.label: Schedule
 schedule.headline: Schedule
 schedule.columns.datetime: Date & Time

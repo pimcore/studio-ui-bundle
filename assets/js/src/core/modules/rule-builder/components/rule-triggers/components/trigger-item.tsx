@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { RuleItemToolStrip } from '@Pimcore/modules/rule-builder/components/shared/rule-item-tool-strip'
 import type { RuleTrigger } from '../types/rule-triggers.types'
 import { useRuleTriggers } from '../provider/rule-triggers-provider/use-rule-triggers'
@@ -33,11 +34,17 @@ export const TriggerItem = ({
     canMoveDown
   } = useRuleTriggers()
 
-  const dynamicType = registry.getDynamicType(trigger.type)
+  const dynamicType = registry.getDynamicType(trigger.type, false)
   const { attributes, listeners, setNodeRef, style } = useSortableItem(trigger.id)
 
   if (dynamicType === undefined) {
-    return <div>Unknown trigger type: {trigger.type}</div>
+    return (
+      <Alert
+        banner
+        message={ `Unknown trigger type: ${trigger.type}` }
+        type="warning"
+      />
+    )
   }
 
   const triggerFormElement = registry.getTriggerFormComponent(trigger.type, {

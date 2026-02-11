@@ -22,10 +22,6 @@ export interface RuleBaseCondition {
   [key: string]: unknown
 }
 
-export interface RuleConditionGroup {
-  conditions: RuleBaseCondition[]
-}
-
 export interface RuleConditionFormProps<T extends RuleBaseCondition = RuleBaseCondition> {
   value: T
   onChange: (value: T) => void
@@ -45,8 +41,8 @@ export interface RuleConditionTypeConfig<T extends RuleBaseCondition = RuleBaseC
 }
 
 export interface RuleConditionProps {
-  value?: RuleConditionGroup
-  onChange?: (value: RuleConditionGroup) => void
+  value?: RuleBaseCondition[]
+  onChange?: (value: RuleBaseCondition[]) => void
   conditionTypes: Array<RuleConditionTypeConfig<RuleBaseCondition>>
   disabled?: boolean
 }

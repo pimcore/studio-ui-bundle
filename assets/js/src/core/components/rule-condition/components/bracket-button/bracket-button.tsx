@@ -20,13 +20,13 @@ interface BracketButtonProps {
   hasError?: boolean
 }
 
-export const BracketButton: React.FC<BracketButtonProps> = ({
+export const BracketButton = ({
   side,
   active,
   onToggle,
   disabled = false,
   hasError = false
-}) => {
+}: BracketButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles, cx } = useStyles()
 
