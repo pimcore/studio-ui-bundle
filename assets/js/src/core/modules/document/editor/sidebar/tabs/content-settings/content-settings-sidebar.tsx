@@ -24,10 +24,12 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface ContentSettingsSidebarProps {
   allowedContentMainDocumentTypes?: string[]
+  enableTitleDescription?: boolean
+  enablePrettyUrl?: boolean
 }
 
 export const ContentSettingsSidebar = ({
-  allowedContentMainDocumentTypes
+  ...props
 }: ContentSettingsSidebarProps = {}): React.JSX.Element => {
   const { t } = useTranslation()
   const context = useContext(DocumentContext)
@@ -79,7 +81,7 @@ export const ContentSettingsSidebar = ({
 
       <Box padding={ { x: 'extra-small', bottom: 'small' } }>
         <ContentSettingsForm
-          allowedContentMainDocumentTypes={ allowedContentMainDocumentTypes }
+          { ...props }
           documentId={ id }
           hasPropertiesPermission={ hasPropertiesPermission }
           hasSavePermission={ hasSavePermission }

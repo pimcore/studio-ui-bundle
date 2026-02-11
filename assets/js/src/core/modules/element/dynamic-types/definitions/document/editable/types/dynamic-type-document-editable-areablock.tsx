@@ -10,7 +10,8 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { AreablockEditable, type AreablockEditableConfig, type AreablockValue, type AreaType } from '../components/areablock-editable/areablock-editable'
+import { type AreablockEditableProps, type AreablockEditableConfig, type AreablockValue, type AreaType } from '../components/areablock-editable/areablock-editable'
+import { WithAreablockRenderQuery } from '../components/areablock-editable/with-areablock-render-query'
 import { AreablockManager } from '../components/areablock-editable/utils/areablock-manager'
 import { configUtils } from '../components/areablock-editable/utils/areablock-utils'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
@@ -29,9 +30,15 @@ export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditab
 export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEditableAbstract {
   id: string = 'areablock'
 
+  getEditableComponent (): React.ComponentType<Omit<AreablockEditableProps, 'renderTrigger'>> {
+    return WithAreablockRenderQuery
+  }
+
   getEditableDataComponent (props: AreablockEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+    const EditableComponent = this.getEditableComponent()
+
     return (
-      <AreablockEditable
+      <EditableComponent
         className={ props.config?.class }
         config={ props.config }
         containerRef={ props.containerRef }
@@ -93,9 +100,9 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
           }
         })
 
-        documentApi.notifyAreablockTypes(documentId, allGroupedTypes)
+        documentApi.notifyAreablockTypes(documentId, this.id, allGroupedTypes)
       } else {
-        documentApi.notifyAreablockTypes(documentId, {})
+        documentApi.notifyAreablockTypes(documentId, this.id, {})
       }
     } catch (error) {
       console.warn('Could not notify parent about areablock types:', error)

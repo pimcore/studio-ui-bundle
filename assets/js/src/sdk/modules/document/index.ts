@@ -41,9 +41,12 @@ export * from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippe
 
 export * from '@Pimcore/modules/document/editor/sidebar/document-sidebar-manager'
 export * from '@Pimcore/modules/document/editor/sidebar/tabs/content-settings/content-settings-sidebar'
+export * from '@Pimcore/modules/document/editor/sidebar/visibility/document-permission-helper'
 
 export * from '@Pimcore/modules/document/editor/widget'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/inheritance-overlay/inheritance-overlay'
 
 export * from '@Pimcore/modules/document/tree/utils/transform-api-data-to-node'
+
+export * from '@Pimcore/modules/document/document-provider'

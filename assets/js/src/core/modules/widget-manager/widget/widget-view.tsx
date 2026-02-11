@@ -11,7 +11,7 @@
 import React, { type ComponentType } from 'react'
 import { useStyles } from './widget-view.styles'
 import { useCssContainer, type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@sdk/components'
 import { type TabNode } from 'flexlayout-react'
 import { type WidgetContentTitleContainerProps, WidgetContentTitleContainer } from './widget-content-title-container'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'

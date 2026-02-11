@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { AbstractProcessorRegistry, type Processor } from '@Pimcore/modules/app/processor-registry/abstract-processor-registry'
 import { type Element } from '../../element-helper'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@sdk/components'
 
 export class ElementIconContext {
   constructor (

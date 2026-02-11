@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { yaml } from '@codemirror/lang-yaml'
 import { html } from '@codemirror/lang-html'
 import { type LanguageSupport } from '@codemirror/language'
-import React from 'react'
+import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
 export type CodeEditorPreset = 'text' | 'yaml' | 'html'

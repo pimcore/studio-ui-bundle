@@ -33,6 +33,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/settings` }),
                 providesTags: ["Settings"],
             }),
+            settingsUpdate: build.mutation<SettingsUpdateApiResponse, SettingsUpdateApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/settings`, method: "PUT", body: queryArg.body }),
+                invalidatesTags: ["Settings"],
+            }),
+            settingsImageAdapterCheck: build.query<
+                SettingsImageAdapterCheckApiResponse,
+                SettingsImageAdapterCheckApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/settings/adapter/image` }),
+                providesTags: ["Settings"],
+            }),
             activeBundlesGet: build.query<ActiveBundlesGetApiResponse, ActiveBundlesGetApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/settings/active-bundles` }),
                 providesTags: ["Settings"],
@@ -62,6 +73,59 @@ export type SystemSettingsGetApiResponse = /** status 200 System settings data *
     [key: string]: any;
 };
 export type SystemSettingsGetApiArg = void;
+export type SettingsUpdateApiResponse = unknown;
+export type SettingsUpdateApiArg = {
+    body: {
+        general?: {
+            /** Valid language codes (ISO 639-1) */
+            valid_languages?: string[];
+            /** Language fallback mapping (e.g., {"de": "en", "fr": "en"}) */
+            fallback_languages?: object;
+            /** Required language codes (ISO 639-1) */
+            required_languages?: string[];
+            /** Default system language */
+            default_language?: string;
+            /** Main domain for the system */
+            domain?: string;
+            /** Redirect to main domain */
+            redirect_to_maindomain?: boolean;
+            /** Enable translation debugging */
+            debug_admin_translations?: boolean;
+        };
+        objects?: {
+            versions?: {
+                /** Number of days to keep object versions */
+                days?: number;
+                /** Number of version steps to keep for objects */
+                steps?: number;
+            };
+        };
+        assets?: {
+            versions?: {
+                /** Number of days to keep asset versions */
+                days?: number;
+                /** Number of version steps to keep for assets */
+                steps?: number;
+            };
+        };
+        documents?: {
+            versions?: {
+                /** Number of days to keep document versions */
+                days?: number;
+                /** Number of version steps to keep for documents */
+                steps?: number;
+            };
+            error_pages?: {
+                /** Default error page */
+                default?: string;
+                /** Localized error page IDs (e.g., {"en": "1", "de": "2"}) */
+                localized?: object;
+            };
+        };
+    };
+};
+export type SettingsImageAdapterCheckApiResponse = unknown;
+export type SettingsImageAdapterCheckApiArg = void;
 export type ActiveBundlesGetApiResponse = /** status 200 List of active bundles */ {
     /** List of active and installed bundles in the system. */
     bundles: ActiveBundle[];
@@ -153,6 +217,8 @@ export const {
     useSettingAdminThumbnailQuery,
     useSettingsCountryCollectionQuery,
     useSystemSettingsGetQuery,
+    useSettingsUpdateMutation,
+    useSettingsImageAdapterCheckQuery,
     useActiveBundlesGetQuery,
     usePingActionQuery,
 } = injectedRtkApi;

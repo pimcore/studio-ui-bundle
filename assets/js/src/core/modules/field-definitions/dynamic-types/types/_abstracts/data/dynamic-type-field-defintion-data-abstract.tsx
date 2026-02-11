@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import {
+  DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext
+} from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionDataFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/field-defintion-data-form-fields'
 import React from 'react'
 
@@ -47,7 +49,7 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
       datatype: 'data',
       name: '',
       title: '',
-      tooltip: 'Some predefined tooltip'
+      tooltip: ''
     }
   }
 
@@ -60,7 +62,7 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    const id = context.path.at(-1) ?? ''
+    const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (

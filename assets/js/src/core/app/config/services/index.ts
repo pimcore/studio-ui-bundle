@@ -288,10 +288,29 @@ import { DynamicTypeFieldDefinitionDate } from '@Pimcore/modules/field-definitio
 import { DynamicTypeFieldDefinitionDateTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateTime/dynamic-type-field-definition-date-time'
 import { DynamicTypeFieldDefinitionDateRange } from '@Pimcore/modules/field-definitions/dynamic-types/types/dateRange/dynamic-type-field-definition-date-range'
 import { DynamicTypeFieldDefinitionTime } from '@Pimcore/modules/field-definitions/dynamic-types/types/time/dynamic-type-field-definition-time'
+import { DynamicTypeFieldDefinitionImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/image/dynamic-type-field-definition-image'
+import { DynamicTypeFieldDefinitionExternalImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/externalImage/dynamic-type-field-definition-external-image'
+import { DynamicTypeFieldDefinitionImageGallery } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageGallery/dynamic-type-field-definition-image-gallery'
+import { DynamicTypeFieldDefinitionVideo } from '@Pimcore/modules/field-definitions/dynamic-types/types/video/dynamic-type-field-definition-video'
+import { DynamicTypeFieldDefinitionHotspotImage } from '@Pimcore/modules/field-definitions/dynamic-types/types/imageAdvanced/dynamic-type-field-definition-hotspot-image'
 import { DynamicTypeFieldDefinitionGeopoint } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopoint/dynamic-type-field-definition-geopoint'
 import { DynamicTypeFieldDefinitionGeobounds } from '@Pimcore/modules/field-definitions/dynamic-types/types/geobounds/dynamic-type-field-definition-geobounds'
 import { DynamicTypeFieldDefinitionGeopolygon } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolygon/dynamic-type-field-definition-geopolygon'
 import { DynamicTypeFieldDefinitionGeopolyline } from '@Pimcore/modules/field-definitions/dynamic-types/types/geopolyline/dynamic-type-field-definition-geopolyline'
+import { DynamicTypeFieldDefinitionSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/select/dynamic-type-field-definition-select'
+import { DynamicTypeFieldDefinitionBooleanSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/booleanSelect/dynamic-type-field-definition-boolean-select'
+import { DynamicTypeFieldDefinitionMultiselection } from '@Pimcore/modules/field-definitions/dynamic-types/types/multiselection/dynamic-type-field-definition-multiselection'
+import { DynamicTypeFieldDefinitionUser } from '@Pimcore/modules/field-definitions/dynamic-types/types/user/dynamic-type-field-definition-user'
+import { DynamicTypeFieldDefinitionCountry } from '@Pimcore/modules/field-definitions/dynamic-types/types/country/dynamic-type-field-definition-country'
+import { DynamicTypeFieldDefinitionLanguage } from '@Pimcore/modules/field-definitions/dynamic-types/types/language/dynamic-type-field-definition-language'
+import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/countrymultiselect/dynamic-type-field-definition-countrymultiselect'
+import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
+import { DynamicTypeFieldDefinitionRgbaColor } from '@Pimcore/modules/field-definitions/dynamic-types/types/rgbaColor/dynamic-type-field-definition-rgba-color'
+import { DynamicTypeFieldDefinitionEncryptedField } from '@Pimcore/modules/field-definitions/dynamic-types/types/encryptedField/dynamic-type-field-definition-encrypted-field'
+import { DynamicTypeFieldDefinitionUrlSlug } from '@Pimcore/modules/field-definitions/dynamic-types/types/urlSlug/dynamic-type-field-definition-url-slug'
+import { DynamicTypeFieldDefinitionCheckbox } from '@Pimcore/modules/field-definitions/dynamic-types/types/checkbox/dynamic-type-field-definition-checkbox'
+import { DynamicTypeFieldDefinitionLink } from '@Pimcore/modules/field-definitions/dynamic-types/types/link/dynamic-type-field-definition-link'
+import { DynamicTypeFieldDefinitionCalculatedValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/calculatedValue/dynamic-type-field-definition-calculated-value'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -668,10 +687,29 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Date']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateTime']).to(DynamicTypeFieldDefinitionDateTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/DateRange']).to(DynamicTypeFieldDefinitionDateRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Time']).to(DynamicTypeFieldDefinitionTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Image']).to(DynamicTypeFieldDefinitionImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ExternalImage']).to(DynamicTypeFieldDefinitionExternalImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ImageGallery']).to(DynamicTypeFieldDefinitionImageGallery).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Video']).to(DynamicTypeFieldDefinitionVideo).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/HotspotImage']).to(DynamicTypeFieldDefinitionHotspotImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopoint']).to(DynamicTypeFieldDefinitionGeopoint).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geobounds']).to(DynamicTypeFieldDefinitionGeobounds).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolygon']).to(DynamicTypeFieldDefinitionGeopolygon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Geopolyline']).to(DynamicTypeFieldDefinitionGeopolyline).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Select']).to(DynamicTypeFieldDefinitionSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/BooleanSelect']).to(DynamicTypeFieldDefinitionBooleanSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Multiselect']).to(DynamicTypeFieldDefinitionMultiselection).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/User']).to(DynamicTypeFieldDefinitionUser).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Country']).to(DynamicTypeFieldDefinitionCountry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTypeFieldDefinitionLanguage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/RgbaColor']).to(DynamicTypeFieldDefinitionRgbaColor).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/EncryptedField']).to(DynamicTypeFieldDefinitionEncryptedField).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/UrlSlug']).to(DynamicTypeFieldDefinitionUrlSlug).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Checkbox']).to(DynamicTypeFieldDefinitionCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Link']).to(DynamicTypeFieldDefinitionLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/CalculatedValue']).to(DynamicTypeFieldDefinitionCalculatedValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider

@@ -16,8 +16,10 @@ import { Content, FormKit } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { useTranslation } from 'react-i18next'
 
 export const LayoutForm = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { useLayout } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
@@ -39,12 +41,12 @@ export const LayoutForm = (): React.JSX.Element => {
     }
   }, [debouncedValues])
 
-  return (
+  return useMemo(() => (
     <>
       {dynamicType === null
         ? (
           <Content padded>
-            Type not supported
+            {t('field-definitions.type-not-supported')}
           </Content>
           )
         : null}
@@ -70,5 +72,5 @@ export const LayoutForm = (): React.JSX.Element => {
           )
         : null}
     </>
-  )
+  ), [fieldDefinition])
 }

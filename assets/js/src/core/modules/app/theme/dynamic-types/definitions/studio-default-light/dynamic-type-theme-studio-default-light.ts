@@ -269,6 +269,10 @@ export const studioDefaultLightThemeConfig = {
       }
     },
 
+    Radio: {
+      fontFamily: 'Lato'
+    },
+
     Tag: {
       colorBorder: '#d9d9d9',
       colorErrorBg: '#fff2f0',
