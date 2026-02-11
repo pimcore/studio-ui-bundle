@@ -10,7 +10,9 @@ import { VersionCollapse } from "./components/version-collapse/version-collapse"
 import { WebsiteCollapse } from "./components/website-collapse/website-collapse";
 
 
-export type SystemSettingsForm = SettingsUpdateApiArg['body']
+export type SystemSettingsForm = SettingsUpdateApiArg['body'] & {
+  email: object
+}
 
 export const SystemSettingsForm = (): React.JSX.Element => {
   const { t } = useTranslation();

@@ -74,7 +74,7 @@ asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
 upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
-upload.error.max-file-size-exceeded: 'File size exceeds the maximum allowed size of {{maxSize}}'
+upload.error.max-file-size-exceeded: "File size exceeds the maximum allowed size of {{maxSize}}"
 upload.error.generic: "The file could not be uploaded."
 upload.error.upload-failed: "Upload failed"
 upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
@@ -1798,3 +1798,20 @@ gdpr-extractor.emails.table.field.subject: Subject
 gdpr-extractor.emails.table.actions.export: Export Email Data
 gdpr-extractor.emails.table.actions.parameters: Expand Parameters
 gdpr-extractor.emails.table.actions.html: View HTML
+navigation.systemSettings: System Settings
+widget.system-settings: System Settings
+system-settings.form.field.version-days: Store version history for x days
+system-settings.form.field.version-count: Store version history for x steps
+system-settings.collapse.debug: Debug
+system-settings.form.debug.field.enable-debug: Debug Admin-Translations (wrapped in +)
+system-settings.form.debug.field.email-addresses: Debug Email Addresses (CSV)
+system-settings.collapse.localization: Localization & Internationalization (i18n/l10n)
+system-settings.form.localization.field.add-language: Add Language
+system-settings.form.localization.field.fallback-language: Fallback Languages
+system-settings.form.localization.field.fallback-language-placeholder: Add fallback languages
+system-settings.form.localization.field.default-language: Default language
+system-settings.form.localization.field.mandatory: Mandatory language
+system-settings.collapse.website: Website
+system-settings.form.field.main-domain: Main Domain
+system-settings.form.field.redirect-to-maindomain: Redirect unknown domains (not used for a site and for redirects, ...) to the main domain (above)
+system-settings.form.field.default-error-page: Error Page (Default)
