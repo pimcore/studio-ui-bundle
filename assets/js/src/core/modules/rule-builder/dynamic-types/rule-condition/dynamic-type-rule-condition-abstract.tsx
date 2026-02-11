@@ -22,6 +22,19 @@ export abstract class DynamicTypeRuleConditionAbstract<T extends RuleBaseConditi
   abstract readonly defaultValue: Partial<Omit<T, 'id' | 'type'>>
 
   /**
+   * Optional availability check. If this function returns false, the condition
+   * will be disabled in the "Add Condition" dropdown and show a warning if already configured.
+   * Defaults to true if not implemented.
+   */
+  readonly isAvailable?: () => boolean
+
+  /**
+   * Optional hint to display when the condition is not available.
+   * Shown as a tooltip in the dropdown and as a warning message in configured conditions.
+   */
+  readonly notAvailableHint?: string
+
+  /**
    * Render the form for this condition type.
    * Must be an arrow function property to preserve 'this' binding.
    *

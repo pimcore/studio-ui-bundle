@@ -38,6 +38,8 @@ export interface RuleConditionTypeConfig<T extends RuleBaseCondition = RuleBaseC
   icon?: ElementIcon
   defaultValue?: Partial<Omit<T, 'id' | 'type'>>
   renderForm: (props: RuleConditionFormProps<T>) => ReactNode
+  isAvailable?: () => boolean
+  notAvailableHint?: string
 }
 
 export interface RuleConditionProps {

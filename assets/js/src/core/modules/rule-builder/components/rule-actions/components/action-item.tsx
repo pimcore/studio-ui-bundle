@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { RuleItemToolStrip } from '@Pimcore/modules/rule-builder/components/shared/rule-item-tool-strip'
@@ -25,6 +26,7 @@ export const ActionItem = ({
   action,
   disabled = false
 }: ActionItemProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const {
     registry,
     handleRemoveAction,
@@ -36,6 +38,8 @@ export const ActionItem = ({
 
   const dynamicType = registry.getDynamicType(action.type, false)
   const { attributes, listeners, setNodeRef, style } = useSortableItem(action.id)
+
+  const isAvailable = dynamicType?.isAvailable?.() ?? true
 
   if (dynamicType === undefined) {
     return (
@@ -68,6 +72,14 @@ export const ActionItem = ({
           />
         }
       >
+        {!isAvailable && dynamicType?.notAvailableHint !== undefined && (
+          <Alert
+            banner
+            message={ t(dynamicType.notAvailableHint) }
+            showIcon
+            type="warning"
+          />
+        )}
         {registry.getActionFormComponent(action.type, {
           value: action.config,
           onChange: (config) => { handleUpdateAction(action.id, config) },

@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
-import type { MenuProps } from 'antd'
+import { Tooltip, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRuleActions } from '../provider/rule-actions-provider/use-rule-actions'
@@ -25,11 +25,23 @@ export const useAddActionMenuItems = (): MenuProps['items'] => {
   return useMemo(() => {
     const allActionTypes = registry.getDynamicTypes()
 
-    return allActionTypes.map((dynamicType) => ({
-      key: dynamicType.id,
-      label: t(dynamicType.label),
-      icon: isNil(dynamicType.icon) ? undefined : <Icon { ...dynamicType.icon } />,
-      onClick: () => { handleAddAction(dynamicType.id) }
-    }))
-  }, [registry, handleAddAction, t])
+    return allActionTypes.map((dynamicType) => {
+      const isAvailable = dynamicType.isAvailable?.() ?? true
+      const label = t(dynamicType.label)
+
+      return {
+        key: dynamicType.id,
+        label: !isAvailable && dynamicType.notAvailableHint !== undefined
+          ? (
+            <Tooltip title={ t(dynamicType.notAvailableHint) }>
+              <span>{label}</span>
+            </Tooltip>
+            )
+          : label,
+        icon: isNil(dynamicType.icon) ? undefined : <Icon { ...dynamicType.icon } />,
+        disabled: !isAvailable,
+        onClick: () => { handleAddAction(dynamicType.id) }
+      }
+    })
+  }, [registry, handleAddAction])
 }

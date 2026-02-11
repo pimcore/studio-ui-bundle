@@ -31,7 +31,7 @@ export function useSortableItem (id: string, options?: UseSortableItemOptions): 
     transform,
     transition,
     isDragging
-  } = useSortable({ 
+  } = useSortable({
     id,
     disabled: options?.disabled
   })

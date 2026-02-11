@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
-import { type MenuProps } from 'antd'
+import { type MenuProps, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRuleConditionContext } from '../provider/rule-condition-provider/use-rule-condition-context'
@@ -23,11 +23,23 @@ export const useAddConditionMenuItems = (afterIndex: number): MenuProps['items']
   const { t } = useTranslation()
 
   return useMemo(() =>
-    conditionTypes.map((type) => ({
-      key: `condition-${type.id}`,
-      label: t(type.label),
-      icon: isNil(type.icon) ? undefined : <Icon { ...type.icon } />,
-      onClick: () => { onConditionAdd(afterIndex, type.id) }
-    }))
+    conditionTypes.map((type) => {
+      const isAvailable = type.isAvailable?.() ?? true
+      const label = t(type.label)
+
+      return {
+        key: `condition-${type.id}`,
+        label: !isAvailable && type.notAvailableHint !== undefined
+          ? (
+            <Tooltip title={ t(type.notAvailableHint) }>
+              <span>{label}</span>
+            </Tooltip>
+            )
+          : label,
+        icon: isNil(type.icon) ? undefined : <Icon { ...type.icon } />,
+        disabled: !isAvailable,
+        onClick: () => { onConditionAdd(afterIndex, type.id) }
+      }
+    })
   , [conditionTypes, afterIndex, onConditionAdd])
 }

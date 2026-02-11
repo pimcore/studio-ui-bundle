@@ -29,6 +29,19 @@ export abstract class DynamicTypeRuleActionAbstract<T extends RuleActionConfig =
   abstract readonly defaultValue: T
 
   /**
+   * Optional availability check. If this function returns false, the action
+   * will be disabled in the "Add Action" dropdown and show a warning if already configured.
+   * Defaults to true if not implemented.
+   */
+  readonly isAvailable?: () => boolean
+
+  /**
+   * Optional hint to display when the action is not available.
+   * Shown as a tooltip in the dropdown and as a warning message in configured actions.
+   */
+  readonly notAvailableHint?: string
+
+  /**
    * Render the form for configuring this action.
    * Must be an arrow function property to preserve 'this' binding.
    *

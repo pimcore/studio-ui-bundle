@@ -67,6 +67,10 @@ export const ConditionItem = ({
     return conditionTypes.find((t) => t.id === condition.type)
   }, [conditionTypes, condition.type])
 
+  const isAvailable = useMemo(() => {
+    return currentTypeConfig?.isAvailable?.() ?? true
+  }, [currentTypeConfig])
+
   const handleValueChange = (newCondition: RuleBaseCondition): void => {
     onConditionChange(condition.id, newCondition)
   }
@@ -211,6 +215,14 @@ export const ConditionItem = ({
               </ToolStrip>
             }
           >
+            {!isAvailable && currentTypeConfig?.notAvailableHint !== undefined && (
+              <Alert
+                banner
+                message={ t(currentTypeConfig.notAvailableHint) }
+                showIcon
+                type="warning"
+              />
+            )}
             {currentTypeConfig !== undefined
               ? (
                 <div className={ styles.conditionFormContainer }>

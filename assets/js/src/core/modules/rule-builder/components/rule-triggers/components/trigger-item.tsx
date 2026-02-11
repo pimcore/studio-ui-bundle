@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { RuleItemToolStrip } from '@Pimcore/modules/rule-builder/components/shared/rule-item-tool-strip'
@@ -25,6 +26,7 @@ export const TriggerItem = ({
   trigger,
   disabled = false
 }: TriggerItemProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const {
     registry,
     handleRemoveTrigger,
@@ -36,6 +38,8 @@ export const TriggerItem = ({
 
   const dynamicType = registry.getDynamicType(trigger.type, false)
   const { attributes, listeners, setNodeRef, style } = useSortableItem(trigger.id)
+
+  const isAvailable = dynamicType?.isAvailable?.() ?? true
 
   if (dynamicType === undefined) {
     return (
@@ -74,6 +78,14 @@ export const TriggerItem = ({
           />
         }
       >
+        {!isAvailable && dynamicType?.notAvailableHint !== undefined && (
+          <Alert
+            banner
+            message={ t(dynamicType.notAvailableHint) }
+            showIcon
+            type="warning"
+          />
+        )}
         {triggerFormElement}
       </ToolStripBox>
     </div>

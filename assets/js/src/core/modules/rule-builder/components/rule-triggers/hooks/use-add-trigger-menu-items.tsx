@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
-import type { MenuProps } from 'antd'
+import { Tooltip, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRuleTriggers } from '../provider/rule-triggers-provider/use-rule-triggers'
@@ -25,11 +25,23 @@ export const useAddTriggerMenuItems = (): MenuProps['items'] => {
   return useMemo(() => {
     const allTriggerTypes = registry.getDynamicTypes()
 
-    return allTriggerTypes.map((dynamicType) => ({
-      key: dynamicType.id,
-      label: t(dynamicType.label),
-      icon: isNil(dynamicType.icon) ? undefined : <Icon { ...dynamicType.icon } />,
-      onClick: () => { handleAddTrigger(dynamicType.id) }
-    }))
-  }, [registry, handleAddTrigger])
+    return allTriggerTypes.map((dynamicType) => {
+      const isAvailable = dynamicType.isAvailable?.() ?? true
+      const label = t(dynamicType.label)
+
+      return {
+        key: dynamicType.id,
+        label: !isAvailable && dynamicType.notAvailableHint !== undefined
+          ? (
+            <Tooltip title={ t(dynamicType.notAvailableHint) }>
+              <span>{label}</span>
+            </Tooltip>
+            )
+          : label,
+        icon: isNil(dynamicType.icon) ? undefined : <Icon { ...dynamicType.icon } />,
+        disabled: !isAvailable,
+        onClick: () => { handleAddTrigger(dynamicType.id) }
+      }
+    })
+  }, [registry, handleAddTrigger, t])
 }
