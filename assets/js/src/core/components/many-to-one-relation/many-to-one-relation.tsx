@@ -54,6 +54,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   inherited?: boolean
   readOnly?: boolean
   vertical?: boolean
+  hideOpenButton?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -92,7 +93,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       if (value.textInput === true) {
         window.open(value.fullPath, '_blank', 'noopener,noreferrer')
       } else {
-        const elementType = mapToElementType(value.type)
+        const elementType = mapToElementType(value.type, true)
         if (!isUndefined(elementType)) {
           openElement({ type: elementType, id: value.id }).catch(() => { })
         }
@@ -104,6 +105,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   const isEnabled = props.disabled !== true && props.readOnly !== true
 
+  const { hideOpenButton, ...inputProps } = props
+
   return (
     <Flex
       className={ cn(styles.container, props.className) }
@@ -114,7 +117,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       vertical={ props.vertical }
     >
       <ManyToOneRelationInput
-        { ...props }
+        { ...inputProps }
         onChange={ setValue }
         value={ value }
       />
@@ -122,7 +125,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         gap="extra-small"
         justify={ props.vertical === true ? 'start' : undefined }
       >
-        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
+        {props.hideOpenButton !== true && (props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
