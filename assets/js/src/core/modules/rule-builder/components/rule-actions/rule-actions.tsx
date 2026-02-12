@@ -28,6 +28,7 @@ export const RuleActions = (props: RuleActionsProps): React.JSX.Element => {
         />
       ) }
       value={ props.value ?? [] }
+      onChange={ props.onChange }
     />
   )
 }
