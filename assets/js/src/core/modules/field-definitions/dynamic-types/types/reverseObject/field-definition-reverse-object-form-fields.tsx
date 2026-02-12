@@ -9,47 +9,93 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Select } from '@sdk/components'
-import React from 'react'
+import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassSelectOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-select-options'
+import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 
 export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const classOptions = useClassSelectOptions()
+  const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
+
+  const selectedClasses = useMemo(() => {
+    return typeof ownerClassName === 'string' && ownerClassName.length > 0 ? [ownerClassName] : []
+  }, [ownerClassName])
+
+  const visibleFieldsOptions = useVisibleFieldsOptions(selectedClasses)
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('width') }
-        name="width"
-      >
-        <Input />
-      </Form.Item>
+      <>
+        <Form.Item name="allowToCreateNewObject">
+          <Switch labelRight={ t('allow-to-create-new-object') } />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('height') }
-        name="height"
-      >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label={ t('width') }
+          name="width"
+          tooltip={ t('width-tooltip') }
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('owner-class') }
-        name="ownerClassName"
-      >
-        <Select
-          options={ classOptions }
-          showSearch
-        />
-      </Form.Item>
+        <Form.Item
+          label={ t('height') }
+          name="height"
+          tooltip={ t('height-tooltip') }
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('owner-field-name') }
-        name="ownerFieldName"
-      >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label={ t('path-formatter-service') }
+          name="pathFormatterClass"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('owner-class') }
+          name="ownerClassName"
+        >
+          <Select
+            options={ classOptions }
+            showSearch
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('owner-field-name') }
+          name="ownerFieldName"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          { ...relationSelectFormItemTransformation('visibleFields') }
+          getValueFromEvent={ (value: string[]) => value.join(',') }
+          getValueProps={ (value: string | string[]) => ({
+            value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
+          }) }
+          label={ t('visible-fields') }
+          name="visibleFields"
+        >
+          <Select
+            mode="multiple"
+            options={ visibleFieldsOptions }
+            showSearch
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="optimizedAdminLoading"
+          tooltip={ t('enable-async-load-in-admin-tooltip') }
+        >
+          <Switch labelRight={ t('enable-async-load-in-admin') } />
+        </Form.Item>
+      </>
     </FormKit.Panel>
   )
 }
