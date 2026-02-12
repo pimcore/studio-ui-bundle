@@ -19,6 +19,7 @@ export const RuleActions = (props: RuleActionsProps): React.JSX.Element => {
   return (
     <RuleItemList
       Provider={ RuleActionsProvider }
+      onChange={ props.onChange }
       providerProps={ props }
       renderAddButton={ (disabled) => <AddActionButton disabled={ disabled } /> }
       renderItem={ (action, disabled) => (
