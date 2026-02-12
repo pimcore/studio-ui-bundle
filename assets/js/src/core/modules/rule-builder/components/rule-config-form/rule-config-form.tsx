@@ -8,51 +8,55 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, useCallback, useMemo } from 'react'
 import { Form, FormKit } from '@sdk/components'
+import { useDebouncedFormChange, type UseDebouncedFormChangeOptions } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 
 interface RuleConfigFormProps<T extends Record<string, any>> {
   config: T
   onChange: (config: T) => void
   disabled?: boolean
   children: ReactNode
+  /**
+   * Debounce options for forms with text inputs or continuously-changing fields.
+   * - delay: Debounce delay in ms (default: 300)
+   * - immediateFields: Fields that bypass debouncing
+   * - tag: Tag for flush coordination (auto-resolved from provider if omitted)
+   */
+  debounceOptions?: UseDebouncedFormChangeOptions
 }
 
 /**
  * Reusable form wrapper for rule configurations (conditions, actions, triggers).
- * Eliminates boilerplate for form setup, change tracking, and value synchronization.
- *
- * @example
- * ```tsx
- * <RuleConfigForm config={config} onChange={onChange} disabled={disabled}>
- *   <Form.Item label={t('label')} name="field">
- *     <Input />
- *   </Form.Item>
- * </RuleConfigForm>
- * ```
  */
 export function RuleConfigForm<T extends Record<string, any>> ({
   config,
   onChange,
   disabled,
-  children
+  children,
+  debounceOptions
 }: RuleConfigFormProps<T>): React.JSX.Element {
   const [form] = Form.useForm<T>()
 
-  const handleValuesChange = (_changedValues: Partial<T>, allValues: T): void => {
+  const handleValuesChange = useCallback((_changedValues: Partial<T>, allValues: T): void => {
     onChange(allValues)
-  }
+  }, [onChange])
+
+  const { handleFormChange } = useDebouncedFormChange(handleValuesChange, {
+    ...debounceOptions,
+    disabled: debounceOptions === undefined
+  })
+
+  const formProps = useMemo(() => ({
+    form,
+    component: false as const,
+    disabled,
+    initialValues: config,
+    onValuesChange: handleFormChange
+  }), [form, disabled, config, handleFormChange])
 
   return (
-    <FormKit
-      formProps={ {
-        form,
-        component: false,
-        initialValues: config,
-        onValuesChange: handleValuesChange,
-        disabled
-      } }
-    >
+    <FormKit formProps={ formProps }>
       {children}
     </FormKit>
   )
