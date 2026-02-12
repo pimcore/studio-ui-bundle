@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { ManyToOneRelation, type ManyToOneRelationProps, type ManyToOneRelationValueType } from '../../many-to-one-relation'
 
@@ -17,24 +17,28 @@ export interface ManyToOneRelationPathProps extends Omit<ManyToOneRelationProps,
   onChange?: (value: string | null) => void
 }
 
+function pathToRelationValue (path: string | null | undefined, allowPathTextInput: boolean | undefined): ManyToOneRelationValueType {
+  if (!isNonEmptyString(path)) {
+    return null
+  }
+
+  if (allowPathTextInput === true) {
+    return { textInput: true, fullPath: path }
+  }
+
+  return { type: '', id: 0, fullPath: path }
+}
+
 export const ManyToOneRelationPath = (props: ManyToOneRelationPathProps): React.JSX.Element => {
   const { value, onChange, allowPathTextInput, ...restProps } = props
 
-  const memoizedValue = useMemo((): ManyToOneRelationValueType => {
-    if (!isNonEmptyString(value)) {
-      return null
-    }
-
-    if (allowPathTextInput === true) {
-      return { textInput: true, fullPath: value }
-    }
-
-    return { type: '', id: 0, fullPath: value }
-  }, [value, allowPathTextInput])
+  const relationValue = useMemo(
+    () => pathToRelationValue(value, allowPathTextInput),
+    [value, allowPathTextInput]
+  )
 
   const handleChange = useCallback((newValue: ManyToOneRelationValueType): void => {
-    const newPath = newValue === null ? null : (newValue.fullPath ?? null)
-    onChange?.(newPath)
+    onChange?.(newValue === null ? null : (newValue.fullPath ?? null))
   }, [onChange])
 
   return (
@@ -43,7 +47,7 @@ export const ManyToOneRelationPath = (props: ManyToOneRelationPathProps): React.
       allowPathTextInput={ allowPathTextInput }
       hideOpenButton
       onChange={ handleChange }
-      value={ memoizedValue }
+      value={ relationValue }
     />
   )
 }
