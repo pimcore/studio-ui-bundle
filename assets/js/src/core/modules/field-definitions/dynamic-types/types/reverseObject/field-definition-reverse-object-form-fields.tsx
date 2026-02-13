@@ -9,23 +9,24 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
-import React, { useMemo } from 'react'
+import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useClassSelectOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-select-options'
-import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
+import {
+  useClassRelationFieldsOptions,
+  useClassVisibleFieldsOptions
+} from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-relation-fields-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 
 export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassSelectOptions()
+  const classOptions = useClassDefinitionOptions()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
+  const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
 
-  const selectedClasses = useMemo(() => {
-    return typeof ownerClassName === 'string' && ownerClassName.length > 0 ? [ownerClassName] : []
-  }, [ownerClassName])
-
-  const visibleFieldsOptions = useVisibleFieldsOptions(selectedClasses)
+  const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
+  const visibleFieldsOptions = useClassVisibleFieldsOptions(ownerClassName, ownerFieldName)
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -71,7 +72,10 @@ export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbs
           label={ t('owner-field-name') }
           name="ownerFieldName"
         >
-          <Input />
+          <Select
+            options={ ownerFieldNameOptions }
+            showSearch
+          />
         </Form.Item>
         <Form.Item
           { ...relationSelectFormItemTransformation('visibleFields') }

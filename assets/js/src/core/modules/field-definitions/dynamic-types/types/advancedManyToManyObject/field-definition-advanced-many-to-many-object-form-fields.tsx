@@ -12,13 +12,13 @@ import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/fi
 import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useClassSelectOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-select-options'
+import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
 
 export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassSelectOptions()
+  const classOptions = useClassDefinitionOptions()
   const allowedClassId = Form.useWatch<string | undefined>('allowedClassId')
 
   const selectedClasses = useMemo(() => {

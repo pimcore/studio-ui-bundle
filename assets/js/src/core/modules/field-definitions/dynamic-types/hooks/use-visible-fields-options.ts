@@ -9,11 +9,17 @@
  */
 
 import { useMemo } from 'react'
-import { useClassGetAvailableVisibleFieldsQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassGetAvailableVisibleFieldsQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 
 export const useVisibleFieldsOptions = (classes: string[]): Array<{ label: string, value: string }> => {
-  const classNames = useMemo(() => classes.join(','), [classes])
-  const { data } = useClassGetAvailableVisibleFieldsQuery({ classNames }, { skip: classes.length === 0 })
+  const { getById } = useClassDefinitions()
+
+  const classNames = useMemo(() => {
+    return classes.map((id) => getById(id)?.name).filter(Boolean).join(',')
+  }, [classes, getById])
+
+  const { data } = useClassGetAvailableVisibleFieldsQuery({ classNames }, { skip: classNames.length === 0 })
 
   return useMemo(() => {
     return data?.items.map((item) => ({

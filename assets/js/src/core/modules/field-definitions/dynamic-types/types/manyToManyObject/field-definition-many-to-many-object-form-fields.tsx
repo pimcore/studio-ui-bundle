@@ -21,11 +21,11 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
   const classOptions = useClassDefinitionOptions(true)
   const form = Form.useFormInstance()
   const displayMode = Form.useWatch('displayMode')
-  const classes = Form.useWatch('classes')
+  const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')
 
   const selectedClasses = useMemo(() => {
     if (Array.isArray(classes)) {
-      return classes.map((item: { classes: string }) => item.classes).filter((className: string) => className !== 'folder')
+      return classes.map((item) => item.classes).filter((id) => id !== 'folder')
     }
     return []
   }, [classes])
