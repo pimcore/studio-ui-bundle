@@ -16,25 +16,19 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DetailSave = (): React.JSX.Element => {
-  // @todo translations
+  const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds } = useLayout()
   const { generalSettings } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
-  const error = result.error as FetchBaseQueryError | undefined
   const messageApi = useMessage()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
   const { area } = useArea()
-
-  useEffect(() => {
-    if (error !== undefined) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
 
   const onClick: ButtonProps['onClick'] = () => {
     if (generalSettings === undefined) {
@@ -64,16 +58,18 @@ export const DetailSave = (): React.JSX.Element => {
 
     if (invalidDefinitions.length > 0) {
       /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-      messageApi.error('Configuration contains invalid field definitions.')
+      messageApi.error(t('field-definitions.configuration-invalid'))
       return
     }
 
-    updateDetailMutation({}).then(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success('Saved successfully.')
-    }).catch((e) => {
-      trackError(new ApiError(e as FetchBaseQueryError))
-    })
+    updateDetailMutation({}).unwrap()
+      .then(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        messageApi.success(t('field-definitions.saved-successfully'))
+      })
+      .catch((e) => {
+        trackError(new ApiError(e as FetchBaseQueryError))
+      })
   }
 
   return (
@@ -83,7 +79,7 @@ export const DetailSave = (): React.JSX.Element => {
       onClick={ onClick }
       type="primary"
     >
-      Save
+      {t('save')}
     </Button>
   )
 }

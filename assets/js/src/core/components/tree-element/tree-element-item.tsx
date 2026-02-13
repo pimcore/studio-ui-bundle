@@ -29,10 +29,13 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
     // handle nested actions
     const buildMenuItems = (actionsList: TreeAction[]): MenuProps['items'] => {
       return actionsList.map((action) => {
+        const translationKey = action.translationKey ?? `tree.actions.${action.key}`
+        const reactKey = action.menuKey ?? action.key
+
         if (action.actions !== undefined && action.actions.length > 0) {
           return {
-            key: action.key,
-            label: t(`tree.actions.${action.key}`),
+            key: reactKey,
+            label: t(translationKey),
             icon: <Icon
               iconColorGroup={ action.iconColorGroup }
               value={ action.icon }
@@ -41,8 +44,8 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
           }
         } else {
           return {
-            key: action.key,
-            label: t(`tree.actions.${action.key}`),
+            key: reactKey,
+            label: t(translationKey),
             icon: <Icon
               iconColorGroup={ action.iconColorGroup }
               value={ action.icon }

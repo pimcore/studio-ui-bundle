@@ -16,6 +16,7 @@ export type {
   PathTextInputValue,
   ManyToOneRelationClassDefinitionProps
 } from './many-to-one-relation'
+export { ManyToOneRelationPath, ManyToOneRelationInput } from './components/many-to-one-relation'
+export type { ManyToOneRelationPathProps } from './components/many-to-one-relation/many-to-one-relation-path'
 export { PathTarget } from './path-target'
-export { ManyToOneRelationInput } from './many-to-one-relation-input'
 export type { PathTargetProps } from './path-target'

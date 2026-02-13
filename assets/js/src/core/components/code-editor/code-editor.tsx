@@ -13,7 +13,7 @@ import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirro
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
-export type CodeEditorPreset = 'text' | 'yaml'
+export type CodeEditorPreset = 'text' | 'yaml' | 'html'
 
 export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions' | 'value' | 'onChange'> {
   preset?: CodeEditorPreset

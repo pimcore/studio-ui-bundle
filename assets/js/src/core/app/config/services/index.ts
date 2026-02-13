@@ -305,6 +305,12 @@ import { DynamicTypeFieldDefinitionCountry } from '@Pimcore/modules/field-defini
 import { DynamicTypeFieldDefinitionLanguage } from '@Pimcore/modules/field-definitions/dynamic-types/types/language/dynamic-type-field-definition-language'
 import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/countrymultiselect/dynamic-type-field-definition-countrymultiselect'
 import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
+import { DynamicTypeFieldDefinitionRgbaColor } from '@Pimcore/modules/field-definitions/dynamic-types/types/rgbaColor/dynamic-type-field-definition-rgba-color'
+import { DynamicTypeFieldDefinitionEncryptedField } from '@Pimcore/modules/field-definitions/dynamic-types/types/encryptedField/dynamic-type-field-definition-encrypted-field'
+import { DynamicTypeFieldDefinitionUrlSlug } from '@Pimcore/modules/field-definitions/dynamic-types/types/urlSlug/dynamic-type-field-definition-url-slug'
+import { DynamicTypeFieldDefinitionCheckbox } from '@Pimcore/modules/field-definitions/dynamic-types/types/checkbox/dynamic-type-field-definition-checkbox'
+import { DynamicTypeFieldDefinitionLink } from '@Pimcore/modules/field-definitions/dynamic-types/types/link/dynamic-type-field-definition-link'
+import { DynamicTypeFieldDefinitionCalculatedValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/calculatedValue/dynamic-type-field-definition-calculated-value'
 import { DynamicTypeFieldDefinitionManyToOne } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToOne/dynamic-type-field-definition-many-to-one'
 import { DynamicTypeFieldDefinitionManyToMany } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToMany/dynamic-type-field-definition-many-to-many'
 import { DynamicTypeFieldDefinitionManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyObject/dynamic-type-field-definition-many-to-many-object'
@@ -704,6 +710,12 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Country']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTypeFieldDefinitionLanguage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/RgbaColor']).to(DynamicTypeFieldDefinitionRgbaColor).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/EncryptedField']).to(DynamicTypeFieldDefinitionEncryptedField).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/UrlSlug']).to(DynamicTypeFieldDefinitionUrlSlug).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Checkbox']).to(DynamicTypeFieldDefinitionCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Link']).to(DynamicTypeFieldDefinitionLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/CalculatedValue']).to(DynamicTypeFieldDefinitionCalculatedValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToOne']).to(DynamicTypeFieldDefinitionManyToOne).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToMany']).to(DynamicTypeFieldDefinitionManyToMany).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToManyObject']).to(DynamicTypeFieldDefinitionManyToManyObject).inSingletonScope()
