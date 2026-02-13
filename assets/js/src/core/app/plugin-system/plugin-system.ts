@@ -52,8 +52,8 @@ export class PluginSystem {
     getInstance()?.registerRemotes(initConfig.remotes)
 
     for (const remote of initConfig.remotes) {
-      const alternativeExport = alternativePaths?.[remote.name]
-      const moduleId = alternativeExport ? `${remote.alias}${alternativeExport}` : remote.alias!
+      const alternativeExport = alternativePaths?.[remote.name] ?? ''
+      const moduleId = alternativeExport !== '' ? `${remote.alias}${alternativeExport}` : remote.alias!
       promises.push(loadRemote(moduleId))
     }
 
