@@ -706,8 +706,6 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Reverse Object Relation
-field-definition.block: Block
-field-definition.panel: Panel
 allowed-classes: Allowed classes
 allowed-asset-types: Allowed asset types
 allowed-document-types: Allowed document types
