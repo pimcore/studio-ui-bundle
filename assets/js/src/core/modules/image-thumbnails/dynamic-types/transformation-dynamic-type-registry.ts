@@ -11,30 +11,54 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-import type { TransformationDynamicTypeInterface } from './transformation-dynamic-type-interface'
-import { createTransformationToolStripBox, type BaseTransformationToolStripBoxProps } from '../components/transformation-toolstrip-boxes/transformation-toolstrip-box-abstract'
 import React from 'react'
+import { injectable } from 'inversify'
+import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
+import { TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
+import { createTransformationToolStripBox, type BaseTransformationToolStripBoxProps } from '../components/transformation-toolstrip-boxes/transformation-toolstrip-box-abstract'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-
-class TransformationDynamicTypeRegistry {
-  private readonly types = new Map<string, TransformationDynamicTypeInterface>()
+@injectable()
+export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstract<TransformationDynamicTypeAbstract> {
+  public static readonly SERVICE_ID = 'image-thumbnails.transformation-dynamic-type-registry'
+  
   private readonly toolstripBoxes = new Map<string, React.ComponentType<BaseTransformationToolStripBoxProps>>()
 
-  register(type: TransformationDynamicTypeInterface): void {
-    this.types.set(type.getName(), type)
-    this.toolstripBoxes.set(type.getName(), createTransformationToolStripBox(type))
+  registerDynamicType(type: TransformationDynamicTypeAbstract): void {
+    super.registerDynamicType(type)
+    
+    try {
+      this.toolstripBoxes.set(type.getId(), createTransformationToolStripBox(type))
+    } catch (error) {
+      trackError(new GeneralError(`Failed to create toolstrip box for transformation type "${type.getId()}": ${error}`))
+    }
   }
 
-  get(name: string): TransformationDynamicTypeInterface | undefined {
-    return this.types.get(name)
+  overrideDynamicType(type: TransformationDynamicTypeAbstract): void {
+    super.overrideDynamicType(type)
+    
+    try {
+      this.toolstripBoxes.set(type.getId(), createTransformationToolStripBox(type))
+    } catch (error) {
+      trackError(new GeneralError(`Failed to override toolstrip box for transformation type "${type.getId()}": ${error}`))
+    }
   }
 
-  getToolStripBox(name: string): React.ComponentType<BaseTransformationToolStripBoxProps> | undefined {
-    return this.toolstripBoxes.get(name)
+  getToolStripBox(id: string): React.ComponentType<BaseTransformationToolStripBoxProps> | undefined {
+    return this.toolstripBoxes.get(id)
   }
 
-  getAll(): TransformationDynamicTypeInterface[] {
-    return Array.from(this.types.values())
+  // Backward compatibility methods
+  register(type: TransformationDynamicTypeAbstract): void {
+    this.registerDynamicType(type)
+  }
+
+  get(name: string): TransformationDynamicTypeAbstract | undefined {
+    return this.getDynamicType(name, false)
+  }
+
+  getAll(): TransformationDynamicTypeAbstract[] {
+    return this.getDynamicTypes()
   }
 }
 
@@ -42,7 +66,7 @@ export const transformationDynamicTypeRegistry = new TransformationDynamicTypeRe
 
 let isRegistered = false
 
-// Synchronous imports for immediate registration
+// Import transformation types - synchronous imports for immediate registration
 import { ResizeTransformationType } from './resize/resize-transformation-type'
 import { ScaleByHeightTransformationType } from './scale-by-height/scale-by-height-transformation-type'
 import { TrimTransformationType } from './trim/trim-transformation-type'
@@ -61,24 +85,25 @@ export function initializeTransformationTypes(): void {
   if (isRegistered) return
   
   try {
-    transformationDynamicTypeRegistry.register(new CoverTransformationType())
-    transformationDynamicTypeRegistry.register(new ResizeTransformationType())
-    transformationDynamicTypeRegistry.register(new ScaleByWidthTransformationType())
-    transformationDynamicTypeRegistry.register(new ScaleByHeightTransformationType())
-    transformationDynamicTypeRegistry.register(new TrimTransformationType())
-    transformationDynamicTypeRegistry.register(new SepiaTransformationType())
-    transformationDynamicTypeRegistry.register(new GrayscaleTransformationType())
-    transformationDynamicTypeRegistry.register(new SharpenTransformationType())
-    transformationDynamicTypeRegistry.register(new ContainTransformationType())
-    transformationDynamicTypeRegistry.register(new CropTransformationType())
-    transformationDynamicTypeRegistry.register(new FrameTransformationType())
-    transformationDynamicTypeRegistry.register(new RotateTransformationType())
-    transformationDynamicTypeRegistry.register(new MirrorTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new CoverTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new ResizeTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new ScaleByWidthTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new ScaleByHeightTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new TrimTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new SepiaTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new GrayscaleTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new SharpenTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new ContainTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new CropTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new FrameTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new RotateTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new MirrorTransformationType())
     
     isRegistered = true
   } catch (error) {
-    console.error('Error during transformation types initialization:', error)
+    trackError(new GeneralError(`Error during transformation types initialization: ${error}`))
   }
 }
 
+// Initialize transformation types on import
 initializeTransformationTypes()

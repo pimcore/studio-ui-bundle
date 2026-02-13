@@ -11,17 +11,21 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
+import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
+import { type FieldConfig } from '../transformation-dynamic-type-interface'
 import React from 'react'
 
 export interface SepiaTransformationConfig {
   // No configuration needed
 }
 
-export class SepiaTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+@injectable()
+export class SepiaTransformationType extends TransformationDynamicTypeAbstract {
+  readonly id = 'sepia'
+
   getName (): string {
-    return 'sepia'
+    return this.id
   }
 
   getLabel (): string {

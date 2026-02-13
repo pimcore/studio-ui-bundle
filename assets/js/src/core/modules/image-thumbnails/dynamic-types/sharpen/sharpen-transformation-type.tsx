@@ -11,8 +11,9 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
+import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
+import { type FieldConfig } from '../transformation-dynamic-type-interface'
 
 export interface SharpenTransformationConfig {
   radius?: number
@@ -21,9 +22,12 @@ export interface SharpenTransformationConfig {
   threshold?: number
 }
 
-export class SharpenTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+@injectable()
+export class SharpenTransformationType extends TransformationDynamicTypeAbstract {
+  readonly id = 'sharpen'
+
   getName (): string {
-    return 'sharpen'
+    return this.id
   }
 
   getLabel (): string {

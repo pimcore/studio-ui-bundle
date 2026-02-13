@@ -12,13 +12,21 @@
  */
 
 import React from 'react'
+import { injectable } from 'inversify'
+import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type TransformationDynamicTypeInterface, type FieldConfig } from './transformation-dynamic-type-interface'
 
-
-export abstract class TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+@injectable()
+export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstract implements TransformationDynamicTypeInterface {
+  abstract readonly id: string
+  
   abstract getName(): string
   abstract getLabel(): string  
   abstract getFieldConfig(): FieldConfig[]
+
+  getId(): string {
+    return this.id
+  }
 
   validateConfig(config: any): boolean { 
     return true 

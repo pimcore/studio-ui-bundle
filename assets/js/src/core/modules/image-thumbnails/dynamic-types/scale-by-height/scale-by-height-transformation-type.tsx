@@ -11,17 +11,21 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
+import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type TransformationDynamicTypeInterface, type FieldConfig } from '../transformation-dynamic-type-interface'
+import { type FieldConfig } from '../transformation-dynamic-type-interface'
 
 export interface ScaleByHeightTransformationConfig {
   height?: number
   forceResize?: boolean
 }
 
-export class ScaleByHeightTransformationType extends TransformationDynamicTypeAbstract implements TransformationDynamicTypeInterface {
+@injectable()
+export class ScaleByHeightTransformationType extends TransformationDynamicTypeAbstract {
+  readonly id = 'scaleByHeight'
+
   getName (): string {
-    return 'scaleByHeight'
+    return this.id
   }
 
   getLabel (): string {

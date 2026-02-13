@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { MediaQueryModal } from '../media-query-modal/media-query-modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { MediaQueryTabs } from '../media-query-tabs/media-query-tabs'
 import type { MediaQuery } from '../../types/media-query.types'
 import { generateMediaQueryId, generateTransformationId } from '../../utils/media-query-helpers'
@@ -22,70 +22,43 @@ import type { TransformationDynamicTypeInterface } from '../../dynamic-types/tra
 interface MediaQueriesPanelProps {
   mediaQueries: MediaQuery[]
   onChange: (mediaQueries: MediaQuery[]) => void
-  collapsed?: boolean
-  onCollapsedChange?: (collapsed: boolean) => void
 }
 
 export const MediaQueriesPanel = ({ 
   mediaQueries, 
-  onChange, 
-  collapsed = true, 
-  onCollapsedChange 
+  onChange
 }: MediaQueriesPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [modalOpen, setModalOpen] = useState(false)
+  const modal = useFormModal()
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
     mediaQueries.length > 0 ? mediaQueries[0].id : undefined
   )
 
-  const handleAddMediaQuery = useCallback((query: string) => {
-    const newMediaQuery: MediaQuery = {
-      id: generateMediaQueryId(),
-      query: query.trim(),
-      displayName: getDisplayName(query.trim()),
-      transformations: [],
-      order: mediaQueries.length
-    }
+  const handleAddMediaQuery = useCallback(() => {
+    modal.input({
+      title: t('image-thumbnails.editor.media-queries.add.title'),
+      label: t('image-thumbnails.editor.media-queries.add.label'),
+      okText: 'Create',
+      cancelButtonProps: { style: { display: 'none' } }, 
+      maskClosable: true,
+      rule: {
+        required: true,
+      },
+      onOk: async (query: string) => {
+        const newMediaQuery: MediaQuery = {
+          id: generateMediaQueryId(),
+          query: query.trim(),
+          displayName: getDisplayName(query.trim()),
+          transformations: [],
+          order: mediaQueries.length
+        }
 
-    const updatedMediaQueries = [...mediaQueries, newMediaQuery]
-    onChange(updatedMediaQueries)
-    setActiveTabKey(newMediaQuery.id)
-    setModalOpen(false)
-    
-    if (collapsed && onCollapsedChange) {
-      onCollapsedChange(false)
-    }
-  }, [mediaQueries, onChange, collapsed, onCollapsedChange])
-
-  const handleRemoveMediaQuery = useCallback((id: string) => {
-    const updatedMediaQueries = mediaQueries.filter(mq => mq.id !== id)
-    onChange(updatedMediaQueries)
-    
-    if (activeTabKey === id) {
-      setActiveTabKey(updatedMediaQueries.length > 0 ? updatedMediaQueries[0].id : undefined)
-    }
-  }, [mediaQueries, onChange, activeTabKey])
-
-  const handleTransformationAdd = useCallback((mediaQueryId: string, type: TransformationDynamicTypeInterface, config: any) => {
-    const updatedMediaQueries = mediaQueries.map(mq => {
-      if (mq.id !== mediaQueryId) return mq
-
-      const newTransformation = {
-        id: generateTransformationId(),
-        type: type.getName() as any,
-        subtype: undefined, 
-        config: config,
-        label: generateTransformationLabel(type, config)
-      }
-
-      return {
-        ...mq,
-        transformations: [...mq.transformations, newTransformation]
+        const updatedMediaQueries = [...mediaQueries, newMediaQuery]
+        onChange(updatedMediaQueries)
+        setActiveTabKey(newMediaQuery.id)
       }
     })
-
-    onChange(updatedMediaQueries)
-  }, [mediaQueries, onChange])
+  }, [mediaQueries, onChange, modal, t])
 
   const handleTransformationRemove = useCallback((mediaQueryId: string, transformationId: string) => {
     const updatedMediaQueries = mediaQueries.map(mq => {
@@ -120,7 +93,7 @@ export const MediaQueriesPanel = ({
       if (mq.id !== mediaQueryId) return mq
 
       const currentIndex = mq.transformations.findIndex(t => t.id === transformationId)
-      if (currentIndex <= 0) return mq // Can't move up if it's the first item
+      if (currentIndex <= 0) return mq 
 
       const newTransformations = [...mq.transformations]
       const temp = newTransformations[currentIndex]
@@ -154,6 +127,36 @@ export const MediaQueriesPanel = ({
     })
 
     onChange(updatedMediaQueries)
+   }, [mediaQueries, onChange])
+
+  const handleRemoveMediaQuery = useCallback((mediaQueryId: string) => {
+    const updatedMediaQueries = mediaQueries.filter(mq => mq.id !== mediaQueryId)
+    onChange(updatedMediaQueries)
+
+    if (activeTabKey === mediaQueryId) {
+      const newActiveKey = updatedMediaQueries.length > 0 ? updatedMediaQueries[0].id : undefined
+      setActiveTabKey(newActiveKey)
+    }
+  }, [mediaQueries, onChange, activeTabKey])
+
+  const handleTransformationAdd = useCallback((mediaQueryId: string, transformationType: TransformationDynamicTypeInterface, config: any) => {
+    const newTransformation = {
+      id: generateTransformationId(),
+      type: transformationType.getId(),
+      config: config || {},
+      order: mediaQueries.find(mq => mq.id === mediaQueryId)?.transformations.length || 0
+    }
+
+    const updatedMediaQueries = mediaQueries.map(mq => {
+      if (mq.id !== mediaQueryId) return mq
+
+      return {
+        ...mq,
+        transformations: [...mq.transformations, newTransformation]
+      }
+    })
+
+    onChange(updatedMediaQueries)
   }, [mediaQueries, onChange])
 
   const newButton = (
@@ -161,44 +164,33 @@ export const MediaQueriesPanel = ({
       type="link"
       icon={<Icon value="plus-circle" options={{ width: 16, height: 16 }} />}
       size="small"
-      onClick={() => setModalOpen(true)}
+      onClick={handleAddMediaQuery}
     >
       {t('image-thumbnails.editor.media-queries.new')}
     </Button>
   )
 
   return (
-    <>
-      <Panel
-        title={t('image-thumbnails.editor.media-queries')}
-        collapsible={true}
-        collapsed={collapsed}
-        onCollapsedChange={onCollapsedChange}
-        border={true}
-        theme="card-with-highlight"
-        contentPadding="small"
-        extra={newButton}
-        extraPosition="end"
-      >
-        <MediaQueryTabs
-          mediaQueries={mediaQueries}
-          activeKey={activeTabKey}
-          onTabChange={setActiveTabKey}
-          onTabClose={handleRemoveMediaQuery}
-          onTransformationAdd={handleTransformationAdd}
-          onTransformationRemove={handleTransformationRemove}
-          onTransformationUpdate={handleTransformationUpdate}
-          onTransformationMoveUp={handleTransformationMoveUp}
-          onTransformationMoveDown={handleTransformationMoveDown}
-        />
-      </Panel>
-
-      <MediaQueryModal
-        open={modalOpen}
-        onOk={handleAddMediaQuery}
-        onCancel={() => setModalOpen(false)}
+    <Panel
+      title={t('image-thumbnails.editor.media-queries')}
+      border={true}
+      theme="card-with-highlight"
+      contentPadding="small"
+      extra={newButton}
+      extraPosition="end"
+    >
+      <MediaQueryTabs
+        mediaQueries={mediaQueries}
+        activeKey={activeTabKey}
+        onTabChange={setActiveTabKey}
+        onTabClose={handleRemoveMediaQuery}
+        onTransformationAdd={handleTransformationAdd}
+        onTransformationRemove={handleTransformationRemove}
+        onTransformationUpdate={handleTransformationUpdate}
+        onTransformationMoveUp={handleTransformationMoveUp}
+        onTransformationMoveDown={handleTransformationMoveDown}
       />
-    </>
+    </Panel>
   )
 }
 
@@ -215,27 +207,4 @@ function getDisplayName(query: string): string {
   }
   
   return query.length > 20 ? query.substring(0, 20) + '...' : query
-}
-
-function generateTransformationLabel(type: TransformationDynamicTypeInterface, config: any): string {
-  const typeName = type.getName()
-  
-  switch (typeName) {
-    case 'cover':
-      const { width, height } = config
-      return `Cover ${width || '?'}x${height || '?'}`
-    case 'resize':
-      const { width: rWidth, height: rHeight } = config
-      return `Resize ${rWidth || '?'}x${rHeight || '?'}`
-    case 'scaleByWidth':
-      return `Scale by Width ${config.width || '?'}px`
-    case 'scale-by-height':
-      return `Scale by Height ${config.height || '?'}px`
-    case 'trim':
-      return `Trim ${config.trim || 'Both'}`
-    case 'effects':
-      return `${config.effect || 'Effect'} Effect`
-    default:
-      return type.getLabel()
-  }
 }

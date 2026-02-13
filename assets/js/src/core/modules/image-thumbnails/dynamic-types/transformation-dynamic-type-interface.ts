@@ -11,7 +11,7 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-import React from 'react'
+import type { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 
 export interface FieldConfig {
   name: string
@@ -23,7 +23,7 @@ export interface FieldConfig {
   options?: Array<{ value: any; label: string }>
 }
 
-export interface TransformationDynamicTypeInterface {
+export interface TransformationDynamicTypeInterface extends DynamicTypeAbstract {
   getName(): string
   getLabel(): string
   getFieldConfig(): FieldConfig[]

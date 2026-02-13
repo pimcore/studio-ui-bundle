@@ -32,7 +32,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/IconSet/Twemoji': 'DynamicTypes/IconSet/Twemoji',
   'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
   'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry',
-  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry'
+  'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry',
+  'DynamicTypes/TransformationDynamicTypeRegistry': 'image-thumbnails.transformation-dynamic-type-registry'
 }
 
 export const serviceIds = {

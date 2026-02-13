@@ -313,6 +313,7 @@ import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-ex
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
 import { DynamicTypeEmailsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-email-gdpr-provider'
+import { TransformationDynamicTypeRegistry } from '@Pimcore/modules/image-thumbnails/dynamic-types/transformation-dynamic-type-registry'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -699,6 +700,9 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Language']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/FieldDefinition/CountryMultiselect']).to(DynamicTypeFieldDefinitionCountryMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
+
+// Image Thumbnails Transformation Registry
+container.bind(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry']).to(TransformationDynamicTypeRegistry).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()

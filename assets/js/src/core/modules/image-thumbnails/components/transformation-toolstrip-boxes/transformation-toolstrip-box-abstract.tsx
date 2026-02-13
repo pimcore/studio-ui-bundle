@@ -23,7 +23,8 @@ import { Input } from '@Pimcore/components/input/input'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import type { Transformation } from '../types/media-query.types'
-import type { TransformationDynamicTypeInterface, FieldConfig } from '../dynamic-types/transformation-dynamic-type-interface'
+import type { FieldConfig } from '../dynamic-types/transformation-dynamic-type-interface'
+import { TransformationDynamicTypeAbstract } from '../dynamic-types/transformation-dynamic-type-abstract'
 import { Box } from '@sdk/components'
 
 interface BaseTransformationToolStripBoxProps {
@@ -167,7 +168,7 @@ const renderFields = (
 }
 
 export function createTransformationToolStripBox(
-  transformationType: TransformationDynamicTypeInterface
+  transformationType: TransformationDynamicTypeAbstract
 ): React.ComponentType<BaseTransformationToolStripBoxProps> {
 
   return React.forwardRef<any, BaseTransformationToolStripBoxProps>((props, ref) => {

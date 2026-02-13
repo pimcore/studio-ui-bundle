@@ -478,6 +478,7 @@ translations.add-translation-mandatory-field-missing.error: Key is a mandatory f
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.save: Save
 button.confirm: Confirm
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
@@ -710,6 +711,9 @@ export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
+form.validation.min: The minimum value is {{min}}
+validation.required: This field is required
+validation.min: The minimum value is {{min}}
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
@@ -1149,9 +1153,125 @@ image-thumbnails.preview.title: "Preview"
 image-thumbnails.preview.description: "Preview thumbnail configuration"
 image-thumbnails.editor.empty.title: "Select a thumbnail"
 image-thumbnails.editor.empty.description: "Select a thumbnail from the tree to view or edit its configuration"
+image-thumbnails.editor.select-thumbnail: "Select a thumbnail configuration to edit"
+image-thumbnails.editor.general-settings: "General Settings"
+image-thumbnails.editor.name: "Name"
+image-thumbnails.editor.name-required: "Name is required"
+image-thumbnails.editor.description: "Description"
+image-thumbnails.editor.description-placeholder: "Enter thumbnail description..."
+image-thumbnails.editor.group: "Group"
+image-thumbnails.editor.group-required: "Group is required"
+image-thumbnails.editor.group-placeholder: "Select a group..."
+image-thumbnails.editor.no-group: "No Group"
+image-thumbnails.editor.format: "Format"
+image-thumbnails.editor.format-required: "Format is required"
+image-thumbnails.editor.format-placeholder: "Select a format..."
+image-thumbnails.editor.format-auto: "Auto (Web-optimized - recommended)"
 image-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
 image-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
 image-thumbnails.add.validation.message: "The thumbnail name is invalid"
+image-thumbnails.editor.advanced: "Advanced"
+image-thumbnails.editor.quality: "Quality"
+image-thumbnails.editor.quality.tooltip: "JPEG quality setting (1-100)"
+image-thumbnails.editor.high-resolution: "High Resolution"
+image-thumbnails.editor.high-resolution.tooltip: "High resolution factor for retina displays"
+image-thumbnails.editor.preserve-color: "Preserve Color"
+image-thumbnails.editor.preserve-color.tooltip: "Preserve color (profile, space) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
+image-thumbnails.editor.force-process-icc: "Force Process ICC Profiles"
+image-thumbnails.editor.force-process-icc.tooltip: "Force process ICC profiles (Imagick, ORIGINAL)"
+image-thumbnails.editor.preserve-metadata: "Preserve Meta Data"
+image-thumbnails.editor.preserve-metadata.tooltip: "Preserve meta data (don't strip) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
+image-thumbnails.editor.rasterize-svg: "Rasterize SVGs"
+image-thumbnails.editor.rasterize-svg.tooltip: "Rasterize SVGs (Imagick)\n(SVGs get automatically rasterized when a transformation other than resize or scale by width/height is used.)"
+image-thumbnails.editor.use-cropbox: "Use Cropbox"
+image-thumbnails.editor.use-cropbox.tooltip: "Use Cropbox (Ghostscript)\n(Sets the page size to the CropBox rather than the MediaBox, useful to exclude some margins and non-content areas.)"
+image-thumbnails.editor.downloadable: "Downloadable"
+image-thumbnails.editor.downloadable.tooltip: "List as option in download section on image detail view"
+image-thumbnails.editor.preserve-animation: "Preserve Animation"
+image-thumbnails.editor.preserve-animation.tooltip: "Preserve animations for GIF (Imagick)\n(Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: "Media Queries"
+image-thumbnails.editor.media-queries.new: "New"
+image-thumbnails.editor.media-queries.empty: "No media queries defined. Click 'New' to add a CSS media query."
+image-thumbnails.editor.media-query.modal.title: "New Media Query"
+image-thumbnails.editor.media-query.modal.label: "Enter a valid CSS media query"
+image-thumbnails.editor.media-queries.add.title: "New Media Query"
+image-thumbnails.editor.media-queries.add.label: "Enter a valid CSS media query"
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: "Transformations"
+image-thumbnails.editor.transformations.resize: "Resize"
+image-thumbnails.editor.transformations.scale-by-height: "Scale by Height"
+image-thumbnails.editor.transformations.trim: "Trim"
+image-thumbnails.editor.transformations.effects: "Effects"
+image-thumbnails.editor.transformations.effects.sepia: "Sepia"
+image-thumbnails.editor.transformations.effects.grayscale: "Grayscale"
+image-thumbnails.editor.transformations.effects.sharpen: "Sharpen"
+image-thumbnails.editor.transformations.empty: "No transformations defined. Use the 'Transformations' button to add image transformations."
+
+# Transformation Groups
+image-thumbnails.transformations.groups.main: "Transformations"
+image-thumbnails.transformations.groups.effects: "Effects"
+
+# Media Query Translations
+image-thumbnails.media-queries.add-transformation: "Add Transformation"
+
+# Cover Transformation
+image-thumbnails.transformations.cover.title: "Configure Cover"
+image-thumbnails.transformations.cover.width: "Width"
+image-thumbnails.transformations.cover.height: "Height"
+image-thumbnails.transformations.cover.positioning: "Position"
+image-thumbnails.transformations.cover.positioning-center: "Center"
+image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
+image-thumbnails.transformations.cover.positioning-topright: "Top Right"
+image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
+image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
+image-thumbnails.transformations.cover.force-resize: "Force Resize"
+
+# Scale by Width Transformation
+image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
+image-thumbnails.transformations.scale-by-width.width: "Width"
+image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
+
+# Resize Transformation
+image-thumbnails.transformations.resize.config-title: "Configure Resize"
+image-thumbnails.transformations.resize.width: "Width"
+image-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
+image-thumbnails.transformations.resize.height: "Height"
+image-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
+image-thumbnails.transformations.resize.positioning: "Positioning"
+image-thumbnails.transformations.resize.positioning-placeholder: "Select positioning"
+image-thumbnails.transformations.resize.positioning-center: "Center"
+image-thumbnails.transformations.resize.positioning-topleft: "Top Left"
+image-thumbnails.transformations.resize.positioning-topright: "Top Right"
+image-thumbnails.transformations.resize.positioning-bottomleft: "Bottom Left"
+image-thumbnails.transformations.resize.positioning-bottomright: "Bottom Right"
+image-thumbnails.transformations.resize.force-resize: "Force Resize"
+
+# Scale by Height Transformation
+image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
+image-thumbnails.transformations.scale-by-height.height: "Height"
+image-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+image-thumbnails.transformations.scale-by-height.force-resize: "Force Resize"
+
+# Trim Transformation
+image-thumbnails.transformations.trim.config-title: "Configure Trim"
+image-thumbnails.transformations.trim.trim-option: "Trim Option"
+image-thumbnails.transformations.trim.trim-option-placeholder: "Select trim option"
+image-thumbnails.transformations.trim.disabled: "Disabled"
+image-thumbnails.transformations.trim.left: "Left"
+image-thumbnails.transformations.trim.right: "Right"
+image-thumbnails.transformations.trim.both: "Both"
+
+# Effects Transformation
+image-thumbnails.transformations.effects.config-title: "Configure Effect"
+image-thumbnails.transformations.effects.effect-type: "Effect Type"
+image-thumbnails.transformations.effects.effect-type-placeholder: "Select effect type"
+image-thumbnails.transformations.effects.sepia: "Sepia"
+image-thumbnails.transformations.effects.grayscale: "Grayscale"
+image-thumbnails.transformations.effects.sharpen: "Sharpen"
+image-thumbnails.transformations.effects.intensity: "Intensity"
+
+# Unknown/Fallback Transformation
+image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."

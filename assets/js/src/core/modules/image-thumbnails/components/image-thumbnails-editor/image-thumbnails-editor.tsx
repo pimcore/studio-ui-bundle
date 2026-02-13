@@ -53,7 +53,6 @@ interface ThumbnailFormData {
   downloadable: boolean
   preserveAnimation: boolean
   mediaQueries: MediaQuery[]
-  mediaQueriesPanelCollapsed: boolean
 }
 
 const formatOptions = [
@@ -148,8 +147,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         useCropBox: configData.settings.useCropBox || false,
         downloadable: configData.settings.downloadable || false,
         preserveAnimation: configData.settings.preserveAnimation || false,
-        mediaQueries: convertFromBackendFormat(configData.medias, {}),
-        mediaQueriesPanelCollapsed: true
+        mediaQueries: convertFromBackendFormat(configData.medias, {})
       }
       
       setInitialFormData({ ...formData })
@@ -398,13 +396,6 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         <MediaQueriesPanel
           mediaQueries={mediaQueries}
           onChange={handleMediaQueriesChange}
-          collapsed={currentFormData?.mediaQueriesPanelCollapsed ?? true}
-          onCollapsedChange={(collapsed) => {
-            if (currentFormData) {
-              const updatedFormData = { ...currentFormData, mediaQueriesPanelCollapsed: collapsed }
-              setCurrentFormData(updatedFormData)
-            }
-          }}
         />
       </FormKit>
       )}
