@@ -44,6 +44,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const currentValue = translationRow?.[`_${locale}`] ?? ''
   const [activeTabKey, setActiveTabKey] = useState<string>('plain-text')
   const [currentFormValue, setCurrentFormValue] = useState<string>('')
+  const [isRestoring, setIsRestoring] = useState<boolean>(false)
 
   const originalContentIsHtml = useMemo(() => {
     return isHtmlContent(currentValue)
@@ -51,7 +52,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
   const currentFormValueIsHtml = isHtmlContent(currentFormValue)
 
-  const showOnlyHtmlTab = originalContentIsHtml && currentFormValueIsHtml
+  const showOnlyHtmlTab = originalContentIsHtml && currentFormValueIsHtml && !isRestoring
   const showRestoreButton = currentFormValueIsHtml
 
   const handleTabChange = (key: string): void => {
@@ -59,27 +60,33 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     let processedValue = currentValues.translation ?? ''
 
     if (key === 'html' && activeTabKey === 'plain-text') {
+      // Convert line breaks to HTML when switching to HTML tab
       processedValue = processedValue.replace(/\n/g, '<br>')
     } else if (key === 'plain-text' && activeTabKey === 'html') {
+      // Convert HTML line breaks to plain text when switching to plain text tab
       processedValue = processedValue.replace(/<br\s*\/?>/gi, '\n')
     }
 
+    setActiveTabKey(key)
+    setCurrentFormValue(processedValue)
     form.setFieldsValue({
       translation: processedValue
     })
-    setCurrentFormValue(processedValue)
-    setActiveTabKey(key)
   }
 
   useEffect(() => {
     if (translationRow !== null && props.open) {
+      const initialValue = translationRow[`_${locale}`] ?? ''
+      const initialIsHtml = isHtmlContent(initialValue)
+
       form.setFieldsValue({
-        translation: currentValue
+        translation: initialValue
       })
-      setCurrentFormValue(currentValue)
-      setActiveTabKey(showOnlyHtmlTab ? 'html' : 'plain-text')
+      setCurrentFormValue(initialValue)
+      setActiveTabKey(initialIsHtml ? 'html' : 'plain-text')
+      setIsRestoring(false)
     }
-  }, [translationRow, locale, props.open, form, currentValue])
+  }, [translationRow, locale, props.open])
 
   const onFinish = async (values: EditFormValues): Promise<void> => {
     if (translationRow === null) return
@@ -105,11 +112,18 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     const withoutTags = stripTags(currentFormValue, [])
     const plainTextValue = decodeHtmlEntities(withoutTags)
 
+    // Set restoring mode first to immediately show both tabs
+    setIsRestoring(true)
+
     form.setFieldsValue({
       translation: plainTextValue.trim()
     })
     setCurrentFormValue(plainTextValue.trim())
-    setActiveTabKey('plain-text')
+
+    // Defer tab change to next tick to ensure state updates have been processed
+    setTimeout(() => {
+      setActiveTabKey('plain-text')
+    }, 0)
   }
 
   const tabItems = [
@@ -117,84 +131,88 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       label: t('translations.edit-modal.tab.plain-text'),
       key: 'plain-text',
       children: (
-        <Form.Item name="translation">
-          <TextArea
-            autoSize={ { minRows: 3, maxRows: 15 } }
-          />
-        </Form.Item>
+          <Form.Item name="translation">
+            <TextArea
+                autoSize={ { minRows: 3, maxRows: 15 } }
+            />
+          </Form.Item>
       )
     },
     {
       label: t('translations.edit-modal.tab.html'),
       key: 'html',
       children: (
-        <Form.Item name="translation">
-          <Wysiwyg
-            context={ WysiwygContext.TRANSLATION }
-            height={ 300 }
-          />
-        </Form.Item>
+          <Form.Item name="translation">
+            <Wysiwyg
+                context={ WysiwygContext.TRANSLATION }
+                height={ 300 }
+            />
+          </Form.Item>
       )
     }
   ]
 
   const visibleTabItems = showOnlyHtmlTab ? [tabItems[1]] : tabItems
-  const defaultActiveKey = showOnlyHtmlTab ? 'html' : activeTabKey
 
   return (
-    <Modal
-      footer={
-        <ModalFooter>
-          <Flex
-            justify="space-between"
-            style={ { width: '100%' } }
-          >
-            <div>
-              {showRestoreButton && (
+      <Modal
+          data-testid="translations-edit-modal"
+          footer={
+            <ModalFooter>
+              <Flex
+                  justify="space-between"
+                  style={ { width: '100%' } }
+              >
+                <div>
+                  {showRestoreButton && (
+                      <Button
+                          data-testid="translations-edit-modal-restore-button"
+                          onClick={ handleRestore }
+                          type="default"
+                      >
+                        {t('translations.edit-modal.restore')}
+                      </Button>
+                  )}
+                </div>
                 <Button
-                  onClick={ handleRestore }
-                  type="default"
+                    data-testid="translations-edit-modal-save-button"
+                    loading={ isLoading }
+                    onClick={ () => { form.submit() } }
+                    type="primary"
                 >
-                  {t('translations.edit-modal.restore')}
+                  {t('translations.edit-modal.save')}
                 </Button>
-              )}
-            </div>
-            <Button
-              loading={ isLoading }
-              onClick={ () => { form.submit() } }
-              type="primary"
-            >
-              {t('translations.edit-modal.save')}
-            </Button>
-          </Flex>
-        </ModalFooter>
-      }
-      onCancel={ () => {
-        props.setOpen(false)
-        form.resetFields()
-      } }
-      open={ props.open }
-      size="L"
-      title={ (
-        <ModalTitle iconName='edit'>
-          {t('translations.edit-modal.title')}
-        </ModalTitle>
-      ) }
-    >
-      <Form
-        form={ form }
-        onFinish={ onFinish }
-        onValuesChange={ (_, allValues) => {
-          setCurrentFormValue(allValues.translation ?? '')
-        } }
+              </Flex>
+            </ModalFooter>
+          }
+          onCancel={ () => {
+            props.setOpen(false)
+            form.resetFields()
+          } }
+          open={ props.open }
+          size="L"
+          title={ (
+              <ModalTitle iconName='edit'>
+                {t('translations.edit-modal.title')}
+              </ModalTitle>
+          ) }
       >
-        <Tabs
-          activeKey={ defaultActiveKey }
-          destroyInactiveTabPane
-          items={ visibleTabItems }
-          onChange={ handleTabChange }
-        />
-      </Form>
-    </Modal>
+        <Form
+            data-testid="translations-edit-modal-form"
+            form={ form }
+            onFinish={ onFinish }
+            onValuesChange={ (_, allValues) => {
+              setCurrentFormValue(allValues.translation ?? '')
+            } }
+        >
+          <Tabs
+              activeKey={ activeTabKey }
+              data-testid="translations-edit-modal-tabs"
+              destroyInactiveTabPane={ false }
+              items={ visibleTabItems }
+              onChange={ handleTabChange }
+          />
+        </Form>
+      </Modal>
   )
 }
