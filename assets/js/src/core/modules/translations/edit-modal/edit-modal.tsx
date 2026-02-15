@@ -131,23 +131,23 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       label: t('translations.edit-modal.tab.plain-text'),
       key: 'plain-text',
       children: (
-          <Form.Item name="translation">
-            <TextArea
-                autoSize={ { minRows: 3, maxRows: 15 } }
-            />
-          </Form.Item>
+        <Form.Item name="translation">
+          <TextArea
+            autoSize={ { minRows: 3, maxRows: 15 } }
+          />
+        </Form.Item>
       )
     },
     {
       label: t('translations.edit-modal.tab.html'),
       key: 'html',
       children: (
-          <Form.Item name="translation">
-            <Wysiwyg
-                context={ WysiwygContext.TRANSLATION }
-                height={ 300 }
-            />
-          </Form.Item>
+        <Form.Item name="translation">
+          <Wysiwyg
+            context={ WysiwygContext.TRANSLATION }
+            height={ 300 }
+          />
+        </Form.Item>
       )
     }
   ]
@@ -155,64 +155,64 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const visibleTabItems = showOnlyHtmlTab ? [tabItems[1]] : tabItems
 
   return (
-      <Modal
-          data-testid="translations-edit-modal"
-          footer={
-            <ModalFooter>
-              <Flex
-                  justify="space-between"
-                  style={ { width: '100%' } }
+    <Modal
+      data-testid="translations-edit-modal"
+      footer={
+        <ModalFooter>
+          <Flex
+            justify="space-between"
+            style={ { width: '100%' } }
+          >
+            <div>
+              {showRestoreButton && (
+              <Button
+                data-testid="translations-edit-modal-restore-button"
+                onClick={ handleRestore }
+                type="default"
               >
-                <div>
-                  {showRestoreButton && (
-                      <Button
-                          data-testid="translations-edit-modal-restore-button"
-                          onClick={ handleRestore }
-                          type="default"
-                      >
-                        {t('translations.edit-modal.restore')}
-                      </Button>
-                  )}
-                </div>
-                <Button
-                    data-testid="translations-edit-modal-save-button"
-                    loading={ isLoading }
-                    onClick={ () => { form.submit() } }
-                    type="primary"
-                >
-                  {t('translations.edit-modal.save')}
-                </Button>
-              </Flex>
-            </ModalFooter>
+                {t('translations.edit-modal.restore')}
+              </Button>
+              )}
+            </div>
+            <Button
+              data-testid="translations-edit-modal-save-button"
+              loading={ isLoading }
+              onClick={ () => { form.submit() } }
+              type="primary"
+            >
+              {t('translations.edit-modal.save')}
+            </Button>
+          </Flex>
+        </ModalFooter>
           }
-          onCancel={ () => {
-            props.setOpen(false)
-            form.resetFields()
-          } }
-          open={ props.open }
-          size="L"
-          title={ (
-              <ModalTitle iconName='edit'>
-                {t('translations.edit-modal.title')}
-              </ModalTitle>
+      onCancel={ () => {
+        props.setOpen(false)
+        form.resetFields()
+      } }
+      open={ props.open }
+      size="L"
+      title={ (
+        <ModalTitle iconName='edit'>
+          {t('translations.edit-modal.title')}
+        </ModalTitle>
           ) }
+    >
+      <Form
+        data-testid="translations-edit-modal-form"
+        form={ form }
+        onFinish={ onFinish }
+        onValuesChange={ (_, allValues) => {
+          setCurrentFormValue(allValues.translation ?? '')
+        } }
       >
-        <Form
-            data-testid="translations-edit-modal-form"
-            form={ form }
-            onFinish={ onFinish }
-            onValuesChange={ (_, allValues) => {
-              setCurrentFormValue(allValues.translation ?? '')
-            } }
-        >
-          <Tabs
-              activeKey={ activeTabKey }
-              data-testid="translations-edit-modal-tabs"
-              destroyInactiveTabPane={ false }
-              items={ visibleTabItems }
-              onChange={ handleTabChange }
-          />
-        </Form>
-      </Modal>
+        <Tabs
+          activeKey={ activeTabKey }
+          data-testid="translations-edit-modal-tabs"
+          destroyInactiveTabPane={ false }
+          items={ visibleTabItems }
+          onChange={ handleTabChange }
+        />
+      </Form>
+    </Modal>
   )
 }
