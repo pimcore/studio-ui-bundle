@@ -96,6 +96,10 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `input-${uuid}`
+  // Capture form instance at creation time to avoid
+  // the module-level variable being overwritten by
+  // other components that call useFormModal()
+  const currentForm = form!
   const {
     label,
     rule,
@@ -111,9 +115,9 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
   const submit = async (fieldName): Promise<any> => {
     onSetModalLoading?.(true)
     return await new Promise((resolve, reject) => {
-      form!.validateFields()
+      currentForm.validateFields()
         .then(async () => {
-          const value = form!.getFieldValue(fieldName)
+          const value = currentForm.getFieldValue(fieldName)
           await props.onOk?.(value)
           onKeyBoardSubmit?.(value)
           resolve(value)
@@ -148,7 +152,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     },
     content: <InputForm
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
       label={ label }
@@ -163,6 +167,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
   const textareaRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `textarea-${uuid}`
+  const currentForm = form!
   const {
     label,
     initialValue = '',
@@ -183,7 +188,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
       ...props.cancelButtonProps
     },
     onOk: async () => {
-      const value = form!.getFieldValue(fieldName)
+      const value = currentForm.getFieldValue(fieldName)
       props.onOk?.(value)
     },
     modalRender: (node) => {
@@ -194,7 +199,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     },
     content: <TextareaForm
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'textarea-form' }
       label={ label }
@@ -254,6 +259,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `upload-${uuid}`
+  const currentForm = form!
   const {
     label,
     rule,
@@ -280,7 +286,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     },
     onOk: async () => {
       return await new Promise((resolve, reject) => {
-        form!.validateFields()
+        currentForm.validateFields()
           .then(() => {
             const files = inputRef.current!.input!.files
 
@@ -295,7 +301,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     content: <UploadForm
       accept={ accept }
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ {} }
       key={ 'upload-form' }
       label={ label }
