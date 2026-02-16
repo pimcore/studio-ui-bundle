@@ -12,6 +12,7 @@ import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/compo
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { message } from 'antd'
 
 interface AllowedColumn {
   position: number
@@ -35,6 +36,7 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
   return useMemo(() => [
     columnHelper.accessor('position', {
       header: t('position'),
+      size: 70,
       meta: {
         editable: true,
         type: 'number'
@@ -42,14 +44,17 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
     }),
     columnHelper.accessor('key', {
       header: t('key'),
+      size: 100,
       meta: { editable: true }
     }),
     columnHelper.accessor('label', {
       header: t('label'),
+      size: 120,
       meta: { editable: true }
     }),
     columnHelper.accessor('type', {
       header: t('type'),
+      size: 100,
       meta: {
         editable: true,
         type: 'select',
@@ -59,7 +64,7 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
             { label: t('text'), value: 'text' },
             { label: t('select'), value: 'select' },
             { label: t('bool'), value: 'bool' },
-            { label: t('column-bool'), value: 'column bool' },
+            { label: t('column-bool'), value: 'columnbool' },
             { label: t('multiselect'), value: 'multiselect' }
           ]
         }
@@ -67,10 +72,12 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
     }),
     columnHelper.accessor('value', {
       header: t('value'),
+      size: 110,
       meta: { editable: true }
     }),
     columnHelper.accessor('width', {
       header: t('width'),
+      size: 70,
       meta: {
         editable: true,
         type: 'number'
@@ -111,13 +118,46 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
 
   const columns = useColumns(value, onChange)
 
+  const validateKey = (keyValue: string): boolean => {
+    const trimmedValue = keyValue.trim()
+    const regresult = trimmedValue.match(/[a-zA-Z0-9_]+/)
+
+    const reservedWords = [
+      'id', 'key', 'path', 'type', 'index', 'classname',
+      'creationdate', 'userowner', 'value', 'class', 'list', 'fullpath', 'childs', 'children', 'values', 'cachetag',
+      'cachetags', 'parent', 'published', 'valuefromparent', 'userpermissions', 'dependencies',
+      'modificationdate', 'usermodification', 'byid', 'bypath', 'data', 'versions', 'properties',
+      'permissions', 'permissionsforuser', 'childamount', 'apipluginbroker', 'resource',
+      'parentClass', 'definition', 'locked', 'language'
+    ]
+
+    if (trimmedValue.length > 1 && regresult !== null && regresult[0] === trimmedValue && !reservedWords.includes(trimmedValue.toLowerCase())) {
+      return true
+    }
+
+    return false
+  }
+
+  const handleUpdateCellData = (event: { rowIndex: number, columnId: string, value: any }): void => {
+    if (event.columnId === 'key') {
+      if (!validateKey(String(event.value))) {
+        void message.error(t('invalid-key'))
+        return
+      }
+    }
+
+    const newValue = [...value]
+    newValue[event.rowIndex] = { ...newValue[event.rowIndex], [event.columnId]: event.value }
+    onChange?.(newValue)
+  }
+
   return (
     <OperationalGrid
       columns={ columns }
-      enableRowSelection
       enableSorting={ false }
       onChange={ onChange as (value: any[]) => void }
       onSelectedRowsChange={ setSelectedRows }
+      onUpdateCellData={ handleUpdateCellData }
       selectedRows={ selectedRows }
       value={ value }
     >
@@ -137,11 +177,11 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
                   onClick={ () => {
                     operations.addRow({
                       position: (value.length > 0 ? Math.max(...value.map((v) => v.position ?? 0)) : 0) + 1,
-                      key: '',
+                      key: 'name',
                       label: '',
-                      type: '',
+                      type: 'text',
                       value: '',
-                      width: 0
+                      width: null
                     })
                   } }
                   tooltip={ { title: t('add') } }

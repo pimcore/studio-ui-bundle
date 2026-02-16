@@ -25,6 +25,7 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
+invalid-key: Invalid key
 import-modal.title: Import
 import-modal.upload: Upload
 import-modal.browse-files: Browse Files
@@ -729,7 +730,7 @@ allow-objects: Allow objects
 path-restriction: Path restriction
 result-limit: Result limit
 remote-owner: Remote owner
-allowed-column-names: Allowed column names
+columns: Columns
 enable-batch-edit: Enable batch edit for columns
 owner-class: Owner class
 owner-field-name: Owner field name

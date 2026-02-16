@@ -147,8 +147,8 @@ export const FieldDefinitionAdvancedManyToManyFormFields = (props: FieldDefiniti
       </FormKit.Panel>
 
       <Form.Item
-        label={ t('allowed-column-names') }
-        name="allowedColumns"
+        label={ t('columns') }
+        name="columns"
       >
         <FieldDefinitionAllowedColumnsGrid />
       </Form.Item>

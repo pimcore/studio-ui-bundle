@@ -84,7 +84,7 @@ export const useConvertRelationEditableColumns = (
       columnDefinition.push(
         columnHelper.accessor(EDITABLE_COLUMN_PREFIX + column.key, {
           header: !_.isEmpty(column.label) ? t(String(column.label)) : undefined,
-          size: column.width ?? 150,
+          size: column.key === 'position' ? 70 : (column.width ?? 150),
           meta: mapColumnType(column.type ?? 'text', column.value)
         })
       )

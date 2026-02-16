@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   ManyToManyObjectRelation,
   type VisibleFieldDefinition
@@ -76,11 +76,21 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
 
+  const finalColumnDefinition = useMemo(() => {
+    const positionColumn = columnDefinition.find(col => col.id === 'edit::position')
+    const otherColumns = columnDefinition.filter(col => col.id !== 'edit::position')
+
+    return [
+      ...(positionColumn !== undefined ? [positionColumn] : []),
+      ...otherColumns
+    ]
+  }, [columnDefinition])
+
   return (
     <ManyToManyObjectRelation
       { ...props }
       allowedClasses={ [String(props.allowedClassId)] }
-      columnDefinition={ columnDefinition }
+      columnDefinition={ finalColumnDefinition }
       dataObjectsAllowed
       onChange={ onChange }
       onUpdateCellData={ onUpdateCellData }
