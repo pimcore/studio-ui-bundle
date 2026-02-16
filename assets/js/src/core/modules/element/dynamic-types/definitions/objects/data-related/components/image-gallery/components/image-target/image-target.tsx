@@ -88,7 +88,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
 
 
   // Determine the shape based on whether an image is selected
-  const droppableShape = !isNil(value?.image?.id) ? 'angular' : 'round'
+  const droppableShape = isNil(value?.image?.id) ? 'round' : 'angular'
 
   return (
       <InlineUpload
