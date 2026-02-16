@@ -67,7 +67,13 @@ export const tagNames = {
   USER_DETAIL: 'USER_DETAIL',
   USER_TREE: 'USER_TREE',
   GDPR_DATA: 'GDPR_DATA',
-  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL'
+  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL',
+  CLASS_DEFINITION: 'CLASS_DEFINITION',
+  CLASS_DEFINITION_DETAIL: 'CLASS_DEFINITION_DETAIL',
+  CLASS_DEFINITION_COLLECTION: 'CLASS_DEFINITION_COLLECTION',
+  CUSTOM_LAYOUT: 'CUSTOM_LAYOUT',
+  CUSTOM_LAYOUT_DETAIL: 'CUSTOM_LAYOUT_DETAIL',
+  CUSTOM_LAYOUT_COLLECTION: 'CUSTOM_LAYOUT_COLLECTION'
 }
 
 export const providingTags = {
@@ -140,7 +146,13 @@ export const providingTags = {
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
   USER_TREE: () => [tagNames.USER_TREE],
   GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
-  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [tagNames.CLASS_DEFINITION, { type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [tagNames.CUSTOM_LAYOUT, { type: tagNames.CUSTOM_LAYOUT_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -203,7 +215,13 @@ export const invalidatingTags = {
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
   USER_TREE: () => [tagNames.USER_TREE],
   GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
-  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [{ type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [{ type: tagNames.CUSTOM_LAYOUT_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

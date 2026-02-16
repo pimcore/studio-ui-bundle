@@ -16,6 +16,7 @@ export enum UserPermission {
   DocumentTypes = 'document_types',
   Objects = 'objects',
   Assets = 'assets',
+  Thumbnails = 'thumbnails',
   TagsConfiguration = 'tags_configuration',
   PredefinedProperties = 'predefined_properties',
   WebsiteSettings = 'website_settings',

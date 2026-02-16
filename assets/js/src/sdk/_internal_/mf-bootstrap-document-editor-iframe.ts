@@ -24,6 +24,7 @@ declare global {
     Pimcore: typeof Pimcore
     PimcoreDocumentEditor: PublicApiDocumentEditorIframe
     pluginRemotes: Record<string, string>
+    alternativePluginExportPaths: Record<string, string>
   }
 }
 

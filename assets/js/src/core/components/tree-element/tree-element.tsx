@@ -21,6 +21,8 @@ export interface TreeAction {
   icon: string
   iconColorGroup?: IconColorGroup
   actions?: TreeAction[]
+  translationKey?: string
+  menuKey?: string
 }
 
 export interface TreeDataItem extends TreeDataNode {

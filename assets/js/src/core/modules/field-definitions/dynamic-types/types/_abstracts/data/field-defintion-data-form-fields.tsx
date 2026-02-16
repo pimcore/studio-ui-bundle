@@ -59,9 +59,11 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         </Form.Item>
 
         {/* @todo check behavior for unique fields */}
-        <Form.Item name="unique">
-          <Switch labelRight={ t('unique') } />
-        </Form.Item>
+        {props.context.hideUnique !== true && (
+          <Form.Item name="unique">
+            <Switch labelRight={ t('unique') } />
+          </Form.Item>
+        )}
 
         <Form.Item name="noteditable">
           <Switch labelRight={ t('not-editable') } />

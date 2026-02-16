@@ -73,6 +73,7 @@ export const studioDefaultLightThemeConfig = {
     colorTextDescription: 'rgba(0, 0, 0, 0.6)',
     colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
     colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
+    colorAccent: '#13C2C2',
     colorAccentSecondary: '#08979c',
     colorButtonInverse: '#f5f5f5',
     colorFillInverse: '#151515',
@@ -266,6 +267,10 @@ export const studioDefaultLightThemeConfig = {
           6: '#2f54eb'
         }
       }
+    },
+
+    Radio: {
+      fontFamily: 'Lato'
     },
 
     Tag: {

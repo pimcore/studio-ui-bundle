@@ -8,29 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { yaml } from '@codemirror/lang-yaml'
-import { type LanguageSupport } from '@codemirror/language'
 import React from 'react'
+import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
-export type CodeEditorPreset = 'text' | 'yaml'
+export type CodeEditorPreset = 'text' | 'yaml' | 'html'
 
 export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions' | 'value' | 'onChange'> {
   preset?: CodeEditorPreset
   extensions?: ReactCodeMirrorProps['extensions']
   value?: string
   onChange?: (value: string) => void
-}
-
-const getPresetExtensions = (preset: CodeEditorPreset): LanguageSupport[] => {
-  switch (preset) {
-    case 'yaml':
-      return [yaml()]
-    case 'text':
-    default:
-      return []
-  }
 }
 
 export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: CodeEditorProps): React.JSX.Element => {

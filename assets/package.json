@@ -39,8 +39,12 @@
       "types": "./dist/build/types/src/sdk/*/index.d.ts"
     },
     "./rsbuild/plugins": {
-      "default": "./dist/build/rsbuild/plugins/entrypoints.js",
+      "default": "./dist/build/rsbuild/entrypoints.js",
       "types": "./dist/types/entrypoints.d.ts"
+    },
+    "./rsbuild/utils": {
+      "default": "./dist/build/rsbuild/utils.js",
+      "types": "./dist/types/utils.d.ts"
     }
   },
   "files": [
@@ -69,6 +73,7 @@
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.14",
+    "@types/js-yaml": "^4.0.9",
     "@types/webpack-env": "^1.18.8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
@@ -130,6 +135,7 @@
     "i18next": "^23.16.8",
     "immer": "^10.1.1",
     "inversify": "6.1.x",
+    "js-yaml": "^4.1.1",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
     "lodash": "^4.17.21",

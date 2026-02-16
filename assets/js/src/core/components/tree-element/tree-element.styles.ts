@@ -38,6 +38,9 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
 
         .ant-tree-node--has-drag-and-drop {
           .ant-tree-iconEle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             min-width: 24px;
           }
 
@@ -68,7 +71,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           &::before {
             content: '';
             position: absolute;
-            top: -1px;
+            top: -3px;
             left: -48px;
             right: 0;
             height: 2px;
@@ -78,7 +81,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           &::after {
             content: '';
             position: absolute;
-            top: -4px;
+            top: -6px;
             left: -49px;
             border-radius: 50%;
             width: 7px;
@@ -91,7 +94,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           &::before {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: -4px;
             left: -48px;
             right: 0;
             height: 2px;
@@ -103,7 +106,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
             position: absolute;
             top: auto;
             right: auto;
-            bottom: -4px;
+            bottom: -6px;
             left: -49px;
             border-radius: 50%;
             width: 7px;
@@ -149,6 +152,10 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
             &:hover {
               background: none;
             }
+          }
+
+          &::before {
+            display: none;
           }
         }
 

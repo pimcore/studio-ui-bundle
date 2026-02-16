@@ -83,8 +83,6 @@ export type GdprDataProvider = {
     key: string;
     /** Label of the provider */
     label: string;
-    /** The Operation ID to call when deleting an item. */
-    deleteOperationId: string;
 };
 export type GdprDataRow = {
     /** AdditionalAttributes */
