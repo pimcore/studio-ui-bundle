@@ -174,10 +174,10 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, edi
   return (
     <div data-testid="translations-table">
       <Grid
-        dataTestId="translations-grid"
         autoWidth
         columns={ tableColumns }
         data={ translationRows }
+        dataTestId="translations-grid"
         enableSorting
         manualSorting
         modifiedCells={ modifiedCells }

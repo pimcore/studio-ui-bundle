@@ -165,11 +165,11 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       className={ selectContainerClassNames }
       data-testid={ dataTestId }
     >      {withCustomIcon && (
-        <Icon
-          className={ customIconClassNames }
-          value={ customIcon! }
-        />
-      )}
+    <Icon
+      className={ customIconClassNames }
+      value={ customIcon! }
+    />
+    )}
       <AntdSelect
         allowClear={ allowClear }
         className={ selectClassNames }

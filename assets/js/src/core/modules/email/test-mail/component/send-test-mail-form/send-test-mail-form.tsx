@@ -114,7 +114,10 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           { type: 'email', message: t('test-email.validation.from.email.type') }
         ] }
       >
-        <Input data-testid="test-email-from-input" type="email" />
+        <Input
+          data-testid="test-email-from-input"
+          type="email"
+        />
       </Form.Item>
 
       <Form.Item
@@ -125,7 +128,10 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           { type: 'email', message: t('test-email.validation.to.email.type') }
         ] }
       >
-        <Input data-testid="test-email-to-input" type="email" />
+        <Input
+          data-testid="test-email-to-input"
+          type="email"
+        />
       </Form.Item>
 
       <Form.Item
