@@ -180,6 +180,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             setValue={ handleChange }
             value={ internalValue }
             width={ width! }
+            uploadPath={props.uploadPath}
           />
         ) }
       </Flex>
