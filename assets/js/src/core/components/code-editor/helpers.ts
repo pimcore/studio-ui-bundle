@@ -14,6 +14,7 @@ import yaml from 'js-yaml'
 import { isEmpty } from 'lodash'
 import type { Extension } from '@codemirror/state'
 import { yaml as codeMirrorYaml } from '@codemirror/lang-yaml'
+import { html as codeMirrorHtml } from '@codemirror/lang-html'
 import { type CodeEditorPreset } from '@Pimcore/components/code-editor/code-editor'
 
 const yamlLinter = linter((view: EditorView): Diagnostic[] => {
@@ -51,6 +52,8 @@ export const getPresetExtensions = (preset: CodeEditorPreset): Extension[] => {
   switch (preset) {
     case 'yaml':
       return [codeMirrorYaml(), yamlLinter, lintGutter()]
+    case 'html':
+      return [codeMirrorHtml()]
     case 'text':
     default:
       return []

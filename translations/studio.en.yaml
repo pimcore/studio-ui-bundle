@@ -151,6 +151,72 @@ toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
 toolbar.switch-layout: Switch custom layout
+import: Import
+export: Export
+more-actions: More Actions
+class-definition.import: Import Class Definition
+class-definition.export: Export Class Definition
+class-definition.import-file-label: Select JSON file
+class-definition.import-success: Class definition imported successfully
+class-definition.export-success: Class definition exported successfully
+class-definition.custom-layouts.default-layout: Default Layout
+class-definition.create-new: Create New Class Definition
+class-definition.class-name: Class name
+class-definition.unique-identifier: Unique identifier
+class-definition.unique-identifier-warning: Be careful with the unique identifier because table names can contain only up to 64 characters.
+class-definition.validation.enter-class-name: Please enter a class name
+class-definition.validation.class-name-format: The class name must start with a letter and can contain only letters, numbers, and underscores.
+class-definition.validation.enter-unique-identifier: Please enter a unique identifier
+class-definition.validation.unique-identifier-in-use: This unique identifier is already in use
+class-definition.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
+class-definition.general-settings.title: General
+class-definition.general-settings.description: Description
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP Class Name
+class-definition.general-settings.group: Group
+class-definition.general-settings.icon: Icon
+class-definition.general-settings.parent-class: Parent Class
+class-definition.general-settings.implements-interfaces: Implements Interfaces
+class-definition.general-settings.listing-parent-class: Listing Parent Class
+class-definition.general-settings.use-traits: Use Traits
+class-definition.general-settings.listing-use-traits: Listing Use Traits
+class-definition.general-settings.link-generator-reference: Link Generator Reference
+class-definition.general-settings.preview-generator-reference: Preview Generator Reference
+class-definition.general-settings.allow-inherit: Allow Inheritance
+class-definition.general-settings.allow-variants: Allow Variants
+class-definition.general-settings.show-variants: Show Variants
+class-definition.general-settings.show-app-logger-tab: Show App Logger Tab
+class-definition.general-settings.show-field-lookup: Show Field Lookup
+class-definition.general-settings.enable-grid-locking: Enable Grid Locking
+class-definition.general-settings.encrypt-data: Encrypt Data
+class-definition.general-settings.enter-name: Please enter a name
+class-definition.property-visibility.title: Property Visibility
+class-definition.property-visibility.id-grid: ID (Grid)
+class-definition.property-visibility.id-search: ID (Search)
+class-definition.property-visibility.key-grid: Key (Grid)
+class-definition.property-visibility.key-search: Key (Search)
+class-definition.property-visibility.path-grid: Path (Grid)
+class-definition.property-visibility.path-search: Path (Search)
+class-definition.property-visibility.modification-date-grid: Modification Date (Grid)
+class-definition.property-visibility.modification-date-search: Modification Date (Search)
+class-definition.property-visibility.creation-date-grid: Creation Date (Grid)
+class-definition.property-visibility.creation-date-search: Creation Date (Search)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Composite Indices
+class-definition.composite-indices.index-name: Index Name
+class-definition.composite-indices.type: Type
+class-definition.composite-indices.columns: Columns
+class-definition.composite-indices.enter-index-name: Enter index name
+class-definition.composite-indices.select-index-type: Select index type
+class-definition.composite-indices.select-column-names: Select or enter column names
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Localized Query
+class-definition.composite-indices.type-store: Store
+class-definition.composite-indices.type-localized-store: Localized Store
+class-definition.composite-indices.index-label: Index
+custom-layout.import-success: Custom layout imported successfully
+custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
+custom-layout.delete.success: Custom layout deleted successfully
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -319,6 +385,7 @@ by: By
 field: Field
 no-data-available: No Data Available
 no-data-available-yet: No data available yet.
+no-items: No items
 schedule.label: Schedule
 schedule.headline: Schedule
 schedule.columns.datetime: Date & Time
@@ -376,6 +443,9 @@ listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
+data-type.html: HTML
+data-type.number: Number
+data-type.boolean: Boolean
 data-type.date: Date
 data-type.text: Text
 data-type.document: Document
@@ -587,6 +657,25 @@ valid-units: Valid units
 slider-min: Slider minimum value
 slider-max: Slider maximum value
 slider-step: Slider step
+field-definitions.general-settings: General Settings
+field-definitions.base: Base
+field-definitions.configuration-invalid: Configuration contains invalid field definitions.
+field-definitions.saved-successfully: Saved successfully.
+field-definitions.select-item-configuration: Select Item Configuration
+field-definitions.custom-layout-title: Custom Layout
+field-definitions.custom-layouts: Custom Layouts
+field-definitions.create-new-class-definition: Create New Custom Layout
+field-definitions.select-field-message: Please select a field from the tree to edit its properties.
+field-definitions.loading-general-settings: Loading general settings...
+field-definitions.type-not-supported: Type not supported
+field-definitions.validation.enter-class-name: Please enter a class name
+field-definitions.validation.class-name-format: The class name must start with a letter and can contain only letters, numbers, and underscores.
+field-definitions.validation.unique-identifier: Unique identifier
+field-definitions.validation.enter-unique-identifier: Please enter a unique identifier
+field-definitions.validation.unique-identifier-in-use: This unique identifier is already in use
+field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
+object-brick-key: Object Brick Key
+field-name: Field Name
 field-definition.geopoint: Geo Point
 field-definition.geobounds: Geo Bounds
 field-definition.geopolygon: Geo Polygon
@@ -627,13 +716,113 @@ field-definition.country: Country
 field-definition.countrymultiselect: Country Multiselect
 field-definition.language: Language
 field-definition.languagemultiselect: Language Multiselect
+field-definition.rgba-color: RGBA Color
+field-definition.encrypted-field: Encrypted Field
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Checkbox
+field-definition.link: Link
+field-definition.calculated-value: Calculated Value
 field-definition.user: User
+field-definition.block: Block
+field-definition.panel: Panel
+field-definition.groups.layout: Layout Component
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Data Component
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Text
+field-definition.groups.data.numeric: Numeric
+field-definition.groups.data.date: Date
+field-definition.groups.data.select: Select
+field-definition.groups.data.media: Media
+field-definition.groups.data.relation: Relation
+field-definition.groups.data.geographic: Geographic
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Structured
+field-definition.groups.data.other: Other
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
 regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
 test-string: Test string
 regex-validation-error-message: "The string does not match the required format."
+calculator-class: Calculator Class
+calculator-expression: Calculator Expression
+calculator-type: Calculator Type
+calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
+expression: Expression
+domain-label-width: Domain label width
+controller-action: Controller action
+controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
+available-sites: "Available sites"
+empty-equals-allow-all-tooltip: "Empty = allow all"
 reset: Reset
 name: Name
 tooltip: Tooltip
@@ -855,6 +1044,13 @@ clipboard.copy.error: Failed to copy to clipboard
 table.empty: Empty
 table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
+tree.actions.prefix.add: "Add "
+tree.actions.convert: "Convert to "
+tree.actions.clone: Clone
+tree.actions.copy: Copy
+tree.actions.paste: Paste
+tree.actions.delete: Delete
+tree.actions.add-user: Add User
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
@@ -863,7 +1059,6 @@ tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
-tree.actions.add-user: Add User
 tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
@@ -1045,6 +1240,8 @@ roles.add-role.label: Enter the name of the new role
 roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
+navigation.data-model-definitions: Data Model Definitions
+navigation.class-definitions: Classes
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
@@ -1136,6 +1333,7 @@ widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+widget.class-definitions: Classes
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
 appearance-branding.title: "Appearance & Branding"
@@ -1836,3 +2034,20 @@ gdpr-extractor.emails.table.field.subject: Subject
 gdpr-extractor.emails.table.actions.export: Export Email Data
 gdpr-extractor.emails.table.actions.parameters: Expand Parameters
 gdpr-extractor.emails.table.actions.html: View HTML
+rule-condition.operator.and: "AND"
+rule-condition.operator.or: "OR"
+rule-condition.operator.and-not: "AND NOT"
+rule-condition.add-condition: "Add condition"
+rule-condition.move-up: "Move up"
+rule-condition.move-down: "Move down"
+rule-condition.remove: "Remove"
+rule-condition.bracket.toggle-left: "Toggle left bracket"
+rule-condition.bracket.toggle-right: "Toggle right bracket"
+rule-condition.validation.brackets-closing-without-opening: "Closing bracket ')' found without a matching opening bracket '('"
+rule-condition.validation.brackets-missing-closing: "Opening bracket '(' found without a matching closing bracket ')'"
+rule-condition.validation.brackets-invalid: "Brackets are not properly balanced"
+rule-builder.add-action: "Add action"
+rule-builder.add-trigger: "Add trigger"
+rule-builder.move-up: "Move up"
+rule-builder.move-down: "Move down"
+rule-builder.remove: "Remove"

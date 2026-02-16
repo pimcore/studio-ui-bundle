@@ -39,8 +39,12 @@
       "types": "./dist/build/types/src/sdk/*/index.d.ts"
     },
     "./rsbuild/plugins": {
-      "default": "./dist/build/rsbuild/plugins/entrypoints.js",
+      "default": "./dist/build/rsbuild/entrypoints.js",
       "types": "./dist/types/entrypoints.d.ts"
+    },
+    "./rsbuild/utils": {
+      "default": "./dist/build/rsbuild/utils.js",
+      "types": "./dist/types/utils.d.ts"
     }
   },
   "files": [

@@ -18,6 +18,16 @@ export interface UseDetailLayoutAccessorReturn {
   accessor: (detailData: Record<string, unknown>) => Layout | undefined
 }
 
+export interface ImportExportConfig {
+  getExportUrl: (id: number | string) => string
+  getImportUrl: (id: number | string) => string
+  getIdFromGeneralSettings: (generalSettings: Record<string, unknown> | undefined) => number | string | undefined
+  validateFile?: (file: File) => boolean
+  acceptFileTypes?: string
+  acceptMimeTypes?: string[]
+  successMessageKey?: string
+}
+
 export interface ISettingsContext {
   AddModal: ComponentType<OptionalModalProps>
   useItemsQuery: AnyQueryHook
@@ -28,6 +38,8 @@ export interface ISettingsContext {
   useDetailUpdateMutation: AnyMutationHook
   LayoutProvider: typeof DefaultLayoutProvider
   useLayout: typeof useDefaultLayout
+  GeneralSettingsFormFields: React.ComponentType
+  importExportConfig?: ImportExportConfig
   customLayouts?: {
     ModalContent?: React.JSX.Element
 
@@ -54,11 +66,11 @@ export const SettingsProvider = (props: SettingsProviderProps): React.JSX.Elemen
     ...rest
   } = props
 
-  const providerProps = {
+  const providerProps = useMemo(() => ({
     LayoutProvider,
     useLayout,
     ...rest
-  }
+  }), [LayoutProvider, useLayout, rest])
 
   return useMemo(() => (
     <SettingsContext.Provider value={ providerProps }>

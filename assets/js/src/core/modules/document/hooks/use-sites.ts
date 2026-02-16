@@ -17,8 +17,12 @@ export interface UseSitesReturn {
   getRemainingSites: (ids: number[], filteredSiteIds?: number[]) => Site[]
 }
 
-export const useSites = (): UseSitesReturn => {
-  const { data: sites } = useDocumentsListAvailableSitesQuery({ excludeMainSite: false })
+export interface UseSitesProps {
+  excludeMainSite?: boolean
+}
+
+export const useSites = (props?: UseSitesProps): UseSitesReturn => {
+  const { data: sites } = useDocumentsListAvailableSitesQuery({ excludeMainSite: props?.excludeMainSite ?? false })
 
   const getSiteById = (siteId: number): Site | undefined => {
     return sites?.items?.find(site => site.id === siteId)

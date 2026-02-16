@@ -10,10 +10,10 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionCropPanel } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-crop-panel/field-definition-crop-panel'
-import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { Form, FormKit, Input } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionImageGalleryFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -38,7 +38,7 @@ export const FieldDefinitionImageGalleryFormFields = (props: FieldDefinitionAbst
         label={ t('upload-path') }
         name="uploadPath"
       >
-        <ManyToOneRelation
+        <ManyToOneRelationPath
           allowToClearRelation
           allowedAssetTypes={ ['folder'] }
           assetsAllowed

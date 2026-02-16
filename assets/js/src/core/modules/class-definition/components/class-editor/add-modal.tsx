@@ -14,8 +14,11 @@ import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQu
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text } from '@Pimcore/components/text/text'
 
 export const ClassDefinitionsAddModal = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const [form] = Form.useForm()
   const { closeModal } = useAddModal()
   const { data, isLoading, error } = useClassDefinitionGetIdentifierDataQuery()
@@ -62,7 +65,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
   return (
     <AddModal
       onOk={ () => { form.submit() } }
-      title={ 'Create New Class Definition' }
+      title={ t('class-definition.create-new') }
     >
       <Content loading={ isLoading }>
         <Form
@@ -71,11 +74,11 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
           onFinish={ onFormFinish }
         >
           <Form.Item
-            label="Class name"
+            label={ t('class-definition.class-name') }
             name="className"
             rules={ [
-              { required: true, message: 'Please enter a class name' },
-              { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: 'The class name must start with a letter and can contain only letters, numbers, and underscores.' }
+              { required: true, message: t('class-definition.validation.enter-class-name') },
+              { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: t('class-definition.validation.class-name-format') }
             ] }
           >
             <Input />
@@ -83,20 +86,20 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
 
           <Form.Item
             initialValue={ data?.suggestedId }
-            label="Unique identifier"
+            label={ t('class-definition.unique-identifier') }
             name="uniqueIdentifier"
             rules={ [
-              { required: true, message: 'Please enter a unique identifier' },
+              { required: true, message: t('class-definition.validation.enter-unique-identifier') },
               {
                 validator: async (_, value: string) => {
                   if (data?.existingIds.includes(value.toLowerCase()) === true) {
-                    return await Promise.reject(new Error('This unique identifier is already in use'))
+                    return await Promise.reject(new Error(t('class-definition.validation.unique-identifier-in-use')))
                   }
 
                   await Promise.resolve()
                 }
               },
-              { pattern: /^[a-zA-Z0-9_]{0,63}$/, message: 'The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.' }
+              { pattern: /^[a-zA-Z0-9_]{0,63}$/, message: t('class-definition.validation.unique-identifier-format') }
             ] }
           >
             <Input
@@ -104,7 +107,9 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
             />
           </Form.Item>
 
-          Be careful with the unique identifier because table names can contain only up to 64 characters.
+          <Text type="secondary">
+            { t('class-definition.unique-identifier-warning') }
+          </Text>
         </Form>
       </Content>
     </AddModal>
