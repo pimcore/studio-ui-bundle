@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useEffect, useMemo, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'

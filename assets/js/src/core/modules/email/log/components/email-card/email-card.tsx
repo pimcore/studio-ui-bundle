@@ -58,7 +58,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         gap="extra-small"
              >
         <Icon value="send-03" />
-        <span>{email.subject}</span>
+        <span data-testid={ `email-log-subject-${email.id}` }>{email.subject}</span>
       </Flex>,
       subLabel: <Flex
         align="center"
@@ -88,6 +88,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       children: (
         <Flex
           className="email-log-content"
+          data-testid={ `email-log-entry-content-${email.id}` }
           gap={ 'small' }
           vertical
         >

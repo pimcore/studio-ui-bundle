@@ -21,11 +21,7 @@ export const createSafeTestIdString = (input: string | number): string => {
 /**
  * Generic test ID builder that combines parts with separators.
  *
- * @param parts - Array of string/number parts to combine
- * @param separator - Separator to use between parts (default: '-')
- * @returns Formatted test ID string
- *
- * @example
+ *  @example
  * buildTestId(['tree', 'node', 123, 'asset'])
  * // Returns: 'tree-node-123-asset'
  */
@@ -41,10 +37,6 @@ export const buildTestId = (parts: Array<string | number | undefined>, separator
 /**
  * Creates a test ID with optional prefix and suffix.
  * More flexible version that can be used as base for specific generators.
- *
- * @param base - The base identifier
- * @param options - Configuration options
- * @returns Formatted test ID string
  *
  * @example
  * createGenericTestId('123', { prefix: 'tree-node', elementType: 'asset' })
@@ -75,10 +67,6 @@ export const createGenericTestId = (
  * Creates a test ID for tree nodes using node ID and element type.
  * Used for element tree components (assets, documents, data objects).
  *
- * @param id - The node ID (numeric)
- * @param elementType - Optional element type (asset, document, data-object)
- * @returns Formatted test ID string
- *
  * @example
  * createNodeTestId(123, 'document')
  * // Returns: 'tree-node-document-123'
@@ -93,11 +81,6 @@ export const createNodeTestId = (id: number, elementType?: string): string => {
 /**
  * Creates a test ID for border buttons that open tree widgets.
  * Uses a priority system: nodeId > elementType+name > name > fallback.
- *
- * @param nodeId - Optional unique node identifier
- * @param nodeName - Optional node name
- * @param elementType - Optional element type
- * @returns Formatted test ID string
  *
  * @example
  * createBorderTestId('asset-tree-123', 'Main Tree', 'asset')
@@ -126,9 +109,6 @@ export const createBorderTestId = (nodeId?: string, nodeName?: string, elementTy
  * Creates a test ID for element trees with underscore to dash replacement.
  * Falls back to 'element-tree' when treeId is empty.
  *
- * @param treeId - The tree identifier (may contain underscores)
- * @returns Formatted test ID string
- *
  * @example
  * createTreeTestId('data_object')
  * // Returns: 'element-tree-data-object'
@@ -147,11 +127,6 @@ export const createTreeTestId = (treeId: string): string => {
 /**
  * Creates a test ID for tab titles with element information when available.
  * Prioritizes element type and ID for specificity, falls back to title.
- *
- * @param title - The tab title text
- * @param elementId - Optional element ID
- * @param elementType - Optional element type string
- * @returns Formatted test ID string
  *
  * @example
  * createTabTitleTestId('My Asset', 123, 'asset')
@@ -177,10 +152,6 @@ export const createTabTitleTestId = (title: string, elementId?: number | string,
  * Creates a test ID for tree nodes with ID and type.
  * Generic function that can be used for user management, tag management, and other tree components.
  *
- * @param id - The node ID (user, role, tag, etc.)
- * @param type - The node type ('user', 'role', 'folder', 'tag', etc.)
- * @returns Formatted test ID string
- *
  * @example
  * createTreeNodeTestId(123, 'user')
  * // Returns: 'tree-node-user-123'
@@ -201,12 +172,6 @@ export const createTreeNodeTestId = (id: number | string, type: string): string 
 /**
  * Creates a test ID for tab content areas.
  * Generic function that can be used for any tab panel content.
- *
- * @param context - The context identifier (user-id, asset-id, etc.)
- * @param options - Configuration options
- * @param options.prefix - Prefix for the test ID (default: 'tab-content')
- * @param options.tabKey - Optional tab key for specific tab content identification
- * @returns Formatted test ID string
  *
  * @example
  * createTabContentTestId(123, { prefix: 'user-tab' })
@@ -237,9 +202,6 @@ export const createTabContentTestId = (
  * Creates a test ID for table containers.
  * Used to identify different types of tables.
  *
- * @param tableType - The type of table (documents, assets, data-objects, etc.)
- * @returns Formatted test ID string
- *
  * @example
  * createTableTestId('documents')
  * // Returns: 'table-documents'
@@ -255,9 +217,6 @@ export const createTableTestId = (tableType: string): string => {
  * Creates a test ID for table rows.
  * Uses just the row index for identification.
  *
- * @param rowIdentifier - Row index (number) or row ID (string)
- * @returns Formatted test ID string
- *
  * @example
  * createTableRowTestId(0)
  * // Returns: 'row-0'
@@ -269,40 +228,20 @@ export const createTableRowTestId = (rowIdentifier: number | string): string => 
   return buildTestId(['row', rowIdentifier])
 }
 
-/**
- * Creates a test ID for table cells.
- * @param rowIdentifier - Row index (number) or row ID (string)
- * @param columnId - Column identifier
- * @returns Formatted test ID string
- */
 export const createTableCellTestId = (rowIdentifier: number | string, columnId: string): string => {
   return buildTestId(['cell', rowIdentifier, columnId])
 }
 
-/**
- * Creates a test ID for context menu containers.
- * @param elementType - Element type (asset, document, data-object)
- * @param nodeId - Node ID for context-specific menus
- * @returns Formatted test ID string
- */
 export const createContextMenuContainerTestId = (elementType: ElementType, nodeId: number | string): string => {
   return buildTestId(['context-menu', elementType, String(nodeId)])
 }
 
-/**
- * Creates consistent test IDs for context menu items based on their key.
- * @param key - Menu item key (action name)
- * @returns Formatted test ID string
- */
 export const createContextMenuItemTestId = (key: string): string => {
   return buildTestId(['context-menu-item', key])
 }
 
 /**
  * Creates a test ID for modal buttons (form modals, confirmation modals, etc.).
- * @param buttonType - Button type ('ok', 'cancel', 'submit', 'close', etc.)
- * @param modalType - Optional modal type identifier for specificity ('form', 'confirmation', 'alert', etc.)
- * @returns Formatted test ID string
  *
  * @example
  * createModalButtonTestId('ok')
