@@ -228,7 +228,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       role='button'
       style={
           {
-            paddingLeft: token.paddingSM + 20 * level,
+            paddingLeft: token.paddingMD * level,
             minWidth: `${20 * level + 200}px`
           }
         }
@@ -237,7 +237,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       <Flex
         align="center"
         className='tree-node__content-wrapper-outer w-full'
-        gap="small"
         justify="center"
       >
         {isRoot !== true && (
