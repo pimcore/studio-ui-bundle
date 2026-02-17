@@ -39,7 +39,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.system-settings',
           icon: {
             type: 'name',
-            value: 'translate'
+            value: 'system-settings'
           }
         }
       }
