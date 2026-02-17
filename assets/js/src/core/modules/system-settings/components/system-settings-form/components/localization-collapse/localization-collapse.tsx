@@ -1,11 +1,21 @@
-import { CollapseItem } from "@Pimcore/components/collapse/collapse"
-import { useSystemSettingsContext } from "@Pimcore/modules/system-settings/context/hooks/use-system-settings-context"
-import { Flex, IconButton } from "@sdk/components"
-import { isNil } from "lodash"
-import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
-import { LanguageForm } from "./components/language-form/language-form"
-import { LanguageSelect } from "./components/language-select/language-select"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { CollapseItem } from '@Pimcore/components/collapse/collapse'
+import { useSystemSettingsContext } from '@Pimcore/modules/system-settings/context/hooks/use-system-settings-context'
+import { Flex, IconButton } from '@sdk/components'
+import { isNil } from 'lodash'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LanguageForm } from './components/language-form/language-form'
+import { LanguageSelect } from './components/language-select/language-select'
 
 export const LocalizationCollapse = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -17,13 +27,10 @@ export const LocalizationCollapse = (): React.JSX.Element => {
       return
     }
 
-    const currentLanguages = form.getFieldValue(['general', 'valid_languages']) ?? []
+    const currentLanguages = (form.getFieldValue(['general', 'valid_languages']) ?? []) as string[]
     if (!currentLanguages.includes(selectedLanguage)) {
-      const allValues = form.getFieldsValue(true)
       form.setFieldsValue({
-        ...allValues,
         general: {
-          ...allValues.general,
           valid_languages: [...currentLanguages, selectedLanguage]
         }
       })
@@ -33,26 +40,26 @@ export const LocalizationCollapse = (): React.JSX.Element => {
 
   return (
     <CollapseItem
-      label={t('system-settings.collapse.localization')}
       forceRender
+      label={ t('system-settings.collapse.localization') }
     >
       <Flex
+        gap={ 'small' }
         vertical
-        gap={'small'}
       >
-        <Flex gap={'extra-small'}>
+        <Flex gap={ 'extra-small' }>
           <LanguageSelect
-            placeholder={t('system-settings.form.localization.field.add-language')}
-            value={selectedLanguage}
-            onChange={setSelectedLanguage}
+            onChange={ setSelectedLanguage }
+            placeholder={ t('system-settings.form.localization.field.add-language') }
+            value={ selectedLanguage }
           />
           <IconButton
-            type="primary"
-            icon={{
+            disabled={ isNil(selectedLanguage) }
+            icon={ {
               value: 'plus-circle'
-            }}
-            onClick={handleAddLanguage}
-            disabled={isNil(selectedLanguage)}
+            } }
+            onClick={ handleAddLanguage }
+            type="primary"
           />
         </Flex>
 
