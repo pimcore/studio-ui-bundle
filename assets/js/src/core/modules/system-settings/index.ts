@@ -14,6 +14,8 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { SystemSettingsContainer } from './system-settings-container'
+import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../auth/enums/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,8 +31,8 @@ moduleSystem.registerModule({
       label: 'navigation.systemSettings',
       className: 'item-style-modifier',
       order: 600,
-      // permission: UserPermission.Translations,
-      // perspectivePermission: NavPermission.Translations,
+      permission: UserPermission.SystemSettings,
+      perspectivePermission: NavPermission.SystemSettings,
       widgetConfig: {
         name: 'system-settings',
         id: 'system-settings',
