@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import type { DragAndDropInfo } from '@sdk/components'
@@ -16,11 +16,11 @@ import type { ImageGalleryValueItem } from '../../image-gallery'
 import { useTranslation } from 'react-i18next'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import {isEmpty, isNil} from 'lodash'
+import { isEmpty } from 'lodash'
 import { useStyles } from '../../image-gallery.styles'
-import {isValidElementType} from "@Pimcore/modules/element/utils/element-type";
-import {InlineUpload} from "@Pimcore/components/inline-upload";
-import {useUploadModal} from "@Pimcore/components/modal-upload/hooks/use-upload-modal";
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 
 interface ImageGalleryImageTargetProps {
   index: number
@@ -28,7 +28,7 @@ interface ImageGalleryImageTargetProps {
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
   disabled?: boolean
   width: string
-  height: string,
+  height: string
   uploadPath: string
 }
 
@@ -64,7 +64,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     setValue(newValue)
   }
 
-  const handleDroppableDrop = (info) => {
+  const handleDroppableDrop = (info): void => {
     const newValue = [...value]
     newValue[index] = { image: { type: 'asset', id: info.data.id as number }, hotspots: [], marker: [], crop: {} }
     setValue(newValue)
@@ -86,45 +86,38 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     })
   }, [triggerUpload])
 
-
-  // Determine the shape based on whether an image is selected
-  const droppableShape = isNil(value?.image?.id) ? 'round' : 'angular'
-
   return (
-      <InlineUpload
-          accept="image/*"
-          assetType="image"
-          disabled={ disabled }
-          onSuccess={ handleFileSystemUpload }
-          targetFolderPath={ uploadPath }
+    <InlineUpload
+      accept="image/*"
+      assetType="image"
+      disabled={ disabled }
+      onSuccess={ handleFileSystemUpload }
+      targetFolderPath={ uploadPath }
+    >
+      <Droppable
+        className={ styles.imageItem }
+        disabled={ disabled }
+        isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
+        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+        onDrop={ handleDroppableDrop }
+        variant="outline"
       >
-        <Droppable
-            className={ styles.imageItem }
-            disabled={ disabled }
-            // dropClass={ props.config?.dropClass }
-            isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
-            isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-            onDrop={ handleDroppableDrop }
-            shape={ droppableShape }
-            variant="outline"
-        >
-          <AssetTarget
-              dndIcon={ disabled !== true }
-              height={ height }
-              onRemove={ value[index] === undefined
-                  ? undefined
-                  : () => {
-                    const newValue = [...value]
-                    newValue.splice(index, 1)
-                    setValue(newValue)
-                  } }
-              onSearch={ openElementSelector }
-              // onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
-              onUpload={ handleUpload }
-              title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
-              width={ width }
-          />
-        </Droppable>
-      </InlineUpload>
+        <AssetTarget
+          dndIcon={ disabled !== true }
+          height={ height }
+          onRemove={ value[index] === undefined
+            ? undefined
+            : () => {
+                const newValue = [...value]
+                newValue.splice(index, 1)
+                setValue(newValue)
+              } }
+          onSearch={ openElementSelector }
+          onUpload={ handleUpload }
+          title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
+          width={ width }
+        />
+      </Droppable>
+    </InlineUpload>
   )
 }
