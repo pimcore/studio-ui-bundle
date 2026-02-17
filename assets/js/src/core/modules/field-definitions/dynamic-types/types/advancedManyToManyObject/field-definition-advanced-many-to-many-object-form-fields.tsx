@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
@@ -19,6 +19,7 @@ import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dyna
 export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const classOptions = useClassDefinitionOptions()
+  const form = Form.useFormInstance()
   const allowedClassId = Form.useWatch<string | undefined>('allowedClassId')
 
   const selectedClasses = useMemo(() => {
@@ -26,6 +27,12 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
   }, [allowedClassId])
 
   const visibleFieldsOptions = useVisibleFieldsOptions(selectedClasses)
+
+  useEffect(() => {
+    if (allowedClassId !== undefined) {
+      // inititialize the options of the visibleFieldOptions here (NOT THE values)!
+    }
+  }, [allowedClassId, form])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -88,8 +95,8 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
       </Form.Item>
 
       <Form.Item
-        label={ t('allowed-column-names') }
-        name="allowedColumns"
+        label={ t('columns') }
+        name="columns"
       >
         <FieldDefinitionAllowedColumnsGrid />
       </Form.Item>

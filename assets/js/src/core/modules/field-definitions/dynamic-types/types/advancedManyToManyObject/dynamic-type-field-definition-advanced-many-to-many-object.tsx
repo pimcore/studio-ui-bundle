@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionAdvancedManyToManyObject extends DynamicT
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
         <FieldDefinitionAdvancedManyToManyObjectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
