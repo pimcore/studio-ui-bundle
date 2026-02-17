@@ -38,7 +38,6 @@ export interface ImageGalleryProps {
   ratioX?: number
   ratioY?: number
   predefinedDataTemplates?: DataTemplates | string | null
-  uploadPath?: string
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
@@ -167,7 +166,6 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
                 ratioY={ props.ratioY }
                 setInternalValue={ setInternalValue }
                 setValue={ handleChange }
-                uploadPath={ props.uploadPath ?? '' }
                 value={ internalValue }
                 width={ width! }
               />
@@ -180,7 +178,6 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             height={ height! }
             index={ internalValue.length }
             setValue={ handleChange }
-            uploadPath={ props.uploadPath ?? '' }
             value={ internalValue }
             width={ width! }
           />

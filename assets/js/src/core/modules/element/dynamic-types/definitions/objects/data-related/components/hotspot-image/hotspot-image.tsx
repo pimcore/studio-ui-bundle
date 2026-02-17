@@ -35,7 +35,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import {
   hasHotspotsOrMarkers
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
-import _, { isNil } from 'lodash'
+import _, { isEmpty, isNil } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './hotspot-image.styles'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
@@ -44,6 +44,8 @@ import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-
 import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -100,6 +102,26 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           marker: newMarkers
         }
         handleChange(newValue)
+      }
+    }
+  })
+
+  const { open: openElementSelector } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: {
+      asset: true,
+      object: false,
+      document: false
+    },
+    config: {
+      assets: {
+        allowedTypes: ['image']
+      }
+    },
+    onFinish: (event) => {
+      if (!isEmpty(event.items)) {
+        const newImage: ImageValue = { type: 'asset', id: event.items[0].data.id }
+        replaceImage(newImage)
       }
     }
   })
@@ -238,8 +260,9 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 <AssetTarget
                   dndIcon={ props.disabled !== true }
                   height={ height }
+                  onSearch={ openElementSelector }
                   onUpload={ handleUpload }
-                  title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty-image') }
+                  title={ t(props.disabled !== true ? 'image.upload.add.and.dnd' : 'empty-image') }
                   width={ width }
                 />
                 ) }
