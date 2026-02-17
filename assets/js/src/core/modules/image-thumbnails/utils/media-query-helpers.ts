@@ -34,7 +34,7 @@ export function convertToBackendFormat(mediaQueries: MediaQuery[]): {
     const queryName = mediaQuery.query || `media-${mediaQuery.id}`
     
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
-      method: getBackendMethodName(transformation),
+      method: transformation.type, // Direct usage - no need for redundant translation
       arguments: transformation.config
     }))
 
@@ -62,7 +62,7 @@ export function convertFromBackendFormat(
         displayName: getDisplayName(queryName),
         transformations: transformations.map((t, index) => ({
           id: generateTransformationId(),
-          type: getFrontendTransformationType(t.method),
+          type: t.method as TransformationType, // Direct usage with type casting
           config: t.arguments || {},
           label: getTransformationLabel(t.method, t.arguments)
         })),
@@ -88,68 +88,6 @@ function getDisplayName(query: string): string {
   }
   
   return query.length > 20 ? query.substring(0, 20) + '...' : query
-}
-
-
-function getBackendMethodName(transformation: Transformation): string {
-  const typeMap: Record<string, string> = {
-    'cover': 'cover',
-    'resize': 'resize',
-    'scaleByWidth': 'scaleByWidth',
-    'scaleByHeight': 'scaleByHeight', 
-    'trim': 'trim',
-    'sepia': 'sepia',
-    'grayscale': 'grayscale',
-    'sharpen': 'sharpen',
-    'contain': 'contain',
-    'crop': 'crop',
-    'frame': 'frame',
-    'rotate': 'rotate',
-    'mirror': 'mirror',
-    'gaussianBlur': 'gaussianBlur',
-    'brightnessSaturation': 'brightnessSaturation',
-    'setBackgroundColor': 'setBackgroundColor',
-    'setBackgroundImage': 'setBackgroundImage',
-    'roundCorners': 'roundCorners',
-    'addOverlay': 'addOverlay',
-    'addOverlayFit': 'addOverlayFit',
-    'applyMask': 'applyMask',
-    'tifforiginal': 'tifforiginal',
-    '1x1_pixel': '1x1_pixel'
-  }
-
-  return typeMap[transformation.type] || transformation.type
-}
-
-
-function getFrontendTransformationType(method: string): TransformationType {
-  const methodMap: Record<string, TransformationType> = {
-    'cover': 'cover',
-    'resize': 'resize',
-    'scaleByHeight': 'scaleByHeight',
-    'scaleByWidth': 'scaleByWidth',
-    'trim': 'trim',
-    'sepia': 'sepia',
-    'grayscale': 'grayscale', 
-    'sharpen': 'sharpen',
-    'contain': 'contain',
-    'crop': 'crop',
-    'frame': 'frame',
-    'rotate': 'rotate',
-    'mirror': 'mirror',
-    'gaussianBlur': 'gaussianBlur',
-    'brightnessSaturation': 'brightnessSaturation',
-    'setBackgroundColor': 'setBackgroundColor',
-    'setBackgroundImage': 'setBackgroundImage',
-    'roundCorners': 'roundCorners',
-    'addOverlay': 'addOverlay',
-    'addOverlayFit': 'addOverlayFit',
-    'applyMask': 'applyMask',
-    'tifforiginal': 'tifforiginal',
-    '1x1_pixel': '1x1_pixel'
-  }
-
-  return methodMap[method] || 'resize'
 }
 
 
