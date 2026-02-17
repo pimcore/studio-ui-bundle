@@ -30,7 +30,7 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
     return []
   }, [classes])
 
-  const visibleFieldsOptions = useVisibleFieldsOptions(selectedClasses)
+  const { options: visibleFieldsOptions } = useVisibleFieldsOptions(selectedClasses)
 
   useEffect(() => {
     if (displayMode === null) {

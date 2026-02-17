@@ -31,7 +31,7 @@ export class DynamicTypeFieldDefinitionReverseObject extends DynamicTypeFieldDef
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true, disableMandatory: true })}
         <FieldDefinitionReverseObjectFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

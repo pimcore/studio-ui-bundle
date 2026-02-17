@@ -26,13 +26,12 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
     return typeof allowedClassId === 'string' && allowedClassId.length > 0 ? [allowedClassId] : []
   }, [allowedClassId])
 
-  const visibleFieldsOptions = useVisibleFieldsOptions(selectedClasses)
-
+  const { options: visibleFieldsOptions, refetch, isLoading } = useVisibleFieldsOptions(selectedClasses)
   useEffect(() => {
     if (allowedClassId !== undefined) {
-      // inititialize the options of the visibleFieldOptions here (NOT THE values)!
+      refetch()
     }
-  }, [allowedClassId, form])
+  }, [allowedClassId, isLoading, visibleFieldsOptions, form, refetch])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -76,6 +75,7 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
         <Select
           options={ classOptions }
           showSearch
+          skeletonLoader={ isLoading }
         />
       </Form.Item>
 
@@ -91,6 +91,7 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
           mode="multiple"
           options={ visibleFieldsOptions }
           showSearch
+          skeletonLoader={ isLoading }
         />
       </Form.Item>
 
