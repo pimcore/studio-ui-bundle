@@ -1,5 +1,5 @@
-import { CollapseItem, Form, Input } from "@sdk/components"
-import { capitalize } from "lodash"
+import { CollapseItem, Form, Input, InputNumber } from "@sdk/components"
+import { capitalize, isNil } from "lodash"
 import React from "react"
 import { useTranslation } from "react-i18next"
 
@@ -9,6 +9,10 @@ interface VersionCollapseProps {
 
 export const VersionCollapse = ({ dataType }: VersionCollapseProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const daysValue = Form.useWatch([dataType, 'versions', 'days'])
+  const stepsValue = Form.useWatch([dataType, 'versions', 'steps'])
+  const hasDays = !isNil(daysValue) && daysValue !== ''
+  const hasSteps = !isNil(stepsValue) && stepsValue !== ''
 
   return (
     <CollapseItem
@@ -19,19 +23,15 @@ export const VersionCollapse = ({ dataType }: VersionCollapseProps): React.JSX.E
         label={t('system-settings.form.field.version-days')}
         name={[dataType, 'versions', 'days']}
       >
-        <Input
-          type="number"
-        />
+        <InputNumber disabled={hasSteps} />
       </Form.Item>
 
       <Form.Item
         label={t('system-settings.form.field.version-count')}
         name={[dataType, 'versions', 'steps']}
       >
-        <Input
-          type="number"
-        />
+        <InputNumber disabled={hasDays} />
       </Form.Item>
-    </CollapseItem >
+    </CollapseItem>
   )
 }

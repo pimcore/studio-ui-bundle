@@ -3,12 +3,12 @@ import { SettingsUpdateApiArg } from "@Pimcore/modules/app/settings/settings-sli
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useSystemSettingsContext } from "../../context/hooks/use-system-settings-context";
+import { useSystemSettings } from "../../hooks/use-system-settings";
 import { getInitialFormValues } from "../../util/format-helper";
 import { DebugCollapse } from "./components/debug-collapse/debug-collapse";
 import { LocalizationCollapse } from "./components/localization-collapse/localization-collapse";
 import { VersionCollapse } from "./components/version-collapse/version-collapse";
 import { WebsiteCollapse } from "./components/website-collapse/website-collapse";
-
 
 export type SystemSettingsForm = SettingsUpdateApiArg['body'] & {
   email: object
@@ -17,9 +17,8 @@ export type SystemSettingsForm = SettingsUpdateApiArg['body'] & {
 export const SystemSettingsForm = (): React.JSX.Element => {
   const { t } = useTranslation();
   const { form, isLoading, setIsLoading } = useSystemSettingsContext()
+  const { updateSettings } = useSystemSettings()
   const initialValues = getInitialFormValues()
-
-  console.log(initialValues)
 
   return (
     <FormKit
@@ -27,24 +26,31 @@ export const SystemSettingsForm = (): React.JSX.Element => {
         form,
         initialValues,
         onFinish: (values: SystemSettingsForm) => {
-          /*const transformedValues = {
-            ...initalValues,
+          const requiredLanguages = form.getFieldValue(['general', 'required_languages']) ?? []
+          const validLanguages = form.getFieldValue(['general', 'valid_languages']) ?? []
+
+          const updatedValues = {
             ...values,
             general: {
               ...values.general,
-              fallback_languages: transformFallbackLanguagesForSubmit(values.general?.fallback_languages)
+              valid_languages: validLanguages,
+              required_languages: requiredLanguages
             }
-          }*/
-          console.log('form submitted', values)
+          }
+
+          setIsLoading(true)
+          void updateSettings(updatedValues, () => {
+            setIsLoading(false)
+          })
         }
       }}
     >
       <LocalizationCollapse />
       <DebugCollapse />
       <WebsiteCollapse />
+      <VersionCollapse dataType="documents" />
       <VersionCollapse dataType="objects" />
       <VersionCollapse dataType="assets" />
-      <VersionCollapse dataType="documents" />
-    </FormKit >
+    </FormKit>
   )
 }

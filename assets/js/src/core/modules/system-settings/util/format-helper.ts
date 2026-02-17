@@ -13,6 +13,7 @@ export const getInitialFormValues = (): SystemSettingsForm => {
       default_language: settings['defaultLanguage'] ?? 'en',
       domain: settings['main_domain'] ?? '',
       redirect_to_maindomain: settings['redirectToMaindomain'] ?? false,
+      debug_admin_translations: settings['debug_admin_translations'] ?? false,
     },
     objects: settings['objects'],
     assets: settings['assets'],

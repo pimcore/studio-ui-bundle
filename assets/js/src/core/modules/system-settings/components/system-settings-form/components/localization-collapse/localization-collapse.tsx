@@ -18,9 +18,6 @@ export const LocalizationCollapse = (): React.JSX.Element => {
     }
 
     const currentLanguages = form.getFieldValue(['general', 'valid_languages']) ?? []
-
-    console.log('currentLanguages', currentLanguages)
-
     if (!currentLanguages.includes(selectedLanguage)) {
       const allValues = form.getFieldsValue(true)
       form.setFieldsValue({
