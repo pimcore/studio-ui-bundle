@@ -80,6 +80,16 @@ import { CropTransformationType } from './crop/crop-transformation-type'
 import { FrameTransformationType } from './frame/frame-transformation-type'
 import { RotateTransformationType } from './rotate/rotate-transformation-type'
 import { MirrorTransformationType } from './mirror/mirror-transformation-type'
+import { GaussianBlurTransformationType } from './gaussian-blur/gaussian-blur-transformation-type'
+import { BrightnessSaturationTransformationType } from './brightness-saturation/brightness-saturation-transformation-type'
+import { SetBackgroundColorTransformationType } from './set-background-color/set-background-color-transformation-type'
+import { SetBackgroundImageTransformationType } from './set-background-image/set-background-image-transformation-type'
+import { RoundCornersTransformationType } from './round-corners/round-corners-transformation-type'
+import { AddOverlayTransformationType } from './add-overlay/add-overlay-transformation-type'
+import { AddOverlayFitTransformationType } from './add-overlay-fit/add-overlay-fit-transformation-type'
+import { ApplyMaskTransformationType } from './apply-mask/apply-mask-transformation-type'
+import { TiffOriginalTransformationType } from './tiff-original/tiff-original-transformation-type'
+import { OnePixelTransformationType } from './one-pixel/one-pixel-transformation-type'
 
 export function initializeTransformationTypes(): void {
   if (isRegistered) return
@@ -98,6 +108,16 @@ export function initializeTransformationTypes(): void {
     transformationDynamicTypeRegistry.registerDynamicType(new FrameTransformationType())
     transformationDynamicTypeRegistry.registerDynamicType(new RotateTransformationType())
     transformationDynamicTypeRegistry.registerDynamicType(new MirrorTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new GaussianBlurTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new BrightnessSaturationTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new SetBackgroundColorTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new SetBackgroundImageTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new RoundCornersTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new AddOverlayTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new AddOverlayFitTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new ApplyMaskTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new TiffOriginalTransformationType())
+    transformationDynamicTypeRegistry.registerDynamicType(new OnePixelTransformationType())
     
     isRegistered = true
   } catch (error) {

@@ -36,7 +36,7 @@ export type TransformationType =
   | 'cover'
   | 'resize' 
   | 'scaleByWidth'
-  | 'scale-by-height' 
+  | 'scaleByHeight' 
   | 'trim' 
   | 'sepia'
   | 'grayscale'
@@ -46,6 +46,16 @@ export type TransformationType =
   | 'frame'
   | 'rotate'
   | 'mirror'
+  | 'gaussianBlur'
+  | 'brightnessSaturation'
+  | 'setBackgroundColor'
+  | 'setBackgroundImage'
+  | 'roundCorners'
+  | 'addOverlay'
+  | 'addOverlayFit'
+  | 'applyMask'
+  | 'tifforiginal'
+  | '1x1_pixel'
 
 
 
@@ -110,6 +120,60 @@ export interface RotateConfig extends TransformationConfig {
 
 export interface MirrorConfig extends TransformationConfig {
   mode?: 'horizontal' | 'vertical'
+}
+
+export interface GaussianBlurConfig extends TransformationConfig {
+  radius?: number
+  sigma?: number
+}
+
+export interface BrightnessSaturationConfig extends TransformationConfig {
+  brightness?: number
+  saturation?: number
+  hue?: number
+}
+
+export interface SetBackgroundColorConfig extends TransformationConfig {
+  color?: string
+}
+
+export interface SetBackgroundImageConfig extends TransformationConfig {
+  asset?: number
+  path?: string
+  mode?: string
+}
+
+export interface RoundCornersConfig extends TransformationConfig {
+  width?: number
+  height?: number
+}
+
+export interface AddOverlayConfig extends TransformationConfig {
+  asset?: number
+  path?: string
+  x?: number
+  y?: number
+  origin?: string
+  alpha?: number
+}
+
+export interface AddOverlayFitConfig extends TransformationConfig {
+  asset?: number
+  path?: string
+  origin?: string
+}
+
+export interface ApplyMaskConfig extends TransformationConfig {
+  asset?: number
+  path?: string
+}
+
+export interface TiffOriginalConfig extends TransformationConfig {
+  // No configuration needed
+}
+
+export interface OnePixelConfig extends TransformationConfig {
+  // No configuration needed
 }
 
 // Backend API format (matches existing medias/mediaOrder structure)

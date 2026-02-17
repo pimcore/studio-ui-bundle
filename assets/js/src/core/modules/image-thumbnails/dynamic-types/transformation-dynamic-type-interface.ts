@@ -15,7 +15,7 @@ import type { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types
 
 export interface FieldConfig {
   name: string
-  type: 'number' | 'select' | 'boolean' | 'text'
+  type: 'number' | 'select' | 'boolean' | 'text' | 'slider' | 'color-picker' | 'image-picker'
   label: string
   defaultValue?: any
   required?: boolean
@@ -24,6 +24,7 @@ export interface FieldConfig {
 }
 
 export interface TransformationDynamicTypeInterface extends DynamicTypeAbstract {
+  getId(): string
   getName(): string
   getLabel(): string
   getFieldConfig(): FieldConfig[]

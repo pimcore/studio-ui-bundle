@@ -15,7 +15,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { MediaQueryTabs } from '../media-query-tabs/media-query-tabs'
-import type { MediaQuery } from '../../types/media-query.types'
+import type { MediaQuery, Transformation, TransformationType } from '../../types/media-query.types'
 import { generateMediaQueryId, generateTransformationId } from '../../utils/media-query-helpers'
 import type { TransformationDynamicTypeInterface } from '../../dynamic-types/transformation-dynamic-type-interface'
 
@@ -140,11 +140,10 @@ export const MediaQueriesPanel = ({
   }, [mediaQueries, onChange, activeTabKey])
 
   const handleTransformationAdd = useCallback((mediaQueryId: string, transformationType: TransformationDynamicTypeInterface, config: any) => {
-    const newTransformation = {
+    const newTransformation: Transformation = {
       id: generateTransformationId(),
-      type: transformationType.getId(),
-      config: config || {},
-      order: mediaQueries.find(mq => mq.id === mediaQueryId)?.transformations.length || 0
+      type: transformationType.getId() as TransformationType,
+      config: config || {}
     }
 
     const updatedMediaQueries = mediaQueries.map(mq => {
