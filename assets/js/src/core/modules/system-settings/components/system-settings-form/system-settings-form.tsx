@@ -30,7 +30,7 @@ export const SystemSettingsForm = (): React.JSX.Element => {
 
   return (
     <FormKit
-      formProps={ {
+      formProps={{
         form,
         initialValues,
         onFinish: (values: SystemSettingsFormValues) => {
@@ -51,7 +51,7 @@ export const SystemSettingsForm = (): React.JSX.Element => {
             setIsLoading(false)
           })
         }
-      } }
+      }}
     >
       <LocalizationCollapse />
       <DebugCollapse />

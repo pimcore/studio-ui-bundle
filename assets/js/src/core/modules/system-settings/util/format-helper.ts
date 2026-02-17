@@ -11,7 +11,7 @@
 import { getSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { type SystemSettingsFormValues } from '../components/system-settings-form/system-settings-form'
 import { store } from '@Pimcore/app/store'
-import { isNil } from 'lodash'
+import { isArray, isEmpty, isNil, isString } from 'lodash'
 
 export const getInitialFormValues = (): SystemSettingsFormValues => {
   const settings = getSettings(store.getState())
@@ -29,8 +29,21 @@ export const getInitialFormValues = (): SystemSettingsFormValues => {
     objects: settings.objects,
     assets: settings.assets,
     documents: settings.documents,
-    email: settings.email // TODO: check if the type changed after #1645 is merged
+    email: {
+      ...settings.email,
+      debug: {
+        email_addresses: normalizeEmailAddresses(settings.email?.debug?.email_addresses)
+      }
+    }
   }
+}
+
+const normalizeEmailAddresses = (value: unknown): string[] => {
+  if (isArray(value)) return value as string[]
+  if (isString(value) && !isEmpty(value.trim())) {
+    return value.split(',').map((item) => item.trim()).filter((item) => !isEmpty(item))
+  }
+  return []
 }
 
 const transformFallbackLanguagesForForm = (fallbackLanguages: Record<string, string> | undefined): Record<string, string[]> => {
