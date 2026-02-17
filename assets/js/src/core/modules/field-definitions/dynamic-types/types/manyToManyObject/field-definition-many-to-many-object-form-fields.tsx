@@ -18,7 +18,7 @@ import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-def
 
 export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassDefinitionOptions(true)
+  const { options: classOptions } = useClassDefinitionOptions(true)
   const form = Form.useFormInstance()
   const displayMode = Form.useWatch('displayMode')
   const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')

@@ -20,7 +20,7 @@ import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-defini
 
 export const FieldDefinitionAdvancedManyToManyFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassDefinitionOptions(true)
+  const { options: classOptions } = useClassDefinitionOptions(true)
   const assetTypeOptions = useAssetTypeOptions()
   const documentTypeOptions = useDocumentTypeOptions()
 

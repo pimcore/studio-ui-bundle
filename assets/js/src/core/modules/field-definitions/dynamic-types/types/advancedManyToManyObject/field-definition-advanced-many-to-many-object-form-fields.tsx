@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
-import React, { useMemo, useEffect, useRef } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
@@ -18,7 +18,7 @@ import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dyna
 
 export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassDefinitionOptions()
+  const { options: classOptions, refetch: refetchClassOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()
   const allowedClassId = Form.useWatch<string | undefined>('allowedClassId')
 
@@ -26,12 +26,35 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
     return typeof allowedClassId === 'string' && allowedClassId.length > 0 ? [allowedClassId] : []
   }, [allowedClassId])
 
-  const { options: visibleFieldsOptions, refetch, isLoading } = useVisibleFieldsOptions(selectedClasses)
+  const { options: visibleFieldsOptions, refetch: refetchVisibleFields, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions(selectedClasses)
+
   useEffect(() => {
     if (allowedClassId !== undefined) {
-      refetch()
+      refetchClassOptions()
+      refetchVisibleFields()
     }
-  }, [allowedClassId, isLoading, visibleFieldsOptions, form, refetch])
+  }, [allowedClassId, refetchClassOptions, refetchVisibleFields])
+
+  useEffect(() => {
+    if (!isLoadingVisibleFields && typeof allowedClassId === 'string' && allowedClassId.length > 0) {
+      const currentVisibleFieldsValue = form.getFieldValue('visibleFields') as string | undefined
+      const currentVisibleFields = typeof currentVisibleFieldsValue === 'string' && currentVisibleFieldsValue.length > 0
+        ? currentVisibleFieldsValue.split(',').filter(Boolean)
+        : []
+
+      if (currentVisibleFields.length > 0) {
+        const validVisibleFields = currentVisibleFields.filter((field) =>
+          visibleFieldsOptions.some((option) => option.value === field)
+        )
+
+        if (validVisibleFields.length !== currentVisibleFields.length) {
+          form.setFieldValue('visibleFields', validVisibleFields.join(','))
+        }
+      }
+    }
+  }, [isLoadingVisibleFields, visibleFieldsOptions, form, allowedClassId])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>

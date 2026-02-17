@@ -11,19 +11,19 @@
 import { useMemo } from 'react'
 import { useClassDefinitionGetTreeQuery } from '@sdk/api/class-definition'
 
-export const useClassDefinitionOptions = (includeFolder: boolean = false): Array<{ label: string, value: string }> => {
-  const { data: selectOptionsTree } = useClassDefinitionGetTreeQuery({ withGroup: true })
+export const useClassDefinitionOptions = (includeFolder: boolean = false): { options: Array<{ label: string, value: string }>, refetch: () => void, isLoading: boolean } => {
+  const { data: selectOptionsTree, refetch, isFetching, status } = useClassDefinitionGetTreeQuery({ withGroup: true })
 
-  return useMemo(() => {
-    const options: Array<{ label: string, value: string }> = []
+  const options = useMemo(() => {
+    const result: Array<{ label: string, value: string }> = []
 
     if (includeFolder) {
-      options.push({ label: 'folder', value: 'folder' })
+      result.push({ label: 'folder', value: 'folder' })
     }
 
     const walk = (items: any[]): void => {
       items.forEach((item) => {
-        options.push({ label: item.name, value: item.id })
+        result.push({ label: item.name, value: item.id })
         if (Array.isArray(item.children) && item.children.length > 0) {
           walk(item.children as any[])
         }
@@ -34,6 +34,12 @@ export const useClassDefinitionOptions = (includeFolder: boolean = false): Array
       walk(selectOptionsTree.items)
     }
 
-    return options
-  }, [selectOptionsTree])
+    return result
+  }, [selectOptionsTree, includeFolder])
+
+  return {
+    options,
+    refetch: status === 'uninitialized' ? () => {} : refetch,
+    isLoading: isFetching
+  }
 }

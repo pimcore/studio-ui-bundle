@@ -21,7 +21,7 @@ import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-def
 
 export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const classOptions = useClassDefinitionOptions()
+  const { options: classOptions } = useClassDefinitionOptions()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
   const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
 
