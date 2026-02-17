@@ -21,21 +21,21 @@ export const DebugCollapse = (): React.JSX.Element => {
   return (
     <CollapseItem
       forceRender
-      label={t('system-settings.collapse.debug')}
+      label={ t('system-settings.collapse.debug') }
     >
       <Form.Item
-        label={t('system-settings.form.debug.field.enable-debug')}
-        name={['general', 'debug_admin_translations']}
+        label={ t('system-settings.form.debug.field.enable-debug') }
+        name={ ['general', 'debug_admin_translations'] }
       >
         <Switch />
       </Form.Item>
 
       <Form.Item
-        label={t('system-settings.form.debug.field.email-addresses')}
-        name={['email', 'debug', 'email_addresses']}
+        label={ t('system-settings.form.debug.field.email-addresses') }
+        name={ ['email', 'debug', 'email_addresses'] }
       >
         <TagInput
-          placeholder={t('system-settings.form.debug.field.email-addresses.placeholder')}
+          placeholder={ t('system-settings.form.debug.field.email-addresses.placeholder') }
         />
       </Form.Item>
     </CollapseItem>

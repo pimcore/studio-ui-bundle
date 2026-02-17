@@ -15,12 +15,12 @@ interface GetLanguageNameProps {
   lng?: string
 }
 
-export function getLanguageName({ locale, lng }: GetLanguageNameProps): string {
+export function getLanguageName ({ locale, lng }: GetLanguageNameProps): string {
   if (lng === undefined) {
     lng = i18n.language
   }
 
-  const localizer = new Intl.DisplayNames([lng], { type: 'language' });
+  const localizer = new Intl.DisplayNames([lng], { type: 'language' })
 
-  return localizer.of(locale) ?? locale;
+  return localizer.of(locale) ?? locale
 }
