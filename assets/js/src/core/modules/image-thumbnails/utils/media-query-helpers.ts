@@ -96,7 +96,7 @@ function getBackendMethodName(transformation: Transformation): string {
     'cover': 'cover',
     'resize': 'resize',
     'scaleByWidth': 'scaleByWidth',
-    'scale-by-height': 'scaleByHeight', 
+    'scaleByHeight': 'scaleByHeight', 
     'trim': 'trim',
     'sepia': 'sepia',
     'grayscale': 'grayscale',
@@ -105,7 +105,17 @@ function getBackendMethodName(transformation: Transformation): string {
     'crop': 'crop',
     'frame': 'frame',
     'rotate': 'rotate',
-    'mirror': 'mirror'
+    'mirror': 'mirror',
+    'gaussianBlur': 'gaussianBlur',
+    'brightnessSaturation': 'brightnessSaturation',
+    'setBackgroundColor': 'setBackgroundColor',
+    'setBackgroundImage': 'setBackgroundImage',
+    'roundCorners': 'roundCorners',
+    'addOverlay': 'addOverlay',
+    'addOverlayFit': 'addOverlayFit',
+    'applyMask': 'applyMask',
+    'tifforiginal': 'tifforiginal',
+    '1x1_pixel': '1x1_pixel'
   }
 
   return typeMap[transformation.type] || transformation.type
@@ -116,7 +126,7 @@ function getFrontendTransformationType(method: string): TransformationType {
   const methodMap: Record<string, TransformationType> = {
     'cover': 'cover',
     'resize': 'resize',
-    'scaleByHeight': 'scale-by-height',
+    'scaleByHeight': 'scaleByHeight',
     'scaleByWidth': 'scaleByWidth',
     'trim': 'trim',
     'sepia': 'sepia',
@@ -126,7 +136,17 @@ function getFrontendTransformationType(method: string): TransformationType {
     'crop': 'crop',
     'frame': 'frame',
     'rotate': 'rotate',
-    'mirror': 'mirror'
+    'mirror': 'mirror',
+    'gaussianBlur': 'gaussianBlur',
+    'brightnessSaturation': 'brightnessSaturation',
+    'setBackgroundColor': 'setBackgroundColor',
+    'setBackgroundImage': 'setBackgroundImage',
+    'roundCorners': 'roundCorners',
+    'addOverlay': 'addOverlay',
+    'addOverlayFit': 'addOverlayFit',
+    'applyMask': 'applyMask',
+    'tifforiginal': 'tifforiginal',
+    '1x1_pixel': '1x1_pixel'
   }
 
   return methodMap[method] || 'resize'
@@ -161,6 +181,26 @@ function getTransformationLabel(method: string, args: Record<string, any> = {}):
       return `Rotate ${args.angle || '?'}°`
     case 'mirror':
       return `Mirror ${args.mode || 'horizontal'}`
+    case 'gaussianBlur':
+      return `Gaussian Blur (radius: ${args.radius || '?'}, sigma: ${args.sigma || '?'})`
+    case 'brightnessSaturation':
+      return `Brightness/Saturation (${args.brightness || 100}%, ${args.saturation || 100}%, ${args.hue || 100}%)`
+    case 'setBackgroundColor':
+      return `Background Color: ${args.color || '#ffffff'}`
+    case 'setBackgroundImage':
+      return `Background Image ${args.path ? `(${args.path})` : ''}`
+    case 'roundCorners':
+      return `Round Corners ${args.width || 10}x${args.height || 10}px`
+    case 'addOverlay':
+      return `Add Overlay ${args.path ? `(${args.path})` : ''} at ${args.origin || 'top-left'}`
+    case 'addOverlayFit':
+      return `Add Overlay Fit ${args.path ? `(${args.path})` : ''} at ${args.origin || 'center'}`
+    case 'applyMask':
+      return `Apply Mask ${args.path ? `(${args.path})` : ''}`
+    case 'tifforiginal':
+      return 'TIFF Original'
+    case '1x1_pixel':
+      return '1x1 Pixel'
     default:
       return method
   }

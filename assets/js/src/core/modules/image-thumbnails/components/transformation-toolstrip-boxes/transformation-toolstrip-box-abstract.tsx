@@ -15,17 +15,19 @@ import React, { useRef } from 'react'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { Form } from '@Pimcore/components/form/form'
-import { FormKit } from '@Pimcore/components/form/form-kit'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Input } from '@Pimcore/components/input/input'
+import { Slider } from '@Pimcore/components/slider/slider'
+import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
+import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
-import type { Transformation } from '../types/media-query.types'
-import type { FieldConfig } from '../dynamic-types/transformation-dynamic-type-interface'
-import { TransformationDynamicTypeAbstract } from '../dynamic-types/transformation-dynamic-type-abstract'
-import { Box } from '@sdk/components'
+import { Flex } from '@Pimcore/components/flex/flex'
+import type { Transformation } from '../../types/media-query.types'
+import type { FieldConfig } from '../../dynamic-types/transformation-dynamic-type-interface'
+import { TransformationDynamicTypeAbstract } from '../../dynamic-types/transformation-dynamic-type-abstract'
 
 interface BaseTransformationToolStripBoxProps {
   transformation: Transformation
@@ -78,13 +80,15 @@ const renderSharedToolStrip = (
 
 const renderField = (
   field: FieldConfig, 
-  fieldName: string[], 
+  fieldName: (string | number)[], 
   isFirst: boolean = false,
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
-  const baseProps = {
-    ...field.props,
-    ...(isFirst ? { ref: firstInputRef } : {})
+  const fieldProps = { ...field.props }
+  
+  // Add ref to first field for focus management
+  if (isFirst && firstInputRef) {
+    fieldProps.ref = firstInputRef
   }
 
   switch (field.type) {
@@ -93,10 +97,9 @@ const renderField = (
         <Form.Item 
           label={field.label}
           name={fieldName}
-          style={{ flex: 1, margin: 0 }}
           rules={field.required ? [{ required: true }] : undefined}
         >
-          <InputNumber {...baseProps} />
+          <InputNumber {...fieldProps} />
         </Form.Item>
       )
 
@@ -105,16 +108,15 @@ const renderField = (
         <Form.Item 
           label={field.label}
           name={fieldName}
-          style={{ flex: 1, margin: 0 }}
           rules={field.required ? [{ required: true }] : undefined}
         >
-          <Select {...baseProps}>
-            {field.options?.map(option => (
-              <Select.Option key={option.value} value={option.value}>
-                {option.label}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select 
+            {...fieldProps}
+            options={field.options?.map(option => ({
+              label: option.label,
+              value: option.value
+            }))}
+          />
         </Form.Item>
       )
 
@@ -123,9 +125,9 @@ const renderField = (
         <Form.Item 
           name={fieldName}
           valuePropName="checked"
-          style={{ margin: 0 }}
+          style={{ marginBottom: 0, marginTop: '5px' }}
         >
-          <Switch {...baseProps} />
+          <Switch {...fieldProps} />
         </Form.Item>
       )
 
@@ -134,10 +136,80 @@ const renderField = (
         <Form.Item 
           label={field.label}
           name={fieldName}
-          style={{ flex: 1, margin: 0 }}
           rules={field.required ? [{ required: true }] : undefined}
         >
-          <Input {...baseProps} />
+          <Input {...fieldProps} />
+        </Form.Item>
+      )
+
+    case 'slider':
+      return (
+        <Form.Item 
+          label={field.label}
+          name={fieldName}
+          rules={field.required ? [{ required: true }] : undefined}
+        >
+          <Slider {...fieldProps} />
+        </Form.Item>
+      )
+
+    case 'color-picker':
+      return (
+        <Form.Item 
+          label={field.label}
+          name={fieldName}
+          rules={field.required ? [{ required: true }] : undefined}
+          getValueFromEvent={(color: any) => {
+            if (color && typeof color === 'object' && color.toHexString) {
+              return color.toHexString()
+            }
+            if (typeof color === 'string') {
+              return color
+            }
+            return color
+          }}
+          getValueProps={(value: any) => {
+            return {
+              value: value || field.defaultValue || '#ffffff'
+            }
+          }}
+        >
+          <ColorPicker {...fieldProps} format="hex" showText />
+        </Form.Item>
+      )
+
+    case 'image-picker':
+      return (
+        <Form.Item 
+          label={field.label}
+          name={fieldName}
+          rules={field.required ? [{ required: true }] : undefined}
+          getValueFromEvent={(value: any) => {
+            return value !== null && value !== undefined && typeof value === 'object' && value.id
+              ? {
+                  id: value.id,
+                  type: value.type ?? 'asset',
+                  subtype: 'image',
+                  fullPath: value.fullPath
+                }
+              : null
+          }}
+          getValueProps={(value: any) => {
+            return {
+              value: value !== null && value !== undefined && typeof value === 'object' && value.id
+                ? {
+                    type: 'asset' as const,
+                    id: value.id,
+                    fullPath: value.fullPath
+                  }
+                : null
+            }
+          }}
+        >
+          <ImagePicker 
+            {...fieldProps}
+            type={fieldProps.type || 'add'}
+          />
         </Form.Item>
       )
 
@@ -152,17 +224,70 @@ const renderFields = (
   transformationIndex: number,
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
+  // Handle single field case
+  if (fieldConfigs.length === 1) {
+    const field = fieldConfigs[0]
+    const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
+    return (
+      <div style={{ padding: '12px' }}>
+        {renderField(field, fieldName, true, firstInputRef)}
+      </div>
+    )
+  }
+
+  // Special case: Set Background Image needs vertical layout  
+  if (fieldConfigs.length === 2 && 
+      fieldConfigs[0].type === 'image-picker' && 
+      fieldConfigs[1].type === 'select') {
+    return (
+      <div style={{ padding: '12px' }}>
+        <Space direction="vertical" size="small">
+          {fieldConfigs.map((field, index) => {
+            const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
+            const isFirst = index === 0
+            return (
+              <div key={field.name} style={{ width: '100%' }}>
+                {renderField(field, fieldName, isFirst, firstInputRef)}
+              </div>
+            )
+          })}
+        </Space>
+      </div>
+    )
+  }
+
+  // Handle multiple fields with horizontal layout and proper spacing
   return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-      {fieldConfigs.map((field, index) => {
-        const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
-        const isFirst = index === 0
-        return (
-          <div key={field.name} style={field.type === 'boolean' ? { alignSelf: 'flex-end' } : { flex: 1 }}>
-            {renderField(field, fieldName, isFirst, firstInputRef)}
-          </div>
-        )
-      })}
+    <div style={{ padding: '12px' }}>
+      <Flex gap="small" wrap="wrap" align="flex-end">
+        {fieldConfigs.map((field, index) => {
+          const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
+          const isFirst = index === 0
+          
+          // Determine field width based on type
+          let fieldStyle: React.CSSProperties = {}
+          
+          if (field.type === 'number') {
+            fieldStyle = { width: '90px', flexShrink: 0 }
+          } else if (field.type === 'boolean') {
+            fieldStyle = { flexShrink: 0, alignSelf: 'flex-start', paddingTop: '5px' }
+          } else if (field.type === 'color-picker') {
+            fieldStyle = { width: '200px', flexShrink: 0 }
+          } else if (field.type === 'select') {
+            fieldStyle = { minWidth: '120px', flex: 1 }
+          } else if (field.type === 'slider') {
+            fieldStyle = { minWidth: '150px', flex: 1 }
+          } else {
+            fieldStyle = { minWidth: '100px', flex: 1 }
+          }
+
+          return (
+            <div key={field.name} style={fieldStyle}>
+              {renderField(field, fieldName, isFirst, firstInputRef)}
+            </div>
+          )
+        })}
+      </Flex>
     </div>
   )
 }
@@ -191,7 +316,7 @@ export function createTransformationToolStripBox(
 
     const fieldConfigs = transformationType.getFieldConfig()
 
-    return (<Box padding='small'>
+    return (
       <ToolStripBox
         onClick={() => handleBoxClick(onFocus)}
         renderToolStripStart={renderSharedToolStrip(
@@ -200,13 +325,9 @@ export function createTransformationToolStripBox(
           onMoveDown,
           onRemove
         )}
-        padding={{ x: 'small', y: 'extra-small' }}
       >
-        <FormKit.Panel contentPadding="small">
-          {renderFields(fieldConfigs, mediaQueryId, transformationIndex, firstInputRef)}
-        </FormKit.Panel>
+        {renderFields(fieldConfigs, mediaQueryId, transformationIndex, firstInputRef)}
       </ToolStripBox>
-      </Box>
     )
   })
 }
