@@ -125,7 +125,7 @@ const renderField = (
         <Form.Item 
           name={fieldName}
           valuePropName="checked"
-          style={{ marginBottom: 0, marginTop: '5px' }}
+          style={{ marginBottom: 0, marginTop: 0 }}
         >
           <Switch {...fieldProps} />
         </Form.Item>
@@ -174,7 +174,7 @@ const renderField = (
             }
           }}
         >
-          <ColorPicker {...fieldProps} format="hex" showText />
+          <ColorPicker {...fieldProps} format="hex" showText style={{ width: '200px' }} />
         </Form.Item>
       )
 
@@ -224,74 +224,22 @@ const renderFields = (
   transformationIndex: number,
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
-  // Handle single field case
-  if (fieldConfigs.length === 1) {
-    const field = fieldConfigs[0]
-    const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
-    return (
-      <div style={{ padding: '12px' }}>
-        {renderField(field, fieldName, true, firstInputRef)}
-      </div>
-    )
-  }
-
-  // Special case: Set Background Image needs vertical layout  
-  if (fieldConfigs.length === 2 && 
-      fieldConfigs[0].type === 'image-picker' && 
-      fieldConfigs[1].type === 'select') {
-    return (
-      <div style={{ padding: '12px' }}>
-        <Space direction="vertical" size="small">
-          {fieldConfigs.map((field, index) => {
-            const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
-            const isFirst = index === 0
-            return (
-              <div key={field.name} style={{ width: '100%' }}>
-                {renderField(field, fieldName, isFirst, firstInputRef)}
-              </div>
-            )
-          })}
-        </Space>
-      </div>
-    )
-  }
-
-  // Handle multiple fields with horizontal layout and proper spacing
   return (
-    <div style={{ padding: '12px' }}>
+    // <div style={{ padding: '12px', width: '100%', boxSizing: 'border-box' }}>
       <Flex gap="small" wrap="wrap" align="flex-end">
         {fieldConfigs.map((field, index) => {
           const fieldName = [mediaQueryId, 'transformations', transformationIndex, 'config', field.name]
           const isFirst = index === 0
-          
-          // Determine field width based on type
-          let fieldStyle: React.CSSProperties = {}
-          
-          if (field.type === 'number') {
-            fieldStyle = { width: '90px', flexShrink: 0 }
-          } else if (field.type === 'boolean') {
-            fieldStyle = { flexShrink: 0, alignSelf: 'flex-start', paddingTop: '5px' }
-          } else if (field.type === 'color-picker') {
-            fieldStyle = { width: '200px', flexShrink: 0 }
-          } else if (field.type === 'select') {
-            fieldStyle = { minWidth: '120px', flex: 1 }
-          } else if (field.type === 'slider') {
-            fieldStyle = { minWidth: '150px', flex: 1 }
-          } else {
-            fieldStyle = { minWidth: '100px', flex: 1 }
-          }
-
           return (
-            <div key={field.name} style={fieldStyle}>
+            <div key={field.name}>
               {renderField(field, fieldName, isFirst, firstInputRef)}
             </div>
           )
         })}
       </Flex>
-    </div>
+    // </div>
   )
 }
-
 export function createTransformationToolStripBox(
   transformationType: TransformationDynamicTypeAbstract
 ): React.ComponentType<BaseTransformationToolStripBoxProps> {
