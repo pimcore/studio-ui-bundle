@@ -53,6 +53,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
 
     return {
       key: email.id.toString(),
+      'data-testid': `email-log-entry-${email.id}`,
       label: <Flex
         align="center"
         gap="extra-small"
