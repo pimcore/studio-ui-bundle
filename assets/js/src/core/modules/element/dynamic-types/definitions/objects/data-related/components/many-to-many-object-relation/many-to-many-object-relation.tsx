@@ -92,11 +92,12 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const visibleFieldDefinitions: VisibleFieldDefinition[] | undefined = useMemo(() => {
     if (isAvailableGridColumnsLoading) return undefined
 
-    const fieldDefinitions = !isNil(availableGridColumnsData) && !isEmpty(availableGridColumnsData.columns)
-      ? availableGridColumnsData?.columns
+    const columns = availableGridColumnsData?.columns
+    const fieldDefinitions = !isNil(columns) && !isEmpty(columns)
+      ? Array.isArray(columns) ? columns : Object.values(columns)
       : getDefaultVisibleFieldDefinitions()
 
-    return fieldDefinitions?.map((field) => {
+    return fieldDefinitions?.map((field: VisibleFieldDefinition) => {
       const newField = { ...field }
 
       if (newField.key === 'id' || newField.key === 'fullpath' || newField.key === 'classname') {
@@ -106,7 +107,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
         newField.title = t(`relations.${newField.key}`)
       } else {
-        newField.title = t(newField.title as string)
+        newField.title = t(newField.title)
       }
 
       const fieldData = find(availableGridColumnsData?.columns, { key: newField.key })
