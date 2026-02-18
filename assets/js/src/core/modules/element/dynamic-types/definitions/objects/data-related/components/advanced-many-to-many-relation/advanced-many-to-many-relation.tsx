@@ -76,12 +76,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
 
   const addNotEditableColumns = (columnDefinition: Array<ColumnDef<any>>): Array<ColumnDef<any>> => {
     const columnHelper = createColumnHelper()
-
-    const positionColumn = columnDefinition.find(col => col.id === 'edit::position')
-    const otherColumns = columnDefinition.filter(col => col.id !== 'edit::position')
-
     return [
-      ...(positionColumn !== undefined ? [positionColumn] : []),
       columnHelper.accessor('id', {
         header: t('relations.id'),
         size: 80
@@ -97,7 +92,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
         size: 200,
         ...(isNonEmptyString(props.pathFormatterClass) ? { cell: renderFullPathCell } : {})
       }),
-      ...otherColumns,
+      ...columnDefinition,
       columnHelper.accessor('type', {
         header: t('relations.type'),
         meta: {
