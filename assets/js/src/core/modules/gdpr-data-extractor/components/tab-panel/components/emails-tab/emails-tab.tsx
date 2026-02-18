@@ -82,6 +82,7 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
         return (
           <Flex align="center">
             <EmailPreviewButton
+              data-testid={ `gdpr-emails-preview-${data.id}` }
               disabled={ !data.hasHtmlLog }
               id={ data.id }
               tooltip={ {
@@ -90,6 +91,7 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
             />
 
             <EmailParametersButton
+              data-testid={ `gdpr-emails-parameters-${data.id}` }
               disabled={ !data.hasParameters }
               id={ data.id }
               tooltip={ {
@@ -98,6 +100,7 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
             />
 
             <ExportButton
+              data-testid={ `gdpr-emails-export-${data.id}` }
               id={ data.id }
               providerKey={ providerKey }
               tooltip={ {
@@ -106,6 +109,7 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
             />
 
             <DeleteButton
+              data-testid={ `gdpr-emails-delete-${data.id}` }
               disabled={ !data.__gdprIsDeletable }
               id={ data.id }
               label={ data.subject ?? data.from }
@@ -125,6 +129,7 @@ export const EmailsTab = ({ data, providerKey, onSortingChange, ...props }: Emai
       autoWidth
       columns={ columns }
       data={ data.map((item) => item.data) }
+      dataTestId="gdpr-emails-grid"
       enableSorting
       onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
