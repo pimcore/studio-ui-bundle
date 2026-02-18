@@ -93,9 +93,12 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     if (isAvailableGridColumnsLoading) return undefined
 
     const columns = availableGridColumnsData?.columns
-    const fieldDefinitions = !isNil(columns) && !isEmpty(columns)
-      ? Array.isArray(columns) ? columns : Object.values(columns)
-      : getDefaultVisibleFieldDefinitions()
+    let fieldDefinitions
+    if (!isNil(columns) && !isEmpty(columns)) {
+      fieldDefinitions = Array.isArray(columns) ? columns : Object.values(columns)
+    } else {
+      fieldDefinitions = getDefaultVisibleFieldDefinitions()
+    }
 
     return fieldDefinitions?.map((field: VisibleFieldDefinition) => {
       const newField = { ...field }
