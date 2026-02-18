@@ -55,7 +55,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           const breadcrumbField = dataItem.title ?? dataItem.name
           const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
-          const getFieldPathValue = isEmptyValue(fieldPathValue) ? fieldPathValue : `${fieldPathValue}.${dataItem.id}`
+          const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
           return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
         }
@@ -66,13 +66,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           const fieldValue: object = get(fieldValueByName, groupId)
 
           if (isEmpty(fieldValue)) {
-            const getFieldPathValue = isEmptyValue(fieldPathValue) ? fieldPathValue : `${fieldPathValue}.${dataItem.id}`
+            const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
             return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
-            const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${fieldPathValue}.${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
+            const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
 
             return getFieldData({ fieldData: { ...dataItem.definition, locale: key }, fieldValue: value[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })

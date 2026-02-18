@@ -15,6 +15,7 @@ import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-t
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const getBreadcrumbTitle = (value1: string, value2: string): string => {
   return [value1, value2].filter(Boolean).join('/')
@@ -29,12 +30,12 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
     modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
   }
 
-  const processLayoutData = async ({ data, objectValuesData = versionData?.objectData, fieldBreadcrumbTitle = '' }: { data: Layout['children'], objectValuesData?: DataObjectVersion['objectData'], fieldBreadcrumbTitle?: string }): Promise<IFormattedDataStructureData[]> => {
+  const processLayoutData = async ({ data, objectValuesData = versionData?.objectData, fieldBreadcrumbTitle = '', fieldPath = '' }: { data: Layout['children'], objectValuesData?: DataObjectVersion['objectData'], fieldBreadcrumbTitle?: string, fieldPath?: string }): Promise<IFormattedDataStructureData[]> => {
     const promises = data.map(async (item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
         const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title as string)
 
-        return await processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle, objectValuesData })
+        return await processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle, objectValuesData, fieldPath })
       }
 
       if (item.datatype === DATATYPE_LIST.DATA) {
@@ -42,13 +43,15 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
         const fieldValueByName = get(objectValuesData, fieldName)
         const currentFieldType: string = item.fieldtype
 
+        const getFieldPathValue = isEmptyValue(fieldPath) ? fieldName : `${fieldPath}.${fieldName}`
+
         if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
           return []
         }
 
         const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount, layoutsList, setLayoutsList, fieldPath: '' })
+        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount, layoutsList, setLayoutsList, fieldPath: getFieldPathValue })
         const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
           objectValuesData = {}
 
@@ -57,7 +60,15 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
           if (!isEmpty(processedDataItem?.fieldData?.children) && !fieldTypesRequiringChildren.includes(processedDataItem?.fieldData?.fieldtype as DynamicTypesList)) {
             const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title ?? '')
 
-            return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
+            return await processLayoutData({
+              data: [processedDataItem?.fieldData],
+              objectValuesData: {
+                ...objectValuesData,
+                [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue
+              },
+              fieldBreadcrumbTitle: breadcrumbTitle,
+              fieldPath: processedDataItem?.fieldPath ?? ''
+            })
           }
 
           return [processedDataItem]
