@@ -35,8 +35,10 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
 
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
-      setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
-      setHideElement(scrollContainerRef.current.clientWidth < 50)
+      // Account for subpixel rounding: scrollWidth may be 1px larger than clientWidth
+      // due to browser rounding differences, even when content fits perfectly
+      setScrollRequired(scrollWidth > clientWidth + 1)
+      setHideElement(clientWidth < 50)
     }
   }
 
