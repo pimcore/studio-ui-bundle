@@ -262,7 +262,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                   height={ height }
                   onSearch={ openElementSelector }
                   onUpload={ handleUpload }
-                  title={ t(props.disabled !== true ? 'image.upload.add.and.dnd' : 'empty-image') }
+                  title={ t(props.disabled === true ? 'empty-image' : 'image.upload.add.and.dnd') }
                   width={ width }
                 />
                 ) }

@@ -81,7 +81,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
               setValue(newValue)
             } }
         onSearch={ openElementSelector }
-        title={ t(disabled !== true ? 'image.add.and.dnd' : 'empty') }
+        title={ t(disabled === true ? 'empty' : 'image.add.and.dnd') }
         width={ width }
       />
     </Droppable>
