@@ -32,7 +32,6 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
     if (allowedClassId !== undefined) {
       refetchClassOptions()
       refetchVisibleFields()
-        //test
     }
   }, [allowedClassId, refetchClassOptions, refetchVisibleFields])
 
