@@ -49,7 +49,7 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
       datatype: 'data',
       name: '',
       title: '',
-      tooltip: 'Some predefined tooltip'
+      tooltip: ''
     }
   }
 

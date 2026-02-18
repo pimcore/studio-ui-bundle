@@ -24,6 +24,8 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
+import advancedManyToManyObjectRelation from '@Pimcore/assets/icons/advanced-many-to-many-object-relation.inline.svg?react'
+import advancedManyToManyRelation from '@Pimcore/assets/icons/advanced-many-to-many-relation.inline.svg?react'
 import alertOutline from '@Pimcore/assets/icons/alert-outline.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import alternativeElementTree from '@Pimcore/assets/icons/alternative-element-tree.inline.svg?react'
@@ -179,6 +181,7 @@ import imageThumbnailClear from '@Pimcore/assets/icons/image-thumbnail-clear.inl
 import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
+import importIcon from '@Pimcore/assets/icons/import.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
@@ -208,7 +211,10 @@ import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
 import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
 import manualOrder from '@Pimcore/assets/icons/manual-order.inline.svg?react'
+import manyToManyObjectRelation from '@Pimcore/assets/icons/many-to-many-object-relation.inline.svg?react'
+import manyToManyRelation from '@Pimcore/assets/icons/many-to-many-relation.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
+import manyToOneRelation from '@Pimcore/assets/icons/many-to-one-relation.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg?react'
 import media from '@Pimcore/assets/icons/media.inline.svg?react'
@@ -293,6 +299,7 @@ import reporting from '@Pimcore/assets/icons/reporting.inline.svg?react'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg?react'
 import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
+import reverseObjectRelation from '@Pimcore/assets/icons/reverse-object-relation.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
@@ -346,6 +353,7 @@ import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
+import upload from '@Pimcore/assets/icons/upload.inline.svg?react'
 import urlSlug from '@Pimcore/assets/icons/url-slug.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
@@ -401,6 +409,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'add-user',
       component: addUser
+    })
+    iconLibrary.register({
+      name: 'advanced-many-to-many-object-relation',
+      component: advancedManyToManyObjectRelation
+    })
+    iconLibrary.register({
+      name: 'advanced-many-to-many-relation',
+      component: advancedManyToManyRelation
     })
     iconLibrary.register({
       name: 'alert-outline',
@@ -1023,6 +1039,10 @@ moduleSystem.registerModule({
       component: importCsv
     })
     iconLibrary.register({
+      name: 'import',
+      component: importIcon
+    })
+    iconLibrary.register({
       name: 'index-field',
       component: indexField
     })
@@ -1139,8 +1159,20 @@ moduleSystem.registerModule({
       component: manualOrder
     })
     iconLibrary.register({
+      name: 'many-to-many-object-relation',
+      component: manyToManyObjectRelation
+    })
+    iconLibrary.register({
+      name: 'many-to-many-relation',
+      component: manyToManyRelation
+    })
+    iconLibrary.register({
       name: 'many-to-many',
       component: manyToMany
+    })
+    iconLibrary.register({
+      name: 'many-to-one-relation',
+      component: manyToOneRelation
     })
     iconLibrary.register({
       name: 'market',
@@ -1479,6 +1511,10 @@ moduleSystem.registerModule({
       component: restore
     })
     iconLibrary.register({
+      name: 'reverse-object-relation',
+      component: reverseObjectRelation
+    })
+    iconLibrary.register({
       name: 'reverse',
       component: reverse
     })
@@ -1689,6 +1725,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
+    })
+    iconLibrary.register({
+      name: 'upload',
+      component: upload
     })
     iconLibrary.register({
       name: 'url-slug',

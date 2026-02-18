@@ -125,6 +125,29 @@ export const create = (): LayoutProviderFactoryReturn => {
     }
   }
 
+  const getNextIndexedName = (baseName: string, siblingNames: string[]): string => {
+    // Extract the base name and current number (if exists)
+    const match = baseName.match(/^(.*?)(\d+)$/)
+    const nameWithoutNumber = match !== null ? match[1] : baseName
+    const currentNumber = match !== null ? parseInt(match[2], 10) : 0
+
+    // Find the highest index among siblings with the same base name
+    let maxIndex = currentNumber
+    siblingNames.forEach(name => {
+      const siblingMatch = name.match(/^(.*?)(\d+)$/)
+      const siblingBase = siblingMatch !== null ? siblingMatch[1] : name
+      const siblingNumber = siblingMatch !== null ? parseInt(siblingMatch[2], 10) : 0
+
+      if (siblingBase === nameWithoutNumber && siblingNumber > maxIndex) {
+        maxIndex = siblingNumber
+      }
+    })
+
+    // Return the next number
+    const nextNumber = maxIndex + 1
+    return `${nameWithoutNumber}${nextNumber}`
+  }
+
   const LayoutProvider = (props: LayoutProviderProps): React.JSX.Element => {
     const [structure, setStructure] = useState<ILayoutContext['structure']>(undefined)
     const [fieldDefinitions, setFieldDefinitions] = useState<ILayoutContext['fieldDefinitions']>({})
@@ -293,6 +316,17 @@ export const create = (): LayoutProviderFactoryReturn => {
         }
       }
 
+      const findParentNode = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        for (const child of node.children) {
+          if (child.id === targetId) {
+            return node
+          }
+          const found = findParentNode(child, targetId)
+          if (found !== undefined) return found
+        }
+        return undefined
+      }
+
       let clonedId = structureNodeId
 
       setStructure((prevStructure) => {
@@ -306,6 +340,10 @@ export const create = (): LayoutProviderFactoryReturn => {
           return prevStructure
         }
 
+        // Find parent to get sibling names
+        const parentNode = findParentNode(prevStructure, structureNodeId) ?? prevStructure
+        const siblingNames = parentNode.children.map(child => fieldDefinitionsRef.current[child.id]?.name ?? '').filter(name => name !== '')
+
         const oldToNewIdMap: Record<string, string> = {}
         const clonedNode = cloneNodeWithIdMapping(nodeToClone, oldToNewIdMap)
         clonedId = clonedNode.id
@@ -314,7 +352,14 @@ export const create = (): LayoutProviderFactoryReturn => {
           const newDefs = { ...prevDefs }
 
           Object.entries(oldToNewIdMap).forEach(([oldId, newId]) => {
-            newDefs[newId] = { ...prevDefs[oldId] }
+            const clonedDef = { ...prevDefs[oldId] }
+
+            // Update the name with index only for the root cloned node
+            if (oldId === structureNodeId && clonedDef.name !== undefined && typeof clonedDef.name === 'string') {
+              clonedDef.name = getNextIndexedName(clonedDef.name, siblingNames as string[])
+            }
+
+            newDefs[newId] = clonedDef
           })
 
           return newDefs

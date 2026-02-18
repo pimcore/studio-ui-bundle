@@ -29,6 +29,7 @@ export class PluginSystem {
   async loadPlugins (): Promise<void> {
     const promises: any[] = []
     const remotes = window.pluginRemotes
+    const alternativePaths = window.alternativePluginExportPaths
 
     if (remotes === undefined) {
       return
@@ -51,7 +52,9 @@ export class PluginSystem {
     getInstance()?.registerRemotes(initConfig.remotes)
 
     for (const remote of initConfig.remotes) {
-      promises.push(loadRemote(remote.alias!))
+      const alternativeExport = alternativePaths?.[remote.name] ?? ''
+      const moduleId = alternativeExport !== '' ? `${remote.alias}${alternativeExport}` : remote.alias!
+      promises.push(loadRemote(moduleId))
     }
 
     const result = await Promise.allSettled(promises)
@@ -67,8 +70,11 @@ export class PluginSystem {
       const plugins: Record<string, IAbstractPlugin> = remoteResponse.value
 
       for (const plugin of Object.values(plugins)) {
+        if (typeof plugin !== 'object') {
+          continue
+        }
+
         if (plugin.name === undefined) {
-          console.error('Plugin name is undefined', plugin)
           continue
         }
 

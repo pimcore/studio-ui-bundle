@@ -8,29 +8,40 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { GeneralSettingsForm } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content/general-settings-form'
 import { LayoutForm } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content/layout-form'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DetailContent = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { useLayout } = useSettings()
   const { currentFieldDefinitionId } = useLayout()
+  const { detailView } = useItems()
 
   return (
     <>
-      {currentFieldDefinitionId === null
+      {detailView === 'general'
+        ? (
+          <GeneralSettingsForm />
+          )
+        : null}
+
+      {detailView === 'layout' && currentFieldDefinitionId === null
         ? (
           <Content
             centered
             padded
           >
-            Please select a field from the tree to edit its properties.
+            {t('field-definitions.select-field-message')}
           </Content>
           )
         : null}
 
-      {currentFieldDefinitionId !== null
+      {detailView === 'layout' && currentFieldDefinitionId !== null
         ? (
           <LayoutForm />
           )

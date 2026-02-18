@@ -20,14 +20,17 @@
 
 /* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
+import { Divider } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface DetailSidebarProps {
   allowExternalDrop?: boolean
@@ -48,6 +51,8 @@ export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   const { useLayout } = useSettings()
+  const { detailView, setDetailView } = useItems()
+  const { t } = useTranslation()
 
   const {
     allowExternalDrop = false
@@ -105,6 +110,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   // Track if we've set initial keys
   const hasInitializedRef = React.useRef(false)
 
+  // Track cloned node IDs to expand them when they appear in structure
+  const pendingClonedNodeIdRef = React.useRef<string | null>(null)
+
   // Set initial expanded keys once when data arrives
   useEffect(() => {
     if (!hasInitializedRef.current && allAvailableKeys.length > 0) {
@@ -113,6 +121,34 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       hasInitializedRef.current = true
     }
   }, [allAvailableKeys])
+
+  // Expand cloned nodes when they appear in structure
+  useEffect(() => {
+    if (pendingClonedNodeIdRef.current !== null && structure !== undefined) {
+      const clonedNodeId = pendingClonedNodeIdRef.current
+      const findNodeInStructure = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        if (node.id === targetId) return node
+        for (const child of node.children) {
+          const found = findNodeInStructure(child, targetId)
+          if (found !== undefined) return found
+        }
+        return undefined
+      }
+
+      const clonedNode = findNodeInStructure(structure, clonedNodeId)
+      if (clonedNode !== undefined) {
+        const keysToExpand = getAllKeys(clonedNode)
+        if (keysToExpand.length > 0) {
+          setExpandedKeys(prev => {
+            const newKeys = [...new Set([...prev, ...keysToExpand])]
+            expandedKeysRef.current = newKeys
+            return newKeys
+          })
+        }
+        pendingClonedNodeIdRef.current = null
+      }
+    }
+  }, [structure])
 
   // Ref for expanded keys (needed in sorting-bottom isValidContext)
   const expandedKeysRef = React.useRef<string[]>(expandedKeys)
@@ -197,10 +233,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         return <></>
       }
 
+      const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDefinition.fieldtype, false)
+
       const info: FieldDefinitionDragDropInfo = {
         type: 'field-definition',
-        icon: { ...currentFieldDefinition.icon },
-        title: currentFieldDefinition.title ?? currentFieldDefinition.name,
+        icon: (currentDynType !== undefined) ? { ...currentDynType.getIcon(), iconColorGroup: ['fieldDefinition_' + currentDynType.id, 'fieldDefinition'] } : { value: 'unknown' },
+        title: currentFieldDefinition.name,
         data: {
           area,
           internal: {
@@ -341,7 +379,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
         return {
           ...initialTreeItem,
-          ...(fieldDefinition.name === 'pimcore_root' ? { title: 'Base', icon: <Icon value="folder" /> } : {}),
+          ...(fieldDefinition.name === 'pimcore_root' ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions: [
             ...(actions ?? []),
@@ -380,7 +418,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
-      cloneFieldDefinition(nodeKey)
+      const clonedNodeId = cloneFieldDefinition(nodeKey)
+      pendingClonedNodeIdRef.current = clonedNodeId
     }
 
     if (actionKey === 'delete') {
@@ -403,6 +442,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
+      setDetailView('layout')
+      expandNode(nodeKey)
     }
 
     if (actionKey.startsWith('convert-')) {
@@ -447,6 +488,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
     setCurrentFieldDefinitionId(key)
     setCurrentFieldDefinitionIdPath(node.meta?.currentPath as string[] ?? null)
+    setDetailView('layout')
   }
 
   return (
@@ -454,6 +496,35 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
+      <Content
+        padded
+        padding={ { top: 'none', x: 'extra-small' } }
+        style={ { height: 'fit-content' } }
+      >
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='none'
+        >
+          <Button
+            className='w-full'
+            onClick={ () => {
+              setDetailView('general')
+              setCurrentFieldDefinitionId(null)
+              setCurrentFieldDefinitionIdPath(null)
+            } }
+            style={ { justifyContent: 'flex-start' } }
+            type={ detailView === 'general' ? 'link' : 'text' }
+          >
+            <div style={ { paddingLeft: '16px' } }>
+              {t('field-definitions.general-settings')}
+            </div>
+          </Button>
+
+          <Divider style={ { margin: '0' } } />
+        </Space>
+      </Content>
+
       <TreeElement
         defaultExpandedKeys={ expandedKeys }
         onActionsClick={ onActionsClick }
