@@ -30,6 +30,7 @@ export * from '@Pimcore/utils/url-cache-buster'
 export * from '@Pimcore/utils/uuid'
 export * from '@Pimcore/utils/type-utils'
 export * from '@Pimcore/utils/local-storage'
+export * from '@Pimcore/utils/css'
 
 export * from '@Pimcore/utils/hooks/use-click-outside'
 export * from '@Pimcore/utils/hooks/use-css-container/use-css-container'
