@@ -96,9 +96,9 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
         name="allowedClassId"
       >
         <Select
+          loadingSkeleton={ isLoading }
           options={ classOptions }
           showSearch
-          skeletonLoader={ isLoading }
         />
       </Form.Item>
 
@@ -111,10 +111,10 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
         name="visibleFields"
       >
         <Select
+          loadingSkeleton={ isLoading }
           mode="multiple"
           options={ visibleFieldsOptions }
           showSearch
-          skeletonLoader={ isLoading }
         />
       </Form.Item>
 
