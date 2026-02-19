@@ -278,6 +278,7 @@ import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.
 import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import printSettings from '@Pimcore/assets/icons/print-settings.inline.svg?react'
 import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import productsup from '@Pimcore/assets/icons/productsup.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
@@ -1425,6 +1426,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'preview',
       component: preview
+    })
+    iconLibrary.register({
+      name: 'print-settings',
+      component: printSettings
     })
     iconLibrary.register({
       name: 'printpage',
