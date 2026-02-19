@@ -13,22 +13,32 @@ import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/componen
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
-import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 import { isString } from 'lodash'
 
-export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionManyToManyObjectRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
+  const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions(false)
   const form = Form.useFormInstance()
-  const allowedClassId = Form.useWatch<string | undefined>('allowedClassId')
+  const displayMode = Form.useWatch('displayMode')
+  const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
   const selectedClasses = useMemo(() => {
-    return isString(allowedClassId) && allowedClassId.length > 0 ? [allowedClassId] : []
-  }, [allowedClassId])
+    if (Array.isArray(classes)) {
+      return classes.map((item) => item.classes).filter((id) => id !== 'folder')
+    }
+    return []
+  }, [classes])
 
   const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions(selectedClasses)
+
+  useEffect(() => {
+    if (displayMode === null) {
+      form.setFieldValue('displayMode', 'grid')
+    }
+  }, [displayMode, form])
 
   useEffect(() => {
     if (isLoadingVisibleFields) {
@@ -82,16 +92,19 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
       </Form.Item>
 
       <Form.Item
-        label={ t('allowed-class') }
-        name="allowedClassId"
+        { ...relationSelectFormItemTransformation('classes') }
+        label={ t('allowed-classes') }
+        name="classes"
       >
         <Select
+          mode="multiple"
           options={ classOptions }
           showSearch
         />
       </Form.Item>
 
       <Form.Item
+        { ...relationSelectFormItemTransformation('visibleFields') }
         getValueFromEvent={ (value: string[]) => value.join(',') }
         getValueProps={ (value: string | string[]) => ({
           value: isString(value) ? value.split(',').filter(Boolean) : value
@@ -108,22 +121,19 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
       </Form.Item>
 
       <Form.Item
-        label={ t('columns') }
-        name="columns"
+        label={ t('display-mode') }
+        name="displayMode"
       >
-        <FieldDefinitionAllowedColumnsGrid />
+        <Select
+          options={ [
+            { label: t('display-mode-grid-view'), value: 'grid' },
+            { label: t('display-mode-tag-field'), value: 'combo' }
+          ] }
+        />
       </Form.Item>
 
       <Form.Item name="enableTextSelection">
         <Switch labelRight={ t('enable-text-selection') } />
-      </Form.Item>
-
-      <Form.Item name="enableBatchEdit">
-        <Switch labelRight={ t('enable-batch-edit') } />
-      </Form.Item>
-
-      <Form.Item name="allowMultipleAssignments">
-        <Switch labelRight={ t('allow-multiple-assignments') } />
       </Form.Item>
 
       <Form.Item name="allowToCreateNewObject">
@@ -140,7 +150,6 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
       >
         <Switch labelRight={ t('enable-async-load-in-admin') } />
       </Form.Item>
-
     </FormKit.Panel>
   )
 }

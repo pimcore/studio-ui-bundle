@@ -10,15 +10,15 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionReverseObjectFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/reverseObject/field-definition-reverse-object-form-fields'
+import { FieldDefinitionManyToManyObjectRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyObjectRelation/field-definition-many-to-many-object-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionReverseObject extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'reverseObjectRelation'
+export class DynamicTypeFieldDefinitionManyToManyObject extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'manyToManyObjectRelation'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'reverse-object-relation' }
+    return { type: 'name', value: 'many-to-many-object-relation' }
   }
 
   getGroup (): string[] {
@@ -31,8 +31,8 @@ export class DynamicTypeFieldDefinitionReverseObject extends DynamicTypeFieldDef
 
     return (
       <>
-        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true, disableMandatory: true })}
-        <FieldDefinitionReverseObjectFormFields
+        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
+        <FieldDefinitionManyToManyObjectRelationFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }

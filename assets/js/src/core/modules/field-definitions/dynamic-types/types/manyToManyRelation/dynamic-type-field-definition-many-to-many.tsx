@@ -10,15 +10,15 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionAdvancedManyToManyObjectFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToManyObject/field-definition-advanced-many-to-many-object-form-fields'
+import { FieldDefinitionManyToManyRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyRelation/field-definition-many-to-many-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionAdvancedManyToManyObject extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'advancedManyToManyObjectRelation'
+export class DynamicTypeFieldDefinitionManyToMany extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'manyToManyRelation'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'advanced-many-to-many-object-relation' }
+    return { type: 'name', value: 'many-to-many-relation' }
   }
 
   getGroup (): string[] {
@@ -32,7 +32,7 @@ export class DynamicTypeFieldDefinitionAdvancedManyToManyObject extends DynamicT
     return (
       <>
         {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
-        <FieldDefinitionAdvancedManyToManyObjectFormFields
+        <FieldDefinitionManyToManyRelationFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }

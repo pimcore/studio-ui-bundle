@@ -22,7 +22,7 @@ import {
 } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
 import { isString } from 'lodash'
 
-export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()

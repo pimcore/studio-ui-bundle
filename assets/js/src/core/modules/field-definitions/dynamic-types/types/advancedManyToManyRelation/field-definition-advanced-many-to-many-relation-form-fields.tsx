@@ -18,7 +18,7 @@ import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynam
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 
-export const FieldDefinitionAdvancedManyToManyFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { options: classOptions } = useClassDefinitionOptions(true)
   const assetTypeOptions = useAssetTypeOptions()

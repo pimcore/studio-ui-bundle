@@ -9,19 +9,27 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
-import React from 'react'
+import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 
-export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { options: classOptions } = useClassDefinitionOptions(true)
   const assetTypeOptions = useAssetTypeOptions()
   const documentTypeOptions = useDocumentTypeOptions()
+  const form = Form.useFormInstance()
+  const displayMode = Form.useWatch('displayMode')
+
+  useEffect(() => {
+    if (displayMode === null) {
+      form.setFieldValue('displayMode', 'grid')
+    }
+  }, [displayMode, form])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -40,24 +48,6 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
         </Form.Item>
 
         <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('maximum-items') }
-          name="maxItems"
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
-        </Form.Item>
-
-        <Form.Item
           label={ t('path-formatter-service') }
           name="pathFormatterClass"
         >
@@ -66,10 +56,6 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
 
         <Form.Item name="allowToClearRelation">
           <Switch labelRight={ t('allow-to-clear-relation') } />
-        </Form.Item>
-
-        <Form.Item name="enableTextSelection">
-          <Switch labelRight={ t('enable-text-selection') } />
         </Form.Item>
 
       </FormKit.Panel>
@@ -160,6 +146,18 @@ export const FieldDefinitionManyToManyFormFields = (props: FieldDefinitionAbstra
           </Form.Item>
         </Form.Conditional>
       </FormKit.Panel>
+
+      <Form.Item
+        label={ t('display-mode') }
+        name="displayMode"
+      >
+        <Select
+          options={ [
+            { label: t('display-mode-display'), value: 'grid' },
+            { label: t('display-mode-inline-search'), value: 'combo' }
+          ] }
+        />
+      </Form.Item>
 
     </FormKit.Panel>
   )

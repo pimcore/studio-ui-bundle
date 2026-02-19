@@ -120,7 +120,18 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
 
   const validateKey = (keyValue: string): boolean => {
     const trimmedValue = keyValue.trim()
-    const regresult = trimmedValue.match(/[a-zA-Z0-9_]+/)
+
+    if (trimmedValue.length <= 1) {
+      return false
+    }
+
+    // eslint-disable-next-line prefer-regex-literals
+    const validKeyPattern = new RegExp('^[a-zA-Z0-9_]+$')
+    const match = validKeyPattern.exec(trimmedValue)
+
+    if (match === null) {
+      return false
+    }
 
     const reservedWords = [
       'id', 'key', 'path', 'type', 'index', 'classname',
@@ -131,11 +142,7 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
       'parentClass', 'definition', 'locked', 'language'
     ]
 
-    if (trimmedValue.length > 1 && regresult !== null && regresult[0] === trimmedValue && !reservedWords.includes(trimmedValue.toLowerCase())) {
-      return true
-    }
-
-    return false
+    return !reservedWords.includes(trimmedValue.toLowerCase())
   }
 
   const handleUpdateCellData = async (event: { rowIndex: number, columnId: string, value: any }): Promise<void> => {

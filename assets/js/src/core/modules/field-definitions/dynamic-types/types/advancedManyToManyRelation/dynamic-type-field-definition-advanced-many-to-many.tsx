@@ -10,15 +10,15 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionManyToOneFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToOne/field-definition-many-to-one-form-fields'
+import { FieldDefinitionAdvancedManyToManyRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToManyRelation/field-definition-advanced-many-to-many-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionManyToOne extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'manyToOneRelation'
+export class DynamicTypeFieldDefinitionAdvancedManyToMany extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'advancedManyToManyRelation'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'many-to-one-relation' }
+    return { type: 'name', value: 'advanced-many-to-many-relation' }
   }
 
   getGroup (): string[] {
@@ -32,7 +32,7 @@ export class DynamicTypeFieldDefinitionManyToOne extends DynamicTypeFieldDefinit
     return (
       <>
         {super.getFormFields({ ...context, hideUnique: true })}
-        <FieldDefinitionManyToOneFormFields
+        <FieldDefinitionAdvancedManyToManyRelationFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }
