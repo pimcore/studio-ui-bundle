@@ -37,6 +37,7 @@ export interface IFormattedDataStructureData {
   fieldBreadcrumbTitle: string
   fieldData: Layout
   fieldValue: any
+  fieldPath: string
   versionCount: number
   versionId: number
 }
@@ -46,6 +47,7 @@ export interface IProcessVersionFieldDataProps {
   item: any
   fieldBreadcrumbTitle: string
   fieldValueByName: any[]
+  fieldPath: string
   versionId: number
   versionCount: number
   layoutsList: ILayoutItem[]
