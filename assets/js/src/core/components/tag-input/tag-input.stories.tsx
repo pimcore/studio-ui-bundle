@@ -9,7 +9,7 @@
  */
 
 import { type Meta, type StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 import { TagInput } from './tag-input'
 
 const config: Meta<typeof TagInput> = {
@@ -34,28 +34,3 @@ export const WithInitialValues: Story = {
   }
 }
 
-const isValidEmail = (value: string): boolean => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
-const EmailTagInputExample = (): React.JSX.Element => {
-  const [emails, setEmails] = useState<string[]>(['admin@example.com'])
-
-  return (
-    <div style={ { maxWidth: '500px' } }>
-      <TagInput
-        onChange={ setEmails }
-        placeholder="Enter email and press Enter..."
-        validate={ isValidEmail }
-        value={ emails }
-      />
-      <div style={ { marginTop: 12, fontSize: 12, color: '#666' } }>
-        Current values: {JSON.stringify(emails)}
-      </div>
-    </div>
-  )
-}
-
-export const EmailValidation: Story = {
-  render: () => <EmailTagInputExample />
-}

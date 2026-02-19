@@ -17,7 +17,6 @@ import cn from 'classnames'
 export interface TagInputProps extends Omit<SelectProps, 'mode' | 'options' | 'showSearch' | 'suffixIcon'> {
   value?: string[] | string
   onChange?: (value: string[]) => void
-  validate?: (value: string) => boolean
 }
 
 const normalizeValue = (value: string[] | string | undefined): string[] => {
@@ -29,7 +28,7 @@ const normalizeValue = (value: string[] | string | undefined): string[] => {
   return []
 }
 
-export const TagInput = ({ value, onChange, validate, className, onBlur, ...restProps }: TagInputProps): React.JSX.Element => {
+export const TagInput = ({ value, onChange, className, onBlur, ...restProps }: TagInputProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [searchValue, setSearchValue] = useState('')
   const normalizedValue = useMemo(() => normalizeValue(value), [value])
@@ -39,43 +38,34 @@ export const TagInput = ({ value, onChange, validate, className, onBlur, ...rest
   }, [normalizedValue])
 
   const handleChange = useCallback((newValue: string[]): void => {
-    if (!isNil(validate)) {
-      const lastAdded = newValue[newValue.length - 1]
-      if (!isNil(lastAdded) && !validate(lastAdded)) {
-        return
-      }
-    }
-
     onChange?.(newValue)
     setSearchValue('')
-  }, [onChange, validate])
+  }, [onChange])
 
   const handleBlur: SelectProps['onBlur'] = useCallback((e: React.FocusEvent<HTMLElement>): void => {
     const trimmed = searchValue.trim()
 
     if (trimmed !== '') {
-      if (isNil(validate) || validate(trimmed)) {
-        onChange?.([...normalizedValue, trimmed])
-      }
+      onChange?.([...normalizedValue, trimmed])
     }
 
     setSearchValue('')
     onBlur?.(e)
-  }, [searchValue, normalizedValue, onChange, validate, onBlur])
+  }, [searchValue, normalizedValue, onChange, onBlur])
 
   return (
     <Select
-      { ...restProps }
-      className={ cn(styles.tagInput, className) }
+      {...restProps}
+      className={cn(styles.tagInput, className)}
       mode="tags"
-      onBlur={ handleBlur }
-      onChange={ handleChange }
-      onSearch={ setSearchValue }
-      open={ false }
-      options={ options }
-      searchValue={ searchValue }
-      suffixIcon={ null }
-      value={ normalizedValue }
+      onBlur={handleBlur}
+      onChange={handleChange}
+      onSearch={setSearchValue}
+      open={false}
+      options={options}
+      searchValue={searchValue}
+      suffixIcon={null}
+      value={normalizedValue}
     />
   )
 }
