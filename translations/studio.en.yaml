@@ -25,7 +25,7 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
-invalid-key: Invalid key
+relation-invalid-key-in-columns: "Invalid value used for key column. Please avoid special characters and reserved keywords."
 import-modal.title: Import
 import-modal.upload: Upload
 import-modal.browse-files: Browse Files
@@ -707,6 +707,7 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Reverse Object Relation
+allowed-class: Allowed class
 allowed-classes: Allowed classes
 allowed-asset-types: Allowed asset types
 allowed-document-types: Allowed document types

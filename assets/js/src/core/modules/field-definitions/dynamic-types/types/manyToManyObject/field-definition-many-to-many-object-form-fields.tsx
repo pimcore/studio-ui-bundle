@@ -15,13 +15,15 @@ import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import { isString } from 'lodash'
 
 export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options: classOptions } = useClassDefinitionOptions(true)
+  const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions(false)
   const form = Form.useFormInstance()
   const displayMode = Form.useWatch('displayMode')
   const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')
+  const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
   const selectedClasses = useMemo(() => {
     if (Array.isArray(classes)) {
@@ -30,13 +32,29 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
     return []
   }, [classes])
 
-  const { options: visibleFieldsOptions } = useVisibleFieldsOptions(selectedClasses)
+  const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions(selectedClasses)
 
   useEffect(() => {
     if (displayMode === null) {
       form.setFieldValue('displayMode', 'grid')
     }
   }, [displayMode, form])
+
+  useEffect(() => {
+    if (isLoadingVisibleFields) {
+      return
+    }
+
+    const currentVisibleFields = isString(visibleFields) ? visibleFields.split(',').filter(Boolean) : []
+    const availableFieldValues = new Set<string>(visibleFieldsOptions.map((option) => option.value))
+    const filteredVisibleFields = currentVisibleFields.filter((field) => availableFieldValues.has(field))
+
+    if (currentVisibleFields.length !== filteredVisibleFields.length) {
+      form.setFieldValue('visibleFields', filteredVisibleFields.join(','))
+    }
+  }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -89,12 +107,13 @@ export const FieldDefinitionManyToManyObjectFormFields = (props: FieldDefinition
         { ...relationSelectFormItemTransformation('visibleFields') }
         getValueFromEvent={ (value: string[]) => value.join(',') }
         getValueProps={ (value: string | string[]) => ({
-          value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
+          value: isString(value) ? value.split(',').filter(Boolean) : value
         }) }
         label={ t('visible-fields') }
         name="visibleFields"
       >
         <Select
+          loadingSkeleton={ isLoading }
           mode="multiple"
           options={ visibleFieldsOptions }
           showSearch

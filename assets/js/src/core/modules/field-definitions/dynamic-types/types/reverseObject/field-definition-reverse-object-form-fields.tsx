@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import {
@@ -20,15 +20,33 @@ import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-def
 import {
   useVisibleFieldsOptions
 } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { isString } from 'lodash'
 
 export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options: classOptions } = useClassDefinitionOptions()
+  const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
+  const form = Form.useFormInstance()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
-  const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
+  const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
   const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
-  const visibleFieldsOptions = useVisibleFieldsOptions([ownerClassName ?? ''])
+  const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions([ownerClassName ?? ''])
+
+  useEffect(() => {
+    if (isLoadingVisibleFields) {
+      return
+    }
+
+    const currentVisibleFields = isString(visibleFields) ? visibleFields.split(',').filter(Boolean) : []
+    const availableFieldValues = new Set<string>(visibleFieldsOptions.map((option) => option.value))
+    const filteredVisibleFields = currentVisibleFields.filter((field) => availableFieldValues.has(field))
+
+    if (currentVisibleFields.length !== filteredVisibleFields.length) {
+      form.setFieldValue('visibleFields', filteredVisibleFields.join(','))
+    }
+  }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
@@ -65,6 +83,7 @@ export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbs
           name="ownerClassName"
         >
           <Select
+            loadingSkeleton={ isLoadingClassOptions }
             options={ classOptions }
             showSearch
           />
@@ -83,12 +102,13 @@ export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbs
           { ...relationSelectFormItemTransformation('visibleFields') }
           getValueFromEvent={ (value: string[]) => value.join(',') }
           getValueProps={ (value: string | string[]) => ({
-            value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
+            value: isString(value) ? value.split(',').filter(Boolean) : value
           }) }
           label={ t('visible-fields') }
           name="visibleFields"
         >
           <Select
+            loadingSkeleton={ isLoading }
             mode="multiple"
             options={ visibleFieldsOptions }
             showSearch

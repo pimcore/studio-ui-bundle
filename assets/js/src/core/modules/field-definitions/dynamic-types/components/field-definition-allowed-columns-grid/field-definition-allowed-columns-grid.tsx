@@ -138,10 +138,10 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
     return false
   }
 
-  const handleUpdateCellData = (event: { rowIndex: number, columnId: string, value: any }): void => {
+  const handleUpdateCellData = async (event: { rowIndex: number, columnId: string, value: any }): Promise<void> => {
     if (event.columnId === 'key') {
       if (!validateKey(String(event.value))) {
-        void message.error(t('invalid-key'))
+        await message.error(`${t('relation-invalid-key-in-columns')}`)
         return
       }
     }
