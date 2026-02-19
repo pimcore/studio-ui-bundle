@@ -10,16 +10,10 @@
 
 import { useMemo } from 'react'
 import { useClassGetAvailableVisibleFieldsQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 
-export const useVisibleFieldsOptions = (classes: string[]): { options: Array<{ label: string, value: string }>, refetch: () => void, isLoading: boolean } => {
-  const { getById } = useClassDefinitions()
+export const useVisibleFieldsOptions = (classNames: string[]): { options: Array<{ label: string, value: string }>, refetch: () => void, isLoading: boolean } => {
 
-  const classNames = useMemo(() => {
-    return classes.map((id) => getById(id)?.name).filter(Boolean).join(',')
-  }, [classes, getById])
-
-  const { data, refetch, isFetching, status } = useClassGetAvailableVisibleFieldsQuery({ classNames }, { skip: classNames.length === 0, refetchOnMountOrArgChange: true })
+  const { data, refetch, isFetching } = useClassGetAvailableVisibleFieldsQuery({ classNames: classNames.join(',') }, { skip: classNames.length === 0, refetchOnMountOrArgChange: true })
 
   const options = useMemo(() => {
     return data?.items.map((item) => ({
@@ -30,7 +24,7 @@ export const useVisibleFieldsOptions = (classes: string[]): { options: Array<{ l
 
   return {
     options,
-    refetch: status === 'uninitialized' ? () => {} : refetch,
+    refetch: refetch ?? (() => {}),
     isLoading: isFetching
   }
 }

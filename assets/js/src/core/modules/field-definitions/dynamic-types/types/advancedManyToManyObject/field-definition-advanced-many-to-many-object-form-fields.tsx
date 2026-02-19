@@ -10,49 +10,39 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
-import React, { useMemo, useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
+import { isString } from 'lodash'
 
 export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options: classOptions, refetch: refetchClassOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
+  const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()
   const allowedClassId = Form.useWatch<string | undefined>('allowedClassId')
+  const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
   const selectedClasses = useMemo(() => {
-    return typeof allowedClassId === 'string' && allowedClassId.length > 0 ? [allowedClassId] : []
+    return isString(allowedClassId) && allowedClassId.length > 0 ? [allowedClassId] : []
   }, [allowedClassId])
 
-  const { options: visibleFieldsOptions, refetch: refetchVisibleFields, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions(selectedClasses)
+  const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions(selectedClasses)
 
   useEffect(() => {
-    if (allowedClassId !== undefined) {
-      refetchClassOptions()
-      refetchVisibleFields()
+    if (isLoadingVisibleFields) {
+      return
     }
-  }, [allowedClassId, refetchClassOptions, refetchVisibleFields])
 
-  useEffect(() => {
-    if (!isLoadingVisibleFields && typeof allowedClassId === 'string' && allowedClassId.length > 0) {
-      const currentVisibleFieldsValue = form.getFieldValue('visibleFields') as string | undefined
-      const currentVisibleFields = typeof currentVisibleFieldsValue === 'string' && currentVisibleFieldsValue.length > 0
-        ? currentVisibleFieldsValue.split(',').filter(Boolean)
-        : []
+    const currentVisibleFields = isString(visibleFields) ? visibleFields.split(',').filter(Boolean) : []
+    const availableFieldValues = new Set<string>(visibleFieldsOptions.map((option) => option.value))
+    const filteredVisibleFields = currentVisibleFields.filter((field) => availableFieldValues.has(field))
 
-      if (currentVisibleFields.length > 0) {
-        const validVisibleFields = currentVisibleFields.filter((field) =>
-          visibleFieldsOptions.some((option) => option.value === field)
-        )
-
-        if (validVisibleFields.length !== currentVisibleFields.length) {
-          form.setFieldValue('visibleFields', validVisibleFields.join(','))
-        }
-      }
+    if (currentVisibleFields.length !== filteredVisibleFields.length) {
+      form.setFieldValue('visibleFields', filteredVisibleFields.join(','))
     }
-  }, [isLoadingVisibleFields, visibleFieldsOptions, form, allowedClassId])
+  }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
 
   const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
@@ -96,7 +86,6 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
         name="allowedClassId"
       >
         <Select
-          loadingSkeleton={ isLoading }
           options={ classOptions }
           showSearch
         />
@@ -105,7 +94,7 @@ export const FieldDefinitionAdvancedManyToManyObjectFormFields = (props: FieldDe
       <Form.Item
         getValueFromEvent={ (value: string[]) => value.join(',') }
         getValueProps={ (value: string | string[]) => ({
-          value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
+          value: isString(value) ? value.split(',').filter(Boolean) : value
         }) }
         label={ t('visible-fields') }
         name="visibleFields"

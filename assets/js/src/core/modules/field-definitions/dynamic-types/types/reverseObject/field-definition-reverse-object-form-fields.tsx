@@ -14,10 +14,12 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import {
-  useClassRelationFieldsOptions,
-  useClassVisibleFieldsOptions
+  useClassRelationFieldsOptions
 } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-relation-fields-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import {
+  useVisibleFieldsOptions
+} from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
 
 export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -26,7 +28,7 @@ export const FieldDefinitionReverseObjectFormFields = (props: FieldDefinitionAbs
   const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
 
   const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
-  const visibleFieldsOptions = useClassVisibleFieldsOptions(ownerClassName, ownerFieldName)
+  const visibleFieldsOptions = useVisibleFieldsOptions([ownerClassName ?? ''])
 
   return (
     <FormKit.Panel title={ t('specific-settings') }>
