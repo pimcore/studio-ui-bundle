@@ -12,7 +12,6 @@ import { useMemo } from 'react'
 import { useClassGetAvailableVisibleFieldsQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 
 export const useVisibleFieldsOptions = (classNames: string[]): { options: Array<{ label: string, value: string }>, refetch: () => void, isLoading: boolean } => {
-
   const { data, refetch, isFetching } = useClassGetAvailableVisibleFieldsQuery({ classNames: classNames.join(',') }, { skip: classNames.length === 0, refetchOnMountOrArgChange: true })
 
   const options = useMemo(() => {
