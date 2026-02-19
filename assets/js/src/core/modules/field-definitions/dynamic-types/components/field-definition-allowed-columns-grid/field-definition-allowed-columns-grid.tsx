@@ -166,7 +166,9 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
         size="small"
         style={ { width: '100%' } }
       >
-        <OperationalGrid.Grid />
+        <Box style={ { overflowX: 'auto' } }>
+          <OperationalGrid.Grid />
+        </Box>
 
         <OperationalGrid.Operations>
           {(operations) => {
