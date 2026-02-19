@@ -10,34 +10,15 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
-import { FieldDefinitionBlockFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/field-definition-block-form-fields'
+import { FieldDefinitionObjectbricksFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/objectbricks/field-definition-objectbricks-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionDataAbstract {
-  id: string = 'block'
+export class DynamicTypeFieldDefinitionObjectbricks extends DynamicTypeFieldDefinitionDataAbstract {
+  id: string = 'objectbricks'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'block' }
-  }
-
-  getDropdownTags (props: FieldDefinitionContext): string[] {
-    const isCustomLayout = props.area.includes('custom-layout')
-
-    if (isCustomLayout) {
-      return ['group:layout']
-    }
-
-    return this.getAllowedChildTags(props)
-  }
-
-  getAllowedChildTags (props: FieldDefinitionContext): string[] {
-    return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
-  }
-
-  getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
-    // @todo check other types here as well
-    return [...super.getDisallowedRecursiveChildTags(props), 'block']
+    return { type: 'name', value: 'area-brick' }
   }
 
   getGroup (): string[] {
@@ -47,7 +28,6 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
-
     const enrichedContext = {
       ...context,
       hideUnique: true,
@@ -56,11 +36,12 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
       disableVisibleGridView: true,
       disableVisibleSearch: true
     }
+
     return (
       <>
         {super.getFormFields(enrichedContext)}
-        <FieldDefinitionBlockFormFields
-          context={ context }
+        <FieldDefinitionObjectbricksFormFields
+          context={ enrichedContext }
           id={ fieldDefinition?.name ?? id }
           type={ this.id }
         />

@@ -409,6 +409,12 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/AdvancedManyToMany': 'DynamicTypes/FieldDefinition/AdvancedManyToMany',
   'DynamicTypes/FieldDefinition/AdvancedManyToManyObject': 'DynamicTypes/FieldDefinition/AdvancedManyToManyObject',
   'DynamicTypes/FieldDefinition/ReverseObject': 'DynamicTypes/FieldDefinition/ReverseObject',
+  'DynamicTypes/FieldDefinition/Table': 'DynamicTypes/FieldDefinition/Table',
+  'DynamicTypes/FieldDefinition/StructuredTable': 'DynamicTypes/FieldDefinition/StructuredTable',
+  'DynamicTypes/FieldDefinition/Fieldcollections': 'DynamicTypes/FieldDefinition/Fieldcollections',
+  'DynamicTypes/FieldDefinition/Objectbricks': 'DynamicTypes/FieldDefinition/Objectbricks',
+  'DynamicTypes/FieldDefinition/Classificationstore': 'DynamicTypes/FieldDefinition/Classificationstore',
+  'DynamicTypes/FieldDefinition/Localizedfields': 'DynamicTypes/FieldDefinition/Localizedfields',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

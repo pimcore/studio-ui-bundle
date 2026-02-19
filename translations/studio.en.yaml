@@ -761,6 +761,12 @@ field-definition.calculated-value: Calculated Value
 field-definition.user: User
 field-definition.block: Block
 field-definition.panel: Panel
+field-definition.table: Table
+field-definition.structured-table: Structured Table
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classification Store
+field-definition.localizedfields: Localized Fields
 field-definition.groups.layout: Layout Component
 field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
 field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
@@ -843,6 +849,18 @@ field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-def
 field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
 field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
 field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.table.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.table)"
+field-definition.table.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.table)"
+field-definition.structured-table.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.structured-table)"
+field-definition.structured-table.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.structured-table)"
+field-definition.fieldcollections.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.fieldcollections)"
+field-definition.fieldcollections.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.fieldcollections)"
+field-definition.objectbricks.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.objectbricks)"
+field-definition.objectbricks.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.objectbricks)"
+field-definition.classificationstore.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.classificationstore)"
+field-definition.classificationstore.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.classificationstore)"
+field-definition.localizedfields.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.localizedfields)"
+field-definition.localizedfields.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.localizedfields)"
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
@@ -854,6 +872,31 @@ calculator-expression: Calculator Expression
 calculator-type: Calculator Type
 calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
 expression: Expression
+lazy-loading: Lazy Loading
+disallow-add-remove: Disallow Add / Remove
+disallow-reorder: Disallow Reorder
+css-style: CSS Style
+collapsible: Collapsible
+collapsed: Initially Collapsed
+border: Border
+rows: Rows
+rows-fixed: Rows Fixed
+cols: Cols
+cols-fixed: Cols Fixed
+length: Length
+label-width: Label Width
+label-first-cell: Label First Cell
+label-align: Label Align
+allowed-types: Allowed Types
+localized: Localized
+allowed-group-ids: Allowed Group IDs
+store: Store
+hide-empty-data: Hide Empty Data
+tab-position: Tab Position
+maximum-tabs: Maximum Tabs
+hide-labels-when-tabs-reached: Hide Locale Labels When Tabs Reached
+provide-split-view: Provide Split View
+data: Data
 domain-label-width: Domain label width
 controller-action: Controller action
 controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'

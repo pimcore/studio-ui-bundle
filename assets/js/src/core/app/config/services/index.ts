@@ -320,6 +320,12 @@ import { DynamicTypeFieldDefinitionReverseObject } from '@Pimcore/modules/field-
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
+import { DynamicTypeFieldDefinitionTable } from '@Pimcore/modules/field-definitions/dynamic-types/types/table/dynamic-type-field-definition-table'
+import { DynamicTypeFieldDefinitionStructuredTable } from '@Pimcore/modules/field-definitions/dynamic-types/types/structuredTable/dynamic-type-field-definition-structured-table'
+import { DynamicTypeFieldDefinitionFieldcollections } from '@Pimcore/modules/field-definitions/dynamic-types/types/fieldcollections/dynamic-type-field-definition-fieldcollections'
+import { DynamicTypeFieldDefinitionObjectbricks } from '@Pimcore/modules/field-definitions/dynamic-types/types/objectbricks/dynamic-type-field-definition-objectbricks'
+import { DynamicTypeFieldDefinitionClassificationstore } from '@Pimcore/modules/field-definitions/dynamic-types/types/classificationstore/dynamic-type-field-definition-classificationstore'
+import { DynamicTypeFieldDefinitionLocalizedfields } from '@Pimcore/modules/field-definitions/dynamic-types/types/localizedfields/dynamic-type-field-definition-localizedfields'
 import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
 import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
@@ -723,6 +729,12 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToMany']).to
 container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToManyObject']).to(DynamicTypeFieldDefinitionAdvancedManyToManyObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ReverseObject']).to(DynamicTypeFieldDefinitionReverseObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Table']).to(DynamicTypeFieldDefinitionTable).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/StructuredTable']).to(DynamicTypeFieldDefinitionStructuredTable).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Fieldcollections']).to(DynamicTypeFieldDefinitionFieldcollections).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Objectbricks']).to(DynamicTypeFieldDefinitionObjectbricks).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Classificationstore']).to(DynamicTypeFieldDefinitionClassificationstore).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Localizedfields']).to(DynamicTypeFieldDefinitionLocalizedfields).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()
