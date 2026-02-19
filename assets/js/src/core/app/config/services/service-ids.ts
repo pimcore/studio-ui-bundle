@@ -403,6 +403,12 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/Checkbox': 'DynamicTypes/FieldDefinition/Checkbox',
   'DynamicTypes/FieldDefinition/Link': 'DynamicTypes/FieldDefinition/Link',
   'DynamicTypes/FieldDefinition/CalculatedValue': 'DynamicTypes/FieldDefinition/CalculatedValue',
+  'DynamicTypes/FieldDefinition/ManyToOne': 'DynamicTypes/FieldDefinition/ManyToOne',
+  'DynamicTypes/FieldDefinition/ManyToMany': 'DynamicTypes/FieldDefinition/ManyToMany',
+  'DynamicTypes/FieldDefinition/ManyToManyObject': 'DynamicTypes/FieldDefinition/ManyToManyObject',
+  'DynamicTypes/FieldDefinition/AdvancedManyToMany': 'DynamicTypes/FieldDefinition/AdvancedManyToMany',
+  'DynamicTypes/FieldDefinition/AdvancedManyToManyObject': 'DynamicTypes/FieldDefinition/AdvancedManyToManyObject',
+  'DynamicTypes/FieldDefinition/ReverseObject': 'DynamicTypes/FieldDefinition/ReverseObject',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

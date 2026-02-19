@@ -311,6 +311,12 @@ import { DynamicTypeFieldDefinitionUrlSlug } from '@Pimcore/modules/field-defini
 import { DynamicTypeFieldDefinitionCheckbox } from '@Pimcore/modules/field-definitions/dynamic-types/types/checkbox/dynamic-type-field-definition-checkbox'
 import { DynamicTypeFieldDefinitionLink } from '@Pimcore/modules/field-definitions/dynamic-types/types/link/dynamic-type-field-definition-link'
 import { DynamicTypeFieldDefinitionCalculatedValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/calculatedValue/dynamic-type-field-definition-calculated-value'
+import { DynamicTypeFieldDefinitionManyToOne } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToOneRelation/dynamic-type-field-definition-many-to-one'
+import { DynamicTypeFieldDefinitionManyToMany } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyRelation/dynamic-type-field-definition-many-to-many'
+import { DynamicTypeFieldDefinitionManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/manyToManyObjectRelation/dynamic-type-field-definition-many-to-many-object'
+import { DynamicTypeFieldDefinitionAdvancedManyToMany } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToManyRelation/dynamic-type-field-definition-advanced-many-to-many'
+import { DynamicTypeFieldDefinitionAdvancedManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/advancedManyToManyObjectRelation/dynamic-type-field-definition-advanced-many-to-many-object'
+import { DynamicTypeFieldDefinitionReverseObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/reverseObjectRelation/dynamic-type-field-definition-reverse-object'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/panel/dynamic-type-field-definition-panel'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/dynamic-type-field-definition-block'
@@ -710,6 +716,12 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/UrlSlug']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Checkbox']).to(DynamicTypeFieldDefinitionCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Link']).to(DynamicTypeFieldDefinitionLink).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/CalculatedValue']).to(DynamicTypeFieldDefinitionCalculatedValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToOne']).to(DynamicTypeFieldDefinitionManyToOne).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToMany']).to(DynamicTypeFieldDefinitionManyToMany).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToManyObject']).to(DynamicTypeFieldDefinitionManyToManyObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToMany']).to(DynamicTypeFieldDefinitionAdvancedManyToMany).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToManyObject']).to(DynamicTypeFieldDefinitionAdvancedManyToManyObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/ReverseObject']).to(DynamicTypeFieldDefinitionReverseObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 
 // GDPR Provider

@@ -129,6 +129,8 @@ export const {
   useClassDefinitionImportMutation,
   useClassCustomLayoutGetIdentifierDataQuery,
   useClassSelectOptionGetTreeQuery,
+  useClassGetAvailableVisibleFieldsQuery,
+  useClassGetSelectedVisibleFieldsQuery,
   useClassDefinitionGetBricksUsagesQuery
 } = api
 
