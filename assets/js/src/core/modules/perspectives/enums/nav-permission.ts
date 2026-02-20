@@ -46,6 +46,7 @@ export enum NavPermission {
   WidgetEditor = 'system.widgetEditor',
   ApplicationLogger = 'system.applicationLogger',
   About = 'system.about',
+  SystemSettings = 'system.systemSettings',
 
-  SearchHidden = 'search.hidden',
+  SearchHidden = 'search.hidden'
 }

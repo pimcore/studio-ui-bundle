@@ -329,6 +329,7 @@ import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
 import systemColumns from '@Pimcore/assets/icons/system-columns.inline.svg?react'
+import systemSettings from '@Pimcore/assets/icons/system-settings.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
 import tablet from '@Pimcore/assets/icons/tablet.inline.svg?react'
@@ -1630,6 +1631,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'system-columns',
       component: systemColumns
+    })
+    iconLibrary.register({
+      name: 'system-settings',
+      component: systemSettings
     })
     iconLibrary.register({
       name: 'tab-panel',
