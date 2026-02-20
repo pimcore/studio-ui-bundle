@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-const RESERVED_WORDS = [
+const RESERVED_WORDS = new Set([
   'id', 'key', 'path', 'type', 'index', 'classname',
   'creationdate', 'userowner', 'value', 'class', 'list', 'fullpath', 'childs', 'children', 'values', 'cachetag',
   'cachetags', 'parent', 'published', 'valuefromparent', 'userpermissions', 'dependencies',
   'modificationdate', 'usermodification', 'byid', 'bypath', 'data', 'versions', 'properties',
   'permissions', 'permissionsforuser', 'childamount', 'apipluginbroker', 'resource',
-  'parentClass', 'definition', 'locked', 'language'
-]
+  'parentclass', 'definition', 'locked', 'language'
+])
 
 export const isReservedWord = (word: string): boolean => {
-  return RESERVED_WORDS.includes(word.toLowerCase())
+  return RESERVED_WORDS.has(word.toLowerCase())
 }

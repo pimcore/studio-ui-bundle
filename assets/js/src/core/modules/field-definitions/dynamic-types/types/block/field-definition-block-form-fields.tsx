@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
+import { Form, FormKit, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,34 +18,32 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <>
-      <FormKit.Panel title={ t('specific-settings') }>
-        {!isCustomLayout && (
-          <>
-            <Form.Item
-              label={ t('maximum-items') }
-              name="maxItems"
-            >
-              <InputNumber
-                min={ 0 }
-                precision={ 0 }
-              />
-            </Form.Item>
+    <FormKit.Panel title={ t('specific-settings') }>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('maximum-items') }
+          name="maxItems"
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
 
-            <Form.Item name="lazyLoading">
-              <Switch labelRight={ t('lazy-loading') } />
-            </Form.Item>
+        <Form.Item name="lazyLoading">
+          <Switch labelRight={ t('lazy-loading') } />
+        </Form.Item>
 
-            <Form.Item name="disallowAddRemove">
-              <Switch labelRight={ t('disallow-add-remove') } />
-            </Form.Item>
+        <Form.Item name="disallowAddRemove">
+          <Switch labelRight={ t('disallow-add-remove') } />
+        </Form.Item>
 
-            <Form.Item name="disallowReorder">
-              <Switch labelRight={ t('disallow-reorder') } />
-            </Form.Item>
-          </>
-        )}
-      </FormKit.Panel>
-    </>
+        <Form.Item name="disallowReorder">
+          <Switch labelRight={ t('disallow-reorder') } />
+        </Form.Item>
+      </>
+      )}
+    </FormKit.Panel>
   )
 }

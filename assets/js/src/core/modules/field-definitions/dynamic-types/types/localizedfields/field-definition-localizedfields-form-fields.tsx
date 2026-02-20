@@ -20,123 +20,121 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
   const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
   return (
-    <>
-      <FormKit.Panel title={ panelTitle }>
-        <Form.Item
-          label={ t('title') }
-          name="title"
-        >
-          <Input />
-        </Form.Item>
+    <FormKit.Panel title={ panelTitle }>
+      <Form.Item
+        label={ t('title') }
+        name="title"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('region') }
-          name="region"
-        >
-          <Select
-            options={ [
-              { label: '', value: '' },
-              { label: 'center', value: 'center' },
-              { label: 'north', value: 'north' },
-              { label: 'south', value: 'south' },
-              { label: 'east', value: 'east' },
-              { label: 'west', value: 'west' }
-            ] }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('region') }
+        name="region"
+      >
+        <Select
+          options={ [
+            { label: '', value: '' },
+            { label: 'center', value: 'center' },
+            { label: 'north', value: 'north' },
+            { label: 'south', value: 'south' },
+            { label: 'east', value: 'east' },
+            { label: 'west', value: 'west' }
+          ] }
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('layout') }
-          name="layout"
-        >
-          <Select
-            options={ [
-              { label: '', value: '' },
-              { label: 'fit', value: 'fit' }
-            ] }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('layout') }
+        name="layout"
+      >
+        <Select
+          options={ [
+            { label: '', value: '' },
+            { label: 'fit', value: 'fit' }
+          ] }
+        />
+      </Form.Item>
 
-        <Form.Item name="border">
-          <Switch labelRight={ t('border') } />
-        </Form.Item>
+      <Form.Item name="border">
+        <Switch labelRight={ t('border') } />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('tab-position') }
-          name="tabPosition"
-        >
-          <Select
-            options={ [
-              { label: 'top', value: 'top' },
-              { label: 'left', value: 'left' },
-              { label: 'right', value: 'right' },
-              { label: 'bottom', value: 'bottom' }
-            ] }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('tab-position') }
+        name="tabPosition"
+      >
+        <Select
+          options={ [
+            { label: 'top', value: 'top' },
+            { label: 'left', value: 'left' },
+            { label: 'right', value: 'right' },
+            { label: 'bottom', value: 'bottom' }
+          ] }
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('maximum-tabs') }
-          name="maxTabs"
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('maximum-tabs') }
+        name="maxTabs"
+      >
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('hide-labels-when-tabs-reached') }
-          name="hideLabelsWhenTabsReached"
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('hide-labels-when-tabs-reached') }
+        name="hideLabelsWhenTabsReached"
+      >
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('label-width') }
-          name="labelWidth"
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('label-width') }
+        name="labelWidth"
+      >
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('label-align') }
-          name="labelAlign"
-        >
-          <Select
-            options={ [
-              { label: 'left', value: 'left' },
-              { label: 'top', value: 'top' }
-            ] }
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('label-align') }
+        name="labelAlign"
+      >
+        <Select
+          options={ [
+            { label: 'left', value: 'left' },
+            { label: 'top', value: 'top' }
+          ] }
+        />
+      </Form.Item>
 
-        <Form.Item name="provideSplitView">
-          <Switch labelRight={ t('provide-split-view') } />
-        </Form.Item>
-      </FormKit.Panel>
-    </>
+      <Form.Item name="provideSplitView">
+        <Switch labelRight={ t('provide-split-view') } />
+      </Form.Item>
+    </FormKit.Panel>
   )
 }
