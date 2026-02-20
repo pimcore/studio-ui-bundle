@@ -127,7 +127,7 @@ export const FieldDefinitionStructuredTableColsGrid = ({ value = [], onChange }:
     }
 
     // eslint-disable-next-line prefer-regex-literals
-    const validKeyPattern = new RegExp('^[a-zA-Z0-9_]+$')
+    const validKeyPattern = new RegExp('^\\w+$')
     const match = validKeyPattern.exec(trimmedValue)
 
     if (match === null) {
