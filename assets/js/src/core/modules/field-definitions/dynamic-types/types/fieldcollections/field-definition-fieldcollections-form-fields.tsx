@@ -56,18 +56,6 @@ export const FieldDefinitionFieldcollectionsFormFields = (props: FieldDefinition
       <Form.Item name="disallowReorder">
         <Switch labelRight={ t('disallow-reorder') } />
       </Form.Item>
-
-      <Form.Item name="collapsible">
-        <Switch labelRight={ t('collapsible') } />
-      </Form.Item>
-
-      <Form.Item name="collapsed">
-        <Switch labelRight={ t('collapsed') } />
-      </Form.Item>
-
-      <Form.Item name="border">
-        <Switch labelRight={ t('border') } />
-      </Form.Item>
     </FormKit.Panel>
   )
 }

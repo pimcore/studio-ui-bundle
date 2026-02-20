@@ -11,7 +11,9 @@
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionFieldcollectionsFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/fieldcollections/field-definition-fieldcollections-form-fields'
+import { Form, FormKit, Switch } from '@sdk/components'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeFieldDefinitionDataAbstract {
@@ -34,6 +36,7 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const isCustomLayout = context.area.includes('custom-layout')
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
     const enrichedContext = {
@@ -47,6 +50,22 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
     return (
       <>
         {super.getFormFields(enrichedContext)}
+        {!isCustomLayout && (
+          <FormKit.Panel
+            theme="card-with-highlight"
+            title={ t('layout-options') }
+          >
+            <Form.Item name="collapsible">
+              <Switch labelRight={ t('collapsible') } />
+            </Form.Item>
+            <Form.Item name="collapsed">
+              <Switch labelRight={ t('collapsed') } />
+            </Form.Item>
+            <Form.Item name="border">
+              <Switch labelRight={ t('border') } />
+            </Form.Item>
+          </FormKit.Panel>
+        )}
         <FieldDefinitionFieldcollectionsFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }
