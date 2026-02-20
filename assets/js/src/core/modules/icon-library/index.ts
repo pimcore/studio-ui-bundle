@@ -338,6 +338,7 @@ import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
+import test from '@Pimcore/assets/icons/test.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
 import thumbnailHtml from '@Pimcore/assets/icons/thumbnail-html.inline.svg?react'
@@ -1667,6 +1668,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tax-class',
       component: taxClass
+    })
+    iconLibrary.register({
+      name: 'test',
+      component: test
     })
     iconLibrary.register({
       name: 'text-field',
