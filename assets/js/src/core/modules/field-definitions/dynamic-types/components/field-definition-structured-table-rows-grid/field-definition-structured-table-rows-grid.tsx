@@ -93,7 +93,7 @@ export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }:
     }
 
     // eslint-disable-next-line prefer-regex-literals
-    const validKeyPattern = new RegExp('^\\w+$')
+    const validKeyPattern = new RegExp(String.raw`^\w+$`)
     const match = validKeyPattern.exec(trimmedValue)
 
     if (match === null) {
