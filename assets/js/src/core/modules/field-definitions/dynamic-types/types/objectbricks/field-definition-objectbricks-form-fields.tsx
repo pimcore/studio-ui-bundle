@@ -21,6 +21,7 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
 
+  // @todo implement the actual logic as soon as the endpoint for loading all bricks is available.
   const { data: bricksData, isFetching } = useClassDefinitionGetBricksUsagesQuery({ id: TEMP_CLASS_ID })
 
   const brickOptions = useMemo(() => {
@@ -54,17 +55,19 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
         />
       </Form.Item>
 
-      <Form.Item
-        label={ t('allowed-types') }
-        name="allowedTypes"
-      >
-        <Select
-          loadingSkeleton={ isFetching }
-          mode="multiple"
-          options={ brickOptions }
-          showSearch
-        />
-      </Form.Item>
+      {isCustomLayout && (
+        <Form.Item
+          label={ t('allowed-types') }
+          name="allowedTypes"
+        >
+          <Select
+            loadingSkeleton={ isFetching }
+            mode="multiple"
+            options={ brickOptions }
+            showSearch
+          />
+        </Form.Item>
+      )}
     </FormKit.Panel>
   )
 }
