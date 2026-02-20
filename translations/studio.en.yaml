@@ -2131,3 +2131,12 @@ display-mode-grid-view: "Grid view"
 display-mode-tag-field: "Tag field"
 activate-column-configuration: "Activate column configuration"
 table-column-configuration: "Table column configuration"
+center: Center
+north: North
+south: South
+east: East
+west: West
+top: Top
+left: Left
+right: Right
+bottom: Bottom
