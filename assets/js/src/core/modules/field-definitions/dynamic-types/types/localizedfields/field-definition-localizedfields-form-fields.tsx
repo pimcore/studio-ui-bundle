@@ -35,11 +35,11 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
         <Select
           options={ [
             { label: '', value: '' },
-            { label: 'center', value: 'center' },
-            { label: 'north', value: 'north' },
-            { label: 'south', value: 'south' },
-            { label: 'east', value: 'east' },
-            { label: 'west', value: 'west' }
+            { label: t('center'), value: 'center' },
+            { label: t('north'), value: 'north' },
+            { label: t('south'), value: 'south' },
+            { label: t('east'), value: 'east' },
+            { label: t('west'), value: 'west' }
           ] }
         />
       </Form.Item>
@@ -82,10 +82,10 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       >
         <Select
           options={ [
-            { label: 'top', value: 'top' },
-            { label: 'left', value: 'left' },
-            { label: 'right', value: 'right' },
-            { label: 'bottom', value: 'bottom' }
+            { label: t('top'), value: 'top' },
+            { label: t('left'), value: 'left' },
+            { label: t('right'), value: 'right' },
+            { label: t('bottom'), value: 'bottom' }
           ] }
         />
       </Form.Item>
@@ -126,8 +126,8 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       >
         <Select
           options={ [
-            { label: 'left', value: 'left' },
-            { label: 'top', value: 'top' }
+            { label: t('left'), value: 'left' },
+            { label: t('top'), value: 'top' }
           ] }
         />
       </Form.Item>
