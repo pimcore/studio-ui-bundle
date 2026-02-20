@@ -25,10 +25,6 @@ export class DynamicTypeFieldDefinitionRegion extends DynamicTypeFieldDefinition
     return { type: 'name', value: 'region' }
   }
 
-  getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:root']
-  }
-
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]

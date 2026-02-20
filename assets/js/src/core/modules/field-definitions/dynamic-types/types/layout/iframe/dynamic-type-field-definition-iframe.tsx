@@ -25,17 +25,13 @@ export class DynamicTypeFieldDefinitionIframe extends DynamicTypeFieldDefinition
     return { type: 'name', value: 'iframe' }
   }
 
-  getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:root']
-  }
-
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideRegion: true, hideCollapsible: true })}
         <FieldDefinitionIframeFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

@@ -2171,3 +2171,6 @@ left: Left
 right: Right
 bottom: Bottom
 region: Region
+icon: Icon
+iframe-url: Iframe URL
+rendering-data: Data Passed to render

@@ -40,6 +40,7 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
         <Input />
       </Form.Item>
 
+      {props.context.hideRegion !== true && (
       <Form.Item
         label={ t('region') }
         name="region"
@@ -53,10 +54,11 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
         ] }
         />
       </Form.Item>
+      )}
 
       {props.context.hideTitle !== true && (
         <Form.Item
-          label="title"
+          label={ t('title') }
           name="title"
         >
           <Input />
@@ -79,15 +81,19 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
         <Input />
       </Form.Item>
 
-      <Form.Item
-        name="collapsible"
-      >
-        <Switch labelRight={ t('collapsible') } />
-      </Form.Item>
+      {props.context.hideCollapsible !== true && (
+      <>
+        <Form.Item
+          name="collapsible"
+        >
+          <Switch labelRight={ t('collapsible') } />
+        </Form.Item>
 
-      <Form.Item name="collapsed">
-        <Switch labelRight={ t('collapsed') } />
-      </Form.Item>
+        <Form.Item name="collapsed">
+          <Switch labelRight={ t('collapsed') } />
+        </Form.Item>
+      </>
+      )}
     </FormKit.Panel>
   )
 }

@@ -11,12 +11,13 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, IconSelector } from '@sdk/components'
 import React from 'react'
+import { t } from 'i18next'
 
 export const FieldDefinitionRegionFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
     <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
       <Form.Item
-        label="icon"
+        label={ t('icon') }
         name="icon"
       >
         <IconSelector />
