@@ -2141,3 +2141,5 @@ display-mode-display: Display path reference
 display-mode-inline-search: Inline search
 display-mode-grid-view: "Grid view"
 display-mode-tag-field: "Tag field"
+activate-column-configuration: "Activate column configuration"
+table-column-configuration: "Table column configuration"

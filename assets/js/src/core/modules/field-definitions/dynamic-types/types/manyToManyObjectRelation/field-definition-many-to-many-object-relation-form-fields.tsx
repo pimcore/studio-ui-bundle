@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useVisibleFieldsOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-visible-fields-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
-import { isString } from 'lodash'
+import { isArray, isString } from 'lodash'
 
 export const FieldDefinitionManyToManyObjectRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -26,7 +26,7 @@ export const FieldDefinitionManyToManyObjectRelationFormFields = (props: FieldDe
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
   const selectedClasses = useMemo(() => {
-    if (Array.isArray(classes)) {
+    if (isArray(classes)) {
       return classes.map((item) => item.classes).filter((id) => id !== 'folder')
     }
     return []

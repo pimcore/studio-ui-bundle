@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isArray, isString } from 'lodash'
+
 // Utilities to reuse with Form.Item getValueFromEvent / getValueProps for multi-selects
 // that are stored as arrays of objects with a single key.
 
@@ -23,7 +25,7 @@ export type SingleKeyObject<K extends string = string, V extends PrimitiveValue 
  *   [{ documentTypes: 'snippet' }, { documentTypes: 'newsletter' }]
  */
 export const relationArrayToObjects = <K extends string>(key: K) => (values: string[] | undefined | null): Array<SingleKeyObject<K, string>> => {
-  if (!Array.isArray(values)) {
+  if (!isArray(values)) {
     return []
   }
   return values.map((v) => ({ [key]: v } as unknown as SingleKeyObject<K, string>))
@@ -40,8 +42,8 @@ export const relationArrayToObjects = <K extends string>(key: K) => (values: str
 export const relationObjectsToValueProps = <K extends string>(key: K) => (
   value: Array<SingleKeyObject<K, string>> | undefined | null
 ): { value: string[] } => {
-  const result: string[] = Array.isArray(value)
-    ? value.map((item) => item?.[key]).filter((v): v is string => typeof v === 'string')
+  const result: string[] = isArray(value)
+    ? value.map((item) => item?.[key]).filter((v): v is string => isString(v))
     : []
   return { value: result }
 }

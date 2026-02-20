@@ -9,6 +9,7 @@
  */
 
 import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { isString } from 'lodash'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -94,7 +95,7 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
       label: t('csv-separated-values-info'),
       initialValue: csvValue,
       onOk: (newValue) => {
-        if (typeof newValue === 'string') {
+        if (isString(newValue)) {
           const newItems = newValue.split('\n').filter((line) => line.trim() !== '').map((line) => {
             return {
               value: line.trim()
