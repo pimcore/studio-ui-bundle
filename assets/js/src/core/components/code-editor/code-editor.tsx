@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import ReactCodeMirror, { type ReactCodeMirrorProps, EditorView } from '@uiw/react-codemirror'
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
@@ -20,17 +20,20 @@ export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions'
   extensions?: ReactCodeMirrorProps['extensions']
   value?: string
   onChange?: (value: string) => void
+  lineWrapping?: boolean
 }
 
-export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: CodeEditorProps): React.JSX.Element => {
+export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping = false, ...props }: CodeEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   // Combine preset extensions with custom extensions
   const combinedExtensions = React.useMemo(() => {
     const presetExtensions = preset !== null && preset !== undefined ? getPresetExtensions(preset) : []
     const customExtensions = extensions ?? []
-    return [...presetExtensions, ...customExtensions]
-  }, [preset, extensions])
+    const wrappingExtensions = lineWrapping ? [EditorView.lineWrapping] : []
+
+    return [...presetExtensions, ...customExtensions, ...wrappingExtensions]
+  }, [preset, extensions, lineWrapping])
 
   // Handle onChange to ensure it matches Ant Design Form expectations
   const handleChange = React.useCallback((val: string) => {
