@@ -9,7 +9,6 @@
  */
 
 import { type Meta, type StoryObj } from '@storybook/react'
-import React from 'react'
 import { TagInput } from './tag-input'
 
 const config: Meta<typeof TagInput> = {
@@ -33,4 +32,3 @@ export const WithInitialValues: Story = {
     placeholder: 'Add more tags...'
   }
 }
-

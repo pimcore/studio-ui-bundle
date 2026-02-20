@@ -55,17 +55,17 @@ export const TagInput = ({ value, onChange, className, onBlur, ...restProps }: T
 
   return (
     <Select
-      {...restProps}
-      className={cn(styles.tagInput, className)}
+      { ...restProps }
+      className={ cn(styles.tagInput, className) }
       mode="tags"
-      onBlur={handleBlur}
-      onChange={handleChange}
-      onSearch={setSearchValue}
-      open={false}
-      options={options}
-      searchValue={searchValue}
-      suffixIcon={null}
-      value={normalizedValue}
+      onBlur={ handleBlur }
+      onChange={ handleChange }
+      onSearch={ setSearchValue }
+      open={ false }
+      options={ options }
+      searchValue={ searchValue }
+      suffixIcon={ null }
+      value={ normalizedValue }
     />
   )
 }

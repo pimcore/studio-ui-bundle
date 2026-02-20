@@ -15,7 +15,7 @@ interface GetLanguageNameProps {
   lng?: string
 }
 
-export function getLanguageName({ locale, lng }: GetLanguageNameProps): string {
+export function getLanguageName ({ locale, lng }: GetLanguageNameProps): string {
   lng ??= i18n.language
 
   const localizer = new Intl.DisplayNames([lng], { type: 'language' })
