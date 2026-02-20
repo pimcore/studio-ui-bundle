@@ -32,4 +32,3 @@ export const WithInitialValues: Story = {
     placeholder: 'Add more tags...'
   }
 }
-
