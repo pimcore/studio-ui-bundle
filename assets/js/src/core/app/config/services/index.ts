@@ -318,6 +318,14 @@ import { DynamicTypeFieldDefinitionAdvancedManyToMany } from '@Pimcore/modules/f
 import { DynamicTypeFieldDefinitionAdvancedManyToManyObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/advancedManyToManyObjectRelation/dynamic-type-field-definition-advanced-many-to-many-object'
 import { DynamicTypeFieldDefinitionReverseObject } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/reverseObjectRelation/dynamic-type-field-definition-reverse-object'
 import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/panel/dynamic-type-field-definition-panel'
+import { DynamicTypeFieldDefinitionFieldContainer } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/fieldcontainer/dynamic-type-field-definition-field-container'
+import { DynamicTypeFieldDefinitionFieldset } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/fieldset/dynamic-type-field-definition-fieldset'
+import { DynamicTypeFieldDefinitionIframe } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/iframe/dynamic-type-field-definition-iframe'
+import { DynamicTypeFieldDefinitionLayout } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/layout/dynamic-type-field-definition-layout'
+import { DynamicTypeFieldDefinitionAccordion } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/accordion/dynamic-type-field-definition-accordion'
+import { DynamicTypeFieldDefinitionRegion } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/region/dynamic-type-field-definition-region'
+import { DynamicTypeFieldDefinitionTabpanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/tabpanel/dynamic-type-field-definition-tabpanel'
+import { DynamicTypeFieldDefinitionText } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/text/dynamic-type-field-definition-text'
 import { DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { DynamicTypeFieldDefinitionBlock } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/block/dynamic-type-field-definition-block'
 import { DynamicTypeFieldDefinitionTable } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/table/dynamic-type-field-definition-table'
@@ -728,7 +736,15 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/ManyToManyObject']).to(D
 container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToMany']).to(DynamicTypeFieldDefinitionAdvancedManyToMany).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/AdvancedManyToManyObject']).to(DynamicTypeFieldDefinitionAdvancedManyToManyObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/ReverseObject']).to(DynamicTypeFieldDefinitionReverseObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Accordion']).to(DynamicTypeFieldDefinitionAccordion).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/FieldContainer']).to(DynamicTypeFieldDefinitionFieldContainer).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Fieldset']).to(DynamicTypeFieldDefinitionFieldset).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Iframe']).to(DynamicTypeFieldDefinitionIframe).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Layout']).to(DynamicTypeFieldDefinitionLayout).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Region']).to(DynamicTypeFieldDefinitionRegion).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Tabpanel']).to(DynamicTypeFieldDefinitionTabpanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Text']).to(DynamicTypeFieldDefinitionText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Table']).to(DynamicTypeFieldDefinitionTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/StructuredTable']).to(DynamicTypeFieldDefinitionStructuredTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Fieldcollections']).to(DynamicTypeFieldDefinitionFieldcollections).inSingletonScope()

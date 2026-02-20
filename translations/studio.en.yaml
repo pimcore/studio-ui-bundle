@@ -769,6 +769,7 @@ field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
 field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Localized Fields
+field-definition.accordion: Accordion
 field-definition.groups.layout: Layout Component
 field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
 field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
@@ -851,6 +852,8 @@ field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-def
 field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
 field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
 field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
@@ -875,6 +878,7 @@ cols: Cols
 cols-fixed: Cols Fixed
 length: Length
 label-width: Label Width
+padding: Padding
 label-first-cell: Label First Cell
 label-align: Label Align
 allowed-types: Allowed Types
