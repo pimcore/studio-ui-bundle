@@ -851,18 +851,6 @@ field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-def
 field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
 field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
 field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
-field-definition.table.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.table)"
-field-definition.table.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.table)"
-field-definition.structured-table.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.structured-table)"
-field-definition.structured-table.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.structured-table)"
-field-definition.fieldcollections.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.fieldcollections)"
-field-definition.fieldcollections.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.fieldcollections)"
-field-definition.objectbricks.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.objectbricks)"
-field-definition.objectbricks.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.objectbricks)"
-field-definition.classificationstore.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.classificationstore)"
-field-definition.classificationstore.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.classificationstore)"
-field-definition.localizedfields.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.localizedfields)"
-field-definition.localizedfields.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.localizedfields)"
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
