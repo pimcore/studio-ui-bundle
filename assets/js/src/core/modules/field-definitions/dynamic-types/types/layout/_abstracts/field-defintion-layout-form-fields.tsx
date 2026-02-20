@@ -18,19 +18,18 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
   const isRegion = isParent('region', context)
 
   return (
-    <>
-      <FormKit.Panel
-        contentPadding={ { bottom: 'none', top: 'small', x: 'small' } }
-        title={ `${props.id} (${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }
+    <FormKit.Panel
+      contentPadding={ { bottom: 'none', top: 'small', x: 'small' } }
+      title={ `${props.id} (${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }
+    >
+      <Form.Item
+        label="name"
+        name="name"
       >
-        <Form.Item
-          label="name"
-          name="name"
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        {isRegion && (
+      {isRegion && (
         <Form.Item
           label="region"
           name="region"
@@ -44,23 +43,22 @@ export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFo
           ] }
           />
         </Form.Item>
-        )}
+      )}
 
-        <Form.Item
-          label="title"
-          name="title"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label="title"
+        name="title"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item name="collapsible">
-          <Switch labelRight="collapsible" />
-        </Form.Item>
+      <Form.Item name="collapsible">
+        <Switch labelRight="collapsible" />
+      </Form.Item>
 
-        <Form.Item name="collapsed">
-          <Switch labelRight="collapsed" />
-        </Form.Item>
-      </FormKit.Panel>
-    </>
+      <Form.Item name="collapsed">
+        <Switch labelRight="collapsed" />
+      </Form.Item>
+    </FormKit.Panel>
   )
 }
