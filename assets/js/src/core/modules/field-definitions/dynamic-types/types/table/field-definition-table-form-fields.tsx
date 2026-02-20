@@ -13,7 +13,7 @@ import { Form, FormKit, Input, InputNumber, Switch, TextArea } from '@sdk/compon
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
-import { isArray, isNumber, isString, times } from 'lodash'
+import { isArray, isNumber } from 'lodash'
 import { type ColumnDef } from '@tanstack/react-table'
 
 interface ColumnConfigItem {
@@ -31,7 +31,6 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
   const colsFixed = Form.useWatch<boolean>('colsFixed') ?? false
   const columnConfigActivated = Form.useWatch<boolean>('columnConfigActivated') ?? false
   const columnConfig = Form.useWatch<ColumnConfigItem[]>('columnConfig') ?? []
-  const data = Form.useWatch<string | null>('data') ?? ''
 
   const gridColumns = useMemo<Array<ColumnDef<ColumnConfigItem>>>(() => [
     { id: 'key', header: t('key'), accessorKey: 'key' },
@@ -52,32 +51,6 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
     }
 
     form.setFieldValue('columnConfig', current)
-  }
-
-  const ensureTableDataRowsSize = (count: number, columnsCount: number): void => {
-    const parsedRows = isNumber(count) ? count : 0
-    const desiredRows = Math.max(0, parsedRows)
-
-    const currentText: string = isString(data) ? data : ''
-    const lines = currentText.length > 0 ? currentText.split(/\r?\n/) : []
-
-    const makeEmptyLine = (cCount: number): string => {
-      const c = isNumber(cCount) ? Math.max(0, cCount) : 0
-      if (c <= 0) {
-        return ''
-      }
-      return times(c, () => '').join('|')
-    }
-
-    if (lines.length < desiredRows) {
-      for (let i = lines.length; i < desiredRows; i++) {
-        lines.push(makeEmptyLine(columnsCount))
-      }
-    } else if (lines.length > desiredRows) {
-      lines.splice(desiredRows)
-    }
-
-    form.setFieldValue('data', lines.join('\n'))
   }
 
   return (
@@ -106,7 +79,6 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
           >
             <InputNumber
               min={ 0 }
-              onChange={ (value) => { ensureTableDataRowsSize(Number(value ?? 0), cols) } }
               precision={ 0 }
             />
           </Form.Item>
@@ -151,10 +123,7 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
           )}
 
           {!isCustomLayout && columnConfigActivated && (
-            <FormKit.Panel
-              theme="card-with-highlight"
-              title={ t('table-column-configuration') }
-            >
+            <>
               <Form.Item
                 name="columnConfig"
                 valuePropName="value"
@@ -169,7 +138,7 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
                   <OperationalGrid.Grid />
                 </OperationalGrid>
               </Form.Item>
-            </FormKit.Panel>
+            </>
           )}
 
           <Form.Item
