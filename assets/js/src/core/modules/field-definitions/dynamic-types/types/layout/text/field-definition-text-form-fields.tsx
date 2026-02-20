@@ -9,17 +9,36 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, TextArea } from '@sdk/components'
+import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
 import React from 'react'
+import { t } from 'i18next'
 
 export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
+    <FormKit.Panel title={ t('specific-settings') }>
+      <Form.Item name="border">
+        <Switch labelRight={ t('border') } />
+      </Form.Item>
+
       <Form.Item
-        label="html"
+        label={ t('rendering-class') }
+        name="renderingClass"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('rendering-data') }
+        name="renderingData"
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('html') }
         name="html"
       >
-        <TextArea />
+        <TextArea rows={ 10 } />
       </Form.Item>
     </FormKit.Panel>
   )

@@ -22,7 +22,7 @@ export class DynamicTypeFieldDefinitionText extends DynamicTypeFieldDefinitionLa
   }
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'text' }
+    return { type: 'name', value: 'text-field' }
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {

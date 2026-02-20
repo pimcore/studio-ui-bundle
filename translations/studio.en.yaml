@@ -2173,4 +2173,5 @@ bottom: Bottom
 region: Region
 icon: Icon
 iframe-url: Iframe URL
+rendering-class: Custom rendering class
 rendering-data: Data Passed to render

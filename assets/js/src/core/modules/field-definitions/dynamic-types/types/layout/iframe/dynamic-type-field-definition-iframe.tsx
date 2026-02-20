@@ -22,7 +22,7 @@ export class DynamicTypeFieldDefinitionIframe extends DynamicTypeFieldDefinition
   }
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'iframe' }
+    return { type: 'name', value: 'preview' }
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {

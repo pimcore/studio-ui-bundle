@@ -22,7 +22,7 @@ export class DynamicTypeFieldDefinitionTabpanel extends DynamicTypeFieldDefiniti
   }
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'tabpanel' }
+    return { type: 'name', value: 'tab-panel' }
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
