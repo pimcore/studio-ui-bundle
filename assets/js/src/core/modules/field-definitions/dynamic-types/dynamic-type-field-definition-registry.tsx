@@ -137,7 +137,7 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
 
       groupParts.forEach((group, index) => {
         currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`
-        const groupKey = `group-${group}`, groupMenuKey = `${actionKeyPrefix}group-${group}`, isRootLevel = currentActions === actions
+        const groupKey = `group-${group}`; const groupMenuKey = `${actionKeyPrefix}group-${group}`; const isRootLevel = currentActions === actions
         let action = currentActions.find(a => a.key === groupKey)
 
         if (isNil(action)) {
