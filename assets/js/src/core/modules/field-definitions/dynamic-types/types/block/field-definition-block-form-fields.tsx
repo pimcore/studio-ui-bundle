@@ -18,47 +18,34 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
-      {!isCustomLayout && (
-        <>
-          <Form.Item
-            label={ t('maximum-items') }
-            name="maxItems"
-          >
-            <InputNumber
-              min={ 0 }
-              precision={ 0 }
-            />
-          </Form.Item>
+    <>
+      <FormKit.Panel title={ t('specific-settings') }>
+        {!isCustomLayout && (
+          <>
+            <Form.Item
+              label={ t('maximum-items') }
+              name="maxItems"
+            >
+              <InputNumber
+                min={ 0 }
+                precision={ 0 }
+              />
+            </Form.Item>
 
-          <Form.Item name="lazyLoading">
-            <Switch labelRight={ t('lazy-loading') } />
-          </Form.Item>
+            <Form.Item name="lazyLoading">
+              <Switch labelRight={ t('lazy-loading') } />
+            </Form.Item>
 
-          <Form.Item name="disallowAddRemove">
-            <Switch labelRight={ t('disallow-add-remove') } />
-          </Form.Item>
+            <Form.Item name="disallowAddRemove">
+              <Switch labelRight={ t('disallow-add-remove') } />
+            </Form.Item>
 
-          <Form.Item name="disallowReorder">
-            <Switch labelRight={ t('disallow-reorder') } />
-          </Form.Item>
-
-          <Form.Item name="collapsible">
-            <Switch labelRight={ t('collapsible') } />
-          </Form.Item>
-
-          <Form.Item name="collapsed">
-            <Switch labelRight={ t('collapsed') } />
-          </Form.Item>
-        </>
-      )}
-
-      <Form.Item
-        label={ t('css-style') }
-        name="styleElement"
-      >
-        <Input />
-      </Form.Item>
-    </FormKit.Panel>
+            <Form.Item name="disallowReorder">
+              <Switch labelRight={ t('disallow-reorder') } />
+            </Form.Item>
+          </>
+        )}
+      </FormKit.Panel>
+    </>
   )
 }

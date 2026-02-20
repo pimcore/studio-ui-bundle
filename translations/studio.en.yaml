@@ -725,6 +725,7 @@ bool: Bool
 column-bool: Column Bool
 multiselect: Multiselect
 layout: "Layout"
+layout-options: "Layout Options"
 allow-documents: Allow documents
 allow-assets: Allow assets
 asset-inline-download-allowed: Allow asset inline download
