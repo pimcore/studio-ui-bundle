@@ -14,19 +14,17 @@ import React from 'react'
 
 export const FieldDefinitionPanelFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <>
-      <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
-        <Form.Item name="border">
-          <Switch labelRight="border" />
-        </Form.Item>
+    <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
+      <Form.Item name="border">
+        <Switch labelRight="border" />
+      </Form.Item>
 
-        <Form.Item
-          label="icon"
-          name="icon"
-        >
-          <IconSelector />
-        </Form.Item>
-      </FormKit.Panel>
-    </>
+      <Form.Item
+        label="icon"
+        name="icon"
+      >
+        <IconSelector />
+      </Form.Item>
+    </FormKit.Panel>
   )
 }

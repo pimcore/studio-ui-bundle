@@ -21,59 +21,58 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
   const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
   return (
-    <>
-      <FormKit.Panel title={ panelTitle }>
-        <Form.Item
-          label={ t('name') }
-          name="name"
-        >
-          <Input />
-        </Form.Item>
+    <FormKit.Panel title={ panelTitle }>
+      <Form.Item
+        label={ t('name') }
+        name="name"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('title') }
-          name="title"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('title') }
+        name="title"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('tooltip') }
-          name="tooltip"
-        >
-          <TextArea />
-        </Form.Item>
+      <Form.Item
+        label={ t('tooltip') }
+        name="tooltip"
+      >
+        <TextArea />
+      </Form.Item>
 
-        <Form.Item name="mandatory">
-          <Switch
-            disabled={ props.context.disableMandatory }
-            labelRight={ t('mandatory') }
-          />
-        </Form.Item>
+      <Form.Item name="mandatory">
+        <Switch
+          disabled={ props.context.disableMandatory }
+          labelRight={ t('mandatory') }
+        />
+      </Form.Item>
 
-        <Form.Item name="index">
-          <Switch
-            disabled={ props.context.disableIndex }
-            labelRight={ t('index') }
-          />
-        </Form.Item>
+      <Form.Item name="index">
+        <Switch
+          disabled={ props.context.disableIndex }
+          labelRight={ t('index') }
+        />
+      </Form.Item>
 
-        {/* @todo check behavior for unique fields */}
-        {props.context.hideUnique !== true && (
-          <Form.Item name="unique">
-            <Switch labelRight={ t('unique') } />
-          </Form.Item>
-        )}
+      {/* @todo check behavior for unique fields */}
+      {props.context.hideUnique !== true && (
+      <Form.Item name="unique">
+        <Switch labelRight={ t('unique') } />
+      </Form.Item>
+      )}
 
-        <Form.Item name="noteditable">
-          <Switch labelRight={ t('not-editable') } />
-        </Form.Item>
+      <Form.Item name="noteditable">
+        <Switch labelRight={ t('not-editable') } />
+      </Form.Item>
 
-        <Form.Item name="invisible">
-          <Switch labelRight={ t('invisible') } />
-        </Form.Item>
+      <Form.Item name="invisible">
+        <Switch labelRight={ t('invisible') } />
+      </Form.Item>
 
-        {!isCustomLayout && (
+      {!isCustomLayout && (
         <>
           <Form.Item name="visibleGridView">
             <Switch
@@ -89,8 +88,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
             />
           </Form.Item>
         </>
-        )}
-      </FormKit.Panel>
-    </>
+      )}
+    </FormKit.Panel>
   )
 }
