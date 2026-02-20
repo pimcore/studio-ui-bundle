@@ -13,7 +13,7 @@ import { useClassificationStoreGetConfigCollectionQuery } from '@Pimcore/modules
 
 export interface SelectOption {
   label: string
-  value: string
+  value: number
 }
 
 export interface UseClassificationStoreOptionsReturn {
@@ -32,7 +32,7 @@ export const useClassificationStoreOptions = (): UseClassificationStoreOptionsRe
 
     return data.items.map((item) => ({
       label: item.name,
-      value: String(item.id)
+      value: item.id
     }))
   }, [data])
 

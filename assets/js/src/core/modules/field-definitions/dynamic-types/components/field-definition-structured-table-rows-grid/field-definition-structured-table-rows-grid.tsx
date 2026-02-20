@@ -13,6 +13,7 @@ import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message } from 'antd'
+import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 
 interface StructuredTableRow {
   position: number
@@ -99,16 +100,7 @@ export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }:
       return false
     }
 
-    const reservedWords = [
-      'id', 'key', 'path', 'type', 'index', 'classname',
-      'creationdate', 'userowner', 'value', 'class', 'list', 'fullpath', 'childs', 'children', 'values', 'cachetag',
-      'cachetags', 'parent', 'published', 'valuefromparent', 'userpermissions', 'dependencies',
-      'modificationdate', 'usermodification', 'byid', 'bypath', 'data', 'versions', 'properties',
-      'permissions', 'permissionsforuser', 'childamount', 'apipluginbroker', 'resource',
-      'parentClass', 'definition', 'locked', 'language'
-    ]
-
-    return !reservedWords.includes(trimmedValue.toLowerCase())
+    return !isReservedWord(trimmedValue)
   }
 
   const handleUpdateCellData = async (event: { rowIndex: number, columnId: string, value: any }): Promise<void> => {
@@ -152,7 +144,7 @@ export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }:
                   onClick={ () => {
                     operations.addRow({
                       position: (value.length > 0 ? Math.max(...value.map((v) => v.position ?? 0)) : 0) + 1,
-                      key: 'row',
+                      key: '',
                       label: ''
                     })
                   } }

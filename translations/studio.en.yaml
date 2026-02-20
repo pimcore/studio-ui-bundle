@@ -613,6 +613,7 @@ width-tooltip: "The width of this component. A numeric value will be interpreted
 width-field: Width field
 width-unit: Width unit
 height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+table-data-tooltip: "Example of how to add data: \n\n one|two|three \n four|five|six \n seven|eight|nine"
 use-current-date: Use current date
 respect-timezone: Respect timezone
 column-type: Column type
@@ -889,8 +890,9 @@ label-first-cell: Label First Cell
 label-align: Label Align
 allowed-types: Allowed Types
 localized: Localized
-allowed-group-ids: Allowed Group IDs
+allowed-group-ids: Allowed Group IDs (csv)
 store: Store
+label: Label
 hide-empty-data: Hide Empty Data
 tab-position: Tab Position
 maximum-tabs: Maximum Tabs

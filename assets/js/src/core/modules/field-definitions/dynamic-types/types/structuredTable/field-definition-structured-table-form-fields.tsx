@@ -57,17 +57,17 @@ export const FieldDefinitionStructuredTableFormFields = (props: FieldDefinitionA
           </Form.Item>
 
           <Form.Item
-            label={ t('cols') }
-            name="cols"
-          >
-            <FieldDefinitionStructuredTableColsGrid />
-          </Form.Item>
-
-          <Form.Item
             label={ t('rows') }
             name="rows"
           >
             <FieldDefinitionStructuredTableRowsGrid />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('cols') }
+            name="cols"
+          >
+            <FieldDefinitionStructuredTableColsGrid />
           </Form.Item>
         </>
       )}

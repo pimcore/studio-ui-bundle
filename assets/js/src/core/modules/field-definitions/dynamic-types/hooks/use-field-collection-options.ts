@@ -31,7 +31,7 @@ export const useFieldCollectionOptions = (): UseFieldCollectionOptionsReturn => 
     }
 
     return data.items.map((item) => ({
-      label: item.title,
+      label: item.key,
       value: item.key
     }))
   }, [data])

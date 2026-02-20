@@ -68,6 +68,7 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
           <Form.Item
             label={ t('data') }
             name="data"
+            tooltip={ t('table-data-tooltip') }
           >
             <TextArea rows={ 6 } />
           </Form.Item>
