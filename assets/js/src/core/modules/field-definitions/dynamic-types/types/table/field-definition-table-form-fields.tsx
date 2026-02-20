@@ -123,22 +123,20 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
           )}
 
           {!isCustomLayout && columnConfigActivated && (
-            <>
-              <Form.Item
-                name="columnConfig"
-                valuePropName="value"
-              >
-                <OperationalGrid
-                  columns={ gridColumns }
-                  enableMultipleRowSelection={ false }
-                  enableRowSelection={ false }
-                  onChange={ (value) => { form.setFieldValue('columnConfig', value) } }
-                  value={ columnConfig }
-                >
-                  <OperationalGrid.Grid />
-                </OperationalGrid>
-              </Form.Item>
-            </>
+          <Form.Item
+            name="columnConfig"
+            valuePropName="value"
+          >
+            <OperationalGrid
+              columns={ gridColumns }
+              enableMultipleRowSelection={ false }
+              enableRowSelection={ false }
+              onChange={ (value) => { form.setFieldValue('columnConfig', value) } }
+              value={ columnConfig }
+            >
+              <OperationalGrid.Grid />
+            </OperationalGrid>
+          </Form.Item>
           )}
 
           <Form.Item
