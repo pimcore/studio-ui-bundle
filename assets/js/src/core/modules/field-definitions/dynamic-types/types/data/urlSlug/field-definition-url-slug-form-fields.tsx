@@ -42,7 +42,10 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
             label={ t('domain-label-width') }
             name="domainLabelWidth"
           >
-            <InputNumber />
+            <InputNumber
+              min={ 0 }
+              precision={ 0 }
+            />
           </Form.Item>
 
           <Form.Item

@@ -9,25 +9,36 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, IconSelector, Input } from '@sdk/components'
+import { Form, FormKit, InputNumber } from '@sdk/components'
 import React from 'react'
+import { t } from 'i18next'
+import { Select } from 'antd'
 
 export const FieldDefinitionFieldsetFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
     <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
       <Form.Item
-        label="label width"
+        label={ t('label-width') }
         name="labelWidth"
       >
-        <Input type="number" />
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
       </Form.Item>
 
       <Form.Item
-        label="icon"
-        name="icon"
+        label={ t('label-align') }
+        name="labelAlign"
       >
-        <IconSelector />
+        <Select
+          options={ [
+            { label: t('left'), value: 'left' },
+            { label: t('top'), value: 'top' }
+          ] }
+        />
       </Form.Item>
+
     </FormKit.Panel>
   )
 }

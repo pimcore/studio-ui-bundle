@@ -35,7 +35,7 @@ export class DynamicTypeFieldDefinitionFieldContainer extends DynamicTypeFieldDe
 
     return (
       <>
-        {super.getFormFields(context)}
+        {super.getFormFields({ ...context, hideTitle: true })}
         <FieldDefinitionFieldContainerFormFields
           context={ context }
           id={ fieldDefinition?.name ?? id }

@@ -9,55 +9,84 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { isParent } from '@Pimcore/modules/field-definitions/utils/context-helpers'
 import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { kebabCase } from 'lodash'
 
 export const FieldDefinitionLayoutFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
-  const { context } = props
-  const isRegion = isParent('region', context)
+  const form = Form.useFormInstance()
+  const collapsible = Form.useWatch('collapsible')
+
+  useEffect(() => {
+    if (collapsible === false) {
+      form.setFieldValue('collapsed', false)
+    }
+  }, [collapsible, form])
+
+  const { t } = useTranslation()
+  const typeTranslation = t('field-definition.' + kebabCase(props.type))
+  const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
   return (
     <FormKit.Panel
       contentPadding={ { bottom: 'none', top: 'small', x: 'small' } }
-      title={ `${props.id} (${props.type.charAt(0).toUpperCase() + props.type.slice(1)})` }
+      title={ panelTitle }
     >
       <Form.Item
-        label="name"
+        label={ t('name') }
         name="name"
       >
         <Input />
       </Form.Item>
 
-      {isRegion && (
+      <Form.Item
+        label={ t('region') }
+        name="region"
+      >
+        <Select options={ [
+          { label: t('center'), value: 'center' },
+          { label: t('north'), value: 'north' },
+          { label: t('south'), value: 'south' },
+          { label: t('east'), value: 'east' },
+          { label: t('west'), value: 'west' }
+        ] }
+        />
+      </Form.Item>
+
+      {props.context.hideTitle !== true && (
         <Form.Item
-          label="region"
-          name="region"
+          label="title"
+          name="title"
         >
-          <Select options={ [
-            { label: 'center', value: 'center' },
-            { label: 'north', value: 'north' },
-            { label: 'south', value: 'south' },
-            { label: 'east', value: 'east' },
-            { label: 'west', value: 'west' }
-          ] }
-          />
+          <Input />
         </Form.Item>
       )}
 
       <Form.Item
-        label="title"
-        name="title"
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
       >
         <Input />
       </Form.Item>
 
-      <Form.Item name="collapsible">
-        <Switch labelRight="collapsible" />
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="collapsible"
+      >
+        <Switch labelRight={ t('collapsible') } />
       </Form.Item>
 
       <Form.Item name="collapsed">
-        <Switch labelRight="collapsed" />
+        <Switch labelRight={ t('collapsed') } />
       </Form.Item>
     </FormKit.Panel>
   )

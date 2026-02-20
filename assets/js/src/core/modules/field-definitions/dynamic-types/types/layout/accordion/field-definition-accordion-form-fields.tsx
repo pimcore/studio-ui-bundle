@@ -10,13 +10,14 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Switch } from '@sdk/components'
+import { t } from 'i18next'
 import React from 'react'
 
 export const FieldDefinitionAccordionFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
     <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
       <Form.Item name="border">
-        <Switch labelRight="border" />
+        <Switch labelRight={ t('border') } />
       </Form.Item>
     </FormKit.Panel>
   )

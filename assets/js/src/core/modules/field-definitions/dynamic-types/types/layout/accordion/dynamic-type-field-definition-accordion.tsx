@@ -16,6 +16,8 @@ import React from 'react'
 
 export interface FieldDefinitionAccordion extends FieldDefinitionLayout {
   border: boolean
+  width: string
+  height: string
 }
 
 export class DynamicTypeFieldDefinitionAccordion extends DynamicTypeFieldDefinitionLayoutAbstract {
@@ -27,13 +29,6 @@ export class DynamicTypeFieldDefinitionAccordion extends DynamicTypeFieldDefinit
 
   getIcon (): ElementIcon {
     return { type: 'name', value: 'accordion' }
-  }
-
-  getDefaultData (): FieldDefinitionAccordion {
-    return {
-      ...super.getDefaultData(),
-      border: false
-    }
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
