@@ -46,7 +46,7 @@ export const useSystemSettings = (): UseSystemSettingsHookReturn => {
 
       onFinish?.()
       void success(t('system-settings.update.success'))
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to update system settings'))
     }
   }

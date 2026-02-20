@@ -11,7 +11,8 @@
 import { getSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { type SystemSettingsFormValues } from '../components/system-settings-form/system-settings-form'
 import { store } from '@Pimcore/app/store'
-import { isArray, isEmpty, isNil, isString } from 'lodash'
+import { isArray, isNil } from 'lodash'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export const getInitialFormValues = (): SystemSettingsFormValues => {
   const settings = getSettings(store.getState())
@@ -40,8 +41,8 @@ export const getInitialFormValues = (): SystemSettingsFormValues => {
 
 const normalizeEmailAddresses = (value: unknown): string[] => {
   if (isArray(value)) return value as string[]
-  if (isString(value) && !isEmpty(value.trim())) {
-    return value.split(',').map((item) => item.trim()).filter((item) => !isEmpty(item))
+  if (isNonEmptyString(value)) {
+    return value.split(',').map((item) => item.trim()).filter(isNonEmptyString)
   }
   return []
 }
@@ -52,7 +53,7 @@ const transformFallbackLanguagesForForm = (fallbackLanguages: Record<string, str
   const transformed: Record<string, string[]> = {}
   Object.keys(fallbackLanguages).forEach(locale => {
     const value = fallbackLanguages[locale]
-    transformed[locale] = value !== '' ? value.split(',').map(lang => lang.trim()) : []
+    transformed[locale] = isNonEmptyString(value) ? value.split(',').map(lang => lang.trim()) : []
   })
   return transformed
 }
