@@ -10,7 +10,11 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/_abstracts/data/dynamic-type-field-defintion-data-abstract'
+import { FieldDefinitionBlockFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/block/field-definition-block-form-fields'
+import { Form, FormKit, Switch } from '@sdk/components'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
+import React from 'react'
 
 export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'block'
@@ -40,5 +44,43 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
 
   getGroup (): string[] {
     return [...super.getGroup(), 'structured']
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const isCustomLayout = context.area.includes('custom-layout')
+    const id = this.getId(context)
+    const fieldDefinition = context.fieldDefinitions[id]
+
+    const enrichedContext = {
+      ...context,
+      hideUnique: true,
+      disableMandatory: true,
+      disableIndex: true,
+      disableVisibleGridView: true,
+      disableVisibleSearch: true
+    }
+    return (
+      <>
+        {super.getFormFields(enrichedContext)}
+        {!isCustomLayout && (
+          <FormKit.Panel
+            theme="card-with-highlight"
+            title={ t('layout-options') }
+          >
+            <Form.Item name="collapsible">
+              <Switch labelRight={ t('collapsible') } />
+            </Form.Item>
+            <Form.Item name="collapsed">
+              <Switch labelRight={ t('collapsed') } />
+            </Form.Item>
+          </FormKit.Panel>
+        )}
+        <FieldDefinitionBlockFormFields
+          context={ context }
+          id={ fieldDefinition?.name ?? id }
+          type={ this.id }
+        />
+      </>
+    )
   }
 }

@@ -76,11 +76,17 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         {!isCustomLayout && (
         <>
           <Form.Item name="visibleGridView">
-            <Switch labelRight={ t('visible-in-gridview') } />
+            <Switch
+              disabled={ props.context.disableVisibleGridView }
+              labelRight={ t('visible-in-gridview') }
+            />
           </Form.Item>
 
           <Form.Item name="visibleSearch">
-            <Switch labelRight={ t('visible-in-searchresult') } />
+            <Switch
+              disabled={ props.context.disableVisibleSearch }
+              labelRight={ t('visible-in-searchresult') }
+            />
           </Form.Item>
         </>
         )}

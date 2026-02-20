@@ -11,6 +11,7 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Select } from '@sdk/components'
 import React, { useMemo } from 'react'
+import { isString } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useSettingsCountryCollectionQuery } from '@Pimcore/modules/app/settings/settings-slice-enhanced'
 
@@ -59,7 +60,7 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
       <Form.Item
         getValueFromEvent={ (value: string[]) => value.join(',') }
         getValueProps={ (value: string | string[]) => ({
-          value: typeof value === 'string' ? value.split(',').filter(Boolean) : value
+          value: isString(value) ? value.split(',').filter(Boolean) : value
         }) }
         label={ t('restrict-selection-to') }
         name="restrictTo"

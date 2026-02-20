@@ -131,7 +131,8 @@ export const {
   useClassSelectOptionGetTreeQuery,
   useClassGetAvailableVisibleFieldsQuery,
   useClassGetSelectedVisibleFieldsQuery,
-  useClassDefinitionGetBricksUsagesQuery
+  useClassDefinitionGetBricksUsagesQuery,
+  useClassFieldCollectionCollectionQuery
 } = api
 
 export { api }

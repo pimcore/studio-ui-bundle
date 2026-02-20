@@ -9,6 +9,7 @@
  */
 
 import { useMemo } from 'react'
+import { isArray } from 'lodash'
 import { useClassSelectOptionGetTreeQuery } from '@sdk/api/class-definition'
 
 export const useClassSelectOptions = (): Array<{ label: string, value: string }> => {
@@ -19,7 +20,7 @@ export const useClassSelectOptions = (): Array<{ label: string, value: string }>
 
     const walk = (items: any[]): void => {
       items.forEach((item) => {
-        if (Array.isArray(item.children) && item.children.length > 0) {
+        if (isArray(item.children) && item.children.length > 0) {
           walk(item.children as any[])
         } else {
           options.push({ label: item.name, value: item.id })
