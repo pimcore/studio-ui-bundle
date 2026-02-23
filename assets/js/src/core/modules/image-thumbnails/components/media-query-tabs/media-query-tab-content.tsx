@@ -9,12 +9,8 @@
  */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Space } from '@Pimcore/components/space/space'
-import { Text } from '@Pimcore/components/text/text'
+import { MediaQueryTransformationsMultiField } from './media-query-transformations-multi-field'
 import type { MediaQuery } from '../../types/media-query.types'
-import { DynamicTransformationsDropdown } from '../transformations-dropdown/dynamic-transformations-dropdown'
-import { TransformationsList } from '../transformations-list/transformations-list'
 import type { TransformationDynamicTypeInterface } from '../../dynamic-types/transformation-dynamic-type-interface'
 
 interface MediaQueryTabContentProps {
@@ -26,40 +22,6 @@ interface MediaQueryTabContentProps {
   onTransformationMoveDown?: (transformationId: string) => void
 }
 
-export const MediaQueryTabContent = ({
-  mediaQuery,
-  onTransformationAdd,
-  onTransformationRemove,
-  onTransformationUpdate,
-  onTransformationMoveUp,
-  onTransformationMoveDown
-}: MediaQueryTabContentProps): React.JSX.Element => {
-  const { t } = useTranslation()
-
-  return (
-    <div style={{ padding: '16px', width: '100%', minHeight: '200px' }}>
-      <Space direction="vertical" size="medium" className="w-full">
-        <div>
-          <DynamicTransformationsDropdown onTransformationAdd={onTransformationAdd} />
-        </div>
-
-        {mediaQuery.transformations.length === 0 ? (
-          <div style={{ padding: '16px 0', textAlign: 'center' }}>
-            <Text type="secondary">
-              {t('image-thumbnails.editor.transformations.empty')}
-            </Text>
-          </div>
-        ) : (
-          <TransformationsList
-            mediaQueryId={mediaQuery.id}
-            transformations={mediaQuery.transformations}
-            onRemove={onTransformationRemove}
-            onUpdate={onTransformationUpdate}
-            onMoveUp={onTransformationMoveUp}
-            onMoveDown={onTransformationMoveDown}
-          />
-        )}
-      </Space>
-    </div>
-  )
+export const MediaQueryTabContent = (props: MediaQueryTabContentProps): React.JSX.Element => {
+  return <MediaQueryTransformationsMultiField {...props} />
 }

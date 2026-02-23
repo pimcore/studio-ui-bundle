@@ -175,6 +175,8 @@ export const MediaQueriesPanel = ({
       border={true}
       theme="card-with-highlight"
       contentPadding="small"
+      collapsible={true}
+      collapsed={false}
       extra={newButton}
       extraPosition="end"
     >
