@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
@@ -19,16 +19,16 @@ import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@sdk/components'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image.styles'
-import {isValidElementType} from "@Pimcore/modules/element/utils/element-type";
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import {
   useElementSelector
-} from "@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector";
+} from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import {
   SelectionType
-} from "@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider";
-import {isEmpty} from "lodash";
+} from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { isEmpty } from 'lodash'
 
 export interface ImageValue {
   type: 'asset'
@@ -41,7 +41,7 @@ export interface ImageProps {
   disabled?: boolean
   value?: ImageValue | null
   onChange?: (value: ImageValue | null) => void
-  className?: string,
+  className?: string
   uploadPath?: string
 }
 
@@ -89,7 +89,6 @@ export const Image = (props: ImageProps): React.JSX.Element => {
     })
   }, [triggerUpload])
 
-
   const handleChange = (value: ImageValue | null): void => {
     props.onChange?.(value)
   }
@@ -120,36 +119,36 @@ export const Image = (props: ImageProps): React.JSX.Element => {
       }
     >
       <InlineUpload
-          accept="image/*"
-          assetType="image"
-          disabled={ props.disabled }
-          onSuccess={ handleFileSystemUpload }
-          targetFolderPath={ props.uploadPath ?? '' }
+        accept="image/*"
+        assetType="image"
+        disabled={ props.disabled }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.uploadPath ?? '' }
       >
         <Droppable
-            disabled={ props.disabled }
-            isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
-            isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-            onDrop={ handleDroppableDrop }
-            variant="outline"
+          disabled={ props.disabled }
+          isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ handleDroppableDrop }
+          variant="outline"
         >
           { imageValue !== null
-              ? (
-                  <ImagePreview
-                      assetId={ imageValue?.id }
-                      height={ height! }
-                      width={ width! }
-                  />
+            ? (
+              <ImagePreview
+                assetId={ imageValue?.id }
+                height={ height! }
+                width={ width! }
+              />
               )
-              : (
-                  <AssetTarget
-                      dndIcon={ props.disabled !== true }
-                      height={ height }
-                      onSearch={ openElementSelector }
-                      onUpload={ handleUpload }
-                      title={ t(props.disabled === true ? 'empty' : 'image.add.and.dnd') }
-                      width={ width }
-                  />
+            : (
+              <AssetTarget
+                dndIcon={ props.disabled !== true }
+                height={ height }
+                onSearch={ openElementSelector }
+                onUpload={ handleUpload }
+                title={ t(props.disabled === true ? 'empty' : 'image.add.and.dnd') }
+                width={ width }
+              />
               )
           }
         </Droppable>

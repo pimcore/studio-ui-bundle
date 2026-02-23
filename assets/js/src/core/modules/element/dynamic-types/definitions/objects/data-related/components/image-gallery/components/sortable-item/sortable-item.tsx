@@ -77,9 +77,9 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             ratioY={ ratioY }
             setInternalValue={ setInternalValue }
             setValue={ setValue }
+            uploadPath={ uploadPath }
             value={ value }
             width={ width }
-            uploadPath={ uploadPath }
           />
           )
         : (
