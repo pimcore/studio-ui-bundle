@@ -9,13 +9,13 @@
  */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Badge as AntBadge, type BadgeProps as AntBadgeProps } from 'antd'
 
-type ExtendedBadgeProps = Omit<BadgeProps, 'size'> & {
+export type BadgeProps = Omit<AntBadgeProps, 'size'> & {
   size?: 'default' | 'small' | 'large'
 }
 
-export const Badge = ({ color, size, ...props }: ExtendedBadgeProps): React.JSX.Element => {
+export const Badge = ({ color, size, ...props }: BadgeProps): React.JSX.Element => {
   const isLarge = size === 'large'
   const antSize = isLarge ? 'default' : size
 
