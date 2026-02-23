@@ -17,6 +17,8 @@ import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-sl
 import { type BackgroundProcessor } from '../background-processor/services/background-processor'
 import { DemoProcess } from './process/demo-process'
 import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
+import { type ComponentRegistry } from '../app/component-registry/component-registry'
+import { NotificationPopup } from './notification-popup'
 
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
@@ -42,11 +44,11 @@ moduleSystem.registerModule({
 
     staticWidgetRestorer.registerStaticWidget(NOTIFICATIONS)
 
-    /* const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
     componentRegistry.registerToSlot('global.feedback', {
-      name: 'notifications',
-      component: NotificationUpdates
-    }) */
+      name: 'notification-popup',
+      component: NotificationPopup
+    })
 
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())

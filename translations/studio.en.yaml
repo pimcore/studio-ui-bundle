@@ -562,6 +562,10 @@ modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
+notifications.new-notification: New Notification
+notifications.from: From
+notifications.hide: Hide
+notifications.mark-as-read: Mark as read
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
