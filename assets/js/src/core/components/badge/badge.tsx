@@ -11,11 +11,26 @@
 import React from 'react'
 import { Badge as AntBadge, type BadgeProps } from 'antd'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+type ExtendedBadgeProps = Omit<BadgeProps, 'size'> & {
+  size?: 'default' | 'small' | 'large'
+}
+
+export const Badge = ({ color, size, ...props }: ExtendedBadgeProps): React.JSX.Element => {
+  const isLarge = size === 'large'
+  const antSize = isLarge ? 'default' : size
+
+  const largeIndicatorStyles = isLarge
+    ? { width: 24, height: 24, minWidth: 24, lineHeight: '24px', borderRadius: 12, fontSize: 12 }
+    : {}
+
   return (
     <AntBadge
       color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
+      size={ antSize }
+      styles={ {
+        indicator: { outline: `1px solid ${color}`, ...largeIndicatorStyles },
+        root: { marginRight: '5px' }
+      } }
       { ...props }
     />
   )
