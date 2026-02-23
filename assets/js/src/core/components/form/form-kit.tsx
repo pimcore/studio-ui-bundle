@@ -19,6 +19,11 @@ import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/defin
 export interface FormKitProps {
   formProps?: Omit<FormProps, 'children'>
   children?: React.ReactNode
+  /**
+   * When false, children are rendered directly inside the Form without
+   * a Panel wrapper. Use this when the child already owns its own layout.
+   */
+  wrapInPanel?: boolean
 }
 
 const FormKit = (props: FormKitProps): React.JSX.Element => {
@@ -34,9 +39,9 @@ const FormKit = (props: FormKitProps): React.JSX.Element => {
     <FieldWidthProvider fieldWidthValues={ { small: 200, medium: 300, large: 900 } }>
       <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
         <Form { ...finalProps.formProps }>
-          <Panel>
-            {props.children}
-          </Panel>
+          { props.wrapInPanel !== false
+            ? <Panel>{ props.children }</Panel>
+            : props.children }
         </Form>
       </ConfigProvider>
     </FieldWidthProvider>
