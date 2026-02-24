@@ -36,7 +36,7 @@ export const ImageThumbnailsTabs = ({
     return openedThumbnails.map((tab) => ({
       key: tab.thumbnail.id,
       label: `${tab.thumbnail.name}${tab.isDirty ? ' *' : ''}`,
-      icon: <Icon value="image-thumbnail-clear" />,
+      icon: <Icon value="image-thumbnail" />,
       children: (
         <ImageThumbnailsEditor
           selectedThumbnail={tab.thumbnail}

@@ -26,7 +26,7 @@ export const IMAGE_THUMBNAILS_WIDGET: WidgetManagerTabConfig = {
     translationKey: 'widget.image-thumbnails',
     icon: {
       type: 'name',
-      value: 'image-thumbnail-clear'
+      value: 'image-thumbnail'
     }
   }
 }

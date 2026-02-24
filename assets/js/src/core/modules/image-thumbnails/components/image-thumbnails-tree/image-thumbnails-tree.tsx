@@ -75,7 +75,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
     return (
       <Icon
         className={ styles.icon }
-        value="image-thumbnail-clear"
+        value="image-thumbnail"
       />
     )
   }
