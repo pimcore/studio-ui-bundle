@@ -98,6 +98,8 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
 
   abstract getFormFields (context: FieldDefinitionContext): React.JSX.Element
 
+  abstract getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element
+
   getAdditionalFormFields (context: FieldDefinitionContext): React.JSX.Element | null {
     return null
   }

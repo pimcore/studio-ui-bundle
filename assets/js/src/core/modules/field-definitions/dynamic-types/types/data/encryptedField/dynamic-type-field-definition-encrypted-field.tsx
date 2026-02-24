@@ -25,19 +25,20 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
     return [...super.getGroup(), 'other']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return ['encryptedFieldSupport']
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true })}
-        <FieldDefinitionEncryptedFieldFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionEncryptedFieldFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

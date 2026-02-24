@@ -12,7 +12,9 @@ import {
   DynamicTypeFieldDefinitionAbstract, type FieldDefinitionDataAbstract, type FieldDefinitionContext
 } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionLayoutFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/field-defintion-layout-form-fields'
+import { FormKit } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface FieldDefinitionLayout extends FieldDefinitionDataAbstract {
   name: string
@@ -48,11 +50,28 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <FieldDefinitionLayoutFormFields
-        context={ context }
-        id={ fieldDefinition?.name ?? id }
-        type={ this.id }
-      />
+      <>
+        <FieldDefinitionLayoutFormFields
+          context={ context }
+          id={ fieldDefinition?.name ?? id }
+          type={ this.id }
+        />
+        {this.getSpecificSettingsPanel(context)}
+      </>
     )
+  }
+
+  getSpecificSettingsPanel (context: FieldDefinitionContext): React.JSX.Element {
+    const { t } = useTranslation()
+
+    return (
+      <FormKit.Panel title={ t('specific-settings') }>
+        {this.getSpecificFormFields(context)}
+      </FormKit.Panel>
+    )
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return <></>
   }
 }
