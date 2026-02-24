@@ -18,7 +18,7 @@ export const useStyle = createStyles(({ css, token }) => {
       display: flex;
       gap: 5px;
       align-items: center;
-      jusify-content: center;
+      justify-content: center;
       padding: 5px;
       width: max-content;
       background: white;
@@ -36,9 +36,6 @@ export const useStyle = createStyles(({ css, token }) => {
         display: none;
       }
 
-      .dnd__overlay--icon-dragging {
-        display: none;
-      }
       .dnd__overlay--icon-invalid {
         color: ${token.colorErrorActive};
         display: none;
@@ -48,7 +45,7 @@ export const useStyle = createStyles(({ css, token }) => {
           display: flex
       }
 
-     .dnd__overlay--icon-valid, .dnd__overlay--icon-not-allowed, .dnd--has-valid-drop & .dnd__overlay--icon-dragging, .dnd--invalid & .dnd__overlay--icon-dragging {
+     .dnd__overlay--icon-valid, .dnd--has-valid-drop & .dnd__overlay--icon-dragging, .dnd--invalid & .dnd__overlay--icon-dragging {
           display: none;
       }
 
