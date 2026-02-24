@@ -45,7 +45,7 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
     }
   }
 
-  const transformationTypes = transformationDynamicTypeRegistry.getAll()
+  const transformationTypes = transformationDynamicTypeRegistry.getDynamicTypes()
 
   const menuItems = transformationTypes.map(type => ({
     key: type.getName(),

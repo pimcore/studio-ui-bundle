@@ -10,8 +10,7 @@
 
 import React, { useMemo, useCallback, useEffect } from 'react'
 import { FieldCollection } from '@Pimcore/components/form/controls/field-collection/field-collection'
-import { TransformationFieldCollectionRegistry } from '../../registries/transformation-field-collection-registry'
-import { transformationDynamicTypeRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { transformationFieldCollectionRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueryTransformationsFieldProps {
@@ -28,10 +27,6 @@ export const MediaQueryTransformationsField = ({
 
   useEffect(() => {
     initializeTransformationTypes()
-  }, [])
-
-  const fieldCollectionRegistry = useMemo(() => {
-    return new TransformationFieldCollectionRegistry(transformationDynamicTypeRegistry)
   }, [])
 
   const transformationsData = useMemo(() => 
@@ -52,7 +47,7 @@ export const MediaQueryTransformationsField = ({
     <FieldCollection
       value={transformationsData}
       onChange={handleChange}
-      registry={fieldCollectionRegistry}
+      registry={transformationFieldCollectionRegistry}
       disabled={disabled}
       style={{ width: '100%' }}
     />

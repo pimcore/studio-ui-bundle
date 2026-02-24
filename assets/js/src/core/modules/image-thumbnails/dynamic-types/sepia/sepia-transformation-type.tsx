@@ -14,10 +14,8 @@
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { type FieldConfig } from '../transformation-dynamic-type-interface'
-import React from 'react'
 
 export interface SepiaTransformationConfig {
-  // No configuration needed
 }
 
 @injectable()
@@ -33,11 +31,6 @@ export class SepiaTransformationType extends TransformationDynamicTypeAbstract {
   }
 
   getFieldConfig (): FieldConfig[] {
-    return [
-      this.createFieldConfig('info', 'text', 'Information', {
-        defaultValue: 'Nothing to configure',
-        props: { readOnly: true, disabled: true, title: 'This transformation applies a sepia effect automatically' }
-      })
-    ]
+    return []
   }
 }

@@ -15,7 +15,8 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { MediaQueryTabs } from '../media-query-tabs/media-query-tabs'
-import { generateMediaQueryId } from '../../utils/media-query-helpers'
+import { generateMediaQueryId, getDisplayName } from '../../utils/media-query-helpers'
+import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueriesPanelProps {
   mediaQueries: MediaQuery[]
@@ -57,7 +58,6 @@ export const MediaQueriesPanel = ({
     })
   }, [mediaQueries, onChange, modal, t])
 
-  // Simplified media query update handler
   const handleMediaQueryUpdate = useCallback((mediaQueryId: string, updatedMediaQuery: MediaQuery) => {
     const updatedMediaQueries = mediaQueries.map(mq => 
       mq.id === mediaQueryId ? updatedMediaQuery : mq
@@ -106,19 +106,4 @@ export const MediaQueriesPanel = ({
       />
     </Panel>
   )
-}
-
-// Helper functions
-function getDisplayName(query: string): string {
-  if (query.includes('min-width')) {
-    const match = query.match(/min-width:\s*(\d+)/)
-    return match ? `≥ ${match[1]}px` : query
-  }
-  
-  if (query.includes('max-width')) {
-    const match = query.match(/max-width:\s*(\d+)/)
-    return match ? `≤ ${match[1]}px` : query
-  }
-  
-  return query.length > 20 ? query.substring(0, 20) + '...' : query
 }

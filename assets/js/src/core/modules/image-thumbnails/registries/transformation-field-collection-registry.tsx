@@ -12,28 +12,30 @@ import React from 'react'
 import { FieldCollectionRegistry, type FieldCollectionRegistryItem } from '@Pimcore/components/form/controls/field-collection/field-collection-registry'
 import type { TransformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
 import { TransformationFieldCollectionItem } from '../components/transformation-field-collection-item'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-/**
- * Adapter that wraps TransformationDynamicTypeRegistry to work with FieldCollection pattern
- * Maintains all existing transformation dynamic types without modification
- */
 export class TransformationFieldCollectionRegistry extends FieldCollectionRegistry {
+  private isAdapted: boolean = false
+
   constructor(private readonly transformationRegistry: TransformationDynamicTypeRegistry) {
     super()
-    this.adaptTransformationTypes()
   }
 
-  /**
-   * Converts transformation dynamic types to field collection registry items
-   */
+  private ensureAdapted(): void {
+    if (!this.isAdapted && this.transformationRegistry.getDynamicTypes().length > 0) {
+      this.adaptTransformationTypes()
+      this.isAdapted = true
+    }
+  }
+
   private adaptTransformationTypes(): void {
-    const transformationItems = this.transformationRegistry.getAll()
+    const transformationItems = this.transformationRegistry.getDynamicTypes()
     
     transformationItems.forEach(transformation => {
       const registryItem: FieldCollectionRegistryItem = {
         type: transformation.getId(),
-        key: transformation.getId(), // Use getId() as key for consistency
-        translationKey: transformation.getLabel(), // Use getLabel() for display
+        key: transformation.getId(), 
+        translationKey: transformation.getLabel(), 
         component: React.createElement(TransformationFieldCollectionItem, { 
           transformationType: transformation.getId() 
         })
@@ -41,6 +43,26 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
       
       this.register(registryItem)
     })
+  }
+
+  /**
+   * Override parent method to ensure lazy adaptation before lookup
+   */
+  public getItemByType(type: string): FieldCollectionRegistryItem | undefined {
+    this.ensureAdapted()
+    const item = super.getItemByType(type)
+    if (item === undefined) {
+      trackError(new GeneralError(`No registry item found for type "${type}"`))
+    }
+    return item
+  }
+
+  /**
+   * Override parent method to ensure lazy adaptation before returning items
+   */
+  public getItems(): FieldCollectionRegistryItem[] {
+    this.ensureAdapted()
+    return super.getItems()
   }
 
   /**

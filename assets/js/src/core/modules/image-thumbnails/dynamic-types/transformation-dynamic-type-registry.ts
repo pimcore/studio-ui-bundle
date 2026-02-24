@@ -15,6 +15,7 @@ import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { TransformationFieldCollectionRegistry } from '../registries/transformation-field-collection-registry'
 
 @injectable()
 export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstract<TransformationDynamicTypeAbstract> {
@@ -27,26 +28,14 @@ export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstra
   overrideDynamicType(type: TransformationDynamicTypeAbstract): void {
     super.overrideDynamicType(type)
   }
-
-  // Backward compatibility methods
-  register(type: TransformationDynamicTypeAbstract): void {
-    this.registerDynamicType(type)
-  }
-
-  get(name: string): TransformationDynamicTypeAbstract | undefined {
-    return this.getDynamicType(name, false)
-  }
-
-  getAll(): TransformationDynamicTypeAbstract[] {
-    return this.getDynamicTypes()
-  }
 }
 
 export const transformationDynamicTypeRegistry = new TransformationDynamicTypeRegistry()
 
+export const transformationFieldCollectionRegistry = new TransformationFieldCollectionRegistry(transformationDynamicTypeRegistry)
+
 let isRegistered = false
 
-// Import transformation types - synchronous imports for immediate registration
 import { ResizeTransformationType } from './resize/resize-transformation-type'
 import { ScaleByHeightTransformationType } from './scale-by-height/scale-by-height-transformation-type'
 import { TrimTransformationType } from './trim/trim-transformation-type'
@@ -105,5 +94,4 @@ export function initializeTransformationTypes(): void {
   }
 }
 
-// Initialize transformation types on import
 initializeTransformationTypes()

@@ -11,7 +11,7 @@
 import React, { useCallback } from 'react'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { MediaQueryTransformationsField } from './media-query-transformations-field'
-import type { MediaQuery } from '../../types/media-query.types'
+import type { MediaQuery, TransformationType } from '../../types/media-query.types'
 
 interface MediaQueryTabContentProps {
   mediaQuery: MediaQuery
@@ -25,14 +25,12 @@ export const MediaQueryTabContent = ({
   disabled = false
 }: MediaQueryTabContentProps): React.JSX.Element => {
   
-  // Handle transformation changes with a single, clean API call
   const handleTransformationsChange = useCallback((transformations: Array<{ type: string; data: any }>) => {
     const updatedMediaQuery: MediaQuery = {
       ...mediaQuery,
       transformations: transformations.map((t, index) => ({
-        // Keep existing ID if available, generate new one if needed
         id: mediaQuery.transformations[index]?.id || `transformation-${Date.now()}-${index}`,
-        type: t.type,
+        type: t.type as TransformationType,
         config: t.data
       }))
     }

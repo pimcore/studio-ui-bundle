@@ -76,7 +76,7 @@ export function convertFromBackendFormat(
 }
 
 
-function getDisplayName(query: string): string {
+export function getDisplayName(query: string): string {
   if (query.includes('min-width')) {
     const match = query.match(/min-width:\s*(\d+)/)
     return match ? `≥ ${match[1]}px` : query
