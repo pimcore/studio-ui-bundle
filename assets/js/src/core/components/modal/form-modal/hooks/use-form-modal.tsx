@@ -29,6 +29,19 @@ import { createModalButtonTestId } from '@Pimcore/utils/test-id-generator'
 
 let form: formInstanceType | null = null
 
+function getFormModalButtonProps (props: ModalFuncProps): Pick<ModalFuncProps, 'okButtonProps' | 'cancelButtonProps'> {
+  return {
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    }
+  }
+}
+
 export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
@@ -135,14 +148,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
-    okButtonProps: {
-      'data-testid': createModalButtonTestId('ok', 'form'),
-      ...props.okButtonProps
-    },
-    cancelButtonProps: {
-      'data-testid': createModalButtonTestId('cancel', 'form'),
-      ...props.cancelButtonProps
-    },
+    ...getFormModalButtonProps(props),
     onOk: async () => {
       await submit(fieldName)
     },
@@ -181,14 +187,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
     width: 700,
-    okButtonProps: {
-      'data-testid': createModalButtonTestId('ok', 'form'),
-      ...props.okButtonProps
-    },
-    cancelButtonProps: {
-      'data-testid': createModalButtonTestId('cancel', 'form'),
-      ...props.cancelButtonProps
-    },
+    ...getFormModalButtonProps(props),
     onOk: async () => {
       const value = currentForm.getFieldValue(fieldName)
       props.onOk?.(value)
@@ -219,14 +218,7 @@ export function withConfirm (props: ConfirmFormModalProps, dontAskAgainRef: Reac
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
     cancelText: props.cancelText ?? i18n.t('no'),
-    okButtonProps: {
-      'data-testid': createModalButtonTestId('ok', 'form'),
-      ...props.okButtonProps
-    },
-    cancelButtonProps: {
-      'data-testid': createModalButtonTestId('cancel', 'form'),
-      ...props.cancelButtonProps
-    }
+    ...getFormModalButtonProps(props)
   }
 
   if (!isNonEmptyString(dontAskAgainKey)) {
@@ -278,14 +270,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
-    okButtonProps: {
-      'data-testid': createModalButtonTestId('ok', 'form'),
-      ...props.okButtonProps
-    },
-    cancelButtonProps: {
-      'data-testid': createModalButtonTestId('cancel', 'form'),
-      ...props.cancelButtonProps
-    },
+    ...getFormModalButtonProps(props),
     onOk: async () => {
       return await new Promise((resolve, reject) => {
         currentForm.validateFields()
