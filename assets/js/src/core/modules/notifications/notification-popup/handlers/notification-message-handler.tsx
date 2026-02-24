@@ -16,8 +16,7 @@ import { api } from '@Pimcore/modules/notifications/notifications-slice-enhanced
 import { store } from '@Pimcore/app/store'
 import { type NotificationInstance } from 'antd/es/notification/interface'
 import {selectCurrentUser} from "@Pimcore/modules/auth/user/user-slice";
-import {AnimatePresence, motion} from "framer-motion";
-import {NotificationPopupItem} from "../notification-popup-item";
+import {NotificationPopupCollapse, type OpenNotification} from "../notification-popup-collapse";
 
 interface NotificationMessagePayload {
     unreadNotificationsCount: number
@@ -30,12 +29,6 @@ interface NotificationMessagePayload {
         recipient: number
         sender: string | null
     }
-}
-
-interface OpenNotification {
-    id: number
-    title: string
-    sender: string | null
 }
 
 export class NotificationMessageHandler extends AbstractMessageHandler {
@@ -57,38 +50,25 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
     }
 
     private updatePopup (): void {
-        const onHideItem = (id: number) => {
-            this.openNotificationsRef.current = this.openNotificationsRef.current.filter((notification) => notification.id !== id)
+        const onClosePopup = (id?) => {
+            if (id) {
+                this.openNotificationsRef.current = this.openNotificationsRef.current.filter((notification) => notification.id !== id)
+                this.updatePopup()
+            } else {
+                this.openNotificationsRef.current = []
+            }
 
             if (this.openNotificationsRef.current.length === 0) {
                 this.notificationApi.destroy(this.POPUP_KEY)
-                return
             }
-
-            this.updatePopup()
         }
-
-        const notifications = [...this.openNotificationsRef.current].reverse()
-
-        const description = (
-            <AnimatePresence>
-                {notifications.map((notification) => (
-                    <motion.div
-                        animate={ { opacity: 1, height: 'auto' } }
-                        exit={ { opacity: 0, height: 1 } }
-                        initial={ { opacity: 0, height: 1 } }
-                        key={notification.id}
-                    >
-                        <NotificationPopupItem notification={notification} onHideItem={() => onHideItem(notification.id)} />
-                    </motion.div>
-                ))}
-            </AnimatePresence>
-        )
 
         this.notificationApi.open({
             key: this.POPUP_KEY,
             message: 'Notifications',
-            description,
+            description: <NotificationPopupCollapse
+                notifications={this.openNotificationsRef.current} onView={onClosePopup}
+            />,
             placement: 'bottomRight',
             duration: 0,
             closable: false
@@ -96,7 +76,6 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
     }
 
     async handleMessage (message: AbstractMercureMessage): Promise<void> {
-        // const { styles } = useStyles()
         const payload = message.payload as NotificationMessagePayload
 
         if (isNil(payload.notification)) {

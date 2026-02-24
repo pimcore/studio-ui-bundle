@@ -565,7 +565,9 @@ notifications.remove-all: Remove all
 notifications.new-notification: New Notification
 notifications.from: From
 notifications.hide: Hide
-notifications.mark-as-read: Mark as read
+notifications.new-notifications.show: View
+notifications.new-notifications.title.single: You have a new notification!
+notifications.new-notifications.title: You have new notifications!
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details

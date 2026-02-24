@@ -18,7 +18,7 @@ import { type BackgroundProcessor } from '../background-processor/services/backg
 import { DemoProcess } from './process/demo-process'
 import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
 import { type ComponentRegistry } from '../app/component-registry/component-registry'
-import { NotificationPopup } from './notification-popup'
+import { NotificationPopup } from './notification-popup/notification-popup'
 
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
