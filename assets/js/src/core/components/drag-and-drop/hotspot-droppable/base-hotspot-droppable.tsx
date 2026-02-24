@@ -66,7 +66,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
       }
     }))
 
-    document.body.classList.toggle('dnd--invalid', finalState === 'error')
+    document.getElementById('studio-dnd-overlay')?.classList.toggle('dnd--invalid', finalState === 'error')
   }, [disableDndActiveIndicator])
 
   // Update global valid drop state whenever hotspot states change
@@ -76,7 +76,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
 
     setHasValidDrop(hasAnyValidDrop)
     setIsValidDragOver(hasAnyValidOver)
-    document.body.classList.toggle('dnd--has-valid-drop', hasAnyValidDrop)
+    document.getElementById('studio-dnd-overlay')?.classList.toggle('dnd--has-valid-drop', hasAnyValidDrop)
   }, [hotspotStates])
 
   const updateAllHotspotStates = useCallback((info: DragAndDropInfo | null): void => {
@@ -96,6 +96,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
       )
       // Clear global drag state classes when drag ends
       setHasValidDrop(false)
+      console.log('Drag ended - resetting all hotspot states')
       document.body.classList.remove('dnd--has-valid-drop')
       return
     }
