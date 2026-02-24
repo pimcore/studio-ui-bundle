@@ -11,41 +11,21 @@
  * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-import React from 'react'
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
-import { createTransformationToolStripBox, type BaseTransformationToolStripBoxProps } from '../components/transformation-toolstrip-boxes/transformation-toolstrip-box-abstract'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 @injectable()
 export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstract<TransformationDynamicTypeAbstract> {
   public static readonly SERVICE_ID = 'image-thumbnails.transformation-dynamic-type-registry'
-  
-  private readonly toolstripBoxes = new Map<string, React.ComponentType<BaseTransformationToolStripBoxProps>>()
 
   registerDynamicType(type: TransformationDynamicTypeAbstract): void {
     super.registerDynamicType(type)
-    
-    try {
-      this.toolstripBoxes.set(type.getId(), createTransformationToolStripBox(type))
-    } catch (error) {
-      trackError(new GeneralError(`Failed to create toolstrip box for transformation type "${type.getId()}": ${error}`))
-    }
   }
 
   overrideDynamicType(type: TransformationDynamicTypeAbstract): void {
     super.overrideDynamicType(type)
-    
-    try {
-      this.toolstripBoxes.set(type.getId(), createTransformationToolStripBox(type))
-    } catch (error) {
-      trackError(new GeneralError(`Failed to override toolstrip box for transformation type "${type.getId()}": ${error}`))
-    }
-  }
-
-  getToolStripBox(id: string): React.ComponentType<BaseTransformationToolStripBoxProps> | undefined {
-    return this.toolstripBoxes.get(id)
   }
 
   // Backward compatibility methods

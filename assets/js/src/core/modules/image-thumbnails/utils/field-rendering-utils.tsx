@@ -173,7 +173,7 @@ export const renderFields = (
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
   return (
-    <Space direction="vertical" size="small" className="w-full">
+    <Space direction="vertical" size="small" className="w-full" style={{ height: 'auto', minHeight: 'auto' }}>
       {fieldConfigs.map((fieldConfig, index) => {
         const fieldName = field !== undefined ? [field, fieldConfig.name] : [fieldConfig.name]
         const isFirst = index === 0
@@ -195,7 +195,7 @@ export const renderFieldsForFieldCollection = (
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
   return (
-    <Space direction="vertical" size="small" className="w-full">
+    <Space direction="vertical" size="small" className="w-full" style={{ height: 'auto', minHeight: 'auto' }}>
       {fieldConfigs.map((fieldConfig, index) => {
         const fieldName = [fieldConfig.name] // FieldCollection handles the field indexing
         const isFirst = index === 0
