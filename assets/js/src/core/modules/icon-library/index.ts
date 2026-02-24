@@ -148,6 +148,7 @@ import favorites from '@Pimcore/assets/icons/favorites.inline.svg?react'
 import fieldCollectionField from '@Pimcore/assets/icons/field-collection-field.inline.svg?react'
 import fieldContainer from '@Pimcore/assets/icons/field-container.inline.svg?react'
 import fieldset from '@Pimcore/assets/icons/fieldset.inline.svg?react'
+import fileCheck03 from '@Pimcore/assets/icons/file-check-03.inline.svg?react'
 import fileExport from '@Pimcore/assets/icons/file-export.inline.svg?react'
 import fileLocked from '@Pimcore/assets/icons/file-locked.inline.svg?react'
 import filter from '@Pimcore/assets/icons/filter.inline.svg?react'
@@ -181,6 +182,7 @@ import imageThumbnailClear from '@Pimcore/assets/icons/image-thumbnail-clear.inl
 import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
+import importIcon from '@Pimcore/assets/icons/import.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
@@ -277,6 +279,7 @@ import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.
 import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import printSettings from '@Pimcore/assets/icons/print-settings.inline.svg?react'
 import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import productsup from '@Pimcore/assets/icons/productsup.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
@@ -327,6 +330,7 @@ import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
 import systemColumns from '@Pimcore/assets/icons/system-columns.inline.svg?react'
+import systemSettings from '@Pimcore/assets/icons/system-settings.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
 import tablet from '@Pimcore/assets/icons/tablet.inline.svg?react'
@@ -335,6 +339,7 @@ import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
+import test from '@Pimcore/assets/icons/test.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
 import thumbnailHtml from '@Pimcore/assets/icons/thumbnail-html.inline.svg?react'
@@ -352,6 +357,7 @@ import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
+import upload from '@Pimcore/assets/icons/upload.inline.svg?react'
 import urlSlug from '@Pimcore/assets/icons/url-slug.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
@@ -905,6 +911,10 @@ moduleSystem.registerModule({
       component: fieldset
     })
     iconLibrary.register({
+      name: 'file-check-03',
+      component: fileCheck03
+    })
+    iconLibrary.register({
       name: 'file-export',
       component: fileExport
     })
@@ -1035,6 +1045,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'import-csv',
       component: importCsv
+    })
+    iconLibrary.register({
+      name: 'import',
+      component: importIcon
     })
     iconLibrary.register({
       name: 'index-field',
@@ -1421,6 +1435,10 @@ moduleSystem.registerModule({
       component: preview
     })
     iconLibrary.register({
+      name: 'print-settings',
+      component: printSettings
+    })
+    iconLibrary.register({
       name: 'printpage',
       component: printpage
     })
@@ -1621,6 +1639,10 @@ moduleSystem.registerModule({
       component: systemColumns
     })
     iconLibrary.register({
+      name: 'system-settings',
+      component: systemSettings
+    })
+    iconLibrary.register({
       name: 'tab-panel',
       component: tabPanel
     })
@@ -1651,6 +1673,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tax-class',
       component: taxClass
+    })
+    iconLibrary.register({
+      name: 'test',
+      component: test
     })
     iconLibrary.register({
       name: 'text-field',
@@ -1719,6 +1745,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
+    })
+    iconLibrary.register({
+      name: 'upload',
+      component: upload
     })
     iconLibrary.register({
       name: 'url-slug',

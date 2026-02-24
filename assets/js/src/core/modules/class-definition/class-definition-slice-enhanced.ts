@@ -129,7 +129,10 @@ export const {
   useClassDefinitionImportMutation,
   useClassCustomLayoutGetIdentifierDataQuery,
   useClassSelectOptionGetTreeQuery,
-  useClassDefinitionGetBricksUsagesQuery
+  useClassGetAvailableVisibleFieldsQuery,
+  useClassGetSelectedVisibleFieldsQuery,
+  useClassDefinitionGetBricksUsagesQuery,
+  useClassFieldCollectionCollectionQuery
 } = api
 
 export { api }

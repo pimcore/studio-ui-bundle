@@ -37,109 +37,96 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
   getDropdownGroupInfos (): Record<string, GroupInfo> {
     return {
       layout: {
-        icon: {
-          value: 'new-layout',
-          type: 'name'
-        },
+        icon: { value: 'new-layout', type: 'name' },
         translationKey: 'field-definition.groups.layout'
       },
+      'layout/panel': {
+        icon: { value: 'panel', type: 'name' },
+        translationKey: 'field-definition.groups.layout.panel'
+      },
+      'layout/accordion': {
+        icon: { value: 'accordion', type: 'name' },
+        translationKey: 'field-definition.groups.layout.accordion'
+      },
+      'layout/fieldset': {
+        icon: { value: 'fieldset', type: 'name' },
+        translationKey: 'field-definition.groups.layout.fieldset'
+      },
+      'layout/fieldcontainer': {
+        icon: { value: 'field-container', type: 'name' },
+        translationKey: 'field-definition.groups.layout.fieldcontainer'
+      },
+      'layout/iframe': {
+        icon: { value: 'iframe', type: 'name' },
+        translationKey: 'field-definition.groups.layout.iframe'
+      },
+      'layout/region': {
+        icon: { value: 'region', type: 'name' },
+        translationKey: 'field-definition.groups.layout.region'
+      },
+      'layout/tabpanel': {
+        icon: { value: 'tabpanel', type: 'name' },
+        translationKey: 'field-definition.groups.layout.tabpanel'
+      },
+      'layout/text': {
+        icon: { value: 'text', type: 'name' },
+        translationKey: 'field-definition.groups.layout.text'
+      },
       data: {
-        icon: {
-          value: 'new-data-component',
-          type: 'name'
-        },
+        icon: { value: 'new-data-component', type: 'name' },
         translationKey: 'field-definition.groups.data'
       },
       'data/text': {
-        icon: {
-          value: 'content',
-          type: 'name'
-        },
+        icon: { value: 'content', type: 'name' },
         translationKey: 'field-definition.groups.data.text'
       },
       'data/numeric': {
-        icon: {
-          value: 'number-type',
-          type: 'name'
-        },
+        icon: { value: 'number-type', type: 'name' },
         translationKey: 'field-definition.groups.data.numeric'
       },
       'data/date': {
-        icon: {
-          value: 'date',
-          type: 'name'
-        },
+        icon: { value: 'date', type: 'name' },
         translationKey: 'field-definition.groups.data.date'
       },
       'data/select': {
-        icon: {
-          value: 'select-type',
-          type: 'name'
-        },
+        icon: { value: 'select-type', type: 'name' },
         translationKey: 'field-definition.groups.data.select'
       },
       'data/media': {
-        icon: {
-          value: 'media',
-          type: 'name'
-        },
+        icon: { value: 'media', type: 'name' },
         translationKey: 'field-definition.groups.data.media'
       },
       'data/relation': {
-        icon: {
-          value: 'relation',
-          type: 'name'
-        },
+        icon: { value: 'relation', type: 'name' },
         translationKey: 'field-definition.groups.data.relation'
       },
       'data/geo': {
-        icon: {
-          value: 'location-marker',
-          type: 'name'
-        },
+        icon: { value: 'location-marker', type: 'name' },
         translationKey: 'field-definition.groups.data.geographic'
       },
       'data/crm': {
-        icon: {
-          value: 'crm',
-          type: 'name'
-        },
+        icon: { value: 'crm', type: 'name' },
         translationKey: 'field-definition.groups.data.crm'
       },
       'data/structured': {
-        icon: {
-          value: 'batch-selection',
-          type: 'name'
-        },
+        icon: { value: 'batch-selection', type: 'name' },
         translationKey: 'field-definition.groups.data.structured'
       },
       'data/other': {
-        icon: {
-          value: 'other',
-          type: 'name'
-        },
+        icon: { value: 'other', type: 'name' },
         translationKey: 'field-definition.groups.data.other'
       }
-
     }
   }
 
-  protected buildGroupedActions (
-    types: DynamicTypeFieldDefinitionAbstract[],
-    actionKeyPrefix: string
-  ): TreeDataItem['actions'] {
+  protected buildGroupedActions (types: DynamicTypeFieldDefinitionAbstract[], actionKeyPrefix: string): TreeDataItem['actions'] {
     const groupInfos = this.getDropdownGroupInfos()
     const actions: TreeDataItem['actions'] = []
     const groupedTypes: Record<string, DynamicTypeFieldDefinitionAbstract[]> = {}
 
     types.forEach((type) => {
-      const groups = type.getGroup()
-      const groupKey = groups.join('/')
-
-      if (isNil(groupedTypes[groupKey])) {
-        groupedTypes[groupKey] = []
-      }
-
+      const groupKey = type.getGroup().join('/')
+      if (isNil(groupedTypes[groupKey])) { groupedTypes[groupKey] = [] }
       groupedTypes[groupKey].push(type)
     })
 
@@ -150,26 +137,14 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
 
       groupParts.forEach((group, index) => {
         currentGroupPath = index === 0 ? group : `${currentGroupPath}/${group}`
-        const groupKey = `group-${group}`
-        const groupMenuKey = `${actionKeyPrefix}group-${group}`
-        const isRootLevel = currentActions === actions
+        const groupKey = `group-${group}`; const groupMenuKey = `${actionKeyPrefix}group-${group}`; const isRootLevel = currentActions === actions
         let action = currentActions.find(a => a.key === groupKey)
 
         if (isNil(action)) {
           const baseTranslationKey = groupInfos[currentGroupPath]?.translationKey
           const shouldAddPrefix = isRootLevel && baseTranslationKey !== undefined && actionKeyPrefix !== 'convert-'
-          const groupTranslationKey = shouldAddPrefix
-            ? `${baseTranslationKey}.with-prefix.${actionKeyPrefix.replace('-', '')}`
-            : baseTranslationKey
-
-          action = {
-            key: groupKey,
-            menuKey: groupMenuKey,
-            icon: groupInfos[currentGroupPath]?.icon.value ?? '',
-            iconColorGroup: ['fieldDefinition_group_' + group, 'fieldDefinition'],
-            translationKey: groupTranslationKey,
-            actions: []
-          }
+          const groupTranslationKey = shouldAddPrefix ? `${baseTranslationKey}.with-prefix.${actionKeyPrefix.replace('-', '')}` : baseTranslationKey
+          action = { key: groupKey, menuKey: groupMenuKey, icon: groupInfos[currentGroupPath]?.icon.value ?? '', iconColorGroup: ['fieldDefinition_group_' + group, 'fieldDefinition'], translationKey: groupTranslationKey, actions: [] }
           currentActions.push(action)
         }
 
@@ -177,24 +152,12 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
           groupedTypes[groupPath].forEach((type) => {
             const isTypeAtRoot = action.actions!.length === 0 && isRootLevel
             const baseTypeTranslationKey = `field-definition.${kebabCase(type.id)}`
-            const shouldAddTypePrefix = isTypeAtRoot && actionKeyPrefix !== 'convert-'
-            const typeTranslationKey = shouldAddTypePrefix
-              ? `${baseTypeTranslationKey}.with-prefix.${actionKeyPrefix.replace('-', '')}`
-              : baseTypeTranslationKey
-
-            action.actions!.push({
-              key: `${actionKeyPrefix}${type.id}`,
-              icon: type.getIcon().value,
-              iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'],
-              translationKey: typeTranslationKey
-            })
+            const typeTranslationKey = isTypeAtRoot && actionKeyPrefix !== 'convert-' ? `${baseTypeTranslationKey}.with-prefix.${actionKeyPrefix.replace('-', '')}` : baseTypeTranslationKey
+            action.actions!.push({ key: `${actionKeyPrefix}${type.id}`, icon: type.getIcon().value, iconColorGroup: ['fieldDefinition_' + type.id, 'fieldDefinition'], translationKey: typeTranslationKey })
           })
-        } else {
-          currentActions = action.actions!
-        }
+        } else { currentActions = action.actions! }
       })
     }
-
     return this.optimizeActions(actions, actionKeyPrefix, true) ?? []
   }
 
@@ -204,6 +167,12 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     }
 
     if (actions.length === 1 && !isNil(actions[0].actions) && actions[0].actions.length > 0) {
+      // If it's a layout or data group at root level, don't promote its children
+      if (isRootLevel && (actions[0].key === 'group-layout' || actions[0].key === 'group-data')) {
+        actions[0].actions = this.optimizeActions(actions[0].actions, actionKeyPrefix, false)
+        return actions
+      }
+
       const promotedActions = this.optimizeActions(actions[0].actions, actionKeyPrefix, isRootLevel)
       // Add prefix only to items being promoted to the absolute root level (and not for convert)
       if (isRootLevel && actionKeyPrefix !== 'convert-') {
@@ -228,6 +197,12 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       }
 
       if (!isNil(action.actions) && action.actions.length === 1) {
+        // If it's a layout or data group, don't promote its only child
+        if (action.key === 'group-layout' || action.key === 'group-data') {
+          optimizedActions.push(action)
+          return
+        }
+
         const childAction = action.actions[0]
         // Add prefix only when promoting to root level (and not for convert)
         if (isRootLevel && actionKeyPrefix !== 'convert-' && childAction.translationKey !== undefined && !childAction.translationKey.includes('.with-prefix.')) {

@@ -19,6 +19,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
@@ -35,25 +36,28 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
-    const { item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
+    const { item, fieldBreadcrumbTitle, fieldValueByName, fieldPath, versionId, versionCount } = props
 
-    const getFieldData = ({ fieldData, fieldValue, fieldBreadcrumbTitle }: { fieldData: any, fieldValue: any, fieldBreadcrumbTitle: string }): IFormattedDataStructureData => {
+    const getFieldData = ({ fieldData, fieldValue, fieldBreadcrumbTitle, fieldPathValue }: { fieldData: any, fieldValue: any, fieldBreadcrumbTitle: string, fieldPathValue: string }): IFormattedDataStructureData => {
       return {
         fieldBreadcrumbTitle,
         versionId,
         versionCount,
         fieldData,
-        fieldValue
+        fieldValue,
+        fieldPath: fieldPathValue
       }
     }
 
-    const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId }: { data: ClassificationStoreGroup[], updatedFieldBreadcrumbTitle?: string, groupId?: number }): IFormattedDataStructureData[] => {
+    const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId, fieldPathValue = fieldPath }: { data: ClassificationStoreGroup[], updatedFieldBreadcrumbTitle?: string, groupId?: number, fieldPathValue?: string }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.keys)) {
           const breadcrumbField = dataItem.title ?? dataItem.name
           const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
-          return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id })
+          const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
+
+          return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
         }
 
         if (!isEmpty(dataItem.definition)) {
@@ -62,11 +66,15 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           const fieldValue: object = get(fieldValueByName, groupId)
 
           if (isEmpty(fieldValue)) {
-            return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle })
+            const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
+
+            return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
-            return getFieldData({ fieldData: { ...dataItem.definition, locale: key }, fieldValue: value[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle })
+            const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
+
+            return getFieldData({ fieldData: { ...dataItem.definition, locale: key }, fieldValue: value[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })
         }
 

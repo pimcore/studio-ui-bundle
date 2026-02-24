@@ -33,6 +33,7 @@ export const {
   useAdminSettingsUpdateMutation,
   useSettingAdminThumbnailQuery,
   useSystemSettingsGetQuery,
+  useSettingsUpdateMutation,
   useActiveBundlesGetQuery,
   usePingActionQuery,
   useLazyPingActionQuery,
