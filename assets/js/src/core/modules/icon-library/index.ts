@@ -148,6 +148,7 @@ import favorites from '@Pimcore/assets/icons/favorites.inline.svg?react'
 import fieldCollectionField from '@Pimcore/assets/icons/field-collection-field.inline.svg?react'
 import fieldContainer from '@Pimcore/assets/icons/field-container.inline.svg?react'
 import fieldset from '@Pimcore/assets/icons/fieldset.inline.svg?react'
+import fileCheck03 from '@Pimcore/assets/icons/file-check-03.inline.svg?react'
 import fileExport from '@Pimcore/assets/icons/file-export.inline.svg?react'
 import fileLocked from '@Pimcore/assets/icons/file-locked.inline.svg?react'
 import filter from '@Pimcore/assets/icons/filter.inline.svg?react'
@@ -908,6 +909,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'fieldset',
       component: fieldset
+    })
+    iconLibrary.register({
+      name: 'file-check-03',
+      component: fileCheck03
     })
     iconLibrary.register({
       name: 'file-export',
