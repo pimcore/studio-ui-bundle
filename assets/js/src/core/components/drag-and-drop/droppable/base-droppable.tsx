@@ -50,7 +50,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     const finalState = disableDndActiveIndicator && state === 'active' ? 'inactive' : state
     setDragState(finalState)
 
-    document.body.classList.toggle('dnd--invalid', finalState === 'error')
+    document.getElementById('studio-dnd-overlay')?.classList.toggle('dnd--invalid', finalState === 'error')
   }
 
   const handleChangeDragInfo = (event: DragInfoChangeEvent): void => {
