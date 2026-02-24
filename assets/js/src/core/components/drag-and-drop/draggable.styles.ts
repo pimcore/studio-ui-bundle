@@ -12,16 +12,15 @@ import { createGlobalStyle } from 'antd-style'
 
 export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
   return {
+    // Dragging state controls cursor globally
+    'body.dnd--dragging *': {
+      cursor: 'pointer !important'
+    },
 
-    '.dnd--invalid': {
-      cursor: 'not-allowed !important',
-      '& *': {
-        cursor: 'not-allowed !important'
-      },
-      '.dnd__overlay': {
-        background: token.colorErrorBg,
-        color: token.colorErrorActive
-      }
+    // Overlay styling when invalid
+    'body.dnd--dragging.dnd--invalid .dnd__overlay': {
+      background: token.colorErrorBg,
+      color: token.colorErrorActive
     }
   }
 })
