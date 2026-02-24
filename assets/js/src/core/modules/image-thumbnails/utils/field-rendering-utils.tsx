@@ -8,96 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { ConfigProvider } from 'antd'
-import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
-import { Form } from '../../form'
-import { useMultiFieldCollection } from './multi-field-collection-provider'
-import { ToolStripBox } from '../../../toolstrip/box/tool-strip-box'
-import { ToolStrip } from '../../../toolstrip/tool-strip'
-import { IconButton } from '../../../icon-button/icon-button'
-import { Space } from '../../../space/space'
-import { InputNumber } from '../../../input-number/input-number'
-import { Select } from '../../../select/select'
-import { Switch } from '../../../switch/switch'
-import { Input } from '../../../input/input'
-import { Slider } from '../../../slider/slider'
-import { ColorPicker } from '../../../color-picker/color-picker'
-import { ImagePicker } from '../../../image-picker/image-picker'
+import { Form } from '@Pimcore/components/form/form'
+import { Space } from '@Pimcore/components/space/space'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { Select } from '@Pimcore/components/select/select'
+import { Switch } from '@Pimcore/components/switch/switch'
+import { Input } from '@Pimcore/components/input/input'
+import { Slider } from '@Pimcore/components/slider/slider'
+import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
+import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
 import type { FieldConfig } from '@Pimcore/modules/image-thumbnails/dynamic-types/transformation-dynamic-type-interface'
 
-export interface MultiFieldCollectionItemProps {
-  field: number
-}
-
-const MultiFieldCollectionItemToolStrip = ({ 
-  title, 
-  field, 
-  disallowReorder, 
-  disallowAddRemove 
-}: { 
-  title: string
-  field: number
-  disallowReorder: boolean
-  disallowAddRemove: boolean
-}): React.ReactNode => {
-  const { move, remove } = useNumberedList()
-
-  const handleMoveUp = (): void => {
-    if (!disallowReorder && field > 0) {
-      move(field, field - 1)
-    }
-  }
-
-  const handleMoveDown = (): void => {
-    if (!disallowReorder) {
-      move(field, field + 1)
-    }
-  }
-
-  const handleRemove = (): void => {
-    if (!disallowAddRemove) {
-      remove(field)
-    }
-  }
-
-  return (
-    <ToolStrip title={title}>
-      {!disallowReorder && (
-        <Space size="mini">
-          <IconButton
-            icon={{ value: 'chevron-down' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              handleMoveDown()
-            }}
-            size="small"
-          />
-          <IconButton
-            icon={{ value: 'chevron-up' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              handleMoveUp()
-            }}
-            size="small"
-          />
-        </Space>
-      )}
-      {!disallowAddRemove && (
-        <IconButton
-          icon={{ value: 'trash' }}
-          onClick={(e) => {
-            e.stopPropagation()
-            handleRemove()
-          }}
-          size="small"
-        />
-      )}
-    </ToolStrip>
-  )
-}
-
-const renderField = (
+/**
+ * Renders a single field based on field configuration
+ */
+export const renderField = (
   field: FieldConfig,
   fieldName: (string | number)[],
   isFirst: boolean = false,
@@ -237,17 +164,46 @@ const renderField = (
   }
 }
 
-const renderFields = (
+/**
+ * Renders multiple fields based on field configurations
+ */
+export const renderFields = (
   fieldConfigs: FieldConfig[],
-  field: number,
+  field: number = 0,
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
   return (
     <Space direction="vertical" size="small" className="w-full">
       {fieldConfigs.map((fieldConfig, index) => {
-        const fieldName = [field, fieldConfig.name]
+        const fieldName = field !== undefined ? [field, fieldConfig.name] : [fieldConfig.name]
         const isFirst = index === 0
-        return renderField(fieldConfig, fieldName, isFirst, firstInputRef)
+        return (
+          <React.Fragment key={fieldConfig.name}>
+            {renderField(fieldConfig, fieldName, isFirst, firstInputRef)}
+          </React.Fragment>
+        )
+      })}
+    </Space>
+  )
+}
+
+/**
+ * Renders multiple fields for use inside FieldCollection components (no field index needed)
+ */
+export const renderFieldsForFieldCollection = (
+  fieldConfigs: FieldConfig[],
+  firstInputRef?: React.RefObject<any>
+): React.ReactNode => {
+  return (
+    <Space direction="vertical" size="small" className="w-full">
+      {fieldConfigs.map((fieldConfig, index) => {
+        const fieldName = [fieldConfig.name] // FieldCollection handles the field indexing
+        const isFirst = index === 0
+        return (
+          <React.Fragment key={fieldConfig.name}>
+            {renderField(fieldConfig, fieldName, isFirst, firstInputRef)}
+          </React.Fragment>
+        )
       })}
     </Space>
   )
@@ -257,7 +213,7 @@ const renderFields = (
  * Enhanced Form wrapper that fixes Ant Design form item height issues
  * by setting itemMarginBottom to 0 in the ConfigProvider
  */
-const ToolStripFormWrapper = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
+export const ToolStripFormWrapper = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   return (
     <ConfigProvider
       theme={{
@@ -270,56 +226,5 @@ const ToolStripFormWrapper = ({ children }: { children: React.ReactNode }): Reac
     >
       {children}
     </ConfigProvider>
-  )
-}
-
-export const MultiFieldCollectionItem = (props: MultiFieldCollectionItemProps): React.JSX.Element => {
-  const { field } = props
-  const { values } = useNumberedList()
-  const { registry, disallowReorder, disallowAddRemove } = useMultiFieldCollection()
-  const value = values[field]
-
-  const type = value?.type
-  const firstInputRef = useRef<any>(null)
-
-  if (type == null) {
-    return <div>Invalid item: missing type</div>
-  }
-
-  const registryItem = registry.getDynamicType(type as string, false)
-
-  if (registryItem == null) {
-    return <div>Unknown type: {type}</div>
-  }
-
-  const handleBoxClick = (): void => {
-    setTimeout(() => firstInputRef.current?.focus(), 100)
-  }
-
-  const fieldConfigs = registryItem.getFieldConfig()
-
-  return (
-    <ToolStripFormWrapper>
-      <ToolStripBox
-        onClick={handleBoxClick}
-        renderToolStripStart={
-          <MultiFieldCollectionItemToolStrip
-            title={registryItem.getLabel()}
-            field={field}
-            disallowReorder={disallowReorder}
-            disallowAddRemove={disallowAddRemove}
-          />
-        }
-      >
-        <Form.Item
-          hidden
-          name={[field, 'type']}
-        >
-          <Input />
-        </Form.Item>
-
-        {renderFields(fieldConfigs, field, firstInputRef)}
-      </ToolStripBox>
-    </ToolStripFormWrapper>
   )
 }

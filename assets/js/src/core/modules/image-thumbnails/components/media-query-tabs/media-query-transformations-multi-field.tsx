@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
-import { MultiFieldCollection } from '@Pimcore/components/form/controls/multi-field-collection'
+import { FieldCollection } from '@Pimcore/components/form/controls/field-collection/field-collection'
+import { TransformationFieldCollectionRegistry } from '../../registries/transformation-field-collection-registry'
 import { transformationDynamicTypeRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { MediaQuery, Transformation } from '../../types/media-query.types'
 import type { TransformationDynamicTypeInterface } from '../../dynamic-types/transformation-dynamic-type-interface'
@@ -28,7 +29,7 @@ interface MediaQueryTransformationsMultiFieldProps {
 interface TransformationFormData {
   transformations: Array<{
     type: string
-    [key: string]: any
+    data: any
   }>
 }
 
@@ -48,87 +49,81 @@ export const MediaQueryTransformationsMultiField = ({
     initializeTransformationTypes()
   }, [])
 
-  // Convert transformations to form data format
-  const transformationsData = mediaQuery.transformations.map(transformation => ({
-    type: transformation.type,
-    ...transformation.config
-  }))
+  // Create the field collection registry adapter
+  const fieldCollectionRegistry = useMemo(() => {
+    return new TransformationFieldCollectionRegistry(transformationDynamicTypeRegistry)
+  }, [])
 
-  const initialValues: TransformationFormData = {
-    transformations: transformationsData
-  }
+  // Convert transformations to field collection format
+  const transformationsData = useMemo(() => 
+    mediaQuery.transformations.map(transformation => ({
+      type: transformation.type,
+      data: transformation.config || {}
+    })), [mediaQuery.transformations]
+  )
 
   // Sync external changes to form
   useEffect(() => {
-    const newTransformationsData = mediaQuery.transformations.map(transformation => ({
-      type: transformation.type,
-      ...transformation.config
-    }))
-    
-    form.setFieldValue('transformations', newTransformationsData)
-  }, [mediaQuery.transformations, form])
+    form.setFieldValue('transformations', transformationsData)
+  }, [transformationsData, form])
 
   // Handle form changes and sync back to parent
-  const handleValuesChange = (changedValues: Partial<TransformationFormData>, allValues: TransformationFormData): void => {
-    if (changedValues.transformations != null) {
-      const newTransformations = changedValues.transformations
-      const oldTransformations = mediaQuery.transformations
+  const handleTransformationsChange = (newTransformations: Array<{ type: string; data: any }> | undefined): void => {
+    if (!newTransformations) return
 
-      // Handle additions
-      if (newTransformations.length > oldTransformations.length) {
-        const newItem = newTransformations[newTransformations.length - 1]
-        const { type, ...config } = newItem
-        const transformationType = transformationDynamicTypeRegistry.getDynamicType(type, false)
-        if (transformationType != null) {
-          onTransformationAdd(transformationType, config)
-        }
-        return
+    const oldTransformations = mediaQuery.transformations
+
+    // Handle additions
+    if (newTransformations.length > oldTransformations.length) {
+      const newItem = newTransformations[newTransformations.length - 1]
+      const transformationType = transformationDynamicTypeRegistry.getDynamicType(newItem.type, false)
+      if (transformationType != null) {
+        onTransformationAdd(transformationType, newItem.data)
       }
-
-      // Handle removals
-      if (newTransformations.length < oldTransformations.length) {
-        // Find which transformation was removed by comparing array positions
-        for (let i = 0; i < oldTransformations.length; i++) {
-          if (i >= newTransformations.length || 
-              newTransformations[i] == null ||
-              newTransformations[i].type !== oldTransformations[i].type) {
-            onTransformationRemove(oldTransformations[i].id)
-            break
-          }
-        }
-        return
-      }
-
-      // Handle updates (same length, different content)
-      newTransformations.forEach((newItem, index) => {
-        const oldTransformation = oldTransformations[index]
-        if (oldTransformation != null && newItem != null) {
-          const { type, ...config } = newItem
-          // Deep comparison of config
-          if (JSON.stringify(config) !== JSON.stringify(oldTransformation.config)) {
-            onTransformationUpdate(oldTransformation.id, config)
-          }
-        }
-      })
+      return
     }
+
+    // Handle removals
+    if (newTransformations.length < oldTransformations.length) {
+      // Find which transformation was removed by comparing array positions
+      for (let i = 0; i < oldTransformations.length; i++) {
+        if (i >= newTransformations.length || 
+            newTransformations[i] == null ||
+            newTransformations[i].type !== oldTransformations[i].type) {
+          onTransformationRemove(oldTransformations[i].id)
+          break
+        }
+      }
+      return
+    }
+
+    // Handle updates (same length, different content)
+    newTransformations.forEach((newItem, index) => {
+      const oldTransformation = oldTransformations[index]
+      if (oldTransformation != null && newItem != null) {
+        // Deep comparison of config
+        if (JSON.stringify(newItem.data) !== JSON.stringify(oldTransformation.config)) {
+          onTransformationUpdate(oldTransformation.id, newItem.data)
+        }
+      }
+    })
   }
 
   return (
     <div style={{ padding: '16px', width: '100%', minHeight: '200px' }}>
       <Form
         form={form}
-        initialValues={initialValues}
         layout="vertical"
-        onValuesChange={handleValuesChange}
       >
         <Form.Item
           name="transformations"
           style={{ marginBottom: 0 }}
         >
-          <MultiFieldCollection
-            registry={transformationDynamicTypeRegistry}
+          <FieldCollection
+            registry={fieldCollectionRegistry}
             title={t('image-thumbnails.editor.transformations')}
             collapsed={false}
+            onChange={handleTransformationsChange}
           />
         </Form.Item>
       </Form>
