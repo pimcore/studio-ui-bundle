@@ -38,6 +38,7 @@ export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): Rea
       justify="center"
     >
       <IconButton
+        data-testid="translations-delete-button"
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }

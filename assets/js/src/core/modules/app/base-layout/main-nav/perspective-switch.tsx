@@ -23,13 +23,20 @@ export const PerspectiveSwitch = ({ setIsOpen }: PerspectiveSwitchProps): React.
   const { switchPerspective } = usePerspectives()
   const user = useUser()
   return (
-    <div className={ 'main-nav__bottom' }>
+    <div
+      className={ 'main-nav__bottom' }
+      data-testid="perspective-switch-container"
+    >
       <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
-      <ul className={ 'main-nav__list-inline' }>
+      <ul
+        className={ 'main-nav__list-inline' }
+        data-testid="perspective-switch-list"
+      >
         {user.perspectives.map((perspective, index) => (
           <li key={ perspective.id }>
             <IconTextButton
               color={ perspective.id === user.activePerspective ? 'primary' : 'secondary' }
+              data-testid={ `perspective-button-${perspective.name}` }
               icon={ perspective.icon }
               onClick={ async () => {
                 void switchPerspective(perspective)

@@ -63,6 +63,7 @@ export const SourceDefinition = ({ form, currentData, updateFormData }: IReportC
       >
         <IconTextButton
           className={ styles.dropdownButton }
+          data-testid="report-source-add-button"
           icon={ { value: 'plus-circle' } }
         >
           {t('add')}
@@ -93,6 +94,7 @@ export const SourceDefinition = ({ form, currentData, updateFormData }: IReportC
             name="type"
           >
             <Select
+              data-testid="report-source-type-select"
               fieldNames={ { label: 'label', value: 'key' } }
               onChange={ (value: string) => { handleSourceDefinitionTypeUpdate(value) } }
               options={ sourceDefinitionOptions }

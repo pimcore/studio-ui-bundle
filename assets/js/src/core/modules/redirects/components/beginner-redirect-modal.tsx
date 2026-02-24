@@ -85,6 +85,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
           rules={ [{ required: true, message: t('redirects.beginner-modal.type.required') }] }
         >
           <Select
+            data-testid="redirects-type-select"
             options={ typeOptions }
             placeholder={ t('redirects.beginner-modal.type') }
           />

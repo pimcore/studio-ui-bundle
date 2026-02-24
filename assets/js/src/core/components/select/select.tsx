@@ -28,6 +28,7 @@ export type SelectTheme = 'default' | 'primary'
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  dataTestId?: string
   inherited?: boolean
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
@@ -35,7 +36,22 @@ export interface SelectProps extends AntdSelectProps {
   loadingSkeleton?: boolean
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', loadingSkeleton = false, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({
+  customIcon,
+  customArrowIcon,
+  mode,
+  status,
+  className,
+  allowClear,
+  inherited,
+  value,
+  width,
+  minWidth,
+  theme = 'default',
+  loadingSkeleton = false,
+  dataTestId,
+  ...antdSelectProps
+}, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
@@ -145,13 +161,15 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }
 
   return (
-    <div className={ selectContainerClassNames }>
-      {withCustomIcon && (
-        <Icon
-          className={ customIconClassNames }
-          value={ customIcon! }
-        />
-      )}
+    <div
+      className={ selectContainerClassNames }
+      data-testid={ dataTestId }
+    >      {withCustomIcon && (
+    <Icon
+      className={ customIconClassNames }
+      value={ customIcon! }
+    />
+    )}
       <AntdSelect
         allowClear={ allowClear }
         className={ selectClassNames }
