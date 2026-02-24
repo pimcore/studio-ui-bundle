@@ -55,7 +55,7 @@ export const useStyle = createStyles(({ css, token }) => {
       .dnd--has-valid-drop & .dnd__overlay--icon-valid {
         display: flex;
       }
-      .dnd--invalid & .dnd__overlay--icon-invvalid {
+      .dnd--invalid & .dnd__overlay--icon-invalid {
         display: flex;
       }
 
