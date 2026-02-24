@@ -24,9 +24,18 @@ export const DragOverlay = (props: DragOverlayProps): React.JSX.Element => {
     <div
       className={ ['dnd__overlay', styles.dragOverlay].join(' ') }
     >
-      <Icon value="drag-option" className="dnd__overlay--icon-dragging" />
-      <Icon value="checkmark" className="dnd__overlay--icon-valid"/>
-      <Icon value="cancel" className="dnd__overlay--icon-invalid" />
+      <Icon
+        className="dnd__overlay--icon-dragging"
+        value="drag-option"
+      />
+      <Icon
+        className="dnd__overlay--icon-valid"
+        value="checkmark"
+      />
+      <Icon
+        className="dnd__overlay--icon-invalid"
+        value="cancel"
+      />
       <Icon { ...props.info.icon } /> {props.info.title}
     </div>
   )
