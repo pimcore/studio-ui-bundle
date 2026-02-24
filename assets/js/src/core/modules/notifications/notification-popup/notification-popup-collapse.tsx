@@ -104,7 +104,7 @@ export const NotificationPopupCollapse: React.FC<NotificationPopupCollapseProps>
             bordered={false}
             hasContentSeparator={false}
             items={[item]}
-            contentPadding={0}
+            contentPadding={'none'}
         />
     )
 }
