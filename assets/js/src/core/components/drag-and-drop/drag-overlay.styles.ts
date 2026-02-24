@@ -15,24 +15,48 @@ export const useStyle = createStyles(({ css, token }) => {
     dragOverlay: css`
       margin-top: 15px;
       margin-left: 15px;
-      display: inline-flex;
+      display: flex;
       gap: 5px;
       align-items: center;
+      jusify-content: center;
       padding: 5px;
       width: max-content;
       background: white;
       box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
-      box-sizing: border-box;
+      box-sizing: border-box; 
 
       .dnd--invalid & {
         background: ${token.colorErrorBg};
         color: ${token.colorErrorActive};
       }
 
-      .dnd--has-valid-drop & {
-        background: ${token.colorSuccessBg};
+
+      .dnd__overlay--icon-valid {
         color: ${token.colorSuccessActive};
-        cursor: not-allowed !important;
+        display: none;
+      }
+
+      .dnd__overlay--icon-dragging {
+        display: none;
+      }
+      .dnd__overlay--icon-invalid {
+        color: ${token.colorErrorActive};
+        display: none;
+      }
+
+      .dnd__overlay--icon-dragging {
+          display: flex
+      }
+
+     .dnd__overlay--icon-valid, .dnd__overlay--icon-not-allowed, .dnd--has-valid-drop & .dnd__overlay--icon-dragging, .dnd--invalid & .dnd__overlay--icon-dragging {
+          display: none;
+      }
+
+      .dnd--has-valid-drop & .dnd__overlay--icon-valid {
+        display: flex;
+      }
+      .dnd--invalid & .dnd__overlay--icon-invvalid {
+        display: flex;
       }
 
     `

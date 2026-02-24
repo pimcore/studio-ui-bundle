@@ -12,15 +12,6 @@ import { createGlobalStyle } from 'antd-style'
 
 export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
   return {
-    '.dnd--drag-valid': {
-      cursor: 'pointer !important',
-      border: '3px solid red !important',
-    },
-    '.dnd--invalid': {
-      cursor: 'not-allowed !important',
-      '& *': {
-        cursor: 'not-allowed !important',
-      },
-    },
+
   }
 })
