@@ -11,7 +11,7 @@
 import { useCurrentConfiguration } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
-import { useClassCustomLayoutGetIdentifierDataQuery, usePimcoreStudioApiClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
+import { useClassCustomLayoutGetIdentifierDataQuery, useClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useEffect } from 'react'
@@ -24,7 +24,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
   const { closeModal } = useAddModal()
   const { configuration } = useCurrentConfiguration()
   const { data, isLoading, error } = useClassCustomLayoutGetIdentifierDataQuery({ classDefinitionId: configuration!.id })
-  const [createCustomLayout] = usePimcoreStudioApiClassCustomLayoutCreateMutation()
+  const [createCustomLayout] = useClassCustomLayoutCreateMutation()
   const { openConfiguration } = useItems()
 
   useEffect(() => {

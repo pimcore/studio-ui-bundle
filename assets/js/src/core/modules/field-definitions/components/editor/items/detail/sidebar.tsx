@@ -225,7 +225,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       return titleComponent
     }
 
-    if (currentFieldDefinition.name !== 'pimcore_root') {
+    if (node.key !== structure?.id) {
       const treeNode = node as TreeDataItem
       const currentPath = Array.isArray(treeNode.meta?.currentPath) ? treeNode.meta.currentPath as string[] : []
       const layout = getLayout({ startNode: node.key.toString() })
@@ -379,12 +379,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
         return {
           ...initialTreeItem,
-          ...(fieldDefinition.name === 'pimcore_root' ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
+          ...(initialTreeItem.key === structure?.id ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions: [
             ...(actions ?? []),
 
-            ...(fieldDefinition.name !== 'pimcore_root' && !isCustomLayout
+            ...(initialTreeItem.key !== structure?.id && !isCustomLayout
               ? [
                   {
                     key: 'copy',
@@ -400,7 +400,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 }]
               : []),
 
-            ...(fieldDefinition.name !== 'pimcore_root'
+            ...(initialTreeItem.key !== structure?.id
               ? [
                   {
                     key: 'delete',
@@ -478,9 +478,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   }
 
   const onSelected: ITreeElementProps['onSelected'] = (key: string, node) => {
-    const fieldDef = fieldDefinitions[key]
-
-    if (fieldDef.name === 'pimcore_root') {
+    if (key === structure?.id) {
       setCurrentFieldDefinitionId(null)
       setCurrentFieldDefinitionIdPath(null)
       return

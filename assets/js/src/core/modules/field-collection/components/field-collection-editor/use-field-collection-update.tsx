@@ -8,25 +8,28 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassCustomLayoutUpdateMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassFieldCollectionUpdateMutation } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
-import { useCustomLayoutLayout } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/layout-provider'
+import { useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type AnyMutationHook } from 'types/react-query'
 
-export const useCustomLayoutUpdateMutation: AnyMutationHook = (options) => {
-  const [fetch, result] = useClassCustomLayoutUpdateMutation(options)
-  const { getLayout } = useCustomLayoutLayout()
+export const useFieldCollectionUpdate: AnyMutationHook = (options) => {
+  const [fetch, result] = useClassFieldCollectionUpdateMutation(options)
+  const { getLayout } = useLayout()
   const { generalSettings } = useGeneralSettings()
 
   const decoratedFetch = (): ReturnType<typeof fetch> => {
+    // generalSettings.id holds the field collection key (mapped in the items query)
+    const key = (generalSettings as any)?.id as string
+
     return fetch({
-      customLayoutId: String(generalSettings!.id),
-      customLayoutUpdate: {
+      key,
+      fieldCollectionUpdate: {
         configuration: {
           children: getLayout()!.children ?? []
         },
         values: {
-          ...generalSettings!
+          ...generalSettings
         }
       }
     })
