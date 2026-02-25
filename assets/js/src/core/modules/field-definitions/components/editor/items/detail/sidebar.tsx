@@ -360,7 +360,38 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       )
     }
 
-    return titleComponent
+    // Root node — not draggable, but accepts drops
+    return (
+      <HotspotDroppable
+        hotspots={ [
+          {
+            id: 'drop-middle',
+            position: { x: '0', y: '0', width: '100%', height: '100%' },
+            isValidContext: (info) => {
+              if (info.type !== 'field-definition') return false
+              const rootPath = [structure!.id]
+              if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                const draggedCurrentPath = findCurrentPath((info as FieldDefinitionDragDropInfo).data.internal.id) ?? []
+                return isValidChildFieldDefinition(rootPath, draggedCurrentPath)
+              }
+              const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+              return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(rootPath, externalLayout)
+            },
+            onDrop: (info) => {
+              const rootId = structure!.id
+              if (isEqual(info.data.area, area)) {
+                moveFieldDefinition((info as FieldDefinitionDragDropInfo).data.internal.id, rootId, 0)
+              } else {
+                addExternalFieldDefinition(rootId, (info as FieldDefinitionDragDropInfo).data.external as Layout, 0)
+              }
+              expandNode(rootId)
+            }
+          }
+        ] }
+      >
+        {titleComponent}
+      </HotspotDroppable>
+    )
   }
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
