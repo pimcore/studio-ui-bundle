@@ -45,6 +45,21 @@ export const NotificationPopup = (): React.JSX.Element => {
     })
   }, [])
 
+  const handleOnView = (id?:number) => {
+      setOpenNotifications((prev) => {
+        if (id !== undefined) {
+          const newNotifications = prev.filter((notification) => notification.id !== id)
+          if (newNotifications.length === 0) {
+            notificationApi.destroy(POPUP_KEY)
+          }
+          return newNotifications
+        }
+
+        notificationApi.destroy(POPUP_KEY)
+        return []
+      })
+  }
+
   useEffect(() => {
     if (openNotifications.length > 0) {
       notificationApi.open({
@@ -53,20 +68,7 @@ export const NotificationPopup = (): React.JSX.Element => {
         description: (
           <NotificationPopupCollapse
             notifications={ openNotifications }
-            onView={ (id?: number) => {
-              setOpenNotifications((prev) => {
-                if (id !== undefined) {
-                  const newNotifications = prev.filter((notification) => notification.id !== id)
-                  if (newNotifications.length === 0) {
-                    notificationApi.destroy(POPUP_KEY)
-                  }
-                  return newNotifications
-                }
-
-                notificationApi.destroy(POPUP_KEY)
-                return []
-              })
-            } }
+            onView={ handleOnView }
           />
         ),
         placement: 'bottomRight',
