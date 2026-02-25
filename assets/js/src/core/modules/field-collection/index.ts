@@ -14,6 +14,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { FieldCollectionWidget } from '@Pimcore/modules/field-collection/field-collection-widget'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -30,6 +32,8 @@ moduleSystem.registerModule({
       label: 'navigation.field-collections',
       className: 'fieldcollection',
       order: 200,
+      permission: UserPermission.FieldCollections,
+      perspectivePermission: NavPermission.FieldCollections,
       widgetConfig: {
         name: 'field-collections',
         id: 'field-collections',
