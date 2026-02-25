@@ -31,12 +31,16 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
     }
   }, [error])
 
+  useEffect(() => {
+    if (data?.suggestedId !== undefined) {
+      form.setFieldValue('uniqueIdentifier', data.suggestedId)
+    }
+  }, [data?.suggestedId])
+
   const onFormFinish = (values: any): void => {
     if (data === undefined) {
       return
     }
-
-    form.resetFields()
 
     createClassDefinition({
       createClassDefinition: {
@@ -44,6 +48,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
         uid: values.uniqueIdentifier
       }
     }).then((data) => {
+      form.resetFields()
       closeModal()
 
       const classDef: ConfigurationPartial = {

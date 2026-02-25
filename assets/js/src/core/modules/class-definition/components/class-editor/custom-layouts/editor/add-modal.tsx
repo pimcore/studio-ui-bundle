@@ -33,12 +33,16 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
     }
   }, [error])
 
+  useEffect(() => {
+    if (data?.suggestedId !== undefined) {
+      form.setFieldValue('uniqueIdentifier', data.suggestedId)
+    }
+  }, [data?.suggestedId])
+
   const onFormFinish = (values: any): void => {
     if (data === undefined) {
       return
     }
-
-    form.resetFields()
 
     createCustomLayout({
       customLayoutId: data.suggestedId,
@@ -49,6 +53,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
         name: values.name
       }
     }).then((data) => {
+      form.resetFields()
       closeModal()
 
       const layoutDef: ConfigurationPartial = {
