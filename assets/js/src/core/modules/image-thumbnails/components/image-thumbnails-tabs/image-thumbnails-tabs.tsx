@@ -39,9 +39,9 @@ export const ImageThumbnailsTabs = ({
       icon: <Icon value="image-thumbnail" />,
       children: (
         <ImageThumbnailsEditor
-          selectedThumbnail={tab.thumbnail}
-          isActive={activeTabKey === tab.thumbnail.id}
-          onChange={(isDirty) => onTabDirtyChange(tab.thumbnail.id, isDirty)}
+          isActive={ activeTabKey === tab.thumbnail.id }
+          onChange={ (isDirty) => { onTabDirtyChange(tab.thumbnail.id, isDirty) } }
+          selectedThumbnail={ tab.thumbnail }
         />
       )
     }))
@@ -49,13 +49,13 @@ export const ImageThumbnailsTabs = ({
 
   return (
     <Tabs
-      activeKey={activeTabKey}
-      className={styles.tabs}
+      activeKey={ activeTabKey }
+      className={ styles.tabs }
       hasStickyHeader
-      items={tabItems}
-      onChange={onChangeTab}
-      onClose={onCloseTab}
-      rootClassName={styles.tabsContainer}
+      items={ tabItems }
+      onChange={ onChangeTab }
+      onClose={ onCloseTab }
+      rootClassName={ styles.tabsContainer }
       type="editable-card"
     />
   )

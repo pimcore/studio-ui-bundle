@@ -1,40 +1,19 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - Pimcore Open Core License (POCL)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
+import type React from 'react'
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-import { TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
+import { type TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { TransformationFieldCollectionRegistry } from '../registries/transformation-field-collection-registry'
-
-@injectable()
-export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstract<TransformationDynamicTypeAbstract> {
-  public static readonly SERVICE_ID = 'image-thumbnails.transformation-dynamic-type-registry'
-
-  registerDynamicType(type: TransformationDynamicTypeAbstract): void {
-    super.registerDynamicType(type)
-  }
-
-  overrideDynamicType(type: TransformationDynamicTypeAbstract): void {
-    super.overrideDynamicType(type)
-  }
-}
-
-export const transformationDynamicTypeRegistry = new TransformationDynamicTypeRegistry()
-
-export const transformationFieldCollectionRegistry = new TransformationFieldCollectionRegistry(transformationDynamicTypeRegistry)
-
-let isRegistered = false
 
 import { ResizeTransformationType } from './resize/resize-transformation-type'
 import { ScaleByHeightTransformationType } from './scale-by-height/scale-by-height-transformation-type'
@@ -60,9 +39,34 @@ import { ApplyMaskTransformationType } from './apply-mask/apply-mask-transformat
 import { TiffOriginalTransformationType } from './tiff-original/tiff-original-transformation-type'
 import { OnePixelTransformationType } from './one-pixel/one-pixel-transformation-type'
 
-export function initializeTransformationTypes(): void {
+@injectable()
+export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstract<TransformationDynamicTypeAbstract> {
+  public static readonly SERVICE_ID = 'image-thumbnails.transformation-dynamic-type-registry'
+
+  registerDynamicType (type: TransformationDynamicTypeAbstract): void {
+    super.registerDynamicType(type)
+  }
+
+  overrideDynamicType (type: TransformationDynamicTypeAbstract): void {
+    super.overrideDynamicType(type)
+  }
+
+  getToolStripBox (transformationType: string): React.ComponentType<any> | null {
+    // Return null to use the default fallback component
+    // This can be extended later to return type-specific toolstrip components
+    return null
+  }
+}
+
+export const transformationDynamicTypeRegistry = new TransformationDynamicTypeRegistry()
+
+export const transformationFieldCollectionRegistry = new TransformationFieldCollectionRegistry(transformationDynamicTypeRegistry)
+
+let isRegistered = false
+
+export function initializeTransformationTypes (): void {
   if (isRegistered) return
-  
+
   try {
     transformationDynamicTypeRegistry.registerDynamicType(new CoverTransformationType())
     transformationDynamicTypeRegistry.registerDynamicType(new ResizeTransformationType())
@@ -87,7 +91,7 @@ export function initializeTransformationTypes(): void {
     transformationDynamicTypeRegistry.registerDynamicType(new ApplyMaskTransformationType())
     transformationDynamicTypeRegistry.registerDynamicType(new TiffOriginalTransformationType())
     transformationDynamicTypeRegistry.registerDynamicType(new OnePixelTransformationType())
-    
+
     isRegistered = true
   } catch (error) {
     trackError(new GeneralError(`Error during transformation types initialization: ${error}`))

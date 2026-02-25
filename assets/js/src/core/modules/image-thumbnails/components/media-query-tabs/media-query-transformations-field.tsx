@@ -15,7 +15,7 @@ import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueryTransformationsFieldProps {
   mediaQuery: MediaQuery
-  onChange: (transformations: Array<{ type: string; data: any }>) => void
+  onChange: (transformations: Array<{ type: string, data: any }>) => void
   disabled?: boolean
 }
 
@@ -24,32 +24,29 @@ export const MediaQueryTransformationsField = ({
   onChange,
   disabled = false
 }: MediaQueryTransformationsFieldProps): React.JSX.Element => {
-
   useEffect(() => {
     initializeTransformationTypes()
   }, [])
 
-  const transformationsData = useMemo(() => 
+  const transformationsData = useMemo(() =>
     mediaQuery.transformations.map(transformation => ({
       type: transformation.type,
-      data: transformation.config || {}
-    })), 
-    [mediaQuery.transformations]
+      data: transformation.config ?? {}
+    })),
+  [mediaQuery.transformations]
   )
 
-  const handleChange = useCallback((newTransformations: Array<{ type: string; data: any }> | undefined) => {
-    if (newTransformations !== undefined) {
+  const handleChange = useCallback((newTransformations: Array<{ type: string, data: any }> | undefined) => {
+    if (newTransformations != null) {
       onChange(newTransformations)
     }
   }, [onChange])
 
   return (
     <FieldCollection
-      value={transformationsData}
-      onChange={handleChange}
-      registry={transformationFieldCollectionRegistry}
-      disabled={disabled}
-      style={{ width: '100%' }}
+      onChange={ handleChange }
+      registry={ transformationFieldCollectionRegistry }
+      value={ transformationsData }
     />
   )
 }

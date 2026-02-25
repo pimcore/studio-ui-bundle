@@ -40,9 +40,9 @@ export const MediaQueryTabs = ({
 
   if (mediaQueries.length === 0) {
     return (
-      <Empty 
-        description={t('image-thumbnails.editor.media-queries.empty')}
-        style={{ padding: '20px' }}
+      <Empty
+        description={ t('image-thumbnails.editor.media-queries.empty') }
+        style={ { padding: '20px' } }
       />
     )
   }
@@ -53,26 +53,26 @@ export const MediaQueryTabs = ({
     closable: true,
     children: (
       <MediaQueryTabContent
-        mediaQuery={mediaQuery}
-        onMediaQueryUpdate={handleMediaQueryUpdate}
-        disabled={disabled}
+        disabled={ disabled }
+        mediaQuery={ mediaQuery }
+        onMediaQueryUpdate={ handleMediaQueryUpdate }
       />
     )
   }))
 
   return (
     <Tabs
-      type="editable-card"
-      items={tabItems}
-      activeKey={activeKey}
-      onChange={onTabChange}
-      onEdit={(targetKey, action) => {
+      activeKey={ activeKey }
+      hideAdd
+      items={ tabItems }
+      onChange={ onTabChange }
+      onEdit={ (targetKey, action) => {
         if (action === 'remove' && typeof targetKey === 'string') {
           onTabClose(targetKey)
         }
-      }}
-      hideAdd
+      } }
       size="small"
+      type="editable-card"
     />
   )
 }

@@ -32,7 +32,7 @@ export const useThumbnailTabManager = (): UseThumbnailTabManagerReturn => {
 
   const handleOpenThumbnail = useCallback((thumbnail: ThumbnailConfigurationData): void => {
     const isAlreadyOpened = openedThumbnails.some(tab => tab.thumbnail.id === thumbnail.id)
-    
+
     if (!isAlreadyOpened) {
       const newTab: ThumbnailTab = {
         thumbnail,
@@ -40,7 +40,7 @@ export const useThumbnailTabManager = (): UseThumbnailTabManagerReturn => {
       }
       setOpenedThumbnails(prev => [...prev, newTab])
     }
-    
+
     setActiveTabKey(thumbnail.id)
   }, [openedThumbnails])
 
@@ -55,7 +55,7 @@ export const useThumbnailTabManager = (): UseThumbnailTabManagerReturn => {
         const newActiveKey = prevTab?.thumbnail.id ?? nextTab?.thumbnail.id
         setActiveTabKey(newActiveKey)
       }
-      
+
       return updatedTabs
     })
   }, [activeTabKey])
@@ -65,8 +65,8 @@ export const useThumbnailTabManager = (): UseThumbnailTabManagerReturn => {
   }, [])
 
   const handleTabDirtyChange = useCallback((key: string, isDirty: boolean): void => {
-    setOpenedThumbnails(prev => prev.map(tab => 
-      tab.thumbnail.id === key 
+    setOpenedThumbnails(prev => prev.map(tab =>
+      tab.thumbnail.id === key
         ? { ...tab, isDirty }
         : tab
     ))

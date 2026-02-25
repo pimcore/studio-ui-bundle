@@ -32,12 +32,12 @@ export interface Transformation {
   label?: string
 }
 
-export type TransformationType = 
+export type TransformationType =
   | 'cover'
-  | 'resize' 
+  | 'resize'
   | 'scaleByWidth'
-  | 'scaleByHeight' 
-  | 'trim' 
+  | 'scaleByHeight'
+  | 'trim'
   | 'sepia'
   | 'grayscale'
   | 'sharpen'
@@ -57,11 +57,7 @@ export type TransformationType =
   | 'tifforiginal'
   | '1x1_pixel'
 
-
-
-export interface TransformationConfig {
-  [key: string]: any
-}
+export type TransformationConfig = Record<string, any>
 
 // Specific transformation config interfaces
 export interface ResizeConfig extends TransformationConfig {
@@ -177,16 +173,12 @@ export interface OnePixelConfig extends TransformationConfig {
 }
 
 // Backend API format (matches existing medias/mediaOrder structure)
-export interface BackendMediasFormat {
-  [mediaQueryName: string]: Array<{
-    method: string
-    arguments: Record<string, any>
-  }>
-}
+export type BackendMediasFormat = Record<string, Array<{
+  method: string
+  arguments: Record<string, any>
+}>>
 
-export interface BackendMediaOrderFormat {
-  [mediaQueryName: string]: number
-}
+export type BackendMediaOrderFormat = Record<string, number>
 
 // Conversion utilities types
 export interface MediaQueryState {

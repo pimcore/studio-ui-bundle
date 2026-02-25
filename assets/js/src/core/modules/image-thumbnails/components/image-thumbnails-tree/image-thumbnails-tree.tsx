@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { isEmpty, isNil, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -158,7 +158,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
     }
   }
 
-  const selectedKeys = activeTabKey ? [activeTabKey] : []
+  const selectedKeys = (activeTabKey != null ? [activeTabKey] : [])
 
   return (
     <ContentLayout

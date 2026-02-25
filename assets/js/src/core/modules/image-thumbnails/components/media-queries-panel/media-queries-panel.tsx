@@ -23,8 +23,8 @@ interface MediaQueriesPanelProps {
   onChange: (mediaQueries: MediaQuery[]) => void
 }
 
-export const MediaQueriesPanel = ({ 
-  mediaQueries, 
+export const MediaQueriesPanel = ({
+  mediaQueries,
   onChange
 }: MediaQueriesPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -38,17 +38,18 @@ export const MediaQueriesPanel = ({
       title: t('image-thumbnails.editor.media-queries.add.title'),
       label: t('image-thumbnails.editor.media-queries.add.label'),
       okText: 'Create',
-      cancelButtonProps: { style: { display: 'none' } }, 
+      cancelButtonProps: { style: { display: 'none' } },
       maskClosable: true,
       rule: {
-        required: true,
+        required: true
       },
       onOk: async (query: string) => {
         const newMediaQuery: MediaQuery = {
           id: generateMediaQueryId(),
           query: query.trim(),
           displayName: getDisplayName(query.trim()),
-          transformations: []
+          transformations: [],
+          order: mediaQueries.length
         }
 
         const updatedMediaQueries = [...mediaQueries, newMediaQuery]
@@ -59,7 +60,7 @@ export const MediaQueriesPanel = ({
   }, [mediaQueries, onChange, modal, t])
 
   const handleMediaQueryUpdate = useCallback((mediaQueryId: string, updatedMediaQuery: MediaQuery) => {
-    const updatedMediaQueries = mediaQueries.map(mq => 
+    const updatedMediaQueries = mediaQueries.map(mq =>
       mq.id === mediaQueryId ? updatedMediaQuery : mq
     )
     onChange(updatedMediaQueries)
@@ -77,10 +78,13 @@ export const MediaQueriesPanel = ({
 
   const newButton = (
     <Button
-      type="link"
-      icon={<Icon value="plus-circle" options={{ width: 16, height: 16 }} />}
+      icon={ <Icon
+        options={ { width: 16, height: 16 } }
+        value="plus-circle"
+             /> }
+      onClick={ handleAddMediaQuery }
       size="small"
-      onClick={handleAddMediaQuery}
+      type="link"
     >
       {t('image-thumbnails.editor.media-queries.new')}
     </Button>
@@ -88,21 +92,21 @@ export const MediaQueriesPanel = ({
 
   return (
     <Panel
-      title={t('image-thumbnails.editor.media-queries')}
-      border={true}
-      theme="card-with-highlight"
+      border
+      collapsed={ false }
+      collapsible
       contentPadding="small"
-      collapsible={true}
-      collapsed={false}
-      extra={newButton}
+      extra={ newButton }
       extraPosition="end"
+      theme="card-with-highlight"
+      title={ t('image-thumbnails.editor.media-queries') }
     >
       <MediaQueryTabs
-        mediaQueries={mediaQueries}
-        activeKey={activeTabKey}
-        onTabChange={setActiveTabKey}
-        onTabClose={handleRemoveMediaQuery}
-        onMediaQueryUpdate={handleMediaQueryUpdate}
+        activeKey={ activeTabKey }
+        mediaQueries={ mediaQueries }
+        onMediaQueryUpdate={ handleMediaQueryUpdate }
+        onTabChange={ setActiveTabKey }
+        onTabClose={ handleRemoveMediaQuery }
       />
     </Panel>
   )

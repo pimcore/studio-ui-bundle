@@ -30,7 +30,7 @@ export const TransformationFieldCollectionItem = ({ transformationType }: Transf
   // We just need to render the fields for this specific transformation type
   return (
     <>
-      {renderFieldsForFieldCollection(fieldConfigs)} 
+      {renderFieldsForFieldCollection(fieldConfigs)}
     </>
   )
 }

@@ -17,30 +17,30 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 export class TransformationFieldCollectionRegistry extends FieldCollectionRegistry {
   private isAdapted: boolean = false
 
-  constructor(private readonly transformationRegistry: TransformationDynamicTypeRegistry) {
+  constructor (private readonly transformationRegistry: TransformationDynamicTypeRegistry) {
     super()
   }
 
-  private ensureAdapted(): void {
+  private ensureAdapted (): void {
     if (!this.isAdapted && this.transformationRegistry.getDynamicTypes().length > 0) {
       this.adaptTransformationTypes()
       this.isAdapted = true
     }
   }
 
-  private adaptTransformationTypes(): void {
+  private adaptTransformationTypes (): void {
     const transformationItems = this.transformationRegistry.getDynamicTypes()
-    
+
     transformationItems.forEach(transformation => {
       const registryItem: FieldCollectionRegistryItem = {
         type: transformation.getId(),
-        key: transformation.getId(), 
-        translationKey: transformation.getLabel(), 
-        component: React.createElement(TransformationFieldCollectionItem, { 
-          transformationType: transformation.getId() 
+        key: transformation.getId(),
+        translationKey: transformation.getLabel(),
+        component: React.createElement(TransformationFieldCollectionItem, {
+          transformationType: transformation.getId()
         })
       }
-      
+
       this.register(registryItem)
     })
   }
@@ -48,7 +48,7 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
   /**
    * Override parent method to ensure lazy adaptation before lookup
    */
-  public getItemByType(type: string): FieldCollectionRegistryItem | undefined {
+  public getItemByType (type: string): FieldCollectionRegistryItem | undefined {
     this.ensureAdapted()
     const item = super.getItemByType(type)
     if (item === undefined) {
@@ -60,7 +60,7 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
   /**
    * Override parent method to ensure lazy adaptation before returning items
    */
-  public getItems(): FieldCollectionRegistryItem[] {
+  public getItems (): FieldCollectionRegistryItem[] {
     this.ensureAdapted()
     return super.getItems()
   }
@@ -68,7 +68,7 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
   /**
    * Get the underlying transformation registry for advanced usage
    */
-  public getTransformationRegistry(): TransformationDynamicTypeRegistry {
+  public getTransformationRegistry (): TransformationDynamicTypeRegistry {
     return this.transformationRegistry
   }
 }

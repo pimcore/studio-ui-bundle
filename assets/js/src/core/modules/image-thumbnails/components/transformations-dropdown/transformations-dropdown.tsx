@@ -31,8 +31,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
     {
       key: 'resize',
       label: (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Icon value="resize" options={{ width: 16, height: 16 }} />
+        <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+          <Icon
+            options={ { width: 16, height: 16 } }
+            value="resize"
+          />
           {t('image-thumbnails.editor.transformations.resize')}
         </div>
       )
@@ -40,8 +43,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
     {
       key: 'scale-by-height',
       label: (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Icon value="arrows-alt-v" options={{ width: 16, height: 16 }} />
+        <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+          <Icon
+            options={ { width: 16, height: 16 } }
+            value="arrows-alt-v"
+          />
           {t('image-thumbnails.editor.transformations.scale-by-height')}
         </div>
       )
@@ -49,8 +55,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
     {
       key: 'trim',
       label: (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Icon value="crop" options={{ width: 16, height: 16 }} />
+        <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+          <Icon
+            options={ { width: 16, height: 16 } }
+            value="crop"
+          />
           {t('image-thumbnails.editor.transformations.trim')}
         </div>
       )
@@ -59,8 +68,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
       type: 'submenu',
       key: 'effects',
       label: (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Icon value="magic" options={{ width: 16, height: 16 }} />
+        <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+          <Icon
+            options={ { width: 16, height: 16 } }
+            value="magic"
+          />
           {t('image-thumbnails.editor.transformations.effects')}
         </div>
       ),
@@ -68,8 +80,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
         {
           key: 'effects:sepia',
           label: (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Icon value="eye-dropper" options={{ width: 16, height: 16 }} />
+            <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+              <Icon
+                options={ { width: 16, height: 16 } }
+                value="eye-dropper"
+              />
               {t('image-thumbnails.editor.transformations.effects.sepia')}
             </div>
           )
@@ -77,8 +92,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
         {
           key: 'effects:grayscale',
           label: (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Icon value="adjust" options={{ width: 16, height: 16 }} />
+            <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+              <Icon
+                options={ { width: 16, height: 16 } }
+                value="adjust"
+              />
               {t('image-thumbnails.editor.transformations.effects.grayscale')}
             </div>
           )
@@ -86,8 +104,11 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
         {
           key: 'effects:sharpen',
           label: (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Icon value="focus" options={{ width: 16, height: 16 }} />
+            <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+              <Icon
+                options={ { width: 16, height: 16 } }
+                value="focus"
+              />
               {t('image-thumbnails.editor.transformations.effects.sharpen')}
             </div>
           )
@@ -98,17 +119,17 @@ export const TransformationsDropdown = ({ onSelect }: TransformationsDropdownPro
 
   return (
     <Dropdown
-      menu={{
+      menu={ {
         items: menuItems,
         onClick: handleMenuClick
-      }}
-      trigger={['click']}
+      } }
       placement="bottomLeft"
+      trigger={ ['click'] }
     >
-      <Button 
-        type="primary" 
-        icon={<Icon value="plus" />}
+      <Button
+        icon={ <Icon value="plus" /> }
         size="small"
+        type="primary"
       >
         {t('image-thumbnails.editor.transformations')}
       </Button>

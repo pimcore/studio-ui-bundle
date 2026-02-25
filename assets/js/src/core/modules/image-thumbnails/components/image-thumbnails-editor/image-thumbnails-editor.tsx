@@ -13,24 +13,20 @@ import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
-import { Input } from '@Pimcore/components/input/input'
-import { Select } from '@Pimcore/components/select/select'
 import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
-import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { Switch } from '@Pimcore/components/switch/switch'
-import { Panel } from '@Pimcore/components/panel/panel'
-import type { MediaQuery } from '../../types/media-query.types'
+import type { MediaQuery, BackendMediasFormat } from '../../types/media-query.types'
 import { MediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
 import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { isNil, isNull, isEqual } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
 import { extractGroupsFromTree } from '../../utils/tree-helpers'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { BasicFormFields } from './basic-form-fields'
+import { AdvancedSettingsPanel } from './advanced-settings-panel'
 
 interface ImageThumbnailsEditorProps {
   selectedThumbnail: ThumbnailConfigurationData | null
@@ -55,41 +51,6 @@ interface ThumbnailFormData {
   mediaQueries: MediaQuery[]
 }
 
-const formatOptions = [
-  { 
-    value: 'auto', 
-    label: 'Auto (Web-optimized - recommended)'
-  },
-  { 
-    value: 'original', 
-    label: 'ORIGINAL' 
-  },
-  { 
-    value: 'png', 
-    label: 'PNG' 
-  },
-  { 
-    value: 'gif', 
-    label: 'GIF' 
-  },
-  { 
-    value: 'jpeg', 
-    label: 'JPEG' 
-  },
-  { 
-    value: 'webp', 
-    label: 'WebP' 
-  },
-  { 
-    value: 'avif', 
-    label: 'AVIF' 
-  },
-  { 
-    value: 'tiff', 
-    label: 'TIFF' 
-  }
-]
-
 const SAVE_BUTTON_PORTAL_ID = 'image-thumbnails-save-button'
 
 export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onChange }: ImageThumbnailsEditorProps): React.JSX.Element => {
@@ -98,22 +59,22 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   const messageApi = useMessage()
   const modificationDateRef = useRef<number | null>(null)
   const [currentThumbnailId, setCurrentThumbnailId] = useState<string | null>(null)
-  
+
   const { thumbnailsData } = useImageThumbnailsContext()
-  
+
   const [initialFormData, setInitialFormData] = useState<ThumbnailFormData | null>(null)
   const [currentFormData, setCurrentFormData] = useState<ThumbnailFormData | null>(null)
   const [mediaQueries, setMediaQueries] = useState<MediaQuery[]>([])
-  
-  const { data: configData, isLoading, error } = useThumbnailImageGetByNameQuery(
+
+  const { data: configData, isLoading } = useThumbnailImageGetByNameQuery(
     { name: selectedThumbnail?.name ?? '' },
-    { skip: !selectedThumbnail?.name }
+    { skip: selectedThumbnail?.name == null }
   )
 
   const [updateThumbnail, { isLoading: isSaving, error: updateError }] = useThumbnailImageUpdateMutation()
 
   const groupOptions = useMemo(() => {
-    if (!thumbnailsData?.items) return []
+    if (thumbnailsData?.items == null) return []
     const groups = extractGroupsFromTree(thumbnailsData.items)
     return [{ value: '', label: t('image-thumbnails.editor.no-group') }, ...groups]
   }, [thumbnailsData, t])
@@ -130,33 +91,33 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [initialFormData, currentFormData])
 
   useEffect(() => {
-    if (selectedThumbnail?.id !== currentThumbnailId && configData?.settings && selectedThumbnail) {
-      setCurrentThumbnailId(selectedThumbnail?.id || null)
-      
+    if (selectedThumbnail?.id !== currentThumbnailId && configData?.settings != null && selectedThumbnail != null) {
+      setCurrentThumbnailId((selectedThumbnail?.id !== '' ? selectedThumbnail?.id : null) ?? null)
+
       const formData: ThumbnailFormData = {
-        name: configData.settings.name || '',
-        description: configData.settings.description || '',
-        format: configData.settings.format || 'auto',
-        group: configData.settings.group || '',
-        quality: configData.settings.quality || 85,
-        highResolution: configData.settings.highResolution || null,
-        preserveColor: configData.settings.preserveColor || false,
-        forceProcessICCProfiles: configData.settings.forceProcessICCProfiles || false,
-        preserveMetaData: configData.settings.preserveMetaData || false,
-        rasterizeSVG: configData.settings.rasterizeSVG || false,
-        useCropBox: configData.settings.useCropBox || false,
-        downloadable: configData.settings.downloadable || false,
-        preserveAnimation: configData.settings.preserveAnimation || false,
-        mediaQueries: convertFromBackendFormat(configData.medias, {})
+        name: (configData.settings.name !== '' ? configData.settings.name : '') ?? '',
+        description: configData.settings.description ?? '',
+        format: (configData.settings.format !== '' ? configData.settings.format : 'auto') ?? 'auto',
+        group: configData.settings.group ?? '',
+        quality: (configData.settings.quality !== 0 ? configData.settings.quality : 85) ?? 85,
+        highResolution: configData.settings.highResolution ?? null,
+        preserveColor: configData.settings.preserveColor ?? false,
+        forceProcessICCProfiles: configData.settings.forceProcessICCProfiles ?? false,
+        preserveMetaData: configData.settings.preserveMetaData ?? false,
+        rasterizeSVG: configData.settings.rasterizeSVG ?? false,
+        useCropBox: configData.settings.useCropBox ?? false,
+        downloadable: configData.settings.downloadable ?? false,
+        preserveAnimation: configData.settings.preserveAnimation ?? false,
+        mediaQueries: convertFromBackendFormat((configData.medias ?? {}) as BackendMediasFormat, {})
       }
-      
+
       setInitialFormData({ ...formData })
       setCurrentFormData({ ...formData })
       setMediaQueries(formData.mediaQueries)
-      
+
       form.setFieldsValue(formData)
-      
-      modificationDateRef.current = configData.settings.modificationDate || Date.now()
+
+      modificationDateRef.current = configData.settings.modificationDate ?? Date.now()
     }
   }, [selectedThumbnail?.id, currentThumbnailId, configData?.settings, form])
 
@@ -170,13 +131,13 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
   const handleMediaQueriesChange = useCallback((updatedMediaQueries: MediaQuery[]): void => {
     setMediaQueries(updatedMediaQueries)
-    setCurrentFormData(prev => 
+    setCurrentFormData(prev =>
       !isNull(prev) ? { ...prev, mediaQueries: updatedMediaQueries } : null
     )
   }, [])
 
   const handleSave = useCallback((): void => {
-    if (!selectedThumbnail?.name || !currentFormData) return
+    if (selectedThumbnail?.name == null || currentFormData == null) return
 
     form.validateFields().then(async (values: ThumbnailFormData) => {
       try {
@@ -184,19 +145,19 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           name: values.name,
           description: values.description,
           format: values.format,
-          group: values.group || '',
+          group: (values.group !== '' ? values.group : '') ?? '',
           quality: values.quality,
           highResolution: values.highResolution,
-          preserveColor: values.preserveColor || false,
-          forceProcessICCProfiles: values.forceProcessICCProfiles || false,
-          preserveMetaData: values.preserveMetaData || false,
-          rasterizeSVG: values.rasterizeSVG || false,
-          useCropBox: values.useCropBox || false,
-          downloadable: values.downloadable || false,
-          preserveAnimation: values.preserveAnimation || false
+          preserveColor: values.preserveColor ?? false,
+          forceProcessICCProfiles: values.forceProcessICCProfiles ?? false,
+          preserveMetaData: values.preserveMetaData ?? false,
+          rasterizeSVG: values.rasterizeSVG ?? false,
+          useCropBox: values.useCropBox ?? false,
+          downloadable: values.downloadable ?? false,
+          preserveAnimation: values.preserveAnimation ?? false
         }
 
-        const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries || [])
+        const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
 
         const { data: response } = await updateThumbnail({
           name: selectedThumbnail.name,
@@ -207,7 +168,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           }
         })
 
-        if (!isNil(response?.settings?.modificationDate)) {
+        if (response?.settings?.modificationDate != null) {
           modificationDateRef.current = response.settings.modificationDate
         }
 
@@ -223,16 +184,16 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
 
   const renderSaveButton = (): React.JSX.Element | null => {
-    if (!isActive || !selectedThumbnail) {
+    if (!isActive || selectedThumbnail == null) {
       return null
     }
 
     return (
-      <Portal targetId={SAVE_BUTTON_PORTAL_ID}>
+      <Portal targetId={ SAVE_BUTTON_PORTAL_ID }>
         <Button
-          disabled={!isDirty}
-          loading={isSaving}
-          onClick={handleSave}
+          disabled={ !isDirty }
+          loading={ isSaving }
+          onClick={ handleSave }
           type="primary"
         >
           {t('save')}
@@ -241,10 +202,10 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     )
   }
 
-  if (!selectedThumbnail) {
+  if (selectedThumbnail == null) {
     return (
       <Content padded>
-        <div style={{ textAlign: 'center', color: '#999', marginTop: '50px' }}>
+        <div style={ { textAlign: 'center', color: '#999', marginTop: '50px' } }>
           {t('image-thumbnails.editor.select-thumbnail')}
         </div>
       </Content>
@@ -253,149 +214,23 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
   return (
     <Content
-      loading={isLoading}
+      loading={ isLoading }
       padded
-      padding={{ top: 'small', right: 'small', bottom: 'small', left: 'small' }}
+      padding={ { top: 'small', right: 'small', bottom: 'small', left: 'small' } }
     >
       {!isNull(currentFormData) && (
       <FormKit
-        formProps={{
+        formProps={ {
           form,
           onValuesChange
-        }}
-        key={selectedThumbnail?.id}
+        } }
+        key={ selectedThumbnail?.id }
       >
-        <FormKit.Panel
-          contentPadding="extra-small"
-        >
-          <Form.Item
-            label={t('image-thumbnails.editor.name')}
-            name="name"
-            rules={[{ required: true, message: t('image-thumbnails.editor.name-required') }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label={t('image-thumbnails.editor.description')}
-            name="description"
-          >
-            <TextArea
-              rows={4}
-              placeholder={t('image-thumbnails.editor.description-placeholder')}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label={t('image-thumbnails.editor.group')}
-            name="group"
-          >
-            <Select
-              allowClear
-              options={groupOptions}
-              placeholder={t('image-thumbnails.editor.group-placeholder')}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label={t('image-thumbnails.editor.format')}
-            name="format"
-            rules={[{ required: true, message: t('image-thumbnails.editor.format-required') }]}
-          >
-            <Select
-              options={formatOptions}
-              placeholder={t('image-thumbnails.editor.format-placeholder')}
-            />
-          </Form.Item>
-        </FormKit.Panel>
-
-        {/* Advanced Settings Panel */}
-        <Panel
-          title={t('image-thumbnails.editor.advanced')}
-          collapsible={true}
-          collapsed={true}
-          border={true}
-          theme="card-with-highlight"
-          contentPadding="extra-small"
-        >
-          <Form.Item
-            label={t('image-thumbnails.editor.quality')}
-            name="quality"
-            tooltip={t('image-thumbnails.editor.quality.tooltip')}
-          >
-            <InputNumber
-              min={1}
-              max={100}
-              placeholder="85"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label={t('image-thumbnails.editor.high-resolution')}
-            name="highResolution"
-            tooltip={t('image-thumbnails.editor.high-resolution.tooltip')}
-          >
-            <InputNumber
-              min={1}
-              max={10}
-              step={0.1}
-              placeholder="2.0"
-            />
-          </Form.Item>
-
-          <Form.Item name="preserveColor" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.preserve-color')}
-              tooltip={t('image-thumbnails.editor.preserve-color.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="forceProcessICCProfiles" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.force-process-icc')}
-              tooltip={t('image-thumbnails.editor.force-process-icc.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="preserveMetaData" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.preserve-metadata')}
-              tooltip={t('image-thumbnails.editor.preserve-metadata.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="rasterizeSVG" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.rasterize-svg')}
-              tooltip={t('image-thumbnails.editor.rasterize-svg.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="useCropBox" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.use-cropbox')}
-              tooltip={t('image-thumbnails.editor.use-cropbox.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="downloadable" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.downloadable')}
-              tooltip={t('image-thumbnails.editor.downloadable.tooltip')}
-            />
-          </Form.Item>
-
-          <Form.Item name="preserveAnimation" valuePropName="checked">
-            <Switch
-              labelRight={t('image-thumbnails.editor.preserve-animation')}
-              tooltip={t('image-thumbnails.editor.preserve-animation.tooltip')}
-            />
-          </Form.Item>
-        </Panel>
-
+        <BasicFormFields groupOptions={ groupOptions } />
+        <AdvancedSettingsPanel />
         <MediaQueriesPanel
-          mediaQueries={mediaQueries}
-          onChange={handleMediaQueriesChange}
+          mediaQueries={ mediaQueries }
+          onChange={ handleMediaQueriesChange }
         />
       </FormKit>
       )}

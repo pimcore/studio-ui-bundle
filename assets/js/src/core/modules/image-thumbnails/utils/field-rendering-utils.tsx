@@ -26,7 +26,7 @@ import type { FieldConfig } from '@Pimcore/modules/image-thumbnails/dynamic-type
  */
 export const renderField = (
   field: FieldConfig,
-  fieldName: (string | number)[],
+  fieldName: Array<string | number>,
   isFirst: boolean = false,
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
@@ -41,27 +41,27 @@ export const renderField = (
     case 'number':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
-          <InputNumber {...fieldProps} />
+          <InputNumber { ...fieldProps } />
         </Form.Item>
       )
 
     case 'select':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
           <Select
-            {...fieldProps}
-            options={field.options?.map(option => ({
+            { ...fieldProps }
+            options={ field.options?.map(option => ({
               label: option.label,
               value: option.value
-            }))}
+            })) }
           />
         </Form.Item>
       )
@@ -69,43 +69,40 @@ export const renderField = (
     case 'boolean':
       return (
         <Form.Item
-          name={fieldName}
+          name={ fieldName }
+          style={ { marginBottom: 0, marginTop: 0 } }
           valuePropName="checked"
-          style={{ marginBottom: 0, marginTop: 0 }}
         >
-          <Switch {...fieldProps} />
+          <Switch { ...fieldProps } />
         </Form.Item>
       )
 
     case 'text':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
-          <Input {...fieldProps} />
+          <Input { ...fieldProps } />
         </Form.Item>
       )
 
     case 'slider':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
-          <Slider {...fieldProps} />
+          <Slider { ...fieldProps } />
         </Form.Item>
       )
 
     case 'color-picker':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
-          getValueFromEvent={(color: any) => {
+          getValueFromEvent={ (color: any) => {
             if (color != null && typeof color === 'object' && color.toHexString != null) {
               return color.toHexString()
             }
@@ -113,24 +110,29 @@ export const renderField = (
               return color
             }
             return color
-          }}
-          getValueProps={(value: any) => {
+          } }
+          getValueProps={ (value: any) => {
             return {
               value: value ?? field.defaultValue ?? '#ffffff'
             }
-          }}
+          } }
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
-          <ColorPicker {...fieldProps} format="hex" showText style={{ width: '200px' }} />
+          <ColorPicker
+            { ...fieldProps }
+            format="hex"
+            showText
+            style={ { width: '200px' } }
+          />
         </Form.Item>
       )
 
     case 'image-picker':
       return (
         <Form.Item
-          label={field.label}
-          name={fieldName}
-          rules={field.required === true ? [{ required: true }] : undefined}
-          getValueFromEvent={(value: any) => {
+          getValueFromEvent={ (value: any) => {
             return value !== null && value !== undefined && typeof value === 'object' && value.id != null
               ? {
                   id: value.id,
@@ -139,8 +141,8 @@ export const renderField = (
                   fullPath: value.fullPath
                 }
               : null
-          }}
-          getValueProps={(value: any) => {
+          } }
+          getValueProps={ (value: any) => {
             return {
               value: value !== null && value !== undefined && typeof value === 'object' && value.id != null
                 ? {
@@ -150,11 +152,14 @@ export const renderField = (
                   }
                 : null
             }
-          }}
+          } }
+          label={ field.label }
+          name={ fieldName }
+          rules={ field.required === true ? [{ required: true }] : undefined }
         >
           <ImagePicker
-            {...fieldProps}
-            type={fieldProps.type ?? 'add'}
+            { ...fieldProps }
+            type={ fieldProps.type ?? 'add' }
           />
         </Form.Item>
       )
@@ -173,12 +178,17 @@ export const renderFields = (
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
   return (
-    <Space direction="vertical" size="small" className="w-full" style={{ height: 'auto', minHeight: 'auto' }}>
+    <Space
+      className="w-full"
+      direction="vertical"
+      size="small"
+      style={ { height: 'auto', minHeight: 'auto' } }
+    >
       {fieldConfigs.map((fieldConfig, index) => {
         const fieldName = field !== undefined ? [field, fieldConfig.name] : [fieldConfig.name]
         const isFirst = index === 0
         return (
-          <React.Fragment key={fieldConfig.name}>
+          <React.Fragment key={ fieldConfig.name }>
             {renderField(fieldConfig, fieldName, isFirst, firstInputRef)}
           </React.Fragment>
         )
@@ -195,12 +205,17 @@ export const renderFieldsForFieldCollection = (
   firstInputRef?: React.RefObject<any>
 ): React.ReactNode => {
   return (
-    <Space direction="vertical" size="small" className="w-full" style={{ height: 'auto', minHeight: 'auto' }}>
+    <Space
+      className="w-full"
+      direction="vertical"
+      size="small"
+      style={ { height: 'auto', minHeight: 'auto' } }
+    >
       {fieldConfigs.map((fieldConfig, index) => {
         const fieldName = [fieldConfig.name] // FieldCollection handles the field indexing
         const isFirst = index === 0
         return (
-          <React.Fragment key={fieldConfig.name}>
+          <React.Fragment key={ fieldConfig.name }>
             {renderField(fieldConfig, fieldName, isFirst, firstInputRef)}
           </React.Fragment>
         )
@@ -216,13 +231,13 @@ export const renderFieldsForFieldCollection = (
 export const ToolStripFormWrapper = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   return (
     <ConfigProvider
-      theme={{
+      theme={ {
         components: {
           Form: {
             itemMarginBottom: 0
           }
         }
-      }}
+      } }
     >
       {children}
     </ConfigProvider>

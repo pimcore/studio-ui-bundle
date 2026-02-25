@@ -28,7 +28,7 @@ const SAVE_BUTTON_PORTAL_ID = 'image-thumbnails-save-button'
 export const ImageThumbnailsContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  
+
   const {
     openedThumbnails,
     activeTabKey,
@@ -50,42 +50,44 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
       <ContentLayout
         renderToolbar={
           <Toolbar justify='flex-end'>
-            <PortalSlot id={SAVE_BUTTON_PORTAL_ID} />
+            <PortalSlot id={ SAVE_BUTTON_PORTAL_ID } />
           </Toolbar>
         }
       >
-        <Flex className={styles.container}>
+        <Flex className={ styles.container }>
           <SplitLayout
-            leftItem={{
+            leftItem={ {
               size: 25,
               minSize: 200,
               children: (
                 <ImageThumbnailsTree
-                  onThumbnailSelect={handleThumbnailSelect}
-                  openedThumbnails={openedThumbnails}
-                  activeTabKey={activeTabKey}
-                  modifiedThumbnails={modifiedThumbnails}
+                  activeTabKey={ activeTabKey }
+                  modifiedThumbnails={ modifiedThumbnails }
+                  onThumbnailSelect={ handleThumbnailSelect }
+                  openedThumbnails={ openedThumbnails }
                 />
               )
-            }}
-            rightItem={{
+            } }
+            rightItem={ {
               size: 75,
-              children: openedThumbnails.length === 0 ? (
-                <Content padded>
-                  <div style={{ textAlign: 'center', color: '#999', marginTop: '50px' }}>
-                    {t('image-thumbnails.editor.select-thumbnail')}
-                  </div>
-                </Content>
-              ) : (
-                <ImageThumbnailsTabs
-                  openedThumbnails={openedThumbnails}
-                  activeTabKey={activeTabKey}
-                  onChangeTab={handleChangeTab}
-                  onCloseTab={handleCloseTab}
-                  onTabDirtyChange={handleTabDirtyChange}
-                />
-              )
-            }}
+              children: openedThumbnails.length === 0
+                ? (
+                  <Content padded>
+                    <div style={ { textAlign: 'center', color: '#999', marginTop: '50px' } }>
+                      {t('image-thumbnails.editor.select-thumbnail')}
+                    </div>
+                  </Content>
+                  )
+                : (
+                  <ImageThumbnailsTabs
+                    activeTabKey={ activeTabKey }
+                    onChangeTab={ handleChangeTab }
+                    onCloseTab={ handleCloseTab }
+                    onTabDirtyChange={ handleTabDirtyChange }
+                    openedThumbnails={ openedThumbnails }
+                  />
+                  )
+            } }
             withDivider
           />
         </Flex>

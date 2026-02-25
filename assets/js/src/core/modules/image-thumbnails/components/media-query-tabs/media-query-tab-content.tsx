@@ -24,26 +24,25 @@ export const MediaQueryTabContent = ({
   onMediaQueryUpdate,
   disabled = false
 }: MediaQueryTabContentProps): React.JSX.Element => {
-  
-  const handleTransformationsChange = useCallback((transformations: Array<{ type: string; data: any }>) => {
+  const handleTransformationsChange = useCallback((transformations: Array<{ type: string, data: any }>) => {
     const updatedMediaQuery: MediaQuery = {
       ...mediaQuery,
       transformations: transformations.map((t, index) => ({
-        id: mediaQuery.transformations[index]?.id || `transformation-${Date.now()}-${index}`,
+        id: (mediaQuery.transformations[index]?.id !== '' ? mediaQuery.transformations[index]?.id : `transformation-${Date.now()}-${index}`) ?? `transformation-${Date.now()}-${index}`,
         type: t.type as TransformationType,
         config: t.data
       }))
     }
-    
+
     onMediaQueryUpdate(updatedMediaQuery)
   }, [mediaQuery, onMediaQueryUpdate])
 
   return (
-    <ItemProvider item={{ name: 'transformations' }}>
+    <ItemProvider item={ { name: 'transformations' } }>
       <MediaQueryTransformationsField
-        mediaQuery={mediaQuery}
-        onChange={handleTransformationsChange}
-        disabled={disabled}
+        disabled={ disabled }
+        mediaQuery={ mediaQuery }
+        onChange={ handleTransformationsChange }
       />
     </ItemProvider>
   )
