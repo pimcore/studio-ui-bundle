@@ -11,12 +11,10 @@
 import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { isNil } from 'lodash'
-import React from 'react'
 import { api } from '@Pimcore/modules/notifications/notifications-slice-enhanced'
 import { store } from '@Pimcore/app/store'
-import { type NotificationInstance } from 'antd/es/notification/interface'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
-import { NotificationPopupCollapse, type OpenNotification } from '../notification-popup-collapse'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 interface NotificationMessagePayload {
   unreadNotificationsCount: number
@@ -32,12 +30,8 @@ interface NotificationMessagePayload {
 }
 
 export class NotificationMessageHandler extends AbstractMessageHandler {
-  private readonly MAX_NOTIFICATIONS = 3
-  private readonly POPUP_KEY = 'notification-popup-group'
-
   constructor (
-    private readonly notificationApi: NotificationInstance,
-    private readonly openNotificationsRef: React.MutableRefObject<OpenNotification[]>
+    private readonly onMessage: (message: AbstractMercureMessage) => void
   ) {
     super()
   }
@@ -49,33 +43,6 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
     return payload?.notification?.recipient === user.id && !isNil(payload?.notification) && !isNil(payload?.unreadNotificationsCount)
   }
 
-  private updatePopup (): void {
-    const onClosePopup = (id?: number): void => {
-      if (id !== undefined) {
-        this.openNotificationsRef.current = this.openNotificationsRef.current.filter((notification) => notification.id !== id)
-        this.updatePopup()
-      } else {
-        this.openNotificationsRef.current = []
-      }
-
-      if (this.openNotificationsRef.current.length === 0) {
-        this.notificationApi.destroy(this.POPUP_KEY)
-      }
-    }
-
-    this.notificationApi.open({
-      key: this.POPUP_KEY,
-      message: 'Notifications',
-      description: <NotificationPopupCollapse
-        notifications={ this.openNotificationsRef.current }
-        onView={ onClosePopup }
-                   />,
-      placement: 'bottomRight',
-      duration: 0,
-      closable: false
-    })
-  }
-
   async handleMessage (message: AbstractMercureMessage): Promise<void> {
     const payload = message.payload as NotificationMessagePayload
 
@@ -83,22 +50,10 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
       return
     }
 
-    const notificationData = payload.notification
-
-    if (this.openNotificationsRef.current.length >= this.MAX_NOTIFICATIONS) {
-      this.openNotificationsRef.current.shift()
-    }
-
-    this.openNotificationsRef.current.push({
-      id: notificationData.id,
-      title: notificationData.title,
-      sender: notificationData.sender
-    })
-
-    this.updatePopup()
+    this.onMessage(message)
 
     store.dispatch(
-      api.util.invalidateTags(['NOTIFICATIONS'])
+      api.util.invalidateTags(invalidatingTags.NOTIFICATIONS())
     )
 
     store.dispatch(
