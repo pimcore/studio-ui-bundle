@@ -503,7 +503,6 @@ export const create = (): LayoutProviderFactoryReturn => {
         /* eslint-enable @typescript-eslint/consistent-type-assertions */
       }
 
-      // @todo ensure structure is defined by injecting pimcore_root early on when necessary
       return buildLayoutRecursively(structureToConvert)
     }, [structure, fieldDefinitions])
 
@@ -547,9 +546,9 @@ export const create = (): LayoutProviderFactoryReturn => {
       const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
       const childDynType = fieldDefinitionRegistry.getDynamicType(childFieldDef?.fieldtype, false)
 
-      const isRoot = currentFieldDef.name === 'pimcore_root'
+      const isRoot = currentTargetPath.length === 1
 
-      if ((childDynType === undefined) || (currentDynType === undefined && currentTargetPath.length > 1)) {
+      if ((childDynType === undefined) || (currentDynType === undefined && !isRoot)) {
         return false
       }
 
@@ -647,9 +646,9 @@ export const create = (): LayoutProviderFactoryReturn => {
       const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
       const childDynType = fieldDefinitionRegistry.getDynamicType(externalFieldtype, false)
 
-      const isRoot = currentFieldDef.name === 'pimcore_root'
+      const isRoot = currentTargetPath.length === 1
 
-      if ((childDynType === undefined) || (currentDynType === undefined && currentTargetPath.length > 1)) {
+      if ((childDynType === undefined) || (currentDynType === undefined && !isRoot)) {
         return false
       }
 

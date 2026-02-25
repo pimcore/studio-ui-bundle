@@ -51,7 +51,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
       const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
-          title: `${configuration.name} (${configuration.id})`,
+          title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
           key: `${configuration.id}`,
           icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
           meta: { configuration },
@@ -73,7 +73,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
       }
 
       const treeDataItem: TreeDataItem = {
-        title: `${configuration.name} (${configuration.id})`,
+        title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
         key: `${configuration.id}`,
         icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
         meta: { configuration },

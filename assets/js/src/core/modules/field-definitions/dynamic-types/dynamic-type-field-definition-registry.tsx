@@ -237,7 +237,7 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     }
 
     const isCustomLayout = area.includes('custom-layout')
-    const isRoot = fieldDefinition.name === 'pimcore_root'
+    const isRoot = path.length === 1
     const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context)
 
     const dropdownTagTypes = this.getTypesByTags(allowedDropdownTags, context)

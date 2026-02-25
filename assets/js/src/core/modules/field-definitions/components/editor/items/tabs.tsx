@@ -18,7 +18,7 @@ export const ItemsTabs = (): React.JSX.Element => {
 
   const items: ITabsProps['items'] = configurations.map((configuration) => ({
     key: `${configuration.id}`,
-    label: `${configuration.name} (${configuration.id})`,
+    label: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
     icon: <Icon { ...(configuration.icon ?? { value: 'class' }) } />,
     closable: true,
     children: (
