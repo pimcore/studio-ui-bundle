@@ -61,7 +61,6 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const result = useClassFieldCollectionGetTreeQuery({})
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const mappedData = useMemo(() => {
     if (result.data === undefined || !('items' in result.data)) return undefined
 
@@ -93,7 +92,7 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
   }, [result.data])
 
   if (mappedData !== undefined) {
-    return { ...result, data: mappedData }
+    return { ...result, data: mappedData } as any // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   return result
