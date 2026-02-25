@@ -54,7 +54,7 @@ export interface ILayoutContext {
   isValidChildFieldDefinition: (targetPath: string[], childPath: string[]) => boolean
   isValidExternalChildFieldDefinition: (targetPath: string[], externalLayout: Layout) => boolean
   getLayout: (props?: GetLayoutProps) => Layout | undefined
-  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => void
+  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => StructureNode
 }
 
 export interface LayoutProviderProps {
@@ -697,6 +697,8 @@ export const create = (): LayoutProviderFactoryReturn => {
         ...prevDefs,
         ...externalFieldDefinitions
       }))
+
+      return externalStructure
     }, [])
 
     return useMemo(() => (
