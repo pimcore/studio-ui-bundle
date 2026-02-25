@@ -11,8 +11,6 @@
 import React, { useMemo } from 'react'
 import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import {
-  type FieldCollectionTreeNodeFolder,
-  type FieldCollectionTreeNodeItem,
   useClassFieldCollectionDeleteMutation,
   useClassFieldCollectionGetByKeyQuery,
   useClassFieldCollectionGetLayoutByKeyQuery,
@@ -29,7 +27,6 @@ import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 // Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result
 const useFieldCollectionGetByKeyQuery: AnyQueryHook = (args: { id: string | number }) => {
   const key = String(args.id)
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const result = useClassFieldCollectionGetByKeyQuery({ key })
 
   if (result.data !== undefined) {
@@ -49,7 +46,6 @@ const useFieldCollectionGetByKeyQuery: AnyQueryHook = (args: { id: string | numb
 // Wrapper: accepts { id } (where id == key), maps to backend { key }
 const useFieldCollectionGetLayoutByKeyQuery: AnyQueryHook = (args: { id: string | number }) => {
   const key = String(args.id)
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   return useClassFieldCollectionGetLayoutByKeyQuery({ key })
 }
 
@@ -58,7 +54,6 @@ const useFieldCollectionGetLayoutByKeyQuery: AnyQueryHook = (args: { id: string 
 // TODO: The backend currently returns an incorrect icon value for field collections.
 //       Once the backend is fixed, the fallback 'field-collection-field' will no longer be needed.
 const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const result = useClassFieldCollectionGetTreeQuery({})
 
   const mappedData = useMemo(() => {
@@ -66,7 +61,7 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
 
     const mappedItems: ConfigurationPartial[] = []
 
-    for (const node of result.data.items as Array<FieldCollectionTreeNodeItem | FieldCollectionTreeNodeFolder>) {
+    for (const node of result.data.items) {
       if ('children' in node) {
         // Folder node — flatten its children; each child already carries its group name
         for (const child of node.children) {
@@ -74,7 +69,7 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
             id: child.key,
             name: child.name,
             group: child.group ?? undefined,
-            icon: { value: child.icon?.value || 'field-collection-field' }
+            icon: { value: (child.icon?.value !== undefined && child.icon.value !== '') ? child.icon.value : 'field-collection-field' }
           })
         }
       } else {
@@ -83,7 +78,7 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
           id: node.key,
           name: node.name,
           group: node.group ?? undefined,
-          icon: { value: node.icon?.value || 'field-collection-field' }
+          icon: { value: (node.icon?.value !== undefined && node.icon.value !== '') ? node.icon.value : 'field-collection-field' }
         })
       }
     }
@@ -100,7 +95,6 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
 
 // Wrapper: maps delete to use key (id) as the key arg
 const useFieldCollectionDeleteMutation: AnyMutationHook = (...args) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [deleteFn, result] = useClassFieldCollectionDeleteMutation(...args)
 
   const wrappedDelete = (arg: { id: string | number }): ReturnType<typeof deleteFn> => {
