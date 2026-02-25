@@ -15,10 +15,10 @@ import {
   type TransformationType
 } from '../types/media-query.types'
 
-export function convertToBackendFormat (mediaQueries: MediaQuery[]): {
+export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   medias: BackendMediasFormat
   mediaOrder: BackendMediaOrderFormat
-} {
+} => {
   const medias: BackendMediasFormat = {}
   const mediaOrder: BackendMediaOrderFormat = {}
 
@@ -42,10 +42,10 @@ export function convertToBackendFormat (mediaQueries: MediaQuery[]): {
   return { medias, mediaOrder }
 }
 
-export function convertFromBackendFormat (
+export const convertFromBackendFormat = (
   medias: BackendMediasFormat = {},
   mediaOrder: BackendMediaOrderFormat = {}
-): MediaQuery[] {
+): MediaQuery[] => {
   const mediaQueries: MediaQuery[] = []
 
   Object.entries(medias).forEach(([queryName, transformations]) => {
@@ -72,7 +72,7 @@ export function convertFromBackendFormat (
   return mediaQueries.sort((a, b) => a.order - b.order)
 }
 
-export function getDisplayName (query: string): string {
+export const getDisplayName = (query: string): string => {
   if (query.includes('min-width')) {
     const match = query.match(/min-width:\s*(\d+)/)
     return (match != null) ? `≥ ${match[1]}px` : query
@@ -86,7 +86,7 @@ export function getDisplayName (query: string): string {
   return query.length > 20 ? query.substring(0, 20) + '...' : query
 }
 
-function getTransformationLabel (method: string, args: Record<string, any> = {}): string {
+const getTransformationLabel = (method: string, args: Record<string, any> = {}): string => {
   switch (method) {
     case 'resize':
       return `Resize ${args.width ?? '?'}x${args.height ?? '?'}`
@@ -139,10 +139,10 @@ function getTransformationLabel (method: string, args: Record<string, any> = {})
 /**
  * Generate unique ID for media query
  */
-export function generateMediaQueryId (): string {
+export const generateMediaQueryId = (): string => {
   return `mq-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 }
 
-export function generateTransformationId (): string {
+export const generateTransformationId = (): string => {
   return `tr-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 }

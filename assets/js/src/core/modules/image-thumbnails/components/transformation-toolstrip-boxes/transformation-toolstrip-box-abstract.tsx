@@ -243,9 +243,9 @@ const renderFields = (
     </Flex>
   )
 }
-export function createTransformationToolStripBox (
+export const createTransformationToolStripBox = (
   transformationType: TransformationDynamicTypeAbstract
-): React.ComponentType<BaseTransformationToolStripBoxProps> {
+): React.ComponentType<BaseTransformationToolStripBoxProps> => {
   const Component = React.forwardRef<any, BaseTransformationToolStripBoxProps>((props, ref) => {
     const {
       mediaQueryId,

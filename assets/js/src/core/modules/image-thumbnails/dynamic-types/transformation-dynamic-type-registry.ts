@@ -64,7 +64,7 @@ export const transformationFieldCollectionRegistry = new TransformationFieldColl
 
 let isRegistered = false
 
-export function initializeTransformationTypes (): void {
+export const initializeTransformationTypes = (): void => {
   if (isRegistered) return
 
   try {

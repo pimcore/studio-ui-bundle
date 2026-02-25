@@ -1,4 +1,14 @@
-import React, { useState } from 'react'
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { transformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
@@ -21,15 +31,16 @@ const DefaultTransformationToolStripBox: React.FC<{
   onFocus?: () => void
 }> = ({ transformation, onRemove }) => {
   const { t } = useTranslation()
-  
+
   return (
-    <div style={{ 
-      padding: '8px 12px', 
+    <div style={ {
+      padding: '8px 12px',
       backgroundColor: '#f5f5f5',
       borderRadius: '4px',
       border: '1px dashed #d9d9d9'
-    }}>
-      <span style={{ color: '#999' }}>
+    } }
+    >
+      <span style={ { color: '#999' } }>
         {t('image-thumbnails.transformations.unknown-type', { type: transformation.type })}
       </span>
     </div>
@@ -44,41 +55,42 @@ export const TransformationsList = ({
   onMoveUp,
   onMoveDown
 }: TransformationsListProps): React.JSX.Element => {
-  const [focusedTransformation, setFocusedTransformation] = useState<string | null>(null)
-
-  const renderTransformation = (transformation: Transformation, index: number) => {
+  const renderTransformation = (transformation: Transformation, index: number): React.JSX.Element => {
     const ToolStripBoxComponent = transformationDynamicTypeRegistry.getToolStripBox(transformation.type)
 
-    if (!ToolStripBoxComponent) {
+    if (ToolStripBoxComponent == null) {
       return (
         <DefaultTransformationToolStripBox
-          key={transformation.id}
-          transformation={transformation}
-          mediaQueryId={mediaQueryId}
-          transformationIndex={index}
-          onRemove={() => onRemove(transformation.id)}
+          key={ transformation.id }
+          mediaQueryId={ mediaQueryId }
+          onRemove={ () => { onRemove(transformation.id) } }
+          transformation={ transformation }
+          transformationIndex={ index }
         />
       )
     }
 
     return (
       <ToolStripBoxComponent
-        key={transformation.id}
-        transformation={transformation}
-        mediaQueryId={mediaQueryId}
-        transformationIndex={index}
-        onRemove={() => onRemove(transformation.id)}
-        onMoveUp={() => onMoveUp?.(transformation.id)}
-        onMoveDown={() => onMoveDown?.(transformation.id)}
-        onFocus={() => setFocusedTransformation(transformation.id)}
+        key={ transformation.id }
+        mediaQueryId={ mediaQueryId }
+        onMoveDown={ () => onMoveDown?.(transformation.id) }
+        onMoveUp={ () => onMoveUp?.(transformation.id) }
+        onRemove={ () => { onRemove(transformation.id) } }
+        transformation={ transformation }
+        transformationIndex={ index }
       />
     )
   }
 
   return (
-    <div style={{ width: '100%' }}>
-      <Space direction="vertical" size="small" className="w-full">
-        {transformations.map((transformation, index) => 
+    <div style={ { width: '100%' } }>
+      <Space
+        className="w-full"
+        direction="vertical"
+        size="small"
+      >
+        {transformations.map((transformation, index) =>
           renderTransformation(transformation, index)
         )}
       </Space>

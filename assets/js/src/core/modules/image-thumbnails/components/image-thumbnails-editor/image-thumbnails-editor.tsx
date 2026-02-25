@@ -21,7 +21,7 @@ import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/me
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { isNil, isNull, isEqual } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
 import { extractGroupsFromTree } from '../../utils/tree-helpers'
 import { useMessage } from '@Pimcore/components/message/useMessage'
@@ -176,10 +176,10 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
         void messageApi.success(t('save-success'))
       } catch (error) {
-        trackError(new ApiError(error))
+        trackError(new GeneralError('Could not save thumbnail configuration'))
       }
     }).catch((error) => {
-      trackError(new ApiError(error))
+      trackError(new GeneralError('Validation failed'))
     })
   }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
 
