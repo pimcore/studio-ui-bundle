@@ -12,21 +12,22 @@ import React, { useEffect, useRef } from 'react'
 import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { NotificationMessageHandler } from './handlers/notification-message-handler'
+import { type OpenNotification } from './notification-popup-collapse'
 
 export const NotificationPopup = (): React.JSX.Element => {
-    const globalMessageBus = useGlobalMessageBus()
-    const [notificationApi] = useNotification()
-    const openNotificationsRef = useRef<any[]>([])
+  const globalMessageBus = useGlobalMessageBus()
+  const [notificationApi] = useNotification()
+  const openNotificationsRef = useRef<OpenNotification[]>([])
 
-    useEffect(() => {
-        const handler = new NotificationMessageHandler(notificationApi, openNotificationsRef)
+  useEffect(() => {
+    const handler = new NotificationMessageHandler(notificationApi, openNotificationsRef)
 
-        globalMessageBus.registerHandler(handler)
+    globalMessageBus.registerHandler(handler)
 
-        return () => {
-            globalMessageBus.unregisterHandler(handler.getId())
-        }
-    }, [notificationApi, globalMessageBus])
+    return () => {
+      globalMessageBus.unregisterHandler(handler.getId())
+    }
+  }, [notificationApi, globalMessageBus])
 
-    return <></>
+  return <></>
 }

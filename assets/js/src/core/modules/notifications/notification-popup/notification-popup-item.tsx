@@ -9,36 +9,43 @@
  */
 
 import React from 'react'
-import {Button, Flex, Icon, Text} from '@sdk/components'
-import {useTranslation} from 'react-i18next';
-import {useStyles} from "./notification-popup.styles"
+import { Button, Flex, Icon, Text } from '@sdk/components'
+import { useTranslation } from 'react-i18next'
+import { useStyles } from './notification-popup.styles'
 
 export interface INotificationPopupItem {
-  notification: any,
+  notification: any
   onView: () => void
 }
 
 export const NotificationPopupItem = ({ notification, onView }: INotificationPopupItem): React.JSX.Element => {
   const { styles } = useStyles()
-    const {t} = useTranslation();
+  const { t } = useTranslation()
 
   return (
+    <Flex
+      align='center'
+      gap={ 'extra-small' }
+      justify={ 'space-between' }
+    >
       <Flex
-          align='center'
-          gap={ 'extra-small' }
-          justify={"space-between"}
+        align='center'
+        gap={ 'mini' }
       >
-        <Flex
-            align='center'
-            gap={ 'mini' }
-        >
-          <Icon value='notification-unread' className={styles.notificationPopupIcon} />
-          <Text strong>{ notification.title }</Text>
-          <Text type={ 'secondary' }>{notification.sender}</Text>
-        </Flex>
-        <Button onClick={onView} type='link' className={styles.notificationPopupButton}>
-            {t('notifications.new-notifications.show')}
-        </Button>
+        <Icon
+          className={ styles.notificationPopupIcon }
+          value='notification-unread'
+        />
+        <Text strong>{ notification.title }</Text>
+        <Text type={ 'secondary' }>{notification.sender}</Text>
       </Flex>
+      <Button
+        className={ styles.notificationPopupButton }
+        onClick={ onView }
+        type='link'
+      >
+        {t('notifications.new-notifications.show')}
+      </Button>
+    </Flex>
   )
 }

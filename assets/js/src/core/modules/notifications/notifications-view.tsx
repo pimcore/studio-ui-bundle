@@ -84,10 +84,12 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
             y: 'none'
           } }
         >
-          {notifications !== undefined && <NotificationList
+          {notifications !== undefined && (
+          <NotificationList
             activeNotification={ activeNotification }
             notifications={ notifications }
-          />}
+          />
+          )}
         </Box>
       </Content>
     </ContentLayout>
