@@ -13,10 +13,10 @@ import {
   api,
   type Error, type UserUpdateProfileApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
-import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import { userProfileUpdated, userProfileImageUpdated } from '@Pimcore/modules/auth/user/user-slice'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
@@ -31,19 +31,13 @@ interface IBlobResponse {
 export const useUserHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const [notificationApi] = useNotification()
+  const messageApi = useMessage()
 
-  const handleNotification = (successMessage, error): void => {
+  const handleNotification = async (successMessage: string, error?: any): Promise<void> => {
     if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: error.data?.message ?? t('user-management.save-user.error')
-      })
+      await messageApi.error((error.data?.message as string) ?? t('user-management.save-user.error'))
     } else {
-      notificationApi.open({
-        type: 'success',
-        message: successMessage
-      })
+      await messageApi.success(successMessage)
     }
   }
 
@@ -87,12 +81,14 @@ export const useUserHelper = (): UseUserReturn => {
         }
       }))
 
-      handleNotification(t('user-management.save-user.password.success'), passwordError)
+      await handleNotification(t('user-management.save-user.password.success'), passwordError)
     }
 
-    handleNotification(t('user-management.save-user.success'), error)
+    await handleNotification(t('user-management.save-user.success'), error)
 
-    dispatch(userProfileUpdated(data))
+    if (data !== undefined) {
+      dispatch(userProfileUpdated(data))
+    }
     return data
   }
 

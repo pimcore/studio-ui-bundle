@@ -921,7 +921,7 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
-jobs.notification.title: Notifications
+jobs.notification.title: Running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"

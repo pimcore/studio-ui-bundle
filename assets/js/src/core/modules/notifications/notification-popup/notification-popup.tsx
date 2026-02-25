@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { NotificationMessageHandler } from './handlers/notification-message-handler'
-import { NotificationPopupCollapse, type OpenNotification } from './notification-popup-collapse'
+import { NotificationPopupContent, type OpenNotification } from './notification-popup-content'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { useTranslation } from 'react-i18next'
 
@@ -45,19 +45,14 @@ export const NotificationPopup = (): React.JSX.Element => {
     })
   }, [])
 
-  const handleOnView = (id?:number) => {
-      setOpenNotifications((prev) => {
-        if (id !== undefined) {
-          const newNotifications = prev.filter((notification) => notification.id !== id)
-          if (newNotifications.length === 0) {
-            notificationApi.destroy(POPUP_KEY)
-          }
-          return newNotifications
-        }
-
+  const handleOnView = (id: number): void => {
+    setOpenNotifications((prev) => {
+      const newNotifications = prev.filter((notification) => notification.id !== id)
+      if (newNotifications.length === 0) {
         notificationApi.destroy(POPUP_KEY)
-        return []
-      })
+      }
+      return newNotifications
+    })
   }
 
   useEffect(() => {
@@ -66,14 +61,15 @@ export const NotificationPopup = (): React.JSX.Element => {
         key: POPUP_KEY,
         message: t('notifications.label'),
         description: (
-          <NotificationPopupCollapse
+          <NotificationPopupContent
             notifications={ openNotifications }
             onView={ handleOnView }
           />
         ),
-        placement: 'bottomRight',
-        duration: 0,
-        closable: false
+        onClose: () => {
+          setOpenNotifications([])
+          notificationApi.destroy(POPUP_KEY)
+        }
       })
     }
   }, [openNotifications])
