@@ -52,6 +52,7 @@ export const ColumnsFilters = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <Button
             className={ styles.btnLink }
+            data-testid="report-filters-clear-button"
             onClick={ handleClearFilters }
             type='link'
           >
@@ -59,6 +60,7 @@ export const ColumnsFilters = (): React.JSX.Element => {
           </Button>
 
           <Button
+            data-testid="report-filters-apply-button"
             onClick={ handleApplyFilters }
             type='primary'
           >

@@ -23,6 +23,7 @@ export const ProvidedTypeSelect = (): React.JSX.Element => {
   return (
     <TypeSelect
       { ...restProps }
+      data-testid="type-select"
       onChange={ onChange }
     />
   )

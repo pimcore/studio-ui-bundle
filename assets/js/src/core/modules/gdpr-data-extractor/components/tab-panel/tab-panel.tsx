@@ -71,6 +71,7 @@ export const Tabpanel = ({ data, providerKey, onProviderChange, isLoading, execu
 
   return (
     <BaseTabPanel
+      data-testid="gdpr-tab-panel"
       items={ items }
       onChange={ (tabKey) => {
         onProviderChange?.(providerData?.items[tabKey]?.key as string)

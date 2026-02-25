@@ -33,24 +33,36 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
             name="permissionsDefault"
           >
             <Select
+              dataTestId="permissions-select-default"
               mode="multiple"
-              options={ permissions.default.map((permission) => ({
-                value: permission.key,
-                label: t(`user-management.permissions.${permission.key}`)
-              })) }
-              placeholder={ t('user-management.permissions.default') }
+              options={ permissions.default.map(
+                (permission) => ({
+                  value: permission.key,
+                  label: t(
+                    `user-management.permissions.${permission.key}`
+                  )
+                })
+              ) }
+              placeholder={
+                t('user-management.permissions.default')
+              }
             ></Select>
           </Form.Item>
           <Form.Item
             name="permissionsBundles"
           >
             <Select
+              dataTestId="permissions-select-bundles"
               mode="multiple"
-              options={ permissions.bundles.map((permission) => ({
-                value: permission.key,
-                label: permission.key
-              })) }
-              placeholder={ t('user-management.permissions.bundles') }
+              options={ permissions.bundles.map(
+                (permission) => ({
+                  value: permission.key,
+                  label: permission.key
+                })
+              ) }
+              placeholder={
+                t('user-management.permissions.bundles')
+              }
             ></Select>
           </Form.Item>
         </>

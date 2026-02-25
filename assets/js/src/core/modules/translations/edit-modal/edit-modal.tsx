@@ -143,6 +143,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
   return (
     <Modal
+      data-testid="translations-edit-modal"
       footer={
         <ModalFooter>
           <Flex
@@ -152,6 +153,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
             <div>
               {showRestoreButton && (
                 <Button
+                  data-testid="translations-edit-modal-restore-button"
                   onClick={ handleRestore }
                   type="default"
                 >
@@ -160,6 +162,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
               )}
             </div>
             <Button
+              data-testid="translations-edit-modal-save-button"
               loading={ isLoading }
               onClick={ () => { form.submit() } }
               type="primary"
@@ -182,6 +185,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       ) }
     >
       <Form
+        data-testid="translations-edit-modal-form"
         form={ form }
         onFinish={ onFinish }
         onValuesChange={ (_, allValues) => {
@@ -190,6 +194,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       >
         <Tabs
           activeKey={ defaultActiveKey }
+          data-testid="translations-edit-modal-tabs"
           destroyInactiveTabPane
           items={ visibleTabItems }
           onChange={ handleTabChange }

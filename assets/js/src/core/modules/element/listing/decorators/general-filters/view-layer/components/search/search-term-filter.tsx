@@ -43,6 +43,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
   return (
     <SearchInput
       className='w-full'
+      data-testid="search-term-filter-input"
       maxWidth={ '100%' }
       onChange={ onChange }
       onSearch={ onSearch }

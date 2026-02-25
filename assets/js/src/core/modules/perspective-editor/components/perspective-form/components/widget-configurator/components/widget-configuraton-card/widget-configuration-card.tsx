@@ -16,13 +16,14 @@ import { AddWidgetDropdown } from '../add-widget-dropdown/add-widget-dropdown'
 import { StackedWidgetList } from '../stacked-widget-list/stacked-widget-list'
 
 interface WidgetConfigurationCardProps {
+  'data-testid'?: string
   label: string
   allowExpandControl?: boolean
   value?: ExtendedWidgetConfig
   onChange?: (value: any) => void
 }
 
-export const WidgetConfigurationCard = ({ label, value, onChange, allowExpandControl = true }: WidgetConfigurationCardProps): React.JSX.Element => {
+export const WidgetConfigurationCard = ({ label, value, onChange, allowExpandControl = true, 'data-testid': testId }: WidgetConfigurationCardProps): React.JSX.Element => {
   return (
     <WidgetConfiguratorProvider
       formChange={ onChange }
@@ -30,6 +31,7 @@ export const WidgetConfigurationCard = ({ label, value, onChange, allowExpandCon
     >
       <Card
         className="w-full"
+        data-testid={ testId }
         title={
           <Flex
             align="center"

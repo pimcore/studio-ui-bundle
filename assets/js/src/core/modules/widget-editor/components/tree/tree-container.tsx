@@ -79,6 +79,7 @@ export const TreeContainer = (): React.JSX.Element => {
       renderToolbar={ (
         <Toolbar justify="space-between">
           <IconButton
+            data-testid="widget-tree-refresh-button"
             icon={ { value: 'refresh' } }
             loading={ isLoading || isFetching }
             onClick={ async () => {
@@ -88,6 +89,7 @@ export const TreeContainer = (): React.JSX.Element => {
           />
 
           <IconTextButton
+            data-testid="widget-tree-create-button"
             icon={ { value: 'new' } }
             loading={ isLoading || isFetching }
             onClick={ createWidget }
