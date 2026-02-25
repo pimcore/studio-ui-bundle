@@ -22,12 +22,10 @@ import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { Flex } from '@Pimcore/components/flex/flex'
-import type { Transformation } from '../../types/media-query.types'
 import type { FieldConfig } from '../../dynamic-types/transformation-dynamic-type-interface'
 import { type TransformationDynamicTypeAbstract } from '../../dynamic-types/transformation-dynamic-type-abstract'
 
 interface BaseTransformationToolStripBoxProps {
-  transformation: Transformation
   mediaQueryId: string
   transformationIndex: number
   onRemove: () => void
@@ -82,7 +80,6 @@ const renderField = (
 ): React.ReactNode => {
   const fieldProps = { ...field.props }
 
-  // Add ref to first field for focus management
   if (isFirst && firstInputRef != null) {
     fieldProps.ref = firstInputRef
   }
@@ -110,7 +107,7 @@ const renderField = (
             { ...fieldProps }
             options={ field.options?.map(option => ({
               label: option.label,
-              value: option.value
+              value: typeof option.value === 'boolean' ? String(option.value) : option.value
             })) }
           />
         </Form.Item>
@@ -209,7 +206,7 @@ const renderField = (
         >
           <ImagePicker
             { ...fieldProps }
-            type={ fieldProps.type ?? 'add' }
+            type={ (fieldProps.type === 'add' || fieldProps.type === 'upload') ? fieldProps.type : 'add' }
           />
         </Form.Item>
       )

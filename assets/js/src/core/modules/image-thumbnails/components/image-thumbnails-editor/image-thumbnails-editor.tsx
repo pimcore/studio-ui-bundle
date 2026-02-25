@@ -20,7 +20,7 @@ import { MediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
 import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { isNil, isNull, isEqual } from 'lodash'
+import { isNil, isNull, isEqual, isEmpty } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
 import { extractGroupsFromTree } from '../../utils/tree-helpers'
@@ -91,7 +91,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [initialFormData, currentFormData])
 
   useEffect(() => {
-    if (selectedThumbnail?.id !== currentThumbnailId && configData?.settings != null && selectedThumbnail != null) {
+    if (selectedThumbnail?.id !== currentThumbnailId && !isEmpty(configData?.settings) && selectedThumbnail !== null) {
       setCurrentThumbnailId((selectedThumbnail?.id !== '' ? selectedThumbnail?.id : null) ?? null)
 
       const formData: ThumbnailFormData = {
@@ -126,18 +126,18 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [isDirty, onChange])
 
   const onValuesChange = useCallback((changedValues: Partial<ThumbnailFormData>, allValues: ThumbnailFormData): void => {
-    setCurrentFormData(prev => !isNull(prev) ? { ...prev, ...allValues } : null)
+    setCurrentFormData(prev => prev !== null ? { ...prev, ...allValues } : null)
   }, [])
 
   const handleMediaQueriesChange = useCallback((updatedMediaQueries: MediaQuery[]): void => {
     setMediaQueries(updatedMediaQueries)
     setCurrentFormData(prev =>
-      !isNull(prev) ? { ...prev, mediaQueries: updatedMediaQueries } : null
+      prev !== null ? { ...prev, mediaQueries: updatedMediaQueries } : null
     )
   }, [])
 
   const handleSave = useCallback((): void => {
-    if (selectedThumbnail?.name == null || currentFormData == null) return
+    if (isEmpty(selectedThumbnail) || currentFormData === null) return
 
     form.validateFields().then(async (values: ThumbnailFormData) => {
       try {
@@ -168,18 +168,18 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           }
         })
 
-        if (response?.settings?.modificationDate != null) {
+        if (!isEmpty(response)) {
           modificationDateRef.current = response.settings.modificationDate
         }
 
         setInitialFormData({ ...currentFormData })
 
         void messageApi.success(t('save-success'))
-      } catch (error) {
+      } catch  {
         trackError(new GeneralError('Could not save thumbnail configuration'))
       }
-    }).catch((error) => {
-      trackError(new GeneralError('Validation failed'))
+    }).catch(() => {
+        trackError(new GeneralError('Validation failed'))
     })
   }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
 

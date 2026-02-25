@@ -25,10 +25,7 @@ interface TransformationsListProps {
 
 const DefaultTransformationToolStripBox: React.FC<{
   transformation: Transformation
-  mediaQueryId: string
-  transformationIndex: number
   onRemove: () => void
-  onFocus?: () => void
 }> = ({ transformation, onRemove }) => {
   const { t } = useTranslation()
 
@@ -62,10 +59,8 @@ export const TransformationsList = ({
       return (
         <DefaultTransformationToolStripBox
           key={ transformation.id }
-          mediaQueryId={ mediaQueryId }
           onRemove={ () => { onRemove(transformation.id) } }
           transformation={ transformation }
-          transformationIndex={ index }
         />
       )
     }
@@ -77,7 +72,6 @@ export const TransformationsList = ({
         onMoveDown={ () => onMoveDown?.(transformation.id) }
         onMoveUp={ () => onMoveUp?.(transformation.id) }
         onRemove={ () => { onRemove(transformation.id) } }
-        transformation={ transformation }
         transformationIndex={ index }
       />
     )

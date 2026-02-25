@@ -36,7 +36,7 @@ export class SharpenTransformationType extends TransformationDynamicTypeAbstract
       this.createNumberFieldConfig('radius', 'Radius', 'Enter radius value'),
       this.createNumberFieldConfig('sigma', 'Sigma', 'Enter sigma value'),
       this.createNumberFieldConfig('amount', 'Amount', 'Enter amount value'),
-      this.createNumberFieldConfig('threshold', 'Threshold', 'Enter threshold value', 0.0)
+      this.createNumberFieldConfig('threshold', 'Threshold', 'Enter threshold value', 0)
     ]
   }
 }

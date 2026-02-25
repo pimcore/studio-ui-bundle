@@ -33,7 +33,7 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
     const queryName = (mediaQuery.query !== '' ? mediaQuery.query : `media-${mediaQuery.id}`) ?? `media-${mediaQuery.id}`
 
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
-      method: transformation.type, 
+      method: transformation.type,
       arguments: transformation.config
     }))
 
@@ -76,19 +76,18 @@ export const convertFromBackendFormat = (
 export const getDisplayName = (query: string): string => {
   if (query.includes('min-width')) {
     const match = query.match(/min-width:\s*(\d+)/)
-    return (match != null) ? `≥ ${match[1]}px` : query
+    return (match !== null) ? `≥ ${match[1]}px` : query
   }
 
   if (query.includes('max-width')) {
     const match = query.match(/max-width:\s*(\d+)/)
-    return (match != null) ? `≤ ${match[1]}px` : query
+    return (match !== null) ? `≤ ${match[1]}px` : query
   }
 
   return query.length > 20 ? query.substring(0, 20) + '...' : query
 }
 
 const getTransformationLabel = (method: string, args: Record<string, any> = {}): string => {
-
   const formatPath = (path: any): string => {
     return (path != null && typeof path === 'string') ? `(${path})` : ''
   }
