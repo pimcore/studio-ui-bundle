@@ -175,11 +175,11 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         setInitialFormData({ ...currentFormData })
 
         void messageApi.success(t('save-success'))
-      } catch  {
+      } catch {
         trackError(new GeneralError('Could not save thumbnail configuration'))
       }
     }).catch(() => {
-        trackError(new GeneralError('Validation failed'))
+      trackError(new GeneralError('Validation failed'))
     })
   }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
 
