@@ -41,7 +41,6 @@ export const FieldCollectionGeneralSettingsFormFields = (): React.JSX.Element =>
         <Form.Item
           label={ t('field-collection.general-settings.title-label') }
           name="title"
-          rules={ [{ required: true, message: t('field-collection.general-settings.enter-title') }] }
         >
           <Input />
         </Form.Item>
