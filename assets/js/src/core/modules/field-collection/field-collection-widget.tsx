@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import {
   type FieldCollectionTreeNodeFolder,
@@ -61,7 +61,10 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const result = useClassFieldCollectionGetTreeQuery({})
 
-  if (result.data !== undefined && 'items' in result.data) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const mappedData = useMemo(() => {
+    if (result.data === undefined || !('items' in result.data)) return undefined
+
     const mappedItems: ConfigurationPartial[] = []
 
     for (const node of result.data.items as Array<FieldCollectionTreeNodeItem | FieldCollectionTreeNodeFolder>) {
@@ -86,13 +89,11 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
       }
     }
 
-    return {
-      ...result,
-      data: {
-        ...result.data,
-        items: mappedItems
-      }
-    }
+    return { ...result.data, items: mappedItems }
+  }, [result.data])
+
+  if (mappedData !== undefined) {
+    return { ...result, data: mappedData }
   }
 
   return result

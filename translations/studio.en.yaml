@@ -224,8 +224,11 @@ field-collection.general-settings.key: Key
 field-collection.general-settings.title-label: Title
 field-collection.general-settings.enter-title: Please enter a title
 field-collection.general-settings.group: Group
-field-collection.general-settings.parent-class: Parent Class
+field-collection.general-settings.parent-class: Parent PHP Class
 field-collection.general-settings.implements-interfaces: Implements Interfaces
+field-collection.general-settings.usages.title: Usages
+field-collection.general-settings.usages.class: Class
+field-collection.general-settings.usages.field: Field
 custom-layout.import-success: Custom layout imported successfully
 custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
 custom-layout.delete.success: Custom layout deleted successfully

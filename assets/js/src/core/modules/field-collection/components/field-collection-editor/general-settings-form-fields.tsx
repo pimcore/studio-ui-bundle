@@ -9,22 +9,33 @@
  */
 
 import { FormKit } from '@sdk/components'
+import { isNil } from 'lodash'
 import React, { useMemo } from 'react'
 import { Input } from '@Pimcore/components/input/input'
 import { Form } from '@Pimcore/components/form/form'
 import { useTranslation } from 'react-i18next'
+import { FieldCollectionUsagesGrid } from './field-collection-usages-grid'
 
 export const FieldCollectionGeneralSettingsFormFields = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const form = Form.useFormInstance()
+  const collectionKey = form.getFieldValue('id') as string | undefined
 
   return useMemo(() => (
     <>
       <FormKit.Panel title={ t('field-collection.general-settings.title') }>
         <Form.Item
-          label={ t('field-collection.general-settings.key') }
-          name="id"
+          label={ t('field-collection.general-settings.parent-class') }
+          name="parentClass"
         >
-          <Input disabled />
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('field-collection.general-settings.implements-interfaces') }
+          name="implementsInterfaces"
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -41,21 +52,13 @@ export const FieldCollectionGeneralSettingsFormFields = (): React.JSX.Element =>
         >
           <Input />
         </Form.Item>
-
-        <Form.Item
-          label={ t('field-collection.general-settings.parent-class') }
-          name="parentClass"
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('field-collection.general-settings.implements-interfaces') }
-          name="implementsInterfaces"
-        >
-          <Input />
-        </Form.Item>
       </FormKit.Panel>
+
+      {!isNil(collectionKey) && (
+        <FormKit.Panel title={ t('field-collection.general-settings.usages.title') }>
+          <FieldCollectionUsagesGrid collectionKey={ collectionKey } />
+        </FormKit.Panel>
+      )}
     </>
-  ), [])
+  ), [collectionKey])
 }

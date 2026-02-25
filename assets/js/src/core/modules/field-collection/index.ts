@@ -36,7 +36,7 @@ moduleSystem.registerModule({
         component: 'field-collections',
         config: {
           translationKey: 'widget.field-collections',
-          icon: { type: 'name', value: 'fieldcollection' }
+          icon: { type: 'name', value: 'field-collection-field' }
         }
       }
     })
