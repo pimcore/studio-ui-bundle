@@ -14,6 +14,7 @@ import {
   type BackendMediaOrderFormat,
   type TransformationType
 } from '../types/media-query.types'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   medias: BackendMediasFormat
@@ -32,7 +33,7 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
     const queryName = (mediaQuery.query !== '' ? mediaQuery.query : `media-${mediaQuery.id}`) ?? `media-${mediaQuery.id}`
 
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
-      method: transformation.type, // Direct usage - no need for redundant translation
+      method: transformation.type, 
       arguments: transformation.config
     }))
 
@@ -87,6 +88,11 @@ export const getDisplayName = (query: string): string => {
 }
 
 const getTransformationLabel = (method: string, args: Record<string, any> = {}): string => {
+
+  const formatPath = (path: any): string => {
+    return (path != null && typeof path === 'string') ? `(${path})` : ''
+  }
+
   switch (method) {
     case 'resize':
       return `Resize ${args.width ?? '?'}x${args.height ?? '?'}`
@@ -119,15 +125,15 @@ const getTransformationLabel = (method: string, args: Record<string, any> = {}):
     case 'setBackgroundColor':
       return `Background Color: ${args.color ?? '#ffffff'}`
     case 'setBackgroundImage':
-      return `Background Image ${args.path != null ? `(${args.path})` : ''}`
+      return `Background Image ${formatPath(args.path)}`
     case 'roundCorners':
       return `Round Corners ${args.width ?? 10}x${args.height ?? 10}px`
     case 'addOverlay':
-      return `Add Overlay ${args.path != null ? `(${args.path})` : ''} at ${args.origin ?? 'top-left'}`
+      return `Add Overlay ${formatPath(args.path)} at ${args.origin ?? 'top-left'}`
     case 'addOverlayFit':
-      return `Add Overlay Fit ${args.path != null ? `(${args.path})` : ''} at ${args.origin ?? 'center'}`
+      return `Add Overlay Fit ${formatPath(args.path)} at ${args.origin ?? 'center'}`
     case 'applyMask':
-      return `Apply Mask ${args.path != null ? `(${args.path})` : ''}`
+      return `Apply Mask ${formatPath(args.path)}`
     case 'tifforiginal':
       return 'TIFF Original'
     case '1x1_pixel':
@@ -140,9 +146,9 @@ const getTransformationLabel = (method: string, args: Record<string, any> = {}):
  * Generate unique ID for media query
  */
 export const generateMediaQueryId = (): string => {
-  return `mq-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  return `mq-${uuid()}`
 }
 
 export const generateTransformationId = (): string => {
-  return `tr-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  return `tr-${uuid()}`
 }

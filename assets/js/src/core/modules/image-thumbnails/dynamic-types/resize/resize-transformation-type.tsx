@@ -33,8 +33,8 @@ export class ResizeTransformationType extends TransformationDynamicTypeAbstract 
 
   getFieldConfig (): FieldConfig[] {
     return [
-      this.createNumberFieldConfig('width', 'Width', 'Enter width', undefined),
-      this.createNumberFieldConfig('height', 'Height', 'Enter height', undefined),
+      this.createNumberFieldConfig('width', 'Width', 'Enter width'),
+      this.createNumberFieldConfig('height', 'Height', 'Enter height'),
       this.createSelectFieldConfig('positioning', 'Position', [
         { value: 'center', label: 'Center' },
         { value: 'topleft', label: 'Top Left' },
