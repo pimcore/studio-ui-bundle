@@ -69,6 +69,7 @@ import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-ho
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
+import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
@@ -252,6 +253,7 @@ import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline
 import numberField from '@Pimcore/assets/icons/number-field.inline.svg?react'
 import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
+import objectBricks from '@Pimcore/assets/icons/object-bricks.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
@@ -347,6 +349,7 @@ import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
 import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
+import translations from '@Pimcore/assets/icons/translations.inline.svg?react'
 import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
 import trimmer from '@Pimcore/assets/icons/trimmer.inline.svg?react'
@@ -593,6 +596,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'class',
       component: classIcon
+    })
+    iconLibrary.register({
+      name: 'classification-store',
+      component: classificationStore
     })
     iconLibrary.register({
       name: 'close-filled',
@@ -1327,6 +1334,10 @@ moduleSystem.registerModule({
       component: numberType
     })
     iconLibrary.register({
+      name: 'object-bricks',
+      component: objectBricks
+    })
+    iconLibrary.register({
       name: 'open-folder',
       component: openFolder
     })
@@ -1705,6 +1716,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'translate',
       component: translate
+    })
+    iconLibrary.register({
+      name: 'translations',
+      component: translations
     })
     iconLibrary.register({
       name: 'trash',
