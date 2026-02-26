@@ -67,7 +67,7 @@ export const DetailSave = (): React.JSX.Element => {
 
       // All types: check for empty name
       if (name.trim() === '') {
-        emptyNameViolations.push({ id: key, label: definition.fieldtype as string })
+        emptyNameViolations.push({ id: key, label: definition.fieldtype })
         if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
       }
 
@@ -105,30 +105,30 @@ export const DetailSave = (): React.JSX.Element => {
 
     if (hasViolations) {
       const content = (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={ { display: 'flex', flexDirection: 'column', gap: 8 } }>
           <span>{t('field-definitions.validation.errors-found')}</span>
           {emptyNameViolations.length > 0 && (
             <div>
               <strong>{t('field-definitions.validation.empty-name')}</strong>
-              <ul>{emptyNameViolations.map(v => <li key={v.id}>{v.label}</li>)}</ul>
+              <ul>{emptyNameViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
             </div>
           )}
           {reservedWordViolations.length > 0 && (
             <div>
               <strong>{t('field-definitions.validation.reserved-word')}</strong>
-              <ul>{reservedWordViolations.map(v => <li key={v.id}>{v.label}</li>)}</ul>
+              <ul>{reservedWordViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
             </div>
           )}
           {formatViolations.length > 0 && (
             <div>
               <strong>{t('field-definitions.validation.invalid-format')}</strong>
-              <ul>{formatViolations.map(v => <li key={v.id}>{v.label}</li>)}</ul>
+              <ul>{formatViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
             </div>
           )}
           {duplicateViolations.length > 0 && (
             <div>
               <strong>{t('field-definitions.validation.duplicate-name')}</strong>
-              <ul>{duplicateViolations.map(v => <li key={v.id}>{v.label}</li>)}</ul>
+              <ul>{duplicateViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
             </div>
           )}
         </div>
