@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { NoConfigurationComponent } from '../../components/no-config-component'
+import { TransformationComponent } from '../../types/transformation-component-types'
 
 export type SepiaTransformationConfig = Record<string, never>
 
@@ -26,7 +27,7 @@ export class SepiaTransformationType extends TransformationDynamicTypeAbstract {
     return 'Sepia'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return []
+  getReactComponent (): TransformationComponent {
+    return NoConfigurationComponent
   }
 }

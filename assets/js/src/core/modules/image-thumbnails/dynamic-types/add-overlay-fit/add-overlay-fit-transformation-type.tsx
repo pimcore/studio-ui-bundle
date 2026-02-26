@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { AddOverlayFitTransformationComponent } from './add-overlay-fit-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface AddOverlayFitTransformationConfig {
   asset?: number
@@ -30,31 +31,7 @@ export class AddOverlayFitTransformationType extends TransformationDynamicTypeAb
     return 'Add Overlay Fit'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createImagePickerFieldConfig('asset', 'Overlay Image'),
-      this.createSelectFieldConfig('origin', 'Origin', [
-        { value: 'center', label: 'Center' },
-        { value: 'top-left', label: 'Top Left' },
-        { value: 'top-right', label: 'Top Right' },
-        { value: 'bottom-left', label: 'Bottom Left' },
-        { value: 'bottom-right', label: 'Bottom Right' }
-      ], 'center')
-    ]
-  }
-
-  private createImagePickerFieldConfig (
-    name: string,
-    label: string
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'image-picker', label, {
-      defaultValue: null,
-      props: {
-        width: 300,
-        height: 150,
-        type: 'add',
-        allowedTypes: ['image']
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return AddOverlayFitTransformationComponent
   }
 }

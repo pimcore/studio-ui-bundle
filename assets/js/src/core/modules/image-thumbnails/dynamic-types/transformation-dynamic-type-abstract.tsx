@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-import { type TransformationDynamicTypeInterface, type FieldConfig } from './transformation-dynamic-type-interface'
+import { type TransformationDynamicTypeInterface } from './transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 @injectable()
 export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstract implements TransformationDynamicTypeInterface {
@@ -18,80 +19,23 @@ export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstr
 
   abstract getName (): string
   abstract getLabel (): string
-  abstract getFieldConfig (): FieldConfig[]
 
   getId (): string {
     return this.id
   }
 
-  validateConfig (config: any): boolean {
+  validateConfig (config: unknown): boolean {
     return true
   }
 
-  async configureTransformation (config: any): Promise<any | null> {
+  async configureTransformation (config: unknown): Promise<unknown | null> {
     return await Promise.resolve(this.createDefaultConfig())
   }
 
-  createDefaultConfig (): any {
-    return this.getFieldConfig().reduce<any>((config, field) => {
-      config[field.name] = field.defaultValue
-      return config
-    }, {})
+  createDefaultConfig (): unknown {
+    return {}
   }
 
-  protected createFieldConfig (
-    name: string,
-    type: FieldConfig['type'],
-    label: string,
-    options?: Partial<FieldConfig>
-  ): FieldConfig {
-    return {
-      name,
-      type,
-      label,
-      defaultValue: undefined,
-      required: false,
-      ...options
-    }
-  }
-
-  protected createSelectFieldConfig (
-    name: string,
-    label: string,
-    options: Array<{ value: any, label: string }>,
-    defaultValue?: any
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'select', label, {
-      options,
-      defaultValue: defaultValue ?? options[0]?.value,
-      props: { placeholder: `Select ${label.toLowerCase()}` }
-    })
-  }
-
-  protected createNumberFieldConfig (
-    name: string,
-    label: string,
-    placeholder?: string,
-    defaultValue?: number
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'number', label, {
-      defaultValue,
-      props: {
-        placeholder,
-        min: 1,
-        style: { width: '100%' }
-      }
-    })
-  }
-
-  protected createBooleanFieldConfig (
-    name: string,
-    label: string,
-    defaultValue: boolean = false
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'boolean', label, {
-      defaultValue,
-      props: { labelRight: label }
-    })
-  }
+  // All transformation types must provide a React component
+  abstract getReactComponent (): TransformationComponent
 }

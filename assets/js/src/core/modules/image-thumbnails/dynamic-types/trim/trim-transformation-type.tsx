@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { TrimTransformationComponent } from './trim-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface TrimTransformationConfig {
   tolerance?: number
@@ -28,9 +29,7 @@ export class TrimTransformationType extends TransformationDynamicTypeAbstract {
     return 'Trim'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('tolerance', 'Tolerance', 'Enter tolerance value')
-    ]
+  getReactComponent (): TransformationComponent {
+    return TrimTransformationComponent
   }
 }

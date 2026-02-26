@@ -9,23 +9,14 @@
  */
 
 import type { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-
-export interface FieldConfig {
-  name: string
-  type: 'number' | 'select' | 'boolean' | 'text' | 'slider' | 'color-picker' | 'image-picker'
-  label: string
-  defaultValue?: any
-  required?: boolean
-  props?: Record<string, any>
-  options?: Array<{ value: any, label: string }>
-}
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface TransformationDynamicTypeInterface extends DynamicTypeAbstract {
   getId: () => string
   getName: () => string
   getLabel: () => string
-  getFieldConfig: () => FieldConfig[]
-  createDefaultConfig: () => any
-  validateConfig: (config: any) => boolean
-  configureTransformation: (config: any) => Promise<any | null>
+  getReactComponent: () => TransformationComponent
+  createDefaultConfig: () => unknown
+  validateConfig: (config: unknown) => boolean
+  configureTransformation: (config: unknown) => Promise<unknown | null>
 }

@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { BrightnessSaturationTransformationComponent } from './brightness-saturation-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface BrightnessSaturationTransformationConfig {
   brightness?: number
@@ -30,29 +31,7 @@ export class BrightnessSaturationTransformationType extends TransformationDynami
     return 'Brightness/Saturation'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createSliderFieldConfig('brightness', 'Brightness', 0, 200, 100),
-      this.createSliderFieldConfig('saturation', 'Saturation', 0, 200, 100),
-      this.createSliderFieldConfig('hue', 'Hue', 0, 200, 100)
-    ]
-  }
-
-  private createSliderFieldConfig (
-    name: string,
-    label: string,
-    min: number,
-    max: number,
-    defaultValue: number
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'slider', label, {
-      defaultValue,
-      props: {
-        min,
-        max,
-        showValue: true,
-        style: { width: '100%' }
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return BrightnessSaturationTransformationComponent
   }
 }

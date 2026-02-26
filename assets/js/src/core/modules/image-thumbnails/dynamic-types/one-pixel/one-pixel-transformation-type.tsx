@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { NoConfigurationComponent } from '../../components/no-config-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export type OnePixelTransformationConfig = Record<string, never>
 
@@ -26,9 +27,8 @@ export class OnePixelTransformationType extends TransformationDynamicTypeAbstrac
     return '1x1 Pixel'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    // No configuration fields - this transformation generates a 1x1 pixel image
-    return []
+  getReactComponent (): TransformationComponent {
+    return NoConfigurationComponent
   }
 
   createDefaultConfig (): any {

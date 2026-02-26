@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { GaussianBlurTransformationComponent } from './gaussian-blur-transformation-component'
 
 export interface GaussianBlurTransformationConfig {
   radius?: number
@@ -29,10 +31,7 @@ export class GaussianBlurTransformationType extends TransformationDynamicTypeAbs
     return 'Gaussian Blur'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('radius', 'Radius', 'Enter radius value (0+)', 0),
-      this.createNumberFieldConfig('sigma', 'Sigma', 'Enter sigma value (1+)', 1)
-    ]
+  getReactComponent (): TransformationComponent {
+    return GaussianBlurTransformationComponent
   }
 }

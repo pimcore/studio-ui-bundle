@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { SharpenTransformationComponent } from './sharpen-transformation-component'
 
 export interface SharpenTransformationConfig {
   radius?: number
@@ -31,12 +33,7 @@ export class SharpenTransformationType extends TransformationDynamicTypeAbstract
     return 'Sharpen'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('radius', 'Radius', 'Enter radius value'),
-      this.createNumberFieldConfig('sigma', 'Sigma', 'Enter sigma value'),
-      this.createNumberFieldConfig('amount', 'Amount', 'Enter amount value'),
-      this.createNumberFieldConfig('threshold', 'Threshold', 'Enter threshold value', 0)
-    ]
+  getReactComponent (): TransformationComponent {
+    return SharpenTransformationComponent
   }
 }

@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { RoundCornersTransformationComponent } from './round-corners-transformation-component'
 
 export interface RoundCornersTransformationConfig {
   width?: number
@@ -29,10 +31,7 @@ export class RoundCornersTransformationType extends TransformationDynamicTypeAbs
     return 'Round Corners'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', 'Enter corner width radius', 10),
-      this.createNumberFieldConfig('height', 'Height', 'Enter corner height radius', 10)
-    ]
+  getReactComponent (): TransformationComponent {
+    return RoundCornersTransformationComponent
   }
 }

@@ -9,28 +9,26 @@
  */
 
 import React from 'react'
-import { renderFieldsForFieldCollection } from '../utils/field-rendering-utils'
 import { transformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
 
 export interface TransformationFieldCollectionItemProps {
   transformationType: string
 }
 
-export const TransformationFieldCollectionItem = ({ transformationType }: TransformationFieldCollectionItemProps): React.JSX.Element => {
+export const TransformationFieldCollectionItem = ({
+  transformationType
+}: TransformationFieldCollectionItemProps): React.JSX.Element => {
   const registryItem = transformationDynamicTypeRegistry.getDynamicType(transformationType, false)
 
   if (registryItem == null) {
     return <div>Unknown transformation type: {transformationType}</div>
   }
 
-  const fieldConfigs = registryItem.getFieldConfig()
+  const Component = registryItem.getReactComponent()
 
-  // This component renders the actual field content inside the FieldCollectionItem
-  // The FieldCollectionItem handles the ToolStripBox, toolstrip, and form structure
-  // We just need to render the fields for this specific transformation type
   return (
-    <>
-      {renderFieldsForFieldCollection(fieldConfigs)}
-    </>
+    <Component
+      formBasePath={ [] } 
+    />
   )
 }

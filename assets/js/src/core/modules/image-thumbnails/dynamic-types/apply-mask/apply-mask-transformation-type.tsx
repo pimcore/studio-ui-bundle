@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { ApplyMaskTransformationComponent } from './apply-mask-transformation-component'
 
 export interface ApplyMaskTransformationConfig {
   asset?: number
@@ -29,24 +31,7 @@ export class ApplyMaskTransformationType extends TransformationDynamicTypeAbstra
     return 'Apply Mask'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createImagePickerFieldConfig('asset', 'Mask Image')
-    ]
-  }
-
-  private createImagePickerFieldConfig (
-    name: string,
-    label: string
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'image-picker', label, {
-      defaultValue: null,
-      props: {
-        width: 300,
-        height: 150,
-        type: 'add',
-        allowedTypes: ['image']
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return ApplyMaskTransformationComponent
   }
 }

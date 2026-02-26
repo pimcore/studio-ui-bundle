@@ -52,8 +52,9 @@ export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstra
   }
 
   getToolStripBox (transformationType: string): React.ComponentType<any> | null {
-    // Return null to use the default fallback component
-    // This can be extended later to return type-specific toolstrip components
+    // All transformation types now have React components
+    // Could return a ToolStripBox wrapper component here in the future
+    // For now, return null to use the default fallback component
     return null
   }
 }

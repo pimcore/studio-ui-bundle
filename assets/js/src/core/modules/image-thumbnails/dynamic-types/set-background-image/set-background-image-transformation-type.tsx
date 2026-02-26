@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { SetBackgroundImageTransformationComponent } from './set-background-image-transformation-component'
 
 export interface SetBackgroundImageTransformationConfig {
   asset?: number
@@ -30,29 +32,7 @@ export class SetBackgroundImageTransformationType extends TransformationDynamicT
     return 'Set Background Image'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createImagePickerFieldConfig('asset', 'Background Image'),
-      this.createSelectFieldConfig('mode', 'Mode', [
-        { value: '', label: 'fit' },
-        { value: 'cropTopLeft', label: 'cropTopLeft' },
-        { value: 'asTexture', label: 'asTexture' }
-      ], '')
-    ]
-  }
-
-  private createImagePickerFieldConfig (
-    name: string,
-    label: string
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'image-picker', label, {
-      defaultValue: null,
-      props: {
-        width: 300,
-        height: 150,
-        type: 'add',
-        allowedTypes: ['image']
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return SetBackgroundImageTransformationComponent
   }
 }

@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { SetBackgroundColorTransformationComponent } from './set-background-color-transformation-component'
 
 export interface SetBackgroundColorTransformationConfig {
   color?: string
@@ -28,24 +30,7 @@ export class SetBackgroundColorTransformationType extends TransformationDynamicT
     return 'Set Background Color'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createColorFieldConfig('color', 'Background Color', '#ffffff')
-    ]
-  }
-
-  private createColorFieldConfig (
-    name: string,
-    label: string,
-    defaultValue: string
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'color-picker', label, {
-      defaultValue,
-      props: {
-        format: 'hex',
-        showText: true,
-        style: { width: '100%' }
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return SetBackgroundColorTransformationComponent
   }
 }

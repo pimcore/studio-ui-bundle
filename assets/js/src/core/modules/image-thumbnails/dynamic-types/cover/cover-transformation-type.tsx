@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { CoverTransformationComponent } from './cover-transformation-component'
 
 export interface CoverTransformationConfig {
   width?: number
@@ -31,22 +33,7 @@ export class CoverTransformationType extends TransformationDynamicTypeAbstract {
     return 'Cover'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createNumberFieldConfig('height', 'Height', '600', 600),
-      this.createSelectFieldConfig('positioning', 'Position', [
-        { value: 'center', label: 'Center' },
-        { value: 'topleft', label: 'Top Left' },
-        { value: 'topright', label: 'Top Right' },
-        { value: 'bottomleft', label: 'Bottom Left' },
-        { value: 'bottomright', label: 'Bottom Right' }
-      ], 'center'),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false),
-      this.createFieldConfig('description', 'text', 'Focal Point', {
-        defaultValue: 'The positioning determines which part of the image remains visible when cropping.',
-        props: { readOnly: true, disabled: true }
-      })
-    ]
+  getReactComponent (): TransformationComponent {
+    return CoverTransformationComponent
   }
 }

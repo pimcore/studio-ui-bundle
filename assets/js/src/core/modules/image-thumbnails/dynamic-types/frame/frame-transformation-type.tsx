@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { FrameTransformationComponent } from './frame-transformation-component'
 
 export interface FrameTransformationConfig {
   width?: number
@@ -30,11 +32,7 @@ export class FrameTransformationType extends TransformationDynamicTypeAbstract {
     return 'Frame'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', 'Enter width value'),
-      this.createNumberFieldConfig('height', 'Height', 'Enter height value'),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
-    ]
+  getReactComponent (): TransformationComponent {
+    return FrameTransformationComponent
   }
 }

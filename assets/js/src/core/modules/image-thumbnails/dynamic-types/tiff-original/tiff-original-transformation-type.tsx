@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { NoConfigurationComponent } from '../../components/no-config-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export type TiffOriginalTransformationConfig = Record<string, never>
 
@@ -26,9 +27,8 @@ export class TiffOriginalTransformationType extends TransformationDynamicTypeAbs
     return 'TIFF Original'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    // No configuration fields - this transformation uses the original TIFF file
-    return []
+  getReactComponent (): TransformationComponent {
+    return NoConfigurationComponent
   }
 
   createDefaultConfig (): any {

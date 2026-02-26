@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { AddOverlayTransformationComponent } from './add-overlay-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface AddOverlayTransformationConfig {
   asset?: number
@@ -33,52 +34,7 @@ export class AddOverlayTransformationType extends TransformationDynamicTypeAbstr
     return 'Add Overlay'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createImagePickerFieldConfig('asset', 'Overlay Image'),
-      this.createNumberFieldConfig('x', 'X Position', 'Horizontal position in pixels', 0),
-      this.createNumberFieldConfig('y', 'Y Position', 'Vertical position in pixels', 0),
-      this.createSelectFieldConfig('origin', 'Origin', [
-        { value: 'top-left', label: 'Top Left' },
-        { value: 'top-right', label: 'Top Right' },
-        { value: 'center', label: 'Center' },
-        { value: 'bottom-left', label: 'Bottom Left' },
-        { value: 'bottom-right', label: 'Bottom Right' }
-      ], 'top-left'),
-      this.createSliderFieldConfig('alpha', 'Opacity', 0, 100, 100)
-    ]
-  }
-
-  private createImagePickerFieldConfig (
-    name: string,
-    label: string
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'image-picker', label, {
-      defaultValue: null,
-      props: {
-        width: 300,
-        height: 150,
-        type: 'add',
-        allowedTypes: ['image']
-      }
-    })
-  }
-
-  private createSliderFieldConfig (
-    name: string,
-    label: string,
-    min: number,
-    max: number,
-    defaultValue: number
-  ): FieldConfig {
-    return this.createFieldConfig(name, 'slider', label, {
-      defaultValue,
-      props: {
-        min,
-        max,
-        showValue: true,
-        style: { width: '100%' }
-      }
-    })
+  getReactComponent (): TransformationComponent {
+    return AddOverlayTransformationComponent
   }
 }

@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { ScaleByWidthTransformationComponent } from './scale-by-width-transformation-component'
 
 export interface ScaleByWidthTransformationConfig {
   width?: number
@@ -29,10 +31,7 @@ export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbs
     return 'Scale by Width'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', '800', 800),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
-    ]
+  getReactComponent (): TransformationComponent {
+    return ScaleByWidthTransformationComponent
   }
 }

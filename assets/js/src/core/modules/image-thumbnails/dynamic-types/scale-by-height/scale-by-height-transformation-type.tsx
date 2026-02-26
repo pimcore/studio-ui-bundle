@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { ScaleByHeightTransformationComponent } from './scale-by-height-transformation-component'
 
 export interface ScaleByHeightTransformationConfig {
   height?: number
@@ -29,10 +31,7 @@ export class ScaleByHeightTransformationType extends TransformationDynamicTypeAb
     return 'Scale by Height'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('height', 'Height', '600', 600),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
-    ]
+  getReactComponent (): TransformationComponent {
+    return ScaleByHeightTransformationComponent
   }
 }

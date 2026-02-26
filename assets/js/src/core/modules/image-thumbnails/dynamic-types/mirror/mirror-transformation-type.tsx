@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { MirrorTransformationComponent } from './mirror-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface MirrorTransformationConfig {
   mode?: 'horizontal' | 'vertical'
@@ -28,12 +29,7 @@ export class MirrorTransformationType extends TransformationDynamicTypeAbstract 
     return 'Mirror'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createSelectFieldConfig('mode', 'Mode', [
-        { value: 'horizontal', label: 'Horizontal' },
-        { value: 'vertical', label: 'Vertical' }
-      ], 'horizontal')
-    ]
+  getReactComponent (): TransformationComponent {
+    return MirrorTransformationComponent
   }
 }

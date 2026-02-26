@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { RotateTransformationComponent } from './rotate-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface RotateTransformationConfig {
   angle?: number
@@ -28,9 +29,7 @@ export class RotateTransformationType extends TransformationDynamicTypeAbstract 
     return 'Rotate'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('angle', 'Angle', 'Enter rotation angle in degrees')
-    ]
+  getReactComponent (): TransformationComponent {
+    return RotateTransformationComponent
   }
 }

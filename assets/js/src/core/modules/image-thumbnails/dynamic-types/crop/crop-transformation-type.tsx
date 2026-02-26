@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import type { TransformationComponent } from '../types/transformation-component-types'
+import { CropTransformationComponent } from './crop-transformation-component'
 
 export interface CropTransformationConfig {
   width?: number
@@ -31,12 +33,7 @@ export class CropTransformationType extends TransformationDynamicTypeAbstract {
     return 'Crop'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', 'Enter width value'),
-      this.createNumberFieldConfig('height', 'Height', 'Enter height value'),
-      this.createNumberFieldConfig('x', 'X Position', 'Enter X coordinate'),
-      this.createNumberFieldConfig('y', 'Y Position', 'Enter Y coordinate')
-    ]
+  getReactComponent (): TransformationComponent {
+    return CropTransformationComponent
   }
 }

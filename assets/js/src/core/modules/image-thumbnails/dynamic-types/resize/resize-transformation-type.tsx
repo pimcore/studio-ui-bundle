@@ -10,7 +10,8 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { type FieldConfig } from '../transformation-dynamic-type-interface'
+import { ResizeTransformationComponent } from './resize-transformation-component'
+import type { TransformationComponent } from '../types/transformation-component-types'
 
 export interface ResizeTransformationConfig {
   width?: number
@@ -31,18 +32,7 @@ export class ResizeTransformationType extends TransformationDynamicTypeAbstract 
     return 'Resize'
   }
 
-  getFieldConfig (): FieldConfig[] {
-    return [
-      this.createNumberFieldConfig('width', 'Width', 'Enter width'),
-      this.createNumberFieldConfig('height', 'Height', 'Enter height'),
-      this.createSelectFieldConfig('positioning', 'Position', [
-        { value: 'center', label: 'Center' },
-        { value: 'topleft', label: 'Top Left' },
-        { value: 'topright', label: 'Top Right' },
-        { value: 'bottomleft', label: 'Bottom Left' },
-        { value: 'bottomright', label: 'Bottom Right' }
-      ], 'center'),
-      this.createBooleanFieldConfig('forceResize', 'Force Resize', false)
-    ]
+  getReactComponent (): TransformationComponent {
+    return ResizeTransformationComponent
   }
 }
