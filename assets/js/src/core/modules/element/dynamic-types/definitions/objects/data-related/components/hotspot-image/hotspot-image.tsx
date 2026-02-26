@@ -224,6 +224,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           setValue={ handleChange }
           value={ imageValue }
+          onSearch={ openElementSelector }
+          onUpload={ handleUpload }
         />)
       }
     >

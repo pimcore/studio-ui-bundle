@@ -18,6 +18,8 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import {Dropdown} from "@Pimcore/components/dropdown/dropdown";
+import {Icon} from "@Pimcore/components/icon/icon";
 
 export interface ImageValue {
   type: 'asset'
@@ -29,7 +31,9 @@ interface ImageFooterProps {
   emptyValue?: () => void
   disabled?: boolean
   setValue: (value: ImageValue | null) => void
-  value?: ImageValue | null
+  value?: ImageValue | null,
+  onSearch?: () => void
+  onUpload?: () => void
 }
 
 export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
@@ -91,6 +95,40 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
         />
       </Tooltip>
     )
+
+      if (isEmpty(props.value) === false && (props.onSearch || props.onUpload)) {
+          buttons.push(
+              <Dropdown
+                  key="more"
+                  menu={ {
+                      items: [
+
+                          {
+                              hidden: props.onSearch === undefined,
+                              label: t('search'),
+                              key: 'search',
+                              icon: <Icon value={ 'search' } />,
+                              onClick: () => props.onSearch?.()
+                          },
+                          {
+                              hidden: props.onUpload === undefined,
+                              label: t('upload'),
+                              key: 'upload',
+                              icon: <Icon value={ 'upload-cloud' } />,
+                              onClick: () => props.onUpload?.()
+                          }
+                      ]
+                  } }
+                  placement='topLeft'
+                  trigger={ ['click'] }
+              >
+                  <IconButton
+                      icon={ { value: 'more' } }
+                      onClick={ (e) => { e.stopPropagation() } }
+                  />
+              </Dropdown>
+          )
+      }
   }
 
   return (

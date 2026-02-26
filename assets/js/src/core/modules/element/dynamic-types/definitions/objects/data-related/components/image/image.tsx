@@ -115,6 +115,8 @@ export const Image = (props: ImageProps): React.JSX.Element => {
           key="image-footer"
           setValue={ handleChange }
           value={ imageValue }
+          onSearch={ openElementSelector }
+          onUpload={ handleUpload }
         />)
       }
     >
