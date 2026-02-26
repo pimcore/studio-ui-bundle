@@ -67,7 +67,7 @@ const useObjectBrickCollectionQuery: AnyQueryHook = () => {
             id: child.key,
             name: child.name,
             group: child.group ?? undefined,
-            icon: { value: (child.icon?.value !== undefined && child.icon.value !== '') ? child.icon.value : 'area-brick' }
+            icon: { value: (child.icon?.value !== undefined && child.icon.value !== '') ? child.icon.value : 'object-bricks' }
           })
         }
       } else {
@@ -76,7 +76,7 @@ const useObjectBrickCollectionQuery: AnyQueryHook = () => {
           id: node.key,
           name: node.name,
           group: node.group ?? undefined,
-          icon: { value: (node.icon?.value !== undefined && node.icon.value !== '') ? node.icon.value : 'area-brick' }
+          icon: { value: (node.icon?.value !== undefined && node.icon.value !== '') ? node.icon.value : 'object-bricks' }
         })
       }
     }

@@ -40,7 +40,7 @@ moduleSystem.registerModule({
         component: 'object-bricks',
         config: {
           translationKey: 'widget.object-bricks',
-          icon: { type: 'name', value: 'area-brick' }
+          icon: { type: 'name', value: 'object-bricks' }
         }
       }
     })
