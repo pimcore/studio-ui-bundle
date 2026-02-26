@@ -810,7 +810,6 @@ field-definition.iframe: Iframe
 field-definition.region: Region
 field-definition.tabpanel: Tab Panel
 field-definition.text: Text
-field-definition.layout: Layout
 field-definition.groups.layout: Layout Component
 field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
 field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"

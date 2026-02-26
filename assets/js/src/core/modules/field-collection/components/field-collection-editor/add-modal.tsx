@@ -62,7 +62,10 @@ export const FieldCollectionAddModal = (): React.JSX.Element => {
             { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: t('field-collection.validation.key-format') }
           ] }
         >
-          <Input />
+          <Input
+            autoFocus
+            onPressEnter={ () => { form.submit() } }
+          />
         </Form.Item>
       </Form>
     </AddModal>

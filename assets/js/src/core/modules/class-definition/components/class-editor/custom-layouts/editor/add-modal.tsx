@@ -91,7 +91,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
               { pattern: /^[-A-Za-z0-9_]*$/, message: t('field-definitions.validation.class-name-format') }
             ] }
           >
-            <Input />
+            <Input autoFocus />
           </Form.Item>
 
           <Form.Item
@@ -114,6 +114,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
           >
             <Input
               maxLength={ 64 }
+              onPressEnter={ () => { form.submit() } }
             />
           </Form.Item>
 

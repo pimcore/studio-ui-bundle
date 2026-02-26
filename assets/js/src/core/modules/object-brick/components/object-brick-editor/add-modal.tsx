@@ -62,7 +62,10 @@ export const ObjectBrickAddModal = (): React.JSX.Element => {
             { pattern: /^[a-zA-Z]\w*$/, message: t('object-brick.validation.key-format') }
           ] }
         >
-          <Input />
+          <Input
+            autoFocus
+            onPressEnter={ () => { form.submit() } }
+          />
         </Form.Item>
       </Form>
     </AddModal>

@@ -86,7 +86,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
               { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: t('class-definition.validation.class-name-format') }
             ] }
           >
-            <Input />
+          <Input autoFocus />
           </Form.Item>
 
           <Form.Item
@@ -109,6 +109,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
           >
             <Input
               maxLength={ 64 }
+              onPressEnter={ () => { form.submit() } }
             />
           </Form.Item>
 
