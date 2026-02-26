@@ -113,10 +113,10 @@ export const Image = (props: ImageProps): React.JSX.Element => {
           disabled={ props.disabled }
           emptyValue={ clearValue }
           key="image-footer"
-          setValue={ handleChange }
-          value={ imageValue }
           onSearch={ openElementSelector }
           onUpload={ handleUpload }
+          setValue={ handleChange }
+          value={ imageValue }
         />)
       }
     >

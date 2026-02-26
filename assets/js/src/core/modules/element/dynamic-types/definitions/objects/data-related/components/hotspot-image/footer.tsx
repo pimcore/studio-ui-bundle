@@ -34,8 +34,8 @@ interface HotspotImageFooterProps {
   setValue: (value: HotspotImageValue | null) => void
   setCropModalOpen: () => void
   setMarkerModalOpen: () => void
-  replaceImage: (newImage: ImageValue) => void,
-  onSearch?: () => void,
+  replaceImage: (newImage: ImageValue) => void
+  onSearch?: () => void
   onUpload?: () => void
 }
 

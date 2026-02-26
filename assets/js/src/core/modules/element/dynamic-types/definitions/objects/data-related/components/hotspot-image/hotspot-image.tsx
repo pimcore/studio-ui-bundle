@@ -219,13 +219,13 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           disabled={ props.disabled }
           emptyValue={ clearValue }
           key="image-footer"
+          onSearch={ openElementSelector }
+          onUpload={ handleUpload }
           replaceImage={ replaceImage }
           setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           setValue={ handleChange }
           value={ imageValue }
-          onSearch={ openElementSelector }
-          onUpload={ handleUpload }
         />)
       }
     >
