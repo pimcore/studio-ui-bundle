@@ -11,7 +11,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import { TransformationComponent } from '../../types/transformation-component-types'
 import { RoundCornersTransformationComponent } from './round-corners-transformation-component'
 
 export interface RoundCornersTransformationConfig {

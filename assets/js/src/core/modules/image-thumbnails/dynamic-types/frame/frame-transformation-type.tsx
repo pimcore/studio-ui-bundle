@@ -11,7 +11,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import { TransformationComponent } from '../../types/transformation-component-types'
 import { FrameTransformationComponent } from './frame-transformation-component'
 
 export interface FrameTransformationConfig {

@@ -12,7 +12,7 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
-import { type TransformationComponentProps } from '../../../types/transformation-component-types'
+import { TransformationComponentProps } from '../../types/transformation-component-types'
 
 export const SetBackgroundColorTransformationComponent: React.FC<TransformationComponentProps> = ({
   formBasePath

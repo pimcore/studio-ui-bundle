@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { AddOverlayTransformationComponent } from './add-overlay-transformation-component'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import { TransformationComponent } from '../../types/transformation-component-types'
 
 export interface AddOverlayTransformationConfig {
   asset?: number
