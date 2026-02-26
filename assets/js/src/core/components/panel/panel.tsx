@@ -14,6 +14,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { TooltipIcon } from '@Pimcore/components/tooltip-icon/tooltip-icon'
+import { type CollapseProps } from 'antd'
 
 export interface PanelProps {
   title?: string
@@ -21,6 +22,8 @@ export interface PanelProps {
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
+  active?: boolean
+  onChange?: CollapseProps['onChange']
   children: React.ReactNode
   theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
   name?: string
@@ -34,6 +37,8 @@ export const Panel = ({
   name,
   border,
   collapsed,
+  active,
+  onChange,
   collapsible,
   title,
   tooltip,
@@ -63,12 +68,14 @@ export const Panel = ({
 
   const getContent = (): ReactNode => (
     <BaseView
+      active={ active }
       border={ border }
       collapsed={ collapsed }
       collapsible={ collapsible }
       contentPadding={ contentPadding }
       extra={ extra }
       extraPosition={ extraPosition }
+      onChange={ onChange }
       theme={ theme }
       title={ renderTitle() }
     >
