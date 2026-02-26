@@ -92,12 +92,12 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
   useEffect(() => {
     if (selectedThumbnail?.id !== currentThumbnailId && !isEmpty(configData?.settings) && selectedThumbnail !== null) {
-      setCurrentThumbnailId((selectedThumbnail?.id !== '' ? selectedThumbnail?.id : null) ?? null)
+      setCurrentThumbnailId((selectedThumbnail?.id === '' ? null : selectedThumbnail?.id) ?? null)
 
       const formData: ThumbnailFormData = {
-        name: (configData.settings.name !== '' ? configData.settings.name : '') ?? '',
+        name: (configData.settings.name === '' ? '' : configData.settings.name) ?? '',
         description: configData.settings.description ?? '',
-        format: (configData.settings.format !== '' ? configData.settings.format : 'auto') ?? 'auto',
+        format: (configData.settings.format === '' ? 'auto' : configData.settings.format) ?? 'auto',
         group: configData.settings.group ?? '',
         quality: (configData.settings.quality !== 0 ? configData.settings.quality : 85) ?? 85,
         highResolution: configData.settings.highResolution ?? null,
@@ -126,13 +126,13 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [isDirty, onChange])
 
   const onValuesChange = useCallback((changedValues: Partial<ThumbnailFormData>, allValues: ThumbnailFormData): void => {
-    setCurrentFormData(prev => prev !== null ? { ...prev, ...allValues } : null)
+    setCurrentFormData(prev => prev === null ? null : { ...prev, ...allValues })
   }, [])
 
   const handleMediaQueriesChange = useCallback((updatedMediaQueries: MediaQuery[]): void => {
     setMediaQueries(updatedMediaQueries)
     setCurrentFormData(prev =>
-      prev !== null ? { ...prev, mediaQueries: updatedMediaQueries } : null
+      prev === null ? null : { ...prev, mediaQueries: updatedMediaQueries } 
     )
   }, [])
 
@@ -145,7 +145,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           name: values.name,
           description: values.description,
           format: values.format,
-          group: (values.group !== '' ? values.group : '') ?? '',
+          group: (values.group === '' ? '' : values.group) ?? '',
           quality: values.quality,
           highResolution: values.highResolution,
           preserveColor: values.preserveColor ?? false,

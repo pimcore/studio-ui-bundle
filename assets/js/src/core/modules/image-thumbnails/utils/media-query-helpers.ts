@@ -30,7 +30,7 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   }
 
   mediaQueries.forEach((mediaQuery) => {
-    const queryName = (mediaQuery.query !== '' ? mediaQuery.query : `media-${mediaQuery.id}`) ?? `media-${mediaQuery.id}`
+    const queryName = (mediaQuery.query === '' ? `media-${mediaQuery.id}`: mediaQuery.query) ?? `media-${mediaQuery.id}`
 
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
       method: transformation.type,
@@ -64,7 +64,7 @@ export const convertFromBackendFormat = (
         config: t.arguments ?? {},
         label: getTransformationLabel(t.method, t.arguments)
       })),
-      order: (mediaOrder[queryName] !== 0 ? mediaOrder[queryName] : 0) ?? 0
+      order: (mediaOrder[queryName] === 0 ? 0 : mediaOrder[queryName]) ?? 0
     }
 
     mediaQueries.push(mediaQuery)
@@ -76,12 +76,12 @@ export const convertFromBackendFormat = (
 export const getDisplayName = (query: string): string => {
   if (query.includes('min-width')) {
     const match = query.match(/min-width:\s*(\d+)/)
-    return (match !== null) ? `≥ ${match[1]}px` : query
+    return (match === null) ? query : `≥ ${match[1]}px`
   }
 
   if (query.includes('max-width')) {
     const match = query.match(/max-width:\s*(\d+)/)
-    return (match !== null) ? `≤ ${match[1]}px` : query
+    return (match === null) ? query : `≤ ${match[1]}px`
   }
 
   return query.length > 20 ? query.substring(0, 20) + '...' : query

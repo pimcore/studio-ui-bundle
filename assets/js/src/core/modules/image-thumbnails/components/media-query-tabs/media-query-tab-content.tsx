@@ -28,7 +28,7 @@ export const MediaQueryTabContent = ({
     const updatedMediaQuery: MediaQuery = {
       ...mediaQuery,
       transformations: transformations.map((t, index) => ({
-        id: (mediaQuery.transformations[index]?.id !== '' ? mediaQuery.transformations[index]?.id : `transformation-${Date.now()}-${index}`) ?? `transformation-${Date.now()}-${index}`,
+        id: (mediaQuery.transformations[index]?.id === '' ? `transformation-${Date.now()}-${index}` : mediaQuery.transformations[index]?.id) ?? `transformation-${Date.now()}-${index}`,
         type: t.type as TransformationType,
         config: t.data
       }))

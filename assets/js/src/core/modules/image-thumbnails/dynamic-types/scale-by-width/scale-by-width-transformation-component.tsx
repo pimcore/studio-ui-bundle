@@ -13,7 +13,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { TransformationComponent } from '../../types/transformation-component-types'
+import { TransformationComponentProps } from '../../types/transformation-component-types'
 
 export const ScaleByWidthTransformationComponent: React.FC<TransformationComponentProps> = ({
   formBasePath
