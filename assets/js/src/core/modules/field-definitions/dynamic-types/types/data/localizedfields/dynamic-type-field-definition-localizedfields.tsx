@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionLocalizedfields extends DynamicTypeFieldD
   id: string = 'localizedfields'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'field-container' }
+    return { type: 'name', value: 'translations' }
   }
 
   getAllowedChildTags (props: FieldDefinitionContext): string[] {
