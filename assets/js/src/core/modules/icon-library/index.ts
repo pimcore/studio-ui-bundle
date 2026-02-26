@@ -84,6 +84,7 @@ import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?r
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import contrast01 from '@Pimcore/assets/icons/contrast-01.inline.svg?react'
 import convert from '@Pimcore/assets/icons/convert.inline.svg?react'
+import copilotJobRuns from '@Pimcore/assets/icons/copilot-job-runs.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
@@ -652,6 +653,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'convert',
       component: convert
+    })
+    iconLibrary.register({
+      name: 'copilot-job-runs',
+      component: copilotJobRuns
     })
     iconLibrary.register({
       name: 'copilot',

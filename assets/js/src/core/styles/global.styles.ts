@@ -659,4 +659,9 @@ export const GlobalStyles = createGlobalStyle`
     position: absolute;
     inset: 0;
   }
+
+  //fix notification enter transition bug
+  .ant-notification-stack > .ant-notification-notice-wrapper {
+      transition: transform 0.3s, backdrop-filter 0s;
+  }
 `
