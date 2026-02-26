@@ -34,7 +34,7 @@ export class GaussianBlurTransformationType extends TransformationDynamicTypeAbs
   createDefaultConfig (): GaussianBlurTransformationConfig {
     return {
       radius: 5,
-      sigma: 1.0
+      sigma: 1
     }
   }
 
