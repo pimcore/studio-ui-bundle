@@ -12,7 +12,7 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
-import { type TransformationComponentProps } from '../../../types/transformation-component-types'
+import { type TransformationComponentProps } from '../../types/transformation-component-types'
 
 export const ApplyMaskTransformationComponent: React.FC<TransformationComponentProps> = ({
   formBasePath

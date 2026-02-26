@@ -12,7 +12,7 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { type TransformationComponentProps } from '../../../types/transformation-component-types'
+import { type TransformationComponentProps } from '../../types/transformation-component-types'
 
 export const GaussianBlurTransformationComponent: React.FC<TransformationComponentProps> = ({
   formBasePath

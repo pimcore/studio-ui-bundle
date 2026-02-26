@@ -11,7 +11,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 import { ScaleByHeightTransformationComponent } from './scale-by-height-transformation-component'
 
 export interface ScaleByHeightTransformationConfig {

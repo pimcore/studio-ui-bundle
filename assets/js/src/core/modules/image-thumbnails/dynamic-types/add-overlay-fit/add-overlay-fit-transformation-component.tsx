@@ -13,7 +13,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
-import { type TransformationComponentProps } from '../../../types/transformation-component-types'
+import { type TransformationComponentProps } from '../../types/transformation-component-types'
 
 const originOptions = [
   { value: 'center', label: 'Center' },

@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { TrimTransformationComponent } from './trim-transformation-component'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
 export interface TrimTransformationConfig {
   tolerance?: number

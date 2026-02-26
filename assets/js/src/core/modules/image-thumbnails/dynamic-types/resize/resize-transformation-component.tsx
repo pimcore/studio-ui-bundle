@@ -14,7 +14,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
-import type { TransformationComponentProps } from '../../../types/transformation-component-types'
+import type { TransformationComponentProps } from '../../types/transformation-component-types'
 
 const positioningOptions = [
   { value: 'center', label: 'Center' },

@@ -75,12 +75,12 @@ export const convertFromBackendFormat = (
 
 export const getDisplayName = (query: string): string => {
   if (query.includes('min-width')) {
-    const match = query.match(/min-width:\s*(\d+)/)
+    const match = /min-width:\s*(\d+)/.exec(query)
     return (match === null) ? query : `≥ ${match[1]}px`
   }
 
   if (query.includes('max-width')) {
-    const match = query.match(/max-width:\s*(\d+)/)
+    const match = /max-width:\s*(\d+)/.exec(query)
     return (match === null) ? query : `≤ ${match[1]}px`
   }
 

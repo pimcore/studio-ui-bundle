@@ -15,7 +15,7 @@ import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Slider } from '@Pimcore/components/slider/slider'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
-import { type TransformationComponentProps } from '../../../types/transformation-component-types'
+import { type TransformationComponentProps } from '../../types/transformation-component-types'
 
 const originOptions = [
   { value: 'top-left', label: 'Top Left' },

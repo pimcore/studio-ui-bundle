@@ -11,7 +11,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import type { TransformationComponent } from '../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 import { SetBackgroundColorTransformationComponent } from './set-background-color-transformation-component'
 
 export interface SetBackgroundColorTransformationConfig {

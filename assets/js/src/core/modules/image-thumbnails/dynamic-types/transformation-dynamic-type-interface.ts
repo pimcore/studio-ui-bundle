@@ -17,6 +17,5 @@ export interface TransformationDynamicTypeInterface extends DynamicTypeAbstract 
   getLabel: () => string
   getReactComponent: () => TransformationComponent
   createDefaultConfig: () => any
-  validateConfig: (config: any) => boolean
   configureTransformation: (config: any) => Promise<any | null>
 }
