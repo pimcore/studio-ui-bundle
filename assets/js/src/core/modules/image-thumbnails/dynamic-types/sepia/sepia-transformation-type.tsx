@@ -16,7 +16,7 @@ import { TransformationComponent } from '../../types/transformation-component-ty
 export type SepiaTransformationConfig = Record<string, never>
 
 @injectable()
-export class SepiaTransformationType extends TransformationDynamicTypeAbstract {
+export class SepiaTransformationType extends TransformationDynamicTypeAbstract<SepiaTransformationConfig> {
   readonly id = 'sepia'
 
   getName (): string {
@@ -25,6 +25,10 @@ export class SepiaTransformationType extends TransformationDynamicTypeAbstract {
 
   getLabel (): string {
     return 'Sepia'
+  }
+
+  createDefaultConfig (): SepiaTransformationConfig {
+    return {}
   }
 
   getReactComponent (): TransformationComponent {

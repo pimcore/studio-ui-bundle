@@ -16,7 +16,7 @@ import { TransformationComponent } from '../../types/transformation-component-ty
 export type GrayscaleTransformationConfig = Record<string, never>
 
 @injectable()
-export class GrayscaleTransformationType extends TransformationDynamicTypeAbstract {
+export class GrayscaleTransformationType extends TransformationDynamicTypeAbstract<GrayscaleTransformationConfig> {
   readonly id = 'grayscale'
 
   getName (): string {
@@ -25,6 +25,10 @@ export class GrayscaleTransformationType extends TransformationDynamicTypeAbstra
 
   getLabel (): string {
     return 'Grayscale'
+  }
+
+  createDefaultConfig (): GrayscaleTransformationConfig {
+    return {}
   }
 
   getReactComponent (): TransformationComponent {

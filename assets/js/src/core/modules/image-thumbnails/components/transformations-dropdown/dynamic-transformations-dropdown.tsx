@@ -13,10 +13,10 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useTranslation } from 'react-i18next'
 import { transformationDynamicTypeRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
-import type { TransformationDynamicTypeInterface } from '../../dynamic-types/transformation-dynamic-type-interface'
+import type { TransformationDynamicTypeAbstract } from '../../dynamic-types/transformation-dynamic-type-abstract'
 
 interface DynamicTransformationsDropdownProps {
-  onTransformationAdd: (type: TransformationDynamicTypeInterface, config: any) => void
+  onTransformationAdd: (type: TransformationDynamicTypeAbstract, config: any) => void
 }
 
 export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDropdownProps> = ({
@@ -28,7 +28,7 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
     initializeTransformationTypes()
   }, [])
 
-  const handleTransformationClick = async (type: TransformationDynamicTypeInterface): Promise<void> => {
+  const handleTransformationClick = async (type: TransformationDynamicTypeAbstract): Promise<void> => {
     try {
       const defaultConfig = type.createDefaultConfig()
 

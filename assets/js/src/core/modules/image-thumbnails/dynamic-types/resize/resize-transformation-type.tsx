@@ -21,7 +21,7 @@ export interface ResizeTransformationConfig {
 }
 
 @injectable()
-export class ResizeTransformationType extends TransformationDynamicTypeAbstract {
+export class ResizeTransformationType extends TransformationDynamicTypeAbstract<ResizeTransformationConfig> {
   readonly id = 'resize'
 
   getName (): string {
@@ -30,6 +30,15 @@ export class ResizeTransformationType extends TransformationDynamicTypeAbstract 
 
   getLabel (): string {
     return 'Resize'
+  }
+
+  createDefaultConfig (): ResizeTransformationConfig {
+    return {
+      width: 100,
+      height: 100,
+      positioning: 'center',
+      forceResize: false
+    }
   }
 
   getReactComponent (): TransformationComponent {

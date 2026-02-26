@@ -18,7 +18,7 @@ export interface TrimTransformationConfig {
 }
 
 @injectable()
-export class TrimTransformationType extends TransformationDynamicTypeAbstract {
+export class TrimTransformationType extends TransformationDynamicTypeAbstract<TrimTransformationConfig> {
   readonly id = 'trim'
 
   getName (): string {
@@ -27,6 +27,12 @@ export class TrimTransformationType extends TransformationDynamicTypeAbstract {
 
   getLabel (): string {
     return 'Trim'
+  }
+
+  createDefaultConfig (): TrimTransformationConfig {
+    return {
+      tolerance: 10
+    }
   }
 
   getReactComponent (): TransformationComponent {

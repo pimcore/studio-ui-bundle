@@ -20,7 +20,7 @@ export interface GaussianBlurTransformationConfig {
 }
 
 @injectable()
-export class GaussianBlurTransformationType extends TransformationDynamicTypeAbstract {
+export class GaussianBlurTransformationType extends TransformationDynamicTypeAbstract<GaussianBlurTransformationConfig> {
   readonly id = 'gaussianBlur'
 
   getName (): string {
@@ -29,6 +29,13 @@ export class GaussianBlurTransformationType extends TransformationDynamicTypeAbs
 
   getLabel (): string {
     return 'Gaussian Blur'
+  }
+
+  createDefaultConfig (): GaussianBlurTransformationConfig {
+    return {
+      radius: 5,
+      sigma: 1.0
+    }
   }
 
   getReactComponent (): TransformationComponent {

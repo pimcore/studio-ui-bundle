@@ -16,7 +16,7 @@ import type { TransformationComponent } from '../../types/transformation-compone
 export type TiffOriginalTransformationConfig = Record<string, never>
 
 @injectable()
-export class TiffOriginalTransformationType extends TransformationDynamicTypeAbstract {
+export class TiffOriginalTransformationType extends TransformationDynamicTypeAbstract<TiffOriginalTransformationConfig> {
   readonly id = 'tifforiginal'
 
   getName (): string {
@@ -27,11 +27,11 @@ export class TiffOriginalTransformationType extends TransformationDynamicTypeAbs
     return 'TIFF Original'
   }
 
-  getReactComponent (): TransformationComponent {
-    return NoConfigurationComponent
+  createDefaultConfig (): TiffOriginalTransformationConfig {
+    return {}
   }
 
-  createDefaultConfig (): any {
-    return {}
+  getReactComponent (): TransformationComponent {
+    return NoConfigurationComponent
   }
 }

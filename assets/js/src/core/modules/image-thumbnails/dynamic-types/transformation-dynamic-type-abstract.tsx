@@ -10,11 +10,10 @@
 
 import { injectable } from 'inversify'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-import { type TransformationDynamicTypeInterface } from './transformation-dynamic-type-interface'
 import type { TransformationComponent } from '../types/transformation-component-types'
 
 @injectable()
-export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstract implements TransformationDynamicTypeInterface {
+export abstract class TransformationDynamicTypeAbstract<TAttributes = any> extends DynamicTypeAbstract {
   abstract readonly id: string
 
   abstract getName (): string
@@ -24,14 +23,13 @@ export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstr
     return this.id
   }
 
-  async configureTransformation (): Promise<any | null> {
-    return await Promise.resolve(this.createDefaultConfig())
+  async configureTransformation (defaultConfig?: TAttributes): Promise<TAttributes | null> {
+    return await Promise.resolve(defaultConfig ?? this.createDefaultConfig())
   }
 
-  createDefaultConfig (): any {
-    return {}
+  createDefaultConfig (): TAttributes {
+    return {} as TAttributes
   }
 
-  // All transformation types must provide a React component
   abstract getReactComponent (): TransformationComponent
 }

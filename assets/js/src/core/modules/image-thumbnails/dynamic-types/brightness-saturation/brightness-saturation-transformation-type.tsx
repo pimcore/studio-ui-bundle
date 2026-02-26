@@ -20,7 +20,7 @@ export interface BrightnessSaturationTransformationConfig {
 }
 
 @injectable()
-export class BrightnessSaturationTransformationType extends TransformationDynamicTypeAbstract {
+export class BrightnessSaturationTransformationType extends TransformationDynamicTypeAbstract<BrightnessSaturationTransformationConfig> {
   readonly id = 'brightnessSaturation'
 
   getName (): string {
@@ -29,6 +29,14 @@ export class BrightnessSaturationTransformationType extends TransformationDynami
 
   getLabel (): string {
     return 'Brightness/Saturation'
+  }
+
+  createDefaultConfig (): BrightnessSaturationTransformationConfig {
+    return {
+      brightness: 0,
+      saturation: 0,
+      hue: 0
+    }
   }
 
   getReactComponent (): TransformationComponent {

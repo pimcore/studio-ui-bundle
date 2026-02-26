@@ -16,7 +16,7 @@ import { TransformationComponent } from '../../types/transformation-component-ty
 export type OnePixelTransformationConfig = Record<string, never>
 
 @injectable()
-export class OnePixelTransformationType extends TransformationDynamicTypeAbstract {
+export class OnePixelTransformationType extends TransformationDynamicTypeAbstract<OnePixelTransformationConfig> {
   readonly id = '1x1_pixel'
 
   getName (): string {
@@ -27,11 +27,11 @@ export class OnePixelTransformationType extends TransformationDynamicTypeAbstrac
     return '1x1 Pixel'
   }
 
-  getReactComponent (): TransformationComponent {
-    return NoConfigurationComponent
+  createDefaultConfig (): OnePixelTransformationConfig {
+    return {}
   }
 
-  createDefaultConfig (): any {
-    return {}
+  getReactComponent (): TransformationComponent {
+    return NoConfigurationComponent
   }
 }

@@ -22,7 +22,7 @@ export interface CropTransformationConfig {
 }
 
 @injectable()
-export class CropTransformationType extends TransformationDynamicTypeAbstract {
+export class CropTransformationType extends TransformationDynamicTypeAbstract<CropTransformationConfig> {
   readonly id = 'crop'
 
   getName (): string {
@@ -31,6 +31,15 @@ export class CropTransformationType extends TransformationDynamicTypeAbstract {
 
   getLabel (): string {
     return 'Crop'
+  }
+
+  createDefaultConfig (): CropTransformationConfig {
+    return {
+      width: 100,
+      height: 100,
+      x: 0,
+      y: 0
+    }
   }
 
   getReactComponent (): TransformationComponent {

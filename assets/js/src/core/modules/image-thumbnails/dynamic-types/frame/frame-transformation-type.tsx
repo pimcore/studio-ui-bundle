@@ -21,7 +21,7 @@ export interface FrameTransformationConfig {
 }
 
 @injectable()
-export class FrameTransformationType extends TransformationDynamicTypeAbstract {
+export class FrameTransformationType extends TransformationDynamicTypeAbstract<FrameTransformationConfig> {
   readonly id = 'frame'
 
   getName (): string {
@@ -30,6 +30,14 @@ export class FrameTransformationType extends TransformationDynamicTypeAbstract {
 
   getLabel (): string {
     return 'Frame'
+  }
+
+  createDefaultConfig (): FrameTransformationConfig {
+    return {
+      width: 100,
+      height: 100,
+      forceResize: false
+    }
   }
 
   getReactComponent (): TransformationComponent {

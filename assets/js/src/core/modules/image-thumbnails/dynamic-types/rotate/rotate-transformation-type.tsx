@@ -18,7 +18,7 @@ export interface RotateTransformationConfig {
 }
 
 @injectable()
-export class RotateTransformationType extends TransformationDynamicTypeAbstract {
+export class RotateTransformationType extends TransformationDynamicTypeAbstract<RotateTransformationConfig> {
   readonly id = 'rotate'
 
   getName (): string {
@@ -27,6 +27,12 @@ export class RotateTransformationType extends TransformationDynamicTypeAbstract 
 
   getLabel (): string {
     return 'Rotate'
+  }
+
+  createDefaultConfig (): RotateTransformationConfig {
+    return {
+      angle: 90
+    }
   }
 
   getReactComponent (): TransformationComponent {
