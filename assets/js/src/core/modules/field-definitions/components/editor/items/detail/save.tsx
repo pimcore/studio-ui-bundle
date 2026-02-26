@@ -14,7 +14,6 @@ import { useSettings } from '@Pimcore/modules/field-definitions/components/edito
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 import { buildPathMap, getNamesInNamespace } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
-import { type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
