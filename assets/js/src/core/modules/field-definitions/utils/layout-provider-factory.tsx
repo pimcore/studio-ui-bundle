@@ -16,7 +16,7 @@ import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
 import { useInjection } from '@sdk/app'
 import { uuid } from '@sdk/utils'
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 export type Layout = LayoutType
 
@@ -54,7 +54,7 @@ export interface ILayoutContext {
   isValidChildFieldDefinition: (targetPath: string[], childPath: string[]) => boolean
   isValidExternalChildFieldDefinition: (targetPath: string[], externalLayout: Layout) => boolean
   getLayout: (props?: GetLayoutProps) => Layout | undefined
-  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => void
+  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => StructureNode
 }
 
 export interface LayoutProviderProps {
@@ -162,6 +162,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     const structureRef = React.useRef(structure)
     const fieldDefinitionsRef = React.useRef(fieldDefinitions)
     const areaRef = React.useRef(area)
+    const isInitializedRef = useRef(false)
 
     React.useEffect(() => {
       structureRef.current = structure
@@ -171,6 +172,8 @@ export const create = (): LayoutProviderFactoryReturn => {
 
     useEffect(() => {
       if (props.layout === undefined) {
+        // Reset: layout cleared or switching away
+        isInitializedRef.current = false
         setStructure(undefined)
         setFieldDefinitions({})
         setInvalidFieldDefinitionIds([])
@@ -180,6 +183,15 @@ export const create = (): LayoutProviderFactoryReturn => {
         return
       }
 
+      if (isInitializedRef.current) {
+        // Already initialized — ignore post-save refetches.
+        // The explicit refresh button remounts the component via key increment,
+        // which is the correct mechanism to re-sync from server.
+        return
+      }
+
+      // First time we have a defined layout — initialize
+      isInitializedRef.current = true
       const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout })!
 
       setCurrentFieldDefinitionId(null)
@@ -697,6 +709,8 @@ export const create = (): LayoutProviderFactoryReturn => {
         ...prevDefs,
         ...externalFieldDefinitions
       }))
+
+      return externalStructure
     }, [])
 
     return useMemo(() => (

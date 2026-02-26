@@ -32,5 +32,7 @@ export enum UserPermission {
   PerspectiveEditor = 'studio_perspective_editor',
   WidgetEditor = 'studio_perspective_widget_editor',
   GDPRDataExtractor = 'gdpr_data_extractor',
-  SystemSettings = 'system_settings'
+  SystemSettings = 'system_settings',
+  Classes = 'classes',
+  FieldCollections = 'fieldcollections'
 }

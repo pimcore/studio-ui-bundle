@@ -41,6 +41,9 @@ const api = baseApi.enhanceEndpoints({
         }
       }
     },
+    classDefinitionGetIdentifierData: {
+      providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
+    },
     classDefinitionCreate: {
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
     },

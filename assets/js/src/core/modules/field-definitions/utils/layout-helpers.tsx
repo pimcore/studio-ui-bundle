@@ -67,6 +67,65 @@ export interface BuildTreeProps {
   itemCallback?: (props: ItemCallbackProps) => ITreeElementProps['treeData'][0]
 }
 
+export const buildPathMap = (structure: StructureNode): Record<string, string[]> => {
+  const map: Record<string, string[]> = {}
+  const walk = (node: StructureNode, path: string[]): void => {
+    const current = [...path, node.id]
+    map[node.id] = current
+    node.children.forEach(child => { walk(child, current) })
+  }
+  walk(structure, [])
+  return map
+}
+
+export const getNamesInNamespace = (
+  structure: StructureNode,
+  fieldDefinitions: Record<string, FieldDefinition>,
+  targetId: string,
+  pathMap: Record<string, string[]>
+): string[] => {
+  const registry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+
+  const isOpener = (id: string): boolean => {
+    const def = fieldDefinitions[id]
+    if (def === undefined) return false
+    return registry.getDynamicType(def.fieldtype, false)?.opensNamespace() ?? false
+  }
+
+  const findNode = (node: StructureNode, id: string): StructureNode | undefined => {
+    if (node.id === id) return node
+    for (const child of node.children) {
+      const found = findNode(child, id)
+      if (found !== undefined) return found
+    }
+    return undefined
+  }
+
+  // Find innermost namespace-opener ancestor (skip tree root and target itself)
+  const path = pathMap[targetId] ?? []
+  let namespaceRootId: string | undefined
+  for (const id of path.slice(1, -1)) {
+    if (isOpener(id)) namespaceRootId = id
+  }
+
+  const namespaceRoot = namespaceRootId !== undefined
+    ? findNode(structure, namespaceRootId)!
+    : structure
+
+  // Collect names, stop descending into nested namespace openers
+  const names: string[] = []
+  const collect = (node: StructureNode, isRoot: boolean): void => {
+    if (!isRoot) {
+      const name = fieldDefinitions[node.id]?.name as string | undefined
+      if (name !== undefined && name !== '') names.push(name)
+      if (isOpener(node.id)) return
+    }
+    node.children.forEach(child => { collect(child, false) })
+  }
+  collect(namespaceRoot, true)
+  return names
+}
+
 export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][0] => {
   const { fieldDefinitions, structure, itemCallback } = props
 

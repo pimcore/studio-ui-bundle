@@ -287,7 +287,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                       return
                     }
 
-                    addExternalFieldDefinition(parentId, info.data.external, targetIndex)
+                    const newNode = addExternalFieldDefinition(parentId, info.data.external, targetIndex)
+                    if (allowExternalDrop) {
+                      const parentPath = currentPath.slice(0, -1)
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...parentPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                 }
               },
@@ -309,7 +321,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                   if (isEqual(info.data.area, area)) {
                     moveFieldDefinition(info.data.internal.id as string, targetNodeId, 0)
                   } else {
-                    addExternalFieldDefinition(targetNodeId, info.data.external as Layout, 0)
+                    const newNode = addExternalFieldDefinition(targetNodeId, info.data.external as Layout, 0)
+                    if (allowExternalDrop) {
+                      const targetPath = findCurrentPath(targetNodeId) ?? []
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, targetNodeId, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...targetPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                   expandNode(targetNodeId)
                 }
@@ -348,7 +372,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                       return
                     }
 
-                    addExternalFieldDefinition(parentId, (info as FieldDefinitionDragDropInfo).data.external, insertIndex)
+                    const newNode = addExternalFieldDefinition(parentId, (info as FieldDefinitionDragDropInfo).data.external, insertIndex)
+                    if (allowExternalDrop) {
+                      const parentPath = currentPath.slice(0, -1)
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...parentPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                 }
               }
@@ -360,7 +396,49 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       )
     }
 
-    return titleComponent
+    // Root node — not draggable, but accepts drops
+    return (
+      <HotspotDroppable
+        hotspots={ [
+          {
+            id: 'drop-middle',
+            position: { x: '0', y: '0', width: '100%', height: '100%' },
+            isValidContext: (info) => {
+              if (info.type !== 'field-definition') return false
+              const rootPath = [structure.id]
+              if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                const draggedCurrentPath = findCurrentPath((info as FieldDefinitionDragDropInfo).data.internal.id) ?? []
+                return isValidChildFieldDefinition(rootPath, draggedCurrentPath)
+              }
+              const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+              return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(rootPath, externalLayout)
+            },
+            onDrop: (info) => {
+              const rootId = structure.id
+              if (isEqual(info.data.area, area)) {
+                moveFieldDefinition((info as FieldDefinitionDragDropInfo).data.internal.id, rootId, 0)
+              } else {
+                const newNode = addExternalFieldDefinition(rootId, (info as FieldDefinitionDragDropInfo).data.external, 0)
+                if (allowExternalDrop) {
+                  const keysToExpand = getAllKeys(newNode)
+                  setExpandedKeys(prev => {
+                    const newKeys = [...new Set([...prev, rootId, ...keysToExpand])]
+                    expandedKeysRef.current = newKeys
+                    return newKeys
+                  })
+                  setCurrentFieldDefinitionId(newNode.id)
+                  setCurrentFieldDefinitionIdPath([rootId, newNode.id])
+                  setDetailView('layout')
+                }
+              }
+              expandNode(rootId)
+            }
+          }
+        ] }
+      >
+        {titleComponent}
+      </HotspotDroppable>
+    )
   }
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {

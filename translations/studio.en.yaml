@@ -691,6 +691,11 @@ field-definitions.validation.unique-identifier: Unique identifier
 field-definitions.validation.enter-unique-identifier: Please enter a unique identifier
 field-definitions.validation.unique-identifier-in-use: This unique identifier is already in use
 field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
+field-definitions.validation.errors-found: Field definitions have errors
+field-definitions.validation.empty-name: 'The following field types are missing a name:'
+field-definitions.validation.reserved-word: 'Reserved word used as name:'
+field-definitions.validation.invalid-format: 'Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):'
+field-definitions.validation.duplicate-name: 'Duplicate name within namespace:'
 object-brick-key: Object Brick Key
 field-name: Field Name
 field-definition.geopoint: Geo Point

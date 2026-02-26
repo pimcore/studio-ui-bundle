@@ -90,6 +90,10 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return true
   }
 
+  opensNamespace (): boolean {
+    return false
+  }
+
   abstract getDefaultData (context: FieldDefinitionContext): FieldDefinitionDataAbstract
 
   getConvertibleData (context: FieldDefinitionConvertibleContext): Partial<FieldDefinitionDataAbstract> {

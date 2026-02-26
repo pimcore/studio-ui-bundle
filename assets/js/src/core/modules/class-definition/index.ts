@@ -14,6 +14,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { ClassDefinitionWidget } from '@Pimcore/modules/class-definition/class-definition-widget'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -30,6 +32,8 @@ moduleSystem.registerModule({
       label: 'navigation.class-definitions',
       className: 'class',
       order: 100,
+      permission: UserPermission.Classes,
+      perspectivePermission: NavPermission.ClassDefinitions,
       widgetConfig: {
         name: 'classes',
         id: 'class-definitions',
