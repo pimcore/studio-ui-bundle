@@ -24,15 +24,15 @@ export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstr
     return this.id
   }
 
-  validateConfig (config: unknown): boolean {
+  validateConfig (config: any): boolean {
     return true
   }
 
-  async configureTransformation (config: unknown): Promise<unknown | null> {
+  async configureTransformation (config: any): Promise<any | null> {
     return await Promise.resolve(this.createDefaultConfig())
   }
 
-  createDefaultConfig (): unknown {
+  createDefaultConfig (): any {
     return {}
   }
 
