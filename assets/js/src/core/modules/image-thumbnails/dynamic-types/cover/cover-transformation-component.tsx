@@ -15,7 +15,7 @@ import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Input } from '@Pimcore/components/input/input'
-import type { TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
 const positioningOptions = [
   { value: 'center', label: 'Center' },
@@ -25,24 +25,22 @@ const positioningOptions = [
   { value: 'bottomright', label: 'Bottom Right' }
 ]
 
-export const CoverTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const CoverTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'width']} label="Width" initialValue={800}>
+      <Form.Item name="width" label="Width" initialValue={800}>
         <InputNumber placeholder="800" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'height']} label="Height" initialValue={600}>
+      <Form.Item name="height" label="Height" initialValue={600}>
         <InputNumber placeholder="600" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'positioning']} label="Position" initialValue="center">
+      <Form.Item name="positioning" label="Position" initialValue="center">
         <Select options={positioningOptions} />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'forceResize']} label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
         <Switch />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'description']} label="Focal Point" initialValue="The positioning determines which part of the image remains visible when cropping.">
+      <Form.Item name="description" label="Focal Point" initialValue="The positioning determines which part of the image remains visible when cropping.">
         <Input readOnly disabled />
       </Form.Item>
     </Flex>

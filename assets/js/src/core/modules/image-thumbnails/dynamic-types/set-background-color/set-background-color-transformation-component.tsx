@@ -12,14 +12,12 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
-import { TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const SetBackgroundColorTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const SetBackgroundColorTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'color']} label="Background Color" initialValue="#ffffff">
+      <Form.Item name="color" label="Background Color" initialValue="#ffffff">
         <ColorPicker format="hex" showText />
       </Form.Item>
     </Flex>

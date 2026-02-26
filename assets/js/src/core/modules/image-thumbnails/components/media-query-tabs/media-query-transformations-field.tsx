@@ -17,13 +17,11 @@ import type { MediaQuery } from '../../types/media-query.types'
 interface MediaQueryTransformationsFieldProps {
   mediaQuery: MediaQuery
   onChange: (transformations: Array<{ type: string, data: any }>) => void
-  disabled?: boolean
 }
 
 export const MediaQueryTransformationsField = ({
   mediaQuery,
   onChange,
-  disabled = false
 }: MediaQueryTransformationsFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
   

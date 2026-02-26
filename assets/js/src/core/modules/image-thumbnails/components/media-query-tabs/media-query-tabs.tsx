@@ -30,7 +30,6 @@ export const MediaQueryTabs = ({
   onTabChange,
   onTabClose,
   onMediaQueryUpdate,
-  disabled = false
 }: MediaQueryTabsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -53,7 +52,6 @@ export const MediaQueryTabs = ({
     closable: true,
     children: (
       <MediaQueryTabContent
-        disabled={ disabled }
         mediaQuery={ mediaQuery }
         onMediaQueryUpdate={ handleMediaQueryUpdate }
       />

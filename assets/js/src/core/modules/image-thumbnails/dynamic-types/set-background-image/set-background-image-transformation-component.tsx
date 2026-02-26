@@ -13,19 +13,18 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
-import { TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
+
 const modeOptions = [
   { value: '', label: 'fit' },
   { value: 'cropTopLeft', label: 'cropTopLeft' },
   { value: 'asTexture', label: 'asTexture' }
 ]
 
-export const SetBackgroundImageTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const SetBackgroundImageTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'asset']} label="Background Image">
+      <Form.Item name="asset" label="Background Image">
         <ImagePicker
           width={300}
           height={150}
@@ -33,7 +32,7 @@ export const SetBackgroundImageTransformationComponent: React.FC<TransformationC
           allowedTypes={['image']}
         />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'mode']} label="Mode" initialValue="">
+      <Form.Item name="mode" label="Mode" initialValue="">
         <Select options={modeOptions} />
       </Form.Item>
     </Flex>

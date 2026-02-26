@@ -13,7 +13,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
-import { type TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
 const originOptions = [
   { value: 'center', label: 'Center' },
@@ -23,12 +23,10 @@ const originOptions = [
   { value: 'bottom-right', label: 'Bottom Right' }
 ]
 
-export const AddOverlayFitTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const AddOverlayFitTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'asset']} label="Overlay Image">
+      <Form.Item name="asset" label="Overlay Image">
         <ImagePicker
           width={300}
           height={150}
@@ -36,7 +34,7 @@ export const AddOverlayFitTransformationComponent: React.FC<TransformationCompon
           allowedTypes={['image']}
         />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'origin']} label="Origin" initialValue="center">
+      <Form.Item name="origin" label="Origin" initialValue="center">
         <Select options={originOptions} />
       </Form.Item>
     </Flex>

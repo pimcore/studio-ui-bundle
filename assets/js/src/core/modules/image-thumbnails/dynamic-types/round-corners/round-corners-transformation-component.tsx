@@ -12,17 +12,15 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { type TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const RoundCornersTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const RoundCornersTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'width']} label="Width" initialValue={10}>
+      <Form.Item name="width" label="Width" initialValue={10}>
         <InputNumber placeholder="Enter corner width radius" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'height']} label="Height" initialValue={10}>
+      <Form.Item name="height" label="Height" initialValue={10}>
         <InputNumber placeholder="Enter corner height radius" />
       </Form.Item>
     </Flex>
