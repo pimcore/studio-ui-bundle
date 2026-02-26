@@ -13,13 +13,15 @@ import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/compon
 import { useClassObjectBrickCreateMutation } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React from 'react'
+import { type InputRef } from 'antd'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const ObjectBrickAddModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { closeModal } = useAddModal()
+  const inputRef = useRef<InputRef>(null)
   const [createObjectBrick] = useClassObjectBrickCreateMutation()
   const { openConfiguration } = useItems()
 
@@ -46,6 +48,8 @@ export const ObjectBrickAddModal = (): React.JSX.Element => {
 
   return (
     <AddModal
+      afterOpenChange={ (open) => { if (open) inputRef.current?.focus() } }
+      focusTriggerAfterClose={ false }
       onOk={ () => { form.submit() } }
       title={ t('object-brick.create-new') }
     >
@@ -62,11 +66,12 @@ export const ObjectBrickAddModal = (): React.JSX.Element => {
             { pattern: /^[a-zA-Z]\w*$/, message: t('object-brick.validation.key-format') }
           ] }
         >
-          <Input
-            autoFocus
-            onPressEnter={ () => { form.submit() } }
-          />
+          <Input ref={ inputRef } />
         </Form.Item>
+        <button
+          style={ { display: 'none' } }
+          type="submit"
+        />
       </Form>
     </AddModal>
   )
