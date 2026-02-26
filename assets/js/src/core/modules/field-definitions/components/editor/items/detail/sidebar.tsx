@@ -27,7 +27,7 @@ import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpe
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
 import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
-import { Divider } from 'antd'
+import { Divider, theme } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -53,6 +53,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   const { useLayout } = useSettings()
   const { detailView, setDetailView } = useItems()
   const { t } = useTranslation()
+  const { token } = theme.useToken()
 
   const {
     allowExternalDrop = false
@@ -589,15 +590,29 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
               setCurrentFieldDefinitionId(null)
               setCurrentFieldDefinitionIdPath(null)
             } }
-            style={ { justifyContent: 'flex-start' } }
-            type={ detailView === 'general' ? 'link' : 'text' }
+            style={ {
+              backgroundColor: detailView === 'general' ? token.controlItemBgActive : undefined,
+              borderRadius: token.borderRadiusSM,
+              fontSize: token.fontSize,
+              height: '24px',
+              justifyContent: 'flex-start',
+              padding: `0 ${token.paddingXS}px`,
+              position: 'relative'
+            } }
+            type='text'
           >
             <div style={ { paddingLeft: '16px' } }>
               {t('field-definitions.general-settings')}
             </div>
+            <div style={ { position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' } }>
+              <Icon
+                colorToken='colorPrimary'
+                value='edit'
+              />
+            </div>
           </Button>
 
-          <Divider style={ { margin: '0' } } />
+          <Divider style={ { margin: `${token.marginXS}px 0 0` } } />
         </Space>
       </Content>
 
