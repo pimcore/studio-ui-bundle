@@ -9,20 +9,16 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { useClassDefinitionGetBricksUsagesQuery } from '@sdk/api/class-definition'
+import { useClassObjectBrickCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { Form, FormKit, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-// NOTE: No global object-brick list API exists. Using a temporary hardcoded class ID as placeholder.
-const TEMP_CLASS_ID = 'Event'
 
 export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
 
-  // @todo implement the actual logic as soon as the endpoint for loading all bricks is available.
-  const { data: bricksData, isFetching } = useClassDefinitionGetBricksUsagesQuery({ id: TEMP_CLASS_ID })
+  const { data: bricksData, isFetching } = useClassObjectBrickCollectionQuery()
 
   const brickOptions = useMemo(() => {
     if (bricksData?.items === undefined) {
@@ -30,7 +26,7 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
     }
 
     return bricksData.items.map((item) => ({
-      label: item.key,
+      label: item.title ?? item.key,
       value: item.key
     }))
   }, [bricksData])

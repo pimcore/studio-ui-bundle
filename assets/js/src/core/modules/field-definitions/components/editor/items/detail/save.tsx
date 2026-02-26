@@ -53,6 +53,9 @@ export const DetailSave = (): React.JSX.Element => {
 
     // Validate all field definitions before saving
     for (const [key, definition] of Object.entries(fieldDefinitions)) {
+      // Skip the root layout node — its name is structural, not user-editable,
+      // and it is stripped from the payload before saving anyway
+      if (structure !== undefined && key === structure.id) continue
       if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
         const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
         // @todo check if we can handle the path here
