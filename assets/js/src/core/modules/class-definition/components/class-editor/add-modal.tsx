@@ -13,7 +13,8 @@ import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/compon
 import { useClassDefinitionCreateMutation, useClassDefinitionGetIdentifierDataQuery } from '@sdk/api/class-definition'
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect } from 'react'
+import { type InputRef } from 'antd'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 
@@ -21,6 +22,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { closeModal } = useAddModal()
+  const inputRef = useRef<InputRef>(null)
   const { data, isLoading, error } = useClassDefinitionGetIdentifierDataQuery()
   const [createClassDefinition] = useClassDefinitionCreateMutation()
   const { openConfiguration } = useItems()
@@ -69,6 +71,8 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
 
   return (
     <AddModal
+      afterOpenChange={ (open) => { if (open) inputRef.current?.focus() } }
+      focusTriggerAfterClose={ false }
       onOk={ () => { form.submit() } }
       title={ t('class-definition.create-new') }
     >
@@ -86,7 +90,7 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
               { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: t('class-definition.validation.class-name-format') }
             ] }
           >
-            <Input />
+            <Input ref={ inputRef } />
           </Form.Item>
 
           <Form.Item
@@ -115,6 +119,10 @@ export const ClassDefinitionsAddModal = (): React.JSX.Element => {
           <Text type="secondary">
             { t('class-definition.unique-identifier-warning') }
           </Text>
+          <button
+            style={ { display: 'none' } }
+            type="submit"
+          />
         </Form>
       </Content>
     </AddModal>

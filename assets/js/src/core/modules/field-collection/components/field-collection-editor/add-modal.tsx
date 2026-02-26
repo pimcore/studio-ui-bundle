@@ -13,13 +13,15 @@ import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/compon
 import { useClassFieldCollectionCreateMutation } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React from 'react'
+import { type InputRef } from 'antd'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldCollectionAddModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { closeModal } = useAddModal()
+  const inputRef = useRef<InputRef>(null)
   const [createFieldCollection] = useClassFieldCollectionCreateMutation()
   const { openConfiguration } = useItems()
 
@@ -46,6 +48,8 @@ export const FieldCollectionAddModal = (): React.JSX.Element => {
 
   return (
     <AddModal
+      afterOpenChange={ (open) => { if (open) inputRef.current?.focus() } }
+      focusTriggerAfterClose={ false }
       onOk={ () => { form.submit() } }
       title={ t('field-collection.create-new') }
     >
@@ -62,8 +66,12 @@ export const FieldCollectionAddModal = (): React.JSX.Element => {
             { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: t('field-collection.validation.key-format') }
           ] }
         >
-          <Input />
+          <Input ref={ inputRef } />
         </Form.Item>
+        <button
+          style={ { display: 'none' } }
+          type="submit"
+        />
       </Form>
     </AddModal>
   )

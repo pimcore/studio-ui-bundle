@@ -14,7 +14,7 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { serviceIds, useInjection } from '@sdk/app'
 import { Content, FormKit } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useTranslation } from 'react-i18next'
 
@@ -25,6 +25,9 @@ export const LayoutForm = (): React.JSX.Element => {
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
   const [values, setValues] = useState<FieldDefinitionType>(fieldDefinition)
   const debouncedValues = useDebounce(values, 300)
+  // Capture the active field definition ID at the moment the user types, not when the debounce fires.
+  // Without this, switching fields quickly causes the debounced update to write old values to the new field.
+  const activeIdRef = useRef(currentFieldDefinitionId)
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
   const { area } = useArea()
   const dynamicType = useMemo(() => {
@@ -36,8 +39,8 @@ export const LayoutForm = (): React.JSX.Element => {
   }, [fieldDefinition])
 
   useEffect(() => {
-    if (currentFieldDefinitionId !== null && debouncedValues !== fieldDefinition) {
-      updateFieldDefinition(currentFieldDefinitionId, debouncedValues)
+    if (activeIdRef.current !== null && debouncedValues !== fieldDefinition) {
+      updateFieldDefinition(activeIdRef.current, debouncedValues)
     }
   }, [debouncedValues])
 
@@ -61,6 +64,7 @@ export const LayoutForm = (): React.JSX.Element => {
               formProps={ {
                 initialValues: { ...fieldDefinition },
                 onValuesChange: (_, changedValues) => {
+                  activeIdRef.current = currentFieldDefinitionId
                   setValues(changedValues as FieldDefinitionType)
                 }
               } }

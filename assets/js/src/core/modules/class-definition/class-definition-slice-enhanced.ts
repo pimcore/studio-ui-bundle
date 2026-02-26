@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimc
 import { api as baseApi } from './class-definition-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -139,6 +139,45 @@ const api = baseApi.enhanceEndpoints({
     },
     classFieldCollectionGetTree: {
       providesTags: () => providingTags.FIELD_COLLECTION_COLLECTION()
+    },
+    classObjectBrickCollection: {
+      providesTags: () => providingTags.OBJECT_BRICK_COLLECTION()
+    },
+    classObjectBrickGetByKey: {
+      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_DETAIL(args.key)
+    },
+    classObjectBrickGetLayoutByKey: {
+      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_DETAIL(args.key)
+    },
+    classObjectBrickGetTree: {
+      providesTags: () => providingTags.OBJECT_BRICK_COLLECTION()
+    },
+    classObjectBrickUpdate: {
+      invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION(),
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            api.util.updateQueryData('classObjectBrickGetByKey', { key: args.key }, (draft) => {
+              Object.assign(draft, data)
+            })
+          )
+        } catch {
+          // Mutation failed, no cache update needed
+        }
+      }
+    },
+    classObjectBrickCreate: {
+      invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION()
+    },
+    classObjectBrickDelete: {
+      invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION()
+    },
+    classObjectBrickImport: {
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key),
+        ...invalidatingTags.OBJECT_BRICK_COLLECTION()
+      ]
     }
   }
 })
@@ -184,7 +223,19 @@ export const {
   useClassFieldCollectionImportMutation,
   useClassFieldCollectionGetLayoutByKeyQuery,
   useClassFieldCollectionGetTreeQuery,
-  useClassFieldCollectionGetUsagesQuery
+  useClassFieldCollectionGetUsagesQuery,
+  useClassObjectBrickCollectionQuery,
+  useClassObjectBrickGetByKeyQuery,
+  useClassObjectBrickGetLayoutByKeyQuery,
+  useClassObjectBrickGetTreeQuery,
+  useClassObjectBrickCreateMutation,
+  useClassObjectBrickUpdateMutation,
+  useClassObjectBrickDeleteMutation,
+  useClassObjectBrickGetUsagesQuery,
+  useClassObjectBrickClassesQuery,
+  useClassObjectBrickExportQuery,
+  useLazyClassObjectBrickExportQuery,
+  useClassObjectBrickImportMutation
 } = api
 
 export { api }

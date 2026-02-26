@@ -37,6 +37,8 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         }
 
         .ant-tree-node--has-drag-and-drop {
+          height: 24px;
+
           .ant-tree-iconEle {
             display: flex;
             align-items: center;

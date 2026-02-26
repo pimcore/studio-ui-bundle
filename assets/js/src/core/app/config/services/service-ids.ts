@@ -370,7 +370,6 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/FieldContainer': 'DynamicTypes/FieldDefinition/FieldContainer',
   'DynamicTypes/FieldDefinition/Fieldset': 'DynamicTypes/FieldDefinition/Fieldset',
   'DynamicTypes/FieldDefinition/Iframe': 'DynamicTypes/FieldDefinition/Iframe',
-  'DynamicTypes/FieldDefinition/Layout': 'DynamicTypes/FieldDefinition/Layout',
   'DynamicTypes/FieldDefinition/Panel': 'DynamicTypes/FieldDefinition/Panel',
   'DynamicTypes/FieldDefinition/Region': 'DynamicTypes/FieldDefinition/Region',
   'DynamicTypes/FieldDefinition/Tabpanel': 'DynamicTypes/FieldDefinition/Tabpanel',

@@ -9,6 +9,7 @@
  */
 
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useStyles } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar.styles'
 import { AddModalProvider } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/modal-holder'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -21,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { useItemsQuery, useItemsDeleteMutation } = useSettings()
   const { isLoading, isFetching, data, refetch } = useItemsQuery()
   const [deleteConfigurationMutation] = useItemsDeleteMutation()
@@ -153,6 +155,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
 
           <Content loading={ isFetching }>
             <TreeElement
+              className={ styles.tree }
               defaultExpandedKeys={ expandedKeys }
               onActionsClick={ (key, action, node) => {
                 if (action === 'delete') {

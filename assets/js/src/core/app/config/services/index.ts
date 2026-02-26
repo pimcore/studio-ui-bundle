@@ -321,7 +321,6 @@ import { DynamicTypeFieldDefinitionPanel } from '@Pimcore/modules/field-definiti
 import { DynamicTypeFieldDefinitionFieldContainer } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/fieldcontainer/dynamic-type-field-definition-field-container'
 import { DynamicTypeFieldDefinitionFieldset } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/fieldset/dynamic-type-field-definition-fieldset'
 import { DynamicTypeFieldDefinitionIframe } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/iframe/dynamic-type-field-definition-iframe'
-import { DynamicTypeFieldDefinitionLayout } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/layout/dynamic-type-field-definition-layout'
 import { DynamicTypeFieldDefinitionAccordion } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/accordion/dynamic-type-field-definition-accordion'
 import { DynamicTypeFieldDefinitionRegion } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/region/dynamic-type-field-definition-region'
 import { DynamicTypeFieldDefinitionTabpanel } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/tabpanel/dynamic-type-field-definition-tabpanel'
@@ -740,7 +739,6 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Accordion']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/FieldDefinition/FieldContainer']).to(DynamicTypeFieldDefinitionFieldContainer).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Fieldset']).to(DynamicTypeFieldDefinitionFieldset).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Iframe']).to(DynamicTypeFieldDefinitionIframe).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldDefinition/Layout']).to(DynamicTypeFieldDefinitionLayout).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeFieldDefinitionPanel).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Region']).to(DynamicTypeFieldDefinitionRegion).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Tabpanel']).to(DynamicTypeFieldDefinitionTabpanel).inSingletonScope()

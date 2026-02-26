@@ -34,5 +34,6 @@ export enum UserPermission {
   GDPRDataExtractor = 'gdpr_data_extractor',
   SystemSettings = 'system_settings',
   Classes = 'classes',
-  FieldCollections = 'fieldcollections'
+  FieldCollections = 'fieldcollections',
+  ObjectBricks = 'objectbricks'
 }
