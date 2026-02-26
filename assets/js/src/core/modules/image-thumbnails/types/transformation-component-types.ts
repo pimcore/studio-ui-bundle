@@ -11,7 +11,7 @@
 import type React from 'react'
 
 export interface TransformationComponentProps {
-  formBasePath: Array<string | number>
+  // Props can be added here if needed in the future
 }
 
 export type TransformationComponent = React.ComponentType<TransformationComponentProps>

@@ -14,9 +14,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const MirrorTransformationComponent: TransformationComponent = ({
-  formBasePath
-}) => {
+export const MirrorTransformationComponent: TransformationComponent = () => {
   const modeOptions = [
     { value: 'horizontal', label: 'Horizontal' },
     { value: 'vertical', label: 'Vertical' }
@@ -24,7 +22,7 @@ export const MirrorTransformationComponent: TransformationComponent = ({
 
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'mode']} label="Mode" initialValue="horizontal">
+      <Form.Item name="mode" label="Mode" initialValue="horizontal">
         <Select options={modeOptions} />
       </Form.Item>
     </Flex>

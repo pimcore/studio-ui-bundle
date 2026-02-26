@@ -158,7 +158,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
     }
   }
 
-  const selectedKeys = activeTabKey != null ? [activeTabKey] : []
+  const selectedKeys = activeTabKey === null ? [] : [activeTabKey]
 
   return (
     <ContentLayout

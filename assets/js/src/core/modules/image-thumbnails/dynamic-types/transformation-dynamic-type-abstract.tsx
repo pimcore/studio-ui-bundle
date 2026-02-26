@@ -24,7 +24,7 @@ export abstract class TransformationDynamicTypeAbstract extends DynamicTypeAbstr
     return this.id
   }
 
-  async configureTransformation (config: any): Promise<any | null> {
+  async configureTransformation (): Promise<any | null> {
     return await Promise.resolve(this.createDefaultConfig())
   }
 

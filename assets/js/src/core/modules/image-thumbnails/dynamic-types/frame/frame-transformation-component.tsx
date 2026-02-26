@@ -13,24 +13,20 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { type TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const FrameTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const FrameTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'width']} label="Width">
+      <Form.Item name="width" label="Width">
         <InputNumber placeholder="Enter frame width" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'height']} label="Height">
+      <Form.Item name="height" label="Height">
         <InputNumber placeholder="Enter frame height" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'forceResize']} label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
         <Switch />
       </Form.Item>
     </Flex>
   )
 }
-
-FrameTransformationComponent.displayName = 'FrameTransformationComponent'

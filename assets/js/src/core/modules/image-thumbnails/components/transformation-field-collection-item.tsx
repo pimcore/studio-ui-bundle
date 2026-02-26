@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { transformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
+import { Form } from '@Pimcore/components/form/form'
 
 export interface TransformationFieldCollectionItemProps {
   transformationType: string
@@ -27,8 +28,8 @@ export const TransformationFieldCollectionItem = ({
   const Component = registryItem.getReactComponent()
 
   return (
-    <Component
-      formBasePath={ [] } 
-    />
+    <Form.Group name="config">
+      <Component />
+    </Form.Group>
   )
 }

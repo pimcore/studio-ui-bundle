@@ -14,12 +14,10 @@ import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const RotateTransformationComponent: TransformationComponent = ({
-  formBasePath
-}) => {
+export const RotateTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'angle']} label="Angle">
+      <Form.Item name="angle" label="Angle">
         <InputNumber placeholder="Enter rotation angle in degrees" />
       </Form.Item>
     </Flex>

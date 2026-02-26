@@ -12,27 +12,23 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { type TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const CropTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const CropTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'width']} label="Width">
+      <Form.Item name="width" label="Width">
         <InputNumber placeholder="Enter crop width" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'height']} label="Height">
+      <Form.Item name="height" label="Height">
         <InputNumber placeholder="Enter crop height" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'x']} label="X Position">
+      <Form.Item name="x" label="X Position">
         <InputNumber placeholder="Enter X coordinate" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'y']} label="Y Position">
+      <Form.Item name="y" label="Y Position">
         <InputNumber placeholder="Enter Y coordinate" />
       </Form.Item>
     </Flex>
   )
 }
-
-CropTransformationComponent.displayName = 'CropTransformationComponent'

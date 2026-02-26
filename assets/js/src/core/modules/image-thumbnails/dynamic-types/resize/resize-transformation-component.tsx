@@ -14,7 +14,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
-import type { TransformationComponentProps } from '../../types/transformation-component-types'
+import type { TransformationComponent } from '../../types/transformation-component-types'
 
 const positioningOptions = [
   { value: 'center', label: 'Center' },
@@ -24,21 +24,19 @@ const positioningOptions = [
   { value: 'bottomright', label: 'Bottom Right' }
 ]
 
-export const ResizeTransformationComponent: React.FC<TransformationComponentProps> = ({
-  formBasePath
-}) => {
+export const ResizeTransformationComponent: TransformationComponent = () => {
   return (
     <Flex vertical gap="small">
-      <Form.Item name={[...formBasePath, 'width']} label="Width">
+      <Form.Item name="width" label="Width">
         <InputNumber placeholder="Enter width" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'height']} label="Height">
+      <Form.Item name="height" label="Height">
         <InputNumber placeholder="Enter height" />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'positioning']} label="Position" initialValue="center">
+      <Form.Item name="positioning" label="Position" initialValue="center">
         <Select options={positioningOptions} />
       </Form.Item>
-      <Form.Item name={[...formBasePath, 'forceResize']} label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
         <Switch />
       </Form.Item>
     </Flex>
