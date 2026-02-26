@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FieldCollection } from '@Pimcore/components/form/controls/field-collection/field-collection'
 import { transformationFieldCollectionRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { MediaQuery } from '../../types/media-query.types'
@@ -24,6 +25,8 @@ export const MediaQueryTransformationsField = ({
   onChange,
   disabled = false
 }: MediaQueryTransformationsFieldProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  
   useEffect(() => {
     initializeTransformationTypes()
   }, [])
@@ -44,8 +47,10 @@ export const MediaQueryTransformationsField = ({
 
   return (
     <FieldCollection
+      addButtonTranslationKey="image-thumbnails.media-queries.add-transformation"
       onChange={ handleChange }
       registry={ transformationFieldCollectionRegistry }
+      title={ t('image-thumbnails.editor.transformations') }
       value={ transformationsData }
     />
   )

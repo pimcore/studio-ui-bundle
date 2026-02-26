@@ -99,7 +99,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         description: configData.settings.description ?? '',
         format: (configData.settings.format === '' ? 'auto' : configData.settings.format) ?? 'auto',
         group: configData.settings.group ?? '',
-        quality: (configData.settings.quality !== 0 ? configData.settings.quality : 85) ?? 85,
+        quality: (configData.settings.quality === 0 ? 85 : configData.settings.quality) ?? 85,
         highResolution: configData.settings.highResolution ?? null,
         preserveColor: configData.settings.preserveColor ?? false,
         forceProcessICCProfiles: configData.settings.forceProcessICCProfiles ?? false,

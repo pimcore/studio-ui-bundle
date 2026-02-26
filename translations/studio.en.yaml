@@ -1272,6 +1272,7 @@ image-thumbnails.transformations.effects.intensity: "Intensity"
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
+image-thumbnails.transformations.no-configuration-required: "No configuration required"
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
@@ -1305,6 +1306,7 @@ url-slug.invalid: Please enter a valid URL slug (starting with a '/')
 site-id: Site ID
 deleted: deleted
 collection.empty: No available fields yet. Start by adding a field.
+field-collection.add.default: "Add collection"
 video.type: Video Type
 video.type.asset: Asset
 video.type.youtube: YouTube

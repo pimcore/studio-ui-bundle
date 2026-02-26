@@ -18,10 +18,11 @@ export interface FieldCollectionAddControlProps {
   size?: SelectProps['size']
   field?: number
   disabled?: boolean
+  placeholderTranslationKey?: string
 }
 
 export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps): React.JSX.Element => {
-  const { size = 'small' } = props
+  const { size = 'small', placeholderTranslationKey } = props
   const { registry } = useFieldCollection()
   const { operations } = useNumberedList()
   const { t } = useTranslation()
@@ -31,6 +32,10 @@ export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps)
     label: t(item.translationKey),
     value: item.type
   }))
+
+  const placeholderText = placeholderTranslationKey 
+    ? t(placeholderTranslationKey) 
+    : t('field-collection.add.default')
 
   const onSelect: SelectProps['onSelect'] = (value) => {
     operations.add({ type: value, data: {} }, props.field !== undefined ? props.field + 1 : undefined)
@@ -42,7 +47,7 @@ export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps)
       dropdownStyle={ { width: 200 } }
       onSelect={ onSelect }
       options={ selectOptions }
-      placeholder={ 'Add collection' }
+      placeholder={ placeholderText }
       showSearch
       size={ size }
       style={ { width: 150 } }
