@@ -37,7 +37,10 @@ const injectedRtkApi = api
                 ClassCustomLayoutCollectionApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/custom-layout/collection/${queryArg.dataObjectClass}`,
+                    url: `/pimcore-studio/api/class/custom-layout/collection`,
+                    params: {
+                        classIds: queryArg.classIds,
+                    },
                 }),
                 providesTags: ["Class Definition"],
             }),
@@ -308,6 +311,16 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/field-collection/${queryArg.key}/usages` }),
                 providesTags: ["Class Definition"],
             }),
+            classGetFieldsByType: build.query<ClassGetFieldsByTypeApiResponse, ClassGetFieldsByTypeApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/definition/fields-by-type`,
+                    params: {
+                        classId: queryArg.classId,
+                        type: queryArg["type"],
+                    },
+                }),
+                providesTags: ["Class Definition"],
+            }),
             classDefinitionFolderCollection: build.query<
                 ClassDefinitionFolderCollectionApiResponse,
                 ClassDefinitionFolderCollectionApiArg
@@ -319,6 +332,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/definition/${queryArg.dataObjectClass}` }),
                 providesTags: ["Class Definition"],
             }),
+            classObjectBrickClasses: build.query<ClassObjectBrickClassesApiResponse, ClassObjectBrickClassesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/class/object-brick/classes` }),
+                providesTags: ["Class Definition"],
+            }),
             classObjectBrickCollection: build.query<
                 ClassObjectBrickCollectionApiResponse,
                 ClassObjectBrickCollectionApiArg
@@ -326,9 +343,94 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/class/object-brick/collection` }),
                 providesTags: ["Class Definition"],
             }),
+            classObjectBrickCreate: build.mutation<ClassObjectBrickCreateApiResponse, ClassObjectBrickCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick`,
+                    method: "POST",
+                    body: queryArg.createObjectBrick,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classObjectBrickCustomLayoutGet: build.query<
+                ClassObjectBrickCustomLayoutGetApiResponse,
+                ClassObjectBrickCustomLayoutGetApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/custom-layout/${queryArg.customLayoutId}`,
+                }),
+                providesTags: ["Class Definition"],
+            }),
+            classObjectBrickCustomLayoutUpdate: build.mutation<
+                ClassObjectBrickCustomLayoutUpdateApiResponse,
+                ClassObjectBrickCustomLayoutUpdateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/custom-layout/${queryArg.customLayoutId}`,
+                    method: "PUT",
+                    body: queryArg.customLayoutUpdate,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classObjectBrickCustomLayoutDelete: build.mutation<
+                ClassObjectBrickCustomLayoutDeleteApiResponse,
+                ClassObjectBrickCustomLayoutDeleteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/custom-layout/${queryArg.customLayoutId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classObjectBrickCustomLayoutExport: build.query<
+                ClassObjectBrickCustomLayoutExportApiResponse,
+                ClassObjectBrickCustomLayoutExportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/custom-layout/${queryArg.customLayoutId}/export`,
+                }),
+                providesTags: ["Class Definition"],
+            }),
+            classObjectBrickCustomLayoutImport: build.mutation<
+                ClassObjectBrickCustomLayoutImportApiResponse,
+                ClassObjectBrickCustomLayoutImportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/custom-layout/${queryArg.customLayoutId}/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             classObjectBrickGetByKey: build.query<ClassObjectBrickGetByKeyApiResponse, ClassObjectBrickGetByKeyApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}` }),
                 providesTags: ["Class Definition"],
+            }),
+            classObjectBrickUpdate: build.mutation<ClassObjectBrickUpdateApiResponse, ClassObjectBrickUpdateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}`,
+                    method: "PUT",
+                    body: queryArg.objectBrickUpdate,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classObjectBrickDelete: build.mutation<ClassObjectBrickDeleteApiResponse, ClassObjectBrickDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classObjectBrickExport: build.query<ClassObjectBrickExportApiResponse, ClassObjectBrickExportApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/export` }),
+                providesTags: ["Class Definition"],
+            }),
+            classObjectBrickImport: build.mutation<ClassObjectBrickImportApiResponse, ClassObjectBrickImportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Class Definition"],
             }),
             classObjectBrickObjectLayout: build.query<
                 ClassObjectBrickObjectLayoutApiResponse,
@@ -348,6 +450,13 @@ const injectedRtkApi = api
             }),
             classObjectBrickGetTree: build.query<ClassObjectBrickGetTreeApiResponse, ClassObjectBrickGetTreeApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/class/object-brick/tree` }),
+                providesTags: ["Class Definition"],
+            }),
+            classObjectBrickGetUsages: build.query<
+                ClassObjectBrickGetUsagesApiResponse,
+                ClassObjectBrickGetUsagesApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/usages` }),
                 providesTags: ["Class Definition"],
             }),
             classSelectOptionGetTree: build.query<ClassSelectOptionGetTreeApiResponse, ClassSelectOptionGetTreeApiArg>({
@@ -390,8 +499,8 @@ export type ClassCustomLayoutCollectionApiResponse =
         items: CustomLayoutsInCompactFormatToBeUsedForEGListings[];
     };
 export type ClassCustomLayoutCollectionApiArg = {
-    /** Data object class */
-    dataObjectClass: string;
+    /** Comma-separated list of class Ids */
+    classIds?: string;
 };
 export type ClassAllLayoutCollectionApiResponse = /** status 200 List of all available class layouts */ {
     totalItems: number;
@@ -605,6 +714,17 @@ export type ClassFieldCollectionGetUsagesApiArg = {
     /** Field collection unique key */
     key: string;
 };
+export type ClassGetFieldsByTypeApiResponse =
+    /** status 200 Successfully retrieved class definition fields for the requested types */ {
+        totalItems: number;
+        items: FieldKeyByType[];
+    };
+export type ClassGetFieldsByTypeApiArg = {
+    /** The class ID to retrieve fields for. */
+    classId: string;
+    /** Comma-separated list of field types to filter by. */
+    type: string;
+};
 export type ClassDefinitionFolderCollectionApiResponse = /** status 200 List of all data object classes in a folder */ {
     totalItems: number;
     items: ClassInDataObjectFolder[];
@@ -618,15 +738,97 @@ export type ClassDefinitionGetApiArg = {
     /** Data object class */
     dataObjectClass: string;
 };
+export type ClassObjectBrickClassesApiResponse =
+    /** status 200 Collection of class definitions with ObjectBricks fields */ {
+        totalItems: number;
+        items: ClassDefinitionListItem[];
+    };
+export type ClassObjectBrickClassesApiArg = void;
 export type ClassObjectBrickCollectionApiResponse = /** status 200 Collection of object brick definitions */ {
     totalItems: number;
     items: ObjectBrickConfiguration[];
 };
 export type ClassObjectBrickCollectionApiArg = void;
+export type ClassObjectBrickCreateApiResponse =
+    /** status 200 Created object brick definition detail */ ObjectBrickDetail;
+export type ClassObjectBrickCreateApiArg = {
+    createObjectBrick: SchemaUsedToCreateObjectBrickDefinitions;
+};
+export type ClassObjectBrickCustomLayoutGetApiResponse =
+    /** status 200 Object brick custom layout data */ CustomLayouts;
+export type ClassObjectBrickCustomLayoutGetApiArg = {
+    /** Object brick key */
+    key: string;
+    /** Id of the base custom layout */
+    customLayoutId: string;
+};
+export type ClassObjectBrickCustomLayoutUpdateApiResponse =
+    /** status 200 Updated object brick custom layout */ CustomLayouts;
+export type ClassObjectBrickCustomLayoutUpdateApiArg = {
+    /** Object brick key */
+    key: string;
+    /** Id of the base custom layout */
+    customLayoutId: string;
+    customLayoutUpdate: SchemaUsedToUpdateCustomLayouts;
+};
+export type ClassObjectBrickCustomLayoutDeleteApiResponse = unknown;
+export type ClassObjectBrickCustomLayoutDeleteApiArg = {
+    /** Object brick key */
+    key: string;
+    /** Id of the base custom layout */
+    customLayoutId: string;
+};
+export type ClassObjectBrickCustomLayoutExportApiResponse =
+    /** status 200 Object brick custom layout data as JSON */ Blob;
+export type ClassObjectBrickCustomLayoutExportApiArg = {
+    /** Object brick key */
+    key: string;
+    /** Id of the base custom layout */
+    customLayoutId: string;
+};
+export type ClassObjectBrickCustomLayoutImportApiResponse =
+    /** status 200 Successfully imported object brick custom layout */ CustomLayouts;
+export type ClassObjectBrickCustomLayoutImportApiArg = {
+    /** Object brick key */
+    key: string;
+    /** Id of the base custom layout */
+    customLayoutId: string;
+    body: {
+        /** Import file to upload */
+        file: Blob;
+    };
+};
 export type ClassObjectBrickGetByKeyApiResponse = /** status 200 Object brick definition detail */ ObjectBrickDetail;
 export type ClassObjectBrickGetByKeyApiArg = {
     /** Object brick unique key */
     key: string;
+};
+export type ClassObjectBrickUpdateApiResponse =
+    /** status 200 Updated object brick definition detail */ ObjectBrickDetail;
+export type ClassObjectBrickUpdateApiArg = {
+    /** Object brick unique key */
+    key: string;
+    objectBrickUpdate: SchemaUsedToUpdateObjectBrickDefinition;
+};
+export type ClassObjectBrickDeleteApiResponse = unknown;
+export type ClassObjectBrickDeleteApiArg = {
+    /** Object brick unique key */
+    key: string;
+};
+export type ClassObjectBrickExportApiResponse = /** status 200 JSON export of the object brick definition */ Blob;
+export type ClassObjectBrickExportApiArg = {
+    /** Object brick unique key */
+    key: string;
+};
+export type ClassObjectBrickImportApiResponse =
+    /** status 200 Imported object brick definition detail */ ObjectBrickDetail;
+export type ClassObjectBrickImportApiArg = {
+    /** Object brick unique key */
+    key: string;
+    body: {
+        /** Import file with JSON encoded object brick definition */
+        file: Blob;
+    };
 };
 export type ClassObjectBrickObjectLayoutApiResponse = /** status 200 List of layouts */ {
     totalItems: number;
@@ -647,6 +849,13 @@ export type ClassObjectBrickGetTreeApiResponse = /** status 200 Object brick tre
     items: (ObjectBrickTreeNodeItem | ObjectBrickTreeNodeFolder)[];
 };
 export type ClassObjectBrickGetTreeApiArg = void;
+export type ClassObjectBrickGetUsagesApiResponse = /** status 200 List of classes and fields using the object brick */ {
+    items: ObjectBrickUsageData[];
+};
+export type ClassObjectBrickGetUsagesApiArg = {
+    /** Object brick unique key */
+    key: string;
+};
 export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
     totalItems: number;
     items: (SelectOptionTreeItem | SelectOptionTreeFolder)[];
@@ -1091,6 +1300,14 @@ export type FieldCollectionUsageData = {
     /** Name of the field in the class */
     field: string;
 };
+export type FieldKeyByType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Field key */
+    key: string;
+};
 export type ClassInDataObjectFolder = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1137,6 +1354,16 @@ export type ObjectBrickDetail = {
         classname?: string;
         fieldname?: string;
     }[];
+};
+export type SchemaUsedToCreateObjectBrickDefinitions = {
+    /** Key of the object brick */
+    key: string;
+};
+export type SchemaUsedToUpdateObjectBrickDefinition = {
+    /** Layout configuration for fields (Panel, Input, ..) */
+    configuration: object;
+    /** Values for object brick definition metadata */
+    values: object;
 };
 export type ObjectBrickLayoutDefinition = {
     /** AdditionalAttributes */
@@ -1195,6 +1422,16 @@ export type ObjectBrickTreeNodeFolder = {
     group: string;
     /** Child nodes */
     children: ObjectBrickTreeNodeItem[];
+};
+export type ObjectBrickUsageData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name of the class using the object brick */
+    class: string;
+    /** Name of the field in the class */
+    field: string;
 };
 export type SelectOptionTreeItem = {
     /** AdditionalAttributes */
@@ -1265,12 +1502,25 @@ export const {
     useClassFieldCollectionGetLayoutByKeyQuery,
     useClassFieldCollectionGetTreeQuery,
     useClassFieldCollectionGetUsagesQuery,
+    useClassGetFieldsByTypeQuery,
     useClassDefinitionFolderCollectionQuery,
     useClassDefinitionGetQuery,
+    useClassObjectBrickClassesQuery,
     useClassObjectBrickCollectionQuery,
+    useClassObjectBrickCreateMutation,
+    useClassObjectBrickCustomLayoutGetQuery,
+    useClassObjectBrickCustomLayoutUpdateMutation,
+    useClassObjectBrickCustomLayoutDeleteMutation,
+    useClassObjectBrickCustomLayoutExportQuery,
+    useClassObjectBrickCustomLayoutImportMutation,
     useClassObjectBrickGetByKeyQuery,
+    useClassObjectBrickUpdateMutation,
+    useClassObjectBrickDeleteMutation,
+    useClassObjectBrickExportQuery,
+    useClassObjectBrickImportMutation,
     useClassObjectBrickObjectLayoutQuery,
     useClassObjectBrickGetLayoutByKeyQuery,
     useClassObjectBrickGetTreeQuery,
+    useClassObjectBrickGetUsagesQuery,
     useClassSelectOptionGetTreeQuery,
 } = injectedRtkApi;
