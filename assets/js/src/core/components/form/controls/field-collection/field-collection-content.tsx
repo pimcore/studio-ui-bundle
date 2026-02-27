@@ -21,7 +21,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 
 export const FieldCollectionContent = (): React.JSX.Element => {
   const { values } = useNumberedList()
-  const { title, collapsed, addButtonTranslationKey } = useFieldCollection()
+  const { title, collapsed } = useFieldCollection()
 
   return (
     <>
