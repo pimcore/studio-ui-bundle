@@ -9,12 +9,11 @@
  */
 
 /* eslint-disable max-lines */
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+import { globalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitions/utils/global-clipboard'
 import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
-import { useInjection } from '@sdk/app'
 import { uuid } from '@sdk/utils'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -59,6 +58,7 @@ export interface ILayoutContext {
 
 export interface LayoutProviderProps {
   layout: Layout | undefined
+  fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   children: React.ReactNode
 }
 
@@ -155,7 +155,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<ILayoutContext['currentFieldDefinitionIdPath']>(null)
     const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<ILayoutContext['invalidFieldDefinitionIds']>([])
     const [copiedPath, setCopiedPath] = useState<ILayoutContext['copiedPath']>(undefined)
-    const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+    const fieldDefinitionRegistry = props.fieldDefinitionRegistry
     const { area } = useArea()
 
     // Use refs to always access latest values in callbacks
@@ -428,6 +428,34 @@ export const create = (): LayoutProviderFactoryReturn => {
 
     const copyFieldDefinition = useCallback((path: string[]): void => {
       setCopiedPath(path)
+
+      // Also write a Layout snapshot to the global clipboard so it can be
+      // pasted into other editor instances (cross-configuration copy/paste).
+      const nodeId = path[path.length - 1]
+      const currentStructure = structureRef.current
+      const currentFieldDefs = fieldDefinitionsRef.current
+
+      if (currentStructure === undefined || nodeId === undefined) {
+        return
+      }
+
+      const buildLayoutFromNode = (node: StructureNode): Layout => {
+        const fieldDef = currentFieldDefs[node.id]
+        const children = node.children.map(buildLayoutFromNode)
+        const { id, ...restFieldDef } = fieldDef
+
+        /* eslint-disable @typescript-eslint/consistent-type-assertions */
+        return {
+          ...restFieldDef,
+          children: (children.length > 0 ? children : null) as Layout['children']
+        } as unknown as Layout
+        /* eslint-enable @typescript-eslint/consistent-type-assertions */
+      }
+
+      const targetNode = findNode(currentStructure, nodeId)
+      if (targetNode !== undefined) {
+        globalFieldDefinitionClipboard.set(buildLayoutFromNode(targetNode))
+      }
     }, [])
 
     const pasteFieldDefinition = useCallback((path: string[]): void => {

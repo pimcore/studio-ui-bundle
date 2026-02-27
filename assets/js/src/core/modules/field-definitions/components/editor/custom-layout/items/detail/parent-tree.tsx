@@ -22,6 +22,7 @@ export const DetailParentTree = (): React.JSX.Element => {
   const settings = useSettings()
   const parentArea = settings.customLayouts?.parent?.area
   const useLayout = settings.customLayouts?.parent?.useLayout
+  const { fieldDefinitionRegistry } = settings
 
   if (useLayout === undefined) {
     throw new Error('Custom Layout Parent: useLayout is not defined in editor settings')
@@ -77,6 +78,7 @@ export const DetailParentTree = (): React.JSX.Element => {
     const treeItems = buildTree({
       structure,
       fieldDefinitions,
+      registry: fieldDefinitionRegistry,
       itemCallback: ({ fieldDefinition, initialTreeItem }) => {
         return {
           ...initialTreeItem,
