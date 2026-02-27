@@ -28,8 +28,8 @@ export abstract class TransformationDynamicTypeAbstract<TAttributes = any> exten
   }
 
   createDefaultConfig (): TAttributes {
-    const defaultConfig: TAttributes = {} as TAttributes
-    return defaultConfig
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {} as TAttributes
   }
 
   abstract getReactComponent (): TransformationComponent

@@ -10,8 +10,6 @@
 
 import type React from 'react'
 
-export interface TransformationComponentProps {
-  [key: string]: any
-}
+export interface TransformationComponentProps extends Record<string, any> {}
 
 export type TransformationComponent = React.ComponentType<TransformationComponentProps>
