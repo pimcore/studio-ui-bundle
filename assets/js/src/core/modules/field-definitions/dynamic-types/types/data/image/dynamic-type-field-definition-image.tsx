@@ -41,6 +41,6 @@ export class DynamicTypeFieldDefinitionImage extends DynamicTypeFieldDefinitionD
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
+    return super.getFormFields({ ...context, hideUnique: true })
   }
 }

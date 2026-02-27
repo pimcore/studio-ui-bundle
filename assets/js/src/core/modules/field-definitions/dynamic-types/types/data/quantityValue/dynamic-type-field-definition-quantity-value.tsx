@@ -39,6 +39,6 @@ export class DynamicTypeFieldDefinitionQuantityValue extends DynamicTypeFieldDef
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    return super.getFormFields(context)
+    return super.getFormFields({ ...context, hideUnique: true })
   }
 }

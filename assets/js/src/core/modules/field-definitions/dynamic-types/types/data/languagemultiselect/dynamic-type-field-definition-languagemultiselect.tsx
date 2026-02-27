@@ -30,7 +30,7 @@ export class DynamicTypeFieldDefinitionLanguageMultiselect extends DynamicTypeFi
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    return super.getFormFields({ ...context, hideUnique: true })
+    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {

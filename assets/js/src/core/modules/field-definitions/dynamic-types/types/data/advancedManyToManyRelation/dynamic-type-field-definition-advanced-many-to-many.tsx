@@ -39,6 +39,6 @@ export class DynamicTypeFieldDefinitionAdvancedManyToMany extends DynamicTypeFie
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    return super.getFormFields({ ...context, hideUnique: true })
+    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
   }
 }

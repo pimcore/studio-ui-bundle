@@ -29,6 +29,10 @@ export class DynamicTypeFieldDefinitionSlider extends DynamicTypeFieldDefinition
     return [...super.getTags(props), 'encryptedFieldSupport']
   }
 
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true })
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
