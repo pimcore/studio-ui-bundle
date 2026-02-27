@@ -39,6 +39,7 @@ import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import autofill from '@Pimcore/assets/icons/autofill.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
@@ -477,6 +478,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'auto-save',
       component: autoSave
+    })
+    iconLibrary.register({
+      name: 'autofill',
+      component: autofill
     })
     iconLibrary.register({
       name: 'automation-integration',
