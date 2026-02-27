@@ -18,6 +18,7 @@ import { type IconLibrary } from './services/icon-library'
 import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import accordion from '@Pimcore/assets/icons/accordion.inline.svg?react'
+import activities from '@Pimcore/assets/icons/activities.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
 import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
@@ -392,6 +393,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'accordion',
       component: accordion
+    })
+    iconLibrary.register({
+      name: 'activities',
+      component: activities
     })
     iconLibrary.register({
       name: 'add-find',
