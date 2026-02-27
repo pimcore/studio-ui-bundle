@@ -13,7 +13,7 @@ import { type Meta } from '@storybook/react'
 import { Steps } from './steps'
 
 const config: Meta = {
-  title: 'Components/General/Steps',
+  title: 'Components/Navigation/Steps',
   component: Steps,
   parameters: {
     layout: 'centered'
@@ -124,6 +124,31 @@ export const Small = {
       },
       {
         title: 'Resolver'
+      }
+    ]
+  }
+}
+
+export const NavigationSmall = {
+  args: {
+    current: 1,
+    type: 'navigation' as const,
+    size: 'small' as const,
+    items: [
+      {
+        title: 'Data Source'
+      },
+      {
+        title: 'Preview Import'
+      },
+      {
+        title: 'Resolver'
+      },
+      {
+        title: 'Mapping'
+      },
+      {
+        title: 'Processing'
       }
     ]
   }
