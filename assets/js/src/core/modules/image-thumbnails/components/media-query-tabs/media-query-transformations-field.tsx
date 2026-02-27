@@ -21,10 +21,10 @@ interface MediaQueryTransformationsFieldProps {
 
 export const MediaQueryTransformationsField = ({
   mediaQuery,
-  onChange,
+  onChange
 }: MediaQueryTransformationsFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
-  
+
   useEffect(() => {
     initializeTransformationTypes()
   }, [])

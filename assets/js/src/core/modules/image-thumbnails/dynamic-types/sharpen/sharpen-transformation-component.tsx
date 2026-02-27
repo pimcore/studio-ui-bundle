@@ -16,17 +16,33 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const SharpenTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="radius" label="Radius">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Radius"
+        name="radius"
+      >
         <InputNumber placeholder="Enter radius value" />
       </Form.Item>
-      <Form.Item name="sigma" label="Sigma">
+      <Form.Item
+        label="Sigma"
+        name="sigma"
+      >
         <InputNumber placeholder="Enter sigma value" />
       </Form.Item>
-      <Form.Item name="amount" label="Amount">
+      <Form.Item
+        label="Amount"
+        name="amount"
+      >
         <InputNumber placeholder="Enter amount value" />
       </Form.Item>
-      <Form.Item name="threshold" label="Threshold" initialValue={0}>
+      <Form.Item
+        initialValue={ 0 }
+        label="Threshold"
+        name="threshold"
+      >
         <InputNumber placeholder="Enter threshold value" />
       </Form.Item>
     </Flex>

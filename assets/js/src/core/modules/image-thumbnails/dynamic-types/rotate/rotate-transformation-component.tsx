@@ -16,8 +16,14 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const RotateTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="angle" label="Angle">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Angle"
+        name="angle"
+      >
         <InputNumber placeholder="Enter rotation angle in degrees" />
       </Form.Item>
     </Flex>

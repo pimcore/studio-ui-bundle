@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { MirrorTransformationComponent } from './mirror-transformation-component'
-import { TransformationComponent } from '../../types/transformation-component-types'
+import { type TransformationComponent } from '../../types/transformation-component-types'
 
 export interface MirrorTransformationConfig {
   mode?: 'horizontal' | 'vertical'

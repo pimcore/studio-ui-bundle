@@ -16,13 +16,19 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const ApplyMaskTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="asset" label="Mask Image">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Mask Image"
+        name="asset"
+      >
         <ImagePicker
-          width={300}
-          height={150}
+          allowedTypes={ ['image'] }
+          height={ 150 }
           type="add"
-          allowedTypes={['image']}
+          width={ 300 }
         />
       </Form.Item>
     </Flex>

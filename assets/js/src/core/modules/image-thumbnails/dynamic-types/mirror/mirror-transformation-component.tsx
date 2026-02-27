@@ -21,9 +21,16 @@ export const MirrorTransformationComponent: TransformationComponent = () => {
   ]
 
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="mode" label="Mode" initialValue="horizontal">
-        <Select options={modeOptions} />
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue="horizontal"
+        label="Mode"
+        name="mode"
+      >
+        <Select options={ modeOptions } />
       </Form.Item>
     </Flex>
   )

@@ -16,15 +16,39 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const BrightnessSaturationTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="brightness" label="Brightness" initialValue={100}>
-        <Slider min={0} max={200} />
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 100 }
+        label="Brightness"
+        name="brightness"
+      >
+        <Slider
+          max={ 200 }
+          min={ 0 }
+        />
       </Form.Item>
-      <Form.Item name="saturation" label="Saturation" initialValue={100}>
-        <Slider min={0} max={200} />
+      <Form.Item
+        initialValue={ 100 }
+        label="Saturation"
+        name="saturation"
+      >
+        <Slider
+          max={ 200 }
+          min={ 0 }
+        />
       </Form.Item>
-      <Form.Item name="hue" label="Hue" initialValue={100}>
-        <Slider min={0} max={200} />
+      <Form.Item
+        initialValue={ 100 }
+        label="Hue"
+        name="hue"
+      >
+        <Slider
+          max={ 200 }
+          min={ 0 }
+        />
       </Form.Item>
     </Flex>
   )

@@ -30,7 +30,7 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   }
 
   mediaQueries.forEach((mediaQuery) => {
-    const queryName = (mediaQuery.query === '' ? `media-${mediaQuery.id}`: mediaQuery.query) ?? `media-${mediaQuery.id}`
+    const queryName = (mediaQuery.query === '' ? `media-${mediaQuery.id}` : mediaQuery.query) ?? `media-${mediaQuery.id}`
 
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
       method: transformation.type,

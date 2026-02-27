@@ -17,14 +17,28 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const FrameTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="width" label="Width">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Width"
+        name="width"
+      >
         <InputNumber placeholder="Enter frame width" />
       </Form.Item>
-      <Form.Item name="height" label="Height">
+      <Form.Item
+        label="Height"
+        name="height"
+      >
         <InputNumber placeholder="Enter frame height" />
       </Form.Item>
-      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item
+        initialValue={ false }
+        label="Force Resize"
+        name="forceResize"
+        valuePropName="checked"
+      >
         <Switch />
       </Form.Item>
     </Flex>

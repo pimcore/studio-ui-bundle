@@ -32,9 +32,9 @@ export const FieldCollectionContent = (): React.JSX.Element => {
             gap={ 'extra-small' }
           >
             <Text strong>{title}</Text>
-            <FieldCollectionAddControl 
-              size="middle" 
-              placeholderTranslationKey={addButtonTranslationKey}
+            <FieldCollectionAddControl
+              placeholderTranslationKey={ addButtonTranslationKey }
+              size="middle"
             />
           </Flex>
 

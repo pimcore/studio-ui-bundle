@@ -16,11 +16,22 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const GaussianBlurTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="radius" label="Radius" initialValue={0}>
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 0 }
+        label="Radius"
+        name="radius"
+      >
         <InputNumber placeholder="Enter radius value (0+)" />
       </Form.Item>
-      <Form.Item name="sigma" label="Sigma" initialValue={1}>
+      <Form.Item
+        initialValue={ 1 }
+        label="Sigma"
+        name="sigma"
+      >
         <InputNumber placeholder="Enter sigma value (1+)" />
       </Form.Item>
     </Flex>
