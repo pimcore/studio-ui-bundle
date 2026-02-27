@@ -34,7 +34,6 @@ export const FieldCollectionContent = (): React.JSX.Element => {
             <Text strong>{title}</Text>
             <FieldCollectionAddControl 
               size="middle" 
-              placeholderTranslationKey={addButtonTranslationKey}
             />
           </Flex>
 
