@@ -10,8 +10,6 @@
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { type FieldDefinition as FieldDefinitionType } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
-import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
-import { serviceIds, useInjection } from '@sdk/app'
 import { Content, FormKit } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -20,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 
 export const LayoutForm = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useLayout } = useSettings()
+  const { useLayout, fieldDefinitionRegistry } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
   const [values, setValues] = useState<FieldDefinitionType>(fieldDefinition)
@@ -28,7 +26,6 @@ export const LayoutForm = (): React.JSX.Element => {
   // Capture the active field definition ID at the moment the user types, not when the debounce fires.
   // Without this, switching fields quickly causes the debounced update to write old values to the new field.
   const activeIdRef = useRef(currentFieldDefinitionId)
-  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
   const { area } = useArea()
   const dynamicType = useMemo(() => {
     if (fieldDefinition !== undefined && fieldDefinitionRegistry.hasDynamicType(fieldDefinition.fieldtype)) {

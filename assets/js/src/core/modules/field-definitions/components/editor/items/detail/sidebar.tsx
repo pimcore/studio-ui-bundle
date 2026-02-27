@@ -22,10 +22,9 @@
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
+import { useGlobalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitions/utils/global-clipboard'
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
-import { serviceIds, useInjection } from '@sdk/app'
 import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
 import { Divider, theme } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
@@ -83,7 +82,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     getLayout
   } = useLayout()
 
-  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const { fieldDefinitionRegistry } = useSettings()
+
+  const { copiedLayout: globalCopiedLayout } = useGlobalFieldDefinitionClipboard()
 
   // Function to get all keys from tree structure that have children
   const getAllKeys = (node: StructureNode): string[] => {
@@ -479,6 +480,13 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 }]
               : []),
 
+            ...(!isCustomLayout && copiedPath === undefined && globalCopiedLayout !== undefined && isValidExternalChildFieldDefinition(currentPath as string[], globalCopiedLayout)
+              ? [{
+                  key: 'paste',
+                  icon: 'paste'
+                }]
+              : []),
+
             ...(initialTreeItem.key !== structure?.id
               ? [
                   {
@@ -493,7 +501,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     })
 
     return [treeItems]
-  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
@@ -510,7 +518,23 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     }
 
     if (actionKey === 'paste') {
-      pasteFieldDefinition(node.meta?.currentPath as string[] ?? [])
+      if (copiedPath !== undefined) {
+        pasteFieldDefinition(node.meta?.currentPath as string[] ?? [])
+      } else if (globalCopiedLayout !== undefined) {
+        const newNode = addExternalFieldDefinition(nodeKey, globalCopiedLayout)
+        const keysToExpand = getAllKeys(newNode)
+        if (keysToExpand.length > 0) {
+          setExpandedKeys(prev => {
+            const newKeys = [...new Set([...prev, ...keysToExpand])]
+            expandedKeysRef.current = newKeys
+            return newKeys
+          })
+        }
+        expandNode(nodeKey)
+        setCurrentFieldDefinitionId(newNode.id)
+        setCurrentFieldDefinitionIdPath([...(node.meta?.currentPath as string[] ?? []), newNode.id])
+        setDetailView('layout')
+      }
     }
 
     if (actionKey.startsWith('add-')) {

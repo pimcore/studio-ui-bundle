@@ -11,11 +11,9 @@
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 import { buildPathMap, getNamesInNamespace } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { serviceIds, useInjection } from '@sdk/app'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
@@ -33,7 +31,7 @@ export const DetailSave = (): React.JSX.Element => {
   const { isLoading } = result
   const messageApi = useMessage()
   const alertModal = useAlertModal()
-  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
   const { area } = useArea()
 
   const onClick: ButtonProps['onClick'] = () => {

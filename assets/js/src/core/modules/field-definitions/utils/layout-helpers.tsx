@@ -65,6 +65,7 @@ export interface BuildTreeProps {
   structure: StructureNode
   fieldDefinitions: ILayoutContext['fieldDefinitions']
   itemCallback?: (props: ItemCallbackProps) => ITreeElementProps['treeData'][0]
+  registry?: DynamicTypeFieldDefinitionRegistry
 }
 
 export const buildPathMap = (structure: StructureNode): Record<string, string[]> => {
@@ -82,9 +83,9 @@ export const getNamesInNamespace = (
   structure: StructureNode,
   fieldDefinitions: Record<string, FieldDefinition>,
   targetId: string,
-  pathMap: Record<string, string[]>
+  pathMap: Record<string, string[]>,
+  registry: DynamicTypeFieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 ): string[] => {
-  const registry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const isOpener = (id: string): boolean => {
     const def = fieldDefinitions[id]
@@ -128,9 +129,9 @@ export const getNamesInNamespace = (
 
 export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][0] => {
   const { fieldDefinitions, structure, itemCallback } = props
+  const fieldDefinitionRegistry = props.registry ?? container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildTreeItems = (node: StructureNode, parentPath: string[] = []): ITreeElementProps['treeData'][0] => {
-    const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
     const fieldDef = fieldDefinitions[node.id]
     let dynType: undefined | DynamicTypeFieldDefinitionAbstract
 
