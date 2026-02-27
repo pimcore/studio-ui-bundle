@@ -47,7 +47,7 @@ export const FieldDefinitionAdvancedManyToManyObjectRelationFormFields = (props:
   const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -141,6 +141,6 @@ export const FieldDefinitionAdvancedManyToManyObjectRelationFormFields = (props:
         <Switch labelRight={ t('enable-async-load-in-admin') } />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

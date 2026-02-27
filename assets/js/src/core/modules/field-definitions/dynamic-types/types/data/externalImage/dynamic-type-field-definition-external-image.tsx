@@ -27,19 +27,20 @@ export class DynamicTypeFieldDefinitionExternalImage extends DynamicTypeFieldDef
     return [...super.getGroup(), 'media']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'encryptedFieldSupport']
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionExternalImageFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionExternalImageFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

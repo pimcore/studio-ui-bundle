@@ -14,7 +14,7 @@ import {
 import { FieldDefinitionLayoutFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/field-defintion-layout-form-fields'
 import { FormKit } from '@sdk/components'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 
 export interface FieldDefinitionLayout extends FieldDefinitionDataAbstract {
   name: string
@@ -62,8 +62,6 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
   }
 
   getSpecificSettingsPanel (context: FieldDefinitionContext): React.JSX.Element {
-    const { t } = useTranslation()
-
     return (
       <FormKit.Panel title={ t('specific-settings') }>
         {this.getSpecificFormFields(context)}

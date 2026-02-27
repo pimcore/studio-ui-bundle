@@ -35,21 +35,13 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
     return [...super.getGroup(), 'structured']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const isCustomLayout = context.area.includes('custom-layout')
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
-    const enrichedContext = {
-      ...context,
-      hideUnique: true,
-      disableMandatory: true,
-      disableIndex: true,
-      disableVisibleGridView: true,
-      disableVisibleSearch: true
-    }
+
     return (
       <>
-        {super.getFormFields(enrichedContext)}
         {!isCustomLayout && (
           <FormKit.Panel
             theme="card-with-highlight"
@@ -73,5 +65,16 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
         />
       </>
     )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({
+      ...context,
+      hideUnique: true,
+      disableMandatory: true,
+      disableIndex: true,
+      disableVisibleGridView: true,
+      disableVisibleSearch: true
+    })
   }
 }

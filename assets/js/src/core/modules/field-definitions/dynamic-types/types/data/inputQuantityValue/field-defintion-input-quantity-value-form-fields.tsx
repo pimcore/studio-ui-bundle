@@ -20,7 +20,7 @@ export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefiniti
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
       <>
         <Form.Item
@@ -62,6 +62,6 @@ export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefiniti
       </>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

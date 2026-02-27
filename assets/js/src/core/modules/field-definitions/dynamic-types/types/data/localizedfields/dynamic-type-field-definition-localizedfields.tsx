@@ -11,7 +11,9 @@
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionLocalizedfieldsFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/localizedfields/field-definition-localizedfields-form-fields'
+import { FormKit } from '@sdk/components'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionLocalizedfields extends DynamicTypeFieldDefinitionDataAbstract {
@@ -45,7 +47,7 @@ export class DynamicTypeFieldDefinitionLocalizedfields extends DynamicTypeFieldD
     return true
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
@@ -55,6 +57,14 @@ export class DynamicTypeFieldDefinitionLocalizedfields extends DynamicTypeFieldD
         id={ fieldDefinition?.name ?? id }
         type={ this.id }
       />
+    )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return (
+      <FormKit.Panel title={ t('specific-settings') }>
+        {this.getSpecificFormFields(context)}
+      </FormKit.Panel>
     )
   }
 }

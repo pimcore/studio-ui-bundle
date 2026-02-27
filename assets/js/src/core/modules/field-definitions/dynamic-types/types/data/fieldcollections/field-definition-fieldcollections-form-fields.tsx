@@ -20,7 +20,7 @@ export const FieldDefinitionFieldcollectionsFormFields = (props: FieldDefinition
   const { options: fieldCollectionOptions, isLoading } = useFieldCollectionOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('allowed-types') }
@@ -56,6 +56,6 @@ export const FieldDefinitionFieldcollectionsFormFields = (props: FieldDefinition
       <Form.Item name="disallowReorder">
         <Switch labelRight={ t('disallow-reorder') } />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

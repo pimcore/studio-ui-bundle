@@ -17,7 +17,7 @@ export const FieldDefinitionExternalImageFormFields = (props: FieldDefinitionAbs
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <Form.Item
         label={ t('preview-width') }
@@ -38,6 +38,6 @@ export const FieldDefinitionExternalImageFormFields = (props: FieldDefinitionAbs
       >
         <InputNumber />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

@@ -18,7 +18,7 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -51,6 +51,6 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
         <InputNumber />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

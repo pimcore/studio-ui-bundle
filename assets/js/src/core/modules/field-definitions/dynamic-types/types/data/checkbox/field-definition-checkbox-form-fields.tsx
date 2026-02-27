@@ -26,7 +26,7 @@ export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstract
   }, [useDefaultValue, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <>
           <Form.Item
@@ -50,6 +50,6 @@ export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstract
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

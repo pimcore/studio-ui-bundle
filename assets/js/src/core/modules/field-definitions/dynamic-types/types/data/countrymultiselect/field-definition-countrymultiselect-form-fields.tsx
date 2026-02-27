@@ -28,7 +28,7 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
   }, [countriesData])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -72,6 +72,6 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

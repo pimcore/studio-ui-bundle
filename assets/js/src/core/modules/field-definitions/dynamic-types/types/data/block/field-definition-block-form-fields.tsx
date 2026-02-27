@@ -18,7 +18,7 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
       <>
         <Form.Item
@@ -44,6 +44,6 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
         </Form.Item>
       </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

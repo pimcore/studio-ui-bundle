@@ -25,7 +25,7 @@ export const FieldDefinitionVideoFormFields = (props: FieldDefinitionAbstractFor
   ]
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -62,6 +62,6 @@ export const FieldDefinitionVideoFormFields = (props: FieldDefinitionAbstractFor
           options={ videoTypeOptions }
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

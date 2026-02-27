@@ -26,6 +26,7 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
       label: t('field-definition.' + kebabCase(type.id)),
       value: type.id
     }))
+    .sort((a, b) => a.label.localeCompare(b.label))
 
   return (
     <>

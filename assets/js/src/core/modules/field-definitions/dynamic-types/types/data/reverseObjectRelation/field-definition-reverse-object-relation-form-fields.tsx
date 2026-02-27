@@ -49,7 +49,7 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
   const isLoading = isLoadingClassOptions || isLoadingVisibleFields
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <>
         <Form.Item name="allowToCreateNewObject">
           <Switch labelRight={ t('allow-to-create-new-object') } />
@@ -122,6 +122,6 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
           <Switch labelRight={ t('enable-async-load-in-admin') } />
         </Form.Item>
       </>
-    </FormKit.Panel>
+    </>
   )
 }

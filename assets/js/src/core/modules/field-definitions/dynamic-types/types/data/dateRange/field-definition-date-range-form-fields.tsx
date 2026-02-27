@@ -17,7 +17,7 @@ export const FieldDefinitionDateRangeFormFields = (props: FieldDefinitionAbstrac
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -25,6 +25,6 @@ export const FieldDefinitionDateRangeFormFields = (props: FieldDefinitionAbstrac
       >
         <Input />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

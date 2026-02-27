@@ -26,7 +26,7 @@ export const FieldDefinitionCountryFormFields = (props: FieldDefinitionAbstractF
     })) ?? []
   }, [countriesData])
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -59,6 +59,6 @@ export const FieldDefinitionCountryFormFields = (props: FieldDefinitionAbstractF
           showSearch
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

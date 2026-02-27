@@ -17,7 +17,7 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -37,6 +37,6 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

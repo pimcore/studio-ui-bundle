@@ -23,7 +23,7 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
   }
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -76,6 +76,6 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
 
       </FormKit.Panel>
 
-    </FormKit.Panel>
+    </>
   )
 }

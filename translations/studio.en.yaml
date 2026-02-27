@@ -679,10 +679,10 @@ field-definitions.validation.unique-identifier-in-use: This unique identifier is
 field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
 object-brick-key: Object Brick Key
 field-name: Field Name
-field-definition.geopoint: Geo Point
-field-definition.geobounds: Geo Bounds
-field-definition.geopolygon: Geo Polygon
-field-definition.geopolyline: Geo Polyline
+field-definition.geopoint: Geographic Point
+field-definition.geobounds: Geographic Bounds
+field-definition.geopolygon: Geographic Polygon
+field-definition.geopolyline: Geographic Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -2175,3 +2175,4 @@ icon: Icon
 iframe-url: Iframe URL
 rendering-class: Custom rendering class
 rendering-data: Data Passed to render
+zoom-level: Zoom level

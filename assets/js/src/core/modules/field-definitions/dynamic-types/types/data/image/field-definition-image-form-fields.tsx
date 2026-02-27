@@ -18,7 +18,7 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -44,6 +44,6 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

@@ -25,19 +25,20 @@ export class DynamicTypeFieldDefinitionGeopolygon extends DynamicTypeFieldDefini
     return [...super.getGroup(), 'geo']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'encryptedFieldSupport']
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionGeopolygonFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionGeopolygonFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

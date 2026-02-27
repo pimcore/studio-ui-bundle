@@ -17,10 +17,8 @@ import { kebabCase } from 'lodash'
 export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
-  const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
-
   return (
-    <FormKit.Panel title={ panelTitle }>
+    <>
       <Form.Item
         label={ t('title') }
         name="title"
@@ -135,6 +133,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item name="provideSplitView">
         <Switch labelRight={ t('provide-split-view') } />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

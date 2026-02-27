@@ -25,19 +25,20 @@ export class DynamicTypeFieldDefinitionDateTime extends DynamicTypeFieldDefiniti
     return [...super.getGroup(), 'date']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'encryptedFieldSupport']
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionDateTimeFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionDateTimeFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

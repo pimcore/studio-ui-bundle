@@ -20,7 +20,7 @@ export const FieldDefinitionStructuredTableFormFields = (props: FieldDefinitionA
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -71,6 +71,6 @@ export const FieldDefinitionStructuredTableFormFields = (props: FieldDefinitionA
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

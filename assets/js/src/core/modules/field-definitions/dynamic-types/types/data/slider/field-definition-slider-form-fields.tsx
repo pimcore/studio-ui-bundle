@@ -17,7 +17,7 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -70,6 +70,6 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
         <Switch labelRight={ t('vertical') } />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

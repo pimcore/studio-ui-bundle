@@ -18,7 +18,7 @@ export const FieldDefinitionLinkFormFields = (props: FieldDefinitionAbstractForm
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <>
           <Form.Item
@@ -76,6 +76,6 @@ export const FieldDefinitionLinkFormFields = (props: FieldDefinitionAbstractForm
         </>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

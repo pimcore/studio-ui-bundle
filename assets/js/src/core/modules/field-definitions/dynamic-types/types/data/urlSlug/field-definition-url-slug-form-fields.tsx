@@ -27,7 +27,7 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
   }, [getAllSites])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -68,6 +68,6 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
         </>
       ) }
 
-    </FormKit.Panel>
+    </>
   )
 }

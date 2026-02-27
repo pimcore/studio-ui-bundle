@@ -18,7 +18,7 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout}
 
       <Form.Item
@@ -55,6 +55,6 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
       <Form.Item name="excludeFromSearchIndex">
         <Switch labelRight={ t('exclude-from-search-index') } />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

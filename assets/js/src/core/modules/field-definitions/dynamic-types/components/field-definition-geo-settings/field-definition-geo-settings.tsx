@@ -39,7 +39,7 @@ export const FieldDefinitionGeoSettings = (): React.JSX.Element => {
       </Form.Item>
 
       <Form.Item
-        label={ t('zoom_level') }
+        label={ t('zoom-level') }
         name="zoom"
       >
         <InputNumber

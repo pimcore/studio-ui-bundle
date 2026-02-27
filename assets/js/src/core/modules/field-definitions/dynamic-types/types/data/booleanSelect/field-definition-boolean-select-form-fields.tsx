@@ -18,7 +18,7 @@ export const FieldDefinitionBooleanSelectFormFields = (props: FieldDefinitionAbs
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -52,6 +52,6 @@ export const FieldDefinitionBooleanSelectFormFields = (props: FieldDefinitionAbs
         </>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

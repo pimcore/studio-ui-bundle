@@ -36,7 +36,7 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
   }, [bricksData])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('maximum-items') }
@@ -68,6 +68,6 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
           />
         </Form.Item>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

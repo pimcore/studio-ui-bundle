@@ -20,7 +20,7 @@ export const FieldDefinitionClassificationstoreFormFields = (props: FieldDefinit
   const { options: storeOptions, isLoading } = useClassificationStoreOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('label-width') }
         name="labelWidth"
@@ -74,6 +74,6 @@ export const FieldDefinitionClassificationstoreFormFields = (props: FieldDefinit
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

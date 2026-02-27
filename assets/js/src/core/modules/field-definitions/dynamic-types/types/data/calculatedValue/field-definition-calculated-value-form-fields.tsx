@@ -27,7 +27,7 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
   }, [useCalculatorType, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('type') }
@@ -99,6 +99,6 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
         </Form.Conditional>
       </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

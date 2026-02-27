@@ -18,13 +18,13 @@ export const FieldDefinitionLanguageFormFields = (props: FieldDefinitionAbstract
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
       <Form.Item name="onlySystemLanguages">
         <Switch labelRight={ t('only-configured-languages') } />
       </Form.Item>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

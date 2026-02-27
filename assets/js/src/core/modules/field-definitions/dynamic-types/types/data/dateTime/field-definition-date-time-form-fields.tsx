@@ -28,7 +28,7 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
   }, [useCurrentDate, useRespectTimezone, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <Form.Item
         label={ t('default-value') }
@@ -69,6 +69,6 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
           ] }
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }
