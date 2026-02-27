@@ -9,9 +9,10 @@
  */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
+import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { transformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { TransformationToolStrip } from './transformation-tool-strip'
 import type { Transformation } from '../../types/media-query.types'
 
 interface TransformationsListProps {
@@ -23,29 +24,7 @@ interface TransformationsListProps {
   onMoveDown?: (transformationId: string) => void
 }
 
-const DefaultTransformationToolStripBox: React.FC<{
-  transformation: Transformation
-  onRemove: () => void
-}> = ({ transformation, onRemove }) => {
-  const { t } = useTranslation()
-
-  return (
-    <div style={ {
-      padding: '8px 12px',
-      backgroundColor: '#f5f5f5',
-      borderRadius: '4px',
-      border: '1px dashed #d9d9d9'
-    } }
-    >
-      <span style={ { color: '#999' } }>
-        {t('image-thumbnails.transformations.unknown-type', { type: transformation.type })}
-      </span>
-    </div>
-  )
-}
-
 export const TransformationsList = ({
-  mediaQueryId,
   transformations,
   onRemove,
   onUpdate,
@@ -53,27 +32,43 @@ export const TransformationsList = ({
   onMoveDown
 }: TransformationsListProps): React.JSX.Element => {
   const renderTransformation = (transformation: Transformation, index: number): React.JSX.Element => {
-    const ToolStripBoxComponent = transformationDynamicTypeRegistry.getToolStripBox(transformation.type)
+    const registryItem = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
 
-    if (ToolStripBoxComponent == null) {
+    if (registryItem == null) {
       return (
-        <DefaultTransformationToolStripBox
-          key={ transformation.id }
-          onRemove={ () => { onRemove(transformation.id) } }
-          transformation={ transformation }
-        />
+        <ToolStripBox
+          renderToolStripStart={
+            <TransformationToolStrip
+              transformation={ transformation }
+              onRemove={ () => { onRemove(transformation.id) } }
+              onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
+              onMoveDown={ onMoveDown != null ? () => { onMoveDown(transformation.id) } : undefined }
+            />
+          }
+        >
+          <div>Unknown transformation type: {transformation.type}</div>
+        </ToolStripBox>
       )
     }
 
+    const Component = registryItem.getReactComponent()
+
     return (
-      <ToolStripBoxComponent
-        key={ transformation.id }
-        mediaQueryId={ mediaQueryId }
-        onMoveDown={ () => onMoveDown?.(transformation.id) }
-        onMoveUp={ () => onMoveUp?.(transformation.id) }
-        onRemove={ () => { onRemove(transformation.id) } }
-        transformationIndex={ index }
-      />
+      <ToolStripBox
+        renderToolStripStart={
+          <TransformationToolStrip
+            transformation={ transformation }
+            onRemove={ () => { onRemove(transformation.id) } }
+            onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
+            onMoveDown={ onMoveDown != null ? () => { onMoveDown(transformation.id) } : undefined }
+          />
+        }
+      >
+        <Component
+          attributes={ transformation.config }
+          onChange={ (newAttributes: any) => { onUpdate(transformation.id, newAttributes) } }
+        />
+      </ToolStripBox>
     )
   }
 

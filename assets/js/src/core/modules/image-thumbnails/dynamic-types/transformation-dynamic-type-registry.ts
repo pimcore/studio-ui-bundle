@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type React from 'react'
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type TransformationDynamicTypeAbstract } from './transformation-dynamic-type-abstract'
@@ -49,13 +48,6 @@ export class TransformationDynamicTypeRegistry extends DynamicTypeRegistryAbstra
 
   overrideDynamicType (type: TransformationDynamicTypeAbstract): void {
     super.overrideDynamicType(type)
-  }
-
-  getToolStripBox (transformationType: string): React.ComponentType<any> | null {
-    // All transformation types now have React components
-    // Could return a ToolStripBox wrapper component here in the future
-    // For now, return null to use the default fallback component
-    return null
   }
 }
 
