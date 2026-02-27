@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
 import {
@@ -35,13 +35,17 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import {
   hasHotspotsOrMarkers
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
-import _, { isNil } from 'lodash'
+import _, { isEmpty, isNil } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './hotspot-image.styles'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
 import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -60,6 +64,7 @@ export interface HotspotImageProps {
   predefinedDataTemplates?: DataTemplates | string | null
   ratioX?: number
   ratioY?: number
+  uploadPath?: string
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
@@ -68,6 +73,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { triggerUpload } = useUploadModal({})
 
   const { openModal: openCropModal } = useCropModal({
     disabled: props.disabled,
@@ -99,6 +105,46 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
       }
     }
   })
+
+  const { open: openElementSelector } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: {
+      asset: true,
+      object: false,
+      document: false
+    },
+    config: {
+      assets: {
+        allowedTypes: ['image']
+      }
+    },
+    onFinish: (event) => {
+      if (!isEmpty(event.items)) {
+        const newImage: ImageValue = { type: 'asset', id: event.items[0].data.id }
+        replaceImage(newImage)
+      }
+    }
+  })
+
+  const handleUpload = useCallback(() => {
+    triggerUpload({
+      targetFolderPath: props.uploadPath ?? '',
+      accept: 'image/*',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets) => {
+        if (assets.length > 0) {
+          const newImage: ImageValue = { type: 'asset', id: assets[0].id as number }
+          replaceImage(newImage)
+        }
+      }
+    })
+  }, [triggerUpload])
+
+  const handleFileSystemUpload = async (asset: any): Promise<void> => {
+    const newImage: ImageValue = { type: 'asset', id: asset.id as number }
+    replaceImage(newImage)
+  }
 
   const handleChange = (newValue: HotspotImageValue | null): void => {
     if (!_.isEqual(newValue, imageValue)) {
@@ -159,6 +205,11 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     }
   }
 
+  const handleDroppableDrop = (info): void => {
+    const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
+    replaceImage(newImage)
+  }
+
   return (
     <Card
       className={ cn('max-w-full', styles.image, props.className) }
@@ -168,6 +219,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           disabled={ props.disabled }
           emptyValue={ clearValue }
           key="image-footer"
+          onSearch={ openElementSelector }
+          onUpload={ handleUpload }
           replaceImage={ replaceImage }
           setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
@@ -176,40 +229,47 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         />)
       }
     >
-      <Droppable
-        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
-        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-        onDrop={ (info: DragAndDropInfo) => {
-          const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
-          replaceImage(newImage)
-        } }
-        variant="outline"
+      <InlineUpload
+        accept="image/*"
+        assetType="image"
+        disabled={ props.disabled }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.uploadPath ?? '' }
       >
-        { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-          imageValue !== null && imageValue?.image !== null
-            ? (
-              <HotspotImagePreview
-                assetId={ imageValue.image.id }
-                disabled={ props.disabled }
-                height={ height! }
-                markerModalOpen={ false }
-                onChange={ handleChange }
-                ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
-                ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
-                setMarkerModalOpen={ openHotspotMarkersModal }
-                value={ imageValue }
-                width={ width! }
-              />
-              )
-            : (
-              <AssetTarget
-                dndIcon={ props.disabled !== true }
-                height={ height }
-                title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty-image') }
-                width={ width }
-              />
-              ) }
-      </Droppable>
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ handleDroppableDrop }
+          variant="outline"
+        >
+          { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+            imageValue !== null && imageValue?.image !== null
+              ? (
+                <HotspotImagePreview
+                  assetId={ imageValue.image.id }
+                  disabled={ props.disabled }
+                  height={ height! }
+                  markerModalOpen={ false }
+                  onChange={ handleChange }
+                  ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
+                  ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
+                  setMarkerModalOpen={ openHotspotMarkersModal }
+                  value={ imageValue }
+                  width={ width! }
+                />
+                )
+              : (
+                <AssetTarget
+                  dndIcon={ props.disabled !== true }
+                  height={ height }
+                  onSearch={ openElementSelector }
+                  onUpload={ handleUpload }
+                  title={ t(props.disabled === true ? 'empty-image' : 'image.upload.add.and.dnd') }
+                  width={ width }
+                />
+                ) }
+        </Droppable>
+      </InlineUpload>
     </Card>
   )
 }

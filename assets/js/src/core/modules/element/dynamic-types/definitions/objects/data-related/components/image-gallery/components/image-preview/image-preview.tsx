@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -32,6 +32,8 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
 import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -45,14 +47,15 @@ interface ImageGalleryImagePreviewProps {
   ratioX?: number
   ratioY?: number
   predefinedDataTemplates?: DataTemplates | string | null
+  uploadPath?: string
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
-
   const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
   const { confirm } = useFormModal()
+  const { triggerUpload } = useUploadModal({})
 
   const { openModal: openCropModal } = useCropModal({
     disabled,
@@ -146,120 +149,150 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
       )
     }
   }
-
   const handleOpenHotspotMarkersModal = (): void => {
     if (!isNil(item.image?.id)) {
       const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
       openHotspotMarkersModal(item.image.id, hotspots, item.crop)
     }
   }
+  const handleFileSystemUpload = async (asset): Promise<void> => {
+    setImage(index, asset as ImageValue, true)
+  }
+
+  const handleUpload = useCallback(() => {
+    triggerUpload({
+      targetFolderPath: uploadPath ?? '',
+      accept: 'image/*',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets) => {
+        if (assets.length > 0) {
+          setImage(index, assets[0] as ImageValue, true)
+        }
+      }
+    })
+  }, [triggerUpload])
 
   return (
-    <Droppable
-      isValidContext={ (info: DragAndDropInfo) => {
-        if (disabled === true) {
-          return false
-        }
-        if (info.sortable! !== undefined) {
-          return true
-        }
-        return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
-      } }
-      isValidData={ (info: DragAndDropInfo) => {
-        if (info.sortable! !== undefined || info.type === 'unknown') {
-          return true
-        }
-        return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
-      } }
-      onDrop={ (info: DragAndDropInfo) => {
-        const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
-        replaceImage(newImage)
-      } }
-      variant="outline"
+    <InlineUpload
+      accept="image/*"
+      assetType="image"
+      disabled={ disabled }
+      onSuccess={ handleFileSystemUpload }
+      targetFolderPath={ uploadPath ?? '' }
     >
-      <ImagePreview
-        assetId={ item.image!.id }
-        bordered
-        dropdownItems={ [
-          {
-            hidden: disabled,
-            key: 'add',
-            label: t('add'),
-            icon: <Icon value={ 'new' } />,
-            onClick: () => {
-              const newValue = [...value]
-              newValue.splice(index + 1, 0, { image: null, hotspots: [], marker: [], crop: {} })
-              setInternalValue(newValue)
-            }
-          },
-          {
-            hidden: disabled,
-            key: 'delete',
-            label: t('delete'),
-            icon: <Icon value={ 'trash' } />,
-            onClick: () => {
-              const newValue = [...value]
-              newValue.splice(index, 1)
-              setValue(newValue)
-            }
-          },
-          {
-            label: t('crop'),
-            key: 'crop',
-            icon: <Icon value={ 'crop' } />,
-            onClick: handleOpenCropModal
-          },
-          {
-            label: t(disabled === true ? 'hotspots.show' : 'hotspots.edit'),
-            key: 'hotspots-edit',
-            icon: <Icon value={ 'new-marker' } />,
-            onClick: handleOpenHotspotMarkersModal
-          },
-          {
-            hidden: !hasHotspotData(index) || disabled === true,
-            label: t('hotspots.clear-data'),
-            key: 'clear-data',
-            icon: <Icon value={ 'remove-marker' } />,
-            onClick: clearHotspotsData
-          },
-          {
-            label: t('element.open'),
-            key: 'open',
-            icon: <Icon value={ 'open-folder' } />,
-            onClick: async () => {
-              openAsset({
-                config: {
-                  id: item.image!.id
-                }
-              })
-            }
-          },
-          {
-            hidden: disabled,
-            key: 'search',
-            label: t('search'),
-            icon: <Icon value={ 'search' } />,
-            onClick: () => {
-              openElementSelector()
-            }
-
-          },
-          {
-            hidden: disabled,
-            label: t('empty'),
-            key: 'empty',
-            icon: <Icon value={ 'trash' } />,
-            onClick: async () => {
-              setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
-            }
+      <Droppable
+        isValidContext={ (info: DragAndDropInfo) => {
+          if (disabled === true) {
+            return false
           }
-        ] }
-        height={ height }
-        onHotspotsDataButtonClick={ hasHotspotData(index) ? handleOpenHotspotMarkersModal : undefined }
-        style={ { backgroundColor: '#fff' } }
-        thumbnailSettings={ item.crop }
-        width={ width }
-      />
-    </Droppable>
+          if (info.sortable! !== undefined) {
+            return true
+          }
+          return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
+        } }
+        isValidData={ (info: DragAndDropInfo) => {
+          if (info.sortable! !== undefined || info.type === 'unknown') {
+            return true
+          }
+          return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
+        } }
+        onDrop={ (info: DragAndDropInfo) => {
+          const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
+          replaceImage(newImage)
+        } }
+        variant="outline"
+      >
+        <ImagePreview
+          assetId={ item.image!.id }
+          bordered
+          dropdownItems={ [
+            {
+              hidden: disabled,
+              key: 'add',
+              label: t('add'),
+              icon: <Icon value={ 'new' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index + 1, 0, { image: null, hotspots: [], marker: [], crop: {} })
+                setInternalValue(newValue)
+              }
+            },
+            {
+              hidden: disabled,
+              key: 'delete',
+              label: t('delete'),
+              icon: <Icon value={ 'trash' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index, 1)
+                setValue(newValue)
+              }
+            },
+            {
+              label: t('crop'),
+              key: 'crop',
+              icon: <Icon value={ 'crop' } />,
+              onClick: handleOpenCropModal
+            },
+            {
+              label: t(disabled === true ? 'hotspots.show' : 'hotspots.edit'),
+              key: 'hotspots-edit',
+              icon: <Icon value={ 'new-marker' } />,
+              onClick: handleOpenHotspotMarkersModal
+            },
+            {
+              hidden: !hasHotspotData(index) || disabled === true,
+              label: t('hotspots.clear-data'),
+              key: 'clear-data',
+              icon: <Icon value={ 'remove-marker' } />,
+              onClick: clearHotspotsData
+            },
+            {
+              label: t('element.open'),
+              key: 'open',
+              icon: <Icon value={ 'open-folder' } />,
+              onClick: async () => {
+                openAsset({
+                  config: {
+                    id: item.image!.id
+                  }
+                })
+              }
+            },
+            {
+              hidden: disabled,
+              key: 'search',
+              label: t('search'),
+              icon: <Icon value={ 'search' } />,
+              onClick: () => {
+                openElementSelector()
+              }
+            },
+            {
+              hidden: disabled,
+              icon: <Icon value="upload-cloud" />,
+              key: 'upload',
+              label: t('upload'),
+              onClick: handleUpload
+            },
+            {
+              hidden: disabled,
+              label: t('empty'),
+              key: 'empty',
+              icon: <Icon value={ 'trash' } />,
+              onClick: async () => {
+                setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
+              }
+            }
+          ] }
+          height={ height }
+          onHotspotsDataButtonClick={ hasHotspotData(index) ? handleOpenHotspotMarkersModal : undefined }
+          style={ { backgroundColor: '#fff' } }
+          thumbnailSettings={ item.crop }
+          width={ width }
+        />
+      </Droppable>
+    </InlineUpload>
   )
 }
