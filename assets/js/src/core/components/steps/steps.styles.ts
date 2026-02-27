@@ -104,6 +104,12 @@ export const useStyles = createStyles(({ token, css }) => {
         color: ${token.colorText};
       }
 
+      /* Finish icon: purple fill + white checkmark */
+      .ant-steps-item-finish .ant-steps-item-icon {
+        background-color: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+      }
+
       /* Finish title: dark */
       .ant-steps-item-finish .ant-steps-item-title {
         color: ${token.colorText};

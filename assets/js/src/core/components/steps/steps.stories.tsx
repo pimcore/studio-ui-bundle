@@ -129,27 +129,21 @@ export const Small = {
   }
 }
 
-export const NavigationSmall = {
-  args: {
-    current: 1,
-    type: 'navigation' as const,
-    size: 'small' as const,
-    items: [
-      {
-        title: 'Data Source'
-      },
-      {
-        title: 'Preview Import'
-      },
-      {
-        title: 'Resolver'
-      },
-      {
-        title: 'Mapping'
-      },
-      {
-        title: 'Processing'
-      }
-    ]
-  }
+export const NavigationSmall = (): React.JSX.Element => {
+  return (
+    <div style={ { width: '900px' } }>
+      <Steps
+        current={ 1 }
+        items={ [
+          { title: 'Data Source' },
+          { title: 'Preview Import' },
+          { title: 'Resolver' },
+          { title: 'Mapping' },
+          { title: 'Processing' }
+        ] }
+        size="small"
+        type="navigation"
+      />
+    </div>
+  )
 }
