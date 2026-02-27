@@ -16,7 +16,6 @@ import type { MediaQuery, TransformationType } from '../../types/media-query.typ
 interface MediaQueryTabContentProps {
   mediaQuery: MediaQuery
   onMediaQueryUpdate: (updatedMediaQuery: MediaQuery) => void
-  disabled?: boolean
 }
 
 export const MediaQueryTabContent = ({

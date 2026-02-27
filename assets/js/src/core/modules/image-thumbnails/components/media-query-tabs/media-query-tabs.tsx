@@ -21,7 +21,6 @@ interface MediaQueryTabsProps {
   onTabChange: (activeKey: string) => void
   onTabClose: (targetKey: string) => void
   onMediaQueryUpdate: (mediaQueryId: string, updatedMediaQuery: MediaQuery) => void
-  disabled?: boolean
 }
 
 export const MediaQueryTabs = ({
