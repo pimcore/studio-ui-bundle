@@ -16,11 +16,22 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const RoundCornersTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="width" label="Width" initialValue={10}>
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 10 }
+        label="Width"
+        name="width"
+      >
         <InputNumber placeholder="Enter corner width radius" />
       </Form.Item>
-      <Form.Item name="height" label="Height" initialValue={10}>
+      <Form.Item
+        initialValue={ 10 }
+        label="Height"
+        name="height"
+      >
         <InputNumber placeholder="Enter corner height radius" />
       </Form.Item>
     </Flex>

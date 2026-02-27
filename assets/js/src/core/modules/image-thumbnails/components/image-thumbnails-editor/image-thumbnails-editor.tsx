@@ -132,7 +132,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   const handleMediaQueriesChange = useCallback((updatedMediaQueries: MediaQuery[]): void => {
     setMediaQueries(updatedMediaQueries)
     setCurrentFormData(prev =>
-      prev === null ? null : { ...prev, mediaQueries: updatedMediaQueries } 
+      prev === null ? null : { ...prev, mediaQueries: updatedMediaQueries }
     )
   }, [])
 

@@ -17,11 +17,23 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const ScaleByHeightTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="height" label="Height" initialValue={600}>
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 600 }
+        label="Height"
+        name="height"
+      >
         <InputNumber placeholder="600" />
       </Form.Item>
-      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item
+        initialValue={ false }
+        label="Force Resize"
+        name="forceResize"
+        valuePropName="checked"
+      >
         <Switch />
       </Form.Item>
     </Flex>

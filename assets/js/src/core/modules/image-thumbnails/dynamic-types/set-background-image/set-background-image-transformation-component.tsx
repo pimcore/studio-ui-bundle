@@ -23,17 +23,27 @@ const modeOptions = [
 
 export const SetBackgroundImageTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="asset" label="Background Image">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Background Image"
+        name="asset"
+      >
         <ImagePicker
-          width={300}
-          height={150}
+          allowedTypes={ ['image'] }
+          height={ 150 }
           type="add"
-          allowedTypes={['image']}
+          width={ 300 }
         />
       </Form.Item>
-      <Form.Item name="mode" label="Mode" initialValue="">
-        <Select options={modeOptions} />
+      <Form.Item
+        initialValue=""
+        label="Mode"
+        name="mode"
+      >
+        <Select options={ modeOptions } />
       </Form.Item>
     </Flex>
   )

@@ -20,7 +20,7 @@ interface MediaQueryTabContentProps {
 
 export const MediaQueryTabContent = ({
   mediaQuery,
-  onMediaQueryUpdate,
+  onMediaQueryUpdate
 }: MediaQueryTabContentProps): React.JSX.Element => {
   const handleTransformationsChange = useCallback((transformations: Array<{ type: string, data: any }>) => {
     const updatedMediaQuery: MediaQuery = {

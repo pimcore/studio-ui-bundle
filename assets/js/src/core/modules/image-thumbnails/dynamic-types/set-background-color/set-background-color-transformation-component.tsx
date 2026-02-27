@@ -16,9 +16,19 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const SetBackgroundColorTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="color" label="Background Color" initialValue="#ffffff">
-        <ColorPicker format="hex" showText />
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue="#ffffff"
+        label="Background Color"
+        name="color"
+      >
+        <ColorPicker
+          format="hex"
+          showText
+        />
       </Form.Item>
     </Flex>
   )

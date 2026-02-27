@@ -16,17 +16,32 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const CropTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="width" label="Width">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Width"
+        name="width"
+      >
         <InputNumber placeholder="Enter crop width" />
       </Form.Item>
-      <Form.Item name="height" label="Height">
+      <Form.Item
+        label="Height"
+        name="height"
+      >
         <InputNumber placeholder="Enter crop height" />
       </Form.Item>
-      <Form.Item name="x" label="X Position">
+      <Form.Item
+        label="X Position"
+        name="x"
+      >
         <InputNumber placeholder="Enter X coordinate" />
       </Form.Item>
-      <Form.Item name="y" label="Y Position">
+      <Form.Item
+        label="Y Position"
+        name="y"
+      >
         <InputNumber placeholder="Enter Y coordinate" />
       </Form.Item>
     </Flex>

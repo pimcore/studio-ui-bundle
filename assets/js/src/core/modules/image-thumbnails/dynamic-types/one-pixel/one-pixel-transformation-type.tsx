@@ -11,7 +11,7 @@
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
 import { NoConfigurationComponent } from '../../components/no-config-component'
-import { TransformationComponent } from '../../types/transformation-component-types'
+import { type TransformationComponent } from '../../types/transformation-component-types'
 
 export type OnePixelTransformationConfig = Record<string, never>
 

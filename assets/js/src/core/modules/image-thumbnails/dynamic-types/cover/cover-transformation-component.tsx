@@ -27,21 +27,48 @@ const positioningOptions = [
 
 export const CoverTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="width" label="Width" initialValue={800}>
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 800 }
+        label="Width"
+        name="width"
+      >
         <InputNumber placeholder="800" />
       </Form.Item>
-      <Form.Item name="height" label="Height" initialValue={600}>
+      <Form.Item
+        initialValue={ 600 }
+        label="Height"
+        name="height"
+      >
         <InputNumber placeholder="600" />
       </Form.Item>
-      <Form.Item name="positioning" label="Position" initialValue="center">
-        <Select options={positioningOptions} />
+      <Form.Item
+        initialValue="center"
+        label="Position"
+        name="positioning"
+      >
+        <Select options={ positioningOptions } />
       </Form.Item>
-      <Form.Item name="forceResize" label="Force Resize" valuePropName="checked" initialValue={false}>
+      <Form.Item
+        initialValue={ false }
+        label="Force Resize"
+        name="forceResize"
+        valuePropName="checked"
+      >
         <Switch />
       </Form.Item>
-      <Form.Item name="description" label="Focal Point" initialValue="The positioning determines which part of the image remains visible when cropping.">
-        <Input readOnly disabled />
+      <Form.Item
+        initialValue="The positioning determines which part of the image remains visible when cropping."
+        label="Focal Point"
+        name="description"
+      >
+        <Input
+          disabled
+          readOnly
+        />
       </Form.Item>
     </Flex>
   )

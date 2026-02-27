@@ -12,12 +12,19 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { TransformationComponent } from '../../types/transformation-component-types'
+import { type TransformationComponent } from '../../types/transformation-component-types'
 
 export const TrimTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="tolerance" label="Tolerance" initialValue={10}>
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        initialValue={ 10 }
+        label="Tolerance"
+        name="tolerance"
+      >
         <InputNumber placeholder="Enter tolerance value" />
       </Form.Item>
     </Flex>

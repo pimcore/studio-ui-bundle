@@ -28,7 +28,7 @@ export const MediaQueryTabs = ({
   activeKey,
   onTabChange,
   onTabClose,
-  onMediaQueryUpdate,
+  onMediaQueryUpdate
 }: MediaQueryTabsProps): React.JSX.Element => {
   const { t } = useTranslation()
 

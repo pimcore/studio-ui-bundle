@@ -27,26 +27,51 @@ const originOptions = [
 
 export const AddOverlayTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex vertical gap="small">
-      <Form.Item name="asset" label="Overlay Image">
+    <Flex
+      gap="small"
+      vertical
+    >
+      <Form.Item
+        label="Overlay Image"
+        name="asset"
+      >
         <ImagePicker
-          width={300}
-          height={150}
+          allowedTypes={ ['image'] }
+          height={ 150 }
           type="add"
-          allowedTypes={['image']}
+          width={ 300 }
         />
       </Form.Item>
-      <Form.Item name="x" label="X Position" initialValue={0}>
+      <Form.Item
+        initialValue={ 0 }
+        label="X Position"
+        name="x"
+      >
         <InputNumber placeholder="Horizontal position in pixels" />
       </Form.Item>
-      <Form.Item name="y" label="Y Position" initialValue={0}>
+      <Form.Item
+        initialValue={ 0 }
+        label="Y Position"
+        name="y"
+      >
         <InputNumber placeholder="Vertical position in pixels" />
       </Form.Item>
-      <Form.Item name="origin" label="Origin" initialValue="top-left">
-        <Select options={originOptions} />
+      <Form.Item
+        initialValue="top-left"
+        label="Origin"
+        name="origin"
+      >
+        <Select options={ originOptions } />
       </Form.Item>
-      <Form.Item name="alpha" label="Opacity" initialValue={100}>
-        <Slider min={0} max={100} />
+      <Form.Item
+        initialValue={ 100 }
+        label="Opacity"
+        name="alpha"
+      >
+        <Slider
+          max={ 100 }
+          min={ 0 }
+        />
       </Form.Item>
     </Flex>
   )
