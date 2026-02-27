@@ -60,14 +60,7 @@ export const Steps = ({
             // Chevron arrow color
             navArrowColor: token.colorBorder,
             // Icon size: 24px to match design (size="small" default is 20px)
-            iconSizeSM: 24,
-            // Wait state: grey fill, no border
-            waitIconBgColor: token.colorFillContent,
-            waitIconBorderColor: 'transparent',
-            waitIconColor: token.colorText,
-            // Finish state: purple fill, no border
-            finishIconBgColor: token.colorPrimary,
-            finishIconBorderColor: token.colorPrimary
+            iconSizeSM: 24
           }
         }
       } }
