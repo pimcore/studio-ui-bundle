@@ -86,7 +86,6 @@ export const getNamesInNamespace = (
   pathMap: Record<string, string[]>,
   registry: DynamicTypeFieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 ): string[] => {
-
   const isOpener = (id: string): boolean => {
     const def = fieldDefinitions[id]
     if (def === undefined) return false
