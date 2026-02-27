@@ -28,7 +28,8 @@ export abstract class TransformationDynamicTypeAbstract<TAttributes = any> exten
   }
 
   createDefaultConfig (): TAttributes {
-    return {} as TAttributes
+    const defaultConfig: TAttributes = {} as TAttributes
+    return defaultConfig
   }
 
   abstract getReactComponent (): TransformationComponent

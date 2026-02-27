@@ -11,7 +11,7 @@
 import type React from 'react'
 
 export interface TransformationComponentProps {
-  // Props can be added here if needed in the future
+  [key: string]: any
 }
 
 export type TransformationComponent = React.ComponentType<TransformationComponentProps>

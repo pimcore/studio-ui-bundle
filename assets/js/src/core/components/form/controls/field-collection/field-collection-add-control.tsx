@@ -33,8 +33,8 @@ export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps)
     value: item.type
   }))
 
-  const placeholderText = placeholderTranslationKey 
-    ? t(placeholderTranslationKey) 
+  const placeholderText = placeholderTranslationKey != null
+    ? t(placeholderTranslationKey)
     : t('field-collection.add.default')
 
   const onSelect: SelectProps['onSelect'] = (value) => {
