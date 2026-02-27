@@ -41,6 +41,6 @@ export class DynamicTypeFieldDefinitionVideo extends DynamicTypeFieldDefinitionD
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    return super.getFormFields(context)
+    return super.getFormFields({ ...context, hideUnique: true })
   }
 }
