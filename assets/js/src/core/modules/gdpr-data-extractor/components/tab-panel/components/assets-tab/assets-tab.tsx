@@ -86,33 +86,33 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
-              filename={data.fullPath.split('/').pop() ?? crypto.randomUUID()}
-              data-testid={`gdpr-assets-export-${data.id}`}
-              id={data.id}
-              tooltip={{
+              data-testid={ `gdpr-assets-export-${data.id}` }
+              filename={ data.fullPath.split('/').pop() ?? crypto.randomUUID() }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.export')
-              }}
+              } }
             />
 
             <OpenButton
-              data-testid={`gdpr-assets-open-${data.id}`}
-              elementType={elementTypes.asset}
-              id={data.id}
-              tooltip={{
+              data-testid={ `gdpr-assets-open-${data.id}` }
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.open')
-              }}
+              } }
             />
 
             <DeleteButton
-              data-testid={`gdpr-assets-delete-${data.id}`}
-              disabled={!data.__gdprIsDeletable}
-              elementType={elementTypes.asset}
-              id={data.id}
-              label={data.fullPath}
-              providerKey={providerKey}
-              tooltip={{
+              data-testid={ `gdpr-assets-delete-${data.id}` }
+              disabled={ !data.__gdprIsDeletable }
+              elementType={ elementTypes.asset }
+              id={ data.id }
+              label={ data.fullPath }
+              providerKey={ providerKey }
+              tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.delete')
-              }}
+              } }
             />
           </Flex>
         )
