@@ -93,8 +93,6 @@ export const VideoMediaQueriesPanel = ({
   return (
     <Panel
       border
-      collapsed={ false }
-      collapsible
       contentPadding="small"
       extra={ newButton }
       extraPosition="end"

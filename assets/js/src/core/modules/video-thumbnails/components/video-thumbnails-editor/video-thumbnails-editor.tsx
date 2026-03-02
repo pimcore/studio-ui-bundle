@@ -15,13 +15,9 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
-import { FieldCollection } from '@Pimcore/components/form/controls/field-collection/field-collection'
-import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import type { MediaQuery, BackendMediasFormat, Transformation } from '../../types/media-query.types'
+import type { MediaQuery, BackendMediasFormat } from '../../types/media-query.types'
 import { VideoMediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
-import { convertToBackendFormat, convertFromBackendFormat, convertDefaultTransformationsFromBackend, generateTransformationId } from '../../utils/media-query-helpers'
+import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailVideoGetByNameQuery, useThumbnailVideoUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { isNil, isNull, isEqual, isEmpty } from 'lodash'
@@ -30,7 +26,6 @@ import { useVideoThumbnailsContext } from '../../providers/video-thumbnails-prov
 import { extractGroupsFromTree } from '../../utils/tree-helpers'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { BasicFormFields } from './basic-form-fields'
-import { type VideoTransformationFieldCollectionRegistry } from '../../registries/video-transformation-field-collection-registry'
 
 interface VideoThumbnailsEditorProps {
   selectedThumbnail: ThumbnailConfigurationData | null
@@ -45,7 +40,6 @@ interface VideoThumbnailFormData {
   videoBitrate: number | null
   audioBitrate: number | null
   presetting?: string
-  defaultTransformations: Array<{ type: string, data: any }>
   mediaSegments: MediaQuery[]
 }
 
@@ -56,18 +50,6 @@ const PRESETTING_BITRATES: Record<string, { videoBitrate: number, audioBitrate: 
 }
 
 const SAVE_BUTTON_PORTAL_ID = 'video-thumbnails-save-button'
-
-const transformationsToFieldCollectionData = (transformations: Transformation[]): Array<{ type: string, data: any }> => {
-  return transformations.map(t => ({ type: t.type, data: t.config ?? {} }))
-}
-
-const fieldCollectionDataToTransformations = (data: Array<{ type: string, data: any }>): Transformation[] => {
-  return data.map(item => ({
-    id: generateTransformationId(),
-    type: item.type as Transformation['type'],
-    config: item.data ?? {}
-  }))
-}
 
 export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onChange }: VideoThumbnailsEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -80,7 +62,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
   const [initialFormData, setInitialFormData] = useState<VideoThumbnailFormData | null>(null)
   const [currentFormData, setCurrentFormData] = useState<VideoThumbnailFormData | null>(null)
-  const [defaultTransformations, setDefaultTransformations] = useState<Array<{ type: string, data: any }>>([])
   const [mediaSegments, setMediaSegments] = useState<MediaQuery[]>([])
 
   const { data: configData, isLoading } = useThumbnailVideoGetByNameQuery(
@@ -95,8 +76,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     const groups = extractGroupsFromTree(thumbnailsData.items)
     return [{ value: '', label: t('video-thumbnails.editor.no-group') }, ...groups]
   }, [thumbnailsData, t])
-
-  const fieldCollectionRegistry = container.get<VideoTransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/VideoTransformationFieldCollectionRegistry'])
 
   useEffect(() => {
     if (!isNil(updateError)) {
@@ -114,8 +93,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
       setCurrentThumbnailId((selectedThumbnail?.id === '' ? null : selectedThumbnail?.id) ?? null)
 
       const backedMedias = (configData.medias ?? {}) as BackendMediasFormat
-      const defaultTrans = convertDefaultTransformationsFromBackend(backedMedias)
-      const defaultTransData = transformationsToFieldCollectionData(defaultTrans)
       const segments = convertFromBackendFormat(backedMedias, {})
 
       const formData: VideoThumbnailFormData = {
@@ -124,13 +101,11 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         group: configData.settings.group ?? '',
         videoBitrate: configData.settings.videoBitrate ?? null,
         audioBitrate: configData.settings.audioBitrate ?? null,
-        defaultTransformations: defaultTransData,
         mediaSegments: segments
       }
 
       setInitialFormData({ ...formData })
       setCurrentFormData({ ...formData })
-      setDefaultTransformations(defaultTransData)
       setMediaSegments(segments)
 
       form.setFieldsValue(formData)
@@ -147,15 +122,8 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     setCurrentFormData(prev => prev === null ? null : {
       ...prev,
       ...allValues,
-      defaultTransformations: prev.defaultTransformations,
       mediaSegments: prev.mediaSegments
     })
-  }, [])
-
-  const handleDefaultTransformationsChange = useCallback((newData: Array<{ type: string, data: any }> | undefined): void => {
-    if (newData == null) return
-    setDefaultTransformations(newData)
-    setCurrentFormData(prev => prev === null ? null : { ...prev, defaultTransformations: newData })
   }, [])
 
   const handleMediaSegmentsChange = useCallback((updatedSegments: MediaQuery[]): void => {
@@ -191,8 +159,7 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           audioBitrate: values.audioBitrate
         }
 
-        const defaultTrans = fieldCollectionDataToTransformations(currentFormData.defaultTransformations ?? [])
-        const { medias, mediaOrder } = convertToBackendFormat(defaultTrans, currentFormData.mediaSegments ?? [])
+        const { medias, mediaOrder } = convertToBackendFormat([], currentFormData.mediaSegments ?? [])
 
         const { data: response } = await updateThumbnail({
           name: selectedThumbnail.name,
@@ -265,14 +232,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
             groupOptions={ groupOptions }
             onPresettingChange={ handlePresettingChange }
           />
-          <ItemProvider item={ { name: 'defaultTransformations' } }>
-            <FieldCollection
-              onChange={ handleDefaultTransformationsChange }
-              registry={ fieldCollectionRegistry }
-              title={ t('video-thumbnails.editor.transformations') }
-              value={ defaultTransformations }
-            />
-          </ItemProvider>
           <VideoMediaQueriesPanel
             mediaQueries={ mediaSegments }
             onChange={ handleMediaSegmentsChange }
