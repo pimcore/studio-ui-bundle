@@ -17,14 +17,12 @@ export const FieldDefinitionRgbaColorFormFields = (props: FieldDefinitionAbstrac
   const { t } = useTranslation()
 
   return (
-    <>
-      <Form.Item
-        label={ t('width') }
-        name="width"
-        tooltip={ t('width-tooltip') }
-      >
-        <Input />
-      </Form.Item>
-    </>
+    <Form.Item
+      label={ t('width') }
+      name="width"
+      tooltip={ t('width-tooltip') }
+    >
+      <Input />
+    </Form.Item>
   )
 }

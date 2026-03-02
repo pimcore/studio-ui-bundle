@@ -50,78 +50,76 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
 
   return (
     <>
-      <>
-        <Form.Item name="allowToCreateNewObject">
-          <Switch labelRight={ t('allow-to-create-new-object') } />
-        </Form.Item>
+      <Form.Item name="allowToCreateNewObject">
+        <Switch labelRight={ t('allow-to-create-new-object') } />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('path-formatter-service') }
-          name="pathFormatterClass"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('path-formatter-service') }
+        name="pathFormatterClass"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('owner-class') }
-          name="ownerClassName"
-        >
-          <Select
-            loadingSkeleton={ isLoadingClassOptions }
-            options={ classOptions }
-            showSearch
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('owner-class') }
+        name="ownerClassName"
+      >
+        <Select
+          loadingSkeleton={ isLoadingClassOptions }
+          options={ classOptions }
+          showSearch
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('owner-field-name') }
-          name="ownerFieldName"
-        >
-          <Select
-            options={ ownerFieldNameOptions }
-            showSearch
-          />
-        </Form.Item>
-        <Form.Item
-          { ...relationSelectFormItemTransformation('visibleFields') }
-          getValueFromEvent={ (value: string[]) => value.join(',') }
-          getValueProps={ (value: string | string[]) => ({
-            value: isString(value) ? value.split(',').filter(Boolean) : value
-          }) }
-          label={ t('visible-fields') }
-          name="visibleFields"
-        >
-          <Select
-            loadingSkeleton={ isLoading }
-            mode="multiple"
-            options={ visibleFieldsOptions }
-            showSearch
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('owner-field-name') }
+        name="ownerFieldName"
+      >
+        <Select
+          options={ ownerFieldNameOptions }
+          showSearch
+        />
+      </Form.Item>
+      <Form.Item
+        { ...relationSelectFormItemTransformation('visibleFields') }
+        getValueFromEvent={ (value: string[]) => value.join(',') }
+        getValueProps={ (value: string | string[]) => ({
+          value: isString(value) ? value.split(',').filter(Boolean) : value
+        }) }
+        label={ t('visible-fields') }
+        name="visibleFields"
+      >
+        <Select
+          loadingSkeleton={ isLoading }
+          mode="multiple"
+          options={ visibleFieldsOptions }
+          showSearch
+        />
+      </Form.Item>
 
-        <Form.Item
-          name="optimizedAdminLoading"
-          tooltip={ t('enable-async-load-in-admin-tooltip') }
-        >
-          <Switch labelRight={ t('enable-async-load-in-admin') } />
-        </Form.Item>
-      </>
+      <Form.Item
+        name="optimizedAdminLoading"
+        tooltip={ t('enable-async-load-in-admin-tooltip') }
+      >
+        <Switch labelRight={ t('enable-async-load-in-admin') } />
+      </Form.Item>
     </>
   )
 }
