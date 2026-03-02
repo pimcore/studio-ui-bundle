@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { isEmpty, isNil, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -24,13 +24,16 @@ import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-h
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
+import { type ThumbnailTab } from '../../hooks/use-thumbnail-tab-manager'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
-  selectedThumbnail: ThumbnailConfigurationData | null
+  openedThumbnails: ThumbnailTab[]
+  activeTabKey: string | undefined
+  modifiedThumbnails?: string[]
 }
 
-export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: ImageThumbnailsTreeProps): React.JSX.Element => {
+export const ImageThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activeTabKey, modifiedThumbnails = [] }: ImageThumbnailsTreeProps): React.JSX.Element => {
   const { thumbnailsData, isLoading, isFetching, refetch, expandedKeys, setExpandedKeys } = useImageThumbnailsContext()
   const [thumbnailsListData, setThumbnailsListData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
   const [filteredData, setFilteredData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
@@ -72,7 +75,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     return (
       <Icon
         className={ styles.icon }
-        value="image-thumbnail-clear"
+        value="image-thumbnail"
       />
     )
   }
@@ -88,6 +91,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       })
       .map((item) => {
         const isFolder = 'children' in item && Array.isArray(item.children)
+        const isModified = !isFolder && modifiedThumbnails.includes(item.id)
         const actions = isFolder
           ? []
           : [
@@ -96,7 +100,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
 
         return {
           key: isUndefined(item.id) ? '' : String(item.id),
-          title: item.name,
+          title: `${item.name}${isModified ? ' *' : ''}`,
           icon: getTreeItemIcon(item),
           children: isFolder ? transformToTreeData((item).children) : undefined,
           isLeaf: !isFolder,
@@ -107,7 +111,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       })
   }
 
-  const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData])
+  const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData, modifiedThumbnails])
 
   const handleAddWithSelection = (): void => {
     handleAdd((thumbnailName: string) => {
@@ -154,7 +158,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     }
   }
 
-  const selectedKeys = isEmpty(selectedThumbnail) ? [] : [selectedThumbnail.id]
+  const selectedKeys = activeTabKey != null ? [activeTabKey] : []
 
   return (
     <ContentLayout

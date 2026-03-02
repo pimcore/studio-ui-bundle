@@ -1,0 +1,28 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import type { TransformationComponent } from '../types/transformation-component-types'
+
+export const NoConfigurationComponent: TransformationComponent = () => {
+  const { t } = useTranslation()
+
+  return (
+    <div style={ {
+      padding: '8px 12px',
+      color: '#666',
+      fontStyle: 'italic'
+    } }
+    >
+      {t('image-thumbnails.transformations.no-configuration-required')}
+    </div>
+  )
+}
