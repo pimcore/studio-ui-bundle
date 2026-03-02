@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionEncryptedFieldFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/field-definition-encrypted-field-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -23,6 +23,13 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
 
   getGroup (): string[] {
     return [...super.getGroup(), 'other']
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      delegateDatatype: 'input'
+    }
   }
 
   getAllowedChildTags (props: FieldDefinitionContext): string[] {
