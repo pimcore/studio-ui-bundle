@@ -314,6 +314,30 @@ import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extrac
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
 import { DynamicTypeEmailsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-email-gdpr-provider'
 import { TransformationDynamicTypeRegistry } from '@Pimcore/modules/image-thumbnails/dynamic-types/transformation-dynamic-type-registry'
+import { TransformationFieldCollectionRegistry } from '@Pimcore/modules/image-thumbnails/registries/transformation-field-collection-registry'
+import { CoverTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/cover/cover-transformation-type'
+import { ResizeTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/resize/resize-transformation-type'
+import { ScaleByWidthTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/scale-by-width/scale-by-width-transformation-type'
+import { ScaleByHeightTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/scale-by-height/scale-by-height-transformation-type'
+import { TrimTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/trim/trim-transformation-type'
+import { SepiaTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/sepia/sepia-transformation-type'
+import { GrayscaleTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/grayscale/grayscale-transformation-type'
+import { SharpenTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/sharpen/sharpen-transformation-type'
+import { ContainTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/contain/contain-transformation-type'
+import { CropTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/crop/crop-transformation-type'
+import { FrameTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/frame/frame-transformation-type'
+import { RotateTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/rotate/rotate-transformation-type'
+import { MirrorTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/mirror/mirror-transformation-type'
+import { GaussianBlurTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/gaussian-blur/gaussian-blur-transformation-type'
+import { BrightnessSaturationTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/brightness-saturation/brightness-saturation-transformation-type'
+import { SetBackgroundColorTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/set-background-color/set-background-color-transformation-type'
+import { SetBackgroundImageTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/set-background-image/set-background-image-transformation-type'
+import { RoundCornersTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/round-corners/round-corners-transformation-type'
+import { AddOverlayTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/add-overlay/add-overlay-transformation-type'
+import { AddOverlayFitTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/add-overlay-fit/add-overlay-fit-transformation-type'
+import { ApplyMaskTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/apply-mask/apply-mask-transformation-type'
+import { TiffOriginalTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/tiff-original/tiff-original-transformation-type'
+import { OnePixelTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/one-pixel/one-pixel-transformation-type'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -703,6 +727,33 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Panel']).to(DynamicTypeF
 
 // Image Thumbnails Transformation Registry
 container.bind(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry']).to(TransformationDynamicTypeRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/TransformationFieldCollectionRegistry']).toDynamicValue((ctx) => {
+  const transformationRegistry = ctx.container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
+  return new TransformationFieldCollectionRegistry(transformationRegistry)
+}).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Cover']).to(CoverTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Resize']).to(ResizeTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/ScaleByWidth']).to(ScaleByWidthTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/ScaleByHeight']).to(ScaleByHeightTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Trim']).to(TrimTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Sepia']).to(SepiaTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Grayscale']).to(GrayscaleTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Sharpen']).to(SharpenTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Contain']).to(ContainTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Crop']).to(CropTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Frame']).to(FrameTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Rotate']).to(RotateTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/Mirror']).to(MirrorTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/GaussianBlur']).to(GaussianBlurTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/BrightnessSaturation']).to(BrightnessSaturationTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/SetBackgroundColor']).to(SetBackgroundColorTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/SetBackgroundImage']).to(SetBackgroundImageTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/RoundCorners']).to(RoundCornersTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/AddOverlay']).to(AddOverlayTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/AddOverlayFit']).to(AddOverlayFitTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/ApplyMask']).to(ApplyMaskTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/TiffOriginal']).to(TiffOriginalTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Transformation/OnePixel']).to(OnePixelTransformationType).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()

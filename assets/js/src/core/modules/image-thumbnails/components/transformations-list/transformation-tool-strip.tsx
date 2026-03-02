@@ -13,7 +13,9 @@ import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { useTranslation } from 'react-i18next'
-import { transformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type TransformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { Transformation } from '../../types/media-query.types'
 
 export interface TransformationToolStripProps {
@@ -31,6 +33,7 @@ export const TransformationToolStrip = ({
 }: TransformationToolStripProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const transformationDynamicTypeRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
   const transformationType = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
   const title = transformationType?.getName() ?? transformation.type
 

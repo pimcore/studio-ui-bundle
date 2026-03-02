@@ -15,17 +15,9 @@ import { TransformationFieldCollectionItem } from '../components/transformation-
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export class TransformationFieldCollectionRegistry extends FieldCollectionRegistry {
-  private isAdapted: boolean = false
-
   constructor (private readonly transformationRegistry: TransformationDynamicTypeRegistry) {
     super()
-  }
-
-  private ensureAdapted (): void {
-    if (!this.isAdapted && this.transformationRegistry.getDynamicTypes().length > 0) {
-      this.adaptTransformationTypes()
-      this.isAdapted = true
-    }
+    this.adaptTransformationTypes()
   }
 
   private adaptTransformationTypes (): void {
@@ -45,24 +37,12 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
     })
   }
 
-  /**
-   * Override parent method to ensure lazy adaptation before lookup
-   */
   public getItemByType (type: string): FieldCollectionRegistryItem | undefined {
-    this.ensureAdapted()
     const item = super.getItemByType(type)
     if (item === undefined) {
       trackError(new GeneralError(`No registry item found for type "${type}"`))
     }
     return item
-  }
-
-  /**
-   * Override parent method to ensure lazy adaptation before returning items
-   */
-  public getItems (): FieldCollectionRegistryItem[] {
-    this.ensureAdapted()
-    return super.getItems()
   }
 
   /**

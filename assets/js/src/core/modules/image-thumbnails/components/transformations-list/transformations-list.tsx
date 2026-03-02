@@ -11,7 +11,9 @@
 import React from 'react'
 import { Space } from '@Pimcore/components/space/space'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
-import { transformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type TransformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
 import { TransformationToolStrip } from './transformation-tool-strip'
 import type { Transformation } from '../../types/media-query.types'
 
@@ -31,6 +33,8 @@ export const TransformationsList = ({
   onMoveUp,
   onMoveDown
 }: TransformationsListProps): React.JSX.Element => {
+  const transformationDynamicTypeRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
+
   const renderTransformation = (transformation: Transformation, index: number): React.JSX.Element => {
     const registryItem = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
 

@@ -9,7 +9,9 @@
  */
 
 import React from 'react'
-import { transformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type TransformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
 import { Form } from '@Pimcore/components/form/form'
 
 export interface TransformationFieldCollectionItemProps {
@@ -19,6 +21,7 @@ export interface TransformationFieldCollectionItemProps {
 export const TransformationFieldCollectionItem = ({
   transformationType
 }: TransformationFieldCollectionItemProps): React.JSX.Element => {
+  const transformationDynamicTypeRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
   const registryItem = transformationDynamicTypeRegistry.getDynamicType(transformationType, false)
 
   if (registryItem == null) {

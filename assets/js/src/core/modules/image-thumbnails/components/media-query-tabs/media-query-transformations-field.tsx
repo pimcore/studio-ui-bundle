@@ -8,10 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useCallback, useEffect } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FieldCollection } from '@Pimcore/components/form/controls/field-collection/field-collection'
-import { transformationFieldCollectionRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type TransformationFieldCollectionRegistry } from '../../registries/transformation-field-collection-registry'
 import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueryTransformationsFieldProps {
@@ -24,10 +26,6 @@ export const MediaQueryTransformationsField = ({
   onChange
 }: MediaQueryTransformationsFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
-
-  useEffect(() => {
-    initializeTransformationTypes()
-  }, [])
 
   const transformationsData = useMemo(() =>
     mediaQuery.transformations.map(transformation => ({
@@ -43,11 +41,13 @@ export const MediaQueryTransformationsField = ({
     }
   }, [onChange])
 
+  const fieldCollectionRegistry = container.get<TransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/TransformationFieldCollectionRegistry'])
+
   return (
     <FieldCollection
       addButtonTranslationKey="image-thumbnails.media-queries.add-transformation"
       onChange={ handleChange }
-      registry={ transformationFieldCollectionRegistry }
+      registry={ fieldCollectionRegistry }
       title={ t('image-thumbnails.editor.transformations') }
       value={ transformationsData }
     />

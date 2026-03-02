@@ -12,7 +12,9 @@ import React from 'react'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useTranslation } from 'react-i18next'
-import { transformationDynamicTypeRegistry, initializeTransformationTypes } from '../../dynamic-types/transformation-dynamic-type-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type TransformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { TransformationDynamicTypeAbstract } from '../../dynamic-types/transformation-dynamic-type-abstract'
 
 interface DynamicTransformationsDropdownProps {
@@ -23,10 +25,6 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
   onTransformationAdd
 }) => {
   const { t } = useTranslation()
-
-  React.useEffect(() => {
-    initializeTransformationTypes()
-  }, [])
 
   const handleTransformationClick = async (type: TransformationDynamicTypeAbstract): Promise<void> => {
     try {
@@ -42,7 +40,8 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
     }
   }
 
-  const transformationTypes = transformationDynamicTypeRegistry.getDynamicTypes()
+  const transformationRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
+  const transformationTypes = transformationRegistry.getDynamicTypes()
 
   const menuItems = transformationTypes.map(type => ({
     key: type.getName(),
