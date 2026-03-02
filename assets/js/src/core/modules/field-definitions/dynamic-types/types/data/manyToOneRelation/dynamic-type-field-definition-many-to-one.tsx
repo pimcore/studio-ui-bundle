@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionManyToOneRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToOneRelation/field-definition-many-to-one-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -23,6 +23,24 @@ export class DynamicTypeFieldDefinitionManyToOne extends DynamicTypeFieldDefinit
 
   getGroup (): string[] {
     return [...super.getGroup(), 'relation']
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      width: '',
+      pathFormatterClass: '',
+      allowToClearRelation: false,
+      documentsAllowed: false,
+      documentTypes: [],
+      assetsAllowed: false,
+      assetInlineDownloadAllowed: false,
+      assetTypes: [],
+      assetUploadPath: '',
+      objectsAllowed: false,
+      classes: [],
+      displayMode: 'grid'
+    }
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {

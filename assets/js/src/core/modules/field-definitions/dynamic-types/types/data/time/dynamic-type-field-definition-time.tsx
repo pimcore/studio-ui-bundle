@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionTimeFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/time/field-definition-time-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -27,6 +27,16 @@ export class DynamicTypeFieldDefinitionTime extends DynamicTypeFieldDefinitionDa
 
   getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'encryptedFieldSupport']
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      width: '',
+      increment: 15,
+      minValue: null,
+      maxValue: null
+    }
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
