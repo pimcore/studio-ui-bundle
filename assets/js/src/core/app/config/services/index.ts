@@ -814,36 +814,6 @@ container.bind(serviceIds['DynamicTypes/Transformation/ApplyMask']).to(ApplyMask
 container.bind(serviceIds['DynamicTypes/Transformation/TiffOriginal']).to(TiffOriginalTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Transformation/OnePixel']).to(OnePixelTransformationType).inSingletonScope()
 
-// Image Thumbnails Transformation Registry
-container.bind(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry']).to(TransformationDynamicTypeRegistry).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/TransformationFieldCollectionRegistry']).toDynamicValue((ctx) => {
-  const transformationRegistry = ctx.container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
-  return new TransformationFieldCollectionRegistry(transformationRegistry)
-}).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Cover']).to(CoverTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Resize']).to(ResizeTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/ScaleByWidth']).to(ScaleByWidthTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/ScaleByHeight']).to(ScaleByHeightTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Trim']).to(TrimTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Sepia']).to(SepiaTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Grayscale']).to(GrayscaleTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Sharpen']).to(SharpenTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Contain']).to(ContainTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Crop']).to(CropTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Frame']).to(FrameTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Rotate']).to(RotateTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/Mirror']).to(MirrorTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/GaussianBlur']).to(GaussianBlurTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/BrightnessSaturation']).to(BrightnessSaturationTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/SetBackgroundColor']).to(SetBackgroundColorTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/SetBackgroundImage']).to(SetBackgroundImageTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/RoundCorners']).to(RoundCornersTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/AddOverlay']).to(AddOverlayTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/AddOverlayFit']).to(AddOverlayFitTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/ApplyMask']).to(ApplyMaskTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/TiffOriginal']).to(TiffOriginalTransformationType).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Transformation/OnePixel']).to(OnePixelTransformationType).inSingletonScope()
-
 // Video Thumbnails Transformation Registry
 container.bind(serviceIds['DynamicTypes/VideoTransformationDynamicTypeRegistry']).to(VideoTransformationDynamicTypeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/VideoTransformationFieldCollectionRegistry']).toDynamicValue((ctx) => {
