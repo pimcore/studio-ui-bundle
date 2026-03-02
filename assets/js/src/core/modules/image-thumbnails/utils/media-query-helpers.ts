@@ -61,7 +61,7 @@ export const convertFromBackendFormat = (
       transformations: transformations.map((t, index) => ({
         id: generateTransformationId(),
         type: t.method as TransformationType, // Direct usage with type casting
-        config: t.arguments ?? {},
+        config: t.arguments ?? {}
       })),
       order: (mediaOrder[queryName] === 0 ? 0 : mediaOrder[queryName]) ?? 0
     }
