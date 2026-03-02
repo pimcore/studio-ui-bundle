@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -22,8 +22,6 @@ import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/t
 import { useThumbnailVideoGetByNameQuery, useThumbnailVideoUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { isNil, isNull, isEqual, isEmpty } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { useVideoThumbnailsContext } from '../../providers/video-thumbnails-provider'
-import { extractGroupsFromTree } from '../../utils/tree-helpers'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { BasicFormFields } from './basic-form-fields'
 
@@ -58,8 +56,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   const modificationDateRef = useRef<number | null>(null)
   const [currentThumbnailId, setCurrentThumbnailId] = useState<string | null>(null)
 
-  const { thumbnailsData } = useVideoThumbnailsContext()
-
   const [initialFormData, setInitialFormData] = useState<VideoThumbnailFormData | null>(null)
   const [currentFormData, setCurrentFormData] = useState<VideoThumbnailFormData | null>(null)
   const [mediaSegments, setMediaSegments] = useState<MediaQuery[]>([])
@@ -70,12 +66,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   )
 
   const [updateThumbnail, { isLoading: isSaving, error: updateError }] = useThumbnailVideoUpdateMutation()
-
-  const groupOptions = useMemo(() => {
-    if (thumbnailsData?.items == null) return []
-    const groups = extractGroupsFromTree(thumbnailsData.items)
-    return [{ value: '', label: t('video-thumbnails.editor.no-group') }, ...groups]
-  }, [thumbnailsData, t])
 
   useEffect(() => {
     if (!isNil(updateError)) {
@@ -229,7 +219,6 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           key={ selectedThumbnail?.id }
         >
           <BasicFormFields
-            groupOptions={ groupOptions }
             onPresettingChange={ handlePresettingChange }
           />
           <VideoMediaQueriesPanel

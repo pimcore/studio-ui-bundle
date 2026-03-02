@@ -18,7 +18,6 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 
 interface BasicFormFieldsProps {
-  groupOptions: Array<{ value: string, label: string }>
   onPresettingChange: (preset: string) => void
 }
 
@@ -28,7 +27,7 @@ const PRESETTING_OPTIONS = [
   { value: 'best', label: 'Best' }
 ]
 
-export const BasicFormFields = ({ groupOptions, onPresettingChange }: BasicFormFieldsProps): React.JSX.Element => {
+export const BasicFormFields = ({ onPresettingChange }: BasicFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -57,11 +56,7 @@ export const BasicFormFields = ({ groupOptions, onPresettingChange }: BasicFormF
         label={ t('video-thumbnails.editor.group') }
         name="group"
       >
-        <Select
-          allowClear
-          options={ groupOptions }
-          placeholder={ t('video-thumbnails.editor.group-placeholder') }
-        />
+        <Input placeholder={ t('video-thumbnails.editor.group-placeholder') } />
       </Form.Item>
 
       <Form.Item
