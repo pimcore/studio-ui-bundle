@@ -22,6 +22,11 @@ import { useObjectBrickUpdate } from '@Pimcore/modules/object-brick/components/o
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { ObjectBrickCustomLayoutEditor } from '@Pimcore/modules/object-brick/components/object-brick-editor/custom-layouts/custom-layout-editor'
+import { ObjectBrickLayoutProvider } from '@Pimcore/modules/object-brick/object-brick-layout-provider'
+import { LayoutProvider as DefaultLayoutProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
 // Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result
@@ -104,8 +109,31 @@ const useObjectBrickDeleteMutation: AnyMutationHook = (...args) => {
 
 const objectBrickImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/export`,
-  getImportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/import`,
-  getIdFromGeneralSettings: (generalSettings) => generalSettings?.id as string | undefined
+  getImportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/import`
+}
+
+/**
+ * Dual layout provider: feeds the same layout data into both the singleton
+ * context (used by inner editor components like DetailSave, DetailSidebar,
+ * etc.) AND the OB-specific isolated context (read by DetailParentTree via
+ * customLayouts.parent.useLayout in the custom layout editor).
+ *
+ * This prevents the custom layout editor's parent tree from accidentally
+ * reading the class definition editor's layout when both editors are open.
+ */
+const ObjectBrickDualLayoutProvider = ({ children, ...rest }: Omit<LayoutProviderProps, 'fieldDefinitionRegistry'>): React.JSX.Element => {
+  const { fieldDefinitionRegistry } = useSettings()
+
+  return (
+    <DefaultLayoutProvider { ...rest }>
+      <ObjectBrickLayoutProvider
+        { ...rest }
+        fieldDefinitionRegistry={ fieldDefinitionRegistry }
+      >
+        {children}
+      </ObjectBrickLayoutProvider>
+    </DefaultLayoutProvider>
+  )
 }
 
 export const ObjectBrickWidget = (): React.JSX.Element => {
@@ -113,7 +141,11 @@ export const ObjectBrickWidget = (): React.JSX.Element => {
     <Editor
       AddModal={ ObjectBrickAddModal }
       GeneralSettingsFormFields={ ObjectBrickGeneralSettingsFormFields }
+      LayoutProvider={ ObjectBrickDualLayoutProvider }
       area={ ['objectbrick'] }
+      customLayouts={ {
+        ModalContent: <ObjectBrickCustomLayoutEditor />
+      } }
       importExportConfig={ objectBrickImportExportConfig }
       useDetailGeneralSettingsQuery={ useObjectBrickGetByKeyQuery }
       useDetailLayoutQuery={ useObjectBrickGetLayoutByKeyQuery }

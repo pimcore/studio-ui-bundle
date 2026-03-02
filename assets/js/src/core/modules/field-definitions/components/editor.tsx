@@ -17,9 +17,9 @@ import React from 'react'
 
 export interface EditorProps {
   area: AreaProviderProps['area']
-  AddModal: SettingsProviderProps['AddModal']
+  AddModal?: SettingsProviderProps['AddModal']
   useItemsQuery: SettingsProviderProps['useItemsQuery']
-  useItemsDeleteMutation: SettingsProviderProps['useItemsDeleteMutation']
+  useItemsDeleteMutation?: SettingsProviderProps['useItemsDeleteMutation']
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
   useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
   useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']

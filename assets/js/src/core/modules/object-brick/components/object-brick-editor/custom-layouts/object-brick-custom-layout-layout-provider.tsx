@@ -12,9 +12,9 @@ import { useSettings } from '@Pimcore/modules/field-definitions/components/edito
 import { create, type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import React from 'react'
 
-const { LayoutProvider: CustomLayoutLayoutProviderInternal, useLayout: useCustomLayoutLayout } = create()
+const { LayoutProvider: ObjectBrickCustomLayoutLayoutProviderInternal, useLayout: useObjectBrickCustomLayoutLayout } = create()
 
-export { useCustomLayoutLayout }
+export { useObjectBrickCustomLayoutLayout }
 
 /**
  * Wrapper that reads fieldDefinitionRegistry from the nearest SettingsProvider
@@ -22,14 +22,14 @@ export { useCustomLayoutLayout }
  * DefaultLayoutProvider works in items/detail/layout-provider.tsx.
  *
  * Created at module level (not inside a component) so the React context
- * identity is stable across renders and the class definition custom layout
- * editor does not share context with other editors.
+ * identity is stable across renders and the OB custom layout editor does not
+ * share context with other editors.
  */
-export const CustomLayoutLayoutProvider = (props: Omit<LayoutProviderProps, 'fieldDefinitionRegistry'>): React.JSX.Element => {
+export const ObjectBrickCustomLayoutLayoutProvider = (props: Omit<LayoutProviderProps, 'fieldDefinitionRegistry'>): React.JSX.Element => {
   const { fieldDefinitionRegistry } = useSettings()
 
   return (
-    <CustomLayoutLayoutProviderInternal
+    <ObjectBrickCustomLayoutLayoutProviderInternal
       { ...props }
       fieldDefinitionRegistry={ fieldDefinitionRegistry }
     />

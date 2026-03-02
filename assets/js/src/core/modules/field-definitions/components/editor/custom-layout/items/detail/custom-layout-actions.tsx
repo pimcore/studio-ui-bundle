@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { IconButton, useMessage, useFormModal, ButtonGroup } from '@sdk/components'
@@ -25,14 +24,32 @@ const defaultValidateFile = (file: File): boolean => {
 
 export const CustomLayoutActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { generalSettings } = useGeneralSettings()
   const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig, useItemsDeleteMutation } = useSettings()
   const { activeConfiguration, closeConfiguration } = useItems()
   const messageApi = useMessage()
   const modal = useFormModal()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
-  const [deleteItem, { isLoading: isDeleting }] = useItemsDeleteMutation()
+  const canDelete = useItemsDeleteMutation !== undefined
+  const [deleteItem, deleteResult] = (useItemsDeleteMutation ?? (() => [async () => {}, {}]))()
+  const isDeleting = canDelete ? (deleteResult as { isLoading?: boolean }).isLoading === true : false
+
+  // Use the pure ID from the inner ItemsContext (activeConfiguration.id) rather
+  // than getIdFromGeneralSettings(generalSettings).  The backend may return a
+  // composite id (e.g. "uuid.brick.obKey") in the GET response body, which
+  // would make generalSettings.id differ from the original cache key, causing
+  // RTK Query to fire a second GET request with the composite string as the
+  // customLayoutId.  activeConfiguration.id is always the stable, clean UUID
+  // that was used to open this detail view.
+  const itemId = activeConfiguration?.id
+
+  const layoutResult = useDetailLayoutQuery?.({
+    id: itemId ?? ''
+  })
+
+  const generalSettingsResult = useDetailGeneralSettingsQuery({
+    id: itemId ?? ''
+  })
 
   if (isNil(importExportConfig)) {
     return <></>
@@ -41,22 +58,11 @@ export const CustomLayoutActions = (): React.JSX.Element => {
   const {
     getExportUrl,
     getImportUrl,
-    getIdFromGeneralSettings,
     validateFile = defaultValidateFile,
     acceptFileTypes = '.json,application/json',
     acceptMimeTypes = ['application/json'],
     successMessageKey = 'class-definition.import-success'
   } = importExportConfig
-
-  const itemId = getIdFromGeneralSettings(generalSettings as Record<string, unknown> | undefined)
-
-  const layoutResult = useDetailLayoutQuery?.({
-    id: itemId!
-  })
-
-  const generalSettingsResult = useDetailGeneralSettingsQuery({
-    id: itemId!
-  })
 
   const handleExport = (): void => {
     if (isNil(itemId)) {
@@ -121,14 +127,16 @@ export const CustomLayoutActions = (): React.JSX.Element => {
             title={ t('import') }
             type="link"
           />,
-          <IconButton
-            icon={ { value: 'trash' } }
-            key="delete"
-            loading={ isDeleting }
-            onClick={ handleDelete }
-            title={ t('delete') }
-            type="link"
-          />
+          ...(canDelete ? [
+            <IconButton
+              icon={ { value: 'trash' } }
+              key="delete"
+              loading={ isDeleting }
+              onClick={ handleDelete }
+              title={ t('delete') }
+              type="link"
+            />
+          ] : [])
         ] }
       />
 

@@ -79,7 +79,10 @@ export const tagNames = {
   FIELD_COLLECTION_COLLECTION: 'FIELD_COLLECTION_COLLECTION',
   OBJECT_BRICK: 'OBJECT_BRICK',
   OBJECT_BRICK_DETAIL: 'OBJECT_BRICK_DETAIL',
-  OBJECT_BRICK_COLLECTION: 'OBJECT_BRICK_COLLECTION'
+  OBJECT_BRICK_COLLECTION: 'OBJECT_BRICK_COLLECTION',
+  OBJECT_BRICK_CUSTOM_LAYOUT: 'OBJECT_BRICK_CUSTOM_LAYOUT',
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: 'OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL',
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: 'OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION'
 }
 
 export const providingTags = {
@@ -164,7 +167,10 @@ export const providingTags = {
   FIELD_COLLECTION_DETAIL: (key: string) => [tagNames.FIELD_COLLECTION, { type: tagNames.FIELD_COLLECTION_DETAIL, id: key }],
   OBJECT_BRICK: () => [tagNames.OBJECT_BRICK],
   OBJECT_BRICK_COLLECTION: () => [tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_COLLECTION],
-  OBJECT_BRICK_DETAIL: (key: string) => [tagNames.OBJECT_BRICK, { type: tagNames.OBJECT_BRICK_DETAIL, id: key }]
+  OBJECT_BRICK_DETAIL: (key: string) => [tagNames.OBJECT_BRICK, { type: tagNames.OBJECT_BRICK_DETAIL, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT: () => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT],
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: (key: string) => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, { type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: (key: string, id: string) => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, { type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, id: `${key}-${id}` }]
 }
 
 export const invalidatingTags = {
@@ -239,7 +245,10 @@ export const invalidatingTags = {
   FIELD_COLLECTION_DETAIL: (key: string) => [{ type: tagNames.FIELD_COLLECTION_DETAIL, id: key }],
   OBJECT_BRICK: () => [tagNames.OBJECT_BRICK],
   OBJECT_BRICK_COLLECTION: () => [tagNames.OBJECT_BRICK_COLLECTION],
-  OBJECT_BRICK_DETAIL: (key: string) => [{ type: tagNames.OBJECT_BRICK_DETAIL, id: key }]
+  OBJECT_BRICK_DETAIL: (key: string) => [{ type: tagNames.OBJECT_BRICK_DETAIL, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT: () => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT],
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: (key: string) => [{ type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: (key: string, id: string) => [{ type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, id: `${key}-${id}` }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
