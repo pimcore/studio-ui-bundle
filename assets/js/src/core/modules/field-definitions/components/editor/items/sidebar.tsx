@@ -69,9 +69,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
           key: `${configuration.id}`,
           icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
           meta: { configuration },
-          actions: canDelete ? [
-            { key: 'delete', icon: 'delete' }
-          ] : []
+          actions: canDelete
+            ? [
+                { key: 'delete', icon: 'delete' }
+              ]
+            : []
         })
         return
       }
@@ -91,9 +93,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
         key: `${configuration.id}`,
         icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
         meta: { configuration },
-        actions: canDelete ? [
-          { key: 'delete', icon: 'delete' }
-        ] : []
+        actions: canDelete
+          ? [
+              { key: 'delete', icon: 'delete' }
+            ]
+          : []
       }
 
       groupMap[groupName].children!.push(treeDataItem)

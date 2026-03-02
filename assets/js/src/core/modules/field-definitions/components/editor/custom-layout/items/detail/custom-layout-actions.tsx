@@ -127,16 +127,18 @@ export const CustomLayoutActions = (): React.JSX.Element => {
             title={ t('import') }
             type="link"
           />,
-          ...(canDelete ? [
-            <IconButton
-              icon={ { value: 'trash' } }
-              key="delete"
-              loading={ isDeleting }
-              onClick={ handleDelete }
-              title={ t('delete') }
-              type="link"
-            />
-          ] : [])
+          ...(canDelete
+            ? [
+              <IconButton
+                icon={ { value: 'trash' } }
+                key="delete"
+                loading={ isDeleting }
+                onClick={ handleDelete }
+                title={ t('delete') }
+                type="link"
+              />
+              ]
+            : [])
         ] }
       />
 
