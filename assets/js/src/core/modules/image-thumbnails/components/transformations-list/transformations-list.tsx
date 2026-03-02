@@ -44,10 +44,10 @@ export const TransformationsList = ({
         <ToolStripBox
           renderToolStripStart={
             <TransformationToolStrip
-              transformation={ transformation }
-              onRemove={ () => { onRemove(transformation.id) } }
-              onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
               onMoveDown={ onMoveDown != null ? () => { onMoveDown(transformation.id) } : undefined }
+              onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
+              onRemove={ () => { onRemove(transformation.id) } }
+              transformation={ transformation }
             />
           }
         >
@@ -63,10 +63,10 @@ export const TransformationsList = ({
       <ToolStripBox
         renderToolStripStart={
           <TransformationToolStrip
-            transformation={ transformation }
-            onRemove={ () => { onRemove(transformation.id) } }
-            onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
             onMoveDown={ onMoveDown != null ? () => { onMoveDown(transformation.id) } : undefined }
+            onMoveUp={ onMoveUp != null ? () => { onMoveUp(transformation.id) } : undefined }
+            onRemove={ () => { onRemove(transformation.id) } }
+            transformation={ transformation }
           />
         }
       >
