@@ -45,7 +45,6 @@ export const MediaQueryTransformationsField = ({
 
   return (
     <FieldCollection
-      addButtonTranslationKey="image-thumbnails.media-queries.add-transformation"
       onChange={ handleChange }
       registry={ fieldCollectionRegistry }
       title={ t('image-thumbnails.editor.transformations') }

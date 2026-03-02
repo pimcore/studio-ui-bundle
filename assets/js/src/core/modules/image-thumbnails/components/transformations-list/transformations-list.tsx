@@ -18,7 +18,6 @@ import { TransformationToolStrip } from './transformation-tool-strip'
 import type { Transformation } from '../../types/media-query.types'
 
 interface TransformationsListProps {
-  mediaQueryId: string
   transformations: Transformation[]
   onRemove: (transformationId: string) => void
   onUpdate: (transformationId: string, config: any) => void
@@ -38,7 +37,9 @@ export const TransformationsList = ({
   const renderTransformation = (transformation: Transformation, index: number): React.JSX.Element => {
     const registryItem = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
 
-    if (registryItem == null) {
+    if (registryItem != null) {
+      const Component = registryItem.getReactComponent()
+
       return (
         <ToolStripBox
           renderToolStripStart={
@@ -50,12 +51,13 @@ export const TransformationsList = ({
             />
           }
         >
-          <div>Unknown transformation type: {transformation.type}</div>
+          <Component
+            attributes={ transformation.config }
+            onChange={ (newAttributes: any) => { onUpdate(transformation.id, newAttributes) } }
+          />
         </ToolStripBox>
       )
     }
-
-    const Component = registryItem.getReactComponent()
 
     return (
       <ToolStripBox
@@ -68,10 +70,7 @@ export const TransformationsList = ({
           />
         }
       >
-        <Component
-          attributes={ transformation.config }
-          onChange={ (newAttributes: any) => { onUpdate(transformation.id, newAttributes) } }
-        />
+        <div>Unknown transformation type: {transformation.type}</div>
       </ToolStripBox>
     )
   }

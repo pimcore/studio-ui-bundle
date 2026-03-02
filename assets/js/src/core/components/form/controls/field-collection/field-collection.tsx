@@ -23,7 +23,6 @@ export interface FieldCollectionProps {
   maxItems?: number
   title?: string
   collapsed?: boolean
-  addButtonTranslationKey?: string
 }
 
 export const FieldCollection = (props: FieldCollectionProps): React.JSX.Element => {
