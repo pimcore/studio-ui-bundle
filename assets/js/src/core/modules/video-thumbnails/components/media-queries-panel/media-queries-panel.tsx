@@ -36,7 +36,7 @@ export const VideoMediaQueriesPanel = ({
   const handleAddMediaQuery = useCallback(() => {
     modal.input({
       title: t('video-thumbnails.editor.media-segments.add.title'),
-      label: t('video-thumbnails.editor.media-segments.add.bitrate-hint'),
+      label: t('video-thumbnails.editor.media-segments.add.label'),
       okText: t('video-thumbnails.editor.media-segments.add.ok'),
       cancelButtonProps: { style: { display: 'none' } },
       maskClosable: true,
@@ -44,10 +44,15 @@ export const VideoMediaQueriesPanel = ({
         required: true
       },
       onOk: async (segmentName: string) => {
+        const sanitised = segmentName.trim().replace(/[^a-zA-Z0-9_\-+]/g, '')
+
+        if (sanitised === '') return
+        if (mediaQueries.some(mq => mq.query === sanitised)) return
+
         const newMediaQuery: MediaQuery = {
           id: generateMediaQueryId(),
-          query: segmentName.trim(),
-          displayName: segmentName.trim(),
+          query: sanitised,
+          displayName: sanitised,
           transformations: [],
           order: mediaQueries.length
         }
