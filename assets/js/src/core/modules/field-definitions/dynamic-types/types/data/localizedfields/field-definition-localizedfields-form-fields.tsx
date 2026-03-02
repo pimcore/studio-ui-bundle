@@ -9,14 +9,12 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { kebabCase } from 'lodash'
 
 export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const typeTranslation = t('field-definition.' + kebabCase(props.type))
   return (
     <>
       <Form.Item

@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useClassDefinitionGetBricksUsagesQuery } from '@sdk/api/class-definition'
-import { Form, FormKit, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

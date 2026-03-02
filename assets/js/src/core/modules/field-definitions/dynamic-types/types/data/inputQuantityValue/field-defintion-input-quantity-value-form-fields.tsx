@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
-import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import { Form, Input, InputNumber, Select } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -11,7 +11,7 @@
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionStructuredTableColsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-structured-table-cols-grid/field-definition-structured-table-cols-grid'
 import { FieldDefinitionStructuredTableRowsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-structured-table-rows-grid/field-definition-structured-table-rows-grid'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, Input, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

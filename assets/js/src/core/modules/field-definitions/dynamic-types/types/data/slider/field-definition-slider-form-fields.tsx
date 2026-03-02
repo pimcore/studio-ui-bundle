@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
+import { Form, Input, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

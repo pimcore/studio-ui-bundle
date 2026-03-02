@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionCropPanel } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-crop-panel/field-definition-crop-panel'
-import { Form, FormKit, Input } from '@sdk/components'
+import { Form, Input } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
