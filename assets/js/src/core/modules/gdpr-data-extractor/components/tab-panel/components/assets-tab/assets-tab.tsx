@@ -86,7 +86,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
-              filename={data.fullPath.split('/').pop()!}
+              filename={data.fullPath.split('/').pop() ?? crypto.randomUUID()}
               data-testid={`gdpr-assets-export-${data.id}`}
               id={data.id}
               tooltip={{
