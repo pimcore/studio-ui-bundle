@@ -39,12 +39,12 @@ import {
   userAvailablePermissionsFetched,
   type UserDraft
 } from '@Pimcore/modules/user/user-management-slice'
-import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface AddItemArgs {
   parentId: number
@@ -81,23 +81,17 @@ interface UseUserReturn extends
 export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const [notificationApi] = useNotification()
+  const messageApi = useMessage()
   const activeId = useAppSelector(state => state.user.activeId)
   const getAllIds = useAppSelector(state => state.user.ids)
   const currentUser = useUser()
   const { refreshPerspectives } = usePerspectives()
 
-  const handleNotification = (successMessage, error): void => {
+  const handleNotification = async (successMessage: string, error?: any): Promise<void> => {
     if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: error.data.message
-      })
+      await messageApi.error((error?.data?.message as string) ?? t('error'))
     } else {
-      notificationApi.open({
-        type: 'success',
-        message: successMessage
-      })
+      await messageApi.success(successMessage)
     }
   }
 
@@ -144,14 +138,14 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function addNewUser (props: AddItemArgs): Promise<{ data: UserCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userCreate.initiate({ body: { parentId, name } }))
-    handleNotification(t('user-management.add-user.success'), error)
+    await handleNotification(t('user-management.add-user.success'), error)
     return data
   }
 
   async function addNewFolder (props: AddItemArgs): Promise<{ data: UserFolderCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderCreate.initiate({ body: { parentId, name } }))
-    handleNotification(t('user-management.add-folder.success'), error)
+    await handleNotification(t('user-management.add-folder.success'), error)
 
     return data
   }
@@ -159,14 +153,14 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function removeUser (props: UserDeleteByIdApiArg): Promise<{ data: UserDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userDeleteById.initiate({ id }))
-    handleNotification(t('user-management.remove-user.success'), error)
+    await handleNotification(t('user-management.remove-user.success'), error)
     return data
   }
 
   async function removeFolder (props: UserFolderDeleteByIdApiArg): Promise<{ data: UserFolderDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderDeleteById.initiate({ id }))
-    handleNotification(t('user-management.remove-folder.success'), error)
+    await handleNotification(t('user-management.remove-folder.success'), error)
     return data
   }
 
@@ -175,7 +169,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { data, error }: any = await dispatch(api.endpoints.userCloneById.initiate({ id, body: { name } }))
 
     dispatch(userOpened(data.id as number))
-    handleNotification(t('user-management.clone-user.success'), error)
+    await handleNotification(t('user-management.clone-user.success'), error)
     return data
   }
 
@@ -195,7 +189,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     }))
 
     if (user.password === undefined) {
-      handleNotification(t('user-management.save-user.success'), error)
+      await handleNotification(t('user-management.save-user.success'), error)
     } else {
       const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
         id,
@@ -205,7 +199,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
         }
       }))
 
-      handleNotification(t('user-management.save-user.success'), passwordError)
+      await handleNotification(t('user-management.save-user.success'), passwordError)
     }
 
     if (currentUser.id === id && !currentUser.isAdmin) {
@@ -227,19 +221,19 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
     const user = await fetchUserById({ id })
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '' } }))
-    handleNotification(t('user-management.save-user.success'), error)
+    await handleNotification(t('user-management.save-user.success'), error)
     return data
   }
 
   async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
-    handleNotification(t('user-management.upload-image.success'), error)
+    await handleNotification(t('user-management.upload-image.success'), error)
     return data
   }
 
   async function deleteUserAvatar (id: number): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userImageDeleteById.initiate({ id }))
-    handleNotification(t('user-management.upload-image.success'), error)
+    await handleNotification(t('user-management.upload-image.success'), error)
 
     return data
   }

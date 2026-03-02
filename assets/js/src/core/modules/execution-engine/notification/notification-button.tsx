@@ -22,6 +22,10 @@ export const NotificationButton = (): React.JSX.Element => {
   const { jobs } = useJobs()
   const [notificationApi] = useNotification()
 
+  if (jobs.length === 0) {
+    return <></>
+  }
+
   return (
     <Badge
       className={ styles.badge }
@@ -30,7 +34,6 @@ export const NotificationButton = (): React.JSX.Element => {
       size={ 'small' }
     >
       <IconButton
-        disabled={ jobs.length === 0 }
         icon={ { value: 'copilot-job-runs' } }
         onClick={ () => {
           notificationApi.open({

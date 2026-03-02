@@ -25,7 +25,7 @@ export const AppView = (): React.JSX.Element => {
     <StrictMode>
       <ErrorBoundary>
         <GlobalProvider>
-          <AntApp>
+          <AntApp notification={ { stack: false } }>
             <TreeCopyPasteProvider>
               <ModalsProvider>
                 { <ApiGateway /> }

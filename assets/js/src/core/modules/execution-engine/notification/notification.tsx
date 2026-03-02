@@ -32,7 +32,7 @@ export const Notification = (): React.JSX.Element => {
     if (!hasJobs) {
       notificationApi.destroy('jobs-notification')
     }
-  }, [hasJobs])
+  }, [jobs.length])
 
   return <></>
 }
