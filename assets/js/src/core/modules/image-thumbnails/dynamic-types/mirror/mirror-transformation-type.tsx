@@ -18,15 +18,15 @@ export interface MirrorTransformationConfig {
 }
 
 @injectable()
-export class MirrorTransformationType extends TransformationDynamicTypeAbstract {
+export class MirrorTransformationType extends TransformationDynamicTypeAbstract<MirrorTransformationConfig> {
   readonly id = 'mirror'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Mirror'
+  }
+
+  getSummary (config: MirrorTransformationConfig): string {
+    return `Mirror ${config.mode ?? 'horizontal'}`
   }
 
   getReactComponent (): TransformationComponent {

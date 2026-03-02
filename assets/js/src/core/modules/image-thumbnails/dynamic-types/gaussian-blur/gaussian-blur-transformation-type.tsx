@@ -22,12 +22,12 @@ export interface GaussianBlurTransformationConfig {
 export class GaussianBlurTransformationType extends TransformationDynamicTypeAbstract<GaussianBlurTransformationConfig> {
   readonly id = 'gaussianBlur'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Gaussian Blur'
+  }
+
+  getSummary (config: GaussianBlurTransformationConfig): string {
+    return `Gaussian Blur (radius: ${config.radius ?? '?'}, sigma: ${config.sigma ?? '?'})`
   }
 
   createDefaultConfig (): GaussianBlurTransformationConfig {

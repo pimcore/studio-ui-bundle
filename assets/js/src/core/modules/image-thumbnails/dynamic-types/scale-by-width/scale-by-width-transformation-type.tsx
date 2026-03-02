@@ -19,15 +19,15 @@ export interface ScaleByWidthTransformationConfig {
 }
 
 @injectable()
-export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract {
+export class ScaleByWidthTransformationType extends TransformationDynamicTypeAbstract<ScaleByWidthTransformationConfig> {
   readonly id = 'scaleByWidth'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Scale by Width'
+  }
+
+  getSummary (config: ScaleByWidthTransformationConfig): string {
+    return `Scale by Width ${config.width ?? '?'}px`
   }
 
   getReactComponent (): TransformationComponent {

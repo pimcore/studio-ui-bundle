@@ -19,10 +19,6 @@ export type GrayscaleTransformationConfig = Record<string, never>
 export class GrayscaleTransformationType extends TransformationDynamicTypeAbstract<GrayscaleTransformationConfig> {
   readonly id = 'grayscale'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Grayscale'
   }

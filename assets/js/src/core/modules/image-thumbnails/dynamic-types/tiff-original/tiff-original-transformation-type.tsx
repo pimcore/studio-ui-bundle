@@ -19,10 +19,6 @@ export type TiffOriginalTransformationConfig = Record<string, never>
 export class TiffOriginalTransformationType extends TransformationDynamicTypeAbstract<TiffOriginalTransformationConfig> {
   readonly id = 'tifforiginal'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'TIFF Original'
   }

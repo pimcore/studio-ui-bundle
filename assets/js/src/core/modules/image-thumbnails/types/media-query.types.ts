@@ -28,8 +28,6 @@ export interface Transformation {
   type: TransformationType
   /** Configuration arguments for the transformation */
   config: TransformationConfig
-  /** Display label for the transformation */
-  label?: string
 }
 
 export type TransformationType =

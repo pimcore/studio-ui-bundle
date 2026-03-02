@@ -23,15 +23,15 @@ export interface AddOverlayTransformationConfig {
 }
 
 @injectable()
-export class AddOverlayTransformationType extends TransformationDynamicTypeAbstract {
+export class AddOverlayTransformationType extends TransformationDynamicTypeAbstract<AddOverlayTransformationConfig> {
   readonly id = 'addOverlay'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Add Overlay'
+  }
+
+  getSummary (config: AddOverlayTransformationConfig): string {
+    return `Add Overlay${config.path != null ? ` (${config.path})` : ''} at ${config.origin ?? 'top-left'}`
   }
 
   getReactComponent (): TransformationComponent {

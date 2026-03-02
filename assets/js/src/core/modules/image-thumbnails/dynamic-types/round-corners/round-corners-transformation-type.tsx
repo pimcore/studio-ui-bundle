@@ -19,15 +19,15 @@ export interface RoundCornersTransformationConfig {
 }
 
 @injectable()
-export class RoundCornersTransformationType extends TransformationDynamicTypeAbstract {
+export class RoundCornersTransformationType extends TransformationDynamicTypeAbstract<RoundCornersTransformationConfig> {
   readonly id = 'roundCorners'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Round Corners'
+  }
+
+  getSummary (config: RoundCornersTransformationConfig): string {
+    return `Round Corners ${config.width ?? 10}x${config.height ?? 10}px`
   }
 
   getReactComponent (): TransformationComponent {

@@ -19,10 +19,6 @@ export type SepiaTransformationConfig = Record<string, never>
 export class SepiaTransformationType extends TransformationDynamicTypeAbstract<SepiaTransformationConfig> {
   readonly id = 'sepia'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Sepia'
   }

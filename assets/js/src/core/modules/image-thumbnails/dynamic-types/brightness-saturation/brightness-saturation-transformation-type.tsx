@@ -23,12 +23,12 @@ export interface BrightnessSaturationTransformationConfig {
 export class BrightnessSaturationTransformationType extends TransformationDynamicTypeAbstract<BrightnessSaturationTransformationConfig> {
   readonly id = 'brightnessSaturation'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Brightness/Saturation'
+  }
+
+  getSummary (config: BrightnessSaturationTransformationConfig): string {
+    return `Brightness/Saturation (${config.brightness ?? 100}%, ${config.saturation ?? 100}%, ${config.hue ?? 100}%)`
   }
 
   createDefaultConfig (): BrightnessSaturationTransformationConfig {

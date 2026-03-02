@@ -21,12 +21,12 @@ export interface RotateTransformationConfig {
 export class RotateTransformationType extends TransformationDynamicTypeAbstract<RotateTransformationConfig> {
   readonly id = 'rotate'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Rotate'
+  }
+
+  getSummary (config: RotateTransformationConfig): string {
+    return `Rotate ${config.angle ?? '?'}°`
   }
 
   createDefaultConfig (): RotateTransformationConfig {

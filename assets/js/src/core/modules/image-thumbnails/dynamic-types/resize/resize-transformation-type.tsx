@@ -24,12 +24,12 @@ export interface ResizeTransformationConfig {
 export class ResizeTransformationType extends TransformationDynamicTypeAbstract<ResizeTransformationConfig> {
   readonly id = 'resize'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Resize'
+  }
+
+  getSummary (config: ResizeTransformationConfig): string {
+    return `Resize ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   createDefaultConfig (): ResizeTransformationConfig {

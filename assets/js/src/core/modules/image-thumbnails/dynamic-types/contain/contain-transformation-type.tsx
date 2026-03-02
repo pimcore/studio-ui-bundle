@@ -20,15 +20,15 @@ export interface ContainTransformationConfig {
 }
 
 @injectable()
-export class ContainTransformationType extends TransformationDynamicTypeAbstract {
+export class ContainTransformationType extends TransformationDynamicTypeAbstract<ContainTransformationConfig> {
   readonly id = 'contain'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Contain'
+  }
+
+  getSummary (config: ContainTransformationConfig): string {
+    return `Contain ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   getReactComponent (): TransformationComponent {

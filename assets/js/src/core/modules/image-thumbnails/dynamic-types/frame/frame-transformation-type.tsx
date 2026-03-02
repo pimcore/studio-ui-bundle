@@ -23,12 +23,12 @@ export interface FrameTransformationConfig {
 export class FrameTransformationType extends TransformationDynamicTypeAbstract<FrameTransformationConfig> {
   readonly id = 'frame'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Frame'
+  }
+
+  getSummary (config: FrameTransformationConfig): string {
+    return `Frame ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   createDefaultConfig (): FrameTransformationConfig {

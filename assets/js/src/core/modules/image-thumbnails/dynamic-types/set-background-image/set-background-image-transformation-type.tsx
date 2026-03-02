@@ -20,15 +20,15 @@ export interface SetBackgroundImageTransformationConfig {
 }
 
 @injectable()
-export class SetBackgroundImageTransformationType extends TransformationDynamicTypeAbstract {
+export class SetBackgroundImageTransformationType extends TransformationDynamicTypeAbstract<SetBackgroundImageTransformationConfig> {
   readonly id = 'setBackgroundImage'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Set Background Image'
+  }
+
+  getSummary (config: SetBackgroundImageTransformationConfig): string {
+    return `Background Image${config.path != null ? ` (${config.path})` : ''}`
   }
 
   getReactComponent (): TransformationComponent {

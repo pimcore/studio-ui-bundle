@@ -24,10 +24,6 @@ export interface SharpenTransformationConfig {
 export class SharpenTransformationType extends TransformationDynamicTypeAbstract {
   readonly id = 'sharpen'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Sharpen'
   }

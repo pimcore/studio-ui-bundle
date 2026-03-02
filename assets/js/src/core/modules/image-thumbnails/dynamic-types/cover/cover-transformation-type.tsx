@@ -21,15 +21,15 @@ export interface CoverTransformationConfig {
 }
 
 @injectable()
-export class CoverTransformationType extends TransformationDynamicTypeAbstract {
+export class CoverTransformationType extends TransformationDynamicTypeAbstract<CoverTransformationConfig> {
   readonly id = 'cover'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Cover'
+  }
+
+  getSummary (config: CoverTransformationConfig): string {
+    return `Cover ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   getReactComponent (): TransformationComponent {

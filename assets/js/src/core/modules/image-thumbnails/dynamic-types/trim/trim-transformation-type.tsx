@@ -21,12 +21,12 @@ export interface TrimTransformationConfig {
 export class TrimTransformationType extends TransformationDynamicTypeAbstract<TrimTransformationConfig> {
   readonly id = 'trim'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Trim'
+  }
+
+  getSummary (config: TrimTransformationConfig): string {
+    return `Trim (tolerance: ${config.tolerance ?? 'not set'})`
   }
 
   createDefaultConfig (): TrimTransformationConfig {

@@ -24,12 +24,12 @@ export interface CropTransformationConfig {
 export class CropTransformationType extends TransformationDynamicTypeAbstract<CropTransformationConfig> {
   readonly id = 'crop'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return 'Crop'
+  }
+
+  getSummary (config: CropTransformationConfig): string {
+    return `Crop ${config.width ?? '?'}x${config.height ?? '?'} at (${config.x ?? '?'}, ${config.y ?? '?'})`
   }
 
   createDefaultConfig (): CropTransformationConfig {

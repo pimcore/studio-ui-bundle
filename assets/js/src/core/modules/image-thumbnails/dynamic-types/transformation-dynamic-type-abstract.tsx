@@ -16,11 +16,14 @@ import type { TransformationComponent } from '../types/transformation-component-
 export abstract class TransformationDynamicTypeAbstract<TAttributes = any> extends DynamicTypeAbstract {
   abstract readonly id: string
 
-  abstract getName (): string
   abstract getLabel (): string
 
   getId (): string {
     return this.id
+  }
+
+  getSummary (config: TAttributes): string {
+    return this.getLabel()
   }
 
   async configureTransformation (defaultConfig?: TAttributes): Promise<TAttributes | null> {

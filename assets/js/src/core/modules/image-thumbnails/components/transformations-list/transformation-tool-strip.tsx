@@ -35,7 +35,7 @@ export const TransformationToolStrip = ({
 
   const transformationDynamicTypeRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
   const transformationType = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
-  const title = transformationType?.getName() ?? transformation.type
+  const title = transformationType?.getSummary(transformation.config) ?? transformation.type
 
   return (
     <ToolStrip title={ title }>

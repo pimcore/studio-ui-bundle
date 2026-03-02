@@ -19,15 +19,15 @@ export interface ApplyMaskTransformationConfig {
 }
 
 @injectable()
-export class ApplyMaskTransformationType extends TransformationDynamicTypeAbstract {
+export class ApplyMaskTransformationType extends TransformationDynamicTypeAbstract<ApplyMaskTransformationConfig> {
   readonly id = 'applyMask'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Apply Mask'
+  }
+
+  getSummary (config: ApplyMaskTransformationConfig): string {
+    return `Apply Mask${config.path != null ? ` (${config.path})` : ''}`
   }
 
   getReactComponent (): TransformationComponent {

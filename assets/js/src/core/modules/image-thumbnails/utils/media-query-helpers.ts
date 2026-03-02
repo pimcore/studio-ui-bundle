@@ -62,7 +62,6 @@ export const convertFromBackendFormat = (
         id: generateTransformationId(),
         type: t.method as TransformationType, // Direct usage with type casting
         config: t.arguments ?? {},
-        label: getTransformationLabel(t.method, t.arguments)
       })),
       order: (mediaOrder[queryName] === 0 ? 0 : mediaOrder[queryName]) ?? 0
     }
@@ -87,60 +86,6 @@ export const getDisplayName = (query: string): string => {
   return query.length > 20 ? query.substring(0, 20) + '...' : query
 }
 
-const getTransformationLabel = (method: string, args: Record<string, any> = {}): string => {
-  const formatPath = (path: any): string => {
-    return (path != null && typeof path === 'string') ? `(${path})` : ''
-  }
-
-  switch (method) {
-    case 'resize':
-      return `Resize ${args.width ?? '?'}x${args.height ?? '?'}`
-    case 'scaleByHeight':
-      return `Scale by Height ${args.height ?? '?'}px`
-    case 'cover':
-      return `Cover ${args.width ?? '?'}x${args.height ?? '?'}`
-    case 'trim':
-      return `Trim (tolerance: ${args.tolerance ?? 'not set'})`
-    case 'sepia':
-      return 'Sepia Effect'
-    case 'grayscale':
-      return 'Grayscale Effect'
-    case 'sharpen':
-      return 'Sharpen Effect'
-    case 'contain':
-      return `Contain ${args.width ?? '?'}x${args.height ?? '?'}`
-    case 'crop':
-      return `Crop ${args.width ?? '?'}x${args.height ?? '?'} at (${args.x ?? '?'}, ${args.y ?? '?'})`
-    case 'frame':
-      return `Frame ${args.width ?? '?'}x${args.height ?? '?'}`
-    case 'rotate':
-      return `Rotate ${args.angle ?? '?'}°`
-    case 'mirror':
-      return `Mirror ${args.mode ?? 'horizontal'}`
-    case 'gaussianBlur':
-      return `Gaussian Blur (radius: ${args.radius ?? '?'}, sigma: ${args.sigma ?? '?'})`
-    case 'brightnessSaturation':
-      return `Brightness/Saturation (${args.brightness ?? 100}%, ${args.saturation ?? 100}%, ${args.hue ?? 100}%)`
-    case 'setBackgroundColor':
-      return `Background Color: ${args.color ?? '#ffffff'}`
-    case 'setBackgroundImage':
-      return `Background Image ${formatPath(args.path)}`
-    case 'roundCorners':
-      return `Round Corners ${args.width ?? 10}x${args.height ?? 10}px`
-    case 'addOverlay':
-      return `Add Overlay ${formatPath(args.path)} at ${args.origin ?? 'top-left'}`
-    case 'addOverlayFit':
-      return `Add Overlay Fit ${formatPath(args.path)} at ${args.origin ?? 'center'}`
-    case 'applyMask':
-      return `Apply Mask ${formatPath(args.path)}`
-    case 'tifforiginal':
-      return 'TIFF Original'
-    case '1x1_pixel':
-      return '1x1 Pixel'
-    default:
-      return method
-  }
-}
 /**
  * Generate unique ID for media query
  */

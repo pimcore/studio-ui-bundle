@@ -19,15 +19,15 @@ export interface ScaleByHeightTransformationConfig {
 }
 
 @injectable()
-export class ScaleByHeightTransformationType extends TransformationDynamicTypeAbstract {
+export class ScaleByHeightTransformationType extends TransformationDynamicTypeAbstract<ScaleByHeightTransformationConfig> {
   readonly id = 'scaleByHeight'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Scale by Height'
+  }
+
+  getSummary (config: ScaleByHeightTransformationConfig): string {
+    return `Scale by Height ${config.height ?? '?'}px`
   }
 
   getReactComponent (): TransformationComponent {

@@ -18,15 +18,15 @@ export interface SetBackgroundColorTransformationConfig {
 }
 
 @injectable()
-export class SetBackgroundColorTransformationType extends TransformationDynamicTypeAbstract {
+export class SetBackgroundColorTransformationType extends TransformationDynamicTypeAbstract<SetBackgroundColorTransformationConfig> {
   readonly id = 'setBackgroundColor'
-
-  getName (): string {
-    return this.id
-  }
 
   getLabel (): string {
     return 'Set Background Color'
+  }
+
+  getSummary (config: SetBackgroundColorTransformationConfig): string {
+    return `Background Color: ${config.color ?? '#ffffff'}`
   }
 
   getReactComponent (): TransformationComponent {

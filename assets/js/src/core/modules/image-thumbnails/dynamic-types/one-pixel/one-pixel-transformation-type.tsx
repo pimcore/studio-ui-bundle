@@ -19,10 +19,6 @@ export type OnePixelTransformationConfig = Record<string, never>
 export class OnePixelTransformationType extends TransformationDynamicTypeAbstract<OnePixelTransformationConfig> {
   readonly id = '1x1_pixel'
 
-  getName (): string {
-    return this.id
-  }
-
   getLabel (): string {
     return '1x1 Pixel'
   }
