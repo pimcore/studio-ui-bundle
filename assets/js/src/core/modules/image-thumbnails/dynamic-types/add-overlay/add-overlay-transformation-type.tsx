@@ -31,7 +31,7 @@ export class AddOverlayTransformationType extends TransformationDynamicTypeAbstr
   }
 
   getSummary (config: AddOverlayTransformationConfig): string {
-    const pathPart = config.path != null ? ` (${config.path})` : ''
+    const pathPart = config.path == null ? '' : ` (${config.path})`
     return `Add Overlay${pathPart} at ${config.origin ?? 'top-left'}`
   }
 

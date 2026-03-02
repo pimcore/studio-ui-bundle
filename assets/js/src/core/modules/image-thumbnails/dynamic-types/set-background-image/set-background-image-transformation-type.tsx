@@ -28,7 +28,7 @@ export class SetBackgroundImageTransformationType extends TransformationDynamicT
   }
 
   getSummary (config: SetBackgroundImageTransformationConfig): string {
-    const pathPart = config.path != null ? ` (${config.path})` : ''
+    const pathPart = config.path == null ? '' : ` (${config.path})`
     return `Background Image${pathPart}`
   }
 
