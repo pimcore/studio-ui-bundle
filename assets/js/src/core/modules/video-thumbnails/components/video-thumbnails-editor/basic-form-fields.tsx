@@ -47,7 +47,6 @@ export const BasicFormFields = ({ onPresettingChange }: BasicFormFieldsProps): R
         name="description"
       >
         <TextArea
-          placeholder={ t('video-thumbnails.editor.description-placeholder') }
           rows={ 4 }
         />
       </Form.Item>
@@ -56,7 +55,7 @@ export const BasicFormFields = ({ onPresettingChange }: BasicFormFieldsProps): R
         label={ t('video-thumbnails.editor.group') }
         name="group"
       >
-        <Input placeholder={ t('video-thumbnails.editor.group-placeholder') } />
+        <Input />
       </Form.Item>
 
       <Form.Item
@@ -67,7 +66,6 @@ export const BasicFormFields = ({ onPresettingChange }: BasicFormFieldsProps): R
           allowClear
           onChange={ onPresettingChange }
           options={ PRESETTING_OPTIONS }
-          placeholder={ t('video-thumbnails.editor.presetting-placeholder') }
         />
       </Form.Item>
 

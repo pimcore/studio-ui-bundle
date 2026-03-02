@@ -34,10 +34,11 @@ export const VideoMediaQueriesPanel = ({
   )
 
   const handleAddMediaQuery = useCallback(() => {
+
     modal.input({
       title: t('video-thumbnails.editor.media-segments.add.title'),
-      label: t('video-thumbnails.editor.media-segments.add.label'),
-      okText: 'Create',
+      label: t('video-thumbnails.editor.media-segments.add.bitrate-hint'),
+      okText: t('video-thumbnails.editor.media-segments.add.ok'),
       cancelButtonProps: { style: { display: 'none' } },
       maskClosable: true,
       rule: {
