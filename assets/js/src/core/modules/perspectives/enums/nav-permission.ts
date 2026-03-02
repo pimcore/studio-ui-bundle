@@ -21,6 +21,9 @@ export enum NavPermission {
   PredefinedProperties = 'dataManagement.predefinedProperties',
   TagConfiguration = 'dataManagement.tagConfiguration',
   GDPRDataExtractor = 'dataManagement.gdprDataExtractor',
+  ClassDefinitions = 'dataManagement.dataModel_classes',
+  FieldCollections = 'dataManagement.dataModel_fieldCollections',
+  ObjectBricks = 'dataManagement.dataModel_objectBricks',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
 
@@ -46,6 +49,7 @@ export enum NavPermission {
   WidgetEditor = 'system.widgetEditor',
   ApplicationLogger = 'system.applicationLogger',
   About = 'system.about',
+  SystemSettings = 'system.systemSettings',
 
-  SearchHidden = 'search.hidden',
+  SearchHidden = 'search.hidden'
 }

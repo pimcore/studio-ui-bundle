@@ -88,7 +88,7 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-1 {
-        padding: 0px 10px 0px 10px;
+        padding: 0px ${token.paddingXXS}px 0px 10px;
       }
 
       .main-nav__list-detail {

@@ -1,6 +1,10 @@
 import fs from 'fs';
 import type { RsbuildPlugin, ManifestData, OnAfterBuildFn, OnDevCompileDoneFn } from '@rsbuild/core';
 
+interface PluginOptions {
+  alternativePluginExportPath?: string;
+}
+
 interface EntrypointJson {
   entrypoints: {
     [key: string]: {
@@ -19,7 +23,7 @@ interface DevServerContext {
 type parameters = Parameters<OnAfterBuildFn | OnDevCompileDoneFn>;
 type data = parameters[0];
 
-const generateEntrypoints = (data: data, devServer?: DevServerContext): EntrypointJson => {
+const generateEntrypoints = (data: data, devServer?: DevServerContext, options?: PluginOptions): EntrypointJson => {
   const manifest: ManifestData = data.environments.web.manifest as unknown as ManifestData;
   const entrypoints: EntrypointJson = {
     entrypoints: {}
@@ -116,10 +120,19 @@ const generateEntrypoints = (data: data, devServer?: DevServerContext): Entrypoi
         window.pluginRemotes = {}
       }
 
+      if (window.alternativePluginExportPaths === undefined) {
+        window.alternativePluginExportPaths = {}
+      }
+
       ${Object.entries(remoteEntrypoints).map((entrypoint) => {
         const [key, value] = entrypoint;
         return `window.pluginRemotes.${key} = "${hasDevServer && !hasDomain ? `http${devServer.https ? 's' : ''}://${host}:${devServer.port}` : ''}${value}"`
       })}
+
+      ${options?.alternativePluginExportPath ? Object.entries(remoteEntrypoints).map((entrypoint) => {
+        const [key, value] = entrypoint;
+        return `window.alternativePluginExportPaths.${key} = "${options.alternativePluginExportPath}"`
+      }).join('\n      ') : ''}
     `
   )
 
@@ -131,18 +144,18 @@ const generateEntrypoints = (data: data, devServer?: DevServerContext): Entrypoi
   return entrypoints;
 }
 
-export const pluginGenerateEntrypoints = (): RsbuildPlugin => ({
+export const pluginGenerateEntrypoints = (options?: PluginOptions): RsbuildPlugin => ({
   name: 'entrypoints-generate',
   setup(api) {
     api.onAfterBuild((data) => {
-      const entrypoints = generateEntrypoints(data);
+      const entrypoints = generateEntrypoints(data, undefined, options);
       const outPath = data.environments.web.config.output.distPath.root
       const entrypointsPath = `${outPath}/entrypoints.json`;
       fs.writeFileSync(entrypointsPath, JSON.stringify(entrypoints, null, 2), 'utf-8');
     })
 
     api.onDevCompileDone((data) => {
-      const entrypoints = generateEntrypoints(data, api.context.devServer);
+      const entrypoints = generateEntrypoints(data, api.context.devServer, options);
       const outPath = data.environments.web.config.output.distPath.root
       const entrypointsPath = `${outPath}/entrypoints.json`;
       fs.writeFileSync(entrypointsPath, JSON.stringify(entrypoints, null, 2), 'utf-8');

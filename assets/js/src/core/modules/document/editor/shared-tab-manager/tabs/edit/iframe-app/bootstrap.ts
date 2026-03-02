@@ -22,6 +22,7 @@ declare global {
   interface Window {
     Pimcore: typeof Pimcore
     pluginRemotes: Record<string, string>
+    alternativePluginExportPaths: Record<string, string>
   }
 }
 

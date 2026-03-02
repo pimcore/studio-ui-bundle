@@ -11,7 +11,6 @@
 import React, { useCallback } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { DragOverlay, type DragAndDropInfo } from '@sdk/components'
-import { GlobalStyle } from './draggable.styles'
 import { isNull } from 'lodash'
 import { getIframeOffset } from '@sdk/utils'
 
@@ -107,7 +106,6 @@ function Draggable ({ children, info }: DraggableProps): React.JSX.Element {
       onDragStart={ handleDragStart }
       role="none"
     >
-      <GlobalStyle />
       {children}
     </div>
   )

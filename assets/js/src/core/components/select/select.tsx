@@ -10,7 +10,7 @@
 
 import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
-import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps, Skeleton } from 'antd'
 import cn from 'classnames'
 import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -28,13 +28,30 @@ export type SelectTheme = 'default' | 'primary'
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  dataTestId?: string
   inherited?: boolean
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
+  loadingSkeleton?: boolean
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({
+  customIcon,
+  customArrowIcon,
+  mode,
+  status,
+  className,
+  allowClear,
+  inherited,
+  value,
+  width,
+  minWidth,
+  theme = 'default',
+  loadingSkeleton = false,
+  dataTestId,
+  ...antdSelectProps
+}, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
@@ -63,6 +80,24 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const computedWidth = getComputedWidth()
 
   const { styles } = useStyles({ width: computedWidth, theme })
+
+  // Show skeleton if loading
+  if (loadingSkeleton) {
+    // Map Select size to Skeleton size
+    const getSkeletonSize = (): 'small' | 'default' | 'large' => {
+      if (antdSelectProps.size === 'small') return 'small'
+      if (antdSelectProps.size === 'large') return 'large'
+      return 'default'
+    }
+
+    return (
+      <Skeleton.Input
+        active
+        size={ getSkeletonSize() }
+        style={ { width: computedWidth } }
+      />
+    )
+  }
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
@@ -126,13 +161,15 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }
 
   return (
-    <div className={ selectContainerClassNames }>
-      {withCustomIcon && (
-        <Icon
-          className={ customIconClassNames }
-          value={ customIcon! }
-        />
-      )}
+    <div
+      className={ selectContainerClassNames }
+      data-testid={ dataTestId }
+    >      {withCustomIcon && (
+    <Icon
+      className={ customIconClassNames }
+      value={ customIcon! }
+    />
+    )}
       <AntdSelect
         allowClear={ allowClear }
         className={ selectClassNames }

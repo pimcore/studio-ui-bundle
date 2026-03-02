@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isEqual, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -25,6 +25,7 @@ import {
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
 import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
@@ -54,6 +55,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   inherited?: boolean
   readOnly?: boolean
   vertical?: boolean
+  hideOpenButton?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -68,7 +70,10 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
+  const { value, handleChange: handleValueChange } = useControlledState<ManyToOneRelationValueType>(
+    props.value ?? null,
+    props.onChange
+  )
 
   const { openElement, mapToElementType } = useElementHelper()
   const { download } = useDownload()
@@ -77,22 +82,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  useEffect(() => {
-    if (!isEqual(value, props.value ?? null)) {
-      props.onChange?.(value)
-    }
-  }, [value])
-
-  useEffect(() => {
-    setValue(props.value ?? null)
-  }, [props.value])
-
   const clickOpenElement = (): void => {
     if (value !== null) {
       if (value.textInput === true) {
         window.open(value.fullPath, '_blank', 'noopener,noreferrer')
       } else {
-        const elementType = mapToElementType(value.type)
+        const elementType = mapToElementType(value.type, true)
         if (!isUndefined(elementType)) {
           openElement({ type: elementType, id: value.id }).catch(() => { })
         }
@@ -104,6 +99,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   const isEnabled = props.disabled !== true && props.readOnly !== true
 
+  const { hideOpenButton, ...inputProps } = props
+
   return (
     <Flex
       className={ cn(styles.container, props.className) }
@@ -114,15 +111,15 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       vertical={ props.vertical }
     >
       <ManyToOneRelationInput
-        { ...props }
-        onChange={ setValue }
+        { ...inputProps }
+        onChange={ handleValueChange }
         value={ value }
       />
       <Flex
         gap="extra-small"
         justify={ props.vertical === true ? 'start' : undefined }
       >
-        {(props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
+        {props.hideOpenButton !== true && (props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
             title={ t('open') }
@@ -162,7 +159,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             <IconButton
               icon={ { value: 'trash' } }
               onClick={ () => {
-                setValue(null)
+                handleValueChange(null)
               } }
               type="default"
             />
@@ -177,7 +174,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
               config: createElementSelectorConfig(props),
               onFinish: (event) => {
                 if (!isEmpty(event.items)) {
-                  setValue({
+                  handleValueChange({
                     type: event.items[0].elementType,
                     subtype: event.items[0].data.type,
                     id: event.items[0].data.id,

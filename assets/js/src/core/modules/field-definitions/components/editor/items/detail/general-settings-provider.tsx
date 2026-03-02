@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type CustomLayouts, type ClassDefinition } from '@sdk/api/class-definition'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-export type GeneralSettings = ClassDefinition | CustomLayouts
+export type GeneralSettings = Record<string, unknown>
 
 export interface IGeneralSettingsContext {
   generalSettings: GeneralSettings | undefined
+  setGeneralSettings: (settings: GeneralSettings | undefined) => void
 }
 
 export const GeneralSettingsContext = createContext<IGeneralSettingsContext | undefined>(undefined)
@@ -29,8 +29,20 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
   useEffect(() => {
     setGeneralSettings(props.generalSettings)
   }, [props.generalSettings])
+
+  const updateGeneralSettings = (settings: GeneralSettings | undefined): void => {
+    /* eslint-disable  @typescript-eslint/consistent-type-assertions */
+    setGeneralSettings((oldSettings) => {
+      return {
+        ...oldSettings,
+        ...settings
+      } as GeneralSettings
+    })
+    /* eslint-enable  @typescript-eslint/consistent-type-assertions */
+  }
+
   return useMemo(() => (
-    <GeneralSettingsContext.Provider value={ { generalSettings } }>
+    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings } }>
       {props.children}
     </GeneralSettingsContext.Provider>
   ), [generalSettings, props.children])

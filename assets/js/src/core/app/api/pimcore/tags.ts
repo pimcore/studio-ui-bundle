@@ -67,7 +67,22 @@ export const tagNames = {
   USER_DETAIL: 'USER_DETAIL',
   USER_TREE: 'USER_TREE',
   GDPR_DATA: 'GDPR_DATA',
-  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL'
+  GDPR_DATA_DETAIL: 'GDPR_DATA_DETAIL',
+  CLASS_DEFINITION: 'CLASS_DEFINITION',
+  CLASS_DEFINITION_DETAIL: 'CLASS_DEFINITION_DETAIL',
+  CLASS_DEFINITION_COLLECTION: 'CLASS_DEFINITION_COLLECTION',
+  CUSTOM_LAYOUT: 'CUSTOM_LAYOUT',
+  CUSTOM_LAYOUT_DETAIL: 'CUSTOM_LAYOUT_DETAIL',
+  CUSTOM_LAYOUT_COLLECTION: 'CUSTOM_LAYOUT_COLLECTION',
+  FIELD_COLLECTION: 'FIELD_COLLECTION',
+  FIELD_COLLECTION_DETAIL: 'FIELD_COLLECTION_DETAIL',
+  FIELD_COLLECTION_COLLECTION: 'FIELD_COLLECTION_COLLECTION',
+  OBJECT_BRICK: 'OBJECT_BRICK',
+  OBJECT_BRICK_DETAIL: 'OBJECT_BRICK_DETAIL',
+  OBJECT_BRICK_COLLECTION: 'OBJECT_BRICK_COLLECTION',
+  OBJECT_BRICK_CUSTOM_LAYOUT: 'OBJECT_BRICK_CUSTOM_LAYOUT',
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: 'OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL',
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: 'OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION'
 }
 
 export const providingTags = {
@@ -140,7 +155,22 @@ export const providingTags = {
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
   USER_TREE: () => [tagNames.USER_TREE],
   GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
-  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [tagNames.CLASS_DEFINITION, { type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [tagNames.CUSTOM_LAYOUT, { type: tagNames.CUSTOM_LAYOUT_DETAIL, id }],
+  FIELD_COLLECTION: () => [tagNames.FIELD_COLLECTION],
+  FIELD_COLLECTION_COLLECTION: () => [tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_COLLECTION],
+  FIELD_COLLECTION_DETAIL: (key: string) => [tagNames.FIELD_COLLECTION, { type: tagNames.FIELD_COLLECTION_DETAIL, id: key }],
+  OBJECT_BRICK: () => [tagNames.OBJECT_BRICK],
+  OBJECT_BRICK_COLLECTION: () => [tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_COLLECTION],
+  OBJECT_BRICK_DETAIL: (key: string) => [tagNames.OBJECT_BRICK, { type: tagNames.OBJECT_BRICK_DETAIL, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT: () => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT],
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: (key: string) => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, { type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: (key: string, id: string) => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, { type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, id: `${key}-${id}` }]
 }
 
 export const invalidatingTags = {
@@ -203,7 +233,22 @@ export const invalidatingTags = {
   USER_DETAIL: (id: number) => [{ type: tagNames.USER_DETAIL, id }],
   USER_TREE: () => [tagNames.USER_TREE],
   GDPR_DATA: (providerKey: string) => [{ type: tagNames.GDPR_DATA, id: providerKey }],
-  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }]
+  GDPR_DATA_DETAIL: (providerKey: string, id: number) => [{ type: tagNames.GDPR_DATA_DETAIL, id: `${providerKey}-${id}` }],
+  CLASS_DEFINITION: () => [tagNames.CLASS_DEFINITION],
+  CLASS_DEFINITION_COLLECTION: () => [tagNames.CLASS_DEFINITION_COLLECTION],
+  CLASS_DEFINITION_DETAIL: (id: string) => [{ type: tagNames.CLASS_DEFINITION_DETAIL, id }],
+  CUSTOM_LAYOUT: () => [tagNames.CUSTOM_LAYOUT],
+  CUSTOM_LAYOUT_COLLECTION: () => [tagNames.CUSTOM_LAYOUT_COLLECTION],
+  CUSTOM_LAYOUT_DETAIL: (id: string) => [{ type: tagNames.CUSTOM_LAYOUT_DETAIL, id }],
+  FIELD_COLLECTION: () => [tagNames.FIELD_COLLECTION],
+  FIELD_COLLECTION_COLLECTION: () => [tagNames.FIELD_COLLECTION_COLLECTION],
+  FIELD_COLLECTION_DETAIL: (key: string) => [{ type: tagNames.FIELD_COLLECTION_DETAIL, id: key }],
+  OBJECT_BRICK: () => [tagNames.OBJECT_BRICK],
+  OBJECT_BRICK_COLLECTION: () => [tagNames.OBJECT_BRICK_COLLECTION],
+  OBJECT_BRICK_DETAIL: (key: string) => [{ type: tagNames.OBJECT_BRICK_DETAIL, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT: () => [tagNames.OBJECT_BRICK_CUSTOM_LAYOUT],
+  OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION: (key: string) => [{ type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, id: key }],
+  OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL: (key: string, id: string) => [{ type: tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, id: `${key}-${id}` }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

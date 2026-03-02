@@ -20,14 +20,16 @@
 
 /* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { buildTree } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
+import { useGlobalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitions/utils/global-clipboard'
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
-import { serviceIds, useInjection } from '@sdk/app'
-import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem } from '@sdk/components'
+import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
+import { Divider, theme } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface DetailSidebarProps {
   allowExternalDrop?: boolean
@@ -48,6 +50,9 @@ export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   const { useLayout } = useSettings()
+  const { detailView, setDetailView } = useItems()
+  const { t } = useTranslation()
+  const { token } = theme.useToken()
 
   const {
     allowExternalDrop = false
@@ -77,7 +82,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     getLayout
   } = useLayout()
 
-  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const { fieldDefinitionRegistry } = useSettings()
+
+  const { copiedLayout: globalCopiedLayout } = useGlobalFieldDefinitionClipboard()
 
   // Function to get all keys from tree structure that have children
   const getAllKeys = (node: StructureNode): string[] => {
@@ -105,6 +112,9 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   // Track if we've set initial keys
   const hasInitializedRef = React.useRef(false)
 
+  // Track cloned node IDs to expand them when they appear in structure
+  const pendingClonedNodeIdRef = React.useRef<string | null>(null)
+
   // Set initial expanded keys once when data arrives
   useEffect(() => {
     if (!hasInitializedRef.current && allAvailableKeys.length > 0) {
@@ -113,6 +123,34 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       hasInitializedRef.current = true
     }
   }, [allAvailableKeys])
+
+  // Expand cloned nodes when they appear in structure
+  useEffect(() => {
+    if (pendingClonedNodeIdRef.current !== null && structure !== undefined) {
+      const clonedNodeId = pendingClonedNodeIdRef.current
+      const findNodeInStructure = (node: StructureNode, targetId: string): StructureNode | undefined => {
+        if (node.id === targetId) return node
+        for (const child of node.children) {
+          const found = findNodeInStructure(child, targetId)
+          if (found !== undefined) return found
+        }
+        return undefined
+      }
+
+      const clonedNode = findNodeInStructure(structure, clonedNodeId)
+      if (clonedNode !== undefined) {
+        const keysToExpand = getAllKeys(clonedNode)
+        if (keysToExpand.length > 0) {
+          setExpandedKeys(prev => {
+            const newKeys = [...new Set([...prev, ...keysToExpand])]
+            expandedKeysRef.current = newKeys
+            return newKeys
+          })
+        }
+        pendingClonedNodeIdRef.current = null
+      }
+    }
+  }, [structure])
 
   // Ref for expanded keys (needed in sorting-bottom isValidContext)
   const expandedKeysRef = React.useRef<string[]>(expandedKeys)
@@ -189,7 +227,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       return titleComponent
     }
 
-    if (currentFieldDefinition.name !== 'pimcore_root') {
+    if (node.key !== structure?.id) {
       const treeNode = node as TreeDataItem
       const currentPath = Array.isArray(treeNode.meta?.currentPath) ? treeNode.meta.currentPath as string[] : []
       const layout = getLayout({ startNode: node.key.toString() })
@@ -197,10 +235,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         return <></>
       }
 
+      const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDefinition.fieldtype, false)
+
       const info: FieldDefinitionDragDropInfo = {
         type: 'field-definition',
-        icon: { ...currentFieldDefinition.icon },
-        title: currentFieldDefinition.title ?? currentFieldDefinition.name,
+        icon: (currentDynType !== undefined) ? { ...currentDynType.getIcon(), iconColorGroup: ['fieldDefinition_' + currentDynType.id, 'fieldDefinition'] } : { value: 'unknown' },
+        title: currentFieldDefinition.name,
         data: {
           area,
           internal: {
@@ -249,7 +289,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                       return
                     }
 
-                    addExternalFieldDefinition(parentId, info.data.external, targetIndex)
+                    const newNode = addExternalFieldDefinition(parentId, info.data.external, targetIndex)
+                    if (allowExternalDrop) {
+                      const parentPath = currentPath.slice(0, -1)
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...parentPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                 }
               },
@@ -271,7 +323,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                   if (isEqual(info.data.area, area)) {
                     moveFieldDefinition(info.data.internal.id as string, targetNodeId, 0)
                   } else {
-                    addExternalFieldDefinition(targetNodeId, info.data.external as Layout, 0)
+                    const newNode = addExternalFieldDefinition(targetNodeId, info.data.external as Layout, 0)
+                    if (allowExternalDrop) {
+                      const targetPath = findCurrentPath(targetNodeId) ?? []
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, targetNodeId, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...targetPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                   expandNode(targetNodeId)
                 }
@@ -310,7 +374,19 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                       return
                     }
 
-                    addExternalFieldDefinition(parentId, (info as FieldDefinitionDragDropInfo).data.external, insertIndex)
+                    const newNode = addExternalFieldDefinition(parentId, (info as FieldDefinitionDragDropInfo).data.external, insertIndex)
+                    if (allowExternalDrop) {
+                      const parentPath = currentPath.slice(0, -1)
+                      const keysToExpand = getAllKeys(newNode)
+                      setExpandedKeys(prev => {
+                        const newKeys = [...new Set([...prev, ...keysToExpand])]
+                        expandedKeysRef.current = newKeys
+                        return newKeys
+                      })
+                      setCurrentFieldDefinitionId(newNode.id)
+                      setCurrentFieldDefinitionIdPath([...parentPath, newNode.id])
+                      setDetailView('layout')
+                    }
                   }
                 }
               }
@@ -322,7 +398,49 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       )
     }
 
-    return titleComponent
+    // Root node — not draggable, but accepts drops
+    return (
+      <HotspotDroppable
+        hotspots={ [
+          {
+            id: 'drop-middle',
+            position: { x: '0', y: '0', width: '100%', height: '100%' },
+            isValidContext: (info) => {
+              if (info.type !== 'field-definition') return false
+              const rootPath = [structure.id]
+              if (isEqual((info as FieldDefinitionDragDropInfo).data.area, area)) {
+                const draggedCurrentPath = findCurrentPath((info as FieldDefinitionDragDropInfo).data.internal.id) ?? []
+                return isValidChildFieldDefinition(rootPath, draggedCurrentPath)
+              }
+              const externalLayout = (info as FieldDefinitionDragDropInfo).data.external
+              return allowExternalDrop && externalLayout !== undefined && isValidExternalChildFieldDefinition(rootPath, externalLayout)
+            },
+            onDrop: (info) => {
+              const rootId = structure.id
+              if (isEqual(info.data.area, area)) {
+                moveFieldDefinition((info as FieldDefinitionDragDropInfo).data.internal.id, rootId, 0)
+              } else {
+                const newNode = addExternalFieldDefinition(rootId, (info as FieldDefinitionDragDropInfo).data.external, 0)
+                if (allowExternalDrop) {
+                  const keysToExpand = getAllKeys(newNode)
+                  setExpandedKeys(prev => {
+                    const newKeys = [...new Set([...prev, rootId, ...keysToExpand])]
+                    expandedKeysRef.current = newKeys
+                    return newKeys
+                  })
+                  setCurrentFieldDefinitionId(newNode.id)
+                  setCurrentFieldDefinitionIdPath([rootId, newNode.id])
+                  setDetailView('layout')
+                }
+              }
+              expandNode(rootId)
+            }
+          }
+        ] }
+      >
+        {titleComponent}
+      </HotspotDroppable>
+    )
   }
 
   const items: ITreeElementProps['treeData'] = React.useMemo(() => {
@@ -341,12 +459,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
         return {
           ...initialTreeItem,
-          ...(fieldDefinition.name === 'pimcore_root' ? { title: 'Base', icon: <Icon value="folder" /> } : {}),
+          ...(initialTreeItem.key === structure?.id ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
           className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
           actions: [
             ...(actions ?? []),
 
-            ...(fieldDefinition.name !== 'pimcore_root' && !isCustomLayout
+            ...(initialTreeItem.key !== structure?.id && !isCustomLayout
               ? [
                   {
                     key: 'copy',
@@ -362,7 +480,14 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
                 }]
               : []),
 
-            ...(fieldDefinition.name !== 'pimcore_root'
+            ...(!isCustomLayout && copiedPath === undefined && globalCopiedLayout !== undefined && isValidExternalChildFieldDefinition(currentPath as string[], globalCopiedLayout)
+              ? [{
+                  key: 'paste',
+                  icon: 'paste'
+                }]
+              : []),
+
+            ...(initialTreeItem.key !== structure?.id
               ? [
                   {
                     key: 'delete',
@@ -376,11 +501,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     })
 
     return [treeItems]
-  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {
-      cloneFieldDefinition(nodeKey)
+      const clonedNodeId = cloneFieldDefinition(nodeKey)
+      pendingClonedNodeIdRef.current = clonedNodeId
     }
 
     if (actionKey === 'delete') {
@@ -392,7 +518,23 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     }
 
     if (actionKey === 'paste') {
-      pasteFieldDefinition(node.meta?.currentPath as string[] ?? [])
+      if (copiedPath !== undefined) {
+        pasteFieldDefinition(node.meta?.currentPath as string[] ?? [])
+      } else if (globalCopiedLayout !== undefined) {
+        const newNode = addExternalFieldDefinition(nodeKey, globalCopiedLayout)
+        const keysToExpand = getAllKeys(newNode)
+        if (keysToExpand.length > 0) {
+          setExpandedKeys(prev => {
+            const newKeys = [...new Set([...prev, ...keysToExpand])]
+            expandedKeysRef.current = newKeys
+            return newKeys
+          })
+        }
+        expandNode(nodeKey)
+        setCurrentFieldDefinitionId(newNode.id)
+        setCurrentFieldDefinitionIdPath([...(node.meta?.currentPath as string[] ?? []), newNode.id])
+        setDetailView('layout')
+      }
     }
 
     if (actionKey.startsWith('add-')) {
@@ -403,6 +545,8 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       const newlyAddedFieldId = addFieldDefinition(nodeKey, newFieldDefData)
       setCurrentFieldDefinitionId(newlyAddedFieldId)
       setCurrentFieldDefinitionIdPath([...node?.meta?.currentPath ?? [], newlyAddedFieldId])
+      setDetailView('layout')
+      expandNode(nodeKey)
     }
 
     if (actionKey.startsWith('convert-')) {
@@ -437,9 +581,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   }
 
   const onSelected: ITreeElementProps['onSelected'] = (key: string, node) => {
-    const fieldDef = fieldDefinitions[key]
-
-    if (fieldDef.name === 'pimcore_root') {
+    if (key === structure?.id) {
       setCurrentFieldDefinitionId(null)
       setCurrentFieldDefinitionIdPath(null)
       return
@@ -447,6 +589,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
     setCurrentFieldDefinitionId(key)
     setCurrentFieldDefinitionIdPath(node.meta?.currentPath as string[] ?? null)
+    setDetailView('layout')
   }
 
   return (
@@ -454,6 +597,49 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
+      <Content
+        padded
+        padding={ { top: 'none', x: 'extra-small' } }
+        style={ { height: 'fit-content' } }
+      >
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='none'
+        >
+          <Button
+            className='w-full'
+            onClick={ () => {
+              setDetailView('general')
+              setCurrentFieldDefinitionId(null)
+              setCurrentFieldDefinitionIdPath(null)
+            } }
+            style={ {
+              backgroundColor: detailView === 'general' ? token.controlItemBgActive : undefined,
+              borderRadius: token.borderRadiusSM,
+              fontSize: token.fontSize,
+              height: '24px',
+              justifyContent: 'flex-start',
+              padding: `0 ${token.paddingXS}px`,
+              position: 'relative'
+            } }
+            type='text'
+          >
+            <div style={ { paddingLeft: '16px' } }>
+              {t('field-definitions.general-settings')}
+            </div>
+            <div style={ { position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' } }>
+              <Icon
+                colorToken='colorPrimary'
+                value='edit'
+              />
+            </div>
+          </Button>
+
+          <Divider style={ { margin: `${token.marginXS}px 0 0` } } />
+        </Space>
+      </Content>
+
       <TreeElement
         defaultExpandedKeys={ expandedKeys }
         onActionsClick={ onActionsClick }

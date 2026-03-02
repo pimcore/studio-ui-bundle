@@ -8,23 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { LoadingOutlined } from '@ant-design/icons'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { Input } from '@Pimcore/components/input/input'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { Flex } from 'antd'
+import { isNil, isUndefined } from 'lodash'
+import React, { forwardRef, useEffect, useState, type MutableRefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   type ManyToOneRelationValueType
 } from './many-to-one-relation'
-import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil, isUndefined } from 'lodash'
-import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { Flex } from 'antd'
-import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
-import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
-import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { LoadingOutlined } from '@ant-design/icons'
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './path-target.styles'
 
 export interface PathTargetProps {
@@ -44,7 +45,11 @@ export const PathTarget = forwardRef(function PathTarget (
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
   const { t } = useTranslation()
-  const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
+  const { value, handleChange: handleValueChange } = useControlledState<ManyToOneRelationValueType>(
+    props.value ?? null,
+    props.onChange
+  )
+
   const { isDragActive, isOver, isValid } = useDroppable()
   const { styles } = useStyles({ isDragActive, isOver, isValid, hasSearch: props.onSearch !== undefined })
   const { mapToElementType } = useElementHelper()
@@ -62,9 +67,8 @@ export const PathTarget = forwardRef(function PathTarget (
     }))
   }
 
+  // Sync display path from props (separate from value sync handled by useControlledState)
   useEffect(() => {
-    setValue(props.value ?? null)
-
     const actualPath = props.value?.fullPath ?? ''
     setDisplayPath(actualPath)
 
@@ -77,8 +81,8 @@ export const PathTarget = forwardRef(function PathTarget (
           return
         }
 
-        const newValue = mapNewValue([props.value as IFormatPathItem], data)
-        setDisplayPath(String(newValue[0]?.fullPath ?? actualPath))
+        const mappedValue = mapNewValue([props.value as IFormatPathItem], data)
+        setDisplayPath(String(mappedValue[0]?.fullPath ?? actualPath))
         setIsLoading(false)
       }).catch(error => {
         console.error(error)
@@ -88,7 +92,7 @@ export const PathTarget = forwardRef(function PathTarget (
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
-    if (value === null) {
+    if (!isNonEmptyString(value)) {
       return undefined
     }
 
@@ -117,12 +121,11 @@ export const PathTarget = forwardRef(function PathTarget (
       inputPrefix = (
         <ElementTag
           disabled={ props.disabled === true || props.inherited === true }
-          elementType={ mapToElementType(value.type) }
+          elementType={ mapToElementType(value.type, true) }
           id={ value.id }
           onClose={ props.allowElementTagClose === true
             ? () => {
-                setValue(null)
-                props.onChange?.(null)
+                handleValueChange(null)
               }
             : undefined }
           path={ elementTagPath }
@@ -158,12 +161,11 @@ export const PathTarget = forwardRef(function PathTarget (
               prefix={
                 <ElementTag
                   disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ mapToElementType(value.type) }
+                  elementType={ mapToElementType(value.type, true) }
                   id={ value.id }
                   inline
                   onClose={ () => {
-                    setValue(null)
-                    props.onChange?.(null)
+                    handleValueChange(null)
                   } }
                   path={ elementTagPath }
                   published={ value.isPublished ?? undefined }
@@ -185,8 +187,7 @@ export const PathTarget = forwardRef(function PathTarget (
                 fullPath: e.currentTarget.value
               }
 
-              setValue(newValue)
-              props.onChange?.(newValue)
+              handleValueChange(newValue)
             } }
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
             prefix={ inputPrefix }

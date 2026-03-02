@@ -20,6 +20,8 @@ export interface ConfigurationPartial {
   }
 }
 
+export type DetailView = 'layout' | 'general'
+
 export interface IItemsContext {
   configurations: ConfigurationPartial[]
   activeConfiguration: ConfigurationPartial | undefined
@@ -27,6 +29,8 @@ export interface IItemsContext {
   openConfiguration: (config: ConfigurationPartial) => void
   setActiveConfiguration: (config: ConfigurationPartial) => void
   closeActiveConfiguration: () => void
+  detailView: DetailView
+  setDetailView: (view: DetailView) => void
 }
 
 export const ItemsContext = createContext<IItemsContext | undefined>(undefined)
@@ -38,6 +42,7 @@ export interface ItemsProviderProps {
 export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
   const [configurations, setConfigurations] = useState<ConfigurationPartial[]>([])
   const [activeConfiguration, setActiveConfigurationInternal] = useState<ConfigurationPartial | undefined>(undefined)
+  const [detailView, setDetailView] = useState<DetailView>('general')
 
   const closeActiveConfiguration = (): void => {
     if (activeConfiguration === undefined) {
@@ -77,6 +82,7 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     })
 
     setActiveConfigurationInternal(config)
+    setDetailView('general')
   }
 
   const closeConfiguration = (config: ConfigurationPartial): void => {
@@ -97,13 +103,15 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
         openConfiguration,
         activeConfiguration,
         setActiveConfiguration,
-        closeActiveConfiguration
+        closeActiveConfiguration,
+        detailView,
+        setDetailView
       } }
       >
         {props.children}
       </ItemsContext.Provider>
     )
-  }, [props.children, configurations, activeConfiguration])
+  }, [props.children, configurations, activeConfiguration, detailView])
 }
 
 export const useItems = (): IItemsContext => {
