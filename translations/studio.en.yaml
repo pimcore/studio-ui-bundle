@@ -1052,6 +1052,7 @@ navigation.data-management: Data Management
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
+navigation.video-thumbnails: Video Thumbnails
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
 navigation.appearance-branding: Appearance & Branding
@@ -1142,6 +1143,7 @@ widget.role-management: Roles
 widget.user-management: Users
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
+widget.video-thumbnails: Video Thumbnails
 appearance-branding.title: "Appearance & Branding"
 image-thumbnails.title: "Image Thumbnails"
 image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
@@ -1273,6 +1275,81 @@ image-thumbnails.transformations.effects.intensity: "Intensity"
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
 image-thumbnails.transformations.no-configuration-required: "No configuration required"
+
+video-thumbnails.title: "Video Thumbnails"
+video-thumbnails.description: "Manage and configure video thumbnail settings for your assets."
+video-thumbnails.search.placeholder: "Search thumbnails..."
+video-thumbnails.tree.empty: "No thumbnails found"
+video-thumbnails.editor.select-thumbnail: "Select a video thumbnail configuration to edit"
+video-thumbnails.editor.name: "Name"
+video-thumbnails.editor.name-required: "Name is required"
+video-thumbnails.editor.description: "Description"
+video-thumbnails.editor.description-placeholder: "Enter thumbnail description..."
+video-thumbnails.editor.group: "Group"
+video-thumbnails.editor.group-placeholder: "Select a group..."
+video-thumbnails.editor.no-group: "No Group"
+video-thumbnails.editor.presetting: "Select a presetting"
+video-thumbnails.editor.presetting-placeholder: "Select a presetting..."
+video-thumbnails.editor.video-bitrate: "Video Bitrate"
+video-thumbnails.editor.audio-bitrate: "Audio Bitrate"
+video-thumbnails.editor.transformations: "Transformations"
+video-thumbnails.editor.media-segments: "Media Segments"
+video-thumbnails.editor.media-segments.new: "New"
+video-thumbnails.editor.media-segments.empty: "No media segments defined. Click 'New' to add a segment (e.g. 500K)."
+video-thumbnails.editor.media-segments.add.title: "New Media Segment"
+video-thumbnails.editor.media-segments.add.label: "Enter a segment name (e.g. 500K)"
+video-thumbnails.editor.media-segments.add.bitrate-hint: "Please enter a valid bitrate (e.g. 400k, 1500k, 1M)"
+video-thumbnails.editor.transformations.empty: "No transformations have been selected"
+video-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
+video-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
+video-thumbnails.add.validation.message: "The thumbnail name is invalid"
+
+# Video Transformation tool strip
+video-thumbnails.transformations.move-up: "Move Up"
+video-thumbnails.transformations.move-down: "Move Down"
+video-thumbnails.transformations.remove: "Remove"
+
+# Resize Transformation
+video-thumbnails.transformations.resize.config-title: "Configure Resize"
+video-thumbnails.transformations.resize.width: "Width"
+video-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
+video-thumbnails.transformations.resize.height: "Height"
+video-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
+
+# Scale by Width Transformation
+video-thumbnails.transformations.scale-by-width.config-title: "Configure Scale by Width"
+video-thumbnails.transformations.scale-by-width.width: "Width"
+video-thumbnails.transformations.scale-by-width.width-placeholder: "Enter width in pixels"
+
+# Scale by Height Transformation
+video-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
+video-thumbnails.transformations.scale-by-height.height: "Height"
+video-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+
+# Cut Transformation
+video-thumbnails.transformations.cut.config-title: "Configure Cut"
+video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: "Duration"
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Set Framerate Transformation
+video-thumbnails.transformations.set-framerate.config-title: "Configure Set Framerate"
+video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Color Channel Mixer Transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: "Configure Color Channel Mixer"
+video-thumbnails.transformations.color-channel-mixer.effect: "Effect"
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Select an effect"
+video-thumbnails.transformations.color-channel-mixer.grayscale: "Grayscale"
+video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
+video-thumbnails.transformations.color-channel-mixer.cold: "Cold"
+
+# Mute Transformation
+video-thumbnails.transformations.mute.config-title: "Mute"
+video-thumbnails.transformations.no-configuration-required: "No configuration required"
+
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
