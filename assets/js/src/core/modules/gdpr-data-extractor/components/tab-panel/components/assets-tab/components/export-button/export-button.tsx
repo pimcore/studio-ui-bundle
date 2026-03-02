@@ -33,9 +33,9 @@ export const ExportButton = ({ id, filename, onClick, ...iconButtonProps }: Expo
 
   return (
     <IconButton
-      {...iconButtonProps}
-      icon={{ value: 'export' }}
-      onClick={handleExport}
+      { ...iconButtonProps }
+      icon={ { value: 'export' } }
+      onClick={ handleExport }
     />
   )
 }

@@ -123,17 +123,17 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={data.map((item) => item.data)}
+      columns={ columns }
+      data={ data.map((item) => item.data) }
       dataTestId="gdpr-assets-grid"
       enableSorting
-      onSortingChange={(sorting) => {
+      onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
         setSortFilter(newSorting)
         onSortingChange?.(newSorting)
-      }}
-      sorting={transformToSortFilter(sortFilter)}
-      {...props}
+      } }
+      sorting={ transformToSortFilter(sortFilter) }
+      { ...props }
     />
   )
 }
