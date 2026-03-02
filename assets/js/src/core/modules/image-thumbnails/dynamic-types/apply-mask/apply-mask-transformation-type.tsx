@@ -27,7 +27,8 @@ export class ApplyMaskTransformationType extends TransformationDynamicTypeAbstra
   }
 
   getSummary (config: ApplyMaskTransformationConfig): string {
-    return `Apply Mask${config.path != null ? ` (${config.path})` : ''}`
+    const pathPart = config.path != null ? ` (${config.path})` : ''
+    return `Apply Mask${pathPart}`
   }
 
   getReactComponent (): TransformationComponent {

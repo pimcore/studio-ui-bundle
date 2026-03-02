@@ -28,7 +28,8 @@ export class AddOverlayFitTransformationType extends TransformationDynamicTypeAb
   }
 
   getSummary (config: AddOverlayFitTransformationConfig): string {
-    return `Add Overlay Fit${config.path != null ? ` (${config.path})` : ''} at ${config.origin ?? 'center'}`
+    const pathPart = config.path != null ? ` (${config.path})` : ''
+    return `Add Overlay Fit${pathPart} at ${config.origin ?? 'center'}`
   }
 
   getReactComponent (): TransformationComponent {
