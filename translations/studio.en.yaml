@@ -1591,7 +1591,6 @@ image-thumbnails.transformations.effects.intensity: "Intensity"
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
 image-thumbnails.transformations.no-configuration-required: "No configuration required"
-<<<<<<< HEAD
 
 video-thumbnails.title: "Video Thumbnails"
 video-thumbnails.description: "Manage and configure video thumbnail settings for your assets."
@@ -1664,8 +1663,6 @@ video-thumbnails.transformations.color-channel-mixer.cold: "Cold"
 video-thumbnails.transformations.mute.config-title: "Mute"
 video-thumbnails.transformations.no-configuration-required: "No configuration required"
 
-=======
->>>>>>> 50b99d17965601b73cb46e3e46f688d6a49f1563
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
