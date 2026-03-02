@@ -32,8 +32,8 @@ export const FieldCollectionContent = (): React.JSX.Element => {
             gap={ 'extra-small' }
           >
             <Text strong>{title}</Text>
-            <FieldCollectionAddControl 
-              size="middle" 
+            <FieldCollectionAddControl
+              size="middle"
             />
           </Flex>
 
