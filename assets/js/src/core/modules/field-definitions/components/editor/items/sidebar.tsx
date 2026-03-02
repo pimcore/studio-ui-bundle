@@ -19,13 +19,25 @@ import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type AnyMutationHook } from 'types/react-query'
+
+// A stable no-op hook used when useItemsDeleteMutation is not provided
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useNoOpDeleteMutation: AnyMutationHook = () => [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (async () => { }) as any,
+  {} as any
+]
 
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { useItemsQuery, useItemsDeleteMutation } = useSettings()
+  const { useItemsQuery, useItemsDeleteMutation, AddModal } = useSettings()
   const { isLoading, isFetching, data, refetch } = useItemsQuery()
-  const [deleteConfigurationMutation] = useItemsDeleteMutation()
+  const deleteMutationHook = useItemsDeleteMutation ?? useNoOpDeleteMutation
+  const [deleteConfigurationMutation] = deleteMutationHook()
+  const canDelete = useItemsDeleteMutation !== undefined
+  const canCreate = AddModal !== undefined
 
   const [searchTerm, setSearchTerm] = useState<string>('')
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
@@ -57,9 +69,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
           key: `${configuration.id}`,
           icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
           meta: { configuration },
-          actions: [
-            { key: 'delete', icon: 'delete' }
-          ]
+          actions: canDelete
+            ? [
+                { key: 'delete', icon: 'delete' }
+              ]
+            : []
         })
         return
       }
@@ -79,9 +93,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
         key: `${configuration.id}`,
         icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
         meta: { configuration },
-        actions: [
-          { key: 'delete', icon: 'delete' }
-        ]
+        actions: canDelete
+          ? [
+              { key: 'delete', icon: 'delete' }
+            ]
+          : []
       }
 
       groupMap[groupName].children!.push(treeDataItem)
@@ -130,15 +146,17 @@ export const ItemsSidebar = (): React.JSX.Element => {
               onClick={ refetch }
             />
 
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ () => {
-                setShowNewModal(true)
-              } }
-              type="link"
-            >
-              {t('new')}
-            </IconTextButton>
+            { canCreate && (
+              <IconTextButton
+                icon={ { value: 'new' } }
+                onClick={ () => {
+                  setShowNewModal(true)
+                } }
+                type="link"
+              >
+                {t('new')}
+              </IconTextButton>
+            ) }
           </Toolbar>
         }
       >

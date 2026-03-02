@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimc
 import { api as baseApi } from './class-definition-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -178,6 +178,36 @@ const api = baseApi.enhanceEndpoints({
         ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key),
         ...invalidatingTags.OBJECT_BRICK_COLLECTION()
       ]
+    },
+    classObjectBrickCustomLayoutGet: {
+      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId)
+    },
+    classObjectBrickCustomLayoutUpdate: {
+      invalidatesTags: () => [],
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            api.util.updateQueryData('classObjectBrickCustomLayoutGet', { key: args.key, customLayoutId: args.customLayoutId }, (draft) => {
+              Object.assign(draft, data)
+            })
+          )
+        } catch {
+          // Mutation failed, no cache update needed
+        }
+      }
+    },
+    classObjectBrickCustomLayoutDelete: {
+      invalidatesTags: (result, error, args) => invalidatingTags.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION(args.key)
+    },
+    classObjectBrickCustomLayoutExport: {
+      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId)
+    },
+    classObjectBrickCustomLayoutImport: {
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId),
+        ...invalidatingTags.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION(args.key)
+      ]
     }
   }
 })
@@ -235,7 +265,12 @@ export const {
   useClassObjectBrickClassesQuery,
   useClassObjectBrickExportQuery,
   useLazyClassObjectBrickExportQuery,
-  useClassObjectBrickImportMutation
+  useClassObjectBrickImportMutation,
+  useClassObjectBrickCustomLayoutGetQuery,
+  useClassObjectBrickCustomLayoutUpdateMutation,
+  useClassObjectBrickCustomLayoutDeleteMutation,
+  useClassObjectBrickCustomLayoutExportQuery,
+  useClassObjectBrickCustomLayoutImportMutation
 } = api
 
 export { api }

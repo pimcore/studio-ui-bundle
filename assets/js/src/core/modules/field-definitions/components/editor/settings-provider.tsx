@@ -23,7 +23,6 @@ export interface UseDetailLayoutAccessorReturn {
 export interface ImportExportConfig {
   getExportUrl: (id: number | string) => string
   getImportUrl: (id: number | string) => string
-  getIdFromGeneralSettings: (generalSettings: Record<string, unknown> | undefined) => number | string | undefined
   validateFile?: (file: File) => boolean
   acceptFileTypes?: string
   acceptMimeTypes?: string[]
@@ -31,9 +30,9 @@ export interface ImportExportConfig {
 }
 
 export interface ISettingsContext {
-  AddModal: ComponentType<OptionalModalProps>
+  AddModal?: ComponentType<OptionalModalProps>
   useItemsQuery: AnyQueryHook
-  useItemsDeleteMutation: AnyMutationHook
+  useItemsDeleteMutation?: AnyMutationHook
   useDetailLayoutQuery?: AnyQueryHook
   useDetailLayoutAccessor?: () => UseDetailLayoutAccessorReturn
   useDetailGeneralSettingsQuery: AnyQueryHook

@@ -106,8 +106,7 @@ const useFieldCollectionDeleteMutation: AnyMutationHook = (...args) => {
 
 const fieldCollectionImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/export`,
-  getImportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/import`,
-  getIdFromGeneralSettings: (generalSettings) => generalSettings?.id as string | undefined
+  getImportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/import`
 }
 
 export const FieldCollectionWidget = (): React.JSX.Element => {
