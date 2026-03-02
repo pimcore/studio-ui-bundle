@@ -109,11 +109,13 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [isDirty, onChange])
 
   const onValuesChange = useCallback((changedValues: Partial<VideoThumbnailFormData>, allValues: VideoThumbnailFormData): void => {
-    setCurrentFormData(prev => prev === null ? null : {
-      ...prev,
-      ...allValues,
-      mediaSegments: prev.mediaSegments
-    })
+    setCurrentFormData(prev => prev === null
+      ? null
+      : {
+          ...prev,
+          ...allValues,
+          mediaSegments: prev.mediaSegments
+        })
   }, [])
 
   const handleMediaSegmentsChange = useCallback((updatedSegments: MediaQuery[]): void => {
@@ -128,11 +130,13 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         videoBitrate: bitrates.videoBitrate,
         audioBitrate: bitrates.audioBitrate
       })
-      setCurrentFormData(prev => prev === null ? null : {
-        ...prev,
-        videoBitrate: bitrates.videoBitrate,
-        audioBitrate: bitrates.audioBitrate
-      })
+      setCurrentFormData(prev => prev === null
+        ? null
+        : {
+            ...prev,
+            videoBitrate: bitrates.videoBitrate,
+            audioBitrate: bitrates.audioBitrate
+          })
     }
   }, [form])
 
