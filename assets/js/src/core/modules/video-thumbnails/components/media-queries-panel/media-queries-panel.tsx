@@ -34,7 +34,6 @@ export const VideoMediaQueriesPanel = ({
   )
 
   const handleAddMediaQuery = useCallback(() => {
-
     modal.input({
       title: t('video-thumbnails.editor.media-segments.add.title'),
       label: t('video-thumbnails.editor.media-segments.add.bitrate-hint'),
