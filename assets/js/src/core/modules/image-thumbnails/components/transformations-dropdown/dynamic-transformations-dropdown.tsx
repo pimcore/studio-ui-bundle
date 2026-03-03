@@ -16,6 +16,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type TransformationDynamicTypeRegistry } from '../../dynamic-types/transformation-dynamic-type-registry'
 import type { TransformationDynamicTypeAbstract } from '../../dynamic-types/transformation-dynamic-type-abstract'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface DynamicTransformationsDropdownProps {
   onTransformationAdd: (type: TransformationDynamicTypeAbstract, config: any) => void
@@ -36,7 +37,7 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
         onTransformationAdd(type, config)
       }
     } catch (error) {
-      console.error('Error configuring transformation:', error)
+      trackError(new GeneralError(error))
     }
   }
 
