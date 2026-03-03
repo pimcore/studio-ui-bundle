@@ -42,10 +42,13 @@ export const MediaQueriesPanel = ({
         required: true
       },
       onOk: async (query: string) => {
+        const sanitised = query.trim().replace(/[^a-zA-Z0-9_\-+]/g, '')
+        if (sanitised === '') return
+
         const newMediaQuery: MediaQuery = {
           id: generateMediaQueryId(),
-          query: query.trim(),
-          displayName: getDisplayName(query.trim()),
+          query: sanitised,
+          displayName: getDisplayName(sanitised),
           transformations: [],
           order: mediaQueries.length
         }
