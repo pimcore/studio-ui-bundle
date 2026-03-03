@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -41,12 +41,26 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
   const { handleDelete: deleteThumbnail, handleAdd } = useVideoThumbnailConfig({ refetch })
+  const pendingOpenRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
       setThumbnailsListData(thumbnailsData.items)
       setFilteredData(thumbnailsData.items)
       setTreeKey(prev => prev + 1)
+
+      if (!isNil(pendingOpenRef.current)) {
+        const pendingName = pendingOpenRef.current
+        const addedThumbnail = thumbnailsData.items.find((item) =>
+          'name' in item && item.name === pendingName
+        )
+
+        if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
+          onThumbnailSelect(addedThumbnail)
+        }
+
+        pendingOpenRef.current = null
+      }
     }
   }, [thumbnailsData])
 
@@ -115,15 +129,7 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
 
   const handleAddWithSelection = (): void => {
     handleAdd((thumbnailName: string) => {
-      if (!isNil(thumbnailsData?.items)) {
-        const addedThumbnail = thumbnailsData.items.find((item) =>
-          'name' in item && item.name === thumbnailName
-        )
-
-        if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
-          onThumbnailSelect(addedThumbnail)
-        }
-      }
+      pendingOpenRef.current = thumbnailName
     })
   }
 
