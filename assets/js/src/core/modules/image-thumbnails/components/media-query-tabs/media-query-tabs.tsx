@@ -11,9 +11,9 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import { Empty } from '@Pimcore/components/empty/empty'
 import type { MediaQuery } from '../../types/media-query.types'
 import { MediaQueryTabContent } from './media-query-tab-content'
+import { DEFAULT_MEDIA_QUERY_ID } from '../../utils/media-query-helpers'
 
 interface MediaQueryTabsProps {
   mediaQueries: MediaQuery[]
@@ -36,19 +36,12 @@ export const MediaQueryTabs = ({
     onMediaQueryUpdate(mediaQuery.id, mediaQuery)
   }, [onMediaQueryUpdate])
 
-  if (mediaQueries.length === 0) {
-    return (
-      <Empty
-        description={ t('image-thumbnails.editor.media-queries.empty') }
-        style={ { padding: '20px' } }
-      />
-    )
-  }
-
   const tabItems = mediaQueries.map((mediaQuery) => ({
     key: mediaQuery.id,
-    label: mediaQuery.displayName,
-    closable: true,
+    label: mediaQuery.id === DEFAULT_MEDIA_QUERY_ID
+      ? t('image-thumbnails.editor.media-queries.default')
+      : mediaQuery.displayName,
+    closable: mediaQuery.id !== DEFAULT_MEDIA_QUERY_ID,
     children: (
       <MediaQueryTabContent
         mediaQuery={ mediaQuery }

@@ -15,7 +15,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { MediaQueryTabs } from '../media-query-tabs/media-query-tabs'
-import { generateMediaQueryId, getDisplayName } from '../../utils/media-query-helpers'
+import { generateMediaQueryId, getDisplayName, DEFAULT_MEDIA_QUERY_ID } from '../../utils/media-query-helpers'
 import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueriesPanelProps {
@@ -29,10 +29,7 @@ export const MediaQueriesPanel = ({
 }: MediaQueriesPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
-    mediaQueries.length > 0 ? mediaQueries[0].id : undefined
-  )
-  const [panelActive, setPanelActive] = useState(true)
+  const [activeTabKey, setActiveTabKey] = useState<string | undefined>(DEFAULT_MEDIA_QUERY_ID)
 
   const handleAddMediaQuery = useCallback(() => {
     modal.input({
@@ -56,7 +53,6 @@ export const MediaQueriesPanel = ({
         const updatedMediaQueries = [...mediaQueries, newMediaQuery]
         onChange(updatedMediaQueries)
         setActiveTabKey(newMediaQuery.id)
-        setPanelActive(true)
       }
     })
   }, [mediaQueries, onChange, modal, t])
@@ -69,42 +65,39 @@ export const MediaQueriesPanel = ({
   }, [mediaQueries, onChange])
 
   const handleRemoveMediaQuery = useCallback((mediaQueryId: string) => {
+    if (mediaQueryId === DEFAULT_MEDIA_QUERY_ID) {
+      return
+    }
+
     const updatedMediaQueries = mediaQueries.filter(mq => mq.id !== mediaQueryId)
     onChange(updatedMediaQueries)
 
     if (activeTabKey === mediaQueryId) {
-      const newActiveKey = updatedMediaQueries.length > 0 ? updatedMediaQueries[0].id : undefined
+      const newActiveKey = updatedMediaQueries.length > 0 ? updatedMediaQueries[0].id : DEFAULT_MEDIA_QUERY_ID
       setActiveTabKey(newActiveKey)
     }
   }, [mediaQueries, onChange, activeTabKey])
 
   const newButton = (
-    <div onClick={ (e) => { e.stopPropagation() } }>
-      <Button
-        icon={ <Icon
-          options={ { width: 16, height: 16 } }
-          value="plus-circle"
-               /> }
-        onClick={ handleAddMediaQuery }
-        size="small"
-        type="link"
-      >
-        {t('image-thumbnails.editor.media-queries.new')}
-      </Button>
-    </div>
+    <Button
+      icon={ <Icon
+        options={ { width: 16, height: 16 } }
+        value="plus-circle"
+             /> }
+      onClick={ handleAddMediaQuery }
+      size="small"
+      type="link"
+    >
+      {t('image-thumbnails.editor.media-queries.new')}
+    </Button>
   )
 
   return (
     <Panel
-      active={ panelActive }
       border
-      collapsible
       contentPadding="small"
       extra={ newButton }
       extraPosition="end"
-      onChange={ (keys) => {
-        setPanelActive(Array.isArray(keys) ? keys.length > 0 : keys !== '')
-      } }
       theme="card-with-highlight"
       title={ t('image-thumbnails.editor.media-queries') }
     >

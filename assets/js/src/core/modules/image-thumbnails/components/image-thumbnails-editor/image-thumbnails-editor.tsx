@@ -17,10 +17,10 @@ import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
 import type { MediaQuery, BackendMediasFormat } from '../../types/media-query.types'
 import { MediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
-import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
+import { convertToBackendFormat, convertFromBackendFormat, DEFAULT_MEDIA_QUERY_ID, createDefaultMediaQuery } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { isNil, isNull, isEqual, isEmpty } from 'lodash'
+import { isNil, isNull, isEqual, isEmpty, has } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { BasicFormFields } from './basic-form-fields'
@@ -97,7 +97,11 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         useCropBox: configData.settings.useCropBox ?? false,
         downloadable: configData.settings.downloadable ?? false,
         preserveAnimation: configData.settings.preserveAnimation ?? false,
-        mediaQueries: convertFromBackendFormat((configData.medias ?? {}) as BackendMediasFormat, {})
+        mediaQueries: (() => {
+          const fromBackend = convertFromBackendFormat((configData.medias ?? {}) as BackendMediasFormat, {})
+          const hasDefault = fromBackend.some(mq => mq.id === DEFAULT_MEDIA_QUERY_ID)
+          return hasDefault ? fromBackend : [createDefaultMediaQuery(), ...fromBackend]
+        })()
       }
 
       setInitialFormData({ ...formData })
@@ -127,7 +131,6 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     if (isEmpty(selectedThumbnail) || currentFormData === null) return
 
     form.validateFields().then(async (values: ThumbnailFormData) => {
-      try {
         const updatedSettings = {
           name: values.name,
           description: values.description,
@@ -146,7 +149,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
         const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
 
-        await updateThumbnail({
+        const result = await updateThumbnail({
           name: selectedThumbnail.name,
           updateThumbnailConfig: {
             settings: updatedSettings,
@@ -155,12 +158,13 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
           }
         })
 
+        if (has(result, 'error')) {
+          return
+        }
+
         setInitialFormData({ ...currentFormData })
 
         void messageApi.success(t('save-success'))
-      } catch {
-        trackError(new GeneralError('Could not save thumbnail configuration'))
-      }
     }).catch(() => {
       trackError(new GeneralError('Validation failed'))
     })
