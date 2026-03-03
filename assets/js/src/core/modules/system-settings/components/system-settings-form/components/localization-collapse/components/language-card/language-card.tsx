@@ -99,45 +99,45 @@ export const LanguageCard = ({ locale }: LanguageCardProps): React.JSX.Element =
 
   return (
     <Card
-      title={getLanguageName({ locale }) + ` (${locale})`}
-      actions={[
+      actions={ [
         <IconButton
-          disabled={isOnlyLanguage}
-          icon={{
+          disabled={ isOnlyLanguage }
+          icon={ {
             value: 'trash'
-          }}
-          key={'icon-button-01'}
-          onClick={handleDeleteLanguage}
-          title={t('system-settings.form.localization.field.delete-language')}
+          } }
+          key={ 'icon-button-01' }
+          onClick={ handleDeleteLanguage }
+          title={ t('system-settings.form.localization.field.delete-language') }
           type='link'
         />
-      ]}
+      ] }
+      title={ getLanguageName({ locale }) + ` (${locale})` }
     >
       <Form.Item
-        label={t('system-settings.form.localization.field.fallback-language')}
-        name={['general', 'fallback_languages', locale]}
+        label={ t('system-settings.form.localization.field.fallback-language') }
+        name={ ['general', 'fallback_languages', locale] }
       >
         <Select
           allowClear
           mode="multiple"
-          options={fallbackOptions}
-          placeholder={t('system-settings.form.localization.field.fallback-language-placeholder')}
+          options={ fallbackOptions }
+          placeholder={ t('system-settings.form.localization.field.fallback-language-placeholder') }
         />
       </Form.Item>
 
       <Form.Item
-        getValueFromEvent={(checked: boolean) => checked ? locale : ''}
-        getValueProps={(value) => ({ checked: value === locale })}
-        name={['general', 'default_language']}
+        getValueFromEvent={ (checked: boolean) => checked ? locale : '' }
+        getValueProps={ (value) => ({ checked: value === locale }) }
+        name={ ['general', 'default_language'] }
         valuePropName="checked"
       >
         <Switch
-          labelRight={t('system-settings.form.localization.field.default-language')}
+          labelRight={ t('system-settings.form.localization.field.default-language') }
         />
       </Form.Item>
 
       <Form.Item
-        shouldUpdate={(prevValues, curValues) =>
+        shouldUpdate={ (prevValues, curValues) =>
           prevValues.general?.required_languages !== curValues.general?.required_languages
         }
       >
@@ -145,9 +145,9 @@ export const LanguageCard = ({ locale }: LanguageCardProps): React.JSX.Element =
           const currentRequired = form.getFieldValue(['general', 'required_languages']) ?? []
           return (
             <Switch
-              checked={currentRequired.includes(locale)}
-              labelRight={t('system-settings.form.localization.field.mandatory')}
-              onChange={(checked) => { handleMandatoryChange(checked) }}
+              checked={ currentRequired.includes(locale) }
+              labelRight={ t('system-settings.form.localization.field.mandatory') }
+              onChange={ (checked) => { handleMandatoryChange(checked) } }
             />
           )
         }}
