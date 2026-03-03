@@ -708,10 +708,10 @@ field-definitions.validation.enter-unique-identifier: Please enter a unique iden
 field-definitions.validation.unique-identifier-in-use: This unique identifier is already in use
 field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
 field-definitions.validation.errors-found: Field definitions have errors
-field-definitions.validation.empty-name: 'The following field types are missing a name:'
-field-definitions.validation.reserved-word: 'Reserved word used as name:'
-field-definitions.validation.invalid-format: 'Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):'
-field-definitions.validation.duplicate-name: 'Duplicate name within namespace:'
+field-definitions.validation.empty-name: "The following field types are missing a name:"
+field-definitions.validation.reserved-word: "Reserved word used as name:"
+field-definitions.validation.invalid-format: "Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Duplicate name within namespace:"
 object-brick-key: Object Brick Key
 field-name: Field Name
 field-definition.geopoint: Geo Point
@@ -2290,6 +2290,7 @@ system-settings.form.localization.field.fallback-language: Fallback Languages
 system-settings.form.localization.field.fallback-language-placeholder: Add fallback languages
 system-settings.form.localization.field.default-language: Default language
 system-settings.form.localization.field.mandatory: Mandatory language
+system-settings.form.localization.field.delete-language: Delete language
 system-settings.collapse.website: Website
 system-settings.form.field.main-domain: Main Domain
 system-settings.form.field.redirect-to-maindomain: Redirect unknown domains (not used for a site and for redirects, ...) to the main domain (above)
