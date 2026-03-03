@@ -9,37 +9,32 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
+import { Form, Input, Switch } from '@sdk/components'
 import React from 'react'
 import { t } from 'i18next'
+import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 
 export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item name="border">
-        <Switch labelRight={ t('border') } />
-      </Form.Item>
 
-      <Form.Item
-        label={ t('rendering-class') }
-        name="renderingClass"
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('rendering-data') }
-        name="renderingData"
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('html') }
-        name="html"
-      >
-        <TextArea rows={ 10 } />
-      </Form.Item>
-    </FormKit.Panel>
+    <><Form.Item name="border">
+      <Switch labelRight={ t('border') } />
+    </Form.Item><Form.Item
+      label={ t('rendering-class') }
+      name="renderingClass"
+                >
+      <Input />
+    </Form.Item><Form.Item
+      label={ t('rendering-data') }
+      name="renderingData"
+                >
+      <Input />
+    </Form.Item><Form.Item
+      help={ t('layout.text.help') }
+      label={ t('text') }
+      name="html"
+                >
+      <Wysiwyg />
+    </Form.Item></>
   )
 }
