@@ -1532,15 +1532,17 @@ image-thumbnails.media-queries.add-transformation: "Add Transformation"
 
 # Cover Transformation
 image-thumbnails.transformations.cover.title: "Configure Cover"
+image-thumbnails.transformations.cover.width-height: "Width, Height"
 image-thumbnails.transformations.cover.width: "Width"
 image-thumbnails.transformations.cover.height: "Height"
-image-thumbnails.transformations.cover.positioning: "Position"
+image-thumbnails.transformations.cover.focal-point-info: "The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used."
+image-thumbnails.transformations.cover.positioning: "Default Positioning"
 image-thumbnails.transformations.cover.positioning-center: "Center"
 image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
 image-thumbnails.transformations.cover.positioning-topright: "Top Right"
 image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
 image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.cover.force-resize: "Force Resize"
+image-thumbnails.transformations.cover.force-resize: "Force resize"
 
 # Scale by Width Transformation
 image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
@@ -1585,6 +1587,12 @@ image-thumbnails.transformations.effects.sepia: "Sepia"
 image-thumbnails.transformations.effects.grayscale: "Grayscale"
 image-thumbnails.transformations.effects.sharpen: "Sharpen"
 image-thumbnails.transformations.effects.intensity: "Intensity"
+
+# Transformation tool strip
+image-thumbnails.transformations.add: "Add transformation"
+image-thumbnails.transformations.move-up: "Move Up"
+image-thumbnails.transformations.move-down: "Move Down"
+image-thumbnails.transformations.remove: "Remove"
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
