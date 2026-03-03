@@ -45,6 +45,7 @@ export const MediaQueryTransformationsField = ({
 
   return (
     <FieldCollection
+      addLabel={ t('image-thumbnails.transformations.add') }
       onChange={ handleChange }
       registry={ fieldCollectionRegistry }
       title={ t('image-thumbnails.editor.transformations') }
