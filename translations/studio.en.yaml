@@ -2284,7 +2284,7 @@ system-settings.collapse.debug: Debug
 system-settings.form.debug.field.enable-debug: Debug Admin-Translations (wrapped in +)
 system-settings.form.debug.field.email-addresses: Debug Email Addresses
 system-settings.form.debug.field.email-addresses.placeholder: Enter email and press Enter...
-system-settings.collapse.localization: Localization & Internationalization (i18n/l10n)
+system-settings.collapse.localization: Localization & Internationalization (l10n/i18n)
 system-settings.form.localization.field.add-language: Add Language
 system-settings.form.localization.field.fallback-language: Fallback Languages
 system-settings.form.localization.field.fallback-language-placeholder: Add fallback languages
