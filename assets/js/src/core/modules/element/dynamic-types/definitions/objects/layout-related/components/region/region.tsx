@@ -44,7 +44,7 @@ export const Region = ({ children, noteditable, ...props }: RegionProps): React.
 
     items.push({
       region: `${region}${regionIndex}`,
-      // maxWidth: @todo field for the max width needs to be defined,
+      maxWidth: child.width as string | undefined,
       component: (
         <ObjectComponent
           { ...child }
