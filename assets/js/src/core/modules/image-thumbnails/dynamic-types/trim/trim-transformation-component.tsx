@@ -21,6 +21,7 @@ export const TrimTransformationComponent: TransformationComponent = () => {
       vertical
     >
       <Form.Item
+        initialValue={ 0 }
         label="Tolerance"
         name="tolerance"
       >
