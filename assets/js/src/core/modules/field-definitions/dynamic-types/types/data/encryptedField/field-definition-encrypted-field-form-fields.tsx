@@ -9,17 +9,13 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { BASE_FIELD_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/dynamic-type-field-definition-encrypted-field'
 import { Form, Select } from '@sdk/components'
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { container, serviceIds } from '@sdk/app'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { kebabCase } from 'lodash'
-
-// Base keys that are not delegate-specific and must not be overwritten when the delegate type
-// changes. Includes both 'fieldtype' (public property) and 'fieldType' (getter-based) since
-// the backend inconsistently returns both.
-const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
 
 export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -39,14 +35,6 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
     }))
     .sort((a, b) => a.label.localeCompare(b.label))
 
-  // When the delegate type changes, inject missing delegate-specific defaults.
-  //
-  // For a loaded field, keys are already hoisted from the delegate sub-object by
-  // layout-helpers.tsx and present in initialValues, so getFieldsValue()[key] is
-  // defined and we skip those — preserving the saved values.
-  //
-  // { triggerChange: true } causes onValuesChange to fire so the injected defaults
-  // are persisted into fieldDefinitions and will be included when the layout is saved.
   useEffect(() => {
     if (selectedType === undefined || selectedType === '') {
       prevDelegateTypeRef.current = undefined
@@ -55,21 +43,43 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
 
     if (!fieldDefinitionRegistry.hasDynamicType(selectedType)) return
     if (prevDelegateTypeRef.current === selectedType) return
+
+    const isFirstInit = prevDelegateTypeRef.current === undefined
     prevDelegateTypeRef.current = selectedType
 
     const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
     const defaultData = dynType.getDefaultData(props.context)
-    const currentValues = form.getFieldsValue() as Record<string, unknown>
 
-    const delegateDefaults: Record<string, unknown> = {}
-    for (const [key, value] of Object.entries(defaultData)) {
-      if (!BASE_FIELD_KEYS.has(key) && currentValues[key] === undefined) {
-        delegateDefaults[key] = value
+    if (isFirstInit) {
+      const currentValues = form.getFieldsValue() as Record<string, unknown>
+      const delegateDefaults: Record<string, unknown> = {}
+      for (const [key, value] of Object.entries(defaultData)) {
+        if (!BASE_FIELD_KEYS.has(key) && currentValues[key] === undefined) {
+          delegateDefaults[key] = value
+        }
       }
-    }
+      if (Object.keys(delegateDefaults).length > 0) {
+        form.setFieldsValue(delegateDefaults, { triggerChange: true })
+      }
+    } else {
+      const currentValues = form.getFieldsValue() as Record<string, unknown>
+      const nextValues: Record<string, unknown> = {}
 
-    if (Object.keys(delegateDefaults).length > 0) {
-      form.setFieldsValue(delegateDefaults, { triggerChange: true })
+      for (const key of Object.keys(currentValues)) {
+        if (!BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype') {
+          nextValues[key] = undefined
+        }
+      }
+
+      for (const [key, value] of Object.entries(defaultData)) {
+        if (!BASE_FIELD_KEYS.has(key)) {
+          nextValues[key] = value
+        }
+      }
+
+      if (Object.keys(nextValues).length > 0) {
+        form.setFieldsValue(nextValues, { triggerChange: true })
+      }
     }
   }, [selectedType])
 

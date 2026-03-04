@@ -28,10 +28,7 @@ export class DynamicTypeFieldDefinitionSelect extends DynamicTypeFieldDefinition
   getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),
-      optionsSource: 'manual',
-      options: [],
-      optionsProvider: '',
-      optionsProviderData: ''
+      optionsProviderType: 'configure'
     }
   }
 

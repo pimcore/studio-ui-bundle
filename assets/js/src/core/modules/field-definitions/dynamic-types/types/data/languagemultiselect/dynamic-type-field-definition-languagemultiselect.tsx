@@ -35,7 +35,7 @@ export class DynamicTypeFieldDefinitionLanguageMultiselect extends DynamicTypeFi
   getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),
-      renderType: 'List'
+      renderType: 'list'
     }
   }
 

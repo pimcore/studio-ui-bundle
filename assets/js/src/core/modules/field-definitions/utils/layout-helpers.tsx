@@ -31,6 +31,7 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
   }
 
   const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
+  const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildStructure = (layoutItem: Layout): StructureNode => {
     const id = uuid()
@@ -42,33 +43,13 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
 
     const { children, ...fieldDef } = layoutItem
 
-    // For encryptedField: the backend returns delegate-specific properties (e.g. lat, lng, zoom,
-    // width, height) nested inside a 'delegate' sub-object.  The form fields for the chosen
-    // delegate type bind to top-level names, so we hoist those properties here so that
-    // initialValues already contains them at the correct level.
-    //
-    // The backend inconsistently uses both 'fieldType' (getter-based, camelCase) and 'fieldtype'
-    // (public property, lowercase). We check both, matching the same pattern used in the registry.
-    const hoistedFieldDef = { ...fieldDef } as Record<string, unknown>
-    const resolvedFieldType = (hoistedFieldDef.fieldType ?? hoistedFieldDef.fieldtype) as string | undefined
-    if (
-      resolvedFieldType === 'encryptedField' &&
-      hoistedFieldDef.delegate !== null &&
-      typeof hoistedFieldDef.delegate === 'object' &&
-      !Array.isArray(hoistedFieldDef.delegate)
-    ) {
-      // Keys that belong to the encryptedField itself and must not be overwritten with
-      // values from the delegate sub-object.
-      const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
-      for (const [key, value] of Object.entries(hoistedFieldDef.delegate as Record<string, unknown>)) {
-        if (!BASE_FIELD_KEYS.has(key) && hoistedFieldDef[key] === undefined) {
-          hoistedFieldDef[key] = value
-        }
-      }
+    const resolvedFieldType = ((fieldDef as Record<string, unknown>).fieldType ?? (fieldDef as Record<string, unknown>).fieldtype) as string | undefined
+    let normalizedFieldDef: Record<string, unknown> = { ...fieldDef }
+    if (resolvedFieldType !== undefined && fieldDefinitionRegistry.hasDynamicType(resolvedFieldType)) {
+      normalizedFieldDef = fieldDefinitionRegistry.getDynamicType(resolvedFieldType).normalizeFieldDefinition(normalizedFieldDef)
     }
 
-    // @todo remove type conversion after fix of typo from backendSide (fieldtype vs. fieldType)
-    initialFieldDefinitions[id] = hoistedFieldDef as unknown as FieldDefinition
+    initialFieldDefinitions[id] = normalizedFieldDef as unknown as FieldDefinition
 
     return node
   }

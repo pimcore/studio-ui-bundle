@@ -9,10 +9,15 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, Input, Switch } from '@sdk/components'
+import { Form, Input, SanitizeHtml, Switch } from '@sdk/components'
 import React from 'react'
 import { t } from 'i18next'
 import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
+import { Card } from '@Pimcore/components/card/card'
+import {WysiwygContext} from "@Pimcore/modules/wysiwyg/interface/wysiwyg";
+
+// @todo - tabs, iframe, iframeContent (mit Reload)
+// @todo - url hardcoded https://studionightly.pimcore.app/storybook/?path=/docs/components-layout-tabs--docs
 
 export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
@@ -29,12 +34,13 @@ export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractForm
       name="renderingData"
                 >
       <Input />
-    </Form.Item><Form.Item
-      help={ t('layout.text.help') }
-      label={ t('text') }
-      name="html"
-                >
-      <Wysiwyg />
-    </Form.Item></>
+    </Form.Item>
+      <Form.Item
+        help={ <Card style={{overflow: 'auto'}}><SanitizeHtml html={ t('layout.text.help') } /></Card> }
+        label={ t('text') }
+        name="html"
+      >
+        <Wysiwyg context={WysiwygContext.CLASS_EDITOR} /> /* @todo - name, Wysiwyg context for class editor */
+      </Form.Item></>
   )
 }

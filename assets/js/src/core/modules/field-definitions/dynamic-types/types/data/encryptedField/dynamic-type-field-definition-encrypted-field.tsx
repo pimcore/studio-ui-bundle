@@ -14,6 +14,8 @@ import { FieldDefinitionEncryptedFieldFormFields } from '@Pimcore/modules/field-
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
+export const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
+
 export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'encryptedField'
 
@@ -34,6 +36,28 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
 
   getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return ['encryptedFieldSupport']
+  }
+
+  // When the backend returns a saved encryptedField, delegate-specific properties
+  // (e.g. lat/lng/zoom for geopoint, width/height for image) live inside the 'delegate'
+  // sub-object.  The form fields bind to top-level keys, so we hoist those properties here
+  // so that initialValues already contains them at the correct level.
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const hoisted = { ...fieldDef }
+
+    if (
+      hoisted.delegate !== null &&
+      typeof hoisted.delegate === 'object' &&
+      !Array.isArray(hoisted.delegate)
+    ) {
+      for (const [key, value] of Object.entries(hoisted.delegate as Record<string, unknown>)) {
+        if (!BASE_FIELD_KEYS.has(key) && hoisted[key] === undefined) {
+          hoisted[key] = value
+        }
+      }
+    }
+
+    return hoisted
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {

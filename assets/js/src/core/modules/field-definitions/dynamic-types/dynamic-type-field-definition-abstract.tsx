@@ -104,6 +104,10 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return null
   }
 
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    return fieldDef
+  }
+
   protected computeValidTags (tags: string[], context: FieldDefinitionContext): string[] {
     const { path, fieldDefinitions } = context
     const usedFieldDefinitions = path.map((pathItem) => fieldDefinitions[pathItem])

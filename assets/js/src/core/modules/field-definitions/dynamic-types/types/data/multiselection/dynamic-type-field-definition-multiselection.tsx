@@ -28,11 +28,8 @@ export class DynamicTypeFieldDefinitionMultiselection extends DynamicTypeFieldDe
   getDefaultData (): any {
     return {
       ...super.getDefaultData(),
-      optionsProviderType: 'configure',
-      options: [],
-      defaultValue: '',
-      optionsProviderClass: '',
-      optionsProviderData: ''
+      renderType: 'list',
+      optionsProviderType: 'configure'
     }
   }
 
