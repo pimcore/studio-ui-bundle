@@ -73,25 +73,3 @@ export const getFolderKeysFromTree = (
 
   return keys
 }
-
-export const extractGroupsFromTree = (
-  items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>
-): Array<{ value: string, label: string }> => {
-  const groups = new Set<string>()
-
-  const traverseItems = (items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>): void => {
-    for (const item of items) {
-      if ('children' in item && Array.isArray(item.children)) {
-        groups.add(item.name)
-        traverseItems(item.children)
-      }
-    }
-  }
-
-  traverseItems(items)
-
-  return Array.from(groups).map(group => ({
-    value: group,
-    label: group
-  }))
-}
