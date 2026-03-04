@@ -42,7 +42,6 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
     })
   })
 
-  // @todo keep in sync with the gap value below
   const GAP_SIZE = 12
   const numGaps = maxWidthsPerColumn.length - 1
 
