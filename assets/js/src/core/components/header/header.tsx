@@ -28,18 +28,18 @@ export const Header = (props: HeaderProps): React.JSX.Element => {
 
   return (
     <div
-      {...rest}
-      className={classNames}
+      { ...rest }
+      className={ classNames }
     >
       {title !== '' && (
-        <span className={'header__text'}>
-          <Title icon={icon}>
+        <span className={ 'header__text' }>
+          <Title icon={ icon }>
             {title}
           </Title>
         </span>
       )}
 
-      <div className={cn('header__content', { 'w-full': fullWidth === true })}>
+      <div className={ cn('header__content', { 'w-full': fullWidth === true }) }>
         {children}
       </div>
     </div>
