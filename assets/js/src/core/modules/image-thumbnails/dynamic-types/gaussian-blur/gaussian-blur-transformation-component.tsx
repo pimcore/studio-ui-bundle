@@ -21,12 +21,14 @@ export const GaussianBlurTransformationComponent: TransformationComponent = () =
       vertical
     >
       <Form.Item
+        initialValue={ 0 }
         label="Radius"
         name="radius"
       >
         <InputNumber />
       </Form.Item>
       <Form.Item
+        initialValue={ 1 }
         label="Sigma"
         name="sigma"
       >

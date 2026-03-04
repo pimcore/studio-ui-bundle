@@ -52,6 +52,7 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       </p>
 
       <Form.Item
+        initialValue="center"
         label={ t('image-thumbnails.transformations.cover.positioning') }
         name="positioning"
       >

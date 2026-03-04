@@ -48,24 +48,28 @@ export const AddOverlayTransformationComponent: TransformationComponent = () => 
         />
       </Form.Item>
       <Form.Item
+        initialValue={ 0 }
         label="X Position"
         name="x"
       >
         <InputNumber />
       </Form.Item>
       <Form.Item
+        initialValue={ 0 }
         label="Y Position"
         name="y"
       >
         <InputNumber />
       </Form.Item>
       <Form.Item
+        initialValue="top-left"
         label="Origin"
         name="origin"
       >
         <Select options={ originOptions } />
       </Form.Item>
       <Form.Item
+        initialValue={ 100 }
         label="Opacity"
         name="alpha"
       >

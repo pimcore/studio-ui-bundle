@@ -30,13 +30,6 @@ export class GaussianBlurTransformationType extends TransformationDynamicTypeAbs
     return `Gaussian Blur (radius: ${config.radius ?? '?'}, sigma: ${config.sigma ?? '?'})`
   }
 
-  createDefaultConfig (): GaussianBlurTransformationConfig {
-    return {
-      radius: 5,
-      sigma: 1
-    }
-  }
-
   getReactComponent (): TransformationComponent {
     return GaussianBlurTransformationComponent
   }
