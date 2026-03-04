@@ -1546,6 +1546,23 @@ image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
 image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
 image-thumbnails.transformations.cover.force-resize: "Force resize"
 
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: "Overlay Image"
+image-thumbnails.transformations.add-overlay.x: "X Position"
+image-thumbnails.transformations.add-overlay.y: "Y Position"
+image-thumbnails.transformations.add-overlay.origin: "Origin"
+image-thumbnails.transformations.add-overlay.origin-top-left: "Top Left"
+image-thumbnails.transformations.add-overlay.origin-top-right: "Top Right"
+image-thumbnails.transformations.add-overlay.origin-center: "Center"
+image-thumbnails.transformations.add-overlay.origin-bottom-left: "Bottom Left"
+image-thumbnails.transformations.add-overlay.origin-bottom-right: "Bottom Right"
+image-thumbnails.transformations.add-overlay.alpha: "Opacity"
+image-thumbnails.transformations.add-overlay.composite: "Composite"
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: "Radius"
+image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+
 # Scale by Width Transformation
 image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
 image-thumbnails.transformations.scale-by-width.width: "Width"
@@ -1554,17 +1571,7 @@ image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
 # Resize Transformation
 image-thumbnails.transformations.resize.config-title: "Configure Resize"
 image-thumbnails.transformations.resize.width: "Width"
-image-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
 image-thumbnails.transformations.resize.height: "Height"
-image-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
-image-thumbnails.transformations.resize.positioning: "Positioning"
-image-thumbnails.transformations.resize.positioning-placeholder: "Select positioning"
-image-thumbnails.transformations.resize.positioning-center: "Center"
-image-thumbnails.transformations.resize.positioning-topleft: "Top Left"
-image-thumbnails.transformations.resize.positioning-topright: "Top Right"
-image-thumbnails.transformations.resize.positioning-bottomleft: "Bottom Left"
-image-thumbnails.transformations.resize.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.resize.force-resize: "Force Resize"
 
 # Scale by Height Transformation
 image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
