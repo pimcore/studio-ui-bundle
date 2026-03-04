@@ -21,8 +21,7 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
   const { t } = useTranslation()
   const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
   const prevDelegateTypeRef = useRef<string | undefined>(undefined)
-  // Use the custom form instance so setFieldsValue supports { triggerChange: true },
-  // which fires onValuesChange and persists injected defaults into fieldDefinitions.
+  const delegateHistoryRef = useRef<Record<string, Record<string, unknown>>>({})
   const form = Form.useFormInstance()
 
   const selectedType = Form.useWatch('delegateDatatype') as string | undefined
@@ -35,6 +34,16 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
     }))
     .sort((a, b) => a.label.localeCompare(b.label))
 
+  const snapshotDelegateValues = (values: Record<string, unknown>): Record<string, unknown> => {
+    const snapshot: Record<string, unknown> = {}
+    for (const [key, value] of Object.entries(values)) {
+      if (!BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype') {
+        snapshot[key] = value
+      }
+    }
+    return snapshot
+  }
+
   useEffect(() => {
     if (selectedType === undefined || selectedType === '') {
       prevDelegateTypeRef.current = undefined
@@ -44,14 +53,14 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
     if (!fieldDefinitionRegistry.hasDynamicType(selectedType)) return
     if (prevDelegateTypeRef.current === selectedType) return
 
-    const isFirstInit = prevDelegateTypeRef.current === undefined
-    prevDelegateTypeRef.current = selectedType
+    const prevDelegateType = prevDelegateTypeRef.current
+    const currentValues = form.getFieldsValue(true) as Record<string, unknown>
 
-    const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
-    const defaultData = dynType.getDefaultData(props.context)
+    if (prevDelegateType === undefined) {
+      delegateHistoryRef.current[selectedType] = snapshotDelegateValues(currentValues)
 
-    if (isFirstInit) {
-      const currentValues = form.getFieldsValue() as Record<string, unknown>
+      const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
+      const defaultData = dynType.getDefaultData(props.context)
       const delegateDefaults: Record<string, unknown> = {}
       for (const [key, value] of Object.entries(defaultData)) {
         if (!BASE_FIELD_KEYS.has(key) && currentValues[key] === undefined) {
@@ -62,18 +71,25 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
         form.setFieldsValue(delegateDefaults, { triggerChange: true })
       }
     } else {
-      const currentValues = form.getFieldsValue() as Record<string, unknown>
-      const nextValues: Record<string, unknown> = {}
+      delegateHistoryRef.current[prevDelegateType] = snapshotDelegateValues(currentValues)
 
+      const nextValues: Record<string, unknown> = {}
       for (const key of Object.keys(currentValues)) {
         if (!BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype') {
           nextValues[key] = undefined
         }
       }
 
-      for (const [key, value] of Object.entries(defaultData)) {
-        if (!BASE_FIELD_KEYS.has(key)) {
-          nextValues[key] = value
+      const history = delegateHistoryRef.current[selectedType]
+      if (history !== undefined) {
+        Object.assign(nextValues, history)
+      } else {
+        const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
+        const defaultData = dynType.getDefaultData(props.context)
+        for (const [key, value] of Object.entries(defaultData)) {
+          if (!BASE_FIELD_KEYS.has(key)) {
+            nextValues[key] = value
+          }
         }
       }
 
@@ -81,6 +97,8 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
         form.setFieldsValue(nextValues, { triggerChange: true })
       }
     }
+
+    prevDelegateTypeRef.current = selectedType
   }, [selectedType])
 
   return (
@@ -95,7 +113,6 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
         />
       </Form.Item>
 
-      {/* Render the selected field type's specific settings */}
       {selectedType !== undefined && selectedType !== '' && fieldDefinitionRegistry.hasDynamicType(selectedType) && (
         fieldDefinitionRegistry.getDynamicType(selectedType).getSpecificFormFields(props.context)
       )}
