@@ -188,6 +188,7 @@ export * from '@Pimcore/components/predefined-layouts/config/config-layout'
 export * from '@Pimcore/components/tabpanel/tabpanel'
 export * from '@Pimcore/components/operational-grid/operational-grid'
 export * from '@Pimcore/components/operational-grid/hooks/use-operations'
+export * from '@Pimcore/components/url-link/url-link'
 
 // @todo what is the difference betweens this one and the one exported from the modal component?
 // export * from '@Pimcore/components/upload/upload-modal/upload-modal'
