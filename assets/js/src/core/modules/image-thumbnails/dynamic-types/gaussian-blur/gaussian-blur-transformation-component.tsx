@@ -9,12 +9,15 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
 export const GaussianBlurTransformationComponent: TransformationComponent = () => {
+  const { t } = useTranslation()
+
   return (
     <Flex
       gap="small"
@@ -22,14 +25,14 @@ export const GaussianBlurTransformationComponent: TransformationComponent = () =
     >
       <Form.Item
         initialValue={ 0 }
-        label="Radius"
+        label={ t('image-thumbnails.transformations.gaussian-blur.radius') }
         name="radius"
       >
         <InputNumber />
       </Form.Item>
       <Form.Item
         initialValue={ 1 }
-        label="Sigma"
+        label={ t('image-thumbnails.transformations.gaussian-blur.sigma') }
         name="sigma"
       >
         <InputNumber />

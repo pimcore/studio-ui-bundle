@@ -66,8 +66,7 @@ export const getFolderKeysFromTree = (
 
   for (const item of items) {
     if ('children' in item && Array.isArray(item.children)) {
-      keys.push(String(item.id))
-      keys.push(...getFolderKeysFromTree(item.children))
+      keys.push(String(item.id), ...getFolderKeysFromTree(item.children))
     }
   }
 

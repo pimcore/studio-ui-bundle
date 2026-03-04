@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
@@ -20,13 +20,13 @@ import type { TransformationComponent } from '../../types/transformation-compone
 export const CoverTransformationComponent: TransformationComponent = () => {
   const { t } = useTranslation()
 
-  const positioningOptions = [
+  const positioningOptions = useMemo(() => [
     { value: 'center', label: t('image-thumbnails.transformations.cover.positioning-center') },
     { value: 'topleft', label: t('image-thumbnails.transformations.cover.positioning-topleft') },
     { value: 'topright', label: t('image-thumbnails.transformations.cover.positioning-topright') },
     { value: 'bottomleft', label: t('image-thumbnails.transformations.cover.positioning-bottomleft') },
     { value: 'bottomright', label: t('image-thumbnails.transformations.cover.positioning-bottomright') }
-  ]
+  ], [t])
 
   return (
     <Flex

@@ -61,8 +61,6 @@ export type TransformationConfig = Record<string, any>
 export interface ResizeConfig extends TransformationConfig {
   width?: number
   height?: number
-  forceResize?: boolean
-  positioning?: string
 }
 
 export interface ScaleByHeightConfig extends TransformationConfig {
@@ -154,7 +152,7 @@ export interface AddOverlayConfig extends TransformationConfig {
 export interface AddOverlayFitConfig extends TransformationConfig {
   asset?: number
   path?: string
-  origin?: string
+  composite?: string
 }
 
 export interface ApplyMaskConfig extends TransformationConfig {

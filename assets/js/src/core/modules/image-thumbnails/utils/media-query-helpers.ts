@@ -35,15 +35,15 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
 
   const defaultEntry = mediaQueries.find(mq => mq.id === DEFAULT_MEDIA_QUERY_ID)
 
-  if (defaultEntry !== undefined) {
+  if (defaultEntry === undefined) {
+    medias.default = []
+    mediaOrder.default = 0
+  } else {
     medias.default = defaultEntry.transformations.map((transformation) => ({
       method: transformation.type,
       arguments: transformation.config
     }))
     mediaOrder.default = defaultEntry.order
-  } else {
-    medias.default = []
-    mediaOrder.default = 0
   }
 
   mediaQueries.forEach((mediaQuery) => {
