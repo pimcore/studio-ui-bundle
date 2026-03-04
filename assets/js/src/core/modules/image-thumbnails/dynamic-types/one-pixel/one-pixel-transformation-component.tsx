@@ -13,8 +13,8 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const OnePixelTransformationComponent: TransformationComponent = () => {
   return (
-    <div style={ { padding: '8px 12px', color: '#666' } }>
-      {'just returns a 1x1 pixel GIF base64 encoded, in case you don\'t want to display an image for a certain condition'}
+    <div style={ { padding: '8px 12px' } }>
+      {'Just returns a 1x1 pixel GIF base64 encoded, in case you don\'t want to display an image for a certain condition.'}
     </div>
   )
 }

@@ -16,10 +16,7 @@ export const NoConfigurationComponent: TransformationComponent = () => {
   const { t } = useTranslation()
 
   return (
-    <div style={ {
-      padding: '8px 12px',
-      color: '#666'
-    } }
+    <div style={ { padding: '8px 12px' } }
     >
       {t('image-thumbnails.transformations.no-configuration-required')}
     </div>

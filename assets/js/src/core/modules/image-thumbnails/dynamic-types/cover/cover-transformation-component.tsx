@@ -34,26 +34,17 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       vertical
     >
       <Form.Item
-        label={ t('image-thumbnails.transformations.cover.width-height') }
+        label={ t('image-thumbnails.transformations.cover.width') }
+        name="width"
       >
-        <Flex
-          gap="small"
-          vertical
-        >
-          <Form.Item
-            name="width"
-            noStyle
-          >
-            <InputNumber />
-          </Form.Item>
+        <InputNumber />
+      </Form.Item>
 
-          <Form.Item
-            name="height"
-            noStyle
-          >
-            <InputNumber />
-          </Form.Item>
-        </Flex>
+      <Form.Item
+        label={ t('image-thumbnails.transformations.cover.height') }
+        name="height"
+      >
+        <InputNumber />
       </Form.Item>
 
       <p style={ { margin: 0 } }>

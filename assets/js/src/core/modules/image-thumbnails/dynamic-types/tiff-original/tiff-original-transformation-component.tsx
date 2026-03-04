@@ -13,7 +13,7 @@ import type { TransformationComponent } from '../../types/transformation-compone
 
 export const TiffOriginalTransformationComponent: TransformationComponent = () => {
   return (
-    <div style={ { padding: '8px 12px', color: '#666' } }>
+    <div style={ { padding: '8px 12px' } }>
       {'Use original TIFF when source format is a TIFF Image -> do not modify it.'}
     </div>
   )
