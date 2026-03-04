@@ -28,7 +28,7 @@ export class DynamicTypeFieldDefinitionCalculatedValue extends DynamicTypeFieldD
   getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),
-      calculatorType: 'class',
+      calculatorType: 'class'
     }
   }
 
