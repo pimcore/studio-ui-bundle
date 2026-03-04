@@ -600,7 +600,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
       <Content
         padded
         padding={ { top: 'none', x: 'extra-small' } }
-        style={ { height: 'fit-content' } }
+        style={ { height: 'fit-content', flexShrink: 0 } }
       >
         <Space
           className='w-full'
@@ -640,15 +640,20 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         </Space>
       </Content>
 
-      <TreeElement
-        defaultExpandedKeys={ expandedKeys }
-        onActionsClick={ onActionsClick }
-        onExpand={ handleExpand }
-        onSelected={ onSelected }
-        selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }
-        titleRender={ titleRender }
-        treeData={ items }
-      />
+      <Content
+        overflow={ { x: 'hidden', y: 'auto' } }
+        style={ { minHeight: 0, flex: 1 } }
+      >
+        <TreeElement
+          defaultExpandedKeys={ expandedKeys }
+          onActionsClick={ onActionsClick }
+          onExpand={ handleExpand }
+          onSelected={ onSelected }
+          selectedKeys={ currentFieldDefinitionId !== null ? [currentFieldDefinitionId] : [] }
+          titleRender={ titleRender }
+          treeData={ items }
+        />
+      </Content>
     </Content>
   )
 }
