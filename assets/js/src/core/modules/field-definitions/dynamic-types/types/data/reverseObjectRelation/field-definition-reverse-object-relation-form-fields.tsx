@@ -27,9 +27,10 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
   const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
+  const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
-  const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
+  const { options: ownerFieldNameOptions, isLoading: isLoadingOwnerFieldName } = useClassRelationFieldsOptions(ownerClassName)
   const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions([ownerClassName ?? ''])
 
   useEffect(() => {
@@ -46,7 +47,19 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
     }
   }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
 
-  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
+  useEffect(() => {
+    if (isLoadingOwnerFieldName) {
+      return
+    }
+
+    const availableFieldValues = new Set<string>(ownerFieldNameOptions.map((option) => option.value))
+
+    if (ownerFieldName !== undefined && !availableFieldValues.has(ownerFieldName)) {
+      form.setFieldValue('ownerFieldName', undefined)
+    }
+  }, [ownerFieldNameOptions, isLoadingOwnerFieldName, ownerFieldName, form])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields || isLoadingOwnerFieldName
 
   return (
     <>
@@ -93,6 +106,7 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
         name="ownerFieldName"
       >
         <Select
+          loadingSkeleton={ isLoadingOwnerFieldName }
           options={ ownerFieldNameOptions }
           showSearch
         />

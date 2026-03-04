@@ -270,7 +270,8 @@ export const {
   useClassObjectBrickCustomLayoutUpdateMutation,
   useClassObjectBrickCustomLayoutDeleteMutation,
   useClassObjectBrickCustomLayoutExportQuery,
-  useClassObjectBrickCustomLayoutImportMutation
+  useClassObjectBrickCustomLayoutImportMutation,
+  useClassGetFieldsByTypeQuery
 } = api
 
 export { api }
