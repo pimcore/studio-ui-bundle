@@ -80,7 +80,6 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
     )
   }
 
-
   getSpecificSettingsPanel (context: FieldDefinitionContext): React.JSX.Element {
     return (
       <FormKit.Panel title={ t('specific-settings') }>
