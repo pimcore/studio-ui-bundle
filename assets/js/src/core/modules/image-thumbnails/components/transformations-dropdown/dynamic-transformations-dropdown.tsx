@@ -37,7 +37,7 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
         onTransformationAdd(type, config)
       }
     } catch {
-      trackError(new GeneralError("There has been an error while adding the transformation"))
+      trackError(new GeneralError('There has been an error while adding the transformation'))
     }
   }
 
