@@ -2178,3 +2178,5 @@ rendering-data: Data Passed to render
 zoom-level: Zoom level
 class: Class
 layout.text.help: 'You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>'
+configuration: Configuration
+drag-object-for-preview: Drag object for preview
