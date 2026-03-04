@@ -74,10 +74,12 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
           id={ fieldDefinition?.name ?? id }
           type={ this.id }
         />
+        {this.getCustomLayoutOptions(context)}
         {this.getSpecificSettingsPanel(context)}
       </>
     )
   }
+
 
   getSpecificSettingsPanel (context: FieldDefinitionContext): React.JSX.Element {
     return (
@@ -88,6 +90,10 @@ export abstract class DynamicTypeFieldDefinitionDataAbstract extends DynamicType
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return <></>
+  }
+
+  getCustomLayoutOptions (context: FieldDefinitionContext): React.JSX.Element {
     return <></>
   }
 }

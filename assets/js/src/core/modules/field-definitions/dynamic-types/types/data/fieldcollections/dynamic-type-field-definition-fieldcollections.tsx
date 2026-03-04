@@ -35,11 +35,8 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
     return [...super.getGroup(), 'structured']
   }
 
-  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getCustomLayoutOptions (context: FieldDefinitionContext): React.JSX.Element {
     const isCustomLayout = context.area.includes('custom-layout')
-    const id = this.getId(context)
-    const fieldDefinition = context.fieldDefinitions[id]
-
     return (
       <>
         {!isCustomLayout && (
@@ -58,12 +55,20 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
             </Form.Item>
           </FormKit.Panel>
         )}
-        <FieldDefinitionFieldcollectionsFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
       </>
+    )
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = this.getId(context)
+    const fieldDefinition = context.fieldDefinitions[id]
+
+    return (
+      <FieldDefinitionFieldcollectionsFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 
