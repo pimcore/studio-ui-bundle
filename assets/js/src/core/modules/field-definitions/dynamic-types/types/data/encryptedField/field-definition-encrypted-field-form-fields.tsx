@@ -15,7 +15,7 @@ import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { container, serviceIds } from '@sdk/app'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
-import { kebabCase } from 'lodash'
+import { isEmpty, kebabCase, mapValues, omitBy, pickBy } from 'lodash'
 
 export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -34,14 +34,41 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
     }))
     .sort((a, b) => a.label.localeCompare(b.label))
 
+  const isDelegateKey = (key: string): boolean => {
+    return !BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype'
+  }
+
   const snapshotDelegateValues = (values: Record<string, unknown>): Record<string, unknown> => {
-    const snapshot: Record<string, unknown> = {}
-    for (const [key, value] of Object.entries(values)) {
-      if (!BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype') {
-        snapshot[key] = value
-      }
+    return pickBy(values, (_v, key) => isDelegateKey(key))
+  }
+
+  const getDelegateDefaults = (type: string): Record<string, unknown> => {
+    const dynType = fieldDefinitionRegistry.getDynamicType(type)
+    return dynType.getDefaultData(props.context)
+  }
+
+  const applyIfNotEmpty = (values: Record<string, unknown>): void => {
+    if (!isEmpty(values)) {
+      form.setFieldsValue(values, { triggerChange: true })
     }
-    return snapshot
+  }
+
+  const handleInitialType = (type: string, currentValues: Record<string, unknown>): void => {
+    delegateHistoryRef.current[type] = snapshotDelegateValues(currentValues)
+
+    const defaults = getDelegateDefaults(type)
+    const missing = pickBy(defaults, (value, key) => !BASE_FIELD_KEYS.has(key) && currentValues[key] === undefined)
+    applyIfNotEmpty(missing)
+  }
+
+  const handleTypeSwitch = (prevType: string, nextType: string, currentValues: Record<string, unknown>): void => {
+    delegateHistoryRef.current[prevType] = snapshotDelegateValues(currentValues)
+
+    const cleared = mapValues(pickBy(currentValues, (_v, key) => isDelegateKey(key)), () => undefined)
+    const history = delegateHistoryRef.current[nextType]
+    const restored = history ?? omitBy(getDelegateDefaults(nextType), (_v, key) => BASE_FIELD_KEYS.has(key))
+
+    applyIfNotEmpty({ ...cleared, ...restored })
   }
 
   useEffect(() => {
@@ -57,45 +84,9 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
     const currentValues = form.getFieldsValue(true) as Record<string, unknown>
 
     if (prevDelegateType === undefined) {
-      delegateHistoryRef.current[selectedType] = snapshotDelegateValues(currentValues)
-
-      const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
-      const defaultData = dynType.getDefaultData(props.context)
-      const delegateDefaults: Record<string, unknown> = {}
-      for (const [key, value] of Object.entries(defaultData)) {
-        if (!BASE_FIELD_KEYS.has(key) && currentValues[key] === undefined) {
-          delegateDefaults[key] = value
-        }
-      }
-      if (Object.keys(delegateDefaults).length > 0) {
-        form.setFieldsValue(delegateDefaults, { triggerChange: true })
-      }
+      handleInitialType(selectedType, currentValues)
     } else {
-      delegateHistoryRef.current[prevDelegateType] = snapshotDelegateValues(currentValues)
-
-      const nextValues: Record<string, unknown> = {}
-      for (const key of Object.keys(currentValues)) {
-        if (!BASE_FIELD_KEYS.has(key) && key !== 'delegateDatatype') {
-          nextValues[key] = undefined
-        }
-      }
-
-      const history = delegateHistoryRef.current[selectedType]
-      if (history !== undefined) {
-        Object.assign(nextValues, history)
-      } else {
-        const dynType = fieldDefinitionRegistry.getDynamicType(selectedType)
-        const defaultData = dynType.getDefaultData(props.context)
-        for (const [key, value] of Object.entries(defaultData)) {
-          if (!BASE_FIELD_KEYS.has(key)) {
-            nextValues[key] = value
-          }
-        }
-      }
-
-      if (Object.keys(nextValues).length > 0) {
-        form.setFieldsValue(nextValues, { triggerChange: true })
-      }
+      handleTypeSwitch(prevDelegateType, selectedType, currentValues)
     }
 
     prevDelegateTypeRef.current = selectedType
