@@ -36,8 +36,8 @@ export const DynamicTransformationsDropdown: React.FC<DynamicTransformationsDrop
       if (config !== null) {
         onTransformationAdd(type, config)
       }
-    } catch (error) {
-      trackError(new GeneralError(error))
+    } catch {
+      trackError(new GeneralError("There has been an error while adding the transformation"))
     }
   }
 
