@@ -36,7 +36,7 @@ export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractForm
     const values = form.getFieldsValue(true) as Record<string, unknown>
     const params = new URLSearchParams()
 
-    params.set('className', className)
+    params.set('className', className as string)
 
     if (objectPath !== '') {
       params.set('path', objectPath)
