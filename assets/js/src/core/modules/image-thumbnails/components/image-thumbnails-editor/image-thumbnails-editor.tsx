@@ -131,40 +131,40 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     if (isEmpty(selectedThumbnail) || currentFormData === null) return
 
     form.validateFields().then(async (values: ThumbnailFormData) => {
-        const updatedSettings = {
-          name: values.name,
-          description: values.description,
-          format: values.format,
-          group: (values.group === '' ? '' : values.group) ?? '',
-          quality: values.quality,
-          highResolution: values.highResolution,
-          preserveColor: values.preserveColor ?? false,
-          forceProcessICCProfiles: values.forceProcessICCProfiles ?? false,
-          preserveMetaData: values.preserveMetaData ?? false,
-          rasterizeSVG: values.rasterizeSVG ?? false,
-          useCropBox: values.useCropBox ?? false,
-          downloadable: values.downloadable ?? false,
-          preserveAnimation: values.preserveAnimation ?? false
+      const updatedSettings = {
+        name: values.name,
+        description: values.description,
+        format: values.format,
+        group: (values.group === '' ? '' : values.group) ?? '',
+        quality: values.quality,
+        highResolution: values.highResolution,
+        preserveColor: values.preserveColor ?? false,
+        forceProcessICCProfiles: values.forceProcessICCProfiles ?? false,
+        preserveMetaData: values.preserveMetaData ?? false,
+        rasterizeSVG: values.rasterizeSVG ?? false,
+        useCropBox: values.useCropBox ?? false,
+        downloadable: values.downloadable ?? false,
+        preserveAnimation: values.preserveAnimation ?? false
+      }
+
+      const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
+
+      const result = await updateThumbnail({
+        name: selectedThumbnail.name,
+        updateThumbnailConfig: {
+          settings: updatedSettings,
+          medias,
+          mediaOrder
         }
+      })
 
-        const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
+      if (has(result, 'error')) {
+        return
+      }
 
-        const result = await updateThumbnail({
-          name: selectedThumbnail.name,
-          updateThumbnailConfig: {
-            settings: updatedSettings,
-            medias,
-            mediaOrder
-          }
-        })
+      setInitialFormData({ ...currentFormData })
 
-        if (has(result, 'error')) {
-          return
-        }
-
-        setInitialFormData({ ...currentFormData })
-
-        void messageApi.success(t('save-success'))
+      void messageApi.success(t('save-success'))
     }).catch(() => {
       trackError(new GeneralError('Validation failed'))
     })
