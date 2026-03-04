@@ -72,13 +72,11 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        <FieldDefinitionBlockFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionBlockFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 
