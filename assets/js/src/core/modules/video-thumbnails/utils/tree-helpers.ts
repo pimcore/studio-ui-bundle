@@ -59,15 +59,15 @@ export const filterThumbnailsRecursive = (
   })
 }
 
-export const extractGroupsFromTree = (
+export const getFolderKeysFromTree = (
   items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>
-): Array<{ value: string, label: string }> => {
-  const groups = new Set<string>()
+): string[] => {
+  const keys: string[] = []
 
   const traverseItems = (items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>): void => {
     for (const item of items) {
       if ('children' in item && Array.isArray(item.children)) {
-        groups.add(item.name)
+        keys.push(item.id)
         traverseItems(item.children)
       }
     }
@@ -75,8 +75,5 @@ export const extractGroupsFromTree = (
 
   traverseItems(items)
 
-  return Array.from(groups).map(group => ({
-    value: group,
-    label: group
-  }))
+  return keys
 }

@@ -80,7 +80,7 @@ export const useVideoThumbnailConfig = ({ refetch }: UseVideoThumbnailConfigProp
         message: t('video-thumbnails.add.validation.message')
       },
       onOk: async (value: string) => {
-        const sanitized = value.replace(/[^a-zA-Z0-9_-]/g, '')
+        const sanitized = value.replaceAll(/[^a-zA-Z0-9_-]/g, '')
 
         if (sanitized.length <= 2) {
           void messageApi.error(t('video-thumbnails.add.validation.message'))

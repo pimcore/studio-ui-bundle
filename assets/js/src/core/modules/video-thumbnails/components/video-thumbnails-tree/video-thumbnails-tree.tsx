@@ -153,10 +153,10 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
 
       if (isFolder) {
         const currentKeys = expandedKeys
-        if (!isNil(currentKeys) && currentKeys.includes(key)) {
-          setExpandedKeys(currentKeys.filter(k => k !== key))
-        } else {
+        if (isNil(currentKeys) || !currentKeys.includes(key)) {
           setExpandedKeys([...currentKeys, key])
+        } else {
+          setExpandedKeys(currentKeys.filter(k => k !== key))
         }
       } else {
         onThumbnailSelect(thumbnail as ThumbnailConfigurationData)

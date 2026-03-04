@@ -27,7 +27,6 @@ export const ColorChannelMixerVideoTransformationComponent: TransformationCompon
       vertical
     >
       <Form.Item
-        initialValue="grayscale"
         label="Effect"
         name="effect"
       >

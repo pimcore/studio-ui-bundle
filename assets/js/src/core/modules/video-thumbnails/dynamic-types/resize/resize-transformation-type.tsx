@@ -31,10 +31,7 @@ export class ResizeVideoTransformationType extends TransformationDynamicTypeAbst
   }
 
   createDefaultConfig (): ResizeVideoTransformationConfig {
-    return {
-      width: 640,
-      height: 480
-    }
+    return {}
   }
 
   getReactComponent (): TransformationComponent {

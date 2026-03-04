@@ -44,7 +44,7 @@ export const VideoMediaQueriesPanel = ({
         required: true
       },
       onOk: async (segmentName: string) => {
-        const sanitised = segmentName.trim().replace(/[^a-zA-Z0-9_\-+]/g, '')
+        const sanitised = segmentName.trim().replaceAll(/[^a-zA-Z0-9_\-+]/g, '')
 
         if (sanitised === '') return
         if (mediaQueries.some(mq => mq.query === sanitised)) return

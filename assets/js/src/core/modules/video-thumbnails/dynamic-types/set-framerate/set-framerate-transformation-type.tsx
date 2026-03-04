@@ -26,12 +26,12 @@ export class SetFramerateVideoTransformationType extends TransformationDynamicTy
   }
 
   getSummary (config: SetFramerateVideoTransformationConfig): string {
-    return `Set Framerate ${config.fps ?? 25}fps`
+    return `Set Framerate ${config.fps ?? 1}fps`
   }
 
   createDefaultConfig (): SetFramerateVideoTransformationConfig {
     return {
-      fps: 25
+      fps: 1
     }
   }
 

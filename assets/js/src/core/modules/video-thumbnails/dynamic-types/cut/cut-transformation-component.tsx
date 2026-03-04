@@ -21,18 +21,16 @@ export const CutVideoTransformationComponent: TransformationComponent = () => {
       vertical
     >
       <Form.Item
-        initialValue="00:00:00.000"
         label="Start"
         name="start"
       >
-        <Input placeholder="00:00:00.000" />
+        <Input />
       </Form.Item>
       <Form.Item
-        initialValue="00:00:10.000"
         label="Duration"
         name="duration"
       >
-        <Input placeholder="00:00:10.000" />
+        <Input />
       </Form.Item>
     </Flex>
   )

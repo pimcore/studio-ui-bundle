@@ -30,9 +30,7 @@ export class ScaleByWidthVideoTransformationType extends TransformationDynamicTy
   }
 
   createDefaultConfig (): ScaleByWidthVideoTransformationConfig {
-    return {
-      width: 1280
-    }
+    return {}
   }
 
   getReactComponent (): TransformationComponent {

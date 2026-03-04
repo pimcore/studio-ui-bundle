@@ -21,14 +21,12 @@ export const SetFramerateVideoTransformationComponent: TransformationComponent =
       vertical
     >
       <Form.Item
-        initialValue={ 25 }
         label="FPS"
         name="fps"
       >
         <InputNumber
           max={ 60 }
           min={ 1 }
-          placeholder="25"
         />
       </Form.Item>
     </Flex>

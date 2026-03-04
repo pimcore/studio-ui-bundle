@@ -35,7 +35,7 @@ export const VideoTransformationsDropdown: React.FC<VideoTransformationsDropdown
       if (config !== null) {
         onTransformationAdd(type, config)
       }
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Error configuring video transformation'))
     }
   }

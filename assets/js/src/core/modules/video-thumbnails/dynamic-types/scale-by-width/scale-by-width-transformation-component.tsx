@@ -21,11 +21,10 @@ export const ScaleByWidthVideoTransformationComponent: TransformationComponent =
       vertical
     >
       <Form.Item
-        initialValue={ 1280 }
         label="Width"
         name="width"
       >
-        <InputNumber placeholder="1280" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

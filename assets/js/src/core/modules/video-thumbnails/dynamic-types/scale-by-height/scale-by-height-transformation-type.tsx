@@ -30,9 +30,7 @@ export class ScaleByHeightVideoTransformationType extends TransformationDynamicT
   }
 
   createDefaultConfig (): ScaleByHeightVideoTransformationConfig {
-    return {
-      height: 720
-    }
+    return {}
   }
 
   getReactComponent (): TransformationComponent {

@@ -11,7 +11,6 @@
 import React from 'react'
 import { FieldCollectionRegistry, type FieldCollectionRegistryItem } from '@Pimcore/components/form/controls/field-collection/field-collection-registry'
 import type { VideoTransformationDynamicTypeRegistry } from '../dynamic-types/video-transformation-dynamic-type-registry'
-import { VideoTransformationFieldCollectionItem } from '../components/transformation-field-collection-item'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export class VideoTransformationFieldCollectionRegistry extends FieldCollectionRegistry {
@@ -24,13 +23,13 @@ export class VideoTransformationFieldCollectionRegistry extends FieldCollectionR
     const transformationItems = this.transformationRegistry.getDynamicTypes()
 
     transformationItems.forEach(transformation => {
+      const Component = transformation.getReactComponent()
+
       const registryItem: FieldCollectionRegistryItem = {
         type: transformation.getId(),
         key: transformation.getId(),
         translationKey: transformation.getLabel(),
-        component: React.createElement(VideoTransformationFieldCollectionItem, {
-          transformationType: transformation.getId()
-        })
+        component: React.createElement(Component)
       }
 
       this.register(registryItem)

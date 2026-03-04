@@ -26,9 +26,9 @@ export class ColorChannelMixerVideoTransformationType extends TransformationDyna
   }
 
   getSummary (config: ColorChannelMixerVideoTransformationConfig): string {
-    const effectLabel = config.effect != null
-      ? config.effect.charAt(0).toUpperCase() + config.effect.slice(1)
-      : 'Grayscale'
+    const effectLabel = config.effect == null
+      ? 'Grayscale'
+      : config.effect.charAt(0).toUpperCase() + config.effect.slice(1)
     return `Color Channel Mixer (${effectLabel})`
   }
 

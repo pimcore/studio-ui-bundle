@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -73,7 +73,7 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     }
   }, [updateError])
 
-  const isDirty = React.useMemo(() => {
+  const isDirty = useMemo(() => {
     if (isNull(initialFormData) || isNull(currentFormData)) return false
     return !isEqual(initialFormData, currentFormData)
   }, [initialFormData, currentFormData])
@@ -141,43 +141,43 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   }, [form])
 
   const handleSave = useCallback((): void => {
-    if (isEmpty(selectedThumbnail) || currentFormData === null) return
+    if (isNil(selectedThumbnail) || currentFormData === null) return
 
     form.validateFields().then(async (values: VideoThumbnailFormData) => {
-      try {
-        const updatedSettings = {
-          name: values.name,
-          description: values.description,
-          group: (values.group === '' ? '' : values.group) ?? '',
-          videoBitrate: values.videoBitrate,
-          audioBitrate: values.audioBitrate
-        }
-
-        const { medias, mediaOrder } = convertToBackendFormat([], currentFormData.mediaSegments ?? [])
-
-        const { data: response } = await updateThumbnail({
-          name: selectedThumbnail.name,
-          updateThumbnailConfig: {
-            settings: updatedSettings,
-            medias,
-            mediaOrder
-          }
-        })
-
-        if (!isEmpty(response)) {
-          modificationDateRef.current = (response as any).settings?.modificationDate ?? modificationDateRef.current
-        }
-
-        setInitialFormData({ ...currentFormData })
-
-        void messageApi.success(t('save-success'))
-      } catch {
-        trackError(new GeneralError('Could not save video thumbnail configuration'))
+      const updatedSettings = {
+        name: values.name,
+        description: values.description,
+        group: (values.group === '' ? '' : values.group) ?? '',
+        videoBitrate: values.videoBitrate,
+        audioBitrate: values.audioBitrate
       }
+
+      const { medias, mediaOrder } = convertToBackendFormat([], currentFormData.mediaSegments ?? [])
+
+      const result = await updateThumbnail({
+        name: selectedThumbnail.name,
+        updateThumbnailConfig: {
+          settings: updatedSettings,
+          medias,
+          mediaOrder
+        }
+      })
+
+      if ('error' in result) {
+        return
+      }
+
+      if (result.data?.settings?.modificationDate != null) {
+        modificationDateRef.current = result.data.settings.modificationDate
+      }
+
+      setInitialFormData({ ...currentFormData })
+
+      void messageApi.success(t('save-success'))
     }).catch(() => {
       trackError(new GeneralError('Validation failed'))
     })
-  }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
+  }, [selectedThumbnail, currentFormData, updateThumbnail, form, messageApi, t])
 
   const renderSaveButton = (): React.JSX.Element | null => {
     if (!isActive || selectedThumbnail == null) {

@@ -10,7 +10,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '@Pimcore/modules/image-thumbnails/dynamic-types/transformation-dynamic-type-abstract'
-import { NoConfigurationComponent } from '@Pimcore/modules/image-thumbnails/components/no-config-component'
+import { MuteTransformationComponent } from './mute-transformation-component'
 import { type TransformationComponent } from '@Pimcore/modules/image-thumbnails/types/transformation-component-types'
 
 @injectable()
@@ -22,6 +22,6 @@ export class MuteVideoTransformationType extends TransformationDynamicTypeAbstra
   }
 
   getReactComponent (): TransformationComponent {
-    return NoConfigurationComponent
+    return MuteTransformationComponent
   }
 }

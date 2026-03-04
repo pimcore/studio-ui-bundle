@@ -21,18 +21,16 @@ export const ResizeVideoTransformationComponent: TransformationComponent = () =>
       vertical
     >
       <Form.Item
-        initialValue={ 640 }
         label="Width"
         name="width"
       >
-        <InputNumber placeholder="640" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
-        initialValue={ 480 }
         label="Height"
         name="height"
       >
-        <InputNumber placeholder="480" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

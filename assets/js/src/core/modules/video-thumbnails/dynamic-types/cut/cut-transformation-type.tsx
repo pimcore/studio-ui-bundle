@@ -27,13 +27,13 @@ export class CutVideoTransformationType extends TransformationDynamicTypeAbstrac
   }
 
   getSummary (config: CutVideoTransformationConfig): string {
-    return `Cut from ${config.start ?? '00:00:00.000'} (${config.duration ?? '00:00:10.000'})`
+    return `Cut from ${config.start ?? '00:00:00'} (${config.duration ?? '00:00:00'})`
   }
 
   createDefaultConfig (): CutVideoTransformationConfig {
     return {
-      start: '00:00:00.000',
-      duration: '00:00:10.000'
+      start: '00:00:00',
+      duration: '00:00:00'
     }
   }
 
