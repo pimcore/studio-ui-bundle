@@ -42,12 +42,33 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
     })
   })
 
+  // @todo keep in sync with the gap value below
+  const GAP_SIZE = 12
+  const numGaps = maxWidthsPerColumn.length - 1
+
+  const applyGapCorrection = (value: string): string => {
+    if (!value.endsWith('%')) {
+      return value
+    }
+
+    const percentage = parseFloat(value)
+    const gapCorrection = numGaps * GAP_SIZE * (percentage / 100)
+
+    return `calc(${value} - ${gapCorrection}px)`
+  }
+
   const gridTemplateColumns = maxWidthsPerColumn.map((column) => {
     if (column.length === 0) {
       return '1fr'
     }
 
-    return `max(${column.join(',')})`
+    const correctedValues = column.map(applyGapCorrection)
+
+    if (correctedValues.length === 1) {
+      return correctedValues[0]
+    }
+
+    return `max(${correctedValues.join(',')})`
   }).join(' ')
 
   return {
@@ -55,7 +76,7 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
       display: flex;
       flex-direction: column;
       // @todo make this configurable
-      gap: 12px;
+      gap: ${GAP_SIZE}px;
 
       // @todo we should introduce a predefined set of breakpoints
       @container ${cssContainerWidget.name} (min-width: 768px) {
