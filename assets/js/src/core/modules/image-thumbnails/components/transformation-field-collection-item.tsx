@@ -12,7 +12,6 @@ import React from 'react'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type TransformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
-import { Form } from '@Pimcore/components/form/form'
 
 export interface TransformationFieldCollectionItemProps {
   transformationType: string
@@ -30,9 +29,5 @@ export const TransformationFieldCollectionItem = ({
 
   const Component = registryItem.getReactComponent()
 
-  return (
-    <Form.Group name="config">
-      <Component />
-    </Form.Group>
-  )
+  return <Component />
 }
