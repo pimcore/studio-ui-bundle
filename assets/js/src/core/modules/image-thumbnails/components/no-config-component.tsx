@@ -18,8 +18,7 @@ export const NoConfigurationComponent: TransformationComponent = () => {
   return (
     <div style={ {
       padding: '8px 12px',
-      color: '#666',
-      fontStyle: 'italic'
+      color: '#666'
     } }
     >
       {t('image-thumbnails.transformations.no-configuration-required')}

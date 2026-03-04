@@ -25,11 +25,11 @@ export class CoverTransformationType extends TransformationDynamicTypeAbstract<C
   readonly id = 'cover'
 
   getLabel (): string {
-    return 'Cover'
+    return 'Cover (Focal Point Support)'
   }
 
   getSummary (config: CoverTransformationConfig): string {
-    return `Cover ${config.width ?? '?'}x${config.height ?? '?'}`
+    return `Cover (Focal Point Support) ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   getReactComponent (): TransformationComponent {

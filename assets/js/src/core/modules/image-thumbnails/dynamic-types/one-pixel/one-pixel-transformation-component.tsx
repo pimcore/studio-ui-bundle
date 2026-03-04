@@ -9,23 +9,14 @@
  */
 
 import React from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Form } from '@Pimcore/components/form/form'
-import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const RotateTransformationComponent: TransformationComponent = () => {
+export const OnePixelTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex
-      gap="small"
-      vertical
-    >
-      <Form.Item
-        label="Angle"
-        name="angle"
-      >
-        <InputNumber />
-      </Form.Item>
-    </Flex>
+    <div style={ { padding: '8px 12px', color: '#666' } }>
+      {'just returns a 1x1 pixel GIF base64 encoded, in case you don\'t want to display an image for a certain condition'}
+    </div>
   )
 }
+
+OnePixelTransformationComponent.displayName = 'OnePixelTransformationComponent'

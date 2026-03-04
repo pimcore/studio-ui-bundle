@@ -36,9 +36,11 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       <Form.Item
         label={ t('image-thumbnails.transformations.cover.width-height') }
       >
-        <Flex gap="small">
+        <Flex
+          gap="small"
+          vertical
+        >
           <Form.Item
-            initialValue={ 800 }
             name="width"
             noStyle
           >
@@ -46,7 +48,6 @@ export const CoverTransformationComponent: TransformationComponent = () => {
           </Form.Item>
 
           <Form.Item
-            initialValue={ 600 }
             name="height"
             noStyle
           >
@@ -60,7 +61,6 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       </p>
 
       <Form.Item
-        initialValue="center"
         label={ t('image-thumbnails.transformations.cover.positioning') }
         name="positioning"
       >
@@ -68,7 +68,6 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       </Form.Item>
 
       <Form.Item
-        initialValue={ false }
         label={ t('image-thumbnails.transformations.cover.force-resize') }
         name="forceResize"
         valuePropName="checked"

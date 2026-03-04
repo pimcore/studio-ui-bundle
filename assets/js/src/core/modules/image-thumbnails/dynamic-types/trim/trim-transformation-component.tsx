@@ -21,11 +21,10 @@ export const TrimTransformationComponent: TransformationComponent = () => {
       vertical
     >
       <Form.Item
-        initialValue={ 10 }
         label="Tolerance"
         name="tolerance"
       >
-        <InputNumber placeholder="Enter tolerance value" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

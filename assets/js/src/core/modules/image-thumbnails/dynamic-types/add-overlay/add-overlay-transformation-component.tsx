@@ -13,7 +13,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
-import { Slider } from '@Pimcore/components/slider/slider'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
@@ -23,6 +22,12 @@ const originOptions = [
   { value: 'center', label: 'Center' },
   { value: 'bottom-left', label: 'Bottom Left' },
   { value: 'bottom-right', label: 'Bottom Right' }
+]
+
+const compositeOptions = [
+  { value: 'COMPOSITE_DEFAULT', label: 'COMPOSITE_DEFAULT' },
+  { value: 'COMPOSITE_EXCLUSION', label: 'COMPOSITE_EXCLUSION' },
+  { value: 'COMPOSITE_HARDLIGHT', label: 'COMPOSITE_HARDLIGHT' }
 ]
 
 export const AddOverlayTransformationComponent: TransformationComponent = () => {
@@ -43,35 +48,38 @@ export const AddOverlayTransformationComponent: TransformationComponent = () => 
         />
       </Form.Item>
       <Form.Item
-        initialValue={ 0 }
         label="X Position"
         name="x"
       >
-        <InputNumber placeholder="Horizontal position in pixels" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
-        initialValue={ 0 }
         label="Y Position"
         name="y"
       >
-        <InputNumber placeholder="Vertical position in pixels" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
-        initialValue="top-left"
         label="Origin"
         name="origin"
       >
         <Select options={ originOptions } />
       </Form.Item>
       <Form.Item
-        initialValue={ 100 }
         label="Opacity"
         name="alpha"
       >
-        <Slider
+        <InputNumber
           max={ 100 }
           min={ 0 }
         />
+      </Form.Item>
+      <Form.Item
+        initialValue="COMPOSITE_DEFAULT"
+        label="Composite"
+        name="composite"
+      >
+        <Select options={ compositeOptions } />
       </Form.Item>
     </Flex>
   )

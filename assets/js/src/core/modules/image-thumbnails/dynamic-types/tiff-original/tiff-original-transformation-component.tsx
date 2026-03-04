@@ -9,23 +9,14 @@
  */
 
 import React from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Form } from '@Pimcore/components/form/form'
-import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-export const RotateTransformationComponent: TransformationComponent = () => {
+export const TiffOriginalTransformationComponent: TransformationComponent = () => {
   return (
-    <Flex
-      gap="small"
-      vertical
-    >
-      <Form.Item
-        label="Angle"
-        name="angle"
-      >
-        <InputNumber />
-      </Form.Item>
-    </Flex>
+    <div style={ { padding: '8px 12px', color: '#666' } }>
+      {'Use original TIFF when source format is a TIFF Image -> do not modify it.'}
+    </div>
   )
 }
+
+TiffOriginalTransformationComponent.displayName = 'TiffOriginalTransformationComponent'

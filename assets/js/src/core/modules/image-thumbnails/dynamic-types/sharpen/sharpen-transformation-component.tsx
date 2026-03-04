@@ -21,29 +21,32 @@ export const SharpenTransformationComponent: TransformationComponent = () => {
       vertical
     >
       <Form.Item
+        initialValue={ 0 }
         label="Radius"
         name="radius"
       >
-        <InputNumber placeholder="Enter radius value" />
+        <InputNumber step={ 0.1 } />
       </Form.Item>
       <Form.Item
+        initialValue={ 1 }
         label="Sigma"
         name="sigma"
       >
-        <InputNumber placeholder="Enter sigma value" />
+        <InputNumber step={ 0.1 } />
       </Form.Item>
       <Form.Item
+        initialValue={ 1 }
         label="Amount"
         name="amount"
       >
-        <InputNumber placeholder="Enter amount value" />
+        <InputNumber step={ 0.1 } />
       </Form.Item>
       <Form.Item
-        initialValue={ 0 }
+        initialValue={ 0.05 }
         label="Threshold"
         name="threshold"
       >
-        <InputNumber placeholder="Enter threshold value" />
+        <InputNumber step={ 0.01 } />
       </Form.Item>
     </Flex>
   )

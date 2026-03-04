@@ -11,7 +11,7 @@
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
-import { Slider } from '@Pimcore/components/slider/slider'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
 export const BrightnessSaturationTransformationComponent: TransformationComponent = () => {
@@ -25,7 +25,7 @@ export const BrightnessSaturationTransformationComponent: TransformationComponen
         label="Brightness"
         name="brightness"
       >
-        <Slider
+        <InputNumber
           max={ 200 }
           min={ 0 }
         />
@@ -35,7 +35,7 @@ export const BrightnessSaturationTransformationComponent: TransformationComponen
         label="Saturation"
         name="saturation"
       >
-        <Slider
+        <InputNumber
           max={ 200 }
           min={ 0 }
         />
@@ -45,7 +45,7 @@ export const BrightnessSaturationTransformationComponent: TransformationComponen
         label="Hue"
         name="hue"
       >
-        <Slider
+        <InputNumber
           max={ 200 }
           min={ 0 }
         />
