@@ -9,18 +9,16 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, IconSelector } from '@sdk/components'
+import { Form, IconSelector } from '@sdk/components'
 import React from 'react'
 
 export const FieldDefinitionLayoutTypeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
-      <Form.Item
-        label="icon"
-        name="icon"
-      >
-        <IconSelector />
-      </Form.Item>
-    </FormKit.Panel>
+    <Form.Item
+      label="icon"
+      name="icon"
+    >
+      <IconSelector />
+    </Form.Item>
   )
 }

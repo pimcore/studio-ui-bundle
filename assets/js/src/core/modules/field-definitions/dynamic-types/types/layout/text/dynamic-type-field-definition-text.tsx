@@ -25,19 +25,16 @@ export class DynamicTypeFieldDefinitionText extends DynamicTypeFieldDefinitionLa
     return { type: 'name', value: 'text-field' }
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionTextFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionTextFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }
