@@ -19,17 +19,21 @@ export interface HeaderProps {
   icon?: React.JSX.Element
   className?: string
   fullWidth?: boolean
+  style?: React.CSSProperties
   title: string
   children?: React.ReactNode
 }
 
 export const Header = (props: HeaderProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { icon, title, children } = props
+  const { icon, title, children, style } = props
   const classNames = cn(styles.header, props.className)
 
   return (
-    <div className={ classNames }>
+    <div
+      className={ classNames }
+      style={ style }
+    >
       { title !== '' && (
         <span className={ 'header__text' }>
           <Title icon={ icon }>
