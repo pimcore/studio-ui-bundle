@@ -18,6 +18,7 @@ import { type IconLibrary } from './services/icon-library'
 import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import accordion from '@Pimcore/assets/icons/accordion.inline.svg?react'
+import activities from '@Pimcore/assets/icons/activities.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
 import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
@@ -38,6 +39,7 @@ import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import autofill from '@Pimcore/assets/icons/autofill.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
@@ -69,6 +71,7 @@ import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-ho
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
+import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
@@ -252,6 +255,7 @@ import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline
 import numberField from '@Pimcore/assets/icons/number-field.inline.svg?react'
 import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
+import objectBricks from '@Pimcore/assets/icons/object-bricks.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
@@ -347,6 +351,7 @@ import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
 import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
+import translations from '@Pimcore/assets/icons/translations.inline.svg?react'
 import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
 import trimmer from '@Pimcore/assets/icons/trimmer.inline.svg?react'
@@ -363,6 +368,7 @@ import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
 import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
 import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
+import videoThumbnail from '@Pimcore/assets/icons/video-thumbnail.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
@@ -389,6 +395,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'accordion',
       component: accordion
+    })
+    iconLibrary.register({
+      name: 'activities',
+      component: activities
     })
     iconLibrary.register({
       name: 'add-find',
@@ -469,6 +479,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'auto-save',
       component: autoSave
+    })
+    iconLibrary.register({
+      name: 'autofill',
+      component: autofill
     })
     iconLibrary.register({
       name: 'automation-integration',
@@ -593,6 +607,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'class',
       component: classIcon
+    })
+    iconLibrary.register({
+      name: 'classification-store',
+      component: classificationStore
     })
     iconLibrary.register({
       name: 'close-filled',
@@ -1327,6 +1345,10 @@ moduleSystem.registerModule({
       component: numberType
     })
     iconLibrary.register({
+      name: 'object-bricks',
+      component: objectBricks
+    })
+    iconLibrary.register({
       name: 'open-folder',
       component: openFolder
     })
@@ -1707,6 +1729,10 @@ moduleSystem.registerModule({
       component: translate
     })
     iconLibrary.register({
+      name: 'translations',
+      component: translations
+    })
+    iconLibrary.register({
       name: 'trash',
       component: trash
     })
@@ -1769,6 +1795,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'vector',
       component: vector
+    })
+    iconLibrary.register({
+      name: 'video-thumbnail',
+      component: videoThumbnail
     })
     iconLibrary.register({
       name: 'video',

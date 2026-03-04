@@ -35,7 +35,16 @@ export const WIDGET_CONTENT_CLASS = 'widget__content'
 const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   const { styleDefinition } = useCssContainer(cssContainerWidget)
   const { styles } = useStyles()
-  const { title, showTitle, icon, node, contentTitleComponent, children, iconColorGroup } = props
+  const {
+    title,
+    showTitle,
+    icon,
+    node,
+    contentTitleComponent,
+    children,
+    iconColorGroup
+  } = props
+  const componentName = node.getComponent()
 
   return (
     <div className={ ['widget', styles.Widget, styleDefinition.styles.container].join(' ') }>
@@ -49,7 +58,10 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
         />
       )}
 
-      <div className={ WIDGET_CONTENT_CLASS }>
+      <div
+        className={ WIDGET_CONTENT_CLASS }
+        data-testid={ `widget-content-${componentName ?? 'unknown'}` }
+      >
         {children}
       </div>
     </div>

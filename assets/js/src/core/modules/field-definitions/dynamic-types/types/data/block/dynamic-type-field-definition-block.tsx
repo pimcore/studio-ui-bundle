@@ -42,6 +42,10 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
     return [...super.getDisallowedRecursiveChildTags(props), 'block']
   }
 
+  opensNamespace (): boolean {
+    return true
+  }
+
   getGroup (): string[] {
     return [...super.getGroup(), 'structured']
   }

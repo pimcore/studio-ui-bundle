@@ -18,12 +18,16 @@ export const WidgetConfigurator = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <Flex gap={ 10 }>
+    <Flex
+      data-testid="widget-configurator"
+      gap={ 10 }
+    >
       <Form.Item
         name="widgetsLeft"
         style={ { flexGrow: 1 } }
       >
         <WidgetConfigurationCard
+          data-testid="widget-config-left"
           label={ t('perspective-editor.system-widgets.left') }
         />
       </Form.Item>
@@ -34,6 +38,7 @@ export const WidgetConfigurator = (): React.JSX.Element => {
       >
         <WidgetConfigurationCard
           allowExpandControl={ false }
+          data-testid="widget-config-bottom"
           label={ t('perspective-editor.system-widgets.bottom') }
         />
       </Form.Item>
@@ -43,6 +48,7 @@ export const WidgetConfigurator = (): React.JSX.Element => {
         style={ { flexGrow: 1 } }
       >
         <WidgetConfigurationCard
+          data-testid="widget-config-right"
           label={ t('perspective-editor.system-widgets.right') }
         />
       </Form.Item>

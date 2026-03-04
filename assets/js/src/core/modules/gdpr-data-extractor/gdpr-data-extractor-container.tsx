@@ -130,6 +130,7 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       }
     >
       <Content
+        data-testid="gdpr-data-extractor-content"
         gap={ 'extra-small' }
         padded
         padding={ {

@@ -106,6 +106,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <Button
             className={ styles.btnLink }
+            data-testid="report-columns-restore-default"
             onClick={ resetColumnsToInitial }
             type="link"
           >
@@ -133,6 +134,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
           {!isEmpty(addColumnMenu) && (
           <Dropdown menu={ { items: addColumnMenu } }>
             <IconTextButton
+              data-testid="report-columns-add-button"
               icon={ { value: 'new' } }
               type='link'
             >

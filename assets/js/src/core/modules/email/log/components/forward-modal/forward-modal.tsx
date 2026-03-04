@@ -106,7 +106,7 @@ export const ForwardModal = ({ email, ...props }: ForwardModalProps): React.JSX.
             name="to"
             rules={ [{ type: 'email', required: true, message: t('email-blocklist.add.validation') }] }
           >
-            <Input />
+            <Input data-testid="forward-modal-to-input" />
           </Form.Item>
         </Form>
 

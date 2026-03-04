@@ -129,6 +129,7 @@ export default defineConfig({
       './api/workflow': './js/src/sdk/api/workflow/index.ts',
       './api/reports': './js/src/sdk/api/reports/index.ts',
       './modules/app': './js/src/sdk/modules/app/index.ts',
+      './modules/application-logger': './js/src/sdk/modules/application-logger/index.ts',
       './modules/asset': './js/src/sdk/modules/asset/index.ts',
       './modules/class-definitions': './js/src/sdk/modules/class-definitions/index.ts',
       './modules/data-object': './js/src/sdk/modules/data-object/index.ts',

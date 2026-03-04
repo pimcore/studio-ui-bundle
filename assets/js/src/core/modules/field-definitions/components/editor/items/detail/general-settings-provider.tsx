@@ -8,10 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type CustomLayouts, type ClassDefinition } from '@sdk/api/class-definition'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-export type GeneralSettings = ClassDefinition | CustomLayouts
+export type GeneralSettings = Record<string, unknown>
 
 export interface IGeneralSettingsContext {
   generalSettings: GeneralSettings | undefined

@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionClassificationstore extends DynamicTypeFi
   id: string = 'classificationstore'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'category' }
+    return { type: 'name', value: 'classification-store' }
   }
 
   getGroup (): string[] {

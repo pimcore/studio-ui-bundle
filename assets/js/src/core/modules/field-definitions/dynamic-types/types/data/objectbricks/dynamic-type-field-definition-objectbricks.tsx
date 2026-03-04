@@ -18,7 +18,7 @@ export class DynamicTypeFieldDefinitionObjectbricks extends DynamicTypeFieldDefi
   id: string = 'objectbricks'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'area-brick' }
+    return { type: 'name', value: 'object-bricks' }
   }
 
   getGroup (): string[] {

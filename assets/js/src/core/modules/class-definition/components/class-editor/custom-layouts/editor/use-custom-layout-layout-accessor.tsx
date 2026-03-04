@@ -9,10 +9,10 @@
  */
 
 import { type SettingsProviderProps, type UseDetailLayoutAccessorReturn } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type PimcoreStudioApiClassCustomLayoutGetApiResponse } from '@sdk/api/class-definition'
+import { type ClassCustomLayoutGetApiResponse } from '@sdk/api/class-definition'
 
 export const useCustomLayoutLayoutAccessor: SettingsProviderProps['useDetailLayoutAccessor'] = () => {
-  const accessor: UseDetailLayoutAccessorReturn['accessor'] = (data: PimcoreStudioApiClassCustomLayoutGetApiResponse) => {
+  const accessor: UseDetailLayoutAccessorReturn['accessor'] = (data: ClassCustomLayoutGetApiResponse) => {
     return data.layoutDefinition ?? undefined
   }
 

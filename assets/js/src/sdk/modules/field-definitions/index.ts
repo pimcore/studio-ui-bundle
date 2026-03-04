@@ -9,7 +9,14 @@
  */
 
 export * from '@Pimcore/modules/field-definitions/utils/layout-helpers'
+export * from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/dynamic-type-field-defintion-layout-abstract'
+export * from '@Pimcore/modules/field-definitions/components/editor'
+export * from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+export * from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+export * from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+export * from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+export * from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'

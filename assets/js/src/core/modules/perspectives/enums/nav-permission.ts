@@ -21,6 +21,9 @@ export enum NavPermission {
   PredefinedProperties = 'dataManagement.predefinedProperties',
   TagConfiguration = 'dataManagement.tagConfiguration',
   GDPRDataExtractor = 'dataManagement.gdprDataExtractor',
+  ClassDefinitions = 'dataManagement.dataModel_classes',
+  FieldCollections = 'dataManagement.dataModel_fieldCollections',
+  ObjectBricks = 'dataManagement.dataModel_objectBricks',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
 

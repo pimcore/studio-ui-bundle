@@ -191,11 +191,13 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   return (
     <Flex
       className="h-full"
+      data-testid="report-detail-container"
       gap="small"
       vertical
     >
       {!isUndefined(drillDownFields) && (
         <Flex
+          data-testid="report-detail-drilldown-area"
           gap="small"
           wrap
         >
@@ -210,6 +212,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       )}
       <Flex
         className="h-full"
+        data-testid="report-detail-content"
         gap="small"
         justify="flex-start"
         vertical
@@ -227,6 +230,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            dataTestId="report-detail-grid"
             enableColumnVirtualizer
             enableSorting
             isLoading={ isLoading }

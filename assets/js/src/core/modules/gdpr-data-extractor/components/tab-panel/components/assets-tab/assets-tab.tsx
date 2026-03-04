@@ -86,6 +86,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
+              data-testid={ `gdpr-assets-export-${data.id}` }
               id={ data.id }
               providerKey={ providerKey }
               tooltip={ {
@@ -94,6 +95,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
             />
 
             <OpenButton
+              data-testid={ `gdpr-assets-open-${data.id}` }
               elementType={ elementTypes.asset }
               id={ data.id }
               tooltip={ {
@@ -102,6 +104,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
             />
 
             <DeleteButton
+              data-testid={ `gdpr-assets-delete-${data.id}` }
               disabled={ !data.__gdprIsDeletable }
               elementType={ elementTypes.asset }
               id={ data.id }
@@ -122,6 +125,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
       autoWidth
       columns={ columns }
       data={ data.map((item) => item.data) }
+      dataTestId="gdpr-assets-grid"
       enableSorting
       onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!

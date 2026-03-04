@@ -28,7 +28,7 @@ export abstract class DynamicTypeFieldDefinitionLayoutAbstract extends DynamicTy
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:layout']
+    return [...super.getTags(props), 'group:layout', 'group:root']
   }
 
   getGroup (): string[] {

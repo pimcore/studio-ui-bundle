@@ -9,6 +9,7 @@
  */
 
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useStyles } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar.styles'
 import { AddModalProvider } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/modal-holder'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -18,12 +19,25 @@ import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type AnyMutationHook } from 'types/react-query'
+
+// A stable no-op hook used when useItemsDeleteMutation is not provided
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useNoOpDeleteMutation: AnyMutationHook = () => [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (async () => { }) as any,
+  {} as any
+]
 
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useItemsQuery, useItemsDeleteMutation } = useSettings()
+  const { styles } = useStyles()
+  const { useItemsQuery, useItemsDeleteMutation, AddModal } = useSettings()
   const { isLoading, isFetching, data, refetch } = useItemsQuery()
-  const [deleteConfigurationMutation] = useItemsDeleteMutation()
+  const deleteMutationHook = useItemsDeleteMutation ?? useNoOpDeleteMutation
+  const [deleteConfigurationMutation] = deleteMutationHook()
+  const canDelete = useItemsDeleteMutation !== undefined
+  const canCreate = AddModal !== undefined
 
   const [searchTerm, setSearchTerm] = useState<string>('')
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
@@ -51,13 +65,15 @@ export const ItemsSidebar = (): React.JSX.Element => {
       const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
-          title: `${configuration.name} (${configuration.id})`,
+          title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
           key: `${configuration.id}`,
           icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
           meta: { configuration },
-          actions: [
-            { key: 'delete', icon: 'delete' }
-          ]
+          actions: canDelete
+            ? [
+                { key: 'delete', icon: 'delete' }
+              ]
+            : []
         })
         return
       }
@@ -73,13 +89,15 @@ export const ItemsSidebar = (): React.JSX.Element => {
       }
 
       const treeDataItem: TreeDataItem = {
-        title: `${configuration.name} (${configuration.id})`,
+        title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
         key: `${configuration.id}`,
         icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
         meta: { configuration },
-        actions: [
-          { key: 'delete', icon: 'delete' }
-        ]
+        actions: canDelete
+          ? [
+              { key: 'delete', icon: 'delete' }
+            ]
+          : []
       }
 
       groupMap[groupName].children!.push(treeDataItem)
@@ -128,15 +146,17 @@ export const ItemsSidebar = (): React.JSX.Element => {
               onClick={ refetch }
             />
 
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ () => {
-                setShowNewModal(true)
-              } }
-              type="link"
-            >
-              {t('new')}
-            </IconTextButton>
+            { canCreate && (
+              <IconTextButton
+                icon={ { value: 'new' } }
+                onClick={ () => {
+                  setShowNewModal(true)
+                } }
+                type="link"
+              >
+                {t('new')}
+              </IconTextButton>
+            ) }
           </Toolbar>
         }
       >
@@ -153,6 +173,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
 
           <Content loading={ isFetching }>
             <TreeElement
+              className={ styles.tree }
               defaultExpandedKeys={ expandedKeys }
               onActionsClick={ (key, action, node) => {
                 if (action === 'delete') {

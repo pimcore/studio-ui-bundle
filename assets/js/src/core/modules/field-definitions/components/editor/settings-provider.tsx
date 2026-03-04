@@ -10,7 +10,9 @@
 
 import { type OptionalModalProps } from '@Pimcore/components/modal/factory/modal-factory'
 import { LayoutProvider as DefaultLayoutProvider, useLayout as useDefaultLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
+import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { serviceIds, useInjection } from '@sdk/app'
 import React, { type ComponentType, createContext, useContext, useMemo } from 'react'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
@@ -21,7 +23,6 @@ export interface UseDetailLayoutAccessorReturn {
 export interface ImportExportConfig {
   getExportUrl: (id: number | string) => string
   getImportUrl: (id: number | string) => string
-  getIdFromGeneralSettings: (generalSettings: Record<string, unknown> | undefined) => number | string | undefined
   validateFile?: (file: File) => boolean
   acceptFileTypes?: string
   acceptMimeTypes?: string[]
@@ -29,9 +30,9 @@ export interface ImportExportConfig {
 }
 
 export interface ISettingsContext {
-  AddModal: ComponentType<OptionalModalProps>
+  AddModal?: ComponentType<OptionalModalProps>
   useItemsQuery: AnyQueryHook
-  useItemsDeleteMutation: AnyMutationHook
+  useItemsDeleteMutation?: AnyMutationHook
   useDetailLayoutQuery?: AnyQueryHook
   useDetailLayoutAccessor?: () => UseDetailLayoutAccessorReturn
   useDetailGeneralSettingsQuery: AnyQueryHook
@@ -39,6 +40,7 @@ export interface ISettingsContext {
   LayoutProvider: typeof DefaultLayoutProvider
   useLayout: typeof useDefaultLayout
   GeneralSettingsFormFields: React.ComponentType
+  fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   importExportConfig?: ImportExportConfig
   customLayouts?: {
     ModalContent?: React.JSX.Element
@@ -52,10 +54,11 @@ export interface ISettingsContext {
 
 export const SettingsContext = createContext<ISettingsContext | undefined>(undefined)
 
-export interface SettingsProviderProps extends Omit<ISettingsContext, 'LayoutProvider' | 'useLayout'> {
+export interface SettingsProviderProps extends Omit<ISettingsContext, 'LayoutProvider' | 'useLayout' | 'fieldDefinitionRegistry'> {
   children: React.ReactNode
   LayoutProvider?: typeof DefaultLayoutProvider
   useLayout?: typeof useDefaultLayout
+  fieldDefinitionRegistry?: DynamicTypeFieldDefinitionRegistry
 }
 
 export const SettingsProvider = (props: SettingsProviderProps): React.JSX.Element => {
@@ -66,11 +69,15 @@ export const SettingsProvider = (props: SettingsProviderProps): React.JSX.Elemen
     ...rest
   } = props
 
+  const defaultRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const fieldDefinitionRegistry = props.fieldDefinitionRegistry ?? defaultRegistry
+
   const providerProps = useMemo(() => ({
     LayoutProvider,
     useLayout,
+    fieldDefinitionRegistry,
     ...rest
-  }), [LayoutProvider, useLayout, rest])
+  }), [LayoutProvider, useLayout, fieldDefinitionRegistry, rest])
 
   return useMemo(() => (
     <SettingsContext.Provider value={ providerProps }>

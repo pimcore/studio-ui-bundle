@@ -18,6 +18,7 @@ import { isNil, kebabCase, uniq } from 'lodash'
 export interface GroupInfo {
   icon: ElementIcon
   translationKey: string
+  order?: number
 }
 
 @injectable()
@@ -78,43 +79,53 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       },
       'data/text': {
         icon: { value: 'content', type: 'name' },
-        translationKey: 'field-definition.groups.data.text'
+        translationKey: 'field-definition.groups.data.text',
+        order: 100
       },
       'data/numeric': {
         icon: { value: 'number-type', type: 'name' },
-        translationKey: 'field-definition.groups.data.numeric'
+        translationKey: 'field-definition.groups.data.numeric',
+        order: 200
       },
       'data/date': {
         icon: { value: 'date', type: 'name' },
-        translationKey: 'field-definition.groups.data.date'
+        translationKey: 'field-definition.groups.data.date',
+        order: 300
       },
       'data/select': {
         icon: { value: 'select-type', type: 'name' },
-        translationKey: 'field-definition.groups.data.select'
+        translationKey: 'field-definition.groups.data.select',
+        order: 400
       },
       'data/media': {
         icon: { value: 'media', type: 'name' },
-        translationKey: 'field-definition.groups.data.media'
+        translationKey: 'field-definition.groups.data.media',
+        order: 500
       },
       'data/relation': {
         icon: { value: 'relation', type: 'name' },
-        translationKey: 'field-definition.groups.data.relation'
+        translationKey: 'field-definition.groups.data.relation',
+        order: 600
       },
       'data/geo': {
         icon: { value: 'location-marker', type: 'name' },
-        translationKey: 'field-definition.groups.data.geographic'
+        translationKey: 'field-definition.groups.data.geographic',
+        order: 700
       },
       'data/crm': {
         icon: { value: 'crm', type: 'name' },
-        translationKey: 'field-definition.groups.data.crm'
+        translationKey: 'field-definition.groups.data.crm',
+        order: 800
       },
       'data/structured': {
         icon: { value: 'batch-selection', type: 'name' },
-        translationKey: 'field-definition.groups.data.structured'
+        translationKey: 'field-definition.groups.data.structured',
+        order: 900
       },
       'data/other': {
         icon: { value: 'other', type: 'name' },
-        translationKey: 'field-definition.groups.data.other'
+        translationKey: 'field-definition.groups.data.other',
+        order: 1000
       }
     }
   }
@@ -130,7 +141,13 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       groupedTypes[groupKey].push(type)
     })
 
-    for (const groupPath in groupedTypes) {
+    const sortedGroupPaths = Object.keys(groupedTypes).sort((a, b) => {
+      const orderA = groupInfos[a]?.order ?? Infinity
+      const orderB = groupInfos[b]?.order ?? Infinity
+      return orderA - orderB
+    })
+
+    for (const groupPath of sortedGroupPaths) {
       const groupParts = groupPath.split('/')
       let currentActions = actions
       let currentGroupPath = ''
@@ -167,8 +184,8 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     }
 
     if (actions.length === 1 && !isNil(actions[0].actions) && actions[0].actions.length > 0) {
-      // If it's a layout or data group at root level, don't promote its children
-      if (isRootLevel && (actions[0].key === 'group-layout' || actions[0].key === 'group-data')) {
+      // If it's a layout or data group at root level, don't promote its children (except for convert actions)
+      if (isRootLevel && actionKeyPrefix !== 'convert-' && (actions[0].key === 'group-layout' || actions[0].key === 'group-data')) {
         actions[0].actions = this.optimizeActions(actions[0].actions, actionKeyPrefix, false)
         return actions
       }
@@ -197,8 +214,8 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
       }
 
       if (!isNil(action.actions) && action.actions.length === 1) {
-        // If it's a layout or data group, don't promote its only child
-        if (action.key === 'group-layout' || action.key === 'group-data') {
+        // If it's a layout or data group, don't promote its only child (except for convert actions)
+        if (actionKeyPrefix !== 'convert-' && (action.key === 'group-layout' || action.key === 'group-data')) {
           optimizedActions.push(action)
           return
         }
@@ -237,7 +254,7 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     }
 
     const isCustomLayout = area.includes('custom-layout')
-    const isRoot = fieldDefinition.name === 'pimcore_root'
+    const isRoot = path.length === 1
     const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context)
 
     const dropdownTagTypes = this.getTypesByTags(allowedDropdownTags, context)
