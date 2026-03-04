@@ -20,7 +20,7 @@ import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element
 import { useTranslation } from 'react-i18next'
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
-import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
+import { findThumbnailById, filterThumbnailsRecursive, getFolderKeysFromTree } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
@@ -68,8 +68,11 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, onThumbnailClose, opene
   useEffect(() => {
     if (searchValue === '') {
       setFilteredData(thumbnailsListData)
+      setExpandedKeys([])
     } else {
-      setFilteredData(filterThumbnailsRecursive(thumbnailsListData, searchValue))
+      const filtered = filterThumbnailsRecursive(thumbnailsListData, searchValue)
+      setFilteredData(filtered)
+      setExpandedKeys(getFolderKeysFromTree(filtered))
     }
   }, [searchValue, thumbnailsListData])
 
