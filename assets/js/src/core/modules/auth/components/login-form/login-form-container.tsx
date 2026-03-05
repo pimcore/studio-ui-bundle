@@ -13,17 +13,7 @@ import React, { useState } from 'react'
 import { ForgotPasswordForm } from '../forgot-password-form/forgot-password-form'
 import { LoginForm } from './login-form'
 
-export interface IAdditionalLogins {
-  key: string
-  name: string
-  link: string
-}
-
-interface ILoginFormProps {
-  additionalLogins?: IAdditionalLogins[]
-}
-
-export const LoginFormContainer = ({ additionalLogins }: ILoginFormProps): React.JSX.Element => {
+export const LoginFormContainer = (): React.JSX.Element => {
   const { styles } = useStyle()
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
 
@@ -37,7 +27,6 @@ export const LoginFormContainer = ({ additionalLogins }: ILoginFormProps): React
 
       {!showForgotPassword && (
       <LoginForm
-        additionalLogins={ additionalLogins }
         onPasswordForgotten={ () => { setShowForgotPassword(true) } }
       />
       )}
