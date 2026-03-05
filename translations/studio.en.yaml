@@ -1323,6 +1323,7 @@ user-management.clone-user: Clone user
 user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
+user-management.save-user.password.success: Password updated successfully
 user-management.add-user.success: User added successfully
 user-management.remove-user: Delete user
 user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
