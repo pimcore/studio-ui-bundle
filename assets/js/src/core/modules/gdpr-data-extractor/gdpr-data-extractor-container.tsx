@@ -154,7 +154,8 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           isLoading={ isLoading || isFetching }
           onProviderChange={ (providerKey) => {
             setProvider(providerKey)
-            executeSearch({ provider: providerKey })
+            setPage(1)
+            executeSearch({ provider: providerKey, page: 1 })
           } }
           providerKey={ provider }
           refresh={ executeSearch }
