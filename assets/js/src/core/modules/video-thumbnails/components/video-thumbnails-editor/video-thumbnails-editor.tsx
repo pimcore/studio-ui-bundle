@@ -17,7 +17,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
 import type { MediaQuery, BackendMediasFormat } from '../../types/media-query.types'
 import { VideoMediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
-import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
+import { convertToBackendFormat, convertFromBackendFormat, generateMediaQueryId } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailVideoGetByNameQuery, useThumbnailVideoUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { isNil, isNull, isEqual, isEmpty } from 'lodash'
@@ -83,7 +83,16 @@ export const VideoThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
       setCurrentThumbnailId((selectedThumbnail?.id === '' ? null : selectedThumbnail?.id) ?? null)
 
       const backedMedias = (configData.medias ?? {}) as BackendMediasFormat
-      const segments = convertFromBackendFormat(backedMedias, {})
+      const loaded = convertFromBackendFormat(backedMedias, {})
+      const segments: MediaQuery[] = loaded.length > 0
+        ? loaded
+        : [{
+            id: generateMediaQueryId(),
+            query: 'Default',
+            displayName: t('video-thumbnails.editor.media-segments.default'),
+            transformations: [],
+            order: 0
+          }]
 
       const formData: VideoThumbnailFormData = {
         name: configData.settings.name ?? '',

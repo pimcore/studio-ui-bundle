@@ -9,9 +9,7 @@
  */
 
 import React, { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import { Empty } from '@Pimcore/components/empty/empty'
 import type { MediaQuery } from '../../types/media-query.types'
 import { VideoMediaQueryTabContent } from './media-query-tab-content'
 
@@ -30,20 +28,9 @@ export const VideoMediaQueryTabs = ({
   onTabClose,
   onMediaQueryUpdate
 }: VideoMediaQueryTabsProps): React.JSX.Element => {
-  const { t } = useTranslation()
-
   const handleMediaQueryUpdate = useCallback((mediaQuery: MediaQuery) => {
     onMediaQueryUpdate(mediaQuery.id, mediaQuery)
   }, [onMediaQueryUpdate])
-
-  if (mediaQueries.length === 0) {
-    return (
-      <Empty
-        description={ t('video-thumbnails.editor.media-segments.empty') }
-        style={ { padding: '20px' } }
-      />
-    )
-  }
 
   const tabItems = mediaQueries.map((mediaQuery) => ({
     key: mediaQuery.id,
