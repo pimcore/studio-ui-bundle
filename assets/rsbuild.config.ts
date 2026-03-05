@@ -138,6 +138,11 @@ export default defineConfig({
           eager: true,
           version: packages.dependencies.inversify
         },
+        'dayjs': {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies.dayjs
+        },
         'antd': {
           singleton: true,
           eager: true,

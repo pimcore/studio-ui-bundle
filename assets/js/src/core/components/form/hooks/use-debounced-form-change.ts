@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useRef, useEffect, useMemo } from 'react'
+import { useCallback, useRef, useEffect, useMemo, useLayoutEffect } from 'react'
 import { debounce, isNil, isEmpty } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -47,9 +47,12 @@ export const useDebouncedFormChange = (
 
   const registryKey = useMemo(() => `${resolvedTag ?? 'default'}-${uuid()}`, [resolvedTag])
 
+  const onFormChangeRef = useRef(onFormChange)
+  useLayoutEffect(() => { onFormChangeRef.current = onFormChange }, [onFormChange])
+
   const debouncedChangeRef = useRef(
     debounce((changedValues: Record<string, any>, allValues: Record<string, any>) => {
-      onFormChange(changedValues, allValues)
+      onFormChangeRef.current(changedValues, allValues)
     }, delay)
   )
 
