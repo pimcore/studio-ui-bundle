@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input } from '@sdk/components'
+import { Form, Input } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,14 +17,12 @@ export const FieldDefinitionRgbaColorFormFields = (props: FieldDefinitionAbstrac
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
-      <Form.Item
-        label={ t('width') }
-        name="width"
-        tooltip={ t('width-tooltip') }
-      >
-        <Input />
-      </Form.Item>
-    </FormKit.Panel>
+    <Form.Item
+      label={ t('width') }
+      name="width"
+      tooltip={ t('width-tooltip') }
+    >
+      <Input />
+    </Form.Item>
   )
 }

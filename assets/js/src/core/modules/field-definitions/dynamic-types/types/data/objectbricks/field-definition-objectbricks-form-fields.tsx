@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useClassObjectBrickCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import { Form, FormKit, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -32,7 +32,7 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
   }, [bricksData])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('maximum-items') }
@@ -64,6 +64,6 @@ export const FieldDefinitionObjectbricksFormFields = (props: FieldDefinitionAbst
           />
         </Form.Item>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

@@ -24,7 +24,7 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
   const documentTypeOptions = useDocumentTypeOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <FormKit.Panel
         border
@@ -161,6 +161,6 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
         </Form.Conditional>
       </FormKit.Panel>
 
-    </FormKit.Panel>
+    </>
   )
 }

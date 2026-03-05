@@ -25,19 +25,20 @@ export class DynamicTypeFieldDefinitionClassificationstore extends DynamicTypeFi
     return [...super.getGroup(), 'structured']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true, disableVisibleGridView: true, disableVisibleSearch: true })}
-        <FieldDefinitionClassificationstoreFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionClassificationstoreFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true, disableVisibleGridView: true, disableVisibleSearch: true })
   }
 }

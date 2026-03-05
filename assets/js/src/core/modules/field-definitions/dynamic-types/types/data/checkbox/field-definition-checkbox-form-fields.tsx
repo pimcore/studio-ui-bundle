@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Select, Input } from '@sdk/components'
+import { Form, Select, Input } from '@sdk/components'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -26,7 +26,7 @@ export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstract
   }, [useDefaultValue, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <>
           <Form.Item
@@ -50,6 +50,6 @@ export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstract
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

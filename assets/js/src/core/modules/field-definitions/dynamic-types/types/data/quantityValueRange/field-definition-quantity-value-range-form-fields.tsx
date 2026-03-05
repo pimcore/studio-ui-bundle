@@ -20,7 +20,7 @@ export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefiniti
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <FormKit.Panel
         border
@@ -85,6 +85,6 @@ export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefiniti
         <Switch labelRight={ t('auto-convert') } />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

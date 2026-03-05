@@ -28,31 +28,29 @@ export class DynamicTypeFieldDefinitionMultiselection extends DynamicTypeFieldDe
   getDefaultData (): any {
     return {
       ...super.getDefaultData(),
-      optionsProviderType: 'configure',
-      options: [],
-      defaultValue: '',
-      optionsProviderClass: '',
-      optionsProviderData: ''
+      renderType: 'list',
+      optionsProviderType: 'configure'
     }
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:select']
+    return [...super.getTags(props), 'group:select', 'encryptedFieldSupport']
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
-        <FieldDefinitionMultiselectionFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionMultiselectionFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

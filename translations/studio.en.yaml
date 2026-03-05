@@ -714,10 +714,10 @@ field-definitions.validation.invalid-format: "Invalid name format (must match [A
 field-definitions.validation.duplicate-name: "Duplicate name within namespace:"
 object-brick-key: Object Brick Key
 field-name: Field Name
-field-definition.geopoint: Geo Point
-field-definition.geobounds: Geo Bounds
-field-definition.geopolygon: Geo Polygon
-field-definition.geopolyline: Geo Polyline
+field-definition.geopoint: Geographic Point
+field-definition.geobounds: Geographic Bounds
+field-definition.geopolygon: Geographic Polygon
+field-definition.geopolyline: Geographic Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -2432,3 +2432,8 @@ icon: Icon
 iframe-url: Iframe URL
 rendering-class: Custom rendering class
 rendering-data: Data Passed to render
+zoom-level: Zoom level
+class: Class
+layout.text.help: 'You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>'
+configuration: Configuration
+drag-object-for-preview: Drag object for preview

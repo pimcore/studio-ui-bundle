@@ -25,19 +25,24 @@ export class DynamicTypeFieldDefinitionTextarea extends DynamicTypeFieldDefiniti
     return [...super.getGroup(), 'text']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'encryptedFieldSupport']
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionTextareaFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionTextareaFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

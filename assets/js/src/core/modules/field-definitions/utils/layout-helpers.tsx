@@ -31,6 +31,7 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
   }
 
   const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
+  const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildStructure = (layoutItem: Layout): StructureNode => {
     const id = uuid()
@@ -42,8 +43,13 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
 
     const { children, ...fieldDef } = layoutItem
 
-    // @todo remove type conversion after fix of typo from backendSide (fieldtype vs. fieldType)
-    initialFieldDefinitions[id] = fieldDef as unknown as FieldDefinition
+    const resolvedFieldType = ((fieldDef as Record<string, unknown>).fieldType ?? (fieldDef as Record<string, unknown>).fieldtype) as string | undefined
+    let normalizedFieldDef: Record<string, unknown> = { ...fieldDef }
+    if (resolvedFieldType !== undefined && fieldDefinitionRegistry.hasDynamicType(resolvedFieldType)) {
+      normalizedFieldDef = fieldDefinitionRegistry.getDynamicType(resolvedFieldType).normalizeFieldDefinition(normalizedFieldDef)
+    }
+
+    initialFieldDefinitions[id] = normalizedFieldDef as unknown as FieldDefinition
 
     return node
   }

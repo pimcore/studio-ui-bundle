@@ -9,13 +9,13 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input } from '@sdk/components'
+import { Form, Input } from '@sdk/components'
 import React from 'react'
 import { t } from 'i18next'
 
 export const FieldDefinitionIframeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
+    <>
       <Form.Item
         label={ t('iframe-url') }
         name="iframeUrl"
@@ -29,6 +29,6 @@ export const FieldDefinitionIframeFormFields = (props: FieldDefinitionAbstractFo
       >
         <Input />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }
