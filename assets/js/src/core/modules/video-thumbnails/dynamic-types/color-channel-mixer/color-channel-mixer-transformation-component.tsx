@@ -15,9 +15,9 @@ import { Select } from '@Pimcore/components/select/select'
 import type { TransformationComponent } from '@Pimcore/modules/image-thumbnails/types/transformation-component-types'
 
 const effectOptions = [
-  { value: 'grayscale', label: 'Grayscale' },
-  { value: 'sepia', label: 'Sepia' },
-  { value: 'cold', label: 'Cold' }
+  { value: '.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3', label: 'Grayscale' },
+  { value: '.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131', label: 'Sepia' },
+  { value: '.9:0:0:0:0:1.1:0:0:0:0:1:0:0:0:0:1', label: 'Cold' }
 ]
 
 export const ColorChannelMixerVideoTransformationComponent: TransformationComponent = () => {

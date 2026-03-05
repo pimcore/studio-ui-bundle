@@ -30,14 +30,7 @@ export interface Transformation {
   config: TransformationConfig
 }
 
-export type TransformationType =
-  | 'resize'
-  | 'scaleByWidth'
-  | 'scaleByHeight'
-  | 'cut'
-  | 'setFramerate'
-  | 'colorChannelMixer'
-  | 'mute'
+export type TransformationType = string
 
 export type TransformationConfig = Record<string, any>
 

@@ -11,8 +11,7 @@
 import {
   type MediaQuery,
   type BackendMediasFormat,
-  type BackendMediaOrderFormat,
-  type TransformationType
+  type BackendMediaOrderFormat
 } from '../types/media-query.types'
 import { uuid } from '@Pimcore/utils/uuid'
 
@@ -63,7 +62,7 @@ export const convertFromBackendFormat = (
       displayName: segmentName,
       transformations: transformations.map((t) => ({
         id: generateTransformationId(),
-        type: t.method as TransformationType,
+        type: t.method,
         config: t.arguments ?? {}
       })),
       order: (mediaOrder[segmentName] === 0 ? 0 : mediaOrder[segmentName]) ?? 0
@@ -73,17 +72,6 @@ export const convertFromBackendFormat = (
   })
 
   return mediaSegments.sort((a, b) => a.order - b.order)
-}
-
-export const convertDefaultTransformationsFromBackend = (
-  medias: BackendMediasFormat = {}
-): MediaQuery['transformations'] => {
-  const defaultTransformations = medias.default ?? []
-  return defaultTransformations.map(t => ({
-    id: generateTransformationId(),
-    type: t.method as TransformationType,
-    config: t.arguments ?? {}
-  }))
 }
 
 export const generateMediaQueryId = (): string => {

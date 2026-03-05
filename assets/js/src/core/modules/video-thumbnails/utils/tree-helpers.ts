@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { isNil, isUndefined } from 'lodash'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 
 export const findThumbnailById = (
@@ -76,4 +80,37 @@ export const getFolderKeysFromTree = (
   traverseItems(items)
 
   return keys
+}
+
+export const transformToTreeData = (
+  items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> | null,
+  leafIconValue: string,
+  iconClassName: string,
+  modifiedThumbnails: string[] = []
+): TreeDataItem[] => {
+  if (isNil(items)) {
+    return []
+  }
+
+  return [...items]
+    .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+    .map((item) => {
+      const isFolder = 'children' in item && Array.isArray(item.children)
+      const isModified = !isFolder && modifiedThumbnails.includes(item.id)
+      const actions = isFolder ? [] : [{ key: 'delete', icon: 'trash' }]
+      const icon = isFolder
+        ? React.createElement(Icon, { value: 'folder', className: iconClassName })
+        : React.createElement(Icon, { value: leafIconValue, className: iconClassName })
+
+      return {
+        key: isUndefined(item.id) ? '' : String(item.id),
+        title: `${item.name}${isModified ? ' *' : ''}`,
+        icon,
+        children: isFolder ? transformToTreeData((item as ThumbnailConfigurationFolderData).children, leafIconValue, iconClassName, modifiedThumbnails) : undefined,
+        isLeaf: !isFolder,
+        actions,
+        allowDrag: false,
+        allowDrop: false
+      }
+    })
 }

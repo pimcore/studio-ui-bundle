@@ -11,17 +11,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TransformationComponent } from '@Pimcore/modules/image-thumbnails/types/transformation-component-types'
+import { useStyles } from './mute-transformation-component.styles'
 
 export const MuteTransformationComponent: TransformationComponent = () => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   return (
-    <div style={ {
-      padding: '8px 12px',
-      color: '#666',
-      fontStyle: 'italic'
-    } }
-    >
+    <div className={ styles.hint }>
       {t('video-thumbnails.transformations.no-configuration-required')}
     </div>
   )

@@ -13,14 +13,13 @@ import { isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
+import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { useTranslation } from 'react-i18next'
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { VideoThumbnailsTreeToolbar } from '../video-thumbnails-tree-toolbar/video-thumbnails-tree-toolbar'
-import { findThumbnailById, filterThumbnailsRecursive, getFolderKeysFromTree } from '../../utils/tree-helpers'
+import { findThumbnailById, filterThumbnailsRecursive, getFolderKeysFromTree, transformToTreeData } from '../../utils/tree-helpers'
 import { useStyles } from './video-thumbnails-tree.styles'
 import { useVideoThumbnailConfig } from '../../hooks/use-video-thumbnail-config'
 import { useVideoThumbnailsContext } from '../../providers/video-thumbnails-provider'
@@ -83,58 +82,7 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
 
   const { t } = useTranslation()
 
-  const getTreeItemIcon = (item: ThumbnailConfigurationData | ThumbnailConfigurationFolderData): React.JSX.Element | undefined => {
-    const isFolder = 'children' in item && Array.isArray(item.children)
-
-    if (isFolder) {
-      return (
-        <Icon
-          className={ styles.icon }
-          value="folder"
-        />
-      )
-    }
-
-    return (
-      <Icon
-        className={ styles.icon }
-        value="video-thumbnail"
-      />
-    )
-  }
-
-  const transformToTreeData = (items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> | null): TreeDataItem[] => {
-    if (isNil(items)) {
-      return []
-    }
-
-    return [...items]
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-      })
-      .map((item) => {
-        const isFolder = 'children' in item && Array.isArray(item.children)
-        const isModified = !isFolder && modifiedThumbnails.includes(item.id)
-        const actions = isFolder
-          ? []
-          : [
-              { key: 'delete', icon: 'trash' }
-            ]
-
-        return {
-          key: isUndefined(item.id) ? '' : String(item.id),
-          title: `${item.name}${isModified ? ' *' : ''}`,
-          icon: getTreeItemIcon(item),
-          children: isFolder ? transformToTreeData((item).children) : undefined,
-          isLeaf: !isFolder,
-          actions,
-          allowDrag: false,
-          allowDrop: false
-        }
-      })
-  }
-
-  const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData, modifiedThumbnails])
+  const treeData = useMemo(() => transformToTreeData(filteredData, 'video-thumbnail', styles.icon, modifiedThumbnails), [filteredData, modifiedThumbnails])
 
   const handleAddWithSelection = (): void => {
     handleAdd((thumbnailName: string) => {

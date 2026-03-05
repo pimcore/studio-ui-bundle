@@ -14,7 +14,17 @@ import { ColorChannelMixerVideoTransformationComponent } from './color-channel-m
 import { type TransformationComponent } from '@Pimcore/modules/image-thumbnails/types/transformation-component-types'
 
 export interface ColorChannelMixerVideoTransformationConfig {
-  effect?: 'grayscale' | 'sepia' | 'cold'
+  effect?: string
+}
+
+const GRAYSCALE_MATRIX = '.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3'
+const SEPIA_MATRIX = '.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131'
+const COLD_MATRIX = '.9:0:0:0:0:1.1:0:0:0:0:1:0:0:0:0:1'
+
+const EFFECT_LABELS: Record<string, string> = {
+  [GRAYSCALE_MATRIX]: 'Grayscale',
+  [SEPIA_MATRIX]: 'Sepia',
+  [COLD_MATRIX]: 'Cold'
 }
 
 @injectable()
@@ -26,15 +36,15 @@ export class ColorChannelMixerVideoTransformationType extends TransformationDyna
   }
 
   getSummary (config: ColorChannelMixerVideoTransformationConfig): string {
-    const effectLabel = config.effect == null
-      ? 'Grayscale'
-      : config.effect.charAt(0).toUpperCase() + config.effect.slice(1)
-    return `Color Channel Mixer (${effectLabel})`
+    const label = config.effect != null
+      ? (EFFECT_LABELS[config.effect] ?? config.effect)
+      : 'Grayscale'
+    return `Color Channel Mixer (${label})`
   }
 
   createDefaultConfig (): ColorChannelMixerVideoTransformationConfig {
     return {
-      effect: 'grayscale'
+      effect: GRAYSCALE_MATRIX
     }
   }
 
