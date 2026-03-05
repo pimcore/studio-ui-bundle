@@ -363,6 +363,15 @@ import { AddOverlayFitTransformationType } from '@Pimcore/modules/image-thumbnai
 import { ApplyMaskTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/apply-mask/apply-mask-transformation-type'
 import { TiffOriginalTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/tiff-original/tiff-original-transformation-type'
 import { OnePixelTransformationType } from '@Pimcore/modules/image-thumbnails/dynamic-types/one-pixel/one-pixel-transformation-type'
+import { VideoTransformationDynamicTypeRegistry } from '@Pimcore/modules/video-thumbnails/dynamic-types/video-transformation-dynamic-type-registry'
+import { VideoTransformationFieldCollectionRegistry } from '@Pimcore/modules/video-thumbnails/registries/video-transformation-field-collection-registry'
+import { ResizeVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/resize/resize-transformation-type'
+import { ScaleByWidthVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/scale-by-width/scale-by-width-transformation-type'
+import { ScaleByHeightVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/scale-by-height/scale-by-height-transformation-type'
+import { CutVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/cut/cut-transformation-type'
+import { SetFramerateVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/set-framerate/set-framerate-transformation-type'
+import { ColorChannelMixerVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/color-channel-mixer/color-channel-mixer-transformation-type'
+import { MuteVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/mute/mute-transformation-type'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -804,6 +813,20 @@ container.bind(serviceIds['DynamicTypes/Transformation/AddOverlayFit']).to(AddOv
 container.bind(serviceIds['DynamicTypes/Transformation/ApplyMask']).to(ApplyMaskTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Transformation/TiffOriginal']).to(TiffOriginalTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Transformation/OnePixel']).to(OnePixelTransformationType).inSingletonScope()
+
+// Video Thumbnails Transformation Registry
+container.bind(serviceIds['DynamicTypes/VideoTransformationDynamicTypeRegistry']).to(VideoTransformationDynamicTypeRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformationFieldCollectionRegistry']).toDynamicValue((ctx) => {
+  const videoTransformationRegistry = ctx.container.get<VideoTransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/VideoTransformationDynamicTypeRegistry'])
+  return new VideoTransformationFieldCollectionRegistry(videoTransformationRegistry)
+}).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/Resize']).to(ResizeVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/ScaleByWidth']).to(ScaleByWidthVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/ScaleByHeight']).to(ScaleByHeightVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/Cut']).to(CutVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/SetFramerate']).to(SetFramerateVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/ColorChannelMixer']).to(ColorChannelMixerVideoTransformationType).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/VideoTransformation/Mute']).to(MuteVideoTransformationType).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()
