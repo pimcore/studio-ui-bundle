@@ -26,7 +26,7 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
   const { values, getValueByKey, operations } = useNumberedList()
   const value = getValueByKey(field.toString())
   const type = value?.type
-  const { registry, maxItems, disallowAddRemove, disallowReorder } = useFieldCollection()
+  const { registry, maxItems, disallowAddRemove, disallowReorder, addLabel } = useFieldCollection()
   const registryItem = registry.getItemByType(type as string)
   const { t } = useTranslation()
   const hasMaxItems = maxItems !== undefined && values.length >= maxItems
@@ -38,6 +38,7 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
   return (
     <ToolStrip title={ t(registryItem.translationKey) }>
       <FieldCollectionAddControl
+        addLabel={ addLabel }
         disabled={ hasMaxItems || disallowAddRemove }
         field={ field }
       />
@@ -45,14 +46,14 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
       <Space size="mini">
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
+          icon={ { value: 'chevron-down' } }
           onClick={ () => { operations.move(field, field + 1) } }
           size="small"
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
+          icon={ { value: 'chevron-up' } }
           onClick={ () => { operations.move(field, field - 1) } }
           size="small"
         />

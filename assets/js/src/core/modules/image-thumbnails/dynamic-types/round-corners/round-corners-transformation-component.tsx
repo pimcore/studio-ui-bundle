@@ -21,18 +21,16 @@ export const RoundCornersTransformationComponent: TransformationComponent = () =
       vertical
     >
       <Form.Item
-        initialValue={ 10 }
         label="Width"
         name="width"
       >
-        <InputNumber placeholder="Enter corner width radius" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
-        initialValue={ 10 }
         label="Height"
         name="height"
       >
-        <InputNumber placeholder="Enter corner height radius" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

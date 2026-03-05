@@ -12,17 +12,7 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { Select } from '@Pimcore/components/select/select'
-import { Switch } from '@Pimcore/components/switch/switch'
 import type { TransformationComponent } from '../../types/transformation-component-types'
-
-const positioningOptions = [
-  { value: 'center', label: 'Center' },
-  { value: 'topleft', label: 'Top Left' },
-  { value: 'topright', label: 'Top Right' },
-  { value: 'bottomleft', label: 'Bottom Left' },
-  { value: 'bottomright', label: 'Bottom Right' }
-]
 
 export const ResizeTransformationComponent: TransformationComponent = () => {
   return (
@@ -34,28 +24,13 @@ export const ResizeTransformationComponent: TransformationComponent = () => {
         label="Width"
         name="width"
       >
-        <InputNumber placeholder="Enter width" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
         label="Height"
         name="height"
       >
-        <InputNumber placeholder="Enter height" />
-      </Form.Item>
-      <Form.Item
-        initialValue="center"
-        label="Position"
-        name="positioning"
-      >
-        <Select options={ positioningOptions } />
-      </Form.Item>
-      <Form.Item
-        initialValue={ false }
-        label="Force Resize"
-        name="forceResize"
-        valuePropName="checked"
-      >
-        <Switch />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

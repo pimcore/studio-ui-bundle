@@ -16,8 +16,6 @@ import { CropTransformationComponent } from './crop-transformation-component'
 export interface CropTransformationConfig {
   width?: number
   height?: number
-  x?: number
-  y?: number
 }
 
 @injectable()
@@ -29,16 +27,7 @@ export class CropTransformationType extends TransformationDynamicTypeAbstract<Cr
   }
 
   getSummary (config: CropTransformationConfig): string {
-    return `Crop ${config.width ?? '?'}x${config.height ?? '?'} at (${config.x ?? '?'}, ${config.y ?? '?'})`
-  }
-
-  createDefaultConfig (): CropTransformationConfig {
-    return {
-      width: 100,
-      height: 100,
-      x: 0,
-      y: 0
-    }
+    return `Crop ${config.width ?? '?'}x${config.height ?? '?'}`
   }
 
   getReactComponent (): TransformationComponent {

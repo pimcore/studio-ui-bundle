@@ -16,6 +16,16 @@ import {
 } from '../types/media-query.types'
 import { uuid } from '@Pimcore/utils/uuid'
 
+export const DEFAULT_MEDIA_QUERY_ID = 'default'
+
+export const createDefaultMediaQuery = (): MediaQuery => ({
+  id: DEFAULT_MEDIA_QUERY_ID,
+  query: DEFAULT_MEDIA_QUERY_ID,
+  displayName: DEFAULT_MEDIA_QUERY_ID,
+  transformations: [],
+  order: 0
+})
+
 export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   medias: BackendMediasFormat
   mediaOrder: BackendMediaOrderFormat
@@ -23,13 +33,24 @@ export const convertToBackendFormat = (mediaQueries: MediaQuery[]): {
   const medias: BackendMediasFormat = {}
   const mediaOrder: BackendMediaOrderFormat = {}
 
-  if (mediaQueries.length === 0) {
+  const defaultEntry = mediaQueries.find(mq => mq.id === DEFAULT_MEDIA_QUERY_ID)
+
+  if (defaultEntry === undefined) {
     medias.default = []
     mediaOrder.default = 0
-    return { medias, mediaOrder }
+  } else {
+    medias.default = defaultEntry.transformations.map((transformation) => ({
+      method: transformation.type,
+      arguments: transformation.config
+    }))
+    mediaOrder.default = defaultEntry.order
   }
 
   mediaQueries.forEach((mediaQuery) => {
+    if (mediaQuery.id === DEFAULT_MEDIA_QUERY_ID) {
+      return
+    }
+
     const queryName = (mediaQuery.query === '' ? `media-${mediaQuery.id}` : mediaQuery.query) ?? `media-${mediaQuery.id}`
 
     medias[queryName] = mediaQuery.transformations.map((transformation) => ({
@@ -49,8 +70,21 @@ export const convertFromBackendFormat = (
 ): MediaQuery[] => {
   const mediaQueries: MediaQuery[] = []
 
+  const defaultTransformations = medias[DEFAULT_MEDIA_QUERY_ID] ?? []
+  const defaultEntry: MediaQuery = {
+    id: DEFAULT_MEDIA_QUERY_ID,
+    query: DEFAULT_MEDIA_QUERY_ID,
+    displayName: DEFAULT_MEDIA_QUERY_ID,
+    transformations: defaultTransformations.map((t) => ({
+      id: generateTransformationId(),
+      type: t.method as TransformationType,
+      config: t.arguments ?? {}
+    })),
+    order: 0
+  }
+
   Object.entries(medias).forEach(([queryName, transformations]) => {
-    if (queryName === 'default') {
+    if (queryName === DEFAULT_MEDIA_QUERY_ID) {
       return
     }
 
@@ -58,9 +92,9 @@ export const convertFromBackendFormat = (
       id: generateMediaQueryId(),
       query: queryName,
       displayName: getDisplayName(queryName),
-      transformations: transformations.map((t, index) => ({
+      transformations: transformations.map((t) => ({
         id: generateTransformationId(),
-        type: t.method as TransformationType, // Direct usage with type casting
+        type: t.method as TransformationType,
         config: t.arguments ?? {}
       })),
       order: (mediaOrder[queryName] === 0 ? 0 : mediaOrder[queryName]) ?? 0
@@ -69,7 +103,9 @@ export const convertFromBackendFormat = (
     mediaQueries.push(mediaQuery)
   })
 
-  return mediaQueries.sort((a, b) => a.order - b.order)
+  mediaQueries.sort((a, b) => a.order - b.order)
+
+  return [defaultEntry, ...mediaQueries]
 }
 
 export const getDisplayName = (query: string): string => {

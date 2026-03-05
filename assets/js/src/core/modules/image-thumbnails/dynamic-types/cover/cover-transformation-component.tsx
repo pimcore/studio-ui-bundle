@@ -8,67 +8,63 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { Input } from '@Pimcore/components/input/input'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-const positioningOptions = [
-  { value: 'center', label: 'Center' },
-  { value: 'topleft', label: 'Top Left' },
-  { value: 'topright', label: 'Top Right' },
-  { value: 'bottomleft', label: 'Bottom Left' },
-  { value: 'bottomright', label: 'Bottom Right' }
-]
-
 export const CoverTransformationComponent: TransformationComponent = () => {
+  const { t } = useTranslation()
+
+  const positioningOptions = useMemo(() => [
+    { value: 'center', label: t('image-thumbnails.transformations.cover.positioning-center') },
+    { value: 'topleft', label: t('image-thumbnails.transformations.cover.positioning-topleft') },
+    { value: 'topright', label: t('image-thumbnails.transformations.cover.positioning-topright') },
+    { value: 'bottomleft', label: t('image-thumbnails.transformations.cover.positioning-bottomleft') },
+    { value: 'bottomright', label: t('image-thumbnails.transformations.cover.positioning-bottomright') }
+  ], [t])
+
   return (
     <Flex
       gap="small"
       vertical
     >
       <Form.Item
-        initialValue={ 800 }
-        label="Width"
+        label={ t('image-thumbnails.transformations.cover.width') }
         name="width"
       >
-        <InputNumber placeholder="800" />
+        <InputNumber />
       </Form.Item>
+
       <Form.Item
-        initialValue={ 600 }
-        label="Height"
+        label={ t('image-thumbnails.transformations.cover.height') }
         name="height"
       >
-        <InputNumber placeholder="600" />
+        <InputNumber />
       </Form.Item>
+
+      <p style={ { margin: 0 } }>
+        {t('image-thumbnails.transformations.cover.focal-point-info')}
+      </p>
+
       <Form.Item
         initialValue="center"
-        label="Position"
+        label={ t('image-thumbnails.transformations.cover.positioning') }
         name="positioning"
       >
         <Select options={ positioningOptions } />
       </Form.Item>
+
       <Form.Item
-        initialValue={ false }
-        label="Force Resize"
+        label={ t('image-thumbnails.transformations.cover.force-resize') }
         name="forceResize"
         valuePropName="checked"
       >
         <Switch />
-      </Form.Item>
-      <Form.Item
-        initialValue="The positioning determines which part of the image remains visible when cropping."
-        label="Focal Point"
-        name="description"
-      >
-        <Input
-          disabled
-          readOnly
-        />
       </Form.Item>
     </Flex>
   )

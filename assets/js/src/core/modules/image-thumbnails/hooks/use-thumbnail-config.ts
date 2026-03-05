@@ -15,6 +15,7 @@ import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/t
 import { useThumbnailImageDeleteMutation, useThumbnailImageCreateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseThumbnailConfigReturn {
   handleDelete: (thumbnail: ThumbnailConfigurationData, onSuccess?: () => void) => Promise<void>
@@ -28,6 +29,7 @@ interface UseThumbnailConfigProps {
 export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThumbnailConfigReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
+  const messageApi = useMessage()
   const [deleteThumbnailMutation, { error: deleteError }] = useThumbnailImageDeleteMutation()
   const [createThumbnail, { error: createError }] = useThumbnailImageCreateMutation()
 
@@ -78,7 +80,14 @@ export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThu
         message: t('image-thumbnails.add.validation.message')
       },
       onOk: async (value: string) => {
-        const result = await createThumbnail({ createThumbnailConfig: { name: value } })
+        const sanitized = value.replaceAll(/[^a-zA-Z0-9_-]/g, '')
+
+        if (sanitized.length <= 2) {
+          void messageApi.error(t('image-thumbnails.add.validation.message'))
+          return
+        }
+
+        const result = await createThumbnail({ createThumbnailConfig: { name: sanitized } })
 
         if (has(result, 'error')) {
           return
@@ -87,11 +96,11 @@ export const useThumbnailConfig = ({ refetch }: UseThumbnailConfigProps): UseThu
         refetch()
 
         if (!isNil(onSuccess)) {
-          onSuccess(value)
+          onSuccess(sanitized)
         }
       }
     })
-  }, [createThumbnail, refetch, t, modal])
+  }, [createThumbnail, refetch, t, modal, messageApi])
 
   return {
     handleDelete,

@@ -23,11 +23,11 @@ export class RoundCornersTransformationType extends TransformationDynamicTypeAbs
   readonly id = 'roundCorners'
 
   getLabel (): string {
-    return 'Round Corners'
+    return 'Round Corners (Imagick)'
   }
 
   getSummary (config: RoundCornersTransformationConfig): string {
-    return `Round Corners ${config.width ?? 10}x${config.height ?? 10}px`
+    return `Round Corners (Imagick) ${config.width ?? '?'}x${config.height ?? '?'}px`
   }
 
   getReactComponent (): TransformationComponent {

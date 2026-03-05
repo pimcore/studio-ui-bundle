@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -17,13 +17,11 @@ import { Button } from '@Pimcore/components/button/button'
 import { Portal } from '@Pimcore/components/portal/portal'
 import type { MediaQuery, BackendMediasFormat } from '../../types/media-query.types'
 import { MediaQueriesPanel } from '../media-queries-panel/media-queries-panel'
-import { convertToBackendFormat, convertFromBackendFormat } from '../../utils/media-query-helpers'
+import { convertToBackendFormat, convertFromBackendFormat, DEFAULT_MEDIA_QUERY_ID, createDefaultMediaQuery } from '../../utils/media-query-helpers'
 import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useThumbnailImageGetByNameQuery, useThumbnailImageUpdateMutation } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { isNil, isNull, isEqual, isEmpty } from 'lodash'
+import { isNil, isNull, isEqual, isEmpty, has } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
-import { extractGroupsFromTree } from '../../utils/tree-helpers'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { BasicFormFields } from './basic-form-fields'
 import { AdvancedSettingsPanel } from './advanced-settings-panel'
@@ -57,10 +55,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const messageApi = useMessage()
-  const modificationDateRef = useRef<number | null>(null)
   const [currentThumbnailId, setCurrentThumbnailId] = useState<string | null>(null)
-
-  const { thumbnailsData } = useImageThumbnailsContext()
 
   const [initialFormData, setInitialFormData] = useState<ThumbnailFormData | null>(null)
   const [currentFormData, setCurrentFormData] = useState<ThumbnailFormData | null>(null)
@@ -73,19 +68,13 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
 
   const [updateThumbnail, { isLoading: isSaving, error: updateError }] = useThumbnailImageUpdateMutation()
 
-  const groupOptions = useMemo(() => {
-    if (thumbnailsData?.items == null) return []
-    const groups = extractGroupsFromTree(thumbnailsData.items)
-    return [{ value: '', label: t('image-thumbnails.editor.no-group') }, ...groups]
-  }, [thumbnailsData, t])
-
   useEffect(() => {
     if (!isNil(updateError)) {
       trackError(new ApiError(updateError))
     }
   }, [updateError])
 
-  const isDirty = React.useMemo(() => {
+  const isDirty = useMemo(() => {
     if (isNull(initialFormData) || isNull(currentFormData)) return false
     return !isEqual(initialFormData, currentFormData)
   }, [initialFormData, currentFormData])
@@ -108,7 +97,11 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         useCropBox: configData.settings.useCropBox ?? false,
         downloadable: configData.settings.downloadable ?? false,
         preserveAnimation: configData.settings.preserveAnimation ?? false,
-        mediaQueries: convertFromBackendFormat((configData.medias ?? {}) as BackendMediasFormat, {})
+        mediaQueries: (() => {
+          const fromBackend = convertFromBackendFormat((configData.medias ?? {}) as BackendMediasFormat, {})
+          const hasDefault = fromBackend.some(mq => mq.id === DEFAULT_MEDIA_QUERY_ID)
+          return hasDefault ? fromBackend : [createDefaultMediaQuery(), ...fromBackend]
+        })()
       }
 
       setInitialFormData({ ...formData })
@@ -116,8 +109,6 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
       setMediaQueries(formData.mediaQueries)
 
       form.setFieldsValue(formData)
-
-      modificationDateRef.current = configData.settings.modificationDate ?? Date.now()
     }
   }, [selectedThumbnail?.id, currentThumbnailId, configData?.settings, form])
 
@@ -140,48 +131,44 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
     if (isEmpty(selectedThumbnail) || currentFormData === null) return
 
     form.validateFields().then(async (values: ThumbnailFormData) => {
-      try {
-        const updatedSettings = {
-          name: values.name,
-          description: values.description,
-          format: values.format,
-          group: (values.group === '' ? '' : values.group) ?? '',
-          quality: values.quality,
-          highResolution: values.highResolution,
-          preserveColor: values.preserveColor ?? false,
-          forceProcessICCProfiles: values.forceProcessICCProfiles ?? false,
-          preserveMetaData: values.preserveMetaData ?? false,
-          rasterizeSVG: values.rasterizeSVG ?? false,
-          useCropBox: values.useCropBox ?? false,
-          downloadable: values.downloadable ?? false,
-          preserveAnimation: values.preserveAnimation ?? false
-        }
-
-        const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
-
-        const { data: response } = await updateThumbnail({
-          name: selectedThumbnail.name,
-          updateThumbnailConfig: {
-            settings: updatedSettings,
-            medias,
-            mediaOrder
-          }
-        })
-
-        if (!isEmpty(response)) {
-          modificationDateRef.current = response.settings.modificationDate
-        }
-
-        setInitialFormData({ ...currentFormData })
-
-        void messageApi.success(t('save-success'))
-      } catch {
-        trackError(new GeneralError('Could not save thumbnail configuration'))
+      const updatedSettings = {
+        name: values.name,
+        description: values.description,
+        format: values.format,
+        group: (values.group === '' ? '' : values.group) ?? '',
+        quality: values.quality,
+        highResolution: values.highResolution,
+        preserveColor: values.preserveColor ?? false,
+        forceProcessICCProfiles: values.forceProcessICCProfiles ?? false,
+        preserveMetaData: values.preserveMetaData ?? false,
+        rasterizeSVG: values.rasterizeSVG ?? false,
+        useCropBox: values.useCropBox ?? false,
+        downloadable: values.downloadable ?? false,
+        preserveAnimation: values.preserveAnimation ?? false
       }
+
+      const { medias, mediaOrder } = convertToBackendFormat(currentFormData.mediaQueries ?? [])
+
+      const result = await updateThumbnail({
+        name: selectedThumbnail.name,
+        updateThumbnailConfig: {
+          settings: updatedSettings,
+          medias,
+          mediaOrder
+        }
+      })
+
+      if (has(result, 'error')) {
+        return
+      }
+
+      setInitialFormData({ ...currentFormData })
+
+      void messageApi.success(t('save-success'))
     }).catch(() => {
       trackError(new GeneralError('Validation failed'))
     })
-  }, [selectedThumbnail, configData, currentFormData, updateThumbnail, form, messageApi, t])
+  }, [selectedThumbnail, currentFormData, updateThumbnail, form, messageApi, t])
 
   const renderSaveButton = (): React.JSX.Element | null => {
     if (!isActive || selectedThumbnail == null) {
@@ -226,7 +213,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
         } }
         key={ selectedThumbnail?.id }
       >
-        <BasicFormFields groupOptions={ groupOptions } />
+        <BasicFormFields isNameDisabled />
         <AdvancedSettingsPanel />
         <MediaQueriesPanel
           mediaQueries={ mediaQueries }

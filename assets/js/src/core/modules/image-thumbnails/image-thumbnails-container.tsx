@@ -63,6 +63,7 @@ export const ImageThumbnailsContainer = (): React.JSX.Element => {
                 <ImageThumbnailsTree
                   activeTabKey={ activeTabKey }
                   modifiedThumbnails={ modifiedThumbnails }
+                  onThumbnailClose={ handleCloseTab }
                   onThumbnailSelect={ handleThumbnailSelect }
                   openedThumbnails={ openedThumbnails }
                 />
