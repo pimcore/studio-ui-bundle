@@ -19,7 +19,10 @@ interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>
 
 export const ExportButton = ({ id, filename, onClick, ...iconButtonProps }: ExportButtonProps): React.JSX.Element => {
   const handleExport = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
-    const sanitizedFilename = filename.replaceAll(/\s/g, '_')
+    const sanitizedFilename = filename
+      .trim()
+      .replaceAll(/[\s\\/:*?"<>|]+/g, '_')
+
     const url = `${getPrefix()}/gdpr/export-data/${id}?providerKey=assets`
     const link = document.createElement('a')
     link.href = url
@@ -33,9 +36,9 @@ export const ExportButton = ({ id, filename, onClick, ...iconButtonProps }: Expo
 
   return (
     <IconButton
-      { ...iconButtonProps }
-      icon={ { value: 'export' } }
-      onClick={ handleExport }
+      {...iconButtonProps}
+      icon={{ value: 'export' }}
+      onClick={handleExport}
     />
   )
 }

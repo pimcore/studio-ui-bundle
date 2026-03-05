@@ -86,33 +86,33 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
-              data-testid={ `gdpr-assets-export-${data.id}` }
-              filename={ data.fullPath.split('/').pop() ?? crypto.randomUUID() }
-              id={ data.id }
-              tooltip={ {
+              data-testid={`gdpr-assets-export-${data.id}`}
+              filename={data.fullPath.split('/').pop() ?? `asset-${data.id}`}
+              id={data.id}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.export')
-              } }
+              }}
             />
 
             <OpenButton
-              data-testid={ `gdpr-assets-open-${data.id}` }
-              elementType={ elementTypes.asset }
-              id={ data.id }
-              tooltip={ {
+              data-testid={`gdpr-assets-open-${data.id}`}
+              elementType={elementTypes.asset}
+              id={data.id}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.open')
-              } }
+              }}
             />
 
             <DeleteButton
-              data-testid={ `gdpr-assets-delete-${data.id}` }
-              disabled={ !data.__gdprIsDeletable }
-              elementType={ elementTypes.asset }
-              id={ data.id }
-              label={ data.fullPath }
-              providerKey={ providerKey }
-              tooltip={ {
+              data-testid={`gdpr-assets-delete-${data.id}`}
+              disabled={!data.__gdprIsDeletable}
+              elementType={elementTypes.asset}
+              id={data.id}
+              label={data.fullPath}
+              providerKey={providerKey}
+              tooltip={{
                 title: t('gdpr-extractor.assets.table.actions.delete')
-              } }
+              }}
             />
           </Flex>
         )
@@ -123,17 +123,17 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ data.map((item) => item.data) }
+      columns={columns}
+      data={data.map((item) => item.data)}
       dataTestId="gdpr-assets-grid"
       enableSorting
-      onSortingChange={ (sorting) => {
+      onSortingChange={(sorting) => {
         const newSorting = transformToSortingState(sorting)!
         setSortFilter(newSorting)
         onSortingChange?.(newSorting)
-      } }
-      sorting={ transformToSortFilter(sortFilter) }
-      { ...props }
+      }}
+      sorting={transformToSortFilter(sortFilter)}
+      {...props}
     />
   )
 }
