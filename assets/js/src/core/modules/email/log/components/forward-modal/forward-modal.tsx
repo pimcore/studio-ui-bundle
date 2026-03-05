@@ -17,7 +17,6 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { type EmailLog } from '@Pimcore/modules/email/emails-api-slice.gen'
-import { useForm } from 'antd/es/form/Form'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEmailLog } from '../../hooks/use-email-log'
@@ -35,7 +34,7 @@ interface ForwardFormValues {
 
 export const ForwardModal = ({ email, ...props }: ForwardModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { forward } = useEmailLog()
   const dispatch = useAppDispatch()
@@ -107,13 +106,13 @@ export const ForwardModal = ({ email, ...props }: ForwardModalProps): React.JSX.
             name="to"
             rules={ [{ type: 'email', required: true, message: t('email-blocklist.add.validation') }] }
           >
-            <Input />
+            <Input data-testid="forward-modal-to-input" />
           </Form.Item>
         </Form>
 
         <EmailPreview
-          email={ email }
           height={ 300 }
+          id={ email.id }
         />
       </Flex>
     </Modal>

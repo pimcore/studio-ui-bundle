@@ -27,13 +27,12 @@ export const AreablockTypesList = (): React.JSX.Element => {
   const areablockGroupedTypes = useAppSelector((state) => selectDocumentAreablockGroupedTypes(state, documentId))
   const groupEntries = Object.entries(areablockGroupedTypes)
 
-  // If only one group and it's the default group, render items directly without grouping
   if (groupEntries.length === 1 && groupEntries[0][0] === DEFAULT_AREABLOCK_GROUP) {
     const [, types] = groupEntries[0]
     return (
       <Box
         className={ styles.gridContainer }
-        padding={ { x: 'small', bottom: 'small' } }
+        padding={ { x: 'extra-small', bottom: 'small' } }
       >
         {types.map((type: AreablockTypeEntry, typeIndex) => (
           <DraggableAreablockType
@@ -46,9 +45,11 @@ export const AreablockTypesList = (): React.JSX.Element => {
     )
   }
 
-  // Multiple groups - use collapsible panels
   return (
-    <Box className={ styles.collapsibleContainer }>
+    <Box
+      className={ styles.collapsibleContainer }
+      padding={ { x: 'extra-small' } }
+    >
       {groupEntries.map(([groupName, types], groupIndex) => {
         let startIndex = 0
         const entriesBeforeThis = groupEntries.slice(0, groupIndex)
@@ -60,7 +61,7 @@ export const AreablockTypesList = (): React.JSX.Element => {
           <Panel
             border={ false }
             collapsed={ false }
-            collapsible
+            contentPadding="extra-small"
             key={ groupName }
             theme="card-with-highlight"
             title={ t(groupName) }

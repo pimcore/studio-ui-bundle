@@ -8,15 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form, FormKit, Input, TextArea } from '@sdk/components'
+import { Form, type formInstanceType, FormKit, Input, TextArea } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserSelect } from '../user-select/user-select'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation'
-import { type FormInstance } from 'antd'
 
 interface NotificationFormProps {
-  form: FormInstance
+  form: formInstanceType
 }
 
 export const NotificationForm = ({ form }: NotificationFormProps): React.JSX.Element => {

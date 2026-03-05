@@ -17,7 +17,7 @@ export const useStyle = createStyles(({ token, css }) => {
       inset: 0;
       background: #FFF;
       overflow: hidden; 
-      opacity: 0.3;
+      opacity: 0.4;
 
       .background-figure {
         position: absolute;
@@ -46,16 +46,26 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         &--bottom-right {
-          left: 11%;
+          top: 55%;
+          left: 33%;
           width: 1642px;
           height: 686px;
           transform: rotate(65.637deg);
           flex-shrink: 0;
           border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
-          background: rgba(122, 58, 212, 0.42);
+          background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
           filter: blur(310px);
         }
       }
+    `,
+    logoImage: css`
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 586px;
+      max-height: 373px;
+      z-index: 1;
     `
   }
 }, { hashPriority: 'low' })

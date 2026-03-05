@@ -6,6 +6,10 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            assetGetTypes: build.query<AssetGetTypesApiResponse, AssetGetTypesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/assets/types` }),
+                providesTags: ["Assets"],
+            }),
             assetBatchDelete: build.mutation<AssetBatchDeleteApiResponse, AssetBatchDeleteApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/batch-delete`,
@@ -428,6 +432,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetGetVideoTypes: build.query<AssetGetVideoTypesApiResponse, AssetGetVideoTypesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/assets/video/types` }),
+                providesTags: ["Assets"],
+            }),
             assetCustomMetadataGetById: build.query<
                 AssetCustomMetadataGetByIdApiResponse,
                 AssetCustomMetadataGetByIdApiArg
@@ -439,6 +447,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type AssetGetTypesApiResponse = /** status 200 Successfully retrieved all available asset types */ {
+    totalItems: number;
+    items: AssetType[];
+};
+export type AssetGetTypesApiArg = void;
 export type AssetBatchDeleteApiResponse =
     /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
         /** ID of created jobRun */
@@ -514,13 +527,13 @@ export type AssetDocumentStreamCustomApiArg = {
     dpi?: number;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDocumentStreamDynamicApiResponse =
     /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
@@ -554,13 +567,13 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -764,13 +777,13 @@ export type AssetImageStreamCustomApiArg = {
     forceResize?: boolean;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetImageStreamDynamicApiResponse =
     /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
@@ -814,13 +827,13 @@ export type AssetImageStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
     /** Mime type of steamed image. */
     mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
@@ -962,12 +975,25 @@ export type AssetVideoStreamByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetGetVideoTypesApiResponse = /** status 200 Successfully retrieved all available video types */ {
+    totalItems: number;
+    items: VideoType[];
+};
+export type AssetGetVideoTypesApiArg = void;
 export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
 export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
+};
+export type AssetType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** key */
+    key: string;
 };
 export type Error = {
     /** Message */
@@ -1328,6 +1354,14 @@ export type AssetUploadInfo = {
     /** Id of existing asset */
     assetId: number | null;
 };
+export type VideoType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** key */
+    key: string;
+};
 export type CustomMetadata = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1343,6 +1377,7 @@ export type CustomMetadata = {
     data: any | null;
 };
 export const {
+    useAssetGetTypesQuery,
     useAssetBatchDeleteMutation,
     useAssetCloneMutation,
     useAssetCustomSettingsGetByIdQuery,
@@ -1387,5 +1422,6 @@ export const {
     useAssetVideoImageThumbnailStreamQuery,
     useAssetVideoDownloadByThumbnailQuery,
     useAssetVideoStreamByThumbnailQuery,
+    useAssetGetVideoTypesQuery,
     useAssetCustomMetadataGetByIdQuery,
 } = injectedRtkApi;

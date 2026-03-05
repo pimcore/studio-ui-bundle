@@ -84,9 +84,11 @@ interface IHotspotImage {
   disableContextMenu?: boolean
   disabled?: boolean
   disableDrag?: boolean
+  ratioX?: number
+  ratioY?: number
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu, disabled, disableDrag = false }: IHotspotImage): JSX.Element => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu, disabled, disableDrag = false, ratioX, ratioY }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
@@ -153,7 +155,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     if (dragging) {
       setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].marginLeft), toNumber(styleOptions[items[hotspotIndex].type].marginTop)))
     } else if (resizeDirection !== null) {
-      setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
+      setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].minSize), dx, dy, ratioX, ratioY))
     }
   }
 

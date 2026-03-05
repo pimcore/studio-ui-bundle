@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react'
+import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
-import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isString } from 'lodash'
+import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
@@ -28,30 +28,38 @@ export type SelectTheme = 'default' | 'primary'
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  dataTestId?: string
   inherited?: boolean
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
+  loadingSkeleton?: boolean
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({
+  customIcon,
+  customArrowIcon,
+  mode,
+  status,
+  className,
+  allowClear,
+  inherited,
+  value,
+  width,
+  minWidth,
+  theme = 'default',
+  loadingSkeleton = false,
+  dataTestId,
+  ...antdSelectProps
+}, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const [isSelected, setIsSelected] = useState(!isEmptyValue(value))
 
   useImperativeHandle(ref, () => selectRef.current!)
-
-  useEffect(() => {
-    if (!isEmpty(value) || !isEmptyValue(value)) {
-      setIsSelected(true)
-    } else {
-      setIsSelected(false)
-    }
-  }, [value])
 
   // Calculate width: explicit width prop takes precedence over fieldWidths
   const getComputedWidth = (): number | undefined => {
@@ -73,6 +81,24 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const { styles } = useStyles({ width: computedWidth, theme })
 
+  // Show skeleton if loading
+  if (loadingSkeleton) {
+    // Map Select size to Skeleton size
+    const getSkeletonSize = (): 'small' | 'default' | 'large' => {
+      if (antdSelectProps.size === 'small') return 'small'
+      if (antdSelectProps.size === 'large') return 'large'
+      return 'default'
+    }
+
+    return (
+      <Skeleton.Input
+        active
+        size={ getSkeletonSize() }
+        style={ { width: computedWidth } }
+      />
+    )
+  }
+
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
   const isStatusError = status === 'error'
@@ -80,7 +106,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const selectContainerClassNames = cn('studio-select', styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError,
-    [styles.selectContainerWithClear]: allowClear === true && isSelected,
+    [styles.selectContainerWithClear]: allowClear === true,
     [styles.selectContainerPrimary]: theme === 'primary'
   })
   const selectClassNames = cn(className, styles.select, {
@@ -135,13 +161,15 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }
 
   return (
-    <div className={ selectContainerClassNames }>
-      {withCustomIcon && (
-        <Icon
-          className={ customIconClassNames }
-          value={ customIcon! }
-        />
-      )}
+    <div
+      className={ selectContainerClassNames }
+      data-testid={ dataTestId }
+    >      {withCustomIcon && (
+    <Icon
+      className={ customIconClassNames }
+      value={ customIcon! }
+    />
+    )}
       <AntdSelect
         allowClear={ allowClear }
         className={ selectClassNames }

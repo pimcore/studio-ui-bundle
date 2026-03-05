@@ -42,23 +42,24 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       {
         label: t('widget.email-log.tab.html'),
         key: 'html',
-        children: <EmailPreview email={ email } />
+        children: <EmailPreview id={ email.id } />
       },
       {
         label: t('widget.email-log.tab.parameters'),
         key: 'parameters',
-        children: <ParametersTab email={ email } />
+        children: <ParametersTab id={ email.id } />
       }
     ]
 
     return {
       key: email.id.toString(),
+      'data-testid': `email-log-entry-${email.id}`,
       label: <Flex
         align="center"
         gap="extra-small"
              >
         <Icon value="send-03" />
-        <span>{email.subject}</span>
+        <span data-testid={ `email-log-subject-${email.id}` }>{email.subject}</span>
       </Flex>,
       subLabel: <Flex
         align="center"
@@ -78,16 +79,17 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         gap={ 4 }
              >
         {email.hasError && (
-        <Icon
-          className={ styles.errorIcon }
-          value="close-filled"
-        />
+          <Icon
+            className={ styles.errorIcon }
+            value="close-filled"
+          />
         )}
         <span>{formatDateTime({ timestamp: email.sentDate, dateStyle: 'short', timeStyle: 'short' })}</span>
       </Flex>,
       children: (
         <Flex
           className="email-log-content"
+          data-testid={ `email-log-entry-content-${email.id}` }
           gap={ 'small' }
           vertical
         >

@@ -22,6 +22,7 @@ import {
   type ImageGalleryValueItem
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/image-gallery'
 import { useStyles } from '../../image-gallery.styles'
+import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 
 export interface ImageGallerySortableItemProps {
   id: string
@@ -33,9 +34,13 @@ export interface ImageGallerySortableItemProps {
   disabled?: boolean
   width: string
   height: string
+  ratioX?: number
+  ratioY?: number
+  predefinedDataTemplates?: DataTemplates | string | null
+  uploadPath?: string
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -67,8 +72,12 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             height={ height }
             index={ index }
             item={ item }
+            predefinedDataTemplates={ predefinedDataTemplates }
+            ratioX={ ratioX }
+            ratioY={ ratioY }
             setInternalValue={ setInternalValue }
             setValue={ setValue }
+            uploadPath={ uploadPath }
             value={ value }
             width={ width }
           />
@@ -79,6 +88,7 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             height={ height }
             index={ index }
             setValue={ setValue }
+            uploadPath={ uploadPath }
             value={ value }
             width={ width }
           />

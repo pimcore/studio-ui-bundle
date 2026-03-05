@@ -10,13 +10,12 @@
 
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { ManyToOneRelation, type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
-import { type FormInstance } from 'antd'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
@@ -29,7 +28,7 @@ export interface SiteFormValues {
 }
 
 export interface SiteFormProps {
-  form: FormInstance<any>
+  form: formInstanceType<any>
   initialValues: SiteFormValues
   onValuesChange?: () => void
 }

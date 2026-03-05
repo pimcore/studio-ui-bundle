@@ -90,11 +90,13 @@ export type JobRun = {
     /** Total elements */
     totalElements: number;
     /** Current Message og the last Event */
-    currentMessage?: string;
+    currentMessage: string;
+    /** Id of the child Job run */
+    jobRunChildId: number | null;
     /** Current Step of a running Job */
-    currentStep?: number | null;
+    currentStep: number | null;
     /** Number of total Steps of a running Job */
-    totalSteps?: number | null;
+    totalSteps: number | null;
     /** Creation date */
     creationDate: number | null;
     /** Modification date */

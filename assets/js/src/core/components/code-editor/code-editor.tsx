@@ -8,40 +8,32 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import ReactCodeMirror, { type ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { yaml } from '@codemirror/lang-yaml'
-import { type LanguageSupport } from '@codemirror/language'
 import React from 'react'
+import ReactCodeMirror, { type ReactCodeMirrorProps, EditorView } from '@uiw/react-codemirror'
+import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
 import { useStyles } from './code-editor.styles'
 
-export type CodeEditorPreset = 'text' | 'yaml'
+export type CodeEditorPreset = 'text' | 'yaml' | 'html'
 
 export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions' | 'value' | 'onChange'> {
   preset?: CodeEditorPreset
   extensions?: ReactCodeMirrorProps['extensions']
   value?: string
   onChange?: (value: string) => void
+  lineWrapping?: boolean
 }
 
-const getPresetExtensions = (preset: CodeEditorPreset): LanguageSupport[] => {
-  switch (preset) {
-    case 'yaml':
-      return [yaml()]
-    case 'text':
-    default:
-      return []
-  }
-}
-
-export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: CodeEditorProps): React.JSX.Element => {
+export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping = false, ...props }: CodeEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   // Combine preset extensions with custom extensions
   const combinedExtensions = React.useMemo(() => {
     const presetExtensions = preset !== null && preset !== undefined ? getPresetExtensions(preset) : []
     const customExtensions = extensions ?? []
-    return [...presetExtensions, ...customExtensions]
-  }, [preset, extensions])
+    const wrappingExtensions = lineWrapping ? [EditorView.lineWrapping] : []
+
+    return [...presetExtensions, ...customExtensions, ...wrappingExtensions]
+  }, [preset, extensions, lineWrapping])
 
   // Handle onChange to ensure it matches Ant Design Form expectations
   const handleChange = React.useCallback((val: string) => {

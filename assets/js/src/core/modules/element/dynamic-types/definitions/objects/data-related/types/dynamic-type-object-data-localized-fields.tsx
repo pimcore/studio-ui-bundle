@@ -17,6 +17,8 @@ import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import { VersionObjectLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-object-localized-fields'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
   id: string = DynamicTypesList.LOCALIZED_FIELDS
@@ -27,25 +29,20 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition & { children?: any[] }): React.ReactElement<AbstractObjectDataDefinition> {
-    // For version view, we use ObjectLocalizedFields with noteditable=true
-    return (
-      <ObjectLocalizedFields
-        { ...props }
-        noteditable
-      />
-    )
+    return <VersionObjectLocalizedFields { ...props } />
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
-    const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
+    const { item, fieldValueByName, fieldPath, fieldBreadcrumbTitle, versionId, versionCount } = props
 
-    const getFieldData = ({ fieldData, fieldValue }: { fieldData: any, fieldValue: any }): IFormattedDataStructureData => {
+    const getFieldData = ({ fieldData, fieldValue, fieldPathValue }: { fieldData: any, fieldValue: any, fieldPathValue: string }): IFormattedDataStructureData => {
       return {
         fieldBreadcrumbTitle,
         versionId,
         versionCount,
         fieldData,
-        fieldValue
+        fieldValue,
+        fieldPath: fieldPathValue
       }
     }
 
@@ -53,11 +50,15 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
       const fieldValue: object = get(fieldValueByName, item.name)
 
       if (isEmpty(fieldValue)) {
-        return getFieldData({ fieldData: { ...item }, fieldValue })
+        const getFieldPathValue = isEmptyValue(fieldPath) ? item.name : `${fieldPath}.${item.name}`
+
+        return getFieldData({ fieldData: { ...item }, fieldValue, fieldPathValue: getFieldPathValue })
       }
 
       return Object.entries(fieldValue).map(([key, value]) => {
-        return getFieldData({ fieldData: { ...item, locale: key }, fieldValue: value })
+        const getFieldPathValue = isEmptyValue(fieldPath) ? item.name : `${fieldPath}.${item.name}.${key}`
+
+        return getFieldData({ fieldData: { ...item, locale: key }, fieldValue: value, fieldPathValue: getFieldPathValue })
       })
     })
   }

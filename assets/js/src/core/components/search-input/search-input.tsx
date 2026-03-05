@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type CSSProperties } from 'react'
+import React, { type CSSProperties, forwardRef } from 'react'
 import { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
-import { Input } from 'antd'
+import { Input, type InputRef } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
@@ -24,7 +24,7 @@ export interface ISearchInputProps extends AntSearchProps {
   searchButtonIcon?: string
 }
 
-export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, searchButtonIcon = 'search', ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = forwardRef<InputRef, ISearchInputProps>(({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, searchButtonIcon = 'search', ...props }, ref): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(
@@ -34,6 +34,8 @@ export const SearchInput = ({ className, withoutAddon = false, withPrefix = fals
     },
     className
   )
+
+  const dataTestId = props['data-testid']
 
   return (
     <Input.Search
@@ -46,6 +48,7 @@ export const SearchInput = ({ className, withoutAddon = false, withPrefix = fals
         )
       } }
       className={ searchClassNames }
+      data-testid={ dataTestId }
       enterButton={ !withoutAddon && (
         <Icon
           value={ searchButtonIcon }
@@ -58,8 +61,11 @@ export const SearchInput = ({ className, withoutAddon = false, withPrefix = fals
           value='search'
         />
       ) }
+      ref={ ref }
       style={ { maxWidth } }
       { ...props }
     />
   )
-}
+})
+
+SearchInput.displayName = 'SearchInput'

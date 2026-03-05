@@ -16,6 +16,7 @@ import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
 import { configUtils } from './utils/areablock-utils'
 import { AreablockDialog } from './components/areablock-dialog/areablock-dialog'
+import { type useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface AreaType {
   name: string
@@ -47,6 +48,8 @@ export interface AreablockEntry {
 
 export type AreablockValue = AreablockEntry[]
 
+export type AreablockRenderTrigger = ReturnType<typeof useLazyDocumentPageSnippetAreaBlockRenderQuery>[0]
+
 export interface AreablockEditableProps {
   value?: AreablockValue
   onChange?: (value: AreablockValue) => void
@@ -56,6 +59,7 @@ export interface AreablockEditableProps {
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
   isInherited?: boolean
+  renderTrigger: AreablockRenderTrigger
 }
 
 export const AreablockEditable = ({
@@ -66,7 +70,8 @@ export const AreablockEditable = ({
   editableName,
   containerRef,
   disabled = false,
-  isInherited = false
+  isInherited = false,
+  renderTrigger
 }: AreablockEditableProps): React.JSX.Element => {
   const currentValue = isArray(value) ? value : []
 
@@ -110,7 +115,8 @@ export const AreablockEditable = ({
     value: currentValue,
     onChange,
     config,
-    disabled
+    disabled,
+    renderTrigger
   })
 
   const { renderAreablockToolbar } = useAreablockControls({

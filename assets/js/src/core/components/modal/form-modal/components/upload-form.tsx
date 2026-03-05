@@ -9,12 +9,12 @@
  */
 
 import React, { forwardRef, type RefObject } from 'react'
-import { type FormInstance, Input, type InputRef } from 'antd'
+import { Input, type InputRef } from 'antd'
 import { type Rule } from 'antd/lib/form'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type FormProps } from '@Pimcore/components/form/form'
 
 export interface UploadFormProps {
-  form: FormInstance<any>
+  form: FormProps['form']
   initialValues: object
   fieldName: string
   label?: string

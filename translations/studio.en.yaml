@@ -25,6 +25,11 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
+relation-invalid-key-in-columns: "Invalid value used for key column. Please avoid special characters and reserved keywords."
+import-modal.title: Import
+import-modal.upload: Upload
+import-modal.browse-files: Browse Files
+import-modal.drag-drop: Drag and drop file here or click to browse
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -62,18 +67,20 @@ asset.upload.files.uploaded: "{{successItems}} files are uploaded"
 asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Upload completed successfully
 asset.upload.files.completed-actions: Completed actions
-asset.upload.validation: 'Please add a file'
+asset.upload.validation: "Please add a file"
 asset.upload.file-exists.title: File already exists
 asset.upload.file-exists.message: 'The file "{{fileName}}" already exists in this folder. Do you want to overwrite it?'
 asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
-upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
-upload.error.generic: 'The file could not be uploaded.'
-upload.error.upload-failed: 'Upload failed'
-upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
-asset.select.type.nullable: 'All types'
+upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
+upload.error.max-file-size-exceeded: "File size exceeds the maximum allowed size of {{maxSize}}"
+upload.error.generic: "The file could not be uploaded."
+upload.error.upload-failed: "Upload failed"
+upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
+upload.success: "File uploaded successfully"
+asset.select.type.nullable: "All types"
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
@@ -89,11 +96,11 @@ document.select-language-for-new-document: Select language for New Document
 document.language-required: Please select a language
 document.paste-inheritance: Paste (inheritance)
 document.tree.copy-paste.replacing-content: Replacing Content
-document.tree.context-menu.add-page: Add Page
-document.tree.context-menu.add-snippet: Add Snippet
-document.tree.context-menu.add-email: Add Email
-document.tree.context-menu.add-link: Add Link
-document.tree.context-menu.add-hardlink: Add Hardlink
+document.tree.context-menu.add-page: New Page
+document.tree.context-menu.add-snippet: New Snippet
+document.tree.context-menu.add-email: New Email
+document.tree.context-menu.add-link: New Link
+document.tree.context-menu.add-hardlink: New Hardlink
 document.required-fields.validation-title: Required Fields Missing
 document.required-fields.validation-message: The following required fields must be filled before publishing
 document.site.remove-site: Remove Site
@@ -124,11 +131,11 @@ blank: "Blank"
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.select-class-to-display: Select a class to display
-data-object.tree.context-menu.add-object: Add Object
-data-object.tree.context-menu.add-variant: Add Variant
+data-object.tree.context-menu.add-object: New Object
+data-object.tree.context-menu.add-variant: New Variant
 data-object.variant-listing.create-data-variant: New Variant
 data-object.create-data-object: Add new Object of type {{className}}
-data-object.create-variant: Add new Variant of type {{className}} 
+data-object.create-variant: Add new Variant of type {{className}}
 data-object.object-editor-tabs.variants: Variants
 object.object-editor-tabs.children-listing: Children Grid
 workflow.label: Workflow
@@ -145,6 +152,101 @@ toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
 toolbar.switch-layout: Switch custom layout
+import: Import
+export: Export
+more-actions: More Actions
+class-definition.import: Import Class Definition
+class-definition.export: Export Class Definition
+class-definition.import-file-label: Select JSON file
+class-definition.import-success: Class definition imported successfully
+class-definition.export-success: Class definition exported successfully
+class-definition.custom-layouts.default-layout: Default Layout
+class-definition.create-new: Create New Class Definition
+class-definition.class-name: Class name
+class-definition.unique-identifier: Unique identifier
+class-definition.unique-identifier-warning: Be careful with the unique identifier because table names can contain only up to 64 characters.
+class-definition.validation.enter-class-name: Please enter a class name
+class-definition.validation.class-name-format: The class name must start with a letter and can contain only letters, numbers, and underscores.
+class-definition.validation.enter-unique-identifier: Please enter a unique identifier
+class-definition.validation.unique-identifier-in-use: This unique identifier is already in use
+class-definition.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
+class-definition.general-settings.title: General
+class-definition.general-settings.description: Description
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP Class Name
+class-definition.general-settings.group: Group
+class-definition.general-settings.icon: Icon
+class-definition.general-settings.parent-class: Parent Class
+class-definition.general-settings.implements-interfaces: Implements Interfaces
+class-definition.general-settings.listing-parent-class: Listing Parent Class
+class-definition.general-settings.use-traits: Use Traits
+class-definition.general-settings.listing-use-traits: Listing Use Traits
+class-definition.general-settings.link-generator-reference: Link Generator Reference
+class-definition.general-settings.preview-generator-reference: Preview Generator Reference
+class-definition.general-settings.allow-inherit: Allow Inheritance
+class-definition.general-settings.allow-variants: Allow Variants
+class-definition.general-settings.show-variants: Show Variants
+class-definition.general-settings.show-app-logger-tab: Show App Logger Tab
+class-definition.general-settings.show-field-lookup: Show Field Lookup
+class-definition.general-settings.enable-grid-locking: Enable Grid Locking
+class-definition.general-settings.encrypt-data: Encrypt Data
+class-definition.general-settings.enter-name: Please enter a name
+class-definition.property-visibility.title: Property Visibility
+class-definition.property-visibility.id-grid: ID (Grid)
+class-definition.property-visibility.id-search: ID (Search)
+class-definition.property-visibility.key-grid: Key (Grid)
+class-definition.property-visibility.key-search: Key (Search)
+class-definition.property-visibility.path-grid: Path (Grid)
+class-definition.property-visibility.path-search: Path (Search)
+class-definition.property-visibility.modification-date-grid: Modification Date (Grid)
+class-definition.property-visibility.modification-date-search: Modification Date (Search)
+class-definition.property-visibility.creation-date-grid: Creation Date (Grid)
+class-definition.property-visibility.creation-date-search: Creation Date (Search)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Composite Indices
+class-definition.composite-indices.index-name: Index Name
+class-definition.composite-indices.type: Type
+class-definition.composite-indices.columns: Columns
+class-definition.composite-indices.enter-index-name: Enter index name
+class-definition.composite-indices.select-index-type: Select index type
+class-definition.composite-indices.select-column-names: Select or enter column names
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Localized Query
+class-definition.composite-indices.type-store: Store
+class-definition.composite-indices.type-localized-store: Localized Store
+class-definition.composite-indices.index-label: Index
+field-collection.create-new: Create New Field Collection
+field-collection.key: Key
+field-collection.validation.enter-key: Please enter a key
+field-collection.validation.key-format: The key must start with a letter and can contain only letters, numbers, and underscores.
+field-collection.general-settings.title: General
+field-collection.general-settings.key: Key
+field-collection.general-settings.title-label: Title
+field-collection.general-settings.enter-title: Please enter a title
+field-collection.general-settings.group: Group
+field-collection.general-settings.parent-class: Parent PHP Class
+field-collection.general-settings.implements-interfaces: Implements Interfaces
+field-collection.general-settings.usages.title: Usages
+field-collection.general-settings.usages.class: Class
+field-collection.general-settings.usages.field: Field
+object-brick.create-new: Create New Object Brick
+object-brick.key: Key
+object-brick.validation.enter-key: Please enter a key
+object-brick.validation.key-format: The key must start with a letter and can contain only letters, numbers, and underscores.
+object-brick.general-settings.title: General
+object-brick.general-settings.parent-class: Parent PHP Class
+object-brick.general-settings.implements-interfaces: Implements Interfaces
+object-brick.general-settings.title-label: Title
+object-brick.general-settings.group: Group
+object-brick.class-definitions-block.title: Class Definitions
+object-brick.class-definitions-block.new-entry: New Entry
+object-brick.class-definitions-block.classname: Class
+object-brick.class-definitions-block.select-classname: Select class
+object-brick.class-definitions-block.fieldname: Field
+object-brick.class-definitions-block.select-fieldname: Select field
+custom-layout.import-success: Custom layout imported successfully
+custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
+custom-layout.delete.success: Custom layout deleted successfully
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -313,6 +415,7 @@ by: By
 field: Field
 no-data-available: No Data Available
 no-data-available-yet: No data available yet.
+no-items: No items
 schedule.label: Schedule
 schedule.headline: Schedule
 schedule.columns.datetime: Date & Time
@@ -343,6 +446,7 @@ predefined_metadata: Predefined Metadata
 preview: Preview
 id: ID
 type: Type
+position: Position
 filename: Filename
 fullpath: Full path
 modificationDate: Modification date
@@ -370,6 +474,9 @@ listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
+data-type.html: HTML
+data-type.number: Number
+data-type.boolean: Boolean
 data-type.date: Date
 data-type.text: Text
 data-type.document: Document
@@ -472,6 +579,7 @@ translations.add-translation-mandatory-field-missing.error: Key is a mandatory f
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.save: Save
 button.confirm: Confirm
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
@@ -504,6 +612,8 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
+csv-separated-options: CSV separated options
+csv-separated-options-info: "The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value."
 add: Add
 new: New
 save: Save
@@ -529,6 +639,314 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
+width-tooltip: "The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+width-field: Width field
+width-unit: Width unit
+height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+table-data-tooltip: "Example of how to add data: \n\n one|two|three \n four|five|six \n seven|eight|nine"
+use-current-date: Use current date
+respect-timezone: Respect timezone
+column-type: Column type
+specific-settings: Specific Settings
+restrict-selection-to: "Restrict selection to"
+only-configured-languages: Show only in system settings configured languages
+multiselect-render-type: Render Type
+maximum-items: Maximum Items
+enforce-validation: Enforce Validation
+options-source: Options Source
+options-source-configure: "Configure"
+options-source-select-options: "Select Options"
+options-source-options-provider: "Options Provider"
+options-provider-class: "Options Provider Class or Service Name"
+options-provider-data: "Options Provider Data"
+switch-to-selection-mode: Switch to selection mode
+switch-to-drag-mode: Switch to drag mode
+selection-options: Selection Options
+value: Value
+display-name: Display Name
+default-values-settings: Default value settings
+default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
+default-value: Default value
+default-value-generator: Default value generator service / class
+enforce-validation-tooltip: "When enabled, it prevents invalid options from being saved. By default, the API allows saving invalid options"
+show-char-count: Show character count
+column-length: Column length
+max-length: Maximum length
+exclude-from-search-index: Exclude from search index
+toolbar-config: Toolbar configuration
+min-length: Minimum length
+min-value: Minimum value
+max-value: Maximum value
+increment-step: Increment step
+decimal-precision: Decimal precision
+decimal-size: Decimal size
+decimal-settings: Decimal settings
+decimal-settings-tooltip: "If decimal size or precision are specified, DECIMAL(decimalSize, decimalPrecision) MySQL type is used. Default values if missing are 64 as size and 0 as precision. Please note that in MySQL terms, the decimalSize is called precision and the decimalPrecision is called scale."
+integer: Integer
+unsigned: Only unsigned
+auto-convert: Auto convert
+default-unit: Default unit
+valid-units: Valid units
+slider-min: Slider minimum value
+slider-max: Slider maximum value
+slider-step: Slider step
+field-definitions.general-settings: General Settings
+field-definitions.base: Base
+field-definitions.configuration-invalid: Configuration contains invalid field definitions.
+field-definitions.saved-successfully: Saved successfully.
+field-definitions.select-item-configuration: Select Item Configuration
+field-definitions.custom-layout-title: Custom Layout
+field-definitions.custom-layouts: Custom Layouts
+field-definitions.create-new-class-definition: Create New Custom Layout
+field-definitions.select-field-message: Please select a field from the tree to edit its properties.
+field-definitions.loading-general-settings: Loading general settings...
+field-definitions.type-not-supported: Type not supported
+field-definitions.validation.enter-class-name: Please enter a class name
+field-definitions.validation.class-name-format: The class name must start with a letter and can contain only letters, numbers, and underscores.
+field-definitions.validation.unique-identifier: Unique identifier
+field-definitions.validation.enter-unique-identifier: Please enter a unique identifier
+field-definitions.validation.unique-identifier-in-use: This unique identifier is already in use
+field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
+field-definitions.validation.errors-found: Field definitions have errors
+field-definitions.validation.empty-name: "The following field types are missing a name:"
+field-definitions.validation.reserved-word: "Reserved word used as name:"
+field-definitions.validation.invalid-format: "Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Duplicate name within namespace:"
+object-brick-key: Object Brick Key
+field-name: Field Name
+field-definition.geopoint: Geo Point
+field-definition.geobounds: Geo Bounds
+field-definition.geopolygon: Geo Polygon
+field-definition.geopolyline: Geo Polyline
+field-definition.input: Input
+field-definition.textarea: Textarea
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Password
+field-definition.numeric: Number
+field-definition.numeric-range: Numeric Range
+field-definition.slider: Slider
+field-definition.quantity-value: Quantity Value
+field-definition.quantity-value-range: Quantity Value Range
+field-definition.input-quantity-value: Input Quantity Value
+field-definition.date: Date
+field-definition.datetime: Date Time
+field-definition.date-range: Date Range
+field-definition.time: Time
+field-definition.image: Image
+field-definition.external-image: External Image
+field-definition.image-gallery: Image Gallery
+field-definition.video: Video
+field-definition.hotspotimage: Image Advanced
+field-definition.many-to-one-relation: Many-to-One Relation
+field-definition.many-to-many-relation: Many-to-Many Relation
+field-definition.many-to-many-object-relation: Many-to-Many Object Relation
+field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
+field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
+field-definition.reverse-object-relation: Reverse Object Relation
+allowed-class: Allowed class
+allowed-classes: Allowed classes
+allowed-asset-types: Allowed asset types
+allowed-document-types: Allowed document types
+visible-fields: Visible fields
+enable-text-selection: Enable text selection
+allow-to-create-new-object: Allow to create a new object in relation field
+enable-async-load-in-admin: Enable async load in admin
+enable-async-load-in-admin-tooltip: This is especially useful for many relations, it increases performance in the admin interface.
+path-formatter-service: "Formatter Service / Class"
+allow-to-clear-relation: Allow to clear relations of this field
+allow-multiple-assignments: Allow multiple assignments
+number: Number
+bool: Bool
+column-bool: Column Bool
+multiselect: Multiselect
+layout: "Layout"
+layout-options: "Layout Options"
+allow-documents: Allow documents
+allow-assets: Allow assets
+asset-inline-download-allowed: Allow asset inline download
+allow-objects: Allow objects
+path-restriction: Path restriction
+result-limit: Result limit
+remote-owner: Remote owner
+columns: Columns
+enable-batch-edit: Enable batch edit for columns
+owner-class: Owner class
+owner-field-name: Owner field name
+crop-settings: Crop Settings
+ratio-x: Ratio X
+ratio-y: Ratio Y
+predefined-data-templates: Predefined data templates
+upload-path: Upload Path
+preview-width: Preview width
+preview-height: Preview height
+url-width: URL width
+allowed-video-types: Allowed video types
+allowed-video-types-tooltip: Empty = allow all
+field-definition.select: Select
+field-definition.multiselect: Multiselect
+field-definition.boolean-select: Boolean Select
+field-definition.country: Country
+field-definition.countrymultiselect: Country Multiselect
+field-definition.language: Language
+field-definition.languagemultiselect: Language Multiselect
+field-definition.rgba-color: RGBA Color
+field-definition.encrypted-field: Encrypted Field
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Checkbox
+field-definition.link: Link
+field-definition.calculated-value: Calculated Value
+field-definition.user: User
+field-definition.block: Block
+field-definition.panel: Panel
+field-definition.table: Table
+field-definition.structured-table: Structured Table
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classification Store
+field-definition.localizedfields: Localized Fields
+field-definition.accordion: Accordion
+field-definition.fieldset: Fieldset
+field-definition.fieldcontainer: Field Container
+field-definition.iframe: Iframe
+field-definition.region: Region
+field-definition.tabpanel: Tab Panel
+field-definition.text: Text
+field-definition.groups.layout: Layout Component
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Data Component
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Text
+field-definition.groups.data.numeric: Numeric
+field-definition.groups.data.date: Date
+field-definition.groups.data.select: Select
+field-definition.groups.data.media: Media
+field-definition.groups.data.relation: Relation
+field-definition.groups.data.geographic: Geographic
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Structured
+field-definition.groups.data.other: Other
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+regex-validation: Regular Expression Validation
+regex: RegEx
+regex-flags: RegEx Flags
+regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
+test-string: Test string
+regex-validation-error-message: "The string does not match the required format."
+calculator-class: Calculator Class
+calculator-expression: Calculator Expression
+calculator-type: Calculator Type
+calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
+expression: Expression
+lazy-loading: Lazy Loading
+disallow-add-remove: Disallow Add / Remove
+disallow-reorder: Disallow Reorder
+css-style: CSS Style
+collapsible: Collapsible
+collapsed: Initially Collapsed
+border: Border
+rows: Rows
+rows-fixed: Rows Fixed
+cols: Cols
+cols-fixed: Cols Fixed
+length: Length
+label-width: Label Width
+padding: Padding
+label-first-cell: Label First Cell
+label-align: Label Align
+allowed-types: Allowed Types
+localized: Localized
+allowed-group-ids: Allowed Group IDs (csv)
+store: Store
+label: Label
+hide-empty-data: Hide Empty Data
+tab-position: Tab Position
+maximum-tabs: Maximum Tabs
+hide-labels-when-tabs-reached: Hide Locale Labels When Tabs Reached
+provide-split-view: Provide Split View
+data: Data
+domain-label-width: Domain label width
+controller-action: Controller action
+controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
+available-sites: "Available sites"
+empty-equals-allow-all-tooltip: "Empty = allow all"
+reset: Reset
+name: Name
+tooltip: Tooltip
+mandatory: Mandatory
+unique: Unique
+not-editable: Not editable
+invisible: Invisible
+visible-in-gridview: Visible in grid view
+visible-in-searchresult: Visible in search result
 quality: Quality
 mode: Mode
 format: Format
@@ -536,6 +954,7 @@ default: default
 resize: Resize
 scaleByWidth: Scale By Width
 scaleByHeight: Scale By Height
+min-max-settings: Min-Max Times
 download: Download
 asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
@@ -595,6 +1014,9 @@ export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
+form.validation.min: The minimum value is {{min}}
+validation.required: This field is required
+validation.min: The minimum value is {{min}}
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
@@ -623,14 +1045,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
-element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
+element.tree.copy-success-description: '{{elementType}} "{{name}}" has been copied and is ready to paste'
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
-element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
+element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -642,10 +1064,10 @@ element.tree.sorting.keyed-descending: Z to A (Key)
 element.tree.sorting.indexed: Index (Manual)
 element.tree.refresh: Refresh
 element.new-folder: New Folder
-element.new-folder.validation: 'Please enter a valid name'
+element.new-folder.validation: "Please enter a valid name"
 element.rename: Rename
-element.rename.label: 'Please enter the new name'
-element.rename.validation: 'Please enter a valid name'
+element.rename.label: "Please enter the new name"
+element.rename.validation: "Please enter a valid name"
 element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
@@ -698,8 +1120,8 @@ latitude: Latitude
 longitude: Longitude
 search-address: Search address
 search: Search
-geocode.address-not-found: 'The entered address was not found'
-geocode.possible-causes: 'Possible causes'
+geocode.address-not-found: "The entered address was not found"
+geocode.possible-causes: "Possible causes"
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: Do you really want to delete {{type}} '{{value}}'?
 relations.id: ID
@@ -740,15 +1162,21 @@ clipboard.copy.error: Failed to copy to clipboard
 table.empty: Empty
 table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
+tree.actions.prefix.add: "Add "
+tree.actions.convert: "Convert to "
+tree.actions.clone: Clone
+tree.actions.copy: Copy
+tree.actions.paste: Paste
+tree.actions.delete: Delete
+tree.actions.add-user: Add User
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
 tree.actions.user: User
-tree.actions.add-folder: Add Folder
+tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
-tree.actions.add-user: Add User
 tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
@@ -931,10 +1359,17 @@ roles.add-role.label: Enter the name of the new role
 roles.search.id: ID
 navigation.quick-access: Quick Access
 navigation.data-management: Data Management
+navigation.data-model-definitions: Data Model Definitions
+navigation.class-definitions: Classes
+navigation.field-collections: Field Collections
+navigation.object-bricks: Object Bricks
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
+navigation.image-thumbnails: Image Thumbnails
+navigation.video-thumbnails: Video Thumbnails
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
+navigation.appearance-branding: Appearance & Branding
 navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
@@ -1020,6 +1455,245 @@ widget.document-types: Document Types
 widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
+widget.class-definitions: Classes
+widget.field-collections: Field Collections
+widget.object-bricks: Object Bricks
+widget.appearance-branding: Appearance & Branding
+widget.image-thumbnails: Image Thumbnails
+widget.video-thumbnails: Video Thumbnails
+appearance-branding.title: "Appearance & Branding"
+image-thumbnails.title: "Image Thumbnails"
+image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
+image-thumbnails.search.placeholder: "Search thumbnails..."
+image-thumbnails.tree.empty: "No thumbnails found"
+image-thumbnails.configuration.title: "Configuration"
+image-thumbnails.configuration.description: "Configure thumbnail settings"
+image-thumbnails.preview.title: "Preview"
+image-thumbnails.preview.description: "Preview thumbnail configuration"
+image-thumbnails.editor.empty.title: "Select a thumbnail"
+image-thumbnails.editor.empty.description: "Select a thumbnail from the tree to view or edit its configuration"
+image-thumbnails.editor.select-thumbnail: "Select a thumbnail configuration to edit"
+image-thumbnails.editor.general-settings: "General Settings"
+image-thumbnails.editor.name: "Name"
+image-thumbnails.editor.name-required: "Name is required"
+image-thumbnails.editor.description: "Description"
+image-thumbnails.editor.description-placeholder: "Enter thumbnail description..."
+image-thumbnails.editor.group: "Group"
+image-thumbnails.editor.group-required: "Group is required"
+image-thumbnails.editor.group-placeholder: "Select a group..."
+image-thumbnails.editor.no-group: "No Group"
+image-thumbnails.editor.format: "Format"
+image-thumbnails.editor.format-required: "Format is required"
+image-thumbnails.editor.format-placeholder: "Select a format..."
+image-thumbnails.editor.format-auto: "Auto (Web-optimized - recommended)"
+image-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
+image-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
+image-thumbnails.add.validation.message: "The thumbnail name is invalid"
+image-thumbnails.editor.advanced: "Advanced"
+image-thumbnails.editor.quality: "Quality"
+image-thumbnails.editor.quality.tooltip: "JPEG quality setting (1-100)"
+image-thumbnails.editor.high-resolution: "High Resolution"
+image-thumbnails.editor.high-resolution.tooltip: "High resolution factor for retina displays"
+image-thumbnails.editor.preserve-color: "Preserve Color"
+image-thumbnails.editor.preserve-color.tooltip: "Preserve color (profile, space) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
+image-thumbnails.editor.force-process-icc: "Force Process ICC Profiles"
+image-thumbnails.editor.force-process-icc.tooltip: "Force process ICC profiles (Imagick, ORIGINAL)"
+image-thumbnails.editor.preserve-metadata: "Preserve Meta Data"
+image-thumbnails.editor.preserve-metadata.tooltip: "Preserve meta data (don't strip) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
+image-thumbnails.editor.rasterize-svg: "Rasterize SVGs"
+image-thumbnails.editor.rasterize-svg.tooltip: "Rasterize SVGs (Imagick)\n(SVGs get automatically rasterized when a transformation other than resize or scale by width/height is used.)"
+image-thumbnails.editor.use-cropbox: "Use Cropbox"
+image-thumbnails.editor.use-cropbox.tooltip: "Use Cropbox (Ghostscript)\n(Sets the page size to the CropBox rather than the MediaBox, useful to exclude some margins and non-content areas.)"
+image-thumbnails.editor.downloadable: "Downloadable"
+image-thumbnails.editor.downloadable.tooltip: "List as option in download section on image detail view"
+image-thumbnails.editor.preserve-animation: "Preserve Animation"
+image-thumbnails.editor.preserve-animation.tooltip: "Preserve animations for GIF (Imagick)\n(Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: "Media Queries"
+image-thumbnails.editor.media-queries.new: "New"
+image-thumbnails.editor.media-queries.default: "Default"
+image-thumbnails.editor.media-queries.empty: "No media queries defined. Click 'New' to add a CSS media query."
+image-thumbnails.editor.media-query.modal.title: "New Media Query"
+image-thumbnails.editor.media-query.modal.label: "Enter a valid CSS media query"
+image-thumbnails.editor.media-queries.add.title: "New Media Query"
+image-thumbnails.editor.media-queries.add.label: "Enter a valid CSS media query"
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: "Transformations"
+image-thumbnails.editor.transformations.resize: "Resize"
+image-thumbnails.editor.transformations.scale-by-height: "Scale by Height"
+image-thumbnails.editor.transformations.trim: "Trim"
+image-thumbnails.editor.transformations.effects: "Effects"
+image-thumbnails.editor.transformations.effects.sepia: "Sepia"
+image-thumbnails.editor.transformations.effects.grayscale: "Grayscale"
+image-thumbnails.editor.transformations.effects.sharpen: "Sharpen"
+image-thumbnails.editor.transformations.empty: "No transformations defined. Use the 'Transformations' button to add image transformations."
+image-thumbnails.editor.save-error: "Could not save thumbnail configuration"
+
+# Transformation Groups
+image-thumbnails.transformations.groups.main: "Transformations"
+image-thumbnails.transformations.groups.effects: "Effects"
+
+# Media Query Translations
+image-thumbnails.media-queries.add-transformation: "Add Transformation"
+
+# Cover Transformation
+image-thumbnails.transformations.cover.title: "Configure Cover"
+image-thumbnails.transformations.cover.width-height: "Width, Height"
+image-thumbnails.transformations.cover.width: "Width"
+image-thumbnails.transformations.cover.height: "Height"
+image-thumbnails.transformations.cover.focal-point-info: "The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used."
+image-thumbnails.transformations.cover.positioning: "Default Positioning"
+image-thumbnails.transformations.cover.positioning-center: "Center"
+image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
+image-thumbnails.transformations.cover.positioning-topright: "Top Right"
+image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
+image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
+image-thumbnails.transformations.cover.force-resize: "Force resize"
+
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: "Overlay Image"
+image-thumbnails.transformations.add-overlay.x: "X Position"
+image-thumbnails.transformations.add-overlay.y: "Y Position"
+image-thumbnails.transformations.add-overlay.origin: "Origin"
+image-thumbnails.transformations.add-overlay.origin-top-left: "Top Left"
+image-thumbnails.transformations.add-overlay.origin-top-right: "Top Right"
+image-thumbnails.transformations.add-overlay.origin-center: "Center"
+image-thumbnails.transformations.add-overlay.origin-bottom-left: "Bottom Left"
+image-thumbnails.transformations.add-overlay.origin-bottom-right: "Bottom Right"
+image-thumbnails.transformations.add-overlay.alpha: "Opacity"
+image-thumbnails.transformations.add-overlay.composite: "Composite"
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: "Radius"
+image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+
+# Scale by Width Transformation
+image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
+image-thumbnails.transformations.scale-by-width.width: "Width"
+image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
+
+# Resize Transformation
+image-thumbnails.transformations.resize.config-title: "Configure Resize"
+image-thumbnails.transformations.resize.width: "Width"
+image-thumbnails.transformations.resize.height: "Height"
+
+# Scale by Height Transformation
+image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
+image-thumbnails.transformations.scale-by-height.height: "Height"
+image-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+image-thumbnails.transformations.scale-by-height.force-resize: "Force Resize"
+
+# Trim Transformation
+image-thumbnails.transformations.trim.config-title: "Configure Trim"
+image-thumbnails.transformations.trim.trim-option: "Trim Option"
+image-thumbnails.transformations.trim.trim-option-placeholder: "Select trim option"
+image-thumbnails.transformations.trim.disabled: "Disabled"
+image-thumbnails.transformations.trim.left: "Left"
+image-thumbnails.transformations.trim.right: "Right"
+image-thumbnails.transformations.trim.both: "Both"
+
+# Effects Transformation
+image-thumbnails.transformations.effects.config-title: "Configure Effect"
+image-thumbnails.transformations.effects.effect-type: "Effect Type"
+image-thumbnails.transformations.effects.effect-type-placeholder: "Select effect type"
+image-thumbnails.transformations.effects.sepia: "Sepia"
+image-thumbnails.transformations.effects.grayscale: "Grayscale"
+image-thumbnails.transformations.effects.sharpen: "Sharpen"
+image-thumbnails.transformations.effects.intensity: "Intensity"
+
+# Transformation tool strip
+image-thumbnails.transformations.add: "Add transformation"
+image-thumbnails.transformations.move-up: "Move Up"
+image-thumbnails.transformations.move-down: "Move Down"
+image-thumbnails.transformations.remove: "Remove"
+
+# Unknown/Fallback Transformation
+image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
+image-thumbnails.transformations.no-configuration-required: "No configuration required"
+
+video-thumbnails.title: "Video Thumbnails"
+video-thumbnails.description: "Manage and configure video thumbnail settings for your assets."
+video-thumbnails.search.placeholder: "Search thumbnails..."
+video-thumbnails.tree.empty: "No thumbnails found"
+video-thumbnails.editor.select-thumbnail: "Select a video thumbnail configuration to edit"
+video-thumbnails.editor.name: "Name"
+video-thumbnails.editor.name-required: "Name is required"
+video-thumbnails.editor.description: "Description"
+video-thumbnails.editor.group: "Group"
+video-thumbnails.editor.no-group: "No Group"
+video-thumbnails.editor.presetting: "Select a presetting"
+video-thumbnails.editor.video-bitrate: "Video Bitrate"
+video-thumbnails.editor.audio-bitrate: "Audio Bitrate"
+video-thumbnails.editor.transformations: "Transformations"
+video-thumbnails.editor.media-segments: "Media Segments"
+video-thumbnails.editor.media-segments.new: "New"
+video-thumbnails.editor.media-segments.empty: "No media segments defined. Click 'New' to add a segment (e.g. 500K)."
+video-thumbnails.editor.media-segments.add.title: "New Media Segment"
+video-thumbnails.editor.media-segments.add.label: "Enter a segment name (e.g. 500K)"
+video-thumbnails.editor.media-segments.add.bitrate-hint: "Please enter a valid bitrate (e.g. 400k, 1500k, 1M)"
+video-thumbnails.editor.media-segments.add.ok: "Create"
+video-thumbnails.editor.media-segments.default: "Default"
+video-thumbnails.editor.transformations.empty: "No transformations have been selected"
+video-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
+video-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
+video-thumbnails.add.validation.message: "The thumbnail name is invalid"
+
+# Video Transformation tool strip
+video-thumbnails.transformations.move-up: "Move Up"
+video-thumbnails.transformations.move-down: "Move Down"
+video-thumbnails.transformations.remove: "Remove"
+
+# Resize Transformation
+video-thumbnails.transformations.resize.config-title: "Configure Resize"
+video-thumbnails.transformations.resize.width: "Width"
+video-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
+video-thumbnails.transformations.resize.height: "Height"
+video-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
+video-thumbnails.transformations.resize.even-number-hint: "Width and height must be an even number"
+
+# Scale by Width Transformation
+video-thumbnails.transformations.scale-by-width.config-title: "Configure Scale by Width"
+video-thumbnails.transformations.scale-by-width.width: "Width"
+video-thumbnails.transformations.scale-by-width.width-placeholder: "Enter width in pixels"
+
+# Scale by Height Transformation
+video-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
+video-thumbnails.transformations.scale-by-height.height: "Height"
+video-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+
+# Cut Transformation
+video-thumbnails.transformations.cut.config-title: "Configure Cut"
+video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: "Duration"
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Set Framerate Transformation
+video-thumbnails.transformations.set-framerate.config-title: "Configure Set Framerate"
+video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Color Channel Mixer Transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: "Configure Color Channel Mixer"
+video-thumbnails.transformations.color-channel-mixer.effect: "Effect"
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Select an effect"
+video-thumbnails.transformations.color-channel-mixer.grayscale: "Grayscale"
+video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
+video-thumbnails.transformations.color-channel-mixer.cold: "Cold"
+
+# Mute Transformation
+video-thumbnails.transformations.mute.config-title: "Mute"
+video-thumbnails.transformations.no-configuration-required: "No configuration required"
+
+appearance-branding.color.title: "Color"
+appearance-branding.color.brand-color.label: "Brand Color"
+appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
+appearance-branding.color.background-shade.label: "Background Shade"
+appearance-branding.color.background-shade.description: "Applied to the canvas background with lowered opacity for a seamless blend."
+appearance-branding.custom-logo.title: "Custom Logo"
+appearance-branding.custom-logo.description: "Used in the login and in the canvas background"
+appearance-branding.custom-login-background.title: "Custom Login Background Image"
+appearance-branding.custom-login-background.description: "Used in the login screen as a background image"
+appearance-branding.update.success: "Appearance settings updated successfully"
 search-replace-assignments.search-for: Search for
 search-replace-assignments.replace-with: Replace with
 search-replace-assignments.select-element: Select target element
@@ -1037,10 +1711,15 @@ hidden-dependencies-warning: There are additional dependencies your user does no
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here
+image.add.and.dnd: Add or drop an image directly here
+image.upload.add.and.dnd: Upload, add or drop an image directly here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
+site-id: Site ID
+deleted: deleted
 collection.empty: No available fields yet. Start by adding a field.
+field-collection.add.default: "Add collection"
 video.type: Video Type
 video.type.asset: Asset
 video.type.youtube: YouTube
@@ -1106,6 +1785,12 @@ classification-store.column.name: Name
 classification-store.column.description: Description
 home: Home
 preview.label: Preview
+preview.desktop: Desktop
+preview.tablet: Tablet
+preview.phone-vertical: Phone vertical
+preview.phone-horizontal: Phone horizontal
+preview.select_date_time: Select date & time
+preview.screen_size_too_small: The available space is too small to display the selected preview mode.
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
 main: Main
@@ -1118,12 +1803,12 @@ delete-draft-confirmation: Are you sure you want to delete the draft?
 auto-save.tooltip: This version is auto saved.
 auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.
-detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
+detached-tab.draft-tooltip-addon: You can publish in the associated element/object main/mother tab.
 details: Details
 element: Element
 entries: entries
 entry: entry
-error_element_validation_failed: 'Validation failed'
+error_element_validation_failed: "Validation failed"
 element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}}
 edit-modal.inline-edit: Inline edit
@@ -1227,7 +1912,7 @@ please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
-email-blocklist.new: New 
+email-blocklist.new: New
 email-blocklist.add.validation: Please enter a valid email address
 email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
@@ -1257,6 +1942,7 @@ email-log.forward.label: Forward Email
 email-log.send.label: Send
 email-log.forward.email-address.label: Email Address
 email-log.delete.email.success: Email has been deleted successfully
+email-log.html.preview: HTML Preview
 aria.email-log.html.preview: HTML Preview
 user-profile.label: My Profile
 user-profile.general: General Data
@@ -1491,13 +2177,14 @@ widget-editor.widget-form.allowed-objects.title: Allowed Objects (per default ev
 widget-editor.widget-form.filters.title: Filters
 widget-editor.widget-form.filters.pql: PQL Statement
 widget-editor.widget-form.allowed-context-menu.title: Allowed Context Menu Actions
-widget-editor.widget-form.allowed-context-menu.add: Add
+widget-editor.widget-form.allowed-context-menu.addObject: New Object
+widget-editor.widget-form.allowed-context-menu.addVariant: New Variant
 widget-editor.widget-form.allowed-context-menu.copy: Copy
 widget-editor.widget-form.allowed-context-menu.lock: Lock
 widget-editor.widget-form.allowed-context-menu.publish: Publish
 widget-editor.widget-form.allowed-context-menu.searchAndMove: Search & Move
 widget-editor.widget-form.allowed-context-menu.unpublish: Unpublish
-widget-editor.widget-form.allowed-context-menu.addFolder: Add Folder
+widget-editor.widget-form.allowed-context-menu.addFolder: New Folder
 widget-editor.widget-form.allowed-context-menu.cut: Cut
 widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lock and Propagate to Children
 widget-editor.widget-form.allowed-context-menu.refresh: Refresh
@@ -1507,25 +2194,22 @@ widget-editor.widget-form.allowed-context-menu.delete: Delete
 widget-editor.widget-form.allowed-context-menu.paste: Paste
 widget-editor.widget-form.allowed-context-menu.rename: Rename
 widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Unlock and Propagate to Children
-widget-editor.widget-form.allowed-context-menu.hideAdd: Hide  New Asset(s) Menu
-widget-editor.widget-form.allowed-context-menu.addUploadZip:  New Asset(s) > Upload Zip
+widget-editor.widget-form.allowed-context-menu.addUploadZip: New Asset(s) > Upload Zip
 widget-editor.widget-form.allowed-context-menu.addUpload: New Asset(s) > Upload Files
 widget-editor.widget-form.allowed-context-menu.download: Download
 widget-editor.widget-form.allowed-context-menu.pasteCut: Paste Cut
 widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Upload New Version
 widget-editor.widget-form.allowed-context-menu.downloadZip: Download as ZIP
-widget-editor.widget-form.allowed-context-menu.addHardlink: Add Hardlink
-widget-editor.widget-form.allowed-context-menu.addNewsletter: Add Newsletter
 widget-editor.widget-form.allowed-context-menu.convert: Convert
 widget-editor.widget-form.allowed-context-menu.removeSite: Remove Site
 widget-editor.widget-form.allowed-context-menu.useAsSite: Use as Site
-widget-editor.widget-form.allowed-context-menu.addEmail: Add Email
-widget-editor.widget-form.allowed-context-menu.addHeadlessDocument: Add Headless Document
 widget-editor.widget-form.allowed-context-menu.editSite: Edit Site
 widget-editor.widget-form.allowed-context-menu.open: Open
-widget-editor.widget-form.allowed-context-menu.addLink: Add Link
-widget-editor.widget-form.allowed-context-menu.addSnippet: Add Snippet
-widget-editor.widget-form.allowed-context-menu.addPrintPage: Add Print Page
+widget-editor.widget-form.allowed-context-menu.addPage: New Page
+widget-editor.widget-form.allowed-context-menu.addSnippet: New Snippet
+widget-editor.widget-form.allowed-context-menu.addLink: New Link
+widget-editor.widget-form.allowed-context-menu.addEmail: New Email
+widget-editor.widget-form.allowed-context-menu.addHardlink: New Hardlink
 edit.label: Edit
 scheduled-block.delete-all-in-past: Delete all past timestamps
 scheduled-block.delete-all: Delete all timestamps
@@ -1549,6 +2233,7 @@ language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
+content-main-document.apply: Apply Content-Main Document
 content-main-document.apply-warning-title: Are you sure?
 content-main-document.apply-warning-message: All content will be lost
 never: never
@@ -1644,6 +2329,106 @@ about.buttons.license: License
 about.buttons.contact: Contact
 custom-language.default: Default
 login-token-modal.title: Login as this user in a different browser
-login-token-modal.description: The following link is a temporary link that allows you to login as this user in a different browser:
+login-token-modal.description: The following link is a temporary link that allows you to login as this user in a different browser
 login-token-modal.close: Close
 login-token-modal.copy-and-close: Copy & Close
+navigation.gdpr-extractor: GDPR Data Extractor
+widget.gdpr-extractor: GDPR Data Extractor
+gdpr-extractor.title: GDPR Data Extractor
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: First Name
+gdpr-extractor.search-form.field.lastname: Last Name
+gdpr-extractor.search-form.field.email: Email address
+gdpr-extractor.search-form.submit: Search
+gdpr-extractor.data-objects.table.field.type: Type
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Path
+gdpr-extractor.data-objects.table.field.className: Class
+gdpr-extractor.data-objects.table.actions.export: Export DataObject Data
+gdpr-extractor.data-objects.table.actions.open: Open DataObject
+gdpr-extractor.data-objects.table.actions.delete: Delete DataObject
+gdpr-extractor.assets.table.field.type: Type
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Full Path
+gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.assets.table.actions.export: Export Asset Data
+gdpr-extractor.assets.table.actions.open: Open Asset
+gdpr-extractor.assets.table.actions.delete: Delete Asset
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Username
+gdpr-extractor.users.table.field.firstname: First Name
+gdpr-extractor.users.table.field.lastname: Last Name
+gdpr-extractor.users.table.field.email: Email
+gdpr-extractor.users.table.actions.export: Export User Data
+gdpr-extractor.users.table.actions.delete: Delete User
+gdpr-extractor.table.field.actions: Actions
+gdpr-extractor.emails.table.field.sentDate: Sent Date
+gdpr-extractor.emails.table.field.from: From
+gdpr-extractor.emails.table.field.to: To
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Subject
+gdpr-extractor.emails.table.actions.export: Export Email Data
+gdpr-extractor.emails.table.actions.parameters: Expand Parameters
+gdpr-extractor.emails.table.actions.html: View HTML
+navigation.systemSettings: System Settings
+widget.system-settings: System Settings
+system-settings.form.field.version-days: Store version history for x days
+system-settings.form.field.version-count: Store version history for x steps
+system-settings.collapse.debug: Debug
+system-settings.form.debug.field.enable-debug: Debug Admin-Translations (wrapped in +)
+system-settings.form.debug.field.email-addresses: Debug Email Addresses
+system-settings.form.debug.field.email-addresses.placeholder: Enter email and press Enter...
+system-settings.collapse.localization: Localization & Internationalization (l10n/i18n)
+system-settings.form.localization.field.add-language: Add Language
+system-settings.form.localization.field.fallback-language: Fallback Languages
+system-settings.form.localization.field.fallback-language-placeholder: Add fallback languages
+system-settings.form.localization.field.default-language: Default language
+system-settings.form.localization.field.mandatory: Mandatory language
+system-settings.form.localization.field.delete-language: Delete language
+system-settings.collapse.website: Website
+system-settings.form.field.main-domain: Main Domain
+system-settings.form.field.redirect-to-maindomain: Redirect unknown domains (not used for a site and for redirects, ...) to the main domain (above)
+system-settings.form.field.default-error-page: Error Page (Default)
+system-settings.update.success: System settings updated successfully
+rule-condition.operator.and: "AND"
+rule-condition.operator.or: "OR"
+rule-condition.operator.and-not: "AND NOT"
+rule-condition.add-condition: "Add condition"
+rule-condition.move-up: "Move up"
+rule-condition.move-down: "Move down"
+rule-condition.remove: "Remove"
+rule-condition.bracket.toggle-left: "Toggle left bracket"
+rule-condition.bracket.toggle-right: "Toggle right bracket"
+rule-condition.validation.brackets-closing-without-opening: "Closing bracket ')' found without a matching opening bracket '('"
+rule-condition.validation.brackets-missing-closing: "Opening bracket '(' found without a matching closing bracket ')'"
+rule-condition.validation.brackets-invalid: "Brackets are not properly balanced"
+rule-builder.add-action: "Add action"
+rule-builder.add-trigger: "Add trigger"
+rule-builder.move-up: "Move up"
+rule-builder.move-down: "Move down"
+rule-builder.remove: "Remove"
+document-restrictions: Document restrictions
+asset-restrictions: Asset restrictions
+object-restrictions: Object restrictions
+display-mode: Display mode
+display-mode-display: Display path reference
+display-mode-inline-search: Inline search
+display-mode-grid-view: "Grid view"
+display-mode-tag-field: "Tag field"
+activate-column-configuration: "Activate column configuration"
+table-column-configuration: "Table column configuration"
+center: Center
+north: North
+south: South
+east: East
+west: West
+top: Top
+left: Left
+right: Right
+bottom: Bottom
+region: Region
+icon: Icon
+iframe-url: Iframe URL
+rendering-class: Custom rendering class
+rendering-data: Data Passed to render

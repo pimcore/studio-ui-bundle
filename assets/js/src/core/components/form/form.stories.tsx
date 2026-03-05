@@ -176,6 +176,164 @@ export const BasicForm: Story = {
   }
 }
 
+// UseWatch example
+interface UseWatchFormValues {
+  firstName: string
+  lastName: string
+  fullName: string
+  email: string
+}
+
+interface LastNameInputProps {
+  form: any
+  value?: string
+  onChange?: (value: string) => void
+}
+
+const LastNameInput = ({ form, value, onChange }: LastNameInputProps): React.JSX.Element => {
+  const handleGenerateLastName = (): void => {
+    const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis']
+    const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+    form.setFieldValue('lastName', randomLastName)
+  }
+
+  return (
+    <Space style={ { width: '100%' } }>
+      <Input
+        onChange={ (e) => { onChange?.(e.target.value) } }
+        placeholder="Type or generate last name"
+        style={ { flex: 1 } }
+        value={ value }
+      />
+      <Button onClick={ handleGenerateLastName }>
+        Generate
+      </Button>
+    </Space>
+  )
+}
+
+const UseWatchFormExample = (): React.JSX.Element => {
+  const [form] = Form.useForm()
+  const firstName = Form.useWatch('firstName', form)
+  const lastName = Form.useWatch('lastName', form)
+
+  const onFinish = (values: UseWatchFormValues): void => {
+    console.log('Form submitted:', values)
+  }
+
+  const onValuesChange = (changedValues: Partial<UseWatchFormValues>, allValues: UseWatchFormValues): void => {
+    console.log('Values changed:', { changedValues, allValues })
+  }
+
+  const handlePopulateForm = (): void => {
+    form.setFieldsValue({
+      firstName: 'John',
+      lastName: 'Doe'
+    }, { triggerChange: true })
+  }
+
+  React.useEffect(() => {
+    if (firstName !== undefined || lastName !== undefined) {
+      const first = firstName ?? ''
+      const last = lastName ?? ''
+      const full = [first, last].filter(Boolean).join(' ')
+      form.setFieldValue('fullName', full, { triggerChange: true })
+    }
+  }, [firstName, lastName, form])
+
+  React.useEffect(() => {
+    if (firstName !== undefined && lastName !== undefined) {
+      const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`
+      form.setFieldValue('email', email, { triggerChange: true })
+    }
+  }, [firstName, lastName, form])
+
+  return (
+    <div style={ { maxWidth: '600px' } }>
+      <Form
+        form={ form }
+        layout='vertical'
+        onFinish={ onFinish }
+        onValuesChange={ onValuesChange }
+      >
+        <Form.Item
+          label="First Name"
+          name="firstName"
+          rules={ [{ required: true, message: 'Please enter your first name!' }] }
+        >
+          <Input placeholder="Type your first name" />
+        </Form.Item>
+
+        <Form.Item
+          label="Last Name"
+          name="lastName"
+          rules={ [{ required: true, message: 'Please enter your last name!' }] }
+        >
+          <LastNameInput form={ form } />
+        </Form.Item>
+
+        <Form.Item
+          label="Full Name (Auto-filled)"
+          name="fullName"
+        >
+          <Input
+            disabled
+            placeholder="This will be auto-filled"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Email (Auto-generated)"
+          name="email"
+        >
+          <Input
+            disabled
+            placeholder="This will be auto-generated"
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Space>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >
+              Submit
+            </Button>
+            <Button onClick={ handlePopulateForm }>
+              Populate Form
+            </Button>
+          </Space>
+        </Form.Item>
+      </Form>
+
+      <div style={ { marginTop: '20px', padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '6px' } }>
+        <h4>Form Watch Demo:</h4>
+        <p style={ { fontSize: '12px', margin: '8px 0' } }>
+          <strong>Watched firstName:</strong> {firstName ?? 'undefined'}
+        </p>
+        <p style={ { fontSize: '12px', margin: '8px 0' } }>
+          <strong>Watched lastName:</strong> {lastName ?? 'undefined'}
+        </p>
+        <p style={ { fontSize: '12px', margin: 0 } }>
+          Check the console for onValuesChange logs!
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export const UseWatchExample: Story = {
+  render: () => <UseWatchFormExample />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates Form.useWatch to monitor field changes and automatically update other fields using form.setFieldValue. Features a custom LastNameInput component that uses setFieldValue internally to generate random last names. The "Populate Form" button demonstrates form.setFieldsValue to set multiple fields at once. The onValuesChange callback logs all form changes to the console.'
+      }
+    }
+  }
+}
+
 // Inline form example
 const InlineFormExample = (): React.JSX.Element => {
   const [form] = Form.useForm()

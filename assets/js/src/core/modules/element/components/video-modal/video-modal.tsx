@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react'
 import { type VideoType, type VideoValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
-import { Space } from '@Pimcore/components/space/space'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
@@ -123,6 +122,9 @@ export const VideoModal = (props: VideoModalProps): React.JSX.Element => {
           <Flex
             className="w-100"
             justify="flex-end"
+            style={ {
+              justifyContent: 'space-between'
+            } }
           >
             <ButtonGroup items={ [
               <IconTextButton
@@ -135,7 +137,10 @@ export const VideoModal = (props: VideoModalProps): React.JSX.Element => {
                 }) }
               >
                 {t('empty')}
-              </IconTextButton>,
+              </IconTextButton>
+            ] }
+            />
+            <ButtonGroup items={ [
               <CancelBtn key="cancel" />,
               <OkBtn key="ok" />
             ] }
@@ -153,74 +158,68 @@ export const VideoModal = (props: VideoModalProps): React.JSX.Element => {
         form={ form }
         layout="vertical"
       >
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
+        <Form.Item
+          label={ t('video.type') }
+          name="type"
         >
-          <Form.Item
-            label={ t('video.type') }
-            name="type"
-          >
-            <Select
-              disabled={ props.disabled }
-              onChange={ newType => {
-                setType(newType as VideoType)
-                fillForm({ type: newType, data: null })
-              } }
-              options={ getVideoTypeOptions() }
-            />
-          </Form.Item>
+          <Select
+            disabled={ props.disabled }
+            onChange={ newType => {
+              setType(newType as VideoType)
+              fillForm({ type: newType, data: null })
+            } }
+            options={ getVideoTypeOptions() }
+          />
+        </Form.Item>
 
-          <Form.Item
-            key={ 'data-' + type }
-            label={ t(type === 'asset' ? 'video.path' : 'video.id') }
-            name="data"
-          >
-            { type === 'asset'
-              ? (
-                <ManyToOneRelation
-                  allowedAssetTypes={ ['video'] }
-                  assetsAllowed
-                  disabled={ props.disabled }
-                  onOpenElement={ props.onCancel }
-                />
-                )
-              : (
-                <Input placeholder={ t('video.url') } />
-                )}
-          </Form.Item>
-          { type === 'asset' && (
-          <>
-            <Form.Item
-              label={ t('video.poster') }
-              name="poster"
-            >
+        <Form.Item
+          key={ 'data-' + type }
+          label={ t(type === 'asset' ? 'video.path' : 'video.id') }
+          name="data"
+        >
+          { type === 'asset'
+            ? (
               <ManyToOneRelation
-                allowedAssetTypes={ ['image'] }
+                allowedAssetTypes={ ['video'] }
                 assetsAllowed
                 disabled={ props.disabled }
                 onOpenElement={ props.onCancel }
               />
-            </Form.Item>
-            <Form.Item
-              label={ t('title') }
-              name="title"
-            >
-              <Input disabled={ props.disabled } />
-            </Form.Item>
-            <Form.Item
-              label={ t('description') }
-              name="description"
-            >
-              <TextArea
-                autoSize={ { minRows: 3 } }
-                disabled={ props.disabled }
-              />
-            </Form.Item>
-          </>
-          ) }
-        </Space>
+              )
+            : (
+              <Input placeholder={ t('video.url') } />
+              )}
+        </Form.Item>
+        { type === 'asset' && (
+        <>
+          <Form.Item
+            label={ t('video.poster') }
+            name="poster"
+          >
+            <ManyToOneRelation
+              allowedAssetTypes={ ['image'] }
+              assetsAllowed
+              disabled={ props.disabled }
+              onOpenElement={ props.onCancel }
+            />
+          </Form.Item>
+          <Form.Item
+            label={ t('title') }
+            name="title"
+          >
+            <Input disabled={ props.disabled } />
+          </Form.Item>
+          <Form.Item
+            label={ t('description') }
+            name="description"
+          >
+            <TextArea
+              autoSize={ { minRows: 3 } }
+              disabled={ props.disabled }
+            />
+          </Form.Item>
+        </>
+        ) }
       </Form>
     </WindowModal>
   )

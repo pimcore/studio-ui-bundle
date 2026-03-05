@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type SyntheticEvent, useContext } from 'react'
+import React, { type SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
+import { useVideoContext } from './video-provider'
 
 interface VideoSourceType {
   src: string
@@ -42,7 +42,7 @@ export const PimcoreVideo = ({
   poster
 }: PimcoreVideoProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { setPlayerPosition } = useContext(VideoContext)
+  const { setPlayerPosition } = useVideoContext()
 
   return (
     // eslint-disable-next-line jsx-a11y/media-has-caption

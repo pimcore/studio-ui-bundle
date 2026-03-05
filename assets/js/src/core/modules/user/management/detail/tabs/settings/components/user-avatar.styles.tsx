@@ -14,7 +14,6 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     avatar: css`
       background: ${token.colorPrimary};
-    }
     `
   }
 }, { hashPriority: 'low' })

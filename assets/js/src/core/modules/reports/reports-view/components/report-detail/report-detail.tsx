@@ -22,12 +22,12 @@ import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
-import { useFullChartData } from '@Pimcore/modules/reports/reports-view/hooks/useFullChartData'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
@@ -118,6 +118,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
       if (isShowColumn) {
         const columnId = !isEmptyValue(item?.name) ? item.name : `id-${index}`
+        const columnType = !isEmptyValue(item.displayType) ? item.displayType! : 'text'
 
         if (item.displayType !== 'hide') {
           list.push(
@@ -129,8 +130,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 enableSorting: item.order,
                 ...(!isNull(item.width) && { size: item.width }),
                 meta: {
-                  type: !isEmptyValue(item.displayType) ? item.displayType! : 'text',
-                  ...(item.displayType === 'date' && { config: { showTime: true } }),
+                  type: columnType,
+                  ...(columnType === 'date' && { config: { showTime: true } }),
+                  ...(columnType === 'text' && { config: { renderAsHtml: true } }),
                   ...(isNull(item.width) && { autoWidth: true })
                 }
               }
@@ -189,11 +191,13 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   return (
     <Flex
       className="h-full"
+      data-testid="report-detail-container"
       gap="small"
       vertical
     >
       {!isUndefined(drillDownFields) && (
         <Flex
+          data-testid="report-detail-drilldown-area"
           gap="small"
           wrap
         >
@@ -208,6 +212,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       )}
       <Flex
         className="h-full"
+        data-testid="report-detail-content"
         gap="small"
         justify="flex-start"
         vertical
@@ -225,6 +230,8 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            dataTestId="report-detail-grid"
+            enableColumnVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting

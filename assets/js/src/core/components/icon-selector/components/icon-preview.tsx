@@ -12,7 +12,7 @@ import React from 'react'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 
 interface IconPreviewProps {
   icon?: ElementIcon
@@ -20,7 +20,7 @@ interface IconPreviewProps {
 }
 
 export const IconPreview = ({ icon, onLoadError }: IconPreviewProps): React.JSX.Element => {
-  return !isUndefined(icon)
+  return !isNil(icon)
     ? (
       <Tooltip
         placement="bottom"

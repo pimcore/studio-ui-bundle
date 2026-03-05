@@ -26,8 +26,8 @@ export const useStyles = createStyles(({ token, css }) => {
       & svg {
         width: inherit;
         height: inherit;
-        color: ${token.gold7};
-        background: ${token.gold1};
+        color: ${token['gold-7']};
+        background: '${token['gold-3']};'
         border-radius: ${token.borderRadiusLG}px;
       }
 

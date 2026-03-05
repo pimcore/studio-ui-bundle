@@ -8,19 +8,36 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { providingTags, invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './settings-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  endpoints: {}
+  addTagTypes: [tagNames.SETTINGS_ADMIN],
+  endpoints: {
+    adminSettingsGet: {
+      providesTags: (result, error, args) => providingTags.SETTINGS_ADMIN()
+    },
+
+    adminSettingsUpdate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.SETTINGS_ADMIN()
+    },
+
+    settingAdminThumbnail: {
+      providesTags: (result, error, args) => providingTags.SETTINGS_ADMIN()
+    }
+  }
 })
 
 export const {
+  useAdminSettingsGetQuery,
+  useAdminSettingsUpdateMutation,
+  useSettingAdminThumbnailQuery,
   useSystemSettingsGetQuery,
-  useLazySystemSettingsGetQuery,
+  useSettingsUpdateMutation,
   useActiveBundlesGetQuery,
-  useLazyActiveBundlesGetQuery,
   usePingActionQuery,
-  useLazyPingActionQuery
+  useLazyPingActionQuery,
+  useSettingsCountryCollectionQuery
 } = api
 
 export { api }

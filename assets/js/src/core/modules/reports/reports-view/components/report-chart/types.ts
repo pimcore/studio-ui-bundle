@@ -20,4 +20,5 @@ export interface IChartProps {
   reportData: IReportDetailData
   chartLabelMap: Record<string, string>
   chartConfig?: object
+  showLegend?: boolean
 }

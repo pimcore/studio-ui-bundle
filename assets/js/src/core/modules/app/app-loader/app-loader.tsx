@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
@@ -20,6 +21,8 @@ import { useUserLoader } from './loader/user/loader'
 import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
 import { useLanguageLoader } from './loader/language/loader'
+import { useBrandThumbnailUrlLoader } from './loader/brand-thumbnail-urls/loader'
+import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
@@ -27,6 +30,7 @@ import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
+import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -50,7 +54,10 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
   const { loadAvailableLocales } = useLanguageLoader()
+  const { loadBrandThumbnailUrls } = useBrandThumbnailUrlLoader()
+  const { loadAdminSettings } = useAdminSettingsLoader()
   const { loadPerspective } = usePerspectives()
+  const { initGlobalMessageBus } = useGlobalMessageBusLoader()
   const appLoaderRegistry = container.get<AppLoaderRegistry>(serviceIds['AppLoader/Registry'])
 
   async function initActivePerspective (): Promise<any> {
@@ -69,7 +76,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
       if (!isAuthenticated) {
         await Promise.all([
-          loadPublicTranslations()
+          loadPublicTranslations(),
+          loadBrandThumbnailUrls()
         ]).then(() => {
           setIsLoading(() => false)
         }).catch((error) => {
@@ -82,10 +90,17 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadUser()
         ])
 
+        const user = selectCurrentUser(store.getState())
+        if (!isNil(user?.id)) {
+          initGlobalMessageBus(user.id)
+        }
+
         await Promise.all([
           fetchMercureCookie(),
           loadTranslations(),
           loadSettings(),
+          loadAdminSettings(),
+          loadBrandThumbnailUrls(),
           loadAvailableLocales(),
           initActivePerspective(),
           loadReportsMenuItems()

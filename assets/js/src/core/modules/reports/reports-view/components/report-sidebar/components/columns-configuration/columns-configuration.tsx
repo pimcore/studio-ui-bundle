@@ -28,6 +28,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 type Column = AccessorFnColumnDef<unknown, any>
@@ -81,7 +82,11 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
       sortable: true,
       meta: column,
 
-      children: <Tag>{column.header as string}</Tag>,
+      children: (
+        <Tooltip title={ column.header as string }>
+          <Tag className={ styles.stackItem }>{column.header as string}</Tag>
+        </Tooltip>
+      ),
 
       renderRightToolbar: (
         <Space size='mini'>
@@ -101,6 +106,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <Button
             className={ styles.btnLink }
+            data-testid="report-columns-restore-default"
             onClick={ resetColumnsToInitial }
             type="link"
           >
@@ -128,6 +134,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
           {!isEmpty(addColumnMenu) && (
           <Dropdown menu={ { items: addColumnMenu } }>
             <IconTextButton
+              data-testid="report-columns-add-button"
               icon={ { value: 'new' } }
               type='link'
             >

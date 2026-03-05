@@ -20,6 +20,12 @@ export enum NavPermission {
   SearchReplaceAssignments = 'dataManagement.searchReplaceAssignments',
   PredefinedProperties = 'dataManagement.predefinedProperties',
   TagConfiguration = 'dataManagement.tagConfiguration',
+  GDPRDataExtractor = 'dataManagement.gdprDataExtractor',
+  ClassDefinitions = 'dataManagement.dataModel_classes',
+  FieldCollections = 'dataManagement.dataModel_fieldCollections',
+  ObjectBricks = 'dataManagement.dataModel_objectBricks',
+
+  AssetThumbnails = 'assetManagement.assetThumbnails',
 
   ExperienceEcommerceHidden = 'experienceEcommerce.hidden',
   Mails = 'experienceEcommerce.emails',
@@ -29,6 +35,7 @@ export enum NavPermission {
 
   TranslationsHidden = 'translations.hidden',
   Translations = 'translations.translations',
+  Appearance = 'system.appearanceBranding',
 
   ReportingHidden = 'reporting.hidden',
   Reports = 'reporting.reports',
@@ -42,6 +49,7 @@ export enum NavPermission {
   WidgetEditor = 'system.widgetEditor',
   ApplicationLogger = 'system.applicationLogger',
   About = 'system.about',
+  SystemSettings = 'system.systemSettings',
 
-  SearchHidden = 'search.hidden',
+  SearchHidden = 'search.hidden'
 }

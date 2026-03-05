@@ -23,6 +23,7 @@ export interface TypeSelectProps {
   nullable?: boolean
   nullableLabel?: string
   registryServiceId: string
+  'data-testid'?: string
 }
 
 export const TypeSelect = ({ nullable = true, registryServiceId, ...props }: TypeSelectProps): React.JSX.Element => {
@@ -70,6 +71,7 @@ export const TypeSelect = ({ nullable = true, registryServiceId, ...props }: Typ
 
   return (
     <Select
+      data-testid={ props['data-testid'] }
       minWidth={ 'normal' }
       onChange={ onChange }
       options={ preparedOptions }

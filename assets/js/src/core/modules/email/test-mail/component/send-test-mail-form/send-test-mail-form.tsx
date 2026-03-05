@@ -9,20 +9,19 @@
  */
 
 import { CodeEditor } from '@Pimcore/components/code-editor/code-editor'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { type SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { getLanguageExtensions, TextArea } from '@sdk/components'
-import { type FormInstance } from 'antd/lib'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ParametersTable } from '../parameters-table/parameters-table'
 
 export interface TestEmailModalProps {
   initialValues?: Partial<SendEmailParameters>
-  form: FormInstance<SendEmailParameters>
+  form: formInstanceType<SendEmailParameters>
 }
 
 enum TestEmailType {
@@ -91,6 +90,7 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           >
             <TextArea
               autoSize={ { minRows: 10 } }
+              data-testid="test-email-message-textarea"
             />
           </Form.Item>
         )
@@ -114,7 +114,10 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           { type: 'email', message: t('test-email.validation.from.email.type') }
         ] }
       >
-        <Input type="email" />
+        <Input
+          data-testid="test-email-from-input"
+          type="email"
+        />
       </Form.Item>
 
       <Form.Item
@@ -125,7 +128,10 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           { type: 'email', message: t('test-email.validation.to.email.type') }
         ] }
       >
-        <Input type="email" />
+        <Input
+          data-testid="test-email-to-input"
+          type="email"
+        />
       </Form.Item>
 
       <Form.Item
@@ -135,7 +141,7 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
           { required: true, message: t('test-email.validation.subject.required') }
         ] }
       >
-        <Input />
+        <Input data-testid="test-email-subject-input" />
       </Form.Item>
 
       <Form.Item
@@ -143,6 +149,7 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
         name="contentType"
       >
         <Select
+          data-testid="test-email-content-type-select"
           options={ [
             {
               label: t(`test-email.contentType.${TestEmailType.Document}`),

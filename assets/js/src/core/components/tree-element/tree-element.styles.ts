@@ -36,6 +36,101 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           }
         }
 
+        .ant-tree-node--has-drag-and-drop {
+          height: 24px;
+
+          .ant-tree-iconEle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+          }
+
+          .ant-tree-node-content-wrapper {
+            display: flex;
+          }
+
+          .ant-tree-title {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+          }
+
+          .ant-tree-title__btn {
+            text-align: left;
+          }
+        }
+
+        .hotspot-droppable  .ant-tree-title__btn {
+          position: relative;
+          border-top: 2px solid transparent;
+          border-bottom: 2px solid transparent;
+          height: 24px;
+          min-width: 100%;
+        }
+
+        .dnd--hotspot-sorting-top-valid .ant-tree-title__btn {
+          &::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -48px;
+            right: 0;
+            height: 2px;
+            background-color: ${token.colorPrimary};
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -49px;
+            border-radius: 50%;
+            width: 7px;
+            height: 7px;
+            background-color: ${token.colorPrimary};
+          }
+        }
+
+        .dnd--hotspot-sorting-bottom-valid .ant-tree-title__btn {
+          &::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: -48px;
+            right: 0;
+            height: 2px;
+            background-color: ${token.colorPrimary};
+          }
+          
+          &::after {
+            content: '';
+            position: absolute;
+            top: auto;
+            right: auto;
+            bottom: -6px;
+            left: -49px;
+            border-radius: 50%;
+            width: 7px;
+            height: 7px;
+            background-color: ${token.colorPrimary};
+          }
+        }
+
+        .dnd--hotspot-drop-middle-valid .ant-tree-title__btn {
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -48px;
+            right: 0;
+            bottom: 0;
+            background: ${token.colorBgContainerDisabled};
+            border-radius: ${token.borderRadius}px;
+            outline: 1px dashed ${token.colorBorder};
+          }
+        }
+
         .ant-tree-treenode {
           padding: 0 ${token.paddingXS}px;
           position: relative;
@@ -59,6 +154,10 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
             &:hover {
               background: none;
             }
+          }
+
+          &::before {
+            display: none;
           }
         }
 
@@ -125,6 +224,16 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           left: 0;
           right: 0;
           bottom: 0;
+        }
+      }
+
+      .tree-element-item--danger {
+        .ant-tree-title .ant-tree-title__btn {
+          color: ${token.colorError};
+        }
+
+        .ant-tree-icon__customize {
+          color: ${token.colorError};
         }
       }
       

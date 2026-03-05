@@ -29,6 +29,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 interface IReportToolbarProps {
   currentReport: string | null
+  showPagination: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -36,7 +37,7 @@ interface IReportToolbarProps {
   totalItems: number
 }
 
-export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
+export const ReportToolbar = ({ currentReport, showPagination, page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
   const [fetchExportCSV, { isError, error }] = useCustomReportExportCsvMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [includeHeaders, setIncludeHeaders] = useState(true)
@@ -101,17 +102,19 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
         theme="secondary"
       >
         <Dropdown menu={ { items: dropdownItems } }>
-          <DropdownButton>
+          <DropdownButton data-testid="report-export-button">
             {renderDropdownLabel('reports.export', false)}
           </DropdownButton>
         </Dropdown>
-        <Pagination
-          page={ page }
-          pageSize={ pageSize }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
-          totalItems={ totalItems }
-        />
+        {showPagination && (
+          <Pagination
+            page={ page }
+            pageSize={ pageSize }
+            setPage={ setPage }
+            setPageSize={ setPageSize }
+            totalItems={ totalItems }
+          />
+        )}
       </Toolbar>
 
       <Modal

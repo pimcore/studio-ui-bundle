@@ -21,7 +21,6 @@ import {
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { EditView } from './views/edit-view'
 import { SaveView } from './views/save-view'
-import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
@@ -34,6 +33,7 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { Form } from '@sdk/components'
 
 enum ViewState {
   Edit = 'edit',
@@ -81,7 +81,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   }, [isDeleteGridConfigError])
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
-  const [form] = useForm()
+  const [form] = Form.useForm()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
 

@@ -66,6 +66,7 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
       <div>
         <Tooltip title={ t('email-log.tooltip.resend') }>
           <IconButton
+            data-testid={ `email-log-resend-button-${email.id}` }
             icon={ { value: 'vector' } }
             onClick={ () => {
               resendWithConfirmation(email.id, () => {
@@ -81,6 +82,7 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
         <Tooltip title={ t('email-log.tooltip.forward') }>
           <IconButton
+            data-testid={ `email-log-forward-button-${email.id}` }
             icon={ { value: 'flip-forward' } }
             onClick={ () => { setIsForwardModalOpen(true) } }
           />
@@ -88,6 +90,7 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
         <Tooltip title={ t('email-log.tooltip.delete') }>
           <IconButton
+            data-testid={ `email-log-delete-button-${email.id}` }
             icon={ { value: 'trash' } }
             onClick={ () => {
               removeWithConfirmation(email.id, () => {

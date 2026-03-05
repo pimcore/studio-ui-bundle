@@ -23,6 +23,7 @@ declare global {
     Pimcore: typeof Pimcore
     PimcoreStudio: PimcoreStudioApi
     pluginRemotes: Record<string, string>
+    alternativePluginExportPaths: Record<string, string>
   }
 }
 

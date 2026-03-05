@@ -88,10 +88,8 @@ export class DocumentOpeningService {
       config: {
         id,
         elementType: 'document',
-        icon: {
-          type: icon.type,
-          value: icon.value
-        }
+        icon,
+        iconColorGroup: 'element'
       }
     }
   }

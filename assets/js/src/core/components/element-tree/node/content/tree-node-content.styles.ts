@@ -20,7 +20,9 @@ export const useStyles = createStyles(({ token, css }) => {
       // minWidth is now set dynamically via inline styles
     `,
     unpublishedIcon: css`
-      color: ${token.colorIconTreeUnpublished}
+      .pimcore-icon__svg {
+          opacity: 0.4
+       }
     `,
     unpublishedIconPath: css`
        .pimcore-icon__image {

@@ -37,9 +37,10 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'DataManagement/Tag Configuration',
+      dividerBottom: true,
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
-      order: 500,
+      order: 1000,
       permission: UserPermission.TagsConfiguration,
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: TAG_CONFIGURATION_WIDGET

@@ -15,7 +15,7 @@ export const useStyles = createStyles(({ token, css }) => {
     sectionTitle: css`
       position: relative;
       display: block;
-      padding: ${token.paddingXS}px;
+      padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px;
       font-size: 14px;
       font-weight: 900;
     `,

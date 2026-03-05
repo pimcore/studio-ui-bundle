@@ -43,9 +43,15 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
+  const enrichedProps = { ...props, defaultFieldWidth: fieldWidth }
+
+  if (objectDataType.getObjectDataFormItemProps(enrichedProps).hidden === true) {
+    return <></>
+  }
+
   return (
     <ErrorBoundary>
-      {objectDataType.getVersionObjectDataComponent({ ...props, defaultFieldWidth: fieldWidth })}
+      {objectDataType.getVersionObjectDataComponent(enrichedProps)}
     </ErrorBoundary>
   )
 }

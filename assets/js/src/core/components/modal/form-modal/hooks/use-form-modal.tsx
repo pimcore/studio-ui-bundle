@@ -8,12 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
-import { type FormInstance, type InputRef, type ModalFuncProps } from 'antd'
+import { type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { isDontAskAgainEnabled, setDontAskAgain } from '@Pimcore/utils/local-storage'
 import { DontAskAgainSwitch } from '@Pimcore/components/modal/form-modal/components/dont-ask-again-switch'
@@ -23,8 +25,22 @@ import { UploadForm } from '@Pimcore/components/modal/form-modal/components/uplo
 import { noop } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Flex } from '@sdk/components'
+import { createModalButtonTestId } from '@Pimcore/utils/test-id-generator'
 
-let form: FormInstance<any> | null = null
+let form: formInstanceType | null = null
+
+function getFormModalButtonProps (props: ModalFuncProps): Pick<ModalFuncProps, 'okButtonProps' | 'cancelButtonProps'> {
+  return {
+    okButtonProps: {
+      'data-testid': createModalButtonTestId('ok', 'form'),
+      ...props.okButtonProps
+    },
+    cancelButtonProps: {
+      'data-testid': createModalButtonTestId('cancel', 'form'),
+      ...props.cancelButtonProps
+    }
+  }
+}
 
 export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
@@ -95,6 +111,10 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `input-${uuid}`
+  // Capture form instance at creation time to avoid
+  // the module-level variable being overwritten by
+  // other components that call useFormModal()
+  const currentForm = form!
   const {
     label,
     rule,
@@ -110,9 +130,9 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
   const submit = async (fieldName): Promise<any> => {
     onSetModalLoading?.(true)
     return await new Promise((resolve, reject) => {
-      form!.validateFields()
+      currentForm.validateFields()
         .then(async () => {
-          const value = form!.getFieldValue(fieldName)
+          const value = currentForm.getFieldValue(fieldName)
           await props.onOk?.(value)
           onKeyBoardSubmit?.(value)
           resolve(value)
@@ -128,6 +148,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
+    ...getFormModalButtonProps(props),
     onOk: async () => {
       await submit(fieldName)
     },
@@ -139,7 +160,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     },
     content: <InputForm
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
       label={ label }
@@ -154,6 +175,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
   const textareaRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `textarea-${uuid}`
+  const currentForm = form!
   const {
     label,
     initialValue = '',
@@ -165,8 +187,9 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
     width: 700,
+    ...getFormModalButtonProps(props),
     onOk: async () => {
-      const value = form!.getFieldValue(fieldName)
+      const value = currentForm.getFieldValue(fieldName)
       props.onOk?.(value)
     },
     modalRender: (node) => {
@@ -177,7 +200,7 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     },
     content: <TextareaForm
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'textarea-form' }
       label={ label }
@@ -194,7 +217,8 @@ export function withConfirm (props: ConfirmFormModalProps, dontAskAgainRef: Reac
     ...modalProps,
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
-    cancelText: props.cancelText ?? i18n.t('no')
+    cancelText: props.cancelText ?? i18n.t('no'),
+    ...getFormModalButtonProps(props)
   }
 
   if (!isNonEmptyString(dontAskAgainKey)) {
@@ -229,6 +253,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `upload-${uuid}`
+  const currentForm = form!
   const {
     label,
     rule,
@@ -245,9 +270,10 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
+    ...getFormModalButtonProps(props),
     onOk: async () => {
       return await new Promise((resolve, reject) => {
-        form!.validateFields()
+        currentForm.validateFields()
           .then(() => {
             const files = inputRef.current!.input!.files
 
@@ -262,7 +288,7 @@ export function withUpload (props: UploadFormModalProps): ModalFuncProps {
     content: <UploadForm
       accept={ accept }
       fieldName={ fieldName }
-      form={ form! }
+      form={ currentForm }
       initialValues={ {} }
       key={ 'upload-form' }
       label={ label }

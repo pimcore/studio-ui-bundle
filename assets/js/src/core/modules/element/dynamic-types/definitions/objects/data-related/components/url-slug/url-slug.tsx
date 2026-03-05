@@ -76,13 +76,27 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
     return true
   }
 
-  const handleInputChange = (index: number, newSlug: string): void => {
-    const newValue = cloneDeep(value)
+  const sortedValue = (() => {
+    const fallbackIndex = value.findIndex(entry => entry.siteId === 0)
+    if (fallbackIndex === -1 || fallbackIndex === 0) {
+      return value
+    }
+    const sorted = [...value]
+    const [fallback] = sorted.splice(fallbackIndex, 1)
+    sorted.unshift(fallback)
+    return sorted
+  })()
 
-    newValue[index].slug = newSlug
+  const handleInputChange = (sortedIndex: number, newSlug: string): void => {
+    const originalIndex = value.findIndex(entry => entry.siteId === sortedValue[sortedIndex].siteId)
+
+    if (originalIndex === -1) return
+
+    const newValue = cloneDeep(value)
+    newValue[originalIndex].slug = newSlug
 
     const newErrors = [...errors]
-    newErrors[index] = !validateSlug(newSlug)
+    newErrors[originalIndex] = !validateSlug(newSlug)
     handleChange(newValue)
     setErrors(newErrors)
   }
@@ -94,8 +108,6 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
     label: site.domain,
     onClick: () => { handleChange([...value, { slug: '', siteId: site.id }]) }
   }))
-
-  const sortedValue = [...value].sort((a, b) => a.siteId === 0 ? -1 : 0)
 
   return (
     <List
@@ -126,7 +138,14 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
               className="urlSlugLabel"
               style={ { width: toCssDimension(props.domainLabelWidth, 250) } }
             >
-              { item.siteId === 0 ? t('fallback') : getSiteById(item.siteId)?.domain }
+              { item.siteId === 0
+                ? t('fallback')
+                : (getSiteById(item.siteId)?.domain ?? (
+                  <>
+                    {t('site-id')} {item.siteId} <Text type="secondary">({t('deleted')})</Text>
+                  </>
+                  ))
+              }
             </div>
             <div className="w-full">
               <Input

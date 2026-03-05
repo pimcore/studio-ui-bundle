@@ -17,16 +17,16 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
-import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { type TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { type InputRef, type FormInstance } from 'antd'
+import { type InputRef } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -44,6 +44,7 @@ export interface AddDocumentConfig {
   formType: AddDocumentFormType
   modalTitle: string
   hasNoChildren?: boolean // If true, item has onClick instead of children dropdown
+  perspectiveTreePermission?: TreePermission | string
 }
 
 interface UseAddDocumentHookReturn {
@@ -141,7 +142,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   // Full form component (3 inputs: title, navigationName, key)
-  const FullFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, buttonId: string }> = ({ form, firstInputRef, buttonId }) => {
+  const FullFormContent: React.FC<{ form: formInstanceType<any>, firstInputRef: React.RefObject<InputRef>, buttonId: string }> = ({ form, firstInputRef, buttonId }) => {
     const handleEnterPress = (): void => {
       // Click the OK button using the unique ID
       const okButton = document.getElementById(buttonId) as HTMLButtonElement
@@ -270,7 +271,8 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         docTypeId,
         language: null,
         translationsSourceId: null,
-        inheritanceSourceId: null
+        inheritanceSourceId: null,
+        template: null
       }
     })
 
@@ -290,7 +292,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   }
 
   const isAddDocumentHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Add) ||
+    return !isTreeActionAllowed(config.perspectiveTreePermission) ||
       !checkElementPermission(node.permissions, 'create') ||
       isEmpty(getDocumentEntries(node))
   }

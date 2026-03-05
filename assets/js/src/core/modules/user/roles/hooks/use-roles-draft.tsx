@@ -37,7 +37,7 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function fetchRole (): Promise<RoleGetByIdApiResponse> {
-    const { data } = await dispatch(api.endpoints.roleGetById.initiate({ id }))
+    const { data } = await dispatch(api.endpoints.roleGetById.initiate({ id }, { forceRefetch: true }))
 
     if (data !== undefined) {
       return data

@@ -14,10 +14,13 @@ import { type ITreePermissionContext, TreePermissionContext } from './tree-permi
 import { isNil } from 'lodash'
 
 // used to check if a tree action is allowed in the perspectives tree widget config
-export const useTreePermission = (): ITreePermissionContext & { isTreeActionAllowed: (permission: TreePermission) => boolean } => {
+export const useTreePermission = (): ITreePermissionContext & { isTreeActionAllowed: (permission: TreePermission | string | undefined) => boolean } => {
   const context = useContext(TreePermissionContext)
 
   const isTreeActionAllowed = (permission: TreePermission | string): boolean => {
+    if (isNil(permission)) {
+      return true
+    }
     if (isNil(context)) {
       return true
     }

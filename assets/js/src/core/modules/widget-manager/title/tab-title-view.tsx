@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Icon } from '@Pimcore/components/icon/icon'
+import { type ElementIcon, Icon } from '@Pimcore/components/icon/icon'
+import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { Popconfirm } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React, { useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Filename } from '@Pimcore/components/filename/filename'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 
@@ -25,9 +25,10 @@ interface TabTitleViewProps {
   onClose?: () => void
   onConfirm?: () => void
   dataTestId?: string
+  iconColorGroup?: IconColorGroup
 }
 
-export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: TabTitleViewProps): React.JSX.Element => {
+export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { user } = useUserDraft()
@@ -66,6 +67,7 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: Ta
       size='mini'
     >
       <Icon
+        iconColorGroup={ iconColorGroup }
         options={ { width: 16, height: 16 } }
         { ...icon }
       />

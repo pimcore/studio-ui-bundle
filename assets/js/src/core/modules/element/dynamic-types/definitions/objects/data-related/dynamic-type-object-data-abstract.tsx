@@ -32,6 +32,8 @@ import { type DynamicTypeFieldFilterRegistry } from '@sdk/modules/element'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { isNonEmptyString } from '@sdk/utils'
+import { t } from 'i18next'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -95,9 +97,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
-    const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
+    const { fieldBreadcrumbTitle, item, fieldValueByName, fieldPath, versionId, versionCount } = props
 
-    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
+    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, fieldPath, versionId, versionCount }]
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
@@ -110,9 +112,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
-      tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0
+      tooltip: isNonEmptyString(props.tooltip)
         ? {
-            title: respectLineBreak(props.tooltip, false),
+            title: respectLineBreak(t(props.tooltip), false),
             icon: <Icon
               options={ { width: 14, height: 14 } }
               value="help-circle"

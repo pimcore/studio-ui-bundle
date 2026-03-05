@@ -34,6 +34,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .stack-list-item__content {
         flex: 1;
+        min-width: 0; // allows the content to shrink and enables text ellipsis
       }
 
       &.stack-list-item {

@@ -20,6 +20,7 @@ import { isNil } from 'lodash'
 import { useAuthentication } from './hooks/use-authentication'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
+import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
 
 export const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate()
@@ -31,7 +32,8 @@ export const LoginPage = (): React.JSX.Element => {
   const user = useUser()
   const { isAuthenticated } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
-  const { styles } = useStyle()
+  const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
+  const { styles } = useStyle({ backgroundImageUrl: loginScreenCustomBackgroundImage })
 
   useEffect(() => {
     if (isAuthenticated === true) {
@@ -64,8 +66,8 @@ export const LoginPage = (): React.JSX.Element => {
     <div className={ styles.loginPage }>
       <div className={ styles.loginWidget }>
         <img
-          alt={ 'Pimcore Logo' }
-          src={ '/bundles/pimcorestudioui/img/logo.png' }
+          alt={ 'Logo' }
+          src={ customLogoSmall }
         />
         <LoginFormContainer />
       </div>

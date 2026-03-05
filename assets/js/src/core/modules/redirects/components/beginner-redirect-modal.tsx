@@ -13,7 +13,6 @@ import { Input } from '@Pimcore/components/input/input'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Select } from '@Pimcore/components/select/select'
-import { useForm } from 'antd/es/form/Form'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBundleSeoRedirectListTypesQuery } from '../seo-api-slice-enhanced'
@@ -32,7 +31,7 @@ interface BeginnerRedirectFormValues {
 
 export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
 
@@ -86,6 +85,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
           rules={ [{ required: true, message: t('redirects.beginner-modal.type.required') }] }
         >
           <Select
+            data-testid="redirects-type-select"
             options={ typeOptions }
             placeholder={ t('redirects.beginner-modal.type') }
           />

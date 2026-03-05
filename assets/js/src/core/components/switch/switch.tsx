@@ -12,15 +12,21 @@ import React, { type ReactNode } from 'react'
 import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { TooltipIcon, type TooltipIconProps } from '@Pimcore/components/tooltip-icon/tooltip-icon'
+import { isNil } from 'lodash'
 
 export interface SwitchProps extends AntdSwitchProps {
   labelLeft?: ReactNode
   labelRight?: ReactNode
+  tooltip?: ReactNode
+  tooltipPlacement?: TooltipIconProps['placement']
 }
 
 export const Switch = ({
   labelLeft,
   labelRight,
+  tooltip,
+  tooltipPlacement = 'right',
   ...props
 }: SwitchProps): React.JSX.Element => {
   return (
@@ -33,6 +39,12 @@ export const Switch = ({
         { ...props }
       />
       {labelRight}
+      {!isNil(tooltip) && (
+        <TooltipIcon
+          placement={ tooltipPlacement }
+          tooltip={ tooltip }
+        />
+      )}
     </Flex>
   )
 }

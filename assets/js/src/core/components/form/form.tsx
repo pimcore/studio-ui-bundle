@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useCallback, useMemo } from 'react'
+import React, { type ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { Space } from '../space/space'
 import { withGroupName } from './item/with-group-name'
@@ -22,13 +22,38 @@ import { NumberedList } from './controls/numbered-list/numbered-list'
 import { withNumberedItemContext } from './item/with-numbered-item-context'
 import { useStyles } from './form.styles'
 import { Conditional } from './conditional/conditional'
+import { FormInstanceProvider, type formInstanceType, useForm, useFormInstance } from '@Pimcore/components/form/use-form'
 
-export interface FormProps extends Omit<AntFormProps, 'children' | 'defaultValue'> {
+export interface FormProps<Values = any> extends Omit<AntFormProps<Values>, 'children' | 'defaultValue' | 'form'> {
   children?: React.ReactNode
+  form?: formInstanceType<Values>
+}
+
+interface FormComponent {
+  <Values = any>(props: FormProps<Values>): React.JSX.Element
+  Item: typeof AntForm.Item
+  List: typeof AntForm.List
+  Provider: typeof AntForm.Provider
+  Group: typeof Group
+  KeyedList: typeof KeyedList
+  NumberedList: typeof NumberedList
+  Conditional: typeof Conditional
+  useForm: typeof useForm
+  useFormInstance: typeof useFormInstance
+  useWatch: typeof AntForm.useWatch
+  ErrorList: typeof AntForm.ErrorList
 }
 
 const Form = (({ ...props }: FormProps) => {
   const { styles } = useStyles()
+  const { form, children, ...restProps } = props
+  const [formInstance] = useForm(form)
+
+  const currentFormInstance = form ?? formInstance
+
+  useEffect(() => {
+    currentFormInstance.setOnValuesChangeHandler(props.onValuesChange)
+  }, [currentFormInstance])
 
   const requiredMark: FormProps['requiredMark'] = useCallback((label, { required }): ReactNode => {
     return (
@@ -44,16 +69,16 @@ const Form = (({ ...props }: FormProps) => {
   return (
     <AntForm
       requiredMark={ requiredMark }
-      { ...props }
+      { ...restProps }
       className={ className }
-    />
+      form={ currentFormInstance }
+    >
+      <FormInstanceProvider formInstance={ currentFormInstance }>
+        { children }
+      </FormInstanceProvider>
+    </AntForm>
   )
-}) as typeof AntForm & {
-  Group: typeof Group
-  KeyedList: typeof KeyedList
-  NumberedList: typeof NumberedList
-  Conditional: typeof Conditional
-}
+}) as FormComponent
 
 const newFormItem = compose(
   withGroupName,
@@ -70,9 +95,10 @@ Form.Group = Group
 Form.KeyedList = KeyedList
 Form.NumberedList = NumberedList
 Form.Conditional = Conditional
-Form.useForm = AntForm.useForm
-Form.useFormInstance = AntForm.useFormInstance
+Form.useForm = useForm
+Form.useFormInstance = useFormInstance
 Form.useWatch = AntForm.useWatch
 Form.ErrorList = AntForm.ErrorList
 
-export { Form, type FormItemProps }
+// Export useForm and useFormInstance separately for direct import to avoid type casting
+export { Form, type FormItemProps, type formInstanceType, useForm, useFormInstance }

@@ -18,6 +18,7 @@ import { WidgetEditorContainer } from './widget-editor-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { type ElementTreeWidgetPermissionRegistry } from './services/widget-context-menu-item-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -53,5 +54,64 @@ moduleSystem.registerModule({
     widgetRegistry.registerDynamicType(
       container.get<DynamicTypeWidgetTypeElementTree>(serviceIds['DynamicTypes/WidgetEditor/ElementTree'])
     )
+
+    const permissionRegistry = container.get<ElementTreeWidgetPermissionRegistry>(serviceIds.elementTreeWidgetPermissionRegistry)
+
+    // Asset context menu items
+    permissionRegistry.registerItem('asset', { key: 'hideAdd', priority: 100 })
+    permissionRegistry.registerItem('asset', { key: 'addUpload', priority: 200 })
+    permissionRegistry.registerItem('asset', { key: 'addUploadZip', priority: 300 })
+    permissionRegistry.registerItem('asset', { key: 'addFolder', priority: 400 })
+    permissionRegistry.registerItem('asset', { key: 'rename', priority: 500 })
+    permissionRegistry.registerItem('asset', { key: 'copy', priority: 600 })
+    permissionRegistry.registerItem('asset', { key: 'cut', priority: 700 })
+    permissionRegistry.registerItem('asset', { key: 'paste', priority: 800 })
+    permissionRegistry.registerItem('asset', { key: 'pasteCut', priority: 900 })
+    permissionRegistry.registerItem('asset', { key: 'delete', priority: 1000 })
+    permissionRegistry.registerItem('asset', { key: 'uploadNewVersion', priority: 1100 })
+    permissionRegistry.registerItem('asset', { key: 'lock', priority: 1200 })
+    permissionRegistry.registerItem('asset', { key: 'lockAndPropagate', priority: 1300 })
+    permissionRegistry.registerItem('asset', { key: 'unlock', priority: 1400 })
+    permissionRegistry.registerItem('asset', { key: 'unlockAndPropagate', priority: 1500 })
+
+    // Data Object context menu items
+    permissionRegistry.registerItem('data-object', { key: 'addFolder', priority: 100 })
+    permissionRegistry.registerItem('data-object', { key: 'addObject', priority: 200 })
+    permissionRegistry.registerItem('data-object', { key: 'addVariant', priority: 300 })
+    permissionRegistry.registerItem('data-object', { key: 'rename', priority: 400 })
+    permissionRegistry.registerItem('data-object', { key: 'copy', priority: 500 })
+    permissionRegistry.registerItem('data-object', { key: 'cut', priority: 600 })
+    permissionRegistry.registerItem('data-object', { key: 'paste', priority: 700 })
+    permissionRegistry.registerItem('data-object', { key: 'publish', priority: 800 })
+    permissionRegistry.registerItem('data-object', { key: 'unpublish', priority: 900 })
+    permissionRegistry.registerItem('data-object', { key: 'delete', priority: 1000 })
+    permissionRegistry.registerItem('data-object', { key: 'refresh', priority: 1100 })
+    permissionRegistry.registerItem('data-object', { key: 'changeChildrenSortBy', priority: 1200 })
+    permissionRegistry.registerItem('data-object', { key: 'lock', priority: 1300 })
+    permissionRegistry.registerItem('data-object', { key: 'lockAndPropagate', priority: 1400 })
+    permissionRegistry.registerItem('data-object', { key: 'unlock', priority: 1500 })
+    permissionRegistry.registerItem('data-object', { key: 'unlockAndPropagate', priority: 1600 })
+
+    // Document context menu items
+    permissionRegistry.registerItem('document', { key: 'addFolder', priority: 100 })
+    permissionRegistry.registerItem('document', { key: 'addPage', priority: 200 })
+    permissionRegistry.registerItem('document', { key: 'addSnippet', priority: 300 })
+    permissionRegistry.registerItem('document', { key: 'addLink', priority: 400 })
+    permissionRegistry.registerItem('document', { key: 'addEmail', priority: 500 })
+    permissionRegistry.registerItem('document', { key: 'addHardlink', priority: 600 })
+    permissionRegistry.registerItem('document', { key: 'rename', priority: 700 })
+    permissionRegistry.registerItem('document', { key: 'copy', priority: 800 })
+    permissionRegistry.registerItem('document', { key: 'paste', priority: 900 })
+    permissionRegistry.registerItem('document', { key: 'cut', priority: 1000 })
+    permissionRegistry.registerItem('document', { key: 'pasteCut', priority: 1100 })
+    permissionRegistry.registerItem('document', { key: 'publish', priority: 1200 })
+    permissionRegistry.registerItem('document', { key: 'unpublish', priority: 1300 })
+    permissionRegistry.registerItem('document', { key: 'delete', priority: 1400 })
+    permissionRegistry.registerItem('document', { key: 'open', priority: 1500 })
+    permissionRegistry.registerItem('document', { key: 'refresh', priority: 1600 })
+    permissionRegistry.registerItem('document', { key: 'lock', priority: 1700 })
+    permissionRegistry.registerItem('document', { key: 'lockAndPropagate', priority: 1800 })
+    permissionRegistry.registerItem('document', { key: 'unlock', priority: 1900 })
+    permissionRegistry.registerItem('document', { key: 'unlockAndPropagate', priority: 2000 })
   }
 })

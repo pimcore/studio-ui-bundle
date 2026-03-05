@@ -104,6 +104,7 @@ export const LoginForm = ({ additionalLogins, onPasswordForgotten }: ILoginFormP
           </Checkbox>
           <Button
             onClick={ onPasswordForgotten }
+            style={ { paddingLeft: 0, paddingRight: 0 } }
             type={ 'link' }
           >
             {t('login-form.forgot-password')}
