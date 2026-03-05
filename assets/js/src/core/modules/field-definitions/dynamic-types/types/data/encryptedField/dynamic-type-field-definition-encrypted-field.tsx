@@ -38,10 +38,6 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
     return ['encryptedFieldSupport']
   }
 
-  // When the backend returns a saved encryptedField, delegate-specific properties
-  // (e.g. lat/lng/zoom for geopoint, width/height for image) live inside the 'delegate'
-  // sub-object.  The form fields bind to top-level keys, so we hoist those properties here
-  // so that initialValues already contains them at the correct level.
   normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
     const hoisted = { ...fieldDef }
 
