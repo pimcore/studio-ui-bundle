@@ -106,7 +106,7 @@ export const transformToTreeData = (
         key: isUndefined(item.id) ? '' : String(item.id),
         title: `${item.name}${isModified ? ' *' : ''}`,
         icon,
-        children: isFolder ? transformToTreeData((item as ThumbnailConfigurationFolderData).children, leafIconValue, iconClassName, modifiedThumbnails) : undefined,
+        children: isFolder ? transformToTreeData((item).children, leafIconValue, iconClassName, modifiedThumbnails) : undefined,
         isLeaf: !isFolder,
         actions,
         allowDrag: false,
