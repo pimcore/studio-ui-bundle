@@ -25,12 +25,10 @@ export interface Transformation {
   /** Unique identifier for the transformation */
   id: string
   /** Type of transformation */
-  type: TransformationType
+  type: string
   /** Configuration arguments for the transformation */
   config: TransformationConfig
 }
-
-export type TransformationType = string
 
 export type TransformationConfig = Record<string, any>
 
