@@ -20,7 +20,7 @@ import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element
 import { useTranslation } from 'react-i18next'
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { VideoThumbnailsTreeToolbar } from '../video-thumbnails-tree-toolbar/video-thumbnails-tree-toolbar'
-import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
+import { findThumbnailById, filterThumbnailsRecursive, getFolderKeysFromTree } from '../../utils/tree-helpers'
 import { useStyles } from './video-thumbnails-tree.styles'
 import { useVideoThumbnailConfig } from '../../hooks/use-video-thumbnail-config'
 import { useVideoThumbnailsContext } from '../../providers/video-thumbnails-provider'
@@ -42,12 +42,11 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
   const { styles } = useStyles()
   const { handleDelete: deleteThumbnail, handleAdd } = useVideoThumbnailConfig({ refetch })
   const pendingOpenRef = useRef<string | null>(null)
+  const savedExpandedKeysRef = useRef<string[] | null>(null)
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
       setThumbnailsListData(thumbnailsData.items)
-      setFilteredData(thumbnailsData.items)
-      setTreeKey(prev => prev + 1)
 
       if (!isNil(pendingOpenRef.current)) {
         const pendingName = pendingOpenRef.current
@@ -67,9 +66,19 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
   useEffect(() => {
     if (searchValue === '') {
       setFilteredData(thumbnailsListData)
+      if (savedExpandedKeysRef.current !== null) {
+        setExpandedKeys(savedExpandedKeysRef.current)
+        savedExpandedKeysRef.current = null
+      }
     } else {
-      setFilteredData(filterThumbnailsRecursive(thumbnailsListData, searchValue))
+      if (savedExpandedKeysRef.current === null) {
+        savedExpandedKeysRef.current = expandedKeys
+      }
+      const filtered = filterThumbnailsRecursive(thumbnailsListData, searchValue)
+      setFilteredData(filtered)
+      setExpandedKeys(getFolderKeysFromTree(filtered))
     }
+    setTreeKey(prev => prev + 1)
   }, [searchValue, thumbnailsListData])
 
   const { t } = useTranslation()
