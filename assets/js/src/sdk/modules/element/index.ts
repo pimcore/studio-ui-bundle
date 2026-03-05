@@ -120,6 +120,7 @@ export * from '@Pimcore/components/form/localisation/localized-fields/localized-
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 // @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
+export { ManyToManyRelationLabel, type ManyToManyRelationLabelProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 // @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/object-brick/object-brick'
