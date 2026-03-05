@@ -32,7 +32,6 @@ interface ComponentRegistryConfigEntrySlot {
   name: string
   type: ComponentType.SLOT
   defaultEntries?: ComponentRegistryConfigEntrySlotItem[]
-  defaults?: Record<string, unknown>
 }
 
 export type ComponentRegistryConfigEntry = ComponentRegistryConfigEntrySingle | ComponentRegistryConfigEntrySlot

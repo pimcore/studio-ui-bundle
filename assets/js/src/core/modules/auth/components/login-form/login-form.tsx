@@ -31,9 +31,7 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
   const { styles } = useStyle()
   const messageApi = useMessage()
   const { t } = useTranslation()
-  const [hideCredentialsForm, setHideCredentialsForm] = useState<boolean>(
-    componentConfig.form.login.defaults?.hideCredentialsForm
-  )
+  const [hideCredentialsForm, setHideCredentialsForm] = useState<boolean>(false)
 
   const [formState, setFormState] = useState<Credentials>({
     username: '',

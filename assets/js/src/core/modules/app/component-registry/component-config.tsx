@@ -237,10 +237,7 @@ const defaultComponentConfig = {
   form: {
     login: {
       type: ComponentType.SLOT,
-      name: 'form.login',
-      defaults: {
-        hideCredentialsForm: false
-      }
+      name: 'form.login'
     }
   }
 }

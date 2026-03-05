@@ -15,7 +15,7 @@ export const useStyle = createStyles(({ token, css }) => {
     form: css`
       display: flex;
       flex-direction: column;
-      gap: ${token.padding}px;
+      gap: 12px;
 
       form {
         display: flex;
