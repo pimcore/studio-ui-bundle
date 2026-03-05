@@ -1630,6 +1630,7 @@ video-thumbnails.transformations.resize.width: "Width"
 video-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
 video-thumbnails.transformations.resize.height: "Height"
 video-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
+video-thumbnails.transformations.resize.even-number-hint: "Width and height must be an even number"
 
 # Scale by Width Transformation
 video-thumbnails.transformations.scale-by-width.config-title: "Configure Scale by Width"
