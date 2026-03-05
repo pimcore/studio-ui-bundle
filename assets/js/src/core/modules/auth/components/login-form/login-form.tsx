@@ -31,6 +31,9 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
   const { styles } = useStyle()
   const messageApi = useMessage()
   const { t } = useTranslation()
+  const [hideCredentialsForm, setHideCredentialsForm] = useState<boolean>(
+    componentConfig.form.login.defaults?.hideCredentialsForm
+  )
 
   const [formState, setFormState] = useState<Credentials>({
     username: '',
@@ -75,6 +78,7 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
 
   return (
     <div className={ styles.form }>
+      {!hideCredentialsForm && (
       <form onSubmit={ handleAuthentication }>
         <Input
           aria-label={ t('login-form.username') }
@@ -114,8 +118,12 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
           {t('login-form.login')}
         </Button>
       </form>
+      )}
 
-      <SlotRenderer slot={ componentConfig.form.login.name } />
+      <SlotRenderer
+        props={ { onHideCredentialsForm: setHideCredentialsForm } }
+        slot={ componentConfig.form.login.name }
+      />
     </div>
   )
 }
