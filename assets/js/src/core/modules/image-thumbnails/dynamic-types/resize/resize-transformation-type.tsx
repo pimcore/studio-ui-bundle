@@ -16,8 +16,6 @@ import { type TransformationComponent } from '../../types/transformation-compone
 export interface ResizeTransformationConfig {
   width?: number
   height?: number
-  positioning?: 'center' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
-  forceResize?: boolean
 }
 
 @injectable()
@@ -30,15 +28,6 @@ export class ResizeTransformationType extends TransformationDynamicTypeAbstract<
 
   getSummary (config: ResizeTransformationConfig): string {
     return `Resize ${config.width ?? '?'}x${config.height ?? '?'}`
-  }
-
-  createDefaultConfig (): ResizeTransformationConfig {
-    return {
-      width: 100,
-      height: 100,
-      positioning: 'center',
-      forceResize: false
-    }
   }
 
   getReactComponent (): TransformationComponent {

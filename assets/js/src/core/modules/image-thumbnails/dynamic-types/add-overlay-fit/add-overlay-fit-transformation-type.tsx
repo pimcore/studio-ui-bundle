@@ -16,7 +16,7 @@ import { type TransformationComponent } from '../../types/transformation-compone
 export interface AddOverlayFitTransformationConfig {
   asset?: number
   path?: string
-  origin?: string
+  composite?: string
 }
 
 @injectable()
@@ -24,12 +24,12 @@ export class AddOverlayFitTransformationType extends TransformationDynamicTypeAb
   readonly id = 'addOverlayFit'
 
   getLabel (): string {
-    return 'Add Overlay Fit'
+    return 'Add Overlay Fit (Imagick)'
   }
 
   getSummary (config: AddOverlayFitTransformationConfig): string {
     const pathPart = config.path == null ? '' : ` (${config.path})`
-    return `Add Overlay Fit${pathPart} at ${config.origin ?? 'center'}`
+    return `Add Overlay Fit (Imagick)${pathPart}`
   }
 
   getReactComponent (): TransformationComponent {

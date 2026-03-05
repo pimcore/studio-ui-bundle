@@ -1507,6 +1507,7 @@ image-thumbnails.editor.preserve-animation: "Preserve Animation"
 image-thumbnails.editor.preserve-animation.tooltip: "Preserve animations for GIF (Imagick)\n(Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
 image-thumbnails.editor.media-queries: "Media Queries"
 image-thumbnails.editor.media-queries.new: "New"
+image-thumbnails.editor.media-queries.default: "Default"
 image-thumbnails.editor.media-queries.empty: "No media queries defined. Click 'New' to add a CSS media query."
 image-thumbnails.editor.media-query.modal.title: "New Media Query"
 image-thumbnails.editor.media-query.modal.label: "Enter a valid CSS media query"
@@ -1522,6 +1523,7 @@ image-thumbnails.editor.transformations.effects.sepia: "Sepia"
 image-thumbnails.editor.transformations.effects.grayscale: "Grayscale"
 image-thumbnails.editor.transformations.effects.sharpen: "Sharpen"
 image-thumbnails.editor.transformations.empty: "No transformations defined. Use the 'Transformations' button to add image transformations."
+image-thumbnails.editor.save-error: "Could not save thumbnail configuration"
 
 # Transformation Groups
 image-thumbnails.transformations.groups.main: "Transformations"
@@ -1532,15 +1534,34 @@ image-thumbnails.media-queries.add-transformation: "Add Transformation"
 
 # Cover Transformation
 image-thumbnails.transformations.cover.title: "Configure Cover"
+image-thumbnails.transformations.cover.width-height: "Width, Height"
 image-thumbnails.transformations.cover.width: "Width"
 image-thumbnails.transformations.cover.height: "Height"
-image-thumbnails.transformations.cover.positioning: "Position"
+image-thumbnails.transformations.cover.focal-point-info: "The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used."
+image-thumbnails.transformations.cover.positioning: "Default Positioning"
 image-thumbnails.transformations.cover.positioning-center: "Center"
 image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
 image-thumbnails.transformations.cover.positioning-topright: "Top Right"
 image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
 image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.cover.force-resize: "Force Resize"
+image-thumbnails.transformations.cover.force-resize: "Force resize"
+
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: "Overlay Image"
+image-thumbnails.transformations.add-overlay.x: "X Position"
+image-thumbnails.transformations.add-overlay.y: "Y Position"
+image-thumbnails.transformations.add-overlay.origin: "Origin"
+image-thumbnails.transformations.add-overlay.origin-top-left: "Top Left"
+image-thumbnails.transformations.add-overlay.origin-top-right: "Top Right"
+image-thumbnails.transformations.add-overlay.origin-center: "Center"
+image-thumbnails.transformations.add-overlay.origin-bottom-left: "Bottom Left"
+image-thumbnails.transformations.add-overlay.origin-bottom-right: "Bottom Right"
+image-thumbnails.transformations.add-overlay.alpha: "Opacity"
+image-thumbnails.transformations.add-overlay.composite: "Composite"
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: "Radius"
+image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
 
 # Scale by Width Transformation
 image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
@@ -1550,17 +1571,7 @@ image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
 # Resize Transformation
 image-thumbnails.transformations.resize.config-title: "Configure Resize"
 image-thumbnails.transformations.resize.width: "Width"
-image-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
 image-thumbnails.transformations.resize.height: "Height"
-image-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
-image-thumbnails.transformations.resize.positioning: "Positioning"
-image-thumbnails.transformations.resize.positioning-placeholder: "Select positioning"
-image-thumbnails.transformations.resize.positioning-center: "Center"
-image-thumbnails.transformations.resize.positioning-topleft: "Top Left"
-image-thumbnails.transformations.resize.positioning-topright: "Top Right"
-image-thumbnails.transformations.resize.positioning-bottomleft: "Bottom Left"
-image-thumbnails.transformations.resize.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.resize.force-resize: "Force Resize"
 
 # Scale by Height Transformation
 image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
@@ -1585,6 +1596,12 @@ image-thumbnails.transformations.effects.sepia: "Sepia"
 image-thumbnails.transformations.effects.grayscale: "Grayscale"
 image-thumbnails.transformations.effects.sharpen: "Sharpen"
 image-thumbnails.transformations.effects.intensity: "Intensity"
+
+# Transformation tool strip
+image-thumbnails.transformations.add: "Add transformation"
+image-thumbnails.transformations.move-up: "Move Up"
+image-thumbnails.transformations.move-down: "Move Down"
+image-thumbnails.transformations.remove: "Remove"
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"

@@ -18,10 +18,10 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { formatOptions } from '../../constants/format-options'
 
 interface BasicFormFieldsProps {
-  groupOptions: Array<{ value: string, label: string }>
+  isNameDisabled?: boolean
 }
 
-export const BasicFormFields = ({ groupOptions }: BasicFormFieldsProps): React.JSX.Element => {
+export const BasicFormFields = ({ isNameDisabled = false }: BasicFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -33,28 +33,21 @@ export const BasicFormFields = ({ groupOptions }: BasicFormFieldsProps): React.J
         name="name"
         rules={ [{ required: true, message: t('image-thumbnails.editor.name-required') }] }
       >
-        <Input />
+        <Input disabled={ isNameDisabled } />
       </Form.Item>
 
       <Form.Item
         label={ t('image-thumbnails.editor.description') }
         name="description"
       >
-        <TextArea
-          placeholder={ t('image-thumbnails.editor.description-placeholder') }
-          rows={ 4 }
-        />
+        <TextArea rows={ 4 } />
       </Form.Item>
 
       <Form.Item
         label={ t('image-thumbnails.editor.group') }
         name="group"
       >
-        <Select
-          allowClear
-          options={ groupOptions }
-          placeholder={ t('image-thumbnails.editor.group-placeholder') }
-        />
+        <Input />
       </Form.Item>
 
       <Form.Item

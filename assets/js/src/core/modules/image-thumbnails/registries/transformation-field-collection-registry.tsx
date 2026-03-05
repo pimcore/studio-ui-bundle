@@ -11,7 +11,6 @@
 import React from 'react'
 import { FieldCollectionRegistry, type FieldCollectionRegistryItem } from '@Pimcore/components/form/controls/field-collection/field-collection-registry'
 import type { TransformationDynamicTypeRegistry } from '../dynamic-types/transformation-dynamic-type-registry'
-import { TransformationFieldCollectionItem } from '../components/transformation-field-collection-item'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export class TransformationFieldCollectionRegistry extends FieldCollectionRegistry {
@@ -24,13 +23,12 @@ export class TransformationFieldCollectionRegistry extends FieldCollectionRegist
     const transformationItems = this.transformationRegistry.getDynamicTypes()
 
     transformationItems.forEach(transformation => {
+      const Component = transformation.getReactComponent()
       const registryItem: FieldCollectionRegistryItem = {
         type: transformation.getId(),
         key: transformation.getId(),
         translationKey: transformation.getLabel(),
-        component: React.createElement(TransformationFieldCollectionItem, {
-          transformationType: transformation.getId()
-        })
+        component: React.createElement(Component)
       }
 
       this.register(registryItem)

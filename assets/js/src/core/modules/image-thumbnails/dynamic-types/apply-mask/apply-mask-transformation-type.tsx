@@ -23,12 +23,12 @@ export class ApplyMaskTransformationType extends TransformationDynamicTypeAbstra
   readonly id = 'applyMask'
 
   getLabel (): string {
-    return 'Apply Mask'
+    return 'Apply Mask (Imagick)'
   }
 
   getSummary (config: ApplyMaskTransformationConfig): string {
     const pathPart = config.path == null ? '' : ` (${config.path})`
-    return `Apply Mask${pathPart}`
+    return `Apply Mask (Imagick)${pathPart}`
   }
 
   getReactComponent (): TransformationComponent {
