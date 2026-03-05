@@ -11,7 +11,7 @@
 import React, { useCallback } from 'react'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { VideoMediaQueryTransformationsField } from './media-query-transformations-field'
-import type { MediaQuery, TransformationType } from '../../types/media-query.types'
+import type { MediaQuery } from '../../types/media-query.types'
 
 interface VideoMediaQueryTabContentProps {
   mediaQuery: MediaQuery
@@ -27,7 +27,7 @@ export const VideoMediaQueryTabContent = ({
       ...mediaQuery,
       transformations: transformations.map((t, index) => ({
         id: (mediaQuery.transformations[index]?.id === '' ? `transformation-${Date.now()}-${index}` : mediaQuery.transformations[index]?.id) ?? `transformation-${Date.now()}-${index}`,
-        type: t.type as TransformationType,
+        type: t.type,
         config: t.data
       }))
     }
