@@ -19,6 +19,7 @@ export interface TypeRegistryInterface {
   register: (type: ElementEditorType) => void
   get: (name: string) => ElementEditorType
   has: (name: string) => boolean
+  getAll: () => ElementEditorType[]
 }
 
 @injectable()
@@ -43,5 +44,9 @@ export class TypeRegistry implements TypeRegistryInterface {
 
   has (name: string): boolean {
     return name in this.registry
+  }
+
+  getAll (): ElementEditorType[] {
+    return Object.values(this.registry)
   }
 }
