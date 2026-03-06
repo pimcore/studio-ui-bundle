@@ -60,6 +60,19 @@ export const MainNav = (): React.JSX.Element => {
     }
   }
 
+  const renderDivider = (show: boolean | undefined): React.JSX.Element | null => {
+    if (show === true) {
+      return (
+        <Divider
+          className={ 'main-nav__list-item-divider' }
+          size={ 'mini' }
+        />
+      )
+    }
+
+    return null
+  }
+
   const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
     const hasChildren = !isEmpty(item.children)
     const isOpen = openKeys.includes(index)
@@ -103,6 +116,7 @@ export const MainNav = (): React.JSX.Element => {
 
               return (
                 <>
+                  {renderDivider(item.dividerTop)}
                   <button
                     className="main-nav__list-btn"
                     data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
@@ -115,17 +129,13 @@ export const MainNav = (): React.JSX.Element => {
 
                     <SanitizeHtml html={ t(`${item.label}`) } />
                   </button>
-                  {!isUndefined(item.dividerBottom) && item.dividerBottom && (
-                    <Divider
-                      className={ 'main-nav__list-item-divider' }
-                      size={ 'mini' }
-                    />
-                  )}
+                  {renderDivider(item.dividerBottom)}
                 </>
               )
             })()
           : (
             <>
+              {renderDivider(item.dividerTop)}
               <button
                 className={ 'main-nav__list-btn' }
                 data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
@@ -155,12 +165,7 @@ export const MainNav = (): React.JSX.Element => {
                 )}
               </button>
 
-              {!isUndefined(item.dividerBottom) && item.dividerBottom && (
-                <Divider
-                  className={ 'main-nav__list-item-divider' }
-                  size={ 'mini' }
-                />
-              )}
+              {renderDivider(item.dividerBottom)}
             </>
             )}
 
