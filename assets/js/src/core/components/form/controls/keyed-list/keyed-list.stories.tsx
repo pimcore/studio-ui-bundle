@@ -603,3 +603,113 @@ const SimpleOperationsComponent = (): React.JSX.Element => {
 export const SimpleOperations: Story = {
   render: () => <SimpleOperationsComponent />
 }
+
+// Validation story – inline error messages on KeyedList items
+const ValidationExampleComponent = (): React.JSX.Element => {
+  const [form] = Form.useForm()
+  const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const initialValues = {
+    contacts: {
+      alice: { name: 'Alice', email: '' },
+      bob: { name: '', email: 'not-an-email' }
+    }
+  }
+
+  const handleFinish = (values: any): void => {
+    setSubmitResult(JSON.stringify(values, null, 2))
+  }
+
+  const handleFinishFailed = (): void => {
+    setSubmitResult('Validation failed – fix the errors above and try again.')
+  }
+
+  return (
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
+      <h3>KeyedList with Field Validation</h3>
+      <p style={ { marginBottom: '16px', color: '#555' } }>
+        The form starts with intentionally invalid data. Click{' '}
+        <strong>Validate &amp; Submit</strong> to see inline error messages
+        appear below each control. Fix the errors to submit successfully.
+      </p>
+      <Form
+        form={ form }
+        initialValues={ initialValues }
+        layout="vertical"
+        onFinish={ handleFinish }
+        onFinishFailed={ handleFinishFailed }
+      >
+        <Form.Item
+          label="Contacts"
+          name="contacts"
+        >
+          <KeyedList>
+            <KeyedList.Iterator>
+              <Form.Item
+                label="Full Name"
+                name="name"
+                rules={ [{ required: true, message: 'Name is required' }] }
+              >
+                <Input placeholder="Enter name" />
+              </Form.Item>
+
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={ [
+                  { required: true, message: 'Email is required' },
+                  { type: 'email', message: 'Must be a valid email address' }
+                ] }
+              >
+                <Input placeholder="Enter email" />
+              </Form.Item>
+            </KeyedList.Iterator>
+          </KeyedList>
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            htmlType="submit"
+            type="primary"
+          >
+            Validate &amp; Submit
+          </Button>
+        </Form.Item>
+      </Form>
+
+      {submitResult !== null && (
+        <div style={ { marginTop: '16px' } }>
+          <h4>Result:</h4>
+          <pre style={ {
+            background: '#f5f5f5',
+            padding: '12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            overflow: 'auto'
+          } }
+          >
+            {submitResult}
+          </pre>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const WithValidation: Story = {
+  render: () => <ValidationExampleComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `Demonstrates **inline field validation** inside KeyedList items.
+
+The story pre-loads contacts with intentionally invalid data (empty name, bad email).
+Click **Validate & Submit** to trigger validation. Error messages appear directly
+below each offending control, styled to match AntD's Form.Item error presentation.
+
+**Rules exercised:**
+- \`required\` – fires when the field is empty
+- \`type: 'email'\` – fires when the value is not a valid e-mail address`
+      }
+    }
+  }
+}
