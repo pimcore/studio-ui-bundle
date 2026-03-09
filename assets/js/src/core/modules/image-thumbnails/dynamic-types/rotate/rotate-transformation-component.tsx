@@ -24,7 +24,7 @@ export const RotateTransformationComponent: TransformationComponent = () => {
         label="Angle"
         name="angle"
       >
-        <InputNumber placeholder="Enter rotation angle in degrees" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )

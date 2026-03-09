@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, InputNumber } from '@sdk/components'
+import { Form, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,7 @@ export const FieldDefinitionExternalImageFormFields = (props: FieldDefinitionAbs
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <Form.Item
         label={ t('preview-width') }
@@ -38,6 +38,6 @@ export const FieldDefinitionExternalImageFormFields = (props: FieldDefinitionAbs
       >
         <InputNumber />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

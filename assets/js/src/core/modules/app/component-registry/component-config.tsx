@@ -233,6 +233,12 @@ const defaultComponentConfig = {
   },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
+  },
+  form: {
+    login: {
+      type: ComponentType.SLOT,
+      name: 'form.login'
+    }
   }
 }
 

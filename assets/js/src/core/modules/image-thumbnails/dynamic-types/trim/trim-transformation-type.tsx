@@ -22,17 +22,11 @@ export class TrimTransformationType extends TransformationDynamicTypeAbstract<Tr
   readonly id = 'trim'
 
   getLabel (): string {
-    return 'Trim'
+    return 'Trim (Imagick)'
   }
 
   getSummary (config: TrimTransformationConfig): string {
-    return `Trim (tolerance: ${config.tolerance ?? 'not set'})`
-  }
-
-  createDefaultConfig (): TrimTransformationConfig {
-    return {
-      tolerance: 10
-    }
+    return `Trim (Imagick) (tolerance: ${config.tolerance ?? 'not set'})`
   }
 
   getReactComponent (): TransformationComponent {

@@ -18,6 +18,7 @@ export interface FieldCollectionAddControlProps {
   size?: SelectProps['size']
   field?: number
   disabled?: boolean
+  addLabel?: string
 }
 
 export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps): React.JSX.Element => {
@@ -42,7 +43,7 @@ export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps)
       dropdownStyle={ { width: 200 } }
       onSelect={ onSelect }
       options={ selectOptions }
-      placeholder={ 'Add collection' }
+      placeholder={ props.addLabel ?? t('field-collection.add.default') }
       showSearch
       size={ size }
       style={ { width: 150 } }

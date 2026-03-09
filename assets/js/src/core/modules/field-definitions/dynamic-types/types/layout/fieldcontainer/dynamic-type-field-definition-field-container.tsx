@@ -26,18 +26,19 @@ export class DynamicTypeFieldDefinitionFieldContainer extends DynamicTypeFieldDe
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideTitle: true })
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideTitle: true })}
-        <FieldDefinitionFieldContainerFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionFieldContainerFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

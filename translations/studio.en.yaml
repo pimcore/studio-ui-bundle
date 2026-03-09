@@ -708,16 +708,16 @@ field-definitions.validation.enter-unique-identifier: Please enter a unique iden
 field-definitions.validation.unique-identifier-in-use: This unique identifier is already in use
 field-definitions.validation.unique-identifier-format: The unique identifier must start with a letter and can contain only letters, numbers, and underscores, with a maximum length of 64 characters.
 field-definitions.validation.errors-found: Field definitions have errors
-field-definitions.validation.empty-name: 'The following field types are missing a name:'
-field-definitions.validation.reserved-word: 'Reserved word used as name:'
-field-definitions.validation.invalid-format: 'Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):'
-field-definitions.validation.duplicate-name: 'Duplicate name within namespace:'
+field-definitions.validation.empty-name: "The following field types are missing a name:"
+field-definitions.validation.reserved-word: "Reserved word used as name:"
+field-definitions.validation.invalid-format: "Invalid name format (must match [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Duplicate name within namespace:"
 object-brick-key: Object Brick Key
 field-name: Field Name
-field-definition.geopoint: Geo Point
-field-definition.geobounds: Geo Bounds
-field-definition.geopolygon: Geo Polygon
-field-definition.geopolyline: Geo Polyline
+field-definition.geopoint: Geographic Point
+field-definition.geobounds: Geographic Bounds
+field-definition.geopolygon: Geographic Polygon
+field-definition.geopolyline: Geographic Polyline
 field-definition.input: Input
 field-definition.textarea: Textarea
 field-definition.wysiwyg: WYSIWYG
@@ -1323,6 +1323,7 @@ user-management.clone-user: Clone user
 user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
+user-management.save-user.password.success: Password updated successfully
 user-management.add-user.success: User added successfully
 user-management.remove-user: Delete user
 user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
@@ -1365,6 +1366,7 @@ navigation.object-bricks: Object Bricks
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
+navigation.video-thumbnails: Video Thumbnails
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
 navigation.appearance-branding: Appearance & Branding
@@ -1458,6 +1460,7 @@ widget.field-collections: Field Collections
 widget.object-bricks: Object Bricks
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
+widget.video-thumbnails: Video Thumbnails
 appearance-branding.title: "Appearance & Branding"
 image-thumbnails.title: "Image Thumbnails"
 image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
@@ -1507,6 +1510,7 @@ image-thumbnails.editor.preserve-animation: "Preserve Animation"
 image-thumbnails.editor.preserve-animation.tooltip: "Preserve animations for GIF (Imagick)\n(Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
 image-thumbnails.editor.media-queries: "Media Queries"
 image-thumbnails.editor.media-queries.new: "New"
+image-thumbnails.editor.media-queries.default: "Default"
 image-thumbnails.editor.media-queries.empty: "No media queries defined. Click 'New' to add a CSS media query."
 image-thumbnails.editor.media-query.modal.title: "New Media Query"
 image-thumbnails.editor.media-query.modal.label: "Enter a valid CSS media query"
@@ -1522,6 +1526,7 @@ image-thumbnails.editor.transformations.effects.sepia: "Sepia"
 image-thumbnails.editor.transformations.effects.grayscale: "Grayscale"
 image-thumbnails.editor.transformations.effects.sharpen: "Sharpen"
 image-thumbnails.editor.transformations.empty: "No transformations defined. Use the 'Transformations' button to add image transformations."
+image-thumbnails.editor.save-error: "Could not save thumbnail configuration"
 
 # Transformation Groups
 image-thumbnails.transformations.groups.main: "Transformations"
@@ -1532,15 +1537,34 @@ image-thumbnails.media-queries.add-transformation: "Add Transformation"
 
 # Cover Transformation
 image-thumbnails.transformations.cover.title: "Configure Cover"
+image-thumbnails.transformations.cover.width-height: "Width, Height"
 image-thumbnails.transformations.cover.width: "Width"
 image-thumbnails.transformations.cover.height: "Height"
-image-thumbnails.transformations.cover.positioning: "Position"
+image-thumbnails.transformations.cover.focal-point-info: "The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used."
+image-thumbnails.transformations.cover.positioning: "Default Positioning"
 image-thumbnails.transformations.cover.positioning-center: "Center"
 image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
 image-thumbnails.transformations.cover.positioning-topright: "Top Right"
 image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
 image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.cover.force-resize: "Force Resize"
+image-thumbnails.transformations.cover.force-resize: "Force resize"
+
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: "Overlay Image"
+image-thumbnails.transformations.add-overlay.x: "X Position"
+image-thumbnails.transformations.add-overlay.y: "Y Position"
+image-thumbnails.transformations.add-overlay.origin: "Origin"
+image-thumbnails.transformations.add-overlay.origin-top-left: "Top Left"
+image-thumbnails.transformations.add-overlay.origin-top-right: "Top Right"
+image-thumbnails.transformations.add-overlay.origin-center: "Center"
+image-thumbnails.transformations.add-overlay.origin-bottom-left: "Bottom Left"
+image-thumbnails.transformations.add-overlay.origin-bottom-right: "Bottom Right"
+image-thumbnails.transformations.add-overlay.alpha: "Opacity"
+image-thumbnails.transformations.add-overlay.composite: "Composite"
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: "Radius"
+image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
 
 # Scale by Width Transformation
 image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
@@ -1550,17 +1574,7 @@ image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
 # Resize Transformation
 image-thumbnails.transformations.resize.config-title: "Configure Resize"
 image-thumbnails.transformations.resize.width: "Width"
-image-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
 image-thumbnails.transformations.resize.height: "Height"
-image-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
-image-thumbnails.transformations.resize.positioning: "Positioning"
-image-thumbnails.transformations.resize.positioning-placeholder: "Select positioning"
-image-thumbnails.transformations.resize.positioning-center: "Center"
-image-thumbnails.transformations.resize.positioning-topleft: "Top Left"
-image-thumbnails.transformations.resize.positioning-topright: "Top Right"
-image-thumbnails.transformations.resize.positioning-bottomleft: "Bottom Left"
-image-thumbnails.transformations.resize.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.resize.force-resize: "Force Resize"
 
 # Scale by Height Transformation
 image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
@@ -1586,9 +1600,90 @@ image-thumbnails.transformations.effects.grayscale: "Grayscale"
 image-thumbnails.transformations.effects.sharpen: "Sharpen"
 image-thumbnails.transformations.effects.intensity: "Intensity"
 
+# Transformation tool strip
+image-thumbnails.transformations.add: "Add transformation"
+image-thumbnails.transformations.move-up: "Move Up"
+image-thumbnails.transformations.move-down: "Move Down"
+image-thumbnails.transformations.remove: "Remove"
+
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
 image-thumbnails.transformations.no-configuration-required: "No configuration required"
+
+video-thumbnails.title: "Video Thumbnails"
+video-thumbnails.description: "Manage and configure video thumbnail settings for your assets."
+video-thumbnails.search.placeholder: "Search thumbnails..."
+video-thumbnails.tree.empty: "No thumbnails found"
+video-thumbnails.editor.select-thumbnail: "Select a video thumbnail configuration to edit"
+video-thumbnails.editor.name: "Name"
+video-thumbnails.editor.name-required: "Name is required"
+video-thumbnails.editor.description: "Description"
+video-thumbnails.editor.group: "Group"
+video-thumbnails.editor.no-group: "No Group"
+video-thumbnails.editor.presetting: "Select a presetting"
+video-thumbnails.editor.video-bitrate: "Video Bitrate"
+video-thumbnails.editor.audio-bitrate: "Audio Bitrate"
+video-thumbnails.editor.transformations: "Transformations"
+video-thumbnails.editor.media-segments: "Media Segments"
+video-thumbnails.editor.media-segments.new: "New"
+video-thumbnails.editor.media-segments.empty: "No media segments defined. Click 'New' to add a segment (e.g. 500K)."
+video-thumbnails.editor.media-segments.add.title: "New Media Segment"
+video-thumbnails.editor.media-segments.add.label: "Enter a segment name (e.g. 500K)"
+video-thumbnails.editor.media-segments.add.bitrate-hint: "Please enter a valid bitrate (e.g. 400k, 1500k, 1M)"
+video-thumbnails.editor.media-segments.add.ok: "Create"
+video-thumbnails.editor.media-segments.default: "Default"
+video-thumbnails.editor.transformations.empty: "No transformations have been selected"
+video-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
+video-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
+video-thumbnails.add.validation.message: "The thumbnail name is invalid"
+
+# Video Transformation tool strip
+video-thumbnails.transformations.move-up: "Move Up"
+video-thumbnails.transformations.move-down: "Move Down"
+video-thumbnails.transformations.remove: "Remove"
+
+# Resize Transformation
+video-thumbnails.transformations.resize.config-title: "Configure Resize"
+video-thumbnails.transformations.resize.width: "Width"
+video-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
+video-thumbnails.transformations.resize.height: "Height"
+video-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
+video-thumbnails.transformations.resize.even-number-hint: "Width and height must be an even number"
+
+# Scale by Width Transformation
+video-thumbnails.transformations.scale-by-width.config-title: "Configure Scale by Width"
+video-thumbnails.transformations.scale-by-width.width: "Width"
+video-thumbnails.transformations.scale-by-width.width-placeholder: "Enter width in pixels"
+
+# Scale by Height Transformation
+video-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
+video-thumbnails.transformations.scale-by-height.height: "Height"
+video-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+
+# Cut Transformation
+video-thumbnails.transformations.cut.config-title: "Configure Cut"
+video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: "Duration"
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Set Framerate Transformation
+video-thumbnails.transformations.set-framerate.config-title: "Configure Set Framerate"
+video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Color Channel Mixer Transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: "Configure Color Channel Mixer"
+video-thumbnails.transformations.color-channel-mixer.effect: "Effect"
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Select an effect"
+video-thumbnails.transformations.color-channel-mixer.grayscale: "Grayscale"
+video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
+video-thumbnails.transformations.color-channel-mixer.cold: "Cold"
+
+# Mute Transformation
+video-thumbnails.transformations.mute.config-title: "Mute"
+video-thumbnails.transformations.no-configuration-required: "No configuration required"
+
 appearance-branding.color.title: "Color"
 appearance-branding.color.brand-color.label: "Brand Color"
 appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
@@ -2284,12 +2379,13 @@ system-settings.collapse.debug: Debug
 system-settings.form.debug.field.enable-debug: Debug Admin-Translations (wrapped in +)
 system-settings.form.debug.field.email-addresses: Debug Email Addresses
 system-settings.form.debug.field.email-addresses.placeholder: Enter email and press Enter...
-system-settings.collapse.localization: Localization & Internationalization (i18n/l10n)
+system-settings.collapse.localization: Localization & Internationalization (l10n/i18n)
 system-settings.form.localization.field.add-language: Add Language
 system-settings.form.localization.field.fallback-language: Fallback Languages
 system-settings.form.localization.field.fallback-language-placeholder: Add fallback languages
 system-settings.form.localization.field.default-language: Default language
 system-settings.form.localization.field.mandatory: Mandatory language
+system-settings.form.localization.field.delete-language: Delete language
 system-settings.collapse.website: Website
 system-settings.form.field.main-domain: Main Domain
 system-settings.form.field.redirect-to-maindomain: Redirect unknown domains (not used for a site and for redirects, ...) to the main domain (above)
@@ -2336,3 +2432,8 @@ icon: Icon
 iframe-url: Iframe URL
 rendering-class: Custom rendering class
 rendering-data: Data Passed to render
+zoom-level: Zoom level
+class: Class
+layout.text.help: 'You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>'
+configuration: Configuration
+drag-object-for-preview: Drag object for preview

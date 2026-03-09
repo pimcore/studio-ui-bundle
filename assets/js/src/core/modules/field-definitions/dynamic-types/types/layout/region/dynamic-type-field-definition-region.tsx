@@ -25,19 +25,16 @@ export class DynamicTypeFieldDefinitionRegion extends DynamicTypeFieldDefinition
     return { type: 'name', value: 'region' }
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionRegionFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionRegionFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

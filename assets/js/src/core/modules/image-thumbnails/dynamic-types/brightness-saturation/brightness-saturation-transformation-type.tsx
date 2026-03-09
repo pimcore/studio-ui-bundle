@@ -24,18 +24,18 @@ export class BrightnessSaturationTransformationType extends TransformationDynami
   readonly id = 'brightnessSaturation'
 
   getLabel (): string {
-    return 'Brightness/Saturation'
+    return 'Brightness / Saturation / Hue (Imagick)'
   }
 
   getSummary (config: BrightnessSaturationTransformationConfig): string {
-    return `Brightness/Saturation (${config.brightness ?? 100}%, ${config.saturation ?? 100}%, ${config.hue ?? 100}%)`
+    return `Brightness / Saturation / Hue (Imagick) (${config.brightness ?? 100}%, ${config.saturation ?? 100}%, ${config.hue ?? 100}%)`
   }
 
   createDefaultConfig (): BrightnessSaturationTransformationConfig {
     return {
-      brightness: 0,
-      saturation: 0,
-      hue: 0
+      brightness: 100,
+      saturation: 100,
+      hue: 100
     }
   }
 

@@ -10,7 +10,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { NoConfigurationComponent } from '../../components/no-config-component'
+import { TiffOriginalTransformationComponent } from './tiff-original-transformation-component'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
 export type TiffOriginalTransformationConfig = Record<string, never>
@@ -20,7 +20,7 @@ export class TiffOriginalTransformationType extends TransformationDynamicTypeAbs
   readonly id = 'tifforiginal'
 
   getLabel (): string {
-    return 'TIFF Original'
+    return 'Use original TIFF (only PRINT)'
   }
 
   createDefaultConfig (): TiffOriginalTransformationConfig {
@@ -28,6 +28,6 @@ export class TiffOriginalTransformationType extends TransformationDynamicTypeAbs
   }
 
   getReactComponent (): TransformationComponent {
-    return NoConfigurationComponent
+    return TiffOriginalTransformationComponent
   }
 }

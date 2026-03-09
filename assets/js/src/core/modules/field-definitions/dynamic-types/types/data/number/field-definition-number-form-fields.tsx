@@ -19,7 +19,7 @@ export const FieldDefinitionNumberFormFields = (props: FieldDefinitionAbstractFo
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -78,6 +78,6 @@ export const FieldDefinitionNumberFormFields = (props: FieldDefinitionAbstractFo
         </>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

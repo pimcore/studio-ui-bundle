@@ -20,6 +20,7 @@ export interface AddOverlayTransformationConfig {
   y?: number
   origin?: string
   alpha?: number
+  composite?: string
 }
 
 @injectable()
@@ -27,12 +28,12 @@ export class AddOverlayTransformationType extends TransformationDynamicTypeAbstr
   readonly id = 'addOverlay'
 
   getLabel (): string {
-    return 'Add Overlay'
+    return 'Add Overlay (Imagick)'
   }
 
   getSummary (config: AddOverlayTransformationConfig): string {
     const pathPart = config.path == null ? '' : ` (${config.path})`
-    return `Add Overlay${pathPart} at ${config.origin ?? 'top-left'}`
+    return `Add Overlay (Imagick)${pathPart} at ${config.origin ?? 'top-left'}`
   }
 
   getReactComponent (): TransformationComponent {

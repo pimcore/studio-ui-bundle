@@ -95,13 +95,21 @@ export const DetailParentTree = (): React.JSX.Element => {
       padded
       padding={ { y: 'small', x: 'mini' } }
     >
-      <Header title={ currentConfig.name } />
-
-      <TreeElement
-        defaultExpandAll
-        titleRender={ titleRender }
-        treeData={ items }
+      <Header
+        style={ { flexShrink: 0 } }
+        title={ currentConfig.name }
       />
+
+      <Content
+        overflow={ { x: 'hidden', y: 'auto' } }
+        style={ { minHeight: 0, flex: 1 } }
+      >
+        <TreeElement
+          defaultExpandAll
+          titleRender={ titleRender }
+          treeData={ items }
+        />
+      </Content>
     </Content>
   )
 }

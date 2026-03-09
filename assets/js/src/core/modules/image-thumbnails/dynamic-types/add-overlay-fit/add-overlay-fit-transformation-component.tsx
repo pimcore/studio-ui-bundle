@@ -15,12 +15,10 @@ import { Select } from '@Pimcore/components/select/select'
 import { ImagePicker } from '@Pimcore/components/image-picker/image-picker'
 import type { TransformationComponent } from '../../types/transformation-component-types'
 
-const originOptions = [
-  { value: 'center', label: 'Center' },
-  { value: 'top-left', label: 'Top Left' },
-  { value: 'top-right', label: 'Top Right' },
-  { value: 'bottom-left', label: 'Bottom Left' },
-  { value: 'bottom-right', label: 'Bottom Right' }
+const compositeOptions = [
+  { value: 'COMPOSITE_DEFAULT', label: 'COMPOSITE_DEFAULT' },
+  { value: 'COMPOSITE_EXCLUSION', label: 'COMPOSITE_EXCLUSION' },
+  { value: 'COMPOSITE_HARDLIGHT', label: 'COMPOSITE_HARDLIGHT' }
 ]
 
 export const AddOverlayFitTransformationComponent: TransformationComponent = () => {
@@ -41,11 +39,11 @@ export const AddOverlayFitTransformationComponent: TransformationComponent = () 
         />
       </Form.Item>
       <Form.Item
-        initialValue="center"
-        label="Origin"
-        name="origin"
+        initialValue="COMPOSITE_DEFAULT"
+        label="Composite"
+        name="composite"
       >
-        <Select options={ originOptions } />
+        <Select options={ compositeOptions } />
       </Form.Item>
     </Flex>
   )

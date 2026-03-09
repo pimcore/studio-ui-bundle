@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input } from '@sdk/components'
+import { Form, Input } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
@@ -18,7 +18,7 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -44,6 +44,6 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

@@ -25,7 +25,7 @@ export class SharpenTransformationType extends TransformationDynamicTypeAbstract
   readonly id = 'sharpen'
 
   getLabel (): string {
-    return 'Sharpen'
+    return 'Sharpen (Imagick)'
   }
 
   getReactComponent (): TransformationComponent {

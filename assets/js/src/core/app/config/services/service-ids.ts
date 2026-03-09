@@ -57,7 +57,16 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/Transformation/AddOverlayFit': 'DynamicTypes/Transformation/AddOverlayFit',
   'DynamicTypes/Transformation/ApplyMask': 'DynamicTypes/Transformation/ApplyMask',
   'DynamicTypes/Transformation/TiffOriginal': 'DynamicTypes/Transformation/TiffOriginal',
-  'DynamicTypes/Transformation/OnePixel': 'DynamicTypes/Transformation/OnePixel'
+  'DynamicTypes/Transformation/OnePixel': 'DynamicTypes/Transformation/OnePixel',
+  'DynamicTypes/VideoTransformationDynamicTypeRegistry': 'video-thumbnails.transformation-dynamic-type-registry',
+  'DynamicTypes/VideoTransformationFieldCollectionRegistry': 'video-thumbnails.transformation-field-collection-registry',
+  'DynamicTypes/VideoTransformation/Resize': 'DynamicTypes/VideoTransformation/Resize',
+  'DynamicTypes/VideoTransformation/ScaleByWidth': 'DynamicTypes/VideoTransformation/ScaleByWidth',
+  'DynamicTypes/VideoTransformation/ScaleByHeight': 'DynamicTypes/VideoTransformation/ScaleByHeight',
+  'DynamicTypes/VideoTransformation/Cut': 'DynamicTypes/VideoTransformation/Cut',
+  'DynamicTypes/VideoTransformation/SetFramerate': 'DynamicTypes/VideoTransformation/SetFramerate',
+  'DynamicTypes/VideoTransformation/ColorChannelMixer': 'DynamicTypes/VideoTransformation/ColorChannelMixer',
+  'DynamicTypes/VideoTransformation/Mute': 'DynamicTypes/VideoTransformation/Mute'
 }
 
 export const serviceIds = {

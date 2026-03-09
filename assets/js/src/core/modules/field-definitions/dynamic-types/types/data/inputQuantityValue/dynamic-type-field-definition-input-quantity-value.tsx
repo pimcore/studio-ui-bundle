@@ -25,19 +25,20 @@ export class DynamicTypeFieldDefinitionInputQuantityValue extends DynamicTypeFie
     return [...super.getGroup(), 'text']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields(context)}
-        <FieldDefinitionInputQuantityValueFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionInputQuantityValueFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true })
   }
 }

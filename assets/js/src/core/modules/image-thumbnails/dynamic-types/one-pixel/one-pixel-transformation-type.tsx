@@ -10,7 +10,7 @@
 
 import { injectable } from 'inversify'
 import { TransformationDynamicTypeAbstract } from '../transformation-dynamic-type-abstract'
-import { NoConfigurationComponent } from '../../components/no-config-component'
+import { OnePixelTransformationComponent } from './one-pixel-transformation-component'
 import { type TransformationComponent } from '../../types/transformation-component-types'
 
 export type OnePixelTransformationConfig = Record<string, never>
@@ -20,7 +20,7 @@ export class OnePixelTransformationType extends TransformationDynamicTypeAbstrac
   readonly id = '1x1_pixel'
 
   getLabel (): string {
-    return '1x1 Pixel'
+    return '1x1 Pixel Placeholder'
   }
 
   createDefaultConfig (): OnePixelTransformationConfig {
@@ -28,6 +28,6 @@ export class OnePixelTransformationType extends TransformationDynamicTypeAbstrac
   }
 
   getReactComponent (): TransformationComponent {
-    return NoConfigurationComponent
+    return OnePixelTransformationComponent
   }
 }

@@ -24,25 +24,13 @@ export const CropTransformationComponent: TransformationComponent = () => {
         label="Width"
         name="width"
       >
-        <InputNumber placeholder="Enter crop width" />
+        <InputNumber />
       </Form.Item>
       <Form.Item
         label="Height"
         name="height"
       >
-        <InputNumber placeholder="Enter crop height" />
-      </Form.Item>
-      <Form.Item
-        label="X Position"
-        name="x"
-      >
-        <InputNumber placeholder="Enter X coordinate" />
-      </Form.Item>
-      <Form.Item
-        label="Y Position"
-        name="y"
-      >
-        <InputNumber placeholder="Enter Y coordinate" />
+        <InputNumber />
       </Form.Item>
     </Flex>
   )
