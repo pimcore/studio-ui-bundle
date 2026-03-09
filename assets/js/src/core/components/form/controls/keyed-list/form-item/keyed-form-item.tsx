@@ -28,7 +28,7 @@ const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React
         { currentChildren }
       </KeyedFormItemControl>
     </VirtualItem>
-  ), [baseProps.name])
+  ), [baseProps.name, baseProps.rules])
 }
 
 const memoedKeyedFormItem = React.memo(KeyedFormItem)

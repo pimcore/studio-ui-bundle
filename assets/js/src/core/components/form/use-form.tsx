@@ -12,6 +12,7 @@ import { Form, type FormInstance, type FormProps } from 'antd'
 import { type NamePath } from 'antd/es/form/interface'
 import { set } from 'lodash'
 import React, { createContext, useMemo } from 'react'
+import type { VirtualValidatorRegistry } from './item/hooks/use-virtual-validator-registry'
 
 export interface CustomSetFieldValueOptions {
   triggerChange?: boolean
@@ -20,6 +21,8 @@ export interface CustomSetFieldValueOptions {
 export type formInstanceType<Values = any> = Omit<FormInstance<Values>, 'setFieldValue' | 'setFieldsValue'> & {
   setOnValuesChangeHandler: (handler: FormProps<Values>['onValuesChange']) => void
   _onValuesChangeHandler?: FormProps<Values>['onValuesChange']
+  /** Attached by <Form> so validateFields() can reach virtual validators. */
+  _virtualValidatorRegistry?: VirtualValidatorRegistry
   setFieldValue: (name: NamePath<Values>, value: any, options?: CustomSetFieldValueOptions) => void
   setFieldsValue: (values: Partial<Values>, options?: CustomSetFieldValueOptions) => void
 }
