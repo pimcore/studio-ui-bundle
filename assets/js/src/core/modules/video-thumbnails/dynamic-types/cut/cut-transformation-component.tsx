@@ -24,13 +24,13 @@ export const CutVideoTransformationComponent: TransformationComponent = () => {
         label="Start"
         name="start"
       >
-        <Input />
+        <Input placeholder="HH:MM:SS.MS" />
       </Form.Item>
       <Form.Item
         label="Duration"
         name="duration"
       >
-        <Input />
+        <Input placeholder="HH:MM:SS.MS" />
       </Form.Item>
     </Flex>
   )
