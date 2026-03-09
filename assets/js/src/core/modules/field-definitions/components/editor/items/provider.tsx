@@ -82,6 +82,7 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     })
 
     setActiveConfigurationInternal(config)
+    setDetailView('general')
   }
 
   const closeConfiguration = (config: ConfigurationPartial): void => {

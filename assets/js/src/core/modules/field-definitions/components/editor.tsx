@@ -12,13 +12,14 @@ import { AreaProvider, type AreaProviderProps } from '@Pimcore/modules/field-def
 import { ItemsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { SettingsProvider, type SettingsProviderProps } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { EditorView } from '@Pimcore/modules/field-definitions/components/editor/view'
+import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import React from 'react'
 
 export interface EditorProps {
   area: AreaProviderProps['area']
-  AddModal: SettingsProviderProps['AddModal']
+  AddModal?: SettingsProviderProps['AddModal']
   useItemsQuery: SettingsProviderProps['useItemsQuery']
-  useItemsDeleteMutation: SettingsProviderProps['useItemsDeleteMutation']
+  useItemsDeleteMutation?: SettingsProviderProps['useItemsDeleteMutation']
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
   useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
   useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
@@ -26,6 +27,7 @@ export interface EditorProps {
   GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
   LayoutProvider?: SettingsProviderProps['LayoutProvider']
   useLayout?: SettingsProviderProps['useLayout']
+  fieldDefinitionRegistry?: DynamicTypeFieldDefinitionRegistry
   customLayouts?: SettingsProviderProps['customLayouts']
   importExportConfig?: SettingsProviderProps['importExportConfig']
   view?: React.JSX.Element

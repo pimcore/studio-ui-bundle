@@ -21,7 +21,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 
 export const FieldCollectionContent = (): React.JSX.Element => {
   const { values } = useNumberedList()
-  const { title, collapsed } = useFieldCollection()
+  const { title, collapsed, addLabel } = useFieldCollection()
 
   return (
     <>
@@ -32,7 +32,10 @@ export const FieldCollectionContent = (): React.JSX.Element => {
             gap={ 'extra-small' }
           >
             <Text strong>{title}</Text>
-            <FieldCollectionAddControl size="middle" />
+            <FieldCollectionAddControl
+              addLabel={ addLabel }
+              size="middle"
+            />
           </Flex>
 
           <div>

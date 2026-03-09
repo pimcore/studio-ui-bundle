@@ -120,6 +120,7 @@ export * from '@Pimcore/components/form/localisation/localized-fields/localized-
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 // @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
+export { ManyToManyRelationLabel, type ManyToManyRelationLabelProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 // @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/object-brick/object-brick'
@@ -130,6 +131,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/table'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 

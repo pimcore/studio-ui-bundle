@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePimcoreStudioApiClassCustomLayoutUpdateMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassCustomLayoutUpdateMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useCustomLayoutLayout } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail/layout-provider'
 import { type AnyMutationHook } from 'types/react-query'
 
 export const useCustomLayoutUpdateMutation: AnyMutationHook = (options) => {
-  const [fetch, result] = usePimcoreStudioApiClassCustomLayoutUpdateMutation(options)
+  const [fetch, result] = useClassCustomLayoutUpdateMutation(options)
   const { getLayout } = useCustomLayoutLayout()
   const { generalSettings } = useGeneralSettings()
 

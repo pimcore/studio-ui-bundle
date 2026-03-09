@@ -31,6 +31,7 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
   }
 
   const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
+  const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildStructure = (layoutItem: Layout): StructureNode => {
     const id = uuid()
@@ -42,8 +43,13 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
 
     const { children, ...fieldDef } = layoutItem
 
-    // @todo remove type conversion after fix of typo from backendSide (fieldtype vs. fieldType)
-    initialFieldDefinitions[id] = fieldDef as unknown as FieldDefinition
+    const resolvedFieldType = ((fieldDef as Record<string, unknown>).fieldType ?? (fieldDef as Record<string, unknown>).fieldtype) as string | undefined
+    let normalizedFieldDef: Record<string, unknown> = { ...fieldDef }
+    if (resolvedFieldType !== undefined && fieldDefinitionRegistry.hasDynamicType(resolvedFieldType)) {
+      normalizedFieldDef = fieldDefinitionRegistry.getDynamicType(resolvedFieldType).normalizeFieldDefinition(normalizedFieldDef)
+    }
+
+    initialFieldDefinitions[id] = normalizedFieldDef as unknown as FieldDefinition
 
     return node
   }
@@ -65,13 +71,72 @@ export interface BuildTreeProps {
   structure: StructureNode
   fieldDefinitions: ILayoutContext['fieldDefinitions']
   itemCallback?: (props: ItemCallbackProps) => ITreeElementProps['treeData'][0]
+  registry?: DynamicTypeFieldDefinitionRegistry
+}
+
+export const buildPathMap = (structure: StructureNode): Record<string, string[]> => {
+  const map: Record<string, string[]> = {}
+  const walk = (node: StructureNode, path: string[]): void => {
+    const current = [...path, node.id]
+    map[node.id] = current
+    node.children.forEach(child => { walk(child, current) })
+  }
+  walk(structure, [])
+  return map
+}
+
+export const getNamesInNamespace = (
+  structure: StructureNode,
+  fieldDefinitions: Record<string, FieldDefinition>,
+  targetId: string,
+  pathMap: Record<string, string[]>,
+  registry: DynamicTypeFieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+): string[] => {
+  const isOpener = (id: string): boolean => {
+    const def = fieldDefinitions[id]
+    if (def === undefined) return false
+    return registry.getDynamicType(def.fieldtype, false)?.opensNamespace() ?? false
+  }
+
+  const findNode = (node: StructureNode, id: string): StructureNode | undefined => {
+    if (node.id === id) return node
+    for (const child of node.children) {
+      const found = findNode(child, id)
+      if (found !== undefined) return found
+    }
+    return undefined
+  }
+
+  // Find innermost namespace-opener ancestor (skip tree root and target itself)
+  const path = pathMap[targetId] ?? []
+  let namespaceRootId: string | undefined
+  for (const id of path.slice(1, -1)) {
+    if (isOpener(id)) namespaceRootId = id
+  }
+
+  const namespaceRoot = namespaceRootId !== undefined
+    ? findNode(structure, namespaceRootId)!
+    : structure
+
+  // Collect names, stop descending into nested namespace openers
+  const names: string[] = []
+  const collect = (node: StructureNode, isRoot: boolean): void => {
+    if (!isRoot) {
+      const name = fieldDefinitions[node.id]?.name as string | undefined
+      if (name !== undefined && name !== '') names.push(name)
+      if (isOpener(node.id)) return
+    }
+    node.children.forEach(child => { collect(child, false) })
+  }
+  collect(namespaceRoot, true)
+  return names
 }
 
 export const buildTree = (props: BuildTreeProps): ITreeElementProps['treeData'][0] => {
   const { fieldDefinitions, structure, itemCallback } = props
+  const fieldDefinitionRegistry = props.registry ?? container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildTreeItems = (node: StructureNode, parentPath: string[] = []): ITreeElementProps['treeData'][0] => {
-    const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
     const fieldDef = fieldDefinitions[node.id]
     let dynType: undefined | DynamicTypeFieldDefinitionAbstract
 

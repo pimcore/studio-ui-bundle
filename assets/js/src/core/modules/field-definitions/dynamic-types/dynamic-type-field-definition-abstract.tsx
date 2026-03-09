@@ -90,6 +90,10 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return true
   }
 
+  opensNamespace (): boolean {
+    return false
+  }
+
   abstract getDefaultData (context: FieldDefinitionContext): FieldDefinitionDataAbstract
 
   getConvertibleData (context: FieldDefinitionConvertibleContext): Partial<FieldDefinitionDataAbstract> {
@@ -98,8 +102,14 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
 
   abstract getFormFields (context: FieldDefinitionContext): React.JSX.Element
 
+  abstract getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element
+
   getAdditionalFormFields (context: FieldDefinitionContext): React.JSX.Element | null {
     return null
+  }
+
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    return fieldDef
   }
 
   protected computeValidTags (tags: string[], context: FieldDefinitionContext): string[] {

@@ -35,6 +35,8 @@ export const SearchInput = forwardRef<InputRef, ISearchInputProps>(({ className,
     className
   )
 
+  const dataTestId = props['data-testid']
+
   return (
     <Input.Search
       allowClear={ (withClear) && {
@@ -46,6 +48,7 @@ export const SearchInput = forwardRef<InputRef, ISearchInputProps>(({ className,
         )
       } }
       className={ searchClassNames }
+      data-testid={ dataTestId }
       enterButton={ !withoutAddon && (
         <Icon
           value={ searchButtonIcon }

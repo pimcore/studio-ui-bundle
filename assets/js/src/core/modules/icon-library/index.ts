@@ -18,12 +18,14 @@ import { type IconLibrary } from './services/icon-library'
 import aToZOrder from '@Pimcore/assets/icons/a-to-z-order.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import accordion from '@Pimcore/assets/icons/accordion.inline.svg?react'
+import activities from '@Pimcore/assets/icons/activities.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
 import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
+import addativPricingRules from '@Pimcore/assets/icons/addativ-pricing-rules.inline.svg?react'
 import advancedManyToManyObjectRelation from '@Pimcore/assets/icons/advanced-many-to-many-object-relation.inline.svg?react'
 import advancedManyToManyRelation from '@Pimcore/assets/icons/advanced-many-to-many-relation.inline.svg?react'
 import alertOutline from '@Pimcore/assets/icons/alert-outline.inline.svg?react'
@@ -38,6 +40,7 @@ import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import autofill from '@Pimcore/assets/icons/autofill.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
@@ -69,6 +72,7 @@ import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-ho
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
+import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
@@ -94,6 +98,7 @@ import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg?react'
+import customerAutomation from '@Pimcore/assets/icons/customer-automation.inline.svg?react'
 import customerDuplicate from '@Pimcore/assets/icons/customer-duplicate.inline.svg?react'
 import customerManagement from '@Pimcore/assets/icons/customer-management.inline.svg?react'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg?react'
@@ -148,6 +153,7 @@ import favorites from '@Pimcore/assets/icons/favorites.inline.svg?react'
 import fieldCollectionField from '@Pimcore/assets/icons/field-collection-field.inline.svg?react'
 import fieldContainer from '@Pimcore/assets/icons/field-container.inline.svg?react'
 import fieldset from '@Pimcore/assets/icons/fieldset.inline.svg?react'
+import fileCheck03 from '@Pimcore/assets/icons/file-check-03.inline.svg?react'
 import fileExport from '@Pimcore/assets/icons/file-export.inline.svg?react'
 import fileLocked from '@Pimcore/assets/icons/file-locked.inline.svg?react'
 import filter from '@Pimcore/assets/icons/filter.inline.svg?react'
@@ -181,6 +187,7 @@ import imageThumbnailClear from '@Pimcore/assets/icons/image-thumbnail-clear.inl
 import imageThumbnail from '@Pimcore/assets/icons/image-thumbnail.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
 import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
+import importIcon from '@Pimcore/assets/icons/import.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
@@ -194,6 +201,7 @@ import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageOverview from '@Pimcore/assets/icons/language-overview.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import lastRulePricingRules from '@Pimcore/assets/icons/last-rule-pricing-rules.inline.svg?react'
 import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
@@ -250,6 +258,7 @@ import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline
 import numberField from '@Pimcore/assets/icons/number-field.inline.svg?react'
 import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
+import objectBricks from '@Pimcore/assets/icons/object-bricks.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
@@ -277,6 +286,8 @@ import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.
 import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import pricingRules from '@Pimcore/assets/icons/pricing-rules.inline.svg?react'
+import printSettings from '@Pimcore/assets/icons/print-settings.inline.svg?react'
 import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import productsup from '@Pimcore/assets/icons/productsup.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
@@ -327,6 +338,7 @@ import subscriptionCommunity from '@Pimcore/assets/icons/subscription-community.
 import subscriptionEnterprise from '@Pimcore/assets/icons/subscription-enterprise.inline.svg?react'
 import substring from '@Pimcore/assets/icons/substring.inline.svg?react'
 import systemColumns from '@Pimcore/assets/icons/system-columns.inline.svg?react'
+import systemSettings from '@Pimcore/assets/icons/system-settings.inline.svg?react'
 import tabPanel from '@Pimcore/assets/icons/tab-panel.inline.svg?react'
 import table from '@Pimcore/assets/icons/table.inline.svg?react'
 import tablet from '@Pimcore/assets/icons/tablet.inline.svg?react'
@@ -335,6 +347,7 @@ import tag from '@Pimcore/assets/icons/tag.inline.svg?react'
 import targetGroup from '@Pimcore/assets/icons/target-group.inline.svg?react'
 import target from '@Pimcore/assets/icons/target.inline.svg?react'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg?react'
+import test from '@Pimcore/assets/icons/test.inline.svg?react'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg?react'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
 import thumbnailHtml from '@Pimcore/assets/icons/thumbnail-html.inline.svg?react'
@@ -342,6 +355,7 @@ import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
 import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
+import translations from '@Pimcore/assets/icons/translations.inline.svg?react'
 import trash from '@Pimcore/assets/icons/trash.inline.svg?react'
 import tree from '@Pimcore/assets/icons/tree.inline.svg?react'
 import trimmer from '@Pimcore/assets/icons/trimmer.inline.svg?react'
@@ -352,11 +366,13 @@ import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
+import upload from '@Pimcore/assets/icons/upload.inline.svg?react'
 import urlSlug from '@Pimcore/assets/icons/url-slug.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
 import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
 import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
+import videoThumbnail from '@Pimcore/assets/icons/video-thumbnail.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
@@ -385,6 +401,10 @@ moduleSystem.registerModule({
       component: accordion
     })
     iconLibrary.register({
+      name: 'activities',
+      component: activities
+    })
+    iconLibrary.register({
       name: 'add-find',
       component: addFind
     })
@@ -407,6 +427,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'add-user',
       component: addUser
+    })
+    iconLibrary.register({
+      name: 'addativ-pricing-rules',
+      component: addativPricingRules
     })
     iconLibrary.register({
       name: 'advanced-many-to-many-object-relation',
@@ -463,6 +487,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'auto-save',
       component: autoSave
+    })
+    iconLibrary.register({
+      name: 'autofill',
+      component: autofill
     })
     iconLibrary.register({
       name: 'automation-integration',
@@ -589,6 +617,10 @@ moduleSystem.registerModule({
       component: classIcon
     })
     iconLibrary.register({
+      name: 'classification-store',
+      component: classificationStore
+    })
+    iconLibrary.register({
       name: 'close-filled',
       component: closeFilled
     })
@@ -687,6 +719,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'custom-metadata',
       component: customMetadata
+    })
+    iconLibrary.register({
+      name: 'customer-automation',
+      component: customerAutomation
     })
     iconLibrary.register({
       name: 'customer-duplicate',
@@ -905,6 +941,10 @@ moduleSystem.registerModule({
       component: fieldset
     })
     iconLibrary.register({
+      name: 'file-check-03',
+      component: fileCheck03
+    })
+    iconLibrary.register({
       name: 'file-export',
       component: fileExport
     })
@@ -1037,6 +1077,10 @@ moduleSystem.registerModule({
       component: importCsv
     })
     iconLibrary.register({
+      name: 'import',
+      component: importIcon
+    })
+    iconLibrary.register({
       name: 'index-field',
       component: indexField
     })
@@ -1087,6 +1131,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'language-select',
       component: languageSelect
+    })
+    iconLibrary.register({
+      name: 'last-rule-pricing-rules',
+      component: lastRulePricingRules
     })
     iconLibrary.register({
       name: 'layout-grid-02',
@@ -1313,6 +1361,10 @@ moduleSystem.registerModule({
       component: numberType
     })
     iconLibrary.register({
+      name: 'object-bricks',
+      component: objectBricks
+    })
+    iconLibrary.register({
       name: 'open-folder',
       component: openFolder
     })
@@ -1419,6 +1471,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'preview',
       component: preview
+    })
+    iconLibrary.register({
+      name: 'pricing-rules',
+      component: pricingRules
+    })
+    iconLibrary.register({
+      name: 'print-settings',
+      component: printSettings
     })
     iconLibrary.register({
       name: 'printpage',
@@ -1621,6 +1681,10 @@ moduleSystem.registerModule({
       component: systemColumns
     })
     iconLibrary.register({
+      name: 'system-settings',
+      component: systemSettings
+    })
+    iconLibrary.register({
       name: 'tab-panel',
       component: tabPanel
     })
@@ -1653,6 +1717,10 @@ moduleSystem.registerModule({
       component: taxClass
     })
     iconLibrary.register({
+      name: 'test',
+      component: test
+    })
+    iconLibrary.register({
       name: 'text-field',
       component: textField
     })
@@ -1679,6 +1747,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'translate',
       component: translate
+    })
+    iconLibrary.register({
+      name: 'translations',
+      component: translations
     })
     iconLibrary.register({
       name: 'trash',
@@ -1721,6 +1793,10 @@ moduleSystem.registerModule({
       component: uploadZip
     })
     iconLibrary.register({
+      name: 'upload',
+      component: upload
+    })
+    iconLibrary.register({
       name: 'url-slug',
       component: urlSlug
     })
@@ -1739,6 +1815,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'vector',
       component: vector
+    })
+    iconLibrary.register({
+      name: 'video-thumbnail',
+      component: videoThumbnail
     })
     iconLibrary.register({
       name: 'video',

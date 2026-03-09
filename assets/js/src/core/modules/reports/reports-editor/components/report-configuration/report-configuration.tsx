@@ -128,6 +128,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   const renderSaveButton = (): React.JSX.Element => (
     <Portal targetId={ SAVE_BTN_PORTAL_ID }>
       <Button
+        data-testid="reports-editor-save-button"
         disabled={ !isDirty }
         loading={ isUpdatingReport }
         onClick={ handleSave }

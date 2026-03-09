@@ -11,5 +11,7 @@
 export {
   ManyToManyRelation,
   type ManyToManyRelationProps,
-  type ManyToManyRelationClassDefinitionProps
+  type ManyToManyRelationClassDefinitionProps,
+  type ManyToManyRelationValue,
+  type ManyToManyRelationValueItem
 } from '@Pimcore/components/many-to-many-relation'

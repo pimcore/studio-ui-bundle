@@ -24,6 +24,7 @@ import {
 import {
   DynamicTypesList
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
@@ -41,30 +42,34 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
-    const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount, layoutsList, setLayoutsList } = props
+    const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, fieldPath, versionId, versionCount, layoutsList, setLayoutsList } = props
 
     let currentBrickSection: null | string = null
 
-    const processObjectBrickData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle }: { data: ObjectBrickLayoutDefinition[], updatedFieldBreadcrumbTitle?: string }): IFormattedDataStructureData[] => {
+    const processObjectBrickData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, fieldPathValue = fieldPath }: { data: ObjectBrickLayoutDefinition[], updatedFieldBreadcrumbTitle?: string, fieldPathValue?: string }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.key)) currentBrickSection = dataItem.key
 
         const isItemInAllowedList = !isEmpty(currentBrickSection) ? item?.allowedTypes.includes(currentBrickSection) === true : true
+
         if (dataItem.datatype === DATATYPE_LIST.LAYOUT && isItemInAllowedList) {
           const breadcrumbField = dataItem.title ?? dataItem.name
           const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
-          return processObjectBrickData({ data: dataItem.children, updatedFieldBreadcrumbTitle: breadcrumbTitle })
+          return processObjectBrickData({ data: dataItem.children, updatedFieldBreadcrumbTitle: breadcrumbTitle, fieldPathValue })
         }
 
         if (dataItem.datatype === DATATYPE_LIST.DATA) {
           const fieldPath = `${currentBrickSection}.${dataItem?.name}`
           const fieldValue = get(fieldValueByName, fieldPath)
 
+          const getFieldPathValue = isEmptyValue(fieldPathValue) ? fieldPath : `${fieldPathValue}.${fieldPath}`
+
           return {
             fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
             fieldData: { ...dataItem },
             fieldValue,
+            fieldPath: getFieldPathValue,
             versionId,
             versionCount
           }

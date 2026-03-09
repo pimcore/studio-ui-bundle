@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type RefObject, useEffect, useImperativeHandle, useRef } from 'react'
+import React, { type RefObject, useLayoutEffect, useImperativeHandle, useRef } from 'react'
 import { Button as AntdButton, type ButtonProps as AntdButtonProps } from 'antd'
 import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'classnames'
@@ -39,7 +39,7 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
     className
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (loading === true && buttonRef.current !== null) {
       buttonRef.current.style.width = buttonRef.current.getBoundingClientRect().width + 'px'
       buttonRef.current.style.height = buttonRef.current.getBoundingClientRect().height + 'px'

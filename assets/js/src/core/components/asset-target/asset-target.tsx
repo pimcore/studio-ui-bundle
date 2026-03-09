@@ -122,7 +122,7 @@ export const AssetTarget = ({
               gap="mini"
               justify="center"
             >
-              { (addIcon === true || onUpload !== undefined) && (
+              { (addIcon === true) && (
                 <Icon
                   options={ { height: 20, width: 20 } }
                   value={ 'plus-circle' }
@@ -130,8 +130,8 @@ export const AssetTarget = ({
               )}
               { (uploadIcon === true || onUpload !== undefined) && (
                 <Icon
-                  options={ { height: 20, width: 20 } }
-                  value={ 'upload-cloud' }
+                  options={ { height: 17, width: 17 } }
+                  value={ 'upload-import' }
                 />
               )}
               { dndIcon === true && (

@@ -18,8 +18,8 @@
   "minimum-stability": "dev",
   "require": {
 	"php": "~8.3.0 || ~8.4.0",
-    "pimcore/pimcore": "^12.0",
-    "pimcore/studio-backend-bundle": "^0.13.20 || ^1.0"
+    "pimcore/pimcore": "^12.0 || ^2026.1",
+    "pimcore/studio-backend-bundle": "^0.14.19 || ^1.0"
   },
   "require-dev": {
     "codeception/codeception": "^5.0.10",
@@ -49,6 +49,9 @@
     }
   },
   "extra": {
+    "branch-alias": {
+      "dev-1.x": "2026.1.x-dev"
+    },
     "pimcore": {
       "bundles": [
         "Pimcore\\Bundle\\StudioUiBundle\\PimcoreStudioUiBundle"

@@ -8,24 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { LoadingOutlined } from '@ant-design/icons'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { Input } from '@Pimcore/components/input/input'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { Flex } from 'antd'
+import { isNil, isUndefined } from 'lodash'
+import React, { forwardRef, useEffect, useState, type MutableRefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   type ManyToOneRelationValueType
 } from './many-to-one-relation'
-import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil, isUndefined } from 'lodash'
-import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { Flex } from 'antd'
-import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
-import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
-import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { LoadingOutlined } from '@ant-design/icons'
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
-import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
 import { useStyles } from './path-target.styles'
 
 export interface PathTargetProps {
@@ -92,7 +92,7 @@ export const PathTarget = forwardRef(function PathTarget (
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
-    if (value === null) {
+    if (!isNonEmptyString(value)) {
       return undefined
     }
 
