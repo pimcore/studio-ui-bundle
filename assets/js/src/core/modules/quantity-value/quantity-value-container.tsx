@@ -104,7 +104,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
       title: <ModalTitle iconName='new'>{t('quantity-values.create-modal.title')}</ModalTitle>,
       label: t('quantity-values.create-modal.id-label'),
       rule: { required: true, message: t('quantity-values.create-modal.id-required') },
-      cancelButtonProps: { style: { display: 'none' } },
+
       onOk: async (value: string) => {
         const { success } = await onCreateUnit(value)
         if (!success) {
