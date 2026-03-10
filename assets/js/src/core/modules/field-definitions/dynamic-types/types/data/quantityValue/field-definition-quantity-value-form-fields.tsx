@@ -23,7 +23,7 @@ export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbs
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <FormKit.Panel
         border
@@ -124,6 +124,6 @@ export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbs
         <InputNumber />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

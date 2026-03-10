@@ -25,6 +25,7 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg?react'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
+import addativPricingRules from '@Pimcore/assets/icons/addativ-pricing-rules.inline.svg?react'
 import advancedManyToManyObjectRelation from '@Pimcore/assets/icons/advanced-many-to-many-object-relation.inline.svg?react'
 import advancedManyToManyRelation from '@Pimcore/assets/icons/advanced-many-to-many-relation.inline.svg?react'
 import alertOutline from '@Pimcore/assets/icons/alert-outline.inline.svg?react'
@@ -97,6 +98,7 @@ import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg?react'
+import customerAutomation from '@Pimcore/assets/icons/customer-automation.inline.svg?react'
 import customerDuplicate from '@Pimcore/assets/icons/customer-duplicate.inline.svg?react'
 import customerManagement from '@Pimcore/assets/icons/customer-management.inline.svg?react'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg?react'
@@ -199,6 +201,7 @@ import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageOverview from '@Pimcore/assets/icons/language-overview.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import lastRulePricingRules from '@Pimcore/assets/icons/last-rule-pricing-rules.inline.svg?react'
 import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import linkDocument from '@Pimcore/assets/icons/link-document.inline.svg?react'
@@ -283,6 +286,7 @@ import portalEngineIndex from '@Pimcore/assets/icons/portal-engine-index.inline.
 import portalEngineWizard from '@Pimcore/assets/icons/portal-engine-wizard.inline.svg?react'
 import presentation from '@Pimcore/assets/icons/presentation.inline.svg?react'
 import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
+import pricingRules from '@Pimcore/assets/icons/pricing-rules.inline.svg?react'
 import printSettings from '@Pimcore/assets/icons/print-settings.inline.svg?react'
 import printpage from '@Pimcore/assets/icons/printpage.inline.svg?react'
 import productsup from '@Pimcore/assets/icons/productsup.inline.svg?react'
@@ -423,6 +427,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'add-user',
       component: addUser
+    })
+    iconLibrary.register({
+      name: 'addativ-pricing-rules',
+      component: addativPricingRules
     })
     iconLibrary.register({
       name: 'advanced-many-to-many-object-relation',
@@ -711,6 +719,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'custom-metadata',
       component: customMetadata
+    })
+    iconLibrary.register({
+      name: 'customer-automation',
+      component: customerAutomation
     })
     iconLibrary.register({
       name: 'customer-duplicate',
@@ -1121,6 +1133,10 @@ moduleSystem.registerModule({
       component: languageSelect
     })
     iconLibrary.register({
+      name: 'last-rule-pricing-rules',
+      component: lastRulePricingRules
+    })
+    iconLibrary.register({
       name: 'layout-grid-02',
       component: layoutGrid02
     })
@@ -1455,6 +1471,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'preview',
       component: preview
+    })
+    iconLibrary.register({
+      name: 'pricing-rules',
+      component: pricingRules
     })
     iconLibrary.register({
       name: 'print-settings',

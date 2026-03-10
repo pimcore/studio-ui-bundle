@@ -92,7 +92,7 @@ export const PathTarget = forwardRef(function PathTarget (
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
-    if (!isNonEmptyString(value)) {
+    if (isNil(value)) {
       return undefined
     }
 

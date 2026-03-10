@@ -11,6 +11,8 @@
 import { Button } from '@Pimcore/components/button/button'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
@@ -20,22 +22,16 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Icon } from '../../../../components/icon/icon'
 
-export interface IAdditionalLogins {
-  key: string
-  name: string
-  link: string
-}
-
 interface ILoginFormProps {
-  additionalLogins?: IAdditionalLogins[]
   onPasswordForgotten?: () => void
 }
 
-export const LoginForm = ({ additionalLogins, onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
+export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
   const dispatch = useDispatch()
   const { styles } = useStyle()
   const messageApi = useMessage()
   const { t } = useTranslation()
+  const [hideCredentialsForm, setHideCredentialsForm] = useState<boolean>(false)
 
   const [formState, setFormState] = useState<Credentials>({
     username: '',
@@ -80,6 +76,7 @@ export const LoginForm = ({ additionalLogins, onPasswordForgotten }: ILoginFormP
 
   return (
     <div className={ styles.form }>
+      {!hideCredentialsForm && (
       <form onSubmit={ handleAuthentication }>
         <Input
           aria-label={ t('login-form.username') }
@@ -119,23 +116,12 @@ export const LoginForm = ({ additionalLogins, onPasswordForgotten }: ILoginFormP
           {t('login-form.login')}
         </Button>
       </form>
-
-      {Array.isArray(additionalLogins) && (
-        <div className={ 'login__additional-logins' }>
-          <p>{t('login-form-additional-logins.or')}</p>
-
-          {additionalLogins?.map((login) => (
-            <Button
-              aria-label={ `${t('aria.login-form-additional-logins.additional-login-provider')} ${login.name}` }
-              href={ login.link }
-              key={ login.key }
-              type={ 'primary' }
-            >
-              {login.name}
-            </Button>
-          ))}
-        </div>
       )}
+
+      <SlotRenderer
+        props={ { onHideCredentialsForm: setHideCredentialsForm } }
+        slot={ componentConfig.form.login.name }
+      />
     </div>
   )
 }

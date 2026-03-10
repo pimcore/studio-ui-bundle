@@ -9,14 +9,14 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, Input, InputNumber } from '@sdk/components'
 import React from 'react'
 import { t } from 'i18next'
 import { Select } from 'antd'
 
 export const FieldDefinitionFieldContainerFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   return (
-    <FormKit.Panel contentPadding={ { y: 'none', x: 'small' } }>
+    <>
       <Form.Item
         label={ t('label') }
         name="fieldLabel"
@@ -57,6 +57,6 @@ export const FieldDefinitionFieldContainerFormFields = (props: FieldDefinitionAb
           ] }
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

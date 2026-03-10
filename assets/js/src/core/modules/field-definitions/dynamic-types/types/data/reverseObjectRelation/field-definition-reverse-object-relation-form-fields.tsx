@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
+import { Form, Input, Select, Switch } from '@sdk/components'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
@@ -27,9 +27,10 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
   const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
+  const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
-  const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
+  const { options: ownerFieldNameOptions, isLoading: isLoadingOwnerFieldName } = useClassRelationFieldsOptions(ownerClassName)
   const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions([ownerClassName ?? ''])
 
   useEffect(() => {
@@ -46,82 +47,93 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
     }
   }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
 
-  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
+  useEffect(() => {
+    if (isLoadingOwnerFieldName) {
+      return
+    }
+
+    const availableFieldValues = new Set<string>(ownerFieldNameOptions.map((option) => option.value))
+
+    if (ownerFieldName !== undefined && !availableFieldValues.has(ownerFieldName)) {
+      form.setFieldValue('ownerFieldName', undefined)
+    }
+  }, [ownerFieldNameOptions, isLoadingOwnerFieldName, ownerFieldName, form])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields || isLoadingOwnerFieldName
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
-      <>
-        <Form.Item name="allowToCreateNewObject">
-          <Switch labelRight={ t('allow-to-create-new-object') } />
-        </Form.Item>
+    <>
+      <Form.Item name="allowToCreateNewObject">
+        <Switch labelRight={ t('allow-to-create-new-object') } />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('path-formatter-service') }
-          name="pathFormatterClass"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('path-formatter-service') }
+        name="pathFormatterClass"
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('owner-class') }
-          name="ownerClassName"
-        >
-          <Select
-            loadingSkeleton={ isLoadingClassOptions }
-            options={ classOptions }
-            showSearch
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('owner-class') }
+        name="ownerClassName"
+      >
+        <Select
+          loadingSkeleton={ isLoadingClassOptions }
+          options={ classOptions }
+          showSearch
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('owner-field-name') }
-          name="ownerFieldName"
-        >
-          <Select
-            options={ ownerFieldNameOptions }
-            showSearch
-          />
-        </Form.Item>
-        <Form.Item
-          { ...relationSelectFormItemTransformation('visibleFields') }
-          getValueFromEvent={ (value: string[]) => value.join(',') }
-          getValueProps={ (value: string | string[]) => ({
-            value: isString(value) ? value.split(',').filter(Boolean) : value
-          }) }
-          label={ t('visible-fields') }
-          name="visibleFields"
-        >
-          <Select
-            loadingSkeleton={ isLoading }
-            mode="multiple"
-            options={ visibleFieldsOptions }
-            showSearch
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('owner-field-name') }
+        name="ownerFieldName"
+      >
+        <Select
+          loadingSkeleton={ isLoadingOwnerFieldName }
+          options={ ownerFieldNameOptions }
+          showSearch
+        />
+      </Form.Item>
+      <Form.Item
+        { ...relationSelectFormItemTransformation('visibleFields') }
+        getValueFromEvent={ (value: string[]) => value.join(',') }
+        getValueProps={ (value: string | string[]) => ({
+          value: isString(value) ? value.split(',').filter(Boolean) : value
+        }) }
+        label={ t('visible-fields') }
+        name="visibleFields"
+      >
+        <Select
+          loadingSkeleton={ isLoading }
+          mode="multiple"
+          options={ visibleFieldsOptions }
+          showSearch
+        />
+      </Form.Item>
 
-        <Form.Item
-          name="optimizedAdminLoading"
-          tooltip={ t('enable-async-load-in-admin-tooltip') }
-        >
-          <Switch labelRight={ t('enable-async-load-in-admin') } />
-        </Form.Item>
-      </>
-    </FormKit.Panel>
+      <Form.Item
+        name="optimizedAdminLoading"
+        tooltip={ t('enable-async-load-in-admin-tooltip') }
+      >
+        <Switch labelRight={ t('enable-async-load-in-admin') } />
+      </Form.Item>
+    </>
   )
 }

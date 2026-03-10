@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, InputNumber, Switch } from '@sdk/components'
+import { Form, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,7 +18,7 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
       <>
         <Form.Item
@@ -44,6 +44,6 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
         </Form.Item>
       </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

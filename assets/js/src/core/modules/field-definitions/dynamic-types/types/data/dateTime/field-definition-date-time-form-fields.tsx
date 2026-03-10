@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Switch, Select, DatePicker } from '@sdk/components'
+import { Form, Input, Switch, Select, DatePicker } from '@sdk/components'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -28,7 +28,7 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
   }, [useCurrentDate, useRespectTimezone, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <Form.Item
         label={ t('default-value') }
@@ -69,6 +69,6 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
           ] }
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

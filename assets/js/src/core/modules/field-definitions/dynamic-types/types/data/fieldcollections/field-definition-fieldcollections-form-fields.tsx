@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useFieldCollectionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-field-collection-options'
-import { Form, FormKit, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, InputNumber, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,7 +20,7 @@ export const FieldDefinitionFieldcollectionsFormFields = (props: FieldDefinition
   const { options: fieldCollectionOptions, isLoading } = useFieldCollectionOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('allowed-types') }
@@ -56,6 +56,6 @@ export const FieldDefinitionFieldcollectionsFormFields = (props: FieldDefinition
       <Form.Item name="disallowReorder">
         <Switch labelRight={ t('disallow-reorder') } />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

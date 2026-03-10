@@ -21,6 +21,33 @@ export const useStyles = createStyles(({ css, token }) => {
       .virtual-item__tooltip {
         opacity: 0.6;
       }
+
+      .virtual-item__explain {
+        min-height: ${token.controlHeightSM}px;
+        padding-top: ${token.paddingXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+      }
+
+      .virtual-item__explain--error {
+        color: ${token.colorError};
+      }
+
+      .virtual-item__explain--warning {
+        color: ${token.colorWarning};
+      }
+
+      &.virtual-item--error {
+        .virtual-item__label label {
+          color: ${token.colorError};
+        }
+      }
+
+      &.virtual-item--warning {
+        .virtual-item__label label {
+          color: ${token.colorWarning};
+        }
+      }
     `
   }
 })

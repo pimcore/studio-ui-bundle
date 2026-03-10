@@ -16,19 +16,21 @@ import { useTranslation } from 'react-i18next'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
-interface SelectOption {
+export interface SelectOption {
   key: string
   value: string
 }
 
-interface FieldDefinitionSelectOptionsGridProps {
+export interface FieldDefinitionSelectOptionsGridProps {
   value?: SelectOption[]
   onChange?: (value: SelectOption[]) => void
+  className?: string
+  autoWidth?: boolean
 }
 
 const columnHelper = createColumnHelper<SelectOption>()
 
-const useColumns = (value: SelectOption[], onChange?: (value: SelectOption[]) => void): Array<ColumnDef<SelectOption, any>> => {
+const useColumns = (value: SelectOption[], onChange?: (value: SelectOption[]) => void, autoWidth?: boolean): Array<ColumnDef<SelectOption, any>> => {
   const { t } = useTranslation()
 
   return useMemo(() => [
@@ -66,15 +68,15 @@ const useColumns = (value: SelectOption[], onChange?: (value: SelectOption[]) =>
       id: 'actions',
       size: 70
     })
-  ], [t, value, onChange])
+  ], [t, value, onChange, autoWidth])
 }
 
-export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
+export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, className, autoWidth }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const columns = useColumns(value, onChange)
+  const columns = useColumns(value, onChange, autoWidth)
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
@@ -116,6 +118,8 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange }: Field
 
   return (
     <OperationalGrid
+      autoWidth={ autoWidth }
+      className={ className }
       columns={ columns }
       enableRowDrag
       enableRowSelection

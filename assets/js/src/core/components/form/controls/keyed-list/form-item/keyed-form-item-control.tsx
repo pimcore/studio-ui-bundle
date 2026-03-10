@@ -27,7 +27,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   const { getValueFromEvent } = props
 
   const { operations, getAdditionalComponentProps } = useKeyedList()
-  const { name, initialValue } = useItem()
+  const { name, initialValue, validationState, onValidate, onUpdateCurrentValue } = useItem()
 
   const Child = useMemo(() => Children.only(children), [children])
   const value = operations.getValue(name)
@@ -53,13 +53,22 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }, [name])
+
+    if (onUpdateCurrentValue !== undefined) {
+      onUpdateCurrentValue(changedValue)
+    }
+
+    if (onValidate !== undefined) {
+      void onValidate(changedValue)
+    }
+  }, [name, onValidate, onUpdateCurrentValue])
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')
   }
 
   const Component = Child.type
+  const validateStatus = validationState?.validateStatus
 
   return useMemo(() => (
     <Component
@@ -67,7 +76,8 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       { ...props }
       { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
+      status={ validateStatus === 'error' || validateStatus === 'warning' ? validateStatus : undefined }
       value={ cachedValue }
     />
-  ), [Child, props, cachedValue, onChange, getAdditionalComponentProps, name])
+  ), [Child, props, cachedValue, onChange, getAdditionalComponentProps, name, validateStatus])
 }

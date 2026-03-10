@@ -64,9 +64,11 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
       </Form.Item>
       )}
 
-      <Form.Item name="noteditable">
-        <Switch labelRight={ t('not-editable') } />
-      </Form.Item>
+      {props.context.hideNotEditable !== true && (
+        <Form.Item name="noteditable">
+          <Switch labelRight={ t('not-editable') } />
+        </Form.Item>
+      )}
 
       <Form.Item name="invisible">
         <Switch labelRight={ t('invisible') } />
