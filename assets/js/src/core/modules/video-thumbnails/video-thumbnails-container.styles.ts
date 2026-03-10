@@ -12,9 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    container: css`
-      height: 100%;
-      overflow: auto;
+    emptyState: css`
+      text-align: center;
+      color: ${token.colorTextDisabled};
+      margin-top: 50px;
     `
   }
 })

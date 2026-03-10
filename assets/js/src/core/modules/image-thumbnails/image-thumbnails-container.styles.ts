@@ -7,14 +7,3 @@
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
  *  @license    Pimcore Open Core License (POCL)
  */
-
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    container: css`
-      height: 100%;
-      overflow: auto;
-    `
-  }
-})
