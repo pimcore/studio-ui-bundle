@@ -17,7 +17,7 @@ export type SelectOptionType = DefaultOptionType & {
 
 export interface SelectOptionsConfig {
   options?: string[] | SelectOptionType[]
-  optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
 }
 
 export const resolveOptions = (
@@ -26,8 +26,8 @@ export const resolveOptions = (
 ): { isLoading: boolean, options: SelectOptionType[] } => {
   const emptyResult = { isLoading: false, options: [] }
 
-  if (!isUndefined(config.optionsUseHook)) {
-    const useHookResult = config.optionsUseHook(fieldName)
+  if (!isUndefined(config.useOptionsHook)) {
+    const useHookResult = config.useOptionsHook(fieldName)
     if (isUndefined(useHookResult)) {
       return emptyResult
     }

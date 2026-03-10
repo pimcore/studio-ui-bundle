@@ -1363,6 +1363,7 @@ navigation.data-model-definitions: Data Model Definitions
 navigation.class-definitions: Classes
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
+navigation.quantity-values: Quantity Values
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
@@ -1458,6 +1459,7 @@ widget.user-management: Users
 widget.class-definitions: Classes
 widget.field-collections: Field Collections
 widget.object-bricks: Object Bricks
+widget.quantity-values: Quantity Values
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
 widget.video-thumbnails: Video Thumbnails
@@ -2435,9 +2437,26 @@ rendering-class: Custom rendering class
 rendering-data: Data Passed to render
 zoom-level: Zoom level
 class: Class
-layout.text.help: 'You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>'
+layout.text.help: "You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>"
 configuration: Configuration
 drag-object-for-preview: Drag object for preview
+quantity-values.new: New
+quantity-values.columns.id: ID
+quantity-values.columns.abbreviation: Abbreviation
+quantity-values.columns.long-name: Long Name
+quantity-values.columns.base-unit: Base Unit
+quantity-values.columns.factor: Conversion Factor
+quantity-values.columns.conversion-offset: Conversion Offset
+quantity-values.columns.converter: Converter Service
+quantity-values.columns.actions: Actions
+quantity-values.create-modal.title: Create Quantity Value Unit
+quantity-values.create-modal.id-label: Unique identifier
+quantity-values.create-modal.id-placeholder: "e.g. km, kg, ..."
+quantity-values.create-modal.id-required: Unique identifier is required
+quantity-values.create-modal.create: Create
+quantity-values.export: Export
+quantity-values.import: Import
+quantity-values.import-modal.title: Import Quantity Value Units
 owner: Owner
 reverse-object-relation.tooltip: "Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored."
 disabled-fields: Disabled fields

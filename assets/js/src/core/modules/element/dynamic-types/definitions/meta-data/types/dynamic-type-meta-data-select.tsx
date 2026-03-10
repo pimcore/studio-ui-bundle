@@ -33,7 +33,7 @@ export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
     const config: SelectCellConfig = {
-      optionsUseHook: useMetadataSelectOptions,
+      useOptionsHook: useMetadataSelectOptions,
       fieldName: String(props.cell.row.original.name ?? props.column.columnDef.meta?.columnKey)
     }
 
@@ -41,6 +41,6 @@ export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
   }
 
   getVersionPreviewComponent (data: { path: string, key: string }): JSX.Element {
-    return <span>{ data.path }{ data.key }</span>
+    return <span>{data.path}{data.key}</span>
   }
 }
