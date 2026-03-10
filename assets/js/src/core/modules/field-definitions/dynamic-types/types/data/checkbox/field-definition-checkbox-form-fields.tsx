@@ -35,9 +35,9 @@ export const FieldDefinitionCheckboxFormFields = (props: FieldDefinitionAbstract
           >
             <Select
               options={ [
-                { label: t('empty'), value: 'empty' },
-                { label: t('no'), value: 0 },
-                { label: t('yes'), value: 1 }
+                { label: t('null'), value: 'empty' },
+                { label: t('false'), value: 0 },
+                { label: t('true'), value: 1 }
               ] }
             />
           </Form.Item>
