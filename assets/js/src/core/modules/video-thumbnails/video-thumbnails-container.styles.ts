@@ -14,7 +14,7 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
       height: 100%;
-      overflow: hidden;
+      overflow: auto;
     `
   }
 })

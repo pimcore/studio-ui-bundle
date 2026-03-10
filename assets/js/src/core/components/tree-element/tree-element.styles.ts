@@ -19,6 +19,8 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
   return {
     treeContainer: css`
       .ant-tree-list-holder-inner {
+        min-width: fit-content;
+
         & > .ant-tree-treenode {
           .ant-tree-switcher {
             width: ${props.hasRoot === true ? '24px' : '0'};
@@ -132,6 +134,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         }
 
         .ant-tree-treenode {
+          white-space: nowrap;
           padding: 0 ${token.paddingXS}px;
           position: relative;
           margin-bottom: 0;
