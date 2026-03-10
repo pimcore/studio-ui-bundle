@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next'
 import { uuid } from '@sdk/utils'
 import { type QuantityValueUnitRow, useQuantityValueUnit } from './hooks/use-quantity-value-unit'
 import { isUndefined } from 'lodash'
-import { CreateUnitModal } from './components/create-unit-modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { downloadFile } from '../app/utils/download'
 import { ImportModal } from '@Pimcore/components/import-modal'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -31,6 +32,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 export const QuantityValueContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { createUnit, createLoading } = useQuantityValueUnit()
+  const modal = useFormModal()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -60,7 +62,6 @@ export const QuantityValueContainer = (): React.JSX.Element => {
   }
 
   const [quantityValueUnitRows, setQuantityValueUnitRows] = useState<QuantityValueUnitRow[]>([])
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
 
   const items = data?.items
@@ -98,6 +99,21 @@ export const QuantityValueContainer = (): React.JSX.Element => {
     handleRefetch()
   }
 
+  const openCreateModal = (): void => {
+    modal.input({
+      title: <ModalTitle iconName='new'>{t('quantity-values.create-modal.title')}</ModalTitle>,
+      label: t('quantity-values.create-modal.id-label'),
+      rule: { required: true, message: t('quantity-values.create-modal.id-required') },
+      cancelButtonProps: { style: { display: 'none' } },
+      onOk: async (value: string) => {
+        const { success } = await onCreateUnit(value)
+        if (!success) {
+          return Promise.reject(new Error('Failed to create unit'))
+        }
+      }
+    })
+  }
+
   return (
     <ContentLayout
       renderToolbar={
@@ -105,23 +121,22 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           <Flex
             align='center'
             justify='start'
-            style={ { width: '100%', height: '100%' } }
           >
             <div>
               <IconTextButton
-                disabled={ isFetching || exportLoading || quantityValueUnitRows.length < 1 }
-                icon={ { value: 'download' } }
-                loading={ exportLoading }
-                onClick={ handleExport }
-                type={ 'link' }
+                disabled={isFetching || exportLoading || quantityValueUnitRows.length < 1}
+                icon={{ value: 'download' }}
+                loading={exportLoading}
+                onClick={handleExport}
+                type={'link'}
               >
                 {t('quantity-values.export')}
               </IconTextButton>
               <IconTextButton
-                disabled={ isFetching }
-                icon={ { value: 'upload-import' } }
-                onClick={ () => { setIsImportModalOpen(true) } }
-                type={ 'link' }
+                disabled={isFetching}
+                icon={{ value: 'upload-import' }}
+                onClick={() => { setIsImportModalOpen(true) }}
+                type={'link'}
               >
                 {t('quantity-values.import')}
               </IconTextButton>
@@ -132,85 +147,80 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               <Split>
                 <Flex align='center'>
                   <IconButton
-                    disabled={ isFetching }
-                    icon={ { value: 'refresh' } }
-                    onClick={ handleRefetch }
+                    disabled={isFetching}
+                    icon={{ value: 'refresh' }}
+                    onClick={handleRefetch}
                     variant='minimal'
                   />
                 </Flex>
                 <Pagination
-                  current={ currentPage }
-                  onChange={ handlePageChange }
+                  current={currentPage}
+                  onChange={handlePageChange}
                   showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ totalItems }
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={totalItems}
                 />
               </Split>
-              )
+            )
             : (
               <Flex align='center'>
                 <IconButton
-                  disabled={ isFetching }
-                  icon={ { value: 'refresh' } }
-                  onClick={ handleRefetch }
+                  disabled={isFetching}
+                  icon={{ value: 'refresh' }}
+                  onClick={handleRefetch}
                 />
               </Flex>
-              )}
-        </Toolbar> }
+            )}
+        </Toolbar>}
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title>{t('widget.quantity-values')}</Title>
             <IconTextButton
-              disabled={ isLoading || createLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ () => { setIsCreateModalOpen(true) } }
+              disabled={isLoading || createLoading}
+              icon={{ value: 'new' }}
+              loading={createLoading}
+              onClick={openCreateModal}
             >{t('quantity-values.new')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading || isFetching }
-        margin={ {
+        loading={isLoading || isFetching}
+        margin={{
           x: 'extra-small',
           y: 'none'
-        } }
-        none={ isUndefined(items) || items.length === 0 }
+        }}
+        none={isUndefined(items) || items.length === 0}
       >
         <Box
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
           <Table
-            quantityValueUnitRows={ quantityValueUnitRows }
-            setQuantityValueUnitRows={ setQuantityValueUnitRows }
+            quantityValueUnitRows={quantityValueUnitRows}
+            setQuantityValueUnitRows={setQuantityValueUnitRows}
           />
         </Box>
       </Content>
-      <CreateUnitModal
-        createUnit={ onCreateUnit }
-        open={ isCreateModalOpen }
-        setOpen={ setIsCreateModalOpen }
-      />
       <ImportModal
         accept=".json,application/json"
-        acceptMimeTypes={ ['application/json'] }
-        action={ `${getPrefix()}/unit/quantity-value/units/import` }
-        onOpenChange={ setIsImportModalOpen }
-        onUploadSuccess={ handleImportSuccess }
-        open={ isImportModalOpen }
-        title={ t('quantity-values.import-modal.title') }
+        acceptMimeTypes={['application/json']}
+        action={`${getPrefix()}/unit/quantity-value/units/import`}
+        onOpenChange={setIsImportModalOpen}
+        onUploadSuccess={handleImportSuccess}
+        open={isImportModalOpen}
+        title={t('quantity-values.import-modal.title')}
       />
     </ContentLayout>
   )
