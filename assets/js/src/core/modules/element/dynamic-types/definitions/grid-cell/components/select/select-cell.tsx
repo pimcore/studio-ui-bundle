@@ -21,6 +21,7 @@ export interface SelectCellConfig {
   options?: string[] | SelectOptionType[]
   optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
+  allowClear?: boolean
 }
 
 export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
@@ -66,6 +67,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   return (
     <div className={ [styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ') }>
       <Select
+        allowClear={ config.allowClear ?? false }
         onBlur={ disableEditMode }
         onChange={ onChange }
         open={ open }
@@ -77,8 +79,8 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
     </div>
   )
 
-  function onChange (value: string): void {
-    fireOnUpdateCellDataEvent(value)
+  function onChange (value: string | undefined): void {
+    fireOnUpdateCellDataEvent(value ?? null)
     disableEditMode()
   }
 }
