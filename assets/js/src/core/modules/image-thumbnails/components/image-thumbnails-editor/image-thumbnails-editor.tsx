@@ -86,7 +86,7 @@ export const ImageThumbnailsEditor = ({ selectedThumbnail, isActive = true, onCh
       const formData: ThumbnailFormData = {
         name: (configData.settings.name === '' ? '' : configData.settings.name) ?? '',
         description: configData.settings.description ?? '',
-        format: (configData.settings.format === '' ? 'auto' : configData.settings.format) ?? 'auto',
+        format: (['', 'source'].includes((configData.settings.format ?? '').toLowerCase()) ? 'auto' : configData.settings.format) ?? 'auto',
         group: configData.settings.group ?? '',
         quality: (configData.settings.quality === 0 ? 85 : configData.settings.quality) ?? 85,
         highResolution: configData.settings.highResolution ?? null,

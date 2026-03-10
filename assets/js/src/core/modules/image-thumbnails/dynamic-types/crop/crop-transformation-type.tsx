@@ -16,6 +16,8 @@ import { CropTransformationComponent } from './crop-transformation-component'
 export interface CropTransformationConfig {
   width?: number
   height?: number
+  x?: number
+  y?: number
 }
 
 @injectable()

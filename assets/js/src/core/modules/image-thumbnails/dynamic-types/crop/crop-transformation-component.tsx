@@ -32,6 +32,20 @@ export const CropTransformationComponent: TransformationComponent = () => {
       >
         <InputNumber />
       </Form.Item>
+      <Form.Item
+        initialValue={ 0 }
+        label="X"
+        name="x"
+      >
+        <InputNumber />
+      </Form.Item>
+      <Form.Item
+        initialValue={ 0 }
+        label="Y"
+        name="y"
+      >
+        <InputNumber />
+      </Form.Item>
     </Flex>
   )
 }
