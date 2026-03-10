@@ -661,7 +661,7 @@ options-provider-class: "Options Provider Class or Service Name"
 options-provider-data: "Options Provider Data"
 switch-to-selection-mode: Switch to selection mode
 switch-to-drag-mode: Switch to drag mode
-selection-options: Selection Options
+select-options: Select Options
 value: Value
 display-name: Display Name
 default-values-settings: Default value settings
@@ -751,7 +751,7 @@ visible-fields: Visible fields
 enable-text-selection: Enable text selection
 allow-to-create-new-object: Allow to create a new object in relation field
 enable-async-load-in-admin: Enable async load in admin
-enable-async-load-in-admin-tooltip: This is especially useful for many relations, it increases performance in the admin interface.
+enable-async-load-in-admin-tooltip: "WARNING: Async Loading is NOT possible within Localized Fields and Blocks."
 path-formatter-service: "Formatter Service / Class"
 allow-to-clear-relation: Allow to clear relations of this field
 allow-multiple-assignments: Allow multiple assignments
@@ -1754,6 +1754,7 @@ link.accesskey: Accesskey
 link.rel: Relation
 link.tabindex: Tabindex
 link.class: Class
+link.attributes: Attributes
 crop: Crop
 crop.remove: Remove Crop
 hotspots-markers-modal.edit-button: Add & Edit data
@@ -2456,3 +2457,7 @@ quantity-values.create-modal.create: Create
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Import Quantity Value Units
+owner: Owner
+reverse-object-relation.tooltip: "Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored."
+disabled-fields: Disabled fields
+allowed-targets: Allowed Targets

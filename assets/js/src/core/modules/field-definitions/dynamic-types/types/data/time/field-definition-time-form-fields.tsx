@@ -20,6 +20,7 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
   function resetMinMax (): void {
     form.setFieldValue('minValue', null, { triggerChange: true })
     form.setFieldValue('maxValue', null, { triggerChange: true })
+    form.setFieldValue('increment', 15, { triggerChange: true })
   }
 
   return (
@@ -32,19 +33,19 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
         <Input />
       </Form.Item>
 
-      <Form.Item
-        initialValue={ 15 }
-        label={ t('increment') }
-        name="increment"
-      >
-        <InputNumber />
-      </Form.Item>
-
       <FormKit.Panel
         border
         theme="fieldset"
         title={ t('min-max-settings') }
       >
+
+        <Form.Item
+          label={ t('increment-step') }
+          name="increment"
+        >
+          <InputNumber />
+        </Form.Item>
+
         <Form.Item
           label={ t('min-value') }
           name="minValue"
