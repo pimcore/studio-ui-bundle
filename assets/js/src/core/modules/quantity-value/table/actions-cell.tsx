@@ -40,9 +40,9 @@ export const ActionsCell = ({ info, setQuantityValueUnitRows }: ActionsCellProps
       justify="center"
     >
       <IconButton
-        icon={{ value: 'trash' }}
-        loading={deleteLoading}
-        onClick={handleDelete}
+        icon={ { value: 'trash' } }
+        loading={ deleteLoading }
+        onClick={ handleDelete }
         type="link"
       />
     </Flex>

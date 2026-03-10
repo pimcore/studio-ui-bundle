@@ -39,7 +39,7 @@ export const useQuantityValueUnit = (): UseQuantityValueUnitReturn => {
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to create Unit'))
     }
     return { success: false }
@@ -49,7 +49,7 @@ export const useQuantityValueUnit = (): UseQuantityValueUnitReturn => {
     try {
       const result = await deleteUnitMutation({ id })
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to delete Unit'))
       return { success: false }
     }
@@ -69,7 +69,7 @@ export const useQuantityValueUnit = (): UseQuantityValueUnitReturn => {
     try {
       const result = await updateUnitMutation({ id, updateUnitParameters: toApiUnit(row) })
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to update Unit'))
       return { success: false }
     }

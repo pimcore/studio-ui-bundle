@@ -22,7 +22,7 @@ import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/li
 
 export interface MultiSelectCellConfig {
   options?: string[] | SelectOptionType[]
-  optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
   [META_SUPPORTS_BATCH_APPEND_MODE]?: boolean
 }
@@ -46,7 +46,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const optionsResult = !isNil(config) ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
   if (optionsResult.isLoading) {
     return (
-      <div className={ [styles['multi-select-cell'], 'default-cell__content'].join(' ') }>
+      <div className={[styles['multi-select-cell'], 'default-cell__content'].join(' ')}>
         <Spin type="classic" />
       </div>
     )
@@ -56,7 +56,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const value: [] = Array.isArray(getValue()) ? getValue() : []
 
   if (config === undefined) {
-    return <>{ value.join(', ') }</>
+    return <>{value.join(', ')}</>
   }
 
   const displayOptions = value.map((_value: string) => {
@@ -68,32 +68,32 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   if (!isInEditMode) {
     return (
-      <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
-        { displayValue }
+      <div className={cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell'])}>
+        {displayValue}
       </div>
     )
   }
 
   return (
-    <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
+    <div className={cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell'])}>
       <Select
         mode="multiple"
-        onBlur={ disableEditMode }
-        onChange={ onChange }
-        open={ open }
-        options={ options }
-        popupMatchSelectWidth={ false }
-        ref={ element }
-        value={ value }
+        onBlur={disableEditMode}
+        onChange={onChange}
+        open={open}
+        options={options}
+        popupMatchSelectWidth={false}
+        ref={element}
+        value={value}
       />
     </div>
   )
 
-  function onChange (value: string): void {
+  function onChange(value: string): void {
     const meta = config?.[META_SUPPORTS_BATCH_APPEND_MODE] === true
       ? {
-          [META_SUPPORTS_BATCH_APPEND_MODE]: true
-        }
+        [META_SUPPORTS_BATCH_APPEND_MODE]: true
+      }
       : undefined
     fireOnUpdateCellDataEvent(value, meta)
   }

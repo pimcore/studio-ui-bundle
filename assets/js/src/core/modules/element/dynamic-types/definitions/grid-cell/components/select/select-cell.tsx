@@ -19,7 +19,7 @@ import { resolveOptions, type SelectOptionType } from '../../utils/select-option
 
 export interface SelectCellConfig {
   options?: string[] | SelectOptionType[]
-  optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
   allowClear?: boolean
 }
@@ -46,7 +46,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const optionsResult = resolveOptions(config, config.fieldName ?? String(props.column.columnDef.meta?.columnKey))
   if (optionsResult.isLoading) {
     return (
-      <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+      <div className={[styles['select-cell'], 'default-cell__content'].join(' ')}>
         <Spin type="classic" />
       </div>
     )
@@ -58,28 +58,28 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   if (!isInEditMode) {
     return (
-      <div className={ [styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ') }>
-        { displayValue }
+      <div className={[styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ')}>
+        {displayValue}
       </div>
     )
   }
 
   return (
-    <div className={ [styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ') }>
+    <div className={[styles['select-cell'], 'default-cell__content', 'default-cell__content--padded'].join(' ')}>
       <Select
-        allowClear={ config.allowClear ?? false }
-        onBlur={ disableEditMode }
-        onChange={ onChange }
-        open={ open }
-        options={ options }
-        popupMatchSelectWidth={ false }
-        ref={ element }
-        value={ getValue() }
+        allowClear={config.allowClear ?? false}
+        onBlur={disableEditMode}
+        onChange={onChange}
+        open={open}
+        options={options}
+        popupMatchSelectWidth={false}
+        ref={element}
+        value={getValue()}
       />
     </div>
   )
 
-  function onChange (value: string | undefined): void {
+  function onChange(value: string | undefined): void {
     fireOnUpdateCellDataEvent(value ?? null)
     disableEditMode()
   }

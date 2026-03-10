@@ -31,7 +31,7 @@ moduleSystem.registerModule({
       path: 'DataManagement/DataModelDefinitions/QuantityValues',
       label: 'navigation.quantity-values',
       className: 'item-style-modifier',
-      order: 400,
+      order: 600,
       permission: UserPermission.QuantityValues,
       perspectivePermission: NavPermission.QuantityValues,
       widgetConfig: {

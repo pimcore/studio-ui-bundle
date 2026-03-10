@@ -19,7 +19,7 @@ export const useBaseUnitSelectOptions = (): { isLoading: boolean, options: Selec
     data?.items
       ?.filter(unit => unit.id !== null)
       .map(unit => ({
-        value: unit.id as string,
+        value: unit.id!,
         label: unit.abbreviation ?? unit.id ?? ''
       })) ?? [],
   [data]

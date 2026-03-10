@@ -54,7 +54,7 @@ export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: Table
         type: 'select',
         editable: true,
         config: {
-          optionsUseHook: () => useBaseUnitSelectOptions(),
+          useOptionsHook: () => useBaseUnitSelectOptions(),
           allowClear: true
         }
       },
