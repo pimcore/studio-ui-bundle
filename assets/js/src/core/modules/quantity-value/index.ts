@@ -14,6 +14,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { QuantityValueContainer } from './quantity-value-container'
+import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -30,8 +32,10 @@ moduleSystem.registerModule({
       label: 'navigation.quantity-values',
       className: 'item-style-modifier',
       order: 400,
+      permission: UserPermission.QuantityValues,
+      perspectivePermission: NavPermission.QuantityValues,
       widgetConfig: {
-        name: 'Quantity Values',
+        name: 'quantity-values',
         id: 'quantity-values',
         component: 'quantity-values',
         config: {
