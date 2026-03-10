@@ -10,16 +10,16 @@
 
 import React, { useEffect, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
-import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton } from '@sdk/components'
+import { Box, IconTextButton, Pagination, Split } from '@sdk/components'
 import { useUnitQuantityValueUnitsCollectionQuery, useLazyUnitQuantityValueUnitsExportQuery } from '../data-object/unit-slice-enhanced'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import { useTranslation } from 'react-i18next'
 import { uuid } from '@sdk/utils'
 import { type QuantityValueUnitRow, useQuantityValueUnit } from './hooks/use-quantity-value-unit'
 import { isUndefined } from 'lodash'
@@ -29,14 +29,23 @@ import { ImportModal } from '@Pimcore/components/import-modal'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 export const QuantityValueContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { createUnit, createLoading } = useQuantityValueUnit()
 
-  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery({ body: {} })
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+
+  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery({ body: { filters: { page: currentPage, pageSize } } })
 
   const handleRefetch = (): void => {
     void refetch().catch(() => {
       trackError(new GeneralError('Error while reloading'))
     })
+  }
+
+  const handlePageChange = (page: number, newPageSize: number): void => {
+    setCurrentPage(page)
+    setPageSize(newPageSize)
   }
 
   const [triggerExport, { isLoading: exportLoading }] = useLazyUnitQuantityValueUnitsExportQuery()
@@ -55,6 +64,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
 
   const items = data?.items
+  const totalItems = data?.totalItems ?? 0
 
   useEffect(() => {
     if (!isUndefined(items)) {
@@ -95,85 +105,112 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           <Flex
             align='center'
             justify='start'
+            style={ { width: '100%', height: '100%' } }
           >
-            <IconButton
-              disabled={ isFetching }
-              icon={ { value: 'refresh' } }
-              onClick={ handleRefetch }
-            />
-            <IconTextButton
-              disabled={ isFetching || exportLoading || quantityValueUnitRows.length < 1 }
-              icon={ { value: 'download' } }
-              loading={ exportLoading }
-              onClick={ handleExport }
-              type={ 'link' }
-            >
-              {t('quantity-values.export')}
-            </IconTextButton>
-            <IconTextButton
-              disabled={ isFetching }
-              icon={ { value: 'upload-import' } }
-              onClick={ () => { setIsImportModalOpen(true) } }
-              type={ 'link' }
-            >
-              {t('quantity-values.import')}
-            </IconTextButton>
+            <div>
+              <IconTextButton
+                disabled={isFetching || exportLoading || quantityValueUnitRows.length < 1}
+                icon={{ value: 'download' }}
+                loading={exportLoading}
+                onClick={handleExport}
+                type={'link'}
+              >
+                {t('quantity-values.export')}
+              </IconTextButton>
+              <IconTextButton
+                disabled={isFetching}
+                icon={{ value: 'upload-import' }}
+                onClick={() => { setIsImportModalOpen(true) }}
+                type={'link'}
+              >
+                {t('quantity-values.import')}
+              </IconTextButton>
+            </div>
           </Flex>
-        </Toolbar> }
+          {totalItems > 0
+            ? (
+              <Split>
+                <Flex align='center'>
+                  <IconButton
+                    disabled={isFetching}
+                    icon={{ value: 'refresh' }}
+                    onClick={handleRefetch}
+                    variant='minimal'
+                  />
+                </Flex>
+                <Pagination
+                  current={currentPage}
+                  onChange={handlePageChange}
+                  showSizeChanger
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={totalItems}
+                />
+              </Split>
+              )
+            : (
+              <Flex align='center'>
+                <IconButton
+                  disabled={isFetching}
+                  icon={{ value: 'refresh' }}
+                  onClick={handleRefetch}
+                />
+              </Flex>
+              )}
+        </Toolbar>}
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title>{t('widget.quantity-values')}</Title>
             <IconTextButton
-              disabled={ isLoading || createLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ () => { setIsCreateModalOpen(true) } }
+              disabled={isLoading || createLoading}
+              icon={{ value: 'new' }}
+              loading={createLoading}
+              onClick={() => { setIsCreateModalOpen(true) }}
             >{t('quantity-values.new')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading || isFetching }
-        margin={ {
+        loading={isLoading || isFetching}
+        margin={{
           x: 'extra-small',
           y: 'none'
-        } }
-        none={ isUndefined(items) || items.length === 0 }
+        }}
+        none={isUndefined(items) || items.length === 0}
       >
         <Box
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
           <Table
-            quantityValueUnitRows={ quantityValueUnitRows }
-            setQuantityValueUnitRows={ setQuantityValueUnitRows }
+            quantityValueUnitRows={quantityValueUnitRows}
+            setQuantityValueUnitRows={setQuantityValueUnitRows}
           />
         </Box>
       </Content>
       <CreateUnitModal
-        createUnit={ onCreateUnit }
-        open={ isCreateModalOpen }
-        setOpen={ setIsCreateModalOpen }
+        createUnit={onCreateUnit}
+        open={isCreateModalOpen}
+        setOpen={setIsCreateModalOpen}
       />
       <ImportModal
         accept=".json,application/json"
-        acceptMimeTypes={ ['application/json'] }
-        action={ `${getPrefix()}/unit/quantity-value/units/import` }
-        onOpenChange={ setIsImportModalOpen }
-        onUploadSuccess={ handleImportSuccess }
-        open={ isImportModalOpen }
-        title={ t('quantity-values.import-modal.title') }
+        acceptMimeTypes={['application/json']}
+        action={`${getPrefix()}/unit/quantity-value/units/import`}
+        onOpenChange={setIsImportModalOpen}
+        onUploadSuccess={handleImportSuccess}
+        open={isImportModalOpen}
+        title={t('quantity-values.import-modal.title')}
       />
     </ContentLayout>
   )
