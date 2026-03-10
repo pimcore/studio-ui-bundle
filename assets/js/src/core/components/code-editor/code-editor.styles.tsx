@@ -48,6 +48,30 @@ export const useStyles = createStyles(({ token, css }) => {
         .cm-selectionMatch {
           background-color: ${token.colorPrimaryBg};
         }
+
+        &:has(.cm-content[aria-readonly="true"]) {
+          background-color: ${token.colorBgContainerDisabled};
+          cursor: not-allowed;
+
+          &.cm-focused {
+            border-color: ${token.colorBorder};
+            box-shadow: none;
+          }
+
+          .cm-scroller,
+          .cm-content,
+          .cm-line {
+            cursor: not-allowed;
+          }
+
+          .cm-gutters {
+            background-color: ${token.colorBgContainerDisabled};
+          }
+
+          .cm-activeLine {
+            background-color: transparent;
+          }
+        }
       }
     `
   }
