@@ -8,26 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
-import { Title } from '@Pimcore/components/title/title'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Table } from './table/table'
-import { Box, IconTextButton, Pagination, Split } from '@sdk/components'
-import { useUnitQuantityValueUnitsCollectionQuery, useLazyUnitQuantityValueUnitsExportQuery } from '../data-object/unit-slice-enhanced'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
-import { useTranslation } from 'react-i18next'
-import { uuid } from '@sdk/utils'
-import { type QuantityValueUnitRow, useQuantityValueUnit } from './hooks/use-quantity-value-unit'
-import { isUndefined } from 'lodash'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ImportModal } from '@Pimcore/components/import-modal'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Title } from '@Pimcore/components/title/title'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Box, IconTextButton, Pagination, Split } from '@sdk/components'
+import { uuid } from '@sdk/utils'
+import { isUndefined } from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { downloadFile } from '../app/utils/download'
-import { ImportModal } from '@Pimcore/components/import-modal'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { useLazyUnitQuantityValueUnitsExportQuery, useUnitQuantityValueUnitsCollectionQuery } from '../data-object/unit-slice-enhanced'
+import { type QuantityValueUnitRow, useQuantityValueUnit } from './hooks/use-quantity-value-unit'
+import { Table } from './table/table'
 
 export const QuantityValueContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -104,11 +104,10 @@ export const QuantityValueContainer = (): React.JSX.Element => {
       title: <ModalTitle iconName='new'>{t('quantity-values.create-modal.title')}</ModalTitle>,
       label: t('quantity-values.create-modal.id-label'),
       rule: { required: true, message: t('quantity-values.create-modal.id-required') },
-
       onOk: async (value: string) => {
         const { success } = await onCreateUnit(value)
         if (!success) {
-          return await Promise.reject(new Error('Failed to create unit'))
+          throw new GeneralError('Failed to create unit')
         }
       }
     })
@@ -124,19 +123,19 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           >
             <div>
               <IconTextButton
-                disabled={ isFetching || exportLoading || quantityValueUnitRows.length < 1 }
-                icon={ { value: 'download' } }
-                loading={ exportLoading }
-                onClick={ handleExport }
-                type={ 'link' }
+                disabled={isFetching || exportLoading || quantityValueUnitRows.length < 1}
+                icon={{ value: 'download' }}
+                loading={exportLoading}
+                onClick={handleExport}
+                type={'link'}
               >
                 {t('quantity-values.export')}
               </IconTextButton>
               <IconTextButton
-                disabled={ isFetching }
-                icon={ { value: 'upload-import' } }
-                onClick={ () => { setIsImportModalOpen(true) } }
-                type={ 'link' }
+                disabled={isFetching}
+                icon={{ value: 'upload-import' }}
+                onClick={() => { setIsImportModalOpen(true) }}
+                type={'link'}
               >
                 {t('quantity-values.import')}
               </IconTextButton>
@@ -147,80 +146,80 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               <Split>
                 <Flex align='center'>
                   <IconButton
-                    disabled={ isFetching }
-                    icon={ { value: 'refresh' } }
-                    onClick={ handleRefetch }
+                    disabled={isFetching}
+                    icon={{ value: 'refresh' }}
+                    onClick={handleRefetch}
                     variant='minimal'
                   />
                 </Flex>
                 <Pagination
-                  current={ currentPage }
-                  onChange={ handlePageChange }
+                  current={currentPage}
+                  onChange={handlePageChange}
                   showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ totalItems }
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={totalItems}
                 />
               </Split>
-              )
+            )
             : (
               <Flex align='center'>
                 <IconButton
-                  disabled={ isFetching }
-                  icon={ { value: 'refresh' } }
-                  onClick={ handleRefetch }
+                  disabled={isFetching}
+                  icon={{ value: 'refresh' }}
+                  onClick={handleRefetch}
                 />
               </Flex>
-              )}
-        </Toolbar> }
+            )}
+        </Toolbar>}
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title>{t('widget.quantity-values')}</Title>
             <IconTextButton
-              disabled={ isLoading || createLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ openCreateModal }
+              disabled={isLoading || createLoading}
+              icon={{ value: 'new' }}
+              loading={createLoading}
+              onClick={openCreateModal}
             >{t('quantity-values.new')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading || isFetching }
-        margin={ {
+        loading={isLoading || isFetching}
+        margin={{
           x: 'extra-small',
           y: 'none'
-        } }
-        none={ isUndefined(items) || items.length === 0 }
+        }}
+        none={isUndefined(items) || items.length === 0}
       >
         <Box
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
           <Table
-            quantityValueUnitRows={ quantityValueUnitRows }
-            setQuantityValueUnitRows={ setQuantityValueUnitRows }
+            quantityValueUnitRows={quantityValueUnitRows}
+            setQuantityValueUnitRows={setQuantityValueUnitRows}
           />
         </Box>
       </Content>
       <ImportModal
         accept=".json,application/json"
-        acceptMimeTypes={ ['application/json'] }
-        action={ `${getPrefix()}/unit/quantity-value/units/import` }
-        onOpenChange={ setIsImportModalOpen }
-        onUploadSuccess={ handleImportSuccess }
-        open={ isImportModalOpen }
-        title={ t('quantity-values.import-modal.title') }
+        acceptMimeTypes={['application/json']}
+        action={`${getPrefix()}/unit/quantity-value/units/import`}
+        onOpenChange={setIsImportModalOpen}
+        onUploadSuccess={handleImportSuccess}
+        open={isImportModalOpen}
+        title={t('quantity-values.import-modal.title')}
       />
     </ContentLayout>
   )
