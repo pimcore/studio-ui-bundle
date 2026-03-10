@@ -459,33 +459,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/usages` }),
                 providesTags: ["Class Definition"],
             }),
-            classSelectOptionCreate: build.mutation<ClassSelectOptionCreateApiResponse, ClassSelectOptionCreateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/select-option`,
-                    method: "POST",
-                    body: queryArg.createSelectOption,
-                }),
-                invalidatesTags: ["Class Definition"],
-            }),
-            classSelectOptionGet: build.query<ClassSelectOptionGetApiResponse, ClassSelectOptionGetApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/class/select-option/${queryArg.id}` }),
-                providesTags: ["Class Definition"],
-            }),
-            classSelectOptionUpdate: build.mutation<ClassSelectOptionUpdateApiResponse, ClassSelectOptionUpdateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/select-option/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateSelectOption,
-                }),
-                invalidatesTags: ["Class Definition"],
-            }),
-            classSelectOptionDelete: build.mutation<ClassSelectOptionDeleteApiResponse, ClassSelectOptionDeleteApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/class/select-option/${queryArg.id}`,
-                    method: "DELETE",
-                }),
-                invalidatesTags: ["Class Definition"],
-            }),
             classSelectOptionGetTree: build.query<ClassSelectOptionGetTreeApiResponse, ClassSelectOptionGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/select-option/tree`,
@@ -493,13 +466,6 @@ const injectedRtkApi = api
                         withGroup: queryArg.withGroup,
                     },
                 }),
-                providesTags: ["Class Definition"],
-            }),
-            classSelectOptionGetUsages: build.query<
-                ClassSelectOptionGetUsagesApiResponse,
-                ClassSelectOptionGetUsagesApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/class/select-option/${queryArg.id}/usages` }),
                 providesTags: ["Class Definition"],
             }),
         }),
@@ -890,28 +856,6 @@ export type ClassObjectBrickGetUsagesApiArg = {
     /** Object brick unique key */
     key: string;
 };
-export type ClassSelectOptionCreateApiResponse =
-    /** status 200 Newly created select option configuration detail */ SelectOptionDetail;
-export type ClassSelectOptionCreateApiArg = {
-    createSelectOption: SchemaUsedToCreateSelectOptionConfigurations;
-};
-export type ClassSelectOptionGetApiResponse = /** status 200 Select option configuration detail */ SelectOptionDetail;
-export type ClassSelectOptionGetApiArg = {
-    /** Select option configuration ID */
-    id: string;
-};
-export type ClassSelectOptionUpdateApiResponse =
-    /** status 200 Updated select option configuration detail */ SelectOptionDetail;
-export type ClassSelectOptionUpdateApiArg = {
-    /** Select option configuration ID */
-    id: string;
-    updateSelectOption: SchemaUsedToUpdateSelectOptionConfigurations;
-};
-export type ClassSelectOptionDeleteApiResponse = unknown;
-export type ClassSelectOptionDeleteApiArg = {
-    /** Select option configuration ID */
-    id: string;
-};
 export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
     totalItems: number;
     items: (SelectOptionTreeItem | SelectOptionTreeFolder)[];
@@ -919,14 +863,6 @@ export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options 
 export type ClassSelectOptionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
-};
-export type ClassSelectOptionGetUsagesApiResponse =
-    /** status 200 List of classes and fields using the select option configuration */ {
-        items: SelectOptionUsageItem[];
-    };
-export type ClassSelectOptionGetUsagesApiArg = {
-    /** Select option configuration ID */
-    id: string;
 };
 export type ClassDefinitionVisibleField = {
     /** AdditionalAttributes */
@@ -1497,52 +1433,6 @@ export type ObjectBrickUsageData = {
     /** Name of the field in the class */
     field: string;
 };
-export type SelectOptionData = {
-    /** Value of the select option */
-    value: string;
-    /** Display label of the select option */
-    label: string;
-    /** Enum case name of the select option */
-    name: string;
-};
-export type SelectOptionDetail = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the select options configuration */
-    id: string;
-    /** Group name */
-    group: string | null;
-    /** Whether this configuration is restricted to admin */
-    adminOnly: boolean;
-    /** PHP traits to use */
-    useTraits: string;
-    /** PHP interfaces to implement */
-    implementsInterfaces: string;
-    /** Select option entries */
-    selectOptions: SelectOptionData[];
-    /** Fully qualified enum name */
-    enumName: string;
-    /** Whether the configuration is writeable */
-    isWriteable: boolean;
-};
-export type SchemaUsedToCreateSelectOptionConfigurations = {
-    /** ID of the select options configuration */
-    id: string;
-};
-export type SchemaUsedToUpdateSelectOptionConfigurations = {
-    /** Group name */
-    group: string | null;
-    /** Whether this configuration is restricted to admin */
-    adminOnly: boolean;
-    /** PHP traits to use */
-    useTraits: string;
-    /** PHP interfaces to implement */
-    implementsInterfaces: string;
-    /** Select option entries */
-    selectOptions: SelectOptionData[] | null;
-};
 export type SelectOptionTreeItem = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1574,16 +1464,6 @@ export type SelectOptionTreeFolder = {
     group: string | null;
     /** Child nodes */
     children: SelectOptionTreeItem[];
-};
-export type SelectOptionUsageItem = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Name of the class using the select options */
-    class: string;
-    /** Name of the field using the select options */
-    field: string;
 };
 export const {
     useClassGetAvailableVisibleFieldsQuery,
@@ -1642,10 +1522,5 @@ export const {
     useClassObjectBrickGetLayoutByKeyQuery,
     useClassObjectBrickGetTreeQuery,
     useClassObjectBrickGetUsagesQuery,
-    useClassSelectOptionCreateMutation,
-    useClassSelectOptionGetQuery,
-    useClassSelectOptionUpdateMutation,
-    useClassSelectOptionDeleteMutation,
     useClassSelectOptionGetTreeQuery,
-    useClassSelectOptionGetUsagesQuery,
 } = injectedRtkApi;
