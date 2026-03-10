@@ -30,7 +30,7 @@ export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
   @inject(serviceIds['DynamicTypes/GridCell/Select']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
   @inject(serviceIds['DynamicTypes/FieldFilter/Multiselect']) dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
-  getGridCellComponent(props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
+  getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
     const config: SelectCellConfig = {
       useOptionsHook: useMetadataSelectOptions,
@@ -40,7 +40,7 @@ export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
     return GridCellRegistry.getGridCellComponent(this.dynamicTypeGridCellType.id, addColumnConfig(props, config))
   }
 
-  getVersionPreviewComponent(data: { path: string, key: string }): JSX.Element {
+  getVersionPreviewComponent (data: { path: string, key: string }): JSX.Element {
     return <span>{data.path}{data.key}</span>
   }
 }

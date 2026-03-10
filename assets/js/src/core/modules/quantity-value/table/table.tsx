@@ -80,8 +80,8 @@ export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: Table
       size: 80,
       cell: (info) => (
         <ActionsCell
-          info={info}
-          setQuantityValueUnitRows={setQuantityValueUnitRows}
+          info={ info }
+          setQuantityValueUnitRows={ setQuantityValueUnitRows }
         />
       )
     })
@@ -124,13 +124,13 @@ export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: Table
   return (
     <Grid
       autoWidth
-      columns={tableColumns}
-      data={quantityValueUnitRows}
+      columns={ tableColumns }
+      data={ quantityValueUnitRows }
       enableSorting
-      modifiedCells={modifiedCells}
-      onUpdateCellData={onUpdateCellData}
+      modifiedCells={ modifiedCells }
+      onUpdateCellData={ onUpdateCellData }
       resizable
-      setRowId={(row: QuantityValueUnitRow) => row.rowId}
+      setRowId={ (row: QuantityValueUnitRow) => row.rowId }
     />
   )
 }
