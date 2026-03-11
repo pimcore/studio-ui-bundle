@@ -13,6 +13,7 @@ import { createStyles } from 'antd-style'
 interface IStylesProps {
   isHideRootChecker?: boolean
   hasRoot?: boolean
+  hideExpanders?: boolean
 }
 
 export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
@@ -241,6 +242,8 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         position: relative;
         top: 1px;
       }
+
+      ${props.hideExpanders === true ? '.ant-tree-switcher { display: none !important; width: 0 !important; }' : ''}
     `,
     noRoot: css`
       .ant-tree {
