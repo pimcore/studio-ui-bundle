@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
 import { useCallback, useState, useRef, useContext, useEffect } from 'react'
 import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
@@ -19,9 +18,10 @@ import { type AreablockEditableConfig, type AreablockValue, type AreablockRender
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
-import { areablockValueUtils, configUtils } from '../utils/areablock-utils'
+import { areablockValueUtils, configUtils, buildGroupedTypes } from '../utils/areablock-utils'
 import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 import { useStyles } from '../areablock-editable.styles'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -39,6 +39,18 @@ export interface UseAreablockEditableReturn {
   moveAreaUp: (element: HTMLElement) => void
   moveAreaDown: (element: HTMLElement) => void
   moveArea: (fromIndex: number, toIndex: number) => void
+}
+
+function mergeAreablockTypesFromDefinitions (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
+  try {
+    const allGroupedTypes = buildGroupedTypes(editableDefinitions)
+    if (Object.keys(allGroupedTypes).length === 0) return
+
+    const { document: documentApiInstance } = getPimcoreStudioApi()
+    documentApiInstance.mergeAreablockTypes(documentId, 'areablock', allGroupedTypes)
+  } catch (error) {
+    console.warn('Could not merge areablock types after addArea:', error)
+  }
 }
 
 export const useAreablockEditable = ({
@@ -181,8 +193,8 @@ export const useAreablockEditable = ({
         const editablesData = createEditableDataFromDefinitions(editableDefinitions)
         initializeData(editablesData)
         setDynamicEditables(prev => [...prev, ...editableDefinitions])
+        mergeAreablockTypesFromDefinitions(documentId, editableDefinitions)
       } else {
-        // Manually reveal elements when no editables are added
         revealPendingElements()
       }
 

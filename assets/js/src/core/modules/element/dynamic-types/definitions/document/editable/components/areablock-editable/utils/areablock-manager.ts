@@ -17,7 +17,7 @@ export class AreablockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    return '.pimcore_area_entry'
+    return `.pimcore_area_entry[data-name="${this.editableName}"]`
   }
 
   getElementType (element: HTMLElement): string | null {
