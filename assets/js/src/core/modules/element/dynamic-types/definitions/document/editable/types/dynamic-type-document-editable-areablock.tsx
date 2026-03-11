@@ -13,10 +13,10 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { type AreablockEditableProps, type AreablockEditableConfig, type AreablockValue } from '../components/areablock-editable/areablock-editable'
 import { WithAreablockRenderQuery } from '../components/areablock-editable/with-areablock-render-query'
 import { AreablockManager } from '../components/areablock-editable/utils/areablock-manager'
-import { buildGroupedTypes, DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP } from '../components/areablock-editable/utils/areablock-utils'
+import { buildGroupedTypes } from '../components/areablock-editable/utils/areablock-utils'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
-export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP }
+export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP } from '../components/areablock-editable/utils/areablock-utils'
 
 export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: AreablockEditableConfig

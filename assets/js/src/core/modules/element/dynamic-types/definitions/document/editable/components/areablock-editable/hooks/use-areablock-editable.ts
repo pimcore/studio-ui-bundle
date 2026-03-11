@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { useCallback, useState, useRef, useContext, useEffect } from 'react'
 import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
