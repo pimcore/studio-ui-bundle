@@ -14,6 +14,7 @@ import { DynamicTypeRegistryAbstract } from '@sdk/modules/element'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { injectable } from 'inversify'
 import { isNil, kebabCase, uniq } from 'lodash'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface GroupInfo {
   icon: ElementIcon
@@ -23,6 +24,16 @@ export interface GroupInfo {
 
 @injectable()
 export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstract<DynamicTypeFieldDefinitionAbstract> {
+  protected readonly customDropdownGroupInfos: Record<string, GroupInfo> = {}
+
+  registerDropdownGroupInfo (key: string, groupInfo: GroupInfo): void {
+    if (this.customDropdownGroupInfos[key] !== undefined) {
+      trackError(new GeneralError(`Dropdown group with key "${key}" already exists`))
+    }
+
+    this.customDropdownGroupInfos[key] = groupInfo
+  }
+
   getTypesByTags (tags: string[], context: FieldDefinitionContext): DynamicTypeFieldDefinitionAbstract[] {
     return this.getDynamicTypes().filter((type) => {
       const typeTags = type.getTags(context)
@@ -126,7 +137,8 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
         icon: { value: 'other', type: 'name' },
         translationKey: 'field-definition.groups.data.other',
         order: 1000
-      }
+      },
+      ...this.customDropdownGroupInfos
     }
   }
 
