@@ -2138,6 +2138,7 @@ perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollec
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Hide Data Model Definition Menu
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Data Model Definition > Object Bricks
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Data Model Definition > Quantity Value
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Data Model Definition > Select Options
 perspective-editor.form.main-nav-permission.category.experienceEcommerce: Experience & E-commerce
 perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Hide Experience & E-commerce Menu
 perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails

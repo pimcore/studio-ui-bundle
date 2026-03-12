@@ -8,13 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
-import { SelectOptionWidget } from '@Pimcore/modules/select-option/select-option-widget'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { SelectOptionWidget } from '@Pimcore/modules/select-option/select-option-widget'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -32,6 +33,7 @@ moduleSystem.registerModule({
       className: 'selectoption',
       order: 500,
       permission: UserPermission.SelectOptions,
+      perspectivePermission: NavPermission.SelectOptions,
       widgetConfig: {
         name: 'select-options',
         id: 'select-options',

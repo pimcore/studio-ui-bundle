@@ -36,7 +36,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
           icon: <Icon
             type={ item.icon.type }
             value={ (item.icon.value !== undefined && item.icon.value !== '') ? item.icon.value : 'folder' }
-          />,
+                />,
           isLeaf: false,
           children: [...item.children]
             .sort((a, b) => a.name.localeCompare(b.name))
@@ -45,7 +45,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
               key: child.id,
               icon: <Icon
                 value={ 'select-type' }
-              />,
+                    />,
               isLeaf: true,
               actions: [
                 { key: 'remove-item', icon: 'trash' }
@@ -59,7 +59,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
         key: item.id,
         icon: <Icon
           value={ 'select-type' }
-        />,
+              />,
         isLeaf: true,
         actions: [
           { key: 'remove-item', icon: 'trash' }
