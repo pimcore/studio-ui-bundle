@@ -244,6 +244,33 @@ object-brick.class-definitions-block.classname: Class
 object-brick.class-definitions-block.select-classname: Select class
 object-brick.class-definitions-block.fieldname: Field
 object-brick.class-definitions-block.select-fieldname: Select field
+select-option.create-new: Create New Select Option
+select-option.id: ID
+select-option.enter-name-new-item: Enter the name of the new item
+select-option.validation.enter-id: Please enter an ID
+select-option.validation.id-format: The name must start with a capital letter, followed by alphanumeric characters
+select-option.general-settings.title: General
+select-option.general-settings.enum-name: Enum Name
+select-option.general-settings.use-traits: Use Traits
+select-option.general-settings.implements-interfaces: Implements Interfaces
+select-option.general-settings.group: Group
+select-option.general-settings.admin-only: Admin Only
+select-option.entries.title: Options
+select-option.entries.display-name: Display Name
+select-option.entries.value: Value
+select-option.entries.name: Name
+select-option.entries.action: Action
+select-option.entries.move-up: Move Up
+select-option.entries.move-down: Move Down
+select-option.general-settings.usages.title: Usages
+select-option.general-settings.usages.class: Class
+select-option.general-settings.usages.field: Field
+select-option.create.success: Select option created successfully
+select-option.update.success: Select option updated successfully
+select-option.delete.success: Select option deleted successfully
+select-option.tree.all: All
+select-option.tree.search: Search select options
+select-option.tree.actions.select-option: Select Option
 custom-layout.import-success: Custom layout imported successfully
 custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
 custom-layout.delete.success: Custom layout deleted successfully
@@ -1363,6 +1390,7 @@ navigation.data-model-definitions: Data Model Definitions
 navigation.class-definitions: Classes
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
+navigation.select-options: Select Options
 navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
@@ -1458,6 +1486,7 @@ widget.user-management: Users
 widget.class-definitions: Classes
 widget.field-collections: Field Collections
 widget.object-bricks: Object Bricks
+widget.select-options: Select Options
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
 widget.video-thumbnails: Video Thumbnails
@@ -2434,6 +2463,6 @@ rendering-class: Custom rendering class
 rendering-data: Data Passed to render
 zoom-level: Zoom level
 class: Class
-layout.text.help: 'You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>'
+layout.text.help: "You can use the following markup (in source edit mode) to make custom alerts: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Your Message&lt;/div&gt;</pre>The following contextual classes are available: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>You can also use Twig syntax:</pre> <pre>Additional Data {{data}}</pre>"
 configuration: Configuration
 drag-object-for-preview: Drag object for preview
