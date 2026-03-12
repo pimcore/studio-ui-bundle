@@ -375,6 +375,7 @@ import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import videoThumbnail from '@Pimcore/assets/icons/video-thumbnail.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
+import voucher from '@Pimcore/assets/icons/voucher.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
 import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
@@ -1827,6 +1828,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'view',
       component: view
+    })
+    iconLibrary.register({
+      name: 'voucher',
+      component: voucher
     })
     iconLibrary.register({
       name: 'warning-circle',
