@@ -8,8 +8,53 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, isUndefined } from 'lodash'
-import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
+import { isNil, isUndefined, isArray } from 'lodash'
+import { type AreablockEditableConfig, type AreablockValue, type AreaType } from '../areablock-editable'
+import { type AreablockGroupedTypes, type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
+import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
+
+const DEFAULT_AREABLOCK_GROUP = 'Available Areas'
+const UNCATEGORIZED_AREABLOCK_GROUP = 'Uncategorized'
+
+export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP }
+
+export function buildGroupedTypes (editableDefinitions: AbstractDocumentEditableDefinition[]): AreablockGroupedTypes {
+  const areablockEditables = editableDefinitions.filter(e => e.type === 'areablock')
+  if (areablockEditables.length === 0) return {}
+
+  const allGroupedTypes: AreablockGroupedTypes = {}
+
+  const createEntry = (editable: AbstractDocumentEditableDefinition, type: AreaType): AreablockTypeEntry => ({
+    areablockName: editable.name,
+    type: type.type,
+    name: type.name,
+    description: type.description,
+    icon: type.icon
+  })
+
+  const addToGroup = (groupName: string, types: AreaType[], editable: AbstractDocumentEditableDefinition): void => {
+    if (isNil(allGroupedTypes[groupName])) {
+      allGroupedTypes[groupName] = []
+    }
+    types.forEach(type => { allGroupedTypes[groupName].push(createEntry(editable, type)) })
+  }
+
+  const hasGrouped = areablockEditables.some(editable => {
+    const grouped = configUtils.getGroupedAreaTypes(editable.config as AreablockEditableConfig | undefined)
+    return !isArray(grouped)
+  })
+
+  areablockEditables.forEach(editable => {
+    const grouped = configUtils.getGroupedAreaTypes(editable.config as AreablockEditableConfig | undefined)
+    if (isArray(grouped)) {
+      addToGroup(hasGrouped ? UNCATEGORIZED_AREABLOCK_GROUP : DEFAULT_AREABLOCK_GROUP, grouped, editable)
+    } else {
+      Object.entries(grouped).forEach(([groupName, types]) => { addToGroup(groupName, types, editable) })
+    }
+  })
+
+  return allGroupedTypes
+}
 
 export const areablockValueUtils = {
   filterEditableNames (allEditableNames: string[], areablockName: string, entryKey: string): string[] {
