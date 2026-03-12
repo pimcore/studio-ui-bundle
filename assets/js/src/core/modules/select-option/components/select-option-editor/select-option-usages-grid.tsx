@@ -20,8 +20,6 @@ interface SelectOptionUsagesGridProps {
   selectOptionId: string
 }
 
-
-
 export const SelectOptionUsagesGrid = ({ selectOptionId }: SelectOptionUsagesGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { data, isLoading } = useClassSelectOptionGetUsagesQuery({ id: selectOptionId })
@@ -44,10 +42,10 @@ export const SelectOptionUsagesGrid = ({ selectOptionId }: SelectOptionUsagesGri
 
   return (
     <Grid
-      columns={columns}
-      data={data?.items ?? []}
-      enableMultipleRowSelection={false}
-      resizable={false}
+      columns={ columns }
+      data={ data?.items ?? [] }
+      enableMultipleRowSelection={ false }
+      resizable={ false }
     />
   )
 }

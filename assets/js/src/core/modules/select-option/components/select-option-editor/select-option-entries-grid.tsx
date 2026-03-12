@@ -42,12 +42,12 @@ const useColumns = (value: SelectOptionData[], onChange?: (value: SelectOptionDa
       cell: (info) => (
         <Box padding="mini">
           <ButtonGroup
-            items={[
+            items={ [
               <IconButton
-                disabled={info.row.index === 0}
-                icon={{ value: 'chevron-up' }}
+                disabled={ info.row.index === 0 }
+                icon={ { value: 'chevron-up' } }
                 key="move-up"
-                onClick={() => {
+                onClick={ () => {
                   const idx = info.row.index
                   if (idx > 0) {
                     const newValue = [...value]
@@ -56,16 +56,16 @@ const useColumns = (value: SelectOptionData[], onChange?: (value: SelectOptionDa
                     newValue[idx] = temp
                     onChange?.(newValue)
                   }
-                }}
+                } }
                 size="small"
-                tooltip={{ title: t('select-option.entries.move-up') }}
+                tooltip={ { title: t('select-option.entries.move-up') } }
                 type="link"
               />,
               <IconButton
-                disabled={info.row.index === value.length - 1}
-                icon={{ value: 'chevron-down' }}
+                disabled={ info.row.index === value.length - 1 }
+                icon={ { value: 'chevron-down' } }
                 key="move-down"
-                onClick={() => {
+                onClick={ () => {
                   const idx = info.row.index
                   if (idx < value.length - 1) {
                     const newValue = [...value]
@@ -74,24 +74,24 @@ const useColumns = (value: SelectOptionData[], onChange?: (value: SelectOptionDa
                     newValue[idx] = temp
                     onChange?.(newValue)
                   }
-                }}
+                } }
                 size="small"
-                tooltip={{ title: t('select-option.entries.move-down') }}
+                tooltip={ { title: t('select-option.entries.move-down') } }
                 type="link"
               />,
               <IconButton
-                icon={{ value: 'trash' }}
+                icon={ { value: 'trash' } }
                 key="delete"
-                onClick={() => {
+                onClick={ () => {
                   const newValue = [...value]
                   newValue.splice(info.row.index, 1)
                   onChange?.(newValue)
-                }}
+                } }
                 size="small"
-                tooltip={{ title: t('delete') }}
+                tooltip={ { title: t('delete') } }
                 type="link"
               />
-            ]}
+            ] }
             noSpacing
           />
         </Box>
@@ -109,16 +109,16 @@ export const SelectOptionEntriesGrid = ({ value = [], onChange }: SelectOptionEn
 
   return (
     <OperationalGrid
-      columns={columns}
-      enableSorting={false}
-      onChange={onChange as (value: any[]) => void}
-      setRowId={(row, index) => `row-${row.value}-${index}`}
-      value={value}
+      columns={ columns }
+      enableSorting={ false }
+      onChange={ onChange as (value: any[]) => void }
+      setRowId={ (row, index) => `row-${row.value}-${index}` }
+      value={ value }
     >
       <Space
         direction="vertical"
         size="small"
-        style={{ width: '100%' }}
+        style={ { width: '100%' } }
       >
         <OperationalGrid.Grid />
 
@@ -127,15 +127,15 @@ export const SelectOptionEntriesGrid = ({ value = [], onChange }: SelectOptionEn
             return (
               <Space>
                 <IconButton
-                  icon={{ value: 'new-something' }}
-                  onClick={() => {
+                  icon={ { value: 'new-something' } }
+                  onClick={ () => {
                     operations.addRow({
                       label: '',
                       value: '',
                       name: ''
                     })
-                  }}
-                  tooltip={{ title: t('add') }}
+                  } }
+                  tooltip={ { title: t('add') } }
                   type="default"
                 />
               </Space>

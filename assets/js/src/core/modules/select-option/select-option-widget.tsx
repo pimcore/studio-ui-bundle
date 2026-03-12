@@ -34,9 +34,9 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
           key: item.id,
           selectable: false,
           icon: <Icon
-            type={item.icon.type}
-            value={(item.icon.value !== undefined && item.icon.value !== '') ? item.icon.value : 'folder'}
-          />,
+            type={ item.icon.type }
+            value={ (item.icon.value !== undefined && item.icon.value !== '') ? item.icon.value : 'folder' }
+                />,
           isLeaf: false,
           children: [...item.children]
             .sort((a, b) => a.name.localeCompare(b.name))
@@ -44,8 +44,8 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
               title: child.name,
               key: child.id,
               icon: <Icon
-                value={'select-type'}
-              />,
+                value={ 'select-type' }
+                    />,
               isLeaf: true,
               actions: [
                 { key: 'remove-item', icon: 'trash' }
@@ -58,8 +58,8 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
         title: item.name,
         key: item.id,
         icon: <Icon
-          value={'select-type'}
-        />,
+          value={ 'select-type' }
+              />,
         isLeaf: true,
         actions: [
           { key: 'remove-item', icon: 'trash' }
@@ -88,12 +88,12 @@ const SelectOptionWidgetInner = (): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        expandedKeys={expandedKeys}
-        isFetching={isFetching}
+        expandedKeys={ expandedKeys }
+        isFetching={ isFetching }
         key="select-option-editor.sidebar"
-        onReloadTree={handleReloadTree}
-        onSetExpandedKeys={setExpandedKeys}
-        treeData={treeData}
+        onReloadTree={ handleReloadTree }
+        onSetExpandedKeys={ setExpandedKeys }
+        treeData={ treeData }
       />
     ]
   }
@@ -108,8 +108,8 @@ const SelectOptionWidgetInner = (): React.JSX.Element => {
 
   return (
     <ConfigLayout
-      leftItem={sidebar}
-      rightItem={main}
+      leftItem={ sidebar }
+      rightItem={ main }
     />
   )
 }
