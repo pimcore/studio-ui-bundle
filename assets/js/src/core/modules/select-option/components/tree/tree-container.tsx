@@ -43,23 +43,23 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
     <ContentLayout
       renderToolbar={
         <ToolbarTree
-          onAddItem={handleAddItem}
-          onReload={() => { void onReloadTree() }}
+          onAddItem={ handleAddItem }
+          onReload={ () => { void onReloadTree() } }
         />
       }
     >
       <Content
-        className={classNames.join(', ')}
+        className={ classNames.join(', ') }
       >
         <TreeAutocomplete
-          onSelect={(key) => { void openSelectOption(key) }}
-          treeData={treeData}
+          onSelect={ (key) => { void openSelectOption(key) } }
+          treeData={ treeData }
         />
 
         <Tree
-          defaultExpandedKeys={expandedKeys}
-          expandedKeys={expandedKeys}
-          onActionsClick={(key: string | number, action: string) => {
+          defaultExpandedKeys={ expandedKeys }
+          expandedKeys={ expandedKeys }
+          onActionsClick={ (key: string | number, action: string) => {
             const keyStr = String(key)
 
             if (action === 'remove-item') {
@@ -69,16 +69,16 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
                 await onReloadTree()
               })
             }
-          }}
-          onExpand={(keys) => {
+          } }
+          onExpand={ (keys) => {
             onSetExpandedKeys(keys)
-          }}
-          onSelected={(key) => {
+          } }
+          onSelected={ (key) => {
             if (findNodeByKey(treeData, key)?.selectable !== false) {
               void openSelectOption(String(key))
             }
-          }}
-          treeData={treeData}
+          } }
+          treeData={ treeData }
         />
       </Content>
     </ContentLayout>

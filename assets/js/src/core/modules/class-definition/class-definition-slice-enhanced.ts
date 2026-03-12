@@ -29,7 +29,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classDefinitionUpdate: {
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION(),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -62,7 +62,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classCustomLayoutUpdate: {
       invalidatesTags: () => [],
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -113,7 +113,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classFieldCollectionUpdate: {
       invalidatesTags: () => invalidatingTags.FIELD_COLLECTION_COLLECTION(),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -155,7 +155,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classObjectBrickUpdate: {
       invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION(),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -185,7 +185,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classObjectBrickCustomLayoutUpdate: {
       invalidatesTags: () => [],
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -218,7 +218,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classSelectOptionUpdate: {
       invalidatesTags: () => invalidatingTags.SELECT_OPTION_COLLECTION(),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
