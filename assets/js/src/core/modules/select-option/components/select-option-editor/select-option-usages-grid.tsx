@@ -10,11 +10,11 @@
 
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useClassSelectOptionGetUsagesQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import React, { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 import type { SelectOptionUsageItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { createColumnHelper } from '@tanstack/react-table'
 import { Skeleton } from 'antd'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface SelectOptionUsagesGridProps {
   selectOptionId: string
