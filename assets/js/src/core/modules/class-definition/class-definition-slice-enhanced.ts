@@ -11,8 +11,9 @@
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './class-definition-slice.gen'
 
+/* eslint-disable max-lines */
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -28,7 +29,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classDefinitionUpdate: {
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION(),
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -61,7 +62,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classCustomLayoutUpdate: {
       invalidatesTags: () => [],
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -112,7 +113,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classFieldCollectionUpdate: {
       invalidatesTags: () => invalidatingTags.FIELD_COLLECTION_COLLECTION(),
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -154,7 +155,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classObjectBrickUpdate: {
       invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION(),
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -184,7 +185,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classObjectBrickCustomLayoutUpdate: {
       invalidatesTags: () => [],
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
@@ -217,7 +218,7 @@ const api = baseApi.enhanceEndpoints({
     },
     classSelectOptionUpdate: {
       invalidatesTags: () => invalidatingTags.SELECT_OPTION_COLLECTION(),
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
