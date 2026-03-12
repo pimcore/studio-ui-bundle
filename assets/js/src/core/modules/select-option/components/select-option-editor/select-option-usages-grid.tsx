@@ -20,12 +20,14 @@ interface SelectOptionUsagesGridProps {
   selectOptionId: string
 }
 
-const columnHelper = createColumnHelper<SelectOptionUsageItem>()
 
-const useColumns = (): Array<ColumnDef<SelectOptionUsageItem, any>> => {
+
+export const SelectOptionUsagesGrid = ({ selectOptionId }: SelectOptionUsagesGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { data, isLoading } = useClassSelectOptionGetUsagesQuery({ id: selectOptionId })
 
-  return useMemo(() => [
+  const columnHelper = createColumnHelper<SelectOptionUsageItem>()
+  const columns = [
     columnHelper.accessor('class', {
       header: t('select-option.general-settings.usages.class'),
       size: 200
@@ -34,12 +36,7 @@ const useColumns = (): Array<ColumnDef<SelectOptionUsageItem, any>> => {
       header: t('select-option.general-settings.usages.field'),
       size: 200
     })
-  ], [t])
-}
-
-export const SelectOptionUsagesGrid = ({ selectOptionId }: SelectOptionUsagesGridProps): React.JSX.Element => {
-  const { data, isLoading } = useClassSelectOptionGetUsagesQuery({ id: selectOptionId })
-  const columns = useColumns()
+  ]
 
   if (isLoading) {
     return <Skeleton active />
@@ -47,10 +44,10 @@ export const SelectOptionUsagesGrid = ({ selectOptionId }: SelectOptionUsagesGri
 
   return (
     <Grid
-      columns={ columns }
-      data={ data?.items ?? [] }
-      enableMultipleRowSelection={ false }
-      resizable={ false }
+      columns={columns}
+      data={data?.items ?? []}
+      enableMultipleRowSelection={false}
+      resizable={false}
     />
   )
 }
