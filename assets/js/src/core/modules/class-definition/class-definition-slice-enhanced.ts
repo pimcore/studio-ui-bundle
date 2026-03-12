@@ -11,8 +11,9 @@
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './class-definition-slice.gen'
 
+/* eslint-disable max-lines */
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -208,6 +209,36 @@ const api = baseApi.enhanceEndpoints({
         ...invalidatingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId),
         ...invalidatingTags.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION(args.key)
       ]
+    },
+    classSelectOptionGetTree: {
+      providesTags: () => providingTags.SELECT_OPTION_COLLECTION()
+    },
+    classSelectOptionGet: {
+      providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
+    },
+    classSelectOptionUpdate: {
+      invalidatesTags: () => invalidatingTags.SELECT_OPTION_COLLECTION(),
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            api.util.updateQueryData('classSelectOptionGet', { id: args.id }, (draft) => {
+              Object.assign(draft, data)
+            })
+          )
+        } catch {
+          // Mutation failed, no cache update needed
+        }
+      }
+    },
+    classSelectOptionCreate: {
+      invalidatesTags: () => invalidatingTags.SELECT_OPTION_COLLECTION()
+    },
+    classSelectOptionDelete: {
+      invalidatesTags: () => invalidatingTags.SELECT_OPTION_COLLECTION()
+    },
+    classSelectOptionGetUsages: {
+      providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
     }
   }
 })
@@ -271,7 +302,12 @@ export const {
   useClassObjectBrickCustomLayoutDeleteMutation,
   useClassObjectBrickCustomLayoutExportQuery,
   useClassObjectBrickCustomLayoutImportMutation,
-  useClassGetFieldsByTypeQuery
+  useClassGetFieldsByTypeQuery,
+  useClassSelectOptionCreateMutation,
+  useClassSelectOptionGetQuery,
+  useClassSelectOptionUpdateMutation,
+  useClassSelectOptionDeleteMutation,
+  useClassSelectOptionGetUsagesQuery
 } = api
 
 export { api }
