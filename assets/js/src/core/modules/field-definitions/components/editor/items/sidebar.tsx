@@ -32,7 +32,7 @@ const useNoOpDeleteMutation: AnyMutationHook = () => [
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { useItemsQuery, useItemsDeleteMutation, AddModal } = useSettings()
+  const { useItemsQuery, useItemsDeleteMutation, AddModal, hideTreeExpanders } = useSettings()
   const { isLoading, isFetching, data, refetch } = useItemsQuery()
   const deleteMutationHook = useItemsDeleteMutation ?? useNoOpDeleteMutation
   const [deleteConfigurationMutation] = deleteMutationHook()
@@ -175,6 +175,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
             <TreeElement
               className={ styles.tree }
               defaultExpandedKeys={ expandedKeys }
+              hideExpanders={ hideTreeExpanders }
               onActionsClick={ (key, action, node) => {
                 if (action === 'delete') {
                   deleteConfiguration(node)

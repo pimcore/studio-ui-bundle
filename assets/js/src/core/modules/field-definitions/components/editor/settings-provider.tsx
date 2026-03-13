@@ -42,6 +42,7 @@ export interface ISettingsContext {
   GeneralSettingsFormFields: React.ComponentType
   fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   importExportConfig?: ImportExportConfig
+  hideTreeExpanders?: boolean
   customLayouts?: {
     ModalContent?: React.JSX.Element
 
