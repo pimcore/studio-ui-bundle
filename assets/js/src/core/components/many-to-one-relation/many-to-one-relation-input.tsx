@@ -18,13 +18,14 @@ import {
   createElementSelectorConfig,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { isValidElementType, mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { PathTarget, type PathTargetProps } from './path-target'
 import type { ManyToOneRelationValue } from './many-to-one-relation'
 import { useStyles } from './many-to-one-relation.styles'
+import { useElementHelper } from '@sdk/modules/element'
 
 export interface ManyToOneRelationInputProps extends PathTargetProps, IRelationAllowedTypesDataComponent {
   enableSearch?: boolean
@@ -32,6 +33,7 @@ export interface ManyToOneRelationInputProps extends PathTargetProps, IRelationA
 
 export const ManyToOneRelationInput = (props: ManyToOneRelationInputProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { mapToLegacyElementType } = useElementHelper()
 
   const elementSelectorConfig = {
     selectionType: SelectionType.Single,
@@ -40,7 +42,7 @@ export const ManyToOneRelationInput = (props: ManyToOneRelationInputProps): Reac
     onFinish: (event) => {
       if (!isEmpty(event.items)) {
         props.onChange?.({
-          type: mapToLegacyElementType(event.items[0].elementType),
+          type: mapToLegacyElementType(String(event.items[0].elementType)),
           subtype: event.items[0].data.type,
           id: event.items[0].data.id,
           fullPath: event.items[0].data.fullpath

@@ -40,7 +40,7 @@ export const useElementHelper = (): UseElementReturn => {
   function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
-    if (targetType === null && silent !== true) { 
+    if (targetType === null && silent !== true) {
       trackError(new GeneralError(`Unknown element type: ${elementType}`))
       return undefined
     }

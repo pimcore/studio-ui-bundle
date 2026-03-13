@@ -37,7 +37,6 @@ export const mapToElementType = (elementType: string): ElementType | null => {
   }
 }
 
-
 export const mapToLegacyElementType = (elementType: ElementType): 'asset' | 'object' | 'document' => {
   if (elementType === 'data-object') {
     return 'object'
