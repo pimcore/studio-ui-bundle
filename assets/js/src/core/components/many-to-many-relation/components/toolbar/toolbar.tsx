@@ -21,6 +21,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { createElementSelectorAreas, createElementSelectorConfig, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
@@ -62,7 +63,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
             const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
               id: item.data.id,
-              type: item.elementType,
+              type: mapToLegacyElementType(item.elementType),
               subtype: getSubType(item),
               fullPath: item.data.fullpath,
               isPublished: item.data.published ?? null

@@ -12,7 +12,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
-import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
+import { mapToElementType as mapType, mapToLegacyElementType as mapLegacyType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
@@ -49,7 +49,8 @@ export const useElementHelper = (): UseElementReturn => {
   }
 
   const mapToLegacyElementType = (elementType: string): string => {
-    return elementType === 'data-object' ? 'object' : elementType
+    const mapped = mapType(elementType)
+    return mapped !== null ? mapLegacyType(mapped) : elementType
   }
 
   const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void): void => {

@@ -19,6 +19,7 @@ import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-objec
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -226,7 +227,7 @@ export const useValue = (
     if (info.type === 'data-object') {
       newValue = {
         id: info.data.id,
-        type: 'object',
+        type: mapToLegacyElementType(info.type),
         subtype: info.data.className ?? info.data.type,
         isPublished: info.data.published,
         fullPath: info.data.fullPath
