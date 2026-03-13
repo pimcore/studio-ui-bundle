@@ -20,13 +20,25 @@ export interface FieldCollectionProviderProps extends IFieldCollectionContext {
 }
 
 export const FieldCollectionProvider = (props: FieldCollectionProviderProps): React.JSX.Element => {
-  const { children, ...contextValue } = props
+  const { children, registry, title, collapsed, addLabel, maxItems, disallowAddRemove, disallowReorder, value, onChange } = props
 
-  return useMemo(() => (
+  const contextValue = useMemo<IFieldCollectionContext>(() => ({
+    registry,
+    title,
+    collapsed,
+    addLabel,
+    maxItems,
+    disallowAddRemove,
+    disallowReorder,
+    value,
+    onChange
+  }), [registry, title, collapsed, addLabel, maxItems, disallowAddRemove, disallowReorder, value, onChange])
+
+  return (
     <FieldCollectionContext.Provider value={ contextValue }>
       {children}
     </FieldCollectionContext.Provider>
-  ), [contextValue, children])
+  )
 }
 
 export interface UseFieldCollectionReturn extends IFieldCollectionContext {}

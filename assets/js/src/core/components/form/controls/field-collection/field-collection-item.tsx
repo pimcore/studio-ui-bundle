@@ -20,7 +20,7 @@ export interface FieldCollectionItemProps {
   field: number
 }
 
-export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.Element => {
+export const FieldCollectionItem = React.memo((props: FieldCollectionItemProps): React.JSX.Element => {
   const { field } = props
   const { values } = useNumberedList()
   const value = values[field]
@@ -48,4 +48,4 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
       </Form.Group>
     </ToolStripBox>
   )
-}
+})

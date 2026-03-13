@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import type { MediaQuery } from '../../types/media-query.types'
@@ -36,7 +36,13 @@ export const MediaQueryTabs = ({
     onMediaQueryUpdate(mediaQuery.id, mediaQuery)
   }, [onMediaQueryUpdate])
 
-  const tabItems = mediaQueries.map((mediaQuery) => ({
+  const handleEdit = useCallback((targetKey: React.MouseEvent | React.KeyboardEvent | string, action: 'add' | 'remove') => {
+    if (action === 'remove' && typeof targetKey === 'string') {
+      onTabClose(targetKey)
+    }
+  }, [onTabClose])
+
+  const tabItems = useMemo(() => mediaQueries.map((mediaQuery) => ({
     key: mediaQuery.id,
     label: mediaQuery.id === DEFAULT_MEDIA_QUERY_ID
       ? t('image-thumbnails.editor.media-queries.default')
@@ -48,7 +54,7 @@ export const MediaQueryTabs = ({
         onMediaQueryUpdate={ handleMediaQueryUpdate }
       />
     )
-  }))
+  })), [mediaQueries, handleMediaQueryUpdate, t])
 
   return (
     <Tabs
@@ -56,11 +62,7 @@ export const MediaQueryTabs = ({
       hideAdd
       items={ tabItems }
       onChange={ onTabChange }
-      onEdit={ (targetKey, action) => {
-        if (action === 'remove' && typeof targetKey === 'string') {
-          onTabClose(targetKey)
-        }
-      } }
+      onEdit={ handleEdit }
       size="small"
       type="editable-card"
     />

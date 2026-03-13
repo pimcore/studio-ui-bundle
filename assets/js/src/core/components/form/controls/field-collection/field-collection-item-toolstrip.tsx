@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { ToolStrip } from '../../../toolstrip/tool-strip'
 import { useFieldCollection } from './field-collection-provider'
 import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
@@ -21,7 +21,7 @@ export interface FieldCollectionItemToolStripProps {
   field: number
 }
 
-export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStripProps): React.JSX.Element => {
+export const FieldCollectionItemToolStrip = React.memo((props: FieldCollectionItemToolStripProps): React.JSX.Element => {
   const { field } = props
   const { values, getValueByKey, operations } = useNumberedList()
   const value = getValueByKey(field.toString())
@@ -30,6 +30,10 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
   const registryItem = registry.getItemByType(type as string)
   const { t } = useTranslation()
   const hasMaxItems = maxItems !== undefined && values.length >= maxItems
+
+  const handleMoveDown = useCallback(() => { operations.move(field, field + 1) }, [operations, field])
+  const handleMoveUp = useCallback(() => { operations.move(field, field - 1) }, [operations, field])
+  const handleRemove = useCallback(() => { operations.remove(field) }, [operations, field])
 
   if (registryItem === undefined) {
     throw new Error(`No registry item found for type "${type}"`)
@@ -47,14 +51,14 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
         <IconButton
           disabled={ disallowReorder }
           icon={ { value: 'chevron-down' } }
-          onClick={ () => { operations.move(field, field + 1) } }
+          onClick={ handleMoveDown }
           size="small"
         />
 
         <IconButton
           disabled={ disallowReorder }
           icon={ { value: 'chevron-up' } }
-          onClick={ () => { operations.move(field, field - 1) } }
+          onClick={ handleMoveUp }
           size="small"
         />
       </Space>
@@ -62,9 +66,9 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
       <IconButton
         disabled={ disallowAddRemove }
         icon={ { value: 'trash' } }
-        onClick={ () => { operations.remove(field) } }
+        onClick={ handleRemove }
         size="small"
       />
     </ToolStrip>
   )
-}
+})

@@ -11,9 +11,14 @@
 import React, { useMemo } from 'react'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { ImageThumbnailsEditor } from '../image-thumbnails-editor/image-thumbnails-editor'
 import { type ThumbnailTab } from '../../hooks/use-thumbnail-tab-manager'
 import { useStyles } from './image-thumbnails-tabs.styles'
+
+const SAVE_BUTTON_PORTAL_ID = 'image-thumbnails-save-button'
 
 interface ImageThumbnailsTabsProps {
   openedThumbnails: ThumbnailTab[]
@@ -48,15 +53,23 @@ export const ImageThumbnailsTabs = ({
   }, [openedThumbnails, activeTabKey, onTabDirtyChange])
 
   return (
-    <Tabs
-      activeKey={ activeTabKey }
-      className={ styles.tabs }
-      hasStickyHeader
-      items={ tabItems }
-      onChange={ onChangeTab }
-      onClose={ onCloseTab }
-      rootClassName={ styles.tabsContainer }
-      type="editable-card"
-    />
+    <ContentLayout
+      renderToolbar={
+        <Toolbar justify='flex-end'>
+          <PortalSlot id={ SAVE_BUTTON_PORTAL_ID } />
+        </Toolbar>
+      }
+    >
+      <Tabs
+        activeKey={ activeTabKey }
+        className={ styles.tabs }
+        hasStickyHeader
+        items={ tabItems }
+        onChange={ onChangeTab }
+        onClose={ onCloseTab }
+        rootClassName={ styles.tabsContainer }
+        type="editable-card"
+      />
+    </ContentLayout>
   )
 }

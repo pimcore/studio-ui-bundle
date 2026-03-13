@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { MediaQueryTransformationsField } from './media-query-transformations-field'
 import type { MediaQuery, TransformationType } from '../../types/media-query.types'
@@ -22,18 +22,35 @@ export const MediaQueryTabContent = ({
   mediaQuery,
   onMediaQueryUpdate
 }: MediaQueryTabContentProps): React.JSX.Element => {
+  // Stable ID map: once a transformation gets an ID it keeps it across renders
+  const idMapRef = useRef<Record<number, string>>({})
+
+  const mediaQueryRef = useRef(mediaQuery)
+  useEffect(() => {
+    mediaQueryRef.current = mediaQuery
+  })
+
   const handleTransformationsChange = useCallback((transformations: Array<{ type: string, data: any }>) => {
+    const currentMediaQuery = mediaQueryRef.current
     const updatedMediaQuery: MediaQuery = {
-      ...mediaQuery,
-      transformations: transformations.map((t, index) => ({
-        id: (mediaQuery.transformations[index]?.id === '' ? `transformation-${Date.now()}-${index}` : mediaQuery.transformations[index]?.id) ?? `transformation-${Date.now()}-${index}`,
-        type: t.type as TransformationType,
-        config: t.data
-      }))
+      ...currentMediaQuery,
+      transformations: transformations.map((t, index) => {
+        const existingId = currentMediaQuery.transformations[index]?.id
+        if (existingId !== '' && existingId != null) {
+          idMapRef.current[index] = existingId
+        } else if (idMapRef.current[index] == null) {
+          idMapRef.current[index] = `transformation-${crypto.randomUUID()}`
+        }
+        return {
+          id: idMapRef.current[index],
+          type: t.type as TransformationType,
+          config: t.data
+        }
+      })
     }
 
     onMediaQueryUpdate(updatedMediaQuery)
-  }, [mediaQuery, onMediaQueryUpdate])
+  }, [onMediaQueryUpdate])
 
   return (
     <ItemProvider item={ { name: 'transformations' } }>
