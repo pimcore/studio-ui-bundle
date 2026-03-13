@@ -18,7 +18,7 @@ import {
   createElementSelectorConfig,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { isValidElementType, mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
@@ -40,7 +40,7 @@ export const ManyToOneRelationInput = (props: ManyToOneRelationInputProps): Reac
     onFinish: (event) => {
       if (!isEmpty(event.items)) {
         props.onChange?.({
-          type: event.items[0].elementType,
+          type: mapToLegacyElementType(event.items[0].elementType),
           subtype: event.items[0].data.type,
           id: event.items[0].data.id,
           fullPath: event.items[0].data.fullpath

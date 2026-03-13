@@ -17,6 +17,7 @@ import { has, isBoolean, isPlainObject } from 'lodash'
 import { baseUrl } from '@Pimcore/app/router/router'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import {
   ElementIconContext,
   type ElementIconProcessorRegistry
@@ -118,7 +119,7 @@ export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo, 
 
   return {
     id: elementData.id,
-    type: (info.type === 'data-object' ? 'object' : info.type) as ElementReference['type'],
+    type: mapToLegacyElementType(info.type as ElementType),
     fullPath: String(elementData.fullPath),
     isPublished: (showPublishedState && isBoolean(published)) ? published : null,
     subtype: getSubType(info)
