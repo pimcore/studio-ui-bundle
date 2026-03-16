@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
+import { theme } from 'antd'
 import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
@@ -36,6 +37,7 @@ interface BulkExportModalProps extends Omit<IModalProps, 'children'> {
 export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element => {
   const { selectedItems, selectAll, deselectAll, toggleItem, isSelected, closeModal, ...modalProps } = props
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const { data, isLoading } = useClassBulkExportAvailableQuery()
   const [triggerExport, { isLoading: isExporting }] = useClassBulkExportMutation()
 
@@ -75,9 +77,13 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
         bulkExportParameters: {
           items: selectedItems
         }
-      }).unwrap()
+      })
 
-      const blob = result instanceof Blob ? result : new Blob([JSON.stringify(result)], { type: 'application/json' })
+      if (!('data' in result)) {
+        throw new GeneralError('Bulk export failed')
+      }
+
+      const blob = result.data instanceof Blob ? result.data : new Blob([JSON.stringify(result.data)], { type: 'application/json' })
       downloadFile('bulk-export.json', blob)
 
       closeModal()
@@ -131,7 +137,7 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
         <Flex
           align='center'
           justify='center'
-          style={{ padding: '40px 0' }}
+          style={{ padding: `${token.paddingXL}px 0` }}
         >
           <Spin asContainer />
         </Flex>
@@ -141,7 +147,7 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
         <>
           <Flex
             gap='small'
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: token.padding }}
           >
             <Button
               onClick={handleSelectAll}
