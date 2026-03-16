@@ -18,6 +18,44 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
+            classBulkExportAvailable: build.query<ClassBulkExportAvailableApiResponse, ClassBulkExportAvailableApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/class/bulk-export/available` }),
+                providesTags: ["Class Definition"],
+            }),
+            classBulkExport: build.mutation<ClassBulkExportApiResponse, ClassBulkExportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-export`,
+                    method: "POST",
+                    body: queryArg.bulkExportParameters,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImport: build.mutation<ClassBulkImportApiResponse, ClassBulkImportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/${queryArg.fileId}`,
+                    method: "POST",
+                    body: queryArg.bulkImportParameters,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImportDeleteFile: build.mutation<
+                ClassBulkImportDeleteFileApiResponse,
+                ClassBulkImportDeleteFileApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/${queryArg.fileId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImportPrepare: build.mutation<ClassBulkImportPrepareApiResponse, ClassBulkImportPrepareApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/prepare`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             classDefinitionCollection: build.query<
                 ClassDefinitionCollectionApiResponse,
                 ClassDefinitionCollectionApiArg
@@ -515,6 +553,36 @@ export type ClassGetAvailableVisibleFieldsApiArg = {
     /** Comma-separated list of class names */
     classNames?: string;
 };
+export type ClassBulkExportAvailableApiResponse = /** status 200 List of available exportable items */ {
+    items: BulkExportAvailableItem[];
+};
+export type ClassBulkExportAvailableApiArg = void;
+export type ClassBulkExportApiResponse = /** status 200 Bulk export JSON file download */ Blob;
+export type ClassBulkExportApiArg = {
+    bulkExportParameters: BulkExportParameters;
+};
+export type ClassBulkImportApiResponse = /** status 201 Successfully created jobRun for bulk import */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
+export type ClassBulkImportApiArg = {
+    /** File identifier returned by the prepare import endpoint */
+    fileId: string;
+    bulkImportParameters: BulkImportParameters;
+};
+export type ClassBulkImportDeleteFileApiResponse = unknown;
+export type ClassBulkImportDeleteFileApiArg = {
+    /** File identifier returned by the prepare import endpoint */
+    fileId: string;
+};
+export type ClassBulkImportPrepareApiResponse =
+    /** status 200 File identifier and list of importable items */ BulkImportPrepareResponse;
+export type ClassBulkImportPrepareApiArg = {
+    body: {
+        /** Bulk export JSON file to analyze */
+        file: Blob;
+    };
+};
 export type ClassDefinitionCollectionApiResponse = /** status 200 List of class definitions */ {
     totalItems: number;
     items: ClassDefinitionListItem[];
@@ -945,6 +1013,44 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type BulkExportAvailableItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Definition type */
+    type: string;
+    /** Definition name or identifier */
+    name: string;
+    /** Human-readable display name */
+    displayName: string;
+    /** Icon identifier */
+    icon: string;
+};
+export type BulkExportParameters = {
+    /** Items to export */
+    items: {
+        type?: string;
+        name?: string;
+    }[];
+};
+export type BulkImportParameters = {
+    /** Items to import from the uploaded file */
+    items: {
+        type?: string;
+        name?: string;
+    }[];
+};
+export type BulkImportPrepareResponse = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Unique file identifier for the stored import file */
+    fileId: string;
+    /** List of importable items found in the file */
+    items: BulkExportAvailableItem[];
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1587,6 +1693,11 @@ export type SelectOptionUsageItem = {
 };
 export const {
     useClassGetAvailableVisibleFieldsQuery,
+    useClassBulkExportAvailableQuery,
+    useClassBulkExportMutation,
+    useClassBulkImportMutation,
+    useClassBulkImportDeleteFileMutation,
+    useClassBulkImportPrepareMutation,
     useClassDefinitionCollectionQuery,
     useClassDefinitionCollectionCreatableQuery,
     useClassCustomLayoutCollectionQuery,
