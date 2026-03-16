@@ -13,6 +13,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { useBulkExportContext } from '@Pimcore/modules/bulk-export/components/bulk-export-modal/context/bulk-export-context'
+import { UserPermission } from '@sdk/modules/auth'
+import { NavPermission } from '@sdk/modules/perspectives'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -28,6 +30,8 @@ moduleSystem.registerModule({
       path: 'DataManagement/DataModelDefinitions/BulkExport',
       label: 'navigation.bulk-export',
       order: 700,
+      permission: UserPermission.Classes,
+      perspectivePermission: NavPermission.BulkExport,
       useCustomMainNavItem: () => {
         const { open } = useBulkExportContext()
 
