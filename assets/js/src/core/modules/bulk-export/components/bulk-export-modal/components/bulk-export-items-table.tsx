@@ -13,6 +13,7 @@ import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type BulkExportAvailableItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useStyles } from './bulk-export-items-table.styles'
 
 interface BulkExportItemsTableProps {
   items: BulkExportAvailableItem[]
@@ -21,22 +22,24 @@ interface BulkExportItemsTableProps {
 }
 
 export const BulkExportItemsTable = ({ items, toggleItem, isSelected }: BulkExportItemsTableProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
   return (
     <div className='bulk-export-items-table'>
       {items.map((item) => (
         <Flex
           align='center'
+          className={styles.itemRow}
           gap='small'
-          key={ `${item.type}-${item.name}` }
-          style={ { padding: '4px 0' } }
+          key={`${item.type}-${item.name}`}
         >
           <Checkbox
-            checked={ isSelected(item.type, item.name) }
-            onChange={ () => { toggleItem(item.type, item.name) } }
+            checked={isSelected(item.type, item.name)}
+            onChange={() => { toggleItem(item.type, item.name) }}
           />
 
           <Icon
-            value={ item.icon }
+            value={item.icon}
           />
 
           <span>{item.displayName}</span>
