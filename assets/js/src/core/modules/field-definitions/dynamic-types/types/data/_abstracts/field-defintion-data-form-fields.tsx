@@ -26,7 +26,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         label={ t('name') }
         name="name"
       >
-        <Input />
+        <Input disabled={ props.context.disableName } />
       </Form.Item>
 
       <Form.Item
