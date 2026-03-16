@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type MenuProps } from 'antd'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type AreablockEditableConfig } from '../areablock-editable'
 import { configUtils } from '../utils/areablock-utils'
 
@@ -32,7 +34,11 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
     if (Array.isArray(groupedTypes)) {
       return groupedTypes.map(areaType => ({
         key: areaType.type,
-        label: t(areaType.name),
+        label: (
+          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
+            <span>{t(areaType.name)}</span>
+          </Tooltip>
+        ),
         onClick: () => { onAddArea(areaType.type) }
       }))
     }
@@ -42,7 +48,11 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
     Object.entries(groupedTypes).forEach(([groupName, areaTypes]) => {
       const children = areaTypes.map(areaType => ({
         key: areaType.type,
-        label: t(areaType.name),
+        label: (
+          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
+            <span>{t(areaType.name)}</span>
+          </Tooltip>
+        ),
         onClick: () => { onAddArea(areaType.type) }
       }))
 

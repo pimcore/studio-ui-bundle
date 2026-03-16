@@ -103,7 +103,7 @@ export const configUtils = {
     return index < totalCount - 1
   },
 
-  getAvailableTypes (config?: AreablockEditableConfig): Array<{ name: string, type: string }> {
+  getAvailableTypes (config?: AreablockEditableConfig): AreaType[] {
     return config?.types ?? []
   },
 
@@ -112,7 +112,7 @@ export const configUtils = {
     return config.allowed.includes(type)
   },
 
-  getGroupedAreaTypes (config?: AreablockEditableConfig): Array<{ name: string, type: string }> | Record<string, Array<{ name: string, type: string }>> {
+  getGroupedAreaTypes (config?: AreablockEditableConfig): AreaType[] | Record<string, AreaType[]> {
     const availableTypes = config?.types ?? []
     const groupConfig = config?.group
 
@@ -120,14 +120,14 @@ export const configUtils = {
       return availableTypes
     }
 
-    const groupedTypes: Record<string, Array<{ name: string, type: string }>> = {}
+    const groupedTypes: Record<string, AreaType[]> = {}
 
     Object.entries(groupConfig).forEach(([groupName, typeIds]) => {
       const uniqueTypeIds = [...new Set(typeIds)]
 
       const groupTypes = uniqueTypeIds
         .map(typeId => availableTypes.find(type => type.type === typeId))
-        .filter((type): type is { name: string, type: string } => !isNil(type))
+        .filter((type): type is AreaType => !isNil(type))
 
       if (groupTypes.length > 0) {
         groupedTypes[groupName] = groupTypes
