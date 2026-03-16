@@ -147,6 +147,7 @@ export default defineConfig({
       './modules/wysiwyg': './js/src/sdk/modules/wysiwyg/index.ts',
       './modules/notifications': './js/src/sdk/modules/notifications/index.ts',
       './modules/perspectives': './js/src/sdk/modules/perspectives/index.ts',
+      './modules/global-message-bus': './js/src/sdk/modules/global-message-bus/index.ts',
       './utils': './js/src/sdk/utils/index.ts',
       },
       dts: false,
