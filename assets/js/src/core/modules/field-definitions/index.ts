@@ -74,5 +74,10 @@ moduleSystem.registerModule({
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Objectbricks'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Classificationstore'))
     fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Localizedfields'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Consent'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Firstname'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Lastname'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Email'))
+    fieldDefinitionRegistry.registerDynamicType(container.get('DynamicTypes/FieldDefinition/Gender'))
   }
 })

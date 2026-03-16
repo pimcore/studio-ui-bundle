@@ -831,6 +831,11 @@ field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
 field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Localized Fields
+field-definition.firstname: First Name
+field-definition.lastname: Last Name
+field-definition.email: Email
+field-definition.gender: Gender
+field-definition.consent: Consent
 field-definition.accordion: Accordion
 field-definition.fieldset: Fieldset
 field-definition.fieldcontainer: Field Container
@@ -922,6 +927,16 @@ field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-def
 field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
 field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
 field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+field-definition.firstname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.firstname)"
+field-definition.firstname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.firstname)"
+field-definition.lastname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.lastname)"
+field-definition.lastname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.lastname)"
+field-definition.email.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.email)"
+field-definition.email.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.email)"
+field-definition.gender.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.gender)"
+field-definition.gender.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.gender)"
+field-definition.consent.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.consent)"
+field-definition.consent.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.consent)"
 regex-validation: Regular Expression Validation
 regex: RegEx
 regex-flags: RegEx Flags
