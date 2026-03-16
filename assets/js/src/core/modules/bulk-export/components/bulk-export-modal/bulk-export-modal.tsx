@@ -8,21 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo } from 'react'
-import { theme } from 'antd'
-import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
-import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { CollapseItem } from '@Pimcore/components/collapse/collapse'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 import { Space } from '@Pimcore/components/space/space'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { useTranslation } from 'react-i18next'
-import { useClassBulkExportAvailableQuery, useClassBulkExportMutation } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import { type BulkExportAvailableItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import { BulkExportTypeGroup } from './components/bulk-export-type-group'
-import { type BulkExportItem } from './context/bulk-export-context'
-import { downloadFile } from '@Pimcore/modules/app/utils/download'
 import { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { downloadFile } from '@Pimcore/modules/app/utils/download'
+import { useClassBulkExportAvailableQuery, useClassBulkExportMutation, type BulkExportAvailableItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { theme } from 'antd'
+import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { BulkExportItemsTable } from './components/bulk-export-items-table'
+import { type BulkExportItem } from './context/bulk-export-context'
 
 interface BulkExportModalProps extends Omit<IModalProps, 'children'> {
   onClose?: () => void
@@ -144,10 +144,12 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
       )}
 
       {!isLoading && (
-        <>
+        <Flex
+          vertical
+          gap={'extra-small'}
+        >
           <Flex
             gap='small'
-            style={{ marginBottom: token.padding }}
           >
             <Button
               onClick={handleSelectAll}
@@ -166,19 +168,23 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
           <Space
             direction='vertical'
-            style={{ width: '100%' }}
           >
             {sortedTypes.map((type) => (
-              <BulkExportTypeGroup
-                isSelected={isSelected}
-                items={groupedItems[type]}
+              <CollapseItem
                 key={type}
-                toggleItem={toggleItem}
-                type={type}
-              />
+                defaultActive
+                label={t(`bulk-export.type.${type}`)}
+                theme='default'
+              >
+                <BulkExportItemsTable
+                  isSelected={isSelected}
+                  items={groupedItems[type]}
+                  toggleItem={toggleItem}
+                />
+              </CollapseItem>
             ))}
           </Space>
-        </>
+        </Flex>
       )}
     </Modal>
   )
