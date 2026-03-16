@@ -20,6 +20,8 @@ import { useClassBulkExportAvailableQuery, useClassBulkExportMutation } from '@P
 import { type BulkExportAvailableItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { BulkExportTypeGroup } from './components/bulk-export-type-group'
 import { type BulkExportItem } from './context/bulk-export-context'
+import { downloadFile } from '@Pimcore/modules/app/utils/download'
+import { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface BulkExportModalProps extends Omit<IModalProps, 'children'> {
   onClose?: () => void
@@ -76,18 +78,11 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
       }).unwrap()
 
       const blob = result instanceof Blob ? result : new Blob([JSON.stringify(result)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'bulk-export.json'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+      downloadFile('bulk-export.json', blob)
 
       closeModal()
     } catch {
-      // Error handling is done by RTK Query
+      throw new GeneralError('Bulk export failed')
     }
   }
 
@@ -108,15 +103,15 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
   const footer = (
     <ModalFooter>
       <Button
-        onClick={ modalProps.onCancel as React.MouseEventHandler }
+        onClick={modalProps.onCancel as React.MouseEventHandler}
       >
         {t('bulk-export.cancel')}
       </Button>
 
       <Button
-        disabled={ selectedItems.length === 0 || isExporting }
-        loading={ isExporting }
-        onClick={ handleExport }
+        disabled={selectedItems.length === 0 || isExporting}
+        loading={isExporting}
+        onClick={handleExport}
         type='primary'
       >
         {t('bulk-export.export')}
@@ -126,17 +121,17 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
   return (
     <Modal
-      { ...modalProps }
-      footer={ footer }
+      {...modalProps}
+      footer={footer}
       size='L'
-      styles={ { body: { maxHeight: '60vh', overflowY: 'auto' } } }
-      title={ t('bulk-export.title') }
+      styles={{ body: { maxHeight: '60vh', overflowY: 'auto' } }}
+      title={t('bulk-export.title')}
     >
       {isLoading && (
         <Flex
           align='center'
           justify='center'
-          style={ { padding: '40px 0' } }
+          style={{ padding: '40px 0' }}
         >
           <Spin asContainer />
         </Flex>
@@ -146,17 +141,17 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
         <>
           <Flex
             gap='small'
-            style={ { marginBottom: 16 } }
+            style={{ marginBottom: 16 }}
           >
             <Button
-              onClick={ handleSelectAll }
+              onClick={handleSelectAll}
               size='small'
             >
               {t('bulk-export.select-all')}
             </Button>
 
             <Button
-              onClick={ handleDeselectAll }
+              onClick={handleDeselectAll}
               size='small'
             >
               {t('bulk-export.deselect-all')}
@@ -165,15 +160,15 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
           <Space
             direction='vertical'
-            style={ { width: '100%' } }
+            style={{ width: '100%' }}
           >
             {sortedTypes.map((type) => (
               <BulkExportTypeGroup
-                isSelected={ isSelected }
-                items={ groupedItems[type] }
-                key={ type }
-                toggleItem={ toggleItem }
-                type={ type }
+                isSelected={isSelected}
+                items={groupedItems[type]}
+                key={type}
+                toggleItem={toggleItem}
+                type={type}
               />
             ))}
           </Space>
