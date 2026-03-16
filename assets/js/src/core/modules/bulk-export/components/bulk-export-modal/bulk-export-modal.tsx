@@ -103,15 +103,15 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
   const footer = (
     <ModalFooter>
       <Button
-        onClick={modalProps.onCancel as React.MouseEventHandler}
+        onClick={ modalProps.onCancel as React.MouseEventHandler }
       >
         {t('bulk-export.cancel')}
       </Button>
 
       <Button
-        disabled={selectedItems.length === 0 || isExporting}
-        loading={isExporting}
-        onClick={handleExport}
+        disabled={ selectedItems.length === 0 || isExporting }
+        loading={ isExporting }
+        onClick={ handleExport }
         type='primary'
       >
         {t('bulk-export.export')}
@@ -121,17 +121,17 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
   return (
     <Modal
-      {...modalProps}
-      footer={footer}
+      { ...modalProps }
+      footer={ footer }
       size='L'
-      styles={{ body: { maxHeight: '60vh', overflowY: 'auto' } }}
-      title={t('bulk-export.title')}
+      styles={ { body: { maxHeight: '60vh', overflowY: 'auto' } } }
+      title={ t('bulk-export.title') }
     >
       {isLoading && (
         <Flex
           align='center'
           justify='center'
-          style={{ padding: '40px 0' }}
+          style={ { padding: '40px 0' } }
         >
           <Spin asContainer />
         </Flex>
@@ -141,17 +141,17 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
         <>
           <Flex
             gap='small'
-            style={{ marginBottom: 16 }}
+            style={ { marginBottom: 16 } }
           >
             <Button
-              onClick={handleSelectAll}
+              onClick={ handleSelectAll }
               size='small'
             >
               {t('bulk-export.select-all')}
             </Button>
 
             <Button
-              onClick={handleDeselectAll}
+              onClick={ handleDeselectAll }
               size='small'
             >
               {t('bulk-export.deselect-all')}
@@ -160,15 +160,15 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
           <Space
             direction='vertical'
-            style={{ width: '100%' }}
+            style={ { width: '100%' } }
           >
             {sortedTypes.map((type) => (
               <BulkExportTypeGroup
-                isSelected={isSelected}
-                items={groupedItems[type]}
-                key={type}
-                toggleItem={toggleItem}
-                type={type}
+                isSelected={ isSelected }
+                items={ groupedItems[type] }
+                key={ type }
+                toggleItem={ toggleItem }
+                type={ type }
               />
             ))}
           </Space>
