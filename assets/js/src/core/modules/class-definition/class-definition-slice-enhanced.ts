@@ -307,7 +307,9 @@ export const {
   useClassSelectOptionGetQuery,
   useClassSelectOptionUpdateMutation,
   useClassSelectOptionDeleteMutation,
-  useClassSelectOptionGetUsagesQuery
+  useClassSelectOptionGetUsagesQuery,
+  useClassBulkExportAvailableQuery,
+  useClassBulkExportMutation
 } = api
 
 export { api }

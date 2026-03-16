@@ -1405,6 +1405,7 @@ navigation.data-model-definitions: Data Model Definitions
 navigation.class-definitions: Classes
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
+navigation.bulk-export: Bulk Export
 navigation.quantity-values: Quantity Values
 navigation.select-options: Select Options
 navigation.experience-ecommerce: Experience & E-commerce
@@ -2506,3 +2507,12 @@ owner: Owner
 reverse-object-relation.tooltip: "Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored."
 disabled-fields: Disabled fields
 allowed-targets: Allowed Targets
+bulk-export.title: Bulk Export
+bulk-export.select-all: Select All
+bulk-export.deselect-all: Deselect All
+bulk-export.export: Export
+bulk-export.cancel: Cancel
+bulk-export.type.class: Classes
+bulk-export.type.customlayout: Custom Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
