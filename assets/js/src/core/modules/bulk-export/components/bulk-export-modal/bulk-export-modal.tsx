@@ -145,8 +145,8 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
 
       {!isLoading && (
         <Flex
+          gap={ 'extra-small' }
           vertical
-          gap={'extra-small'}
         >
           <Flex
             gap='small'
@@ -171,15 +171,15 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
           >
             {sortedTypes.map((type) => (
               <CollapseItem
-                key={type}
                 defaultActive
-                label={t(`bulk-export.type.${type}`)}
+                key={ type }
+                label={ t(`bulk-export.type.${type}`) }
                 theme='default'
               >
                 <BulkExportItemsTable
-                  isSelected={isSelected}
-                  items={groupedItems[type]}
-                  toggleItem={toggleItem}
+                  isSelected={ isSelected }
+                  items={ groupedItems[type] }
+                  toggleItem={ toggleItem }
                 />
               </CollapseItem>
             ))}

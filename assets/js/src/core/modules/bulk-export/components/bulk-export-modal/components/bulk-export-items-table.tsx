@@ -29,17 +29,17 @@ export const BulkExportItemsTable = ({ items, toggleItem, isSelected }: BulkExpo
       {items.map((item) => (
         <Flex
           align='center'
-          className={styles.itemRow}
+          className={ styles.itemRow }
           gap='small'
-          key={`${item.type}-${item.name}`}
+          key={ `${item.type}-${item.name}` }
         >
           <Checkbox
-            checked={isSelected(item.type, item.name)}
-            onChange={() => { toggleItem(item.type, item.name) }}
+            checked={ isSelected(item.type, item.name) }
+            onChange={ () => { toggleItem(item.type, item.name) } }
           />
 
           <Icon
-            value={item.icon}
+            value={ item.icon }
           />
 
           <span>{item.displayName}</span>
