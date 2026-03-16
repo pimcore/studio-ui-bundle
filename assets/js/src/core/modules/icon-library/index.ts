@@ -36,6 +36,7 @@ import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.s
 import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import arrowSquareRight from '@Pimcore/assets/icons/arrow-square-right.inline.svg?react'
+import assetMetadataClassDefinition from '@Pimcore/assets/icons/asset-metadata-class-definition.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
@@ -472,6 +473,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'arrow-square-right',
       component: arrowSquareRight
+    })
+    iconLibrary.register({
+      name: 'asset-metadata-class-definition',
+      component: assetMetadataClassDefinition
     })
     iconLibrary.register({
       name: 'asset',
