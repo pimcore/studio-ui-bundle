@@ -68,6 +68,7 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
             disallowDelete={ props?.disallowDelete }
             disallowReorder={ props?.disallowReorder }
             field={ field }
+            layoutDefinition={ layoutDefinition }
           />
           ) }
       >
