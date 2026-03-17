@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
@@ -29,14 +29,9 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
-  const bufferedValue = useDebounce(value, 50)
+  const bufferedValue = useDebounce(value, 10)
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
-
-  const valueRef = useRef(value)
-  valueRef.current = value
-  const itemNameRef = useRef(itemName)
-  itemNameRef.current = itemName
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
   const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
@@ -51,17 +46,19 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [baseValue])
 
   const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
+    let currentKey = key
+    currentKey ??= value.length
+
     setValue((currentValue) => {
-      const insertAt = key ?? currentValue.length
-      const _newValue = [...currentValue]
-      _newValue.splice(insertAt, 0, newValue)
+      const _newValue = cloneDeep(currentValue)
+      _newValue.splice(currentKey, 0, newValue)
       return _newValue
     })
-  }, [])
+  }, [value.length])
 
   const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
     setValue((currentValue) => {
-      const newValue = [...currentValue]
+      const newValue = cloneDeep(currentValue)
       newValue.splice(key, 1)
       return newValue
     })
@@ -83,16 +80,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
 
     setValue((currentValue) => {
-      // Only deep-clone the single item being modified, leave others untouched
-      const itemIndex = Number(nameDifference[0])
-      if (!Number.isNaN(itemIndex) && nameDifference.length > 1) {
-        const newValue = [...currentValue]
-        const updatedItem = cloneDeep(currentValue[itemIndex])
-        set(updatedItem, nameDifference.slice(1), newSubValue)
-        newValue[itemIndex] = updatedItem
-        return newValue
-      }
-      const newValue = [...currentValue]
+      const newValue = cloneDeep(currentValue)
       set(newValue, nameDifference, newSubValue)
       return newValue
     })
@@ -100,7 +88,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
     setValue((currentValue) => {
-      const newValue = [...currentValue]
+      const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
       newValue.splice(to, 0, removed)
       return newValue
@@ -115,7 +103,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [bufferedValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
-    const currentName: string[] = itemNameRef.current
+    const currentName: string[] = itemName
     const nameDifference: string[] = []
 
     for (let i = 0; i < subFieldNames.length; i++) {
@@ -124,8 +112,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       }
     }
 
-    return get(valueRef.current, nameDifference)
-  }, [])
+    return get(value, nameDifference)
+  }, [itemName, value])
 
   const operations = useMemo(() => ({ add, remove, update, move, getValue }), [add, remove, update, move, getValue])
 
