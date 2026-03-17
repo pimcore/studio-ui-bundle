@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
@@ -32,6 +32,11 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const bufferedValue = useDebounce(value, 50)
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
+
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const itemNameRef = useRef(itemName)
+  itemNameRef.current = itemName
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
   const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
@@ -110,7 +115,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [bufferedValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
-    const currentName: string[] = itemName
+    const currentName: string[] = itemNameRef.current
     const nameDifference: string[] = []
 
     for (let i = 0; i < subFieldNames.length; i++) {
@@ -119,8 +124,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       }
     }
 
-    return get(value, nameDifference)
-  }, [itemName, value])
+    return get(valueRef.current, nameDifference)
+  }, [])
 
   const operations = useMemo(() => ({ add, remove, update, move, getValue }), [add, remove, update, move, getValue])
 
