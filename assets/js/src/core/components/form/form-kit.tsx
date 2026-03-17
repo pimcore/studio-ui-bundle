@@ -15,6 +15,7 @@ import { ConfigProvider } from 'antd'
 import { Tabpanel } from '../tabpanel/tabpanel'
 import { Region } from '../region/region'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { ItemSpacer } from './layouts/item-spacer/item-spacer'
 
 export interface FormKitProps {
   formProps?: Omit<FormProps, 'children'>
@@ -52,10 +53,12 @@ const TypedFormKit = FormKit as typeof FormKit & {
   Panel: typeof Panel
   TabPanel: typeof Tabpanel
   Region: typeof Region
+  ItemSpacer: typeof ItemSpacer
 }
 
 TypedFormKit.Panel = Panel
 TypedFormKit.TabPanel = Tabpanel
 TypedFormKit.Region = Region
+TypedFormKit.ItemSpacer = ItemSpacer
 
 export { TypedFormKit as FormKit }
