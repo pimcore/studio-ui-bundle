@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
@@ -25,7 +25,7 @@ export interface TransformationToolStripProps {
   onMoveDown?: () => void
 }
 
-export const TransformationToolStrip = ({
+export const TransformationToolStrip = memo(({
   transformation,
   onRemove,
   onMoveUp,
@@ -33,7 +33,11 @@ export const TransformationToolStrip = ({
 }: TransformationToolStripProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const transformationDynamicTypeRegistry = container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry'])
+  const transformationDynamicTypeRegistry = useMemo(
+    () => container.get<TransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry']),
+    []
+  )
+
   const transformationType = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
   const title = transformationType?.getSummary(transformation.config) ?? transformation.type
 
@@ -67,4 +71,5 @@ export const TransformationToolStrip = ({
       </Space>
     </ToolStrip>
   )
-}
+})
+TransformationToolStrip.displayName = 'TransformationToolStrip'

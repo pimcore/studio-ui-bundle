@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -16,9 +16,38 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { VideoThumbnailsEditor } from '../video-thumbnails-editor/video-thumbnails-editor'
 import { type ThumbnailTab } from '../../hooks/use-video-thumbnail-tab-manager'
+import { type ThumbnailConfigurationData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { useStyles } from './video-thumbnails-tabs.styles'
 
 const SAVE_BUTTON_PORTAL_ID = 'video-thumbnails-save-button'
+
+interface VideoThumbnailsTabEditorProps {
+  thumbnail: ThumbnailConfigurationData
+  activeTabKey: string | undefined
+  onTabDirtyChange: (key: string, isDirty: boolean) => void
+}
+
+const VideoThumbnailsTabEditor = memo(({
+  thumbnail,
+  activeTabKey,
+  onTabDirtyChange
+}: VideoThumbnailsTabEditorProps): React.JSX.Element => {
+  const isActive = activeTabKey === thumbnail.id
+
+  const onChange = useCallback((isDirty: boolean): void => {
+    onTabDirtyChange(thumbnail.id, isDirty)
+  }, [thumbnail.id, onTabDirtyChange])
+
+  return (
+    <VideoThumbnailsEditor
+      isActive={ isActive }
+      onChange={ onChange }
+      selectedThumbnail={ thumbnail }
+    />
+  )
+})
+
+VideoThumbnailsTabEditor.displayName = 'VideoThumbnailsTabEditor'
 
 interface VideoThumbnailsTabsProps {
   openedThumbnails: ThumbnailTab[]
@@ -43,10 +72,10 @@ export const VideoThumbnailsTabs = ({
       label: `${tab.thumbnail.name}${tab.isDirty ? ' *' : ''}`,
       icon: <Icon value="video-thumbnail" />,
       children: (
-        <VideoThumbnailsEditor
-          isActive={ activeTabKey === tab.thumbnail.id }
-          onChange={ (isDirty) => { onTabDirtyChange(tab.thumbnail.id, isDirty) } }
-          selectedThumbnail={ tab.thumbnail }
+        <VideoThumbnailsTabEditor
+          activeTabKey={ activeTabKey }
+          onTabDirtyChange={ onTabDirtyChange }
+          thumbnail={ tab.thumbnail }
         />
       )
     }))

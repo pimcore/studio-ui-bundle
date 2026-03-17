@@ -72,3 +72,4 @@ export const FieldCollectionItemToolStrip = React.memo((props: FieldCollectionIt
     </ToolStrip>
   )
 })
+FieldCollectionItemToolStrip.displayName = 'FieldCollectionItemToolStrip'

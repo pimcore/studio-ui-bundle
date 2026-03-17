@@ -49,3 +49,4 @@ export const FieldCollectionItem = React.memo((props: FieldCollectionItemProps):
     </ToolStripBox>
   )
 })
+FieldCollectionItem.displayName = 'FieldCollectionItem'
