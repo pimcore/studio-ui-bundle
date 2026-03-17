@@ -12,3 +12,4 @@ export * from '@Pimcore/modules/gdpr-data-extractor/components/export-button/exp
 export * from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-abstract-gdpr-provider'
 
 export { type GDPRProviderTabProps } from '@Pimcore/modules/gdpr-data-extractor/components/tab-panel/tab-panel'
+export { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
