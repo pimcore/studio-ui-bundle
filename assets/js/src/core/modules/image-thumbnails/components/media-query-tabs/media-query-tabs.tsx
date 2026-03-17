@@ -54,7 +54,7 @@ export const MediaQueryTabs = ({
         onMediaQueryUpdate={ handleMediaQueryUpdate }
       />
     )
-  })), [mediaQueries, handleMediaQueryUpdate, t])
+  })), [mediaQueries, handleMediaQueryUpdate])
 
   return (
     <Tabs
