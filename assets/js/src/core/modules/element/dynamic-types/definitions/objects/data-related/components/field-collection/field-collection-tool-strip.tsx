@@ -38,7 +38,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
   const dropDownItems: DropdownMenuProps['items'] = allowedTypes.map((type, index) => {
     return {
       key: index,
-      label: fieldCollection?.data?.items?.find(item => item.key === type)?.title !== '' ? t(fieldCollection?.data?.items?.find(item => item.key === type)?.title as string) : type,
+      label: fieldCollection?.data?.items?.find(item => item.key === type)?.title === '' ? type : t(fieldCollection?.data?.items?.find(item => item.key === type)?.title as string),
       onClick: (e) => { e.domEvent.stopPropagation(); operations.add({ type }) }
     }
   })

@@ -41,7 +41,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
   const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
       key,
-      label: objectBrick?.data?.items?.find(item => item.key === key)?.title !== '' ? t(objectBrick?.data?.items?.find(item => item.key === key).title as string) : key,
+      label: objectBrick?.data?.items?.find(item => item.key === key)?.title === '' ? key : t(objectBrick?.data?.items?.find(item => item.key === key).title as string),
       closable: true,
       forceRender: true,
       children: (
