@@ -44,7 +44,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
   })
 
   return (
-    <ToolStrip title={ layoutDefinition.title !== '' ? t(layoutDefinition.title as string) : type }>
+    <ToolStrip title={ layoutDefinition.title === '' || layoutDefinition.title === undefined ? type : t(layoutDefinition.title as string) }>
       <Split
         dividerSize='small'
         size='mini'

@@ -28,7 +28,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
     return allowedTypes.map((type) => {
       return {
         key: type,
-        label: objectBrick.find(item => item.key === type)?.title !== '' ? t(objectBrick.find(item => item.key === type).title as string) : type,
+        label: objectBrick.find(item => item.key === type)?.title === '' || objectBrick.find(item => item.key === type)?.title === undefined ? type : t(objectBrick.find(item => item.key === type).title as string),
         onClick: (e: any) => {
           e.domEvent.stopPropagation()
           operations.add(type, {})
