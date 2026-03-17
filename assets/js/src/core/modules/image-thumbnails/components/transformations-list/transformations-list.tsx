@@ -51,8 +51,8 @@ const TransformationItem = memo(({
       <ToolStripBox
         renderToolStripStart={
           <TransformationToolStrip
-            onMoveDown={ onMoveDown != null ? handleMoveDown : undefined }
-            onMoveUp={ onMoveUp != null ? handleMoveUp : undefined }
+            onMoveDown={ onMoveDown == null ? undefined : handleMoveDown }
+            onMoveUp={ onMoveUp == null ? undefined : handleMoveUp }
             onRemove={ handleRemove }
             transformation={ transformation }
           />
@@ -70,8 +70,8 @@ const TransformationItem = memo(({
     <ToolStripBox
       renderToolStripStart={
         <TransformationToolStrip
-          onMoveDown={ onMoveDown != null ? handleMoveDown : undefined }
-          onMoveUp={ onMoveUp != null ? handleMoveUp : undefined }
+          onMoveDown={ onMoveDown == null ? undefined : handleMoveDown }
+          onMoveUp={ onMoveUp == null ? undefined : handleMoveUp }
           onRemove={ handleRemove }
           transformation={ transformation }
         />

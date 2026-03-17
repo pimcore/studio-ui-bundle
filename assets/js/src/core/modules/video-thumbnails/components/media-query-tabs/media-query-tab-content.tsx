@@ -38,8 +38,8 @@ export const VideoMediaQueryTabContent = ({
         const existingId = currentMediaQuery.transformations[index]?.id
         if (existingId !== '' && existingId != null) {
           idMapRef.current[index] = existingId
-        } else if (idMapRef.current[index] == null) {
-          idMapRef.current[index] = `transformation-${crypto.randomUUID()}`
+        } else {
+          idMapRef.current[index] ??= `transformation-${crypto.randomUUID()}`
         }
         return {
           id: idMapRef.current[index],

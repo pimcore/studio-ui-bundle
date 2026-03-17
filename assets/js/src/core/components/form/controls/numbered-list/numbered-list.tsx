@@ -85,7 +85,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     setValue((currentValue) => {
       // Only deep-clone the single item being modified, leave others untouched
       const itemIndex = Number(nameDifference[0])
-      if (!isNaN(itemIndex) && nameDifference.length > 1) {
+      if (!Number.isNaN(itemIndex) && nameDifference.length > 1) {
         const newValue = [...currentValue]
         const updatedItem = cloneDeep(currentValue[itemIndex])
         set(updatedItem, nameDifference.slice(1), newSubValue)
