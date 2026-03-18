@@ -12,5 +12,6 @@ This section contains various examples to help you get started with plugin devel
 - [How to Use API Data](./08_Use_API_Data.md)
 - [How to Customize Context Menus](./09_Customize_Context_Menus.md)
 - [How to Create a Custom Listing](./10_Custom_Listing.md)
+- [How to Add a Custom GDPR Data Extractor Provider](./11_GDPR_Data_Extractor.md)
 
 All these examples are part of the Pimcore Studio Example Bundle, which you can find on GitHub: [Pimcore Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/). Feel free to explore the repository for more insights and code samples.
