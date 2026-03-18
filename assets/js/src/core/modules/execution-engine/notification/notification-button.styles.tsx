@@ -10,14 +10,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    notification: css`
-      .ant-notification-notice-content {          
-        .ant-notification-notice-message {
-            font-size: 16px !important;
-        }
+    badge: css` 
+      .ant-badge-count {
+        background: ${token.itemActiveColor};
+        font-size: 8px;
+        outline: ${token.colorBgBase} solid 2px !important;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        line-height: 14px;
       }
     `
   }
-}, { hashPriority: 'low' })
+})
