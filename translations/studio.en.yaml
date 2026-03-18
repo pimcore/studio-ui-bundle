@@ -1783,6 +1783,44 @@ classification-store.column.id: ID
 classification-store.column.group: Group
 classification-store.column.name: Name
 classification-store.column.description: Description
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
+classification-store.tabs.collections: Collections
+classification-store.tabs.groups: Groups
+classification-store.tabs.keys: Keys
+classification-store.add-store: Add store
+classification-store.rename-store: Rename store
+classification-store.delete-store: "Delete store \"{{storeName}}\"?"
+classification-store.add-group: Add group
+classification-store.rename-group: Rename group
+classification-store.delete-group: "Delete group \"{{groupName}}\"?"
+classification-store.add-collection: Add collection
+classification-store.rename-collection: Rename collection
+classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
+classification-store.add-key: Add key
+classification-store.rename-key: Rename key
+classification-store.delete-key: "Delete key \"{{keyName}}\"?"
+classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
+classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.edit-definition: Edit definition
+classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Name
+classification-store.columns.title: Title
+classification-store.columns.type: Type
+classification-store.columns.description: Description
+classification-store.columns.actions: Actions
+classification-store.columns.mandatory: Mandatory
+classification-store.columns.sorter: Sorter
+classification-store.columns.enabled: Enabled
+classification-store.relations-title: "Keys in group: {{name}}"
+classification-store.select-group-hint: Select a group to view its keys
+classification-store.collection-relations-title: "Groups in collection: {{name}}"
+classification-store.select-collection-hint: Select a collection to view its groups
+classification-store.select-key: Select key
+classification-store.search-keys: Search keys…
+classification-store.select-group: Select group
+classification-store.search-groups: Search groups…
 home: Home
 preview.label: Preview
 preview.desktop: Desktop
