@@ -22,7 +22,7 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 import { VideoProvider, useVideoContext } from '@Pimcore/components/pimcore-video/video-provider'
 
-const PreviewContainer = (): React.JSX.Element => {
+const PreviewContainerInner = (): React.JSX.Element => {
   const [url, setUrl] = useState<string>('')
   const { id } = useContext(AssetContext)
   const { isLoading } = useAssetDraft(id)
@@ -57,26 +57,32 @@ const PreviewContainer = (): React.JSX.Element => {
   const poster = `${getPrefix()}/assets/${id}/video/stream/image-thumbnail?width=500&height=500&aspectRatio=true`
 
   return (
-    <VideoProvider>
-      <ContentLayout renderSidebar={
-        <Sidebar
-          buttons={ sidebarButtons }
-          entries={ sidebarEntries }
-        />
-      }
-      >
-        {url === ''
-          ? (
-            <Content loading />
-            )
-          : (
-            <PreviewView
-              poster={ poster }
-              src={ url }
-            />
-            )}
+    <ContentLayout renderSidebar={
+      <Sidebar
+        buttons={ sidebarButtons }
+        entries={ sidebarEntries }
+      />
+    }
+    >
+      {url === ''
+        ? (
+          <Content loading />
+          )
+        : (
+          <PreviewView
+            poster={ poster }
+            src={ url }
+          />
+          )}
 
-      </ContentLayout>
+    </ContentLayout>
+  )
+}
+
+const PreviewContainer = (): React.JSX.Element => {
+  return (
+    <VideoProvider>
+      <PreviewContainerInner />
     </VideoProvider>
   )
 }
