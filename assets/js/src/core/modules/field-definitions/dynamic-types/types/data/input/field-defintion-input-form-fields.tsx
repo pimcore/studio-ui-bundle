@@ -51,19 +51,21 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
       </Form.Item>
 
       {!isCustomLayout && (
-      <Form.Item
-        label={ t('column-length') }
-        name="columnLength"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
-      )}
+      <>
+        <Form.Item
+          label={ t('column-length') }
+          name="columnLength"
+          rules={ [{ min: 0, type: 'number' }] }
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
 
-      <FieldDefinitionRegexValidation />
+        <FieldDefinitionRegexValidation />
+      </>
+      )}
 
     </>
   )

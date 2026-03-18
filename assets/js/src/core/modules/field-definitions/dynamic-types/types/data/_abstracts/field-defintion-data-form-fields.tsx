@@ -26,7 +26,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         label={ t('name') }
         name="name"
       >
-        <Input disabled={ props.context.disableName } />
+        <Input disabled={ isCustomLayout || props.context.disableName } />
       </Form.Item>
 
       <Form.Item
@@ -45,22 +45,29 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
 
       <Form.Item name="mandatory">
         <Switch
-          disabled={ props.context.disableMandatory }
+          disabled={ isCustomLayout || props.context.disableMandatory }
           labelRight={ t('mandatory') }
         />
       </Form.Item>
 
-      <Form.Item name="index">
-        <Switch
-          disabled={ props.context.disableIndex }
-          labelRight={ t('index') }
-        />
-      </Form.Item>
+      {!isCustomLayout
+        ? (
+          <Form.Item name="index">
+            <Switch
+              disabled={ props.context.disableIndex }
+              labelRight={ t('index') }
+            />
+          </Form.Item>
+          )
+        : null}
 
       {/* @todo check behavior for unique fields */}
       {props.context.hideUnique !== true && (
       <Form.Item name="unique">
-        <Switch labelRight={ t('unique') } />
+        <Switch
+          disabled={ isCustomLayout }
+          labelRight={ t('unique') }
+        />
       </Form.Item>
       )}
 
