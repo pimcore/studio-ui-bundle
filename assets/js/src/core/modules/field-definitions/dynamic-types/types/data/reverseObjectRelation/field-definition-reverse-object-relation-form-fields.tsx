@@ -29,6 +29,7 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
   const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   const { options: ownerFieldNameOptions, isLoading: isLoadingOwnerFieldName } = useClassRelationFieldsOptions(ownerClassName)
   const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions([ownerClassName ?? ''])
@@ -83,65 +84,69 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('path-formatter-service') }
-        name="pathFormatterClass"
-      >
-        <Input />
-      </Form.Item>
-
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('owner') }
-        tooltip={ t('reverse-object-relation.tooltip') }
-      >
-
+      {!isCustomLayout && (
+      <>
         <Form.Item
-          label={ t('owner-class') }
-          name="ownerClassName"
+          label={ t('path-formatter-service') }
+          name="pathFormatterClass"
         >
-          <Select
-            loadingSkeleton={ isLoadingClassOptions }
-            options={ classOptions }
-            showSearch
-          />
+          <Input />
         </Form.Item>
 
-        <Form.Item
-          label={ t('owner-field-name') }
-          name="ownerFieldName"
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('owner') }
+          tooltip={ t('reverse-object-relation.tooltip') }
         >
-          <Select
-            loadingSkeleton={ isLoadingOwnerFieldName }
-            options={ ownerFieldNameOptions }
-            showSearch
-          />
-        </Form.Item>
-        <Form.Item
-          { ...relationSelectFormItemTransformation('visibleFields') }
-          getValueFromEvent={ (value: string[]) => value.join(',') }
-          getValueProps={ (value: string | string[]) => ({
-            value: isString(value) ? value.split(',').filter(Boolean) : value
-          }) }
-          label={ t('visible-fields') }
-          name="visibleFields"
-        >
-          <Select
-            loadingSkeleton={ isLoading }
-            mode="multiple"
-            options={ visibleFieldsOptions }
-            showSearch
-          />
-        </Form.Item>
-      </FormKit.Panel>
 
-      <Form.Item
-        name="optimizedAdminLoading"
-        tooltip={ t('enable-async-load-in-admin-tooltip') }
-      >
-        <Switch labelRight={ t('enable-async-load-in-admin') } />
-      </Form.Item>
+          <Form.Item
+            label={ t('owner-class') }
+            name="ownerClassName"
+          >
+            <Select
+              loadingSkeleton={ isLoadingClassOptions }
+              options={ classOptions }
+              showSearch
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('owner-field-name') }
+            name="ownerFieldName"
+          >
+            <Select
+              loadingSkeleton={ isLoadingOwnerFieldName }
+              options={ ownerFieldNameOptions }
+              showSearch
+            />
+          </Form.Item>
+          <Form.Item
+            { ...relationSelectFormItemTransformation('visibleFields') }
+            getValueFromEvent={ (value: string[]) => value.join(',') }
+            getValueProps={ (value: string | string[]) => ({
+              value: isString(value) ? value.split(',').filter(Boolean) : value
+            }) }
+            label={ t('visible-fields') }
+            name="visibleFields"
+          >
+            <Select
+              loadingSkeleton={ isLoading }
+              mode="multiple"
+              options={ visibleFieldsOptions }
+              showSearch
+            />
+          </Form.Item>
+        </FormKit.Panel>
+
+        <Form.Item
+          name="optimizedAdminLoading"
+          tooltip={ t('enable-async-load-in-admin-tooltip') }
+        >
+          <Switch labelRight={ t('enable-async-load-in-admin') } />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }

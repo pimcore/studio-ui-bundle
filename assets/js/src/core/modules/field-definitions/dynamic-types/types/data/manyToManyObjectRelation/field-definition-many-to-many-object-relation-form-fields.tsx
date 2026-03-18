@@ -24,6 +24,7 @@ export const FieldDefinitionManyToManyObjectRelationFormFields = (props: FieldDe
   const displayMode = Form.useWatch('displayMode')
   const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   const selectedClasses = useMemo(() => {
     if (isArray(classes)) {
@@ -74,82 +75,86 @@ export const FieldDefinitionManyToManyObjectRelationFormFields = (props: FieldDe
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('maximum-items') }
-        name="maxItems"
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('maximum-items') }
+          name="maxItems"
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('path-formatter-service') }
-        name="pathFormatterClass"
-      >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label={ t('path-formatter-service') }
+          name="pathFormatterClass"
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        { ...relationSelectFormItemTransformation('classes') }
-        label={ t('allowed-classes') }
-        name="classes"
-      >
-        <Select
-          mode="multiple"
-          options={ classOptions }
-          showSearch
-        />
-      </Form.Item>
+        <Form.Item
+          { ...relationSelectFormItemTransformation('classes') }
+          label={ t('allowed-classes') }
+          name="classes"
+        >
+          <Select
+            mode="multiple"
+            options={ classOptions }
+            showSearch
+          />
+        </Form.Item>
 
-      <Form.Item
-        { ...relationSelectFormItemTransformation('visibleFields') }
-        getValueFromEvent={ (value: string[]) => value.join(',') }
-        getValueProps={ (value: string | string[]) => ({
-          value: isString(value) ? value.split(',').filter(Boolean) : value
-        }) }
-        label={ t('visible-fields') }
-        name="visibleFields"
-      >
-        <Select
-          loadingSkeleton={ isLoading }
-          mode="multiple"
-          options={ visibleFieldsOptions }
-          showSearch
-        />
-      </Form.Item>
+        <Form.Item
+          { ...relationSelectFormItemTransformation('visibleFields') }
+          getValueFromEvent={ (value: string[]) => value.join(',') }
+          getValueProps={ (value: string | string[]) => ({
+            value: isString(value) ? value.split(',').filter(Boolean) : value
+          }) }
+          label={ t('visible-fields') }
+          name="visibleFields"
+        >
+          <Select
+            loadingSkeleton={ isLoading }
+            mode="multiple"
+            options={ visibleFieldsOptions }
+            showSearch
+          />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('display-mode') }
-        name="displayMode"
-      >
-        <Select
-          options={ [
-            { label: t('display-mode-grid-view'), value: 'grid' },
-            { label: t('display-mode-tag-field'), value: 'combo' }
-          ] }
-        />
-      </Form.Item>
+        <Form.Item
+          label={ t('display-mode') }
+          name="displayMode"
+        >
+          <Select
+            options={ [
+              { label: t('display-mode-grid-view'), value: 'grid' },
+              { label: t('display-mode-tag-field'), value: 'combo' }
+            ] }
+          />
+        </Form.Item>
 
-      <Form.Item name="enableTextSelection">
-        <Switch labelRight={ t('enable-text-selection') } />
-      </Form.Item>
+        <Form.Item name="enableTextSelection">
+          <Switch labelRight={ t('enable-text-selection') } />
+        </Form.Item>
 
-      <Form.Item name="allowToCreateNewObject">
-        <Switch labelRight={ t('allow-to-create-new-object') } />
-      </Form.Item>
+        <Form.Item name="allowToCreateNewObject">
+          <Switch labelRight={ t('allow-to-create-new-object') } />
+        </Form.Item>
 
-      <Form.Item name="allowToClearRelation">
-        <Switch labelRight={ t('allow-to-clear-relation') } />
-      </Form.Item>
+        <Form.Item name="allowToClearRelation">
+          <Switch labelRight={ t('allow-to-clear-relation') } />
+        </Form.Item>
 
-      <Form.Item
-        name="optimizedAdminLoading"
-        tooltip={ t('enable-async-load-in-admin-tooltip') }
-      >
-        <Switch labelRight={ t('enable-async-load-in-admin') } />
-      </Form.Item>
+        <Form.Item
+          name="optimizedAdminLoading"
+          tooltip={ t('enable-async-load-in-admin-tooltip') }
+        >
+          <Switch labelRight={ t('enable-async-load-in-admin') } />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }
