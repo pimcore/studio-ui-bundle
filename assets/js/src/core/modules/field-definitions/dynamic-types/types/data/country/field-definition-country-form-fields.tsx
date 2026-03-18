@@ -18,6 +18,7 @@ import { useSettingsCountryCollectionQuery } from '@Pimcore/modules/app/settings
 export const FieldDefinitionCountryFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { data: countriesData } = useSettingsCountryCollectionQuery()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   const countryOptions = useMemo(() => {
     return countriesData?.items?.map((country) => ({
@@ -35,30 +36,35 @@ export const FieldDefinitionCountryFormFields = (props: FieldDefinitionAbstractF
         <Input />
       </Form.Item>
 
-      <Form.Item
-        getValueFromEvent={ (value: string[]) => value.join(',') }
-        getValueProps={ (value: string | string[]) => ({
-          value: isString(value) ? value.split(',').filter(Boolean) : value
-        }) }
-        label={ t('restrict-selection-to') }
-        name="restrictTo"
-      >
-        <Select
-          mode="multiple"
-          options={ countryOptions }
-          showSearch
-        />
-      </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          getValueFromEvent={ (value: string[]) => value.join(',') }
+          getValueProps={ (value: string | string[]) => ({
+            value: isString(value) ? value.split(',').filter(Boolean) : value
+          }) }
+          label={ t('restrict-selection-to') }
+          name="restrictTo"
+        >
+          <Select
+            mode="multiple"
+            options={ countryOptions }
+            showSearch
+          />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('default-value') }
-        name="defaultValue"
-      >
-        <Select
-          options={ countryOptions }
-          showSearch
-        />
-      </Form.Item>
+        <Form.Item
+          label={ t('default-value') }
+          name="defaultValue"
+        >
+          <Select
+            options={ countryOptions }
+            showSearch
+          />
+        </Form.Item>
+      </>
+      )
+        }
     </>
   )
 }

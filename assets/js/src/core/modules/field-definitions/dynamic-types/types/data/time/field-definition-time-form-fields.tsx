@@ -34,39 +34,40 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
         <Input />
       </Form.Item>
 
-      {!isCustomLayout && <>
+      {!isCustomLayout && (
+      <>
         <FormKit.Panel
-            border
-            theme="fieldset"
-            title={ t('min-max-settings') }
+          border
+          theme="fieldset"
+          title={ t('min-max-settings') }
         >
 
           <Form.Item
-              label={ t('increment-step') }
-              name="increment"
+            label={ t('increment-step') }
+            name="increment"
           >
             <InputNumber />
           </Form.Item>
 
           <Form.Item
-              label={ t('min-value') }
-              name="minValue"
+            label={ t('min-value') }
+            name="minValue"
           >
             <DatePicker.TimePicker
-                outputFormat="HH:mm"
-                outputType="dateString"
-                showSecond={ false }
+              outputFormat="HH:mm"
+              outputType="dateString"
+              showSecond={ false }
             />
           </Form.Item>
 
           <Form.Item
-              label={ t('max-value') }
-              name="maxValue"
+            label={ t('max-value') }
+            name="maxValue"
           >
             <DatePicker.TimePicker
-                outputFormat="HH:mm"
-                outputType="dateString"
-                showSecond={ false }
+              outputFormat="HH:mm"
+              outputType="dateString"
+              showSecond={ false }
             />
           </Form.Item>
 
@@ -79,6 +80,7 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
 
         </FormKit.Panel>
       </>
+      )
       }
     </>
   )

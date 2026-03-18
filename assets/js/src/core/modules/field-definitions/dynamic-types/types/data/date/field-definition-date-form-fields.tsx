@@ -17,7 +17,7 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
   const { t } = useTranslation()
   const form = Form.useFormInstance()
   const useCurrentDate = Form.useWatch('useCurrentDate')
-    const isCustomLayout = props.context.area.includes('custom-layout')
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   useEffect(() => {
     if (useCurrentDate === true) {
@@ -25,9 +25,9 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
     }
   }, [useCurrentDate, form])
 
-    if (isCustomLayout) {
-      return <></>
-    }
+  if (isCustomLayout) {
+    return <></>
+  }
 
   return (
     <>

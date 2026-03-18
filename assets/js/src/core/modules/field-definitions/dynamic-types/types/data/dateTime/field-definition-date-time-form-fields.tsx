@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
-    const isCustomLayout = props.context.area.includes('custom-layout')
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   const useCurrentDate = Form.useWatch('useCurrentDate')
   const useRespectTimezone = Form.useWatch('respectTimezone')
@@ -29,9 +29,9 @@ export const FieldDefinitionDateTimeFormFields = (props: FieldDefinitionAbstract
     }
   }, [useCurrentDate, useRespectTimezone, form])
 
-    if (isCustomLayout) {
-        return <></>
-    }
+  if (isCustomLayout) {
+    return <></>
+  }
 
   return (
     <>
