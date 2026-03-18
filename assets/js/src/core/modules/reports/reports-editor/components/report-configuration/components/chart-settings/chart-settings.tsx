@@ -43,6 +43,7 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
     >
       <Select
         className={ styles.chartSelect }
+        data-testid={ `report-chart-${name}` }
         mode={ mode }
         options={ chartSelectOptions }
       />
@@ -57,6 +58,7 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
       >
         <Select
           className={ styles.chartSelect }
+          data-testid="report-chart-type"
           options={ CHART_OPTIONS }
         />
       </Form.Item>

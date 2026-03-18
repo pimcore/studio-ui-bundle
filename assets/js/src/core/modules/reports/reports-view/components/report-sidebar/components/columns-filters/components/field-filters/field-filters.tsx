@@ -164,6 +164,7 @@ export const FieldFilters = (): React.JSX.Element => {
         {!isEmpty(addColumnMenu) && (
           <Dropdown menu={ { items: addColumnMenu } }>
             <IconTextButton
+              data-testid="report-filters-add-column-button"
               icon={ { value: 'new' } }
               type='link'
             >

@@ -70,6 +70,7 @@ export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props
         return (
           <Flex>
             <ExportButton
+              data-testid={ `gdpr-users-export-${data.id}` }
               id={ data.id }
               providerKey={ providerKey }
               tooltip={ {
@@ -78,6 +79,7 @@ export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props
             />
 
             <DeleteButton
+              data-testid={ `gdpr-users-delete-${data.id}` }
               disabled={ !data.__gdprIsDeletable }
               id={ data.id }
               label={ data.firstname + ' ' + data.lastname }
@@ -97,6 +99,7 @@ export const UsersTab = ({ data, providerKey, refresh, onSortingChange, ...props
       autoWidth
       columns={ columns }
       data={ data.map((item) => item.data) }
+      dataTestId="gdpr-users-grid"
       enableSorting
       onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!

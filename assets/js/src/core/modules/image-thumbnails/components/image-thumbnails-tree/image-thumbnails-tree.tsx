@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useMemo } from 'react'
-import { isEmpty, isNil, isUndefined } from 'lodash'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import { isNil, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -20,17 +20,21 @@ import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element
 import { useTranslation } from 'react-i18next'
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { ImageThumbnailsTreeToolbar } from '../image-thumbnails-tree-toolbar/image-thumbnails-tree-toolbar'
-import { findThumbnailById, filterThumbnailsRecursive } from '../../utils/tree-helpers'
+import { findThumbnailById, filterThumbnailsRecursive, getFolderKeysFromTree } from '../../utils/tree-helpers'
 import { useStyles } from './image-thumbnails-tree.styles'
 import { useThumbnailConfig } from '../../hooks/use-thumbnail-config'
 import { useImageThumbnailsContext } from '../../providers/image-thumbnails-provider'
+import { type ThumbnailTab } from '../../hooks/use-thumbnail-tab-manager'
 
 export interface ImageThumbnailsTreeProps {
   onThumbnailSelect: (thumbnail: ThumbnailConfigurationData) => void
-  selectedThumbnail: ThumbnailConfigurationData | null
+  onThumbnailClose: (id: string) => void
+  openedThumbnails: ThumbnailTab[]
+  activeTabKey: string | undefined
+  modifiedThumbnails?: string[]
 }
 
-export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: ImageThumbnailsTreeProps): React.JSX.Element => {
+export const ImageThumbnailsTree = ({ onThumbnailSelect, onThumbnailClose, openedThumbnails, activeTabKey, modifiedThumbnails = [] }: ImageThumbnailsTreeProps): React.JSX.Element => {
   const { thumbnailsData, isLoading, isFetching, refetch, expandedKeys, setExpandedKeys } = useImageThumbnailsContext()
   const [thumbnailsListData, setThumbnailsListData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
   const [filteredData, setFilteredData] = useState<Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>>([])
@@ -38,20 +42,37 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
   const [treeKey, setTreeKey] = useState(0)
   const { styles } = useStyles()
   const { handleDelete: deleteThumbnail, handleAdd } = useThumbnailConfig({ refetch })
+  const pendingOpenRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (!isNil(thumbnailsData?.items)) {
       setThumbnailsListData(thumbnailsData.items)
       setFilteredData(thumbnailsData.items)
       setTreeKey(prev => prev + 1)
+
+      if (!isNil(pendingOpenRef.current)) {
+        const pendingName = pendingOpenRef.current
+        const addedThumbnail = thumbnailsData.items.find((item) =>
+          'name' in item && item.name === pendingName
+        )
+
+        if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
+          onThumbnailSelect(addedThumbnail)
+        }
+
+        pendingOpenRef.current = null
+      }
     }
   }, [thumbnailsData])
 
   useEffect(() => {
     if (searchValue === '') {
       setFilteredData(thumbnailsListData)
+      setExpandedKeys([])
     } else {
-      setFilteredData(filterThumbnailsRecursive(thumbnailsListData, searchValue))
+      const filtered = filterThumbnailsRecursive(thumbnailsListData, searchValue)
+      setFilteredData(filtered)
+      setExpandedKeys(getFolderKeysFromTree(filtered))
     }
   }, [searchValue, thumbnailsListData])
 
@@ -72,7 +93,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     return (
       <Icon
         className={ styles.icon }
-        value="image-thumbnail-clear"
+        value="image-thumbnail"
       />
     )
   }
@@ -88,6 +109,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       })
       .map((item) => {
         const isFolder = 'children' in item && Array.isArray(item.children)
+        const isModified = !isFolder && modifiedThumbnails.includes(item.id)
         const actions = isFolder
           ? []
           : [
@@ -96,7 +118,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
 
         return {
           key: isUndefined(item.id) ? '' : String(item.id),
-          title: item.name,
+          title: `${item.name}${isModified ? ' *' : ''}`,
           icon: getTreeItemIcon(item),
           children: isFolder ? transformToTreeData((item).children) : undefined,
           isLeaf: !isFolder,
@@ -107,26 +129,20 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
       })
   }
 
-  const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData])
+  const treeData = useMemo(() => transformToTreeData(filteredData), [filteredData, modifiedThumbnails])
 
   const handleAddWithSelection = (): void => {
     handleAdd((thumbnailName: string) => {
-      if (!isNil(thumbnailsData?.items)) {
-        const addedThumbnail = thumbnailsData.items.find((item) =>
-          'name' in item && item.name === thumbnailName
-        )
-
-        if (!isUndefined(addedThumbnail) && 'writeable' in addedThumbnail) {
-          onThumbnailSelect(addedThumbnail)
-        }
-      }
+      pendingOpenRef.current = thumbnailName
     })
   }
 
   const handleDelete = async (key: string): Promise<void> => {
     const thumbnail = findThumbnailById(key, thumbnailsListData)
     if (!isNil(thumbnail) && 'writeable' in thumbnail) {
-      await deleteThumbnail(thumbnail)
+      await deleteThumbnail(thumbnail, () => {
+        onThumbnailClose(key)
+      })
     }
   }
 
@@ -154,7 +170,7 @@ export const ImageThumbnailsTree = ({ onThumbnailSelect, selectedThumbnail }: Im
     }
   }
 
-  const selectedKeys = isEmpty(selectedThumbnail) ? [] : [selectedThumbnail.id]
+  const selectedKeys = activeTabKey != null ? [activeTabKey] : []
 
   return (
     <ContentLayout

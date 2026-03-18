@@ -58,6 +58,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
           <Text className={ styles.selectReportLabel }>{t('reports.reports-title')}</Text>
           <Select
             className='min-w-200'
+            data-testid="reports-view-report-selector"
             onChange={ handleReportChange }
             options={ reportsTreeOptions }
             placeholder={ t('reports.select-report') }

@@ -20,6 +20,7 @@ export interface IMainNavItem {
   groupIcon?: string
   label?: string
   group?: string
+  dividerTop?: boolean
   dividerBottom?: boolean
   children?: IMainNavItem[]
   permission?: string
@@ -130,6 +131,7 @@ export class MainNavRegistry {
           path: levels.slice(0, index + 1).join('/'),
           children: [],
           ...(isCurrentItem && {
+            dividerTop: item.dividerTop,
             dividerBottom: item.dividerBottom,
             icon: item.icon,
             groupIcon: item.groupIcon,
@@ -156,6 +158,7 @@ export class MainNavRegistry {
           widgetConfig: item.widgetConfig,
           useCustomMainNavItem: item.useCustomMainNavItem,
           dividerBottom: item.dividerBottom,
+          dividerTop: item.dividerTop,
           label: item.label ?? existingItem.label
         })
       }

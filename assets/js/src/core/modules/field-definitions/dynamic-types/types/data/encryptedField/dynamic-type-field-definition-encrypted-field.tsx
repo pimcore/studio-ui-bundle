@@ -9,10 +9,12 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionEncryptedFieldFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/field-definition-encrypted-field-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
+
+export const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
 
 export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'encryptedField'
@@ -25,19 +27,49 @@ export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDe
     return [...super.getGroup(), 'other']
   }
 
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      delegateDatatype: 'input'
+    }
+  }
+
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return ['encryptedFieldSupport']
+  }
+
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const hoisted = { ...fieldDef }
+
+    if (
+      hoisted.delegate !== null &&
+      typeof hoisted.delegate === 'object' &&
+      !Array.isArray(hoisted.delegate)
+    ) {
+      for (const [key, value] of Object.entries(hoisted.delegate as Record<string, unknown>)) {
+        if (!BASE_FIELD_KEYS.has(key) && hoisted[key] === undefined) {
+          hoisted[key] = value
+        }
+      }
+    }
+
+    return hoisted
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true })
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true })}
-        <FieldDefinitionEncryptedFieldFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionEncryptedFieldFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
   }
 }

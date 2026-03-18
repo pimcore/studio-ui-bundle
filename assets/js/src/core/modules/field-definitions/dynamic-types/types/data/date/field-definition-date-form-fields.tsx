@@ -25,7 +25,7 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
   }, [useCurrentDate, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <FormKit.Panel
         border
@@ -53,7 +53,6 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
       </FormKit.Panel>
 
       <Form.Item
-        initialValue="date"
         label={ t('column-type') }
         name="columnType"
       >
@@ -64,6 +63,6 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
           ] }
         />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

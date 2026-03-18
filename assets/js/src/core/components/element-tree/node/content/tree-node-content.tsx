@@ -67,7 +67,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         align='center'
         className={ styles.containerChild }
         data-testid={ `tree-node-content-main-${props.node.id}` }
-        gap={ 'small' }
+        gap={ 'mini' }
         ref={ ref }
         style={ { minWidth: `${containerChildMinWidth}px` } }
       >

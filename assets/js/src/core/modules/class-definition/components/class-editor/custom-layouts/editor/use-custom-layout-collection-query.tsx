@@ -14,5 +14,5 @@ import { type AnyQueryHook } from 'types/react-query'
 
 export const useDecoratedClassCustomLayoutCollectionQuery: AnyQueryHook = () => {
   const { configuration } = useCurrentConfiguration()
-  return useClassCustomLayoutCollectionQuery({ dataObjectClass: configuration!.id })
+  return useClassCustomLayoutCollectionQuery({ classIds: configuration!.id })
 }

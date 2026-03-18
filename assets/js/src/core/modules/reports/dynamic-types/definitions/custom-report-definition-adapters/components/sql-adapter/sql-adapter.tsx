@@ -113,7 +113,7 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
       label={ label }
       name={ name }
     >
-      <TextArea />
+      <TextArea data-testid={ `report-source-${name}` } />
     </Form.Item>
   )
 

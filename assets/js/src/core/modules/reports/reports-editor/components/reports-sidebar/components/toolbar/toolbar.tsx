@@ -31,6 +31,7 @@ export const Toolbar = ({ isFetching, refetch, handleReportAdd }: IToolbarProps)
       />
 
       <IconTextButton
+        data-testid="reports-editor-add-button"
         icon={ { value: 'new' } }
         onClick={ handleReportAdd }
         type="link"

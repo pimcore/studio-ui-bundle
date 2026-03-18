@@ -102,7 +102,7 @@ export const ReportToolbar = ({ currentReport, showPagination, page, setPage, pa
         theme="secondary"
       >
         <Dropdown menu={ { items: dropdownItems } }>
-          <DropdownButton>
+          <DropdownButton data-testid="report-export-button">
             {renderDropdownLabel('reports.export', false)}
           </DropdownButton>
         </Dropdown>

@@ -49,6 +49,7 @@ export const SearchModal = (): React.JSX.Element => {
       {isOpen && (
         <Modal
           closable
+          data-testid="search-modal"
           footer={ null }
           onCancel={ () => { close() } }
           open={ isOpen }
@@ -56,6 +57,7 @@ export const SearchModal = (): React.JSX.Element => {
         >
           <Tabs
             activeKey={ activeKey }
+            data-testid="search-modal-tabs"
             items={ tabItems }
             noTabBarMargin
             onChange={ (key) => {

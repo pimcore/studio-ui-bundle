@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
@@ -22,11 +22,21 @@ const defaultValidateFile = (file: File): boolean => {
 
 export const ImportExportActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { generalSettings } = useGeneralSettings()
+  const { activeConfiguration } = useItems()
   const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig } = useSettings()
   const messageApi = useMessage()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+
+  const itemId = activeConfiguration?.id
+
+  const layoutResult = useDetailLayoutQuery?.({
+    id: itemId ?? ''
+  })
+
+  const generalSettingsResult = useDetailGeneralSettingsQuery({
+    id: itemId ?? ''
+  })
 
   if (isNil(importExportConfig)) {
     return <></>
@@ -35,22 +45,11 @@ export const ImportExportActions = (): React.JSX.Element => {
   const {
     getExportUrl,
     getImportUrl,
-    getIdFromGeneralSettings,
     validateFile = defaultValidateFile,
     acceptFileTypes = '.json,application/json',
     acceptMimeTypes = ['application/json'],
     successMessageKey = 'class-definition.import-success'
   } = importExportConfig
-
-  const itemId = getIdFromGeneralSettings(generalSettings as Record<string, unknown> | undefined)
-
-  const layoutResult = useDetailLayoutQuery?.({
-    id: itemId!
-  })
-
-  const generalSettingsResult = useDetailGeneralSettingsQuery({
-    id: itemId!
-  })
 
   const handleExport = (): void => {
     if (isNil(itemId)) {

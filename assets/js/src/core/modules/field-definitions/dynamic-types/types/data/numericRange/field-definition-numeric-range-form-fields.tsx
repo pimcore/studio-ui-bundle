@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionDecimalSettings } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-decimal-settings/field-definition-decimal-settings'
-import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
+import { Form, Input, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,7 +18,7 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -51,6 +51,6 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
         <InputNumber />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

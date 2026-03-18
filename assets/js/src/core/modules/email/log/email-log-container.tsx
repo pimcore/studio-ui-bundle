@@ -55,6 +55,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            data-testid="email-log-refresh-button"
             disabled={ isRTKLoading || isLoading }
             icon={ { value: 'refresh' } }
             onClick={ () => {
@@ -94,6 +95,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
       }
     >
       <Content
+        data-testid="email-log-content"
         loading={ isRTKLoading || (isLoading && isFetching) }
         none={ isUndefined(data?.items) || data.items.length === 0 }
         padded

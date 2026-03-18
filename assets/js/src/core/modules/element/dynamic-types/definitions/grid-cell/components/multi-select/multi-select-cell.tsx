@@ -22,7 +22,7 @@ import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/li
 
 export interface MultiSelectCellConfig {
   options?: string[] | SelectOptionType[]
-  optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
   [META_SUPPORTS_BATCH_APPEND_MODE]?: boolean
 }
@@ -56,7 +56,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const value: [] = Array.isArray(getValue()) ? getValue() : []
 
   if (config === undefined) {
-    return <>{ value.join(', ') }</>
+    return <>{value.join(', ')}</>
   }
 
   const displayOptions = value.map((_value: string) => {
@@ -69,7 +69,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   if (!isInEditMode) {
     return (
       <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
-        { displayValue }
+        {displayValue}
       </div>
     )
   }

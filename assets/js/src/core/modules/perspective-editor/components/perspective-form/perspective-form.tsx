@@ -99,6 +99,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              data-testid="perspective-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
               onClick={ () => {
@@ -110,6 +111,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
 
             <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
               <IconButton
+                data-testid="perspective-form-delete-button"
                 disabled={ isLoading || !isWriteable }
                 icon={ { value: 'trash' } }
                 onClick={ () => {
@@ -125,6 +127,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
 
           <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
             <Button
+              data-testid="perspective-form-save-button"
               disabled={ !isWriteable }
               htmlType='submit'
               loading={ isLoading }

@@ -18,6 +18,7 @@ export { CollapseHeader, type CollapseHeaderProps } from './item/header/collapse
 
 export interface ICollapseItem extends Omit<CollapseItemProps, 'active'> {
   key: string
+  [dataAttr: `data-${string}`]: string | undefined
 }
 
 export interface CollapseProps extends CollapseStyleProps {

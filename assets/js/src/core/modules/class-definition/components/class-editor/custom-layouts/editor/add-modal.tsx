@@ -11,10 +11,11 @@
 import { useCurrentConfiguration } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
-import { useClassCustomLayoutGetIdentifierDataQuery, usePimcoreStudioApiClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
+import { useClassCustomLayoutGetIdentifierDataQuery, useClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
 import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect } from 'react'
+import { type InputRef } from 'antd'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 
@@ -22,9 +23,10 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { closeModal } = useAddModal()
+  const inputRef = useRef<InputRef>(null)
   const { configuration } = useCurrentConfiguration()
   const { data, isLoading, error } = useClassCustomLayoutGetIdentifierDataQuery({ classDefinitionId: configuration!.id })
-  const [createCustomLayout] = usePimcoreStudioApiClassCustomLayoutCreateMutation()
+  const [createCustomLayout] = useClassCustomLayoutCreateMutation()
   const { openConfiguration } = useItems()
 
   useEffect(() => {
@@ -33,12 +35,16 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
     }
   }, [error])
 
+  useEffect(() => {
+    if (data?.suggestedId !== undefined) {
+      form.setFieldValue('uniqueIdentifier', data.suggestedId)
+    }
+  }, [data?.suggestedId])
+
   const onFormFinish = (values: any): void => {
     if (data === undefined) {
       return
     }
-
-    form.resetFields()
 
     createCustomLayout({
       customLayoutId: data.suggestedId,
@@ -49,6 +55,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
         name: values.name
       }
     }).then((data) => {
+      form.resetFields()
       closeModal()
 
       const layoutDef: ConfigurationPartial = {
@@ -69,6 +76,8 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
 
   return (
     <AddModal
+      afterOpenChange={ (open) => { if (open) inputRef.current?.focus() } }
+      focusTriggerAfterClose={ false }
       onOk={ () => { form.submit() } }
       title={ t('field-definitions.create-new-class-definition') }
     >
@@ -86,7 +95,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
               { pattern: /^[-A-Za-z0-9_]*$/, message: t('field-definitions.validation.class-name-format') }
             ] }
           >
-            <Input />
+            <Input ref={ inputRef } />
           </Form.Item>
 
           <Form.Item
@@ -115,6 +124,10 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
           <Text type="secondary">
             { t('class-definition.unique-identifier-warning') }
           </Text>
+          <button
+            style={ { display: 'none' } }
+            type="submit"
+          />
         </Form>
       </Content>
     </AddModal>

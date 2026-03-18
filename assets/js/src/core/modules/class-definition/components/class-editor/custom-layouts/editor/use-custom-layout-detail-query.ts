@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePimcoreStudioApiClassCustomLayoutGetQuery } from '@sdk/api/class-definition'
+import { useClassCustomLayoutGetQuery } from '@sdk/api/class-definition'
 import { type AnyQueryHook } from 'types/react-query'
 
 export const useDecoratedCustomLayoutDetailQuery: AnyQueryHook = (data) => {
-  return usePimcoreStudioApiClassCustomLayoutGetQuery({ customLayoutId: data.id })
+  return useClassCustomLayoutGetQuery({ customLayoutId: data.id })
 }

@@ -122,6 +122,12 @@ export type SettingsUpdateApiArg = {
                 localized?: object;
             };
         };
+        email?: {
+            debug?: {
+                /** Debug email addresses */
+                email_addresses?: string[];
+            };
+        };
     };
 };
 export type SettingsImageAdapterCheckApiResponse = unknown;

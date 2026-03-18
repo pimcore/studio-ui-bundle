@@ -14,7 +14,8 @@ export enum WysiwygContext {
   DOCUMENT = 'document',
   DATA_OBJECT = 'dataObject',
   ASSET = 'asset',
-  TRANSLATION = 'translation'
+  TRANSLATION = 'translation',
+  CLASS_EDITOR = 'classEditor'
 }
 
 export interface WysiwygProps {

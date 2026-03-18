@@ -20,7 +20,7 @@ export const useClassDefinitionUpdate: AnyMutationHook = (options) => {
 
   const decoratedFetch = (): ReturnType<typeof fetch> => {
     return fetch({
-      id: generalSettings!.id,
+      id: generalSettings!.id as string,
       classDefinitionUpdate: {
         configuration: {
           children: getLayout()!.children ?? []

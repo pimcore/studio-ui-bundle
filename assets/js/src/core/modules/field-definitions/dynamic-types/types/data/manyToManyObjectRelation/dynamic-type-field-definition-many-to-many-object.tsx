@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionManyToManyObjectRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToManyObjectRelation/field-definition-many-to-many-object-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -25,19 +25,37 @@ export class DynamicTypeFieldDefinitionManyToManyObject extends DynamicTypeField
     return [...super.getGroup(), 'relation']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      width: '',
+      height: '',
+      maxItems: null,
+      pathFormatterClass: '',
+      classes: [],
+      visibleFields: '',
+      displayMode: 'grid',
+      enableTextSelection: false,
+      allowToCreateNewObject: false,
+      allowToClearRelation: false,
+      optimizedAdminLoading: false
+    }
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true, disableIndex: true })}
-        <FieldDefinitionManyToManyObjectRelationFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionManyToManyObjectRelationFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true, disableIndex: true })
   }
 }

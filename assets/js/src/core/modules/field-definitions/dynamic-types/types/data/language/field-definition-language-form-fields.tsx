@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Switch } from '@sdk/components'
+import { Form, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,13 +18,13 @@ export const FieldDefinitionLanguageFormFields = (props: FieldDefinitionAbstract
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
       <Form.Item name="onlySystemLanguages">
         <Switch labelRight={ t('only-configured-languages') } />
       </Form.Item>
       )}
 
-    </FormKit.Panel>
+    </>
   )
 }

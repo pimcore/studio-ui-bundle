@@ -13,6 +13,10 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     form: css`
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
       form {
         display: flex;
         flex-direction: column;
@@ -42,16 +46,6 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
         
-      .login__additional-logins {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        
-        .ant-btn {
-          width: 100%;
-        }
-      }
     `
   }
 })

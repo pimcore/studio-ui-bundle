@@ -28,6 +28,7 @@ export type SelectTheme = 'default' | 'primary'
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  dataTestId?: string
   inherited?: boolean
   width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
@@ -35,7 +36,22 @@ export interface SelectProps extends AntdSelectProps {
   loadingSkeleton?: boolean
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, theme = 'default', loadingSkeleton = false, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({
+  customIcon,
+  customArrowIcon,
+  mode,
+  status,
+  className,
+  allowClear,
+  inherited,
+  value,
+  width,
+  minWidth,
+  theme = 'default',
+  loadingSkeleton = false,
+  dataTestId,
+  ...antdSelectProps
+}, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
@@ -63,7 +79,28 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const computedWidth = getComputedWidth()
 
-  const { styles } = useStyles({ width: computedWidth, theme })
+  let computedMinWidth: undefined | number
+
+  if (typeof minWidth === 'number') {
+    computedMinWidth = minWidth
+  }
+
+  if (typeof minWidth === 'string') {
+    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
+  }
+
+  const selectStyle = antdSelectProps.style
+  const skeletonWidth = computedWidth ?? selectStyle?.width ?? selectStyle?.maxWidth ?? '100%'
+  const skeletonMaxWidth = selectStyle?.maxWidth ?? '100%'
+  const skeletonMinWidth = computedMinWidth ?? selectStyle?.minWidth
+
+  const { styles } = useStyles({
+    width: computedWidth,
+    theme,
+    skeletonWidth,
+    skeletonMaxWidth,
+    skeletonMinWidth
+  })
 
   // Show skeleton if loading
   if (loadingSkeleton) {
@@ -75,11 +112,14 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     }
 
     return (
-      <Skeleton.Input
-        active
-        size={ getSkeletonSize() }
-        style={ { width: computedWidth } }
-      />
+      <div
+        className={ cn(styles.skeletonLoading, className) }
+      >
+        <Skeleton.Input
+          active
+          size={ getSkeletonSize() }
+        />
+      </div>
     )
   }
 
@@ -127,16 +167,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     return null
   }
 
-  let computedMinWidth: undefined | number
-
-  if (typeof minWidth === 'number') {
-    computedMinWidth = minWidth
-  }
-
-  if (typeof minWidth === 'string') {
-    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
-  }
-
   // Apply field width as default maxWidth, with optional explicit minWidth
   const computedStyle = {
     maxWidth: computedWidth,
@@ -145,13 +175,15 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }
 
   return (
-    <div className={ selectContainerClassNames }>
-      {withCustomIcon && (
-        <Icon
-          className={ customIconClassNames }
-          value={ customIcon! }
-        />
-      )}
+    <div
+      className={ selectContainerClassNames }
+      data-testid={ dataTestId }
+    >      {withCustomIcon && (
+    <Icon
+      className={ customIconClassNames }
+      value={ customIcon! }
+    />
+    )}
       <AntdSelect
         allowClear={ allowClear }
         className={ selectClassNames }

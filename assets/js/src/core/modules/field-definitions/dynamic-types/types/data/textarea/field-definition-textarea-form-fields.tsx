@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
+import { Form, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,7 +18,7 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout}
 
       <Form.Item
@@ -55,6 +55,6 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
       <Form.Item name="excludeFromSearchIndex">
         <Switch labelRight={ t('exclude-from-search-index') } />
       </Form.Item>
-    </FormKit.Panel>
+    </>
   )
 }

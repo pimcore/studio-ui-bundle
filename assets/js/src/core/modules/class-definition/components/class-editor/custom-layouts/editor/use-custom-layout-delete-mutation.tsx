@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePimcoreStudioApiClassCustomLayoutDeleteMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassCustomLayoutDeleteMutation } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { type AnyMutationHook } from 'types/react-query'
 
 export const useCustomLayoutDeleteMutation: AnyMutationHook = (options) => {
-  const [fetch, result] = usePimcoreStudioApiClassCustomLayoutDeleteMutation(options)
+  const [fetch, result] = useClassCustomLayoutDeleteMutation(options)
 
   const decoratedFetch = (args: { id: string | number }): ReturnType<typeof fetch> => {
     return fetch({

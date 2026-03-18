@@ -35,6 +35,8 @@ interface HotspotImageFooterProps {
   setCropModalOpen: () => void
   setMarkerModalOpen: () => void
   replaceImage: (newImage: ImageValue) => void
+  onSearch?: () => void
+  onUpload?: () => void
 }
 
 export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.Element => {
@@ -137,6 +139,20 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
               key: 'clear-data',
               icon: <Icon value={ 'remove-marker' } />,
               onClick: clearHotspotsMarkers
+            },
+            {
+              hidden: props.disabled === true || props.onSearch === undefined,
+              label: t('search'),
+              key: 'search',
+              icon: <Icon value={ 'search' } />,
+              onClick: () => props.onSearch?.()
+            },
+            {
+              hidden: props.disabled === true || props.onUpload === undefined,
+              label: t('upload'),
+              key: 'upload',
+              icon: <Icon value={ 'upload-cloud' } />,
+              onClick: () => props.onUpload?.()
             }
           ]
         } }
@@ -146,7 +162,6 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
         <IconButton
           icon={ { value: 'more' } }
           onClick={ (e) => { e.stopPropagation() } }
-          size="small"
         />
       </Dropdown>
     )

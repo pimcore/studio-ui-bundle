@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber } from '@sdk/components'
+import { Form, Input, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,7 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
   const { t } = useTranslation()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -37,6 +37,6 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

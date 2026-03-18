@@ -37,6 +37,7 @@ export const GeneralTab = (): React.JSX.Element => {
           theme='secondary'
         >
           <SearchInput
+            data-testid="search-modal-input"
             maxWidth={ '100%' }
             onChange={ (event) => { setSearchQuery(event.target.value) } }
             onSearch={ onSearch }

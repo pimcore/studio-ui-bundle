@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Switch, TextArea } from '@sdk/components'
+import { Form, Input, InputNumber, Switch, TextArea } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
@@ -54,7 +54,7 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
   }
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -148,6 +148,6 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

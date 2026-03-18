@@ -50,11 +50,13 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
   return (
     <Flex
       align="center"
+      data-testid={ `report-drilldown-${field.name}` }
       gap="extra-small"
     >
       <Text className={ styles.drillDownSelectLabel }>{selectLabel}</Text>
       <Select
         className='min-w-200'
+        data-testid={ `report-drilldown-select-${field.name}` }
         loading={ isLoading }
         onSelect={ handleSelectChange }
         options={ data?.items?.map((item) => ({

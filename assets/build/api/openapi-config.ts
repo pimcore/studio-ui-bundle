@@ -108,6 +108,10 @@ const config: ConfigFile = {
     {
       pattern: 'gdprSearchData',
       type: 'query'
+    },
+    {
+      pattern: 'unitQuantityValueUnitsCollection',
+      type: 'query'
     }
   ],
   outputFiles: {

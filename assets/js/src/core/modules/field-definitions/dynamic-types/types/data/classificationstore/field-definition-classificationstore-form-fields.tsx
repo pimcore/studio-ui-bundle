@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useClassificationStoreOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-classification-store-options'
-import { Form, FormKit, InputNumber, Select, Switch, TextArea } from '@sdk/components'
+import { Form, InputNumber, Select, Switch, TextArea } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,7 +20,7 @@ export const FieldDefinitionClassificationstoreFormFields = (props: FieldDefinit
   const { options: storeOptions, isLoading } = useClassificationStoreOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('label-width') }
         name="labelWidth"
@@ -74,6 +74,6 @@ export const FieldDefinitionClassificationstoreFormFields = (props: FieldDefinit
           </Form.Item>
         </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

@@ -20,8 +20,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const classDefinitionImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/class/definition/configuration-view/detail/${id}/export`,
-  getImportUrl: (id) => `${getPrefix()}/class/definition/configuration-view/detail/${id}/import`,
-  getIdFromGeneralSettings: (generalSettings) => generalSettings?.id as number | undefined
+  getImportUrl: (id) => `${getPrefix()}/class/definition/configuration-view/detail/${id}/import`
 }
 
 export const ClassDefinitionWidget = (): React.JSX.Element => {

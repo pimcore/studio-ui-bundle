@@ -27,9 +27,10 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
   const { options: classOptions, isLoading: isLoadingClassOptions } = useClassDefinitionOptions()
   const form = Form.useFormInstance()
   const ownerClassName = Form.useWatch<string | undefined>('ownerClassName')
+  const ownerFieldName = Form.useWatch<string | undefined>('ownerFieldName')
   const visibleFields = Form.useWatch<string | undefined>('visibleFields')
 
-  const ownerFieldNameOptions = useClassRelationFieldsOptions(ownerClassName)
+  const { options: ownerFieldNameOptions, isLoading: isLoadingOwnerFieldName } = useClassRelationFieldsOptions(ownerClassName)
   const { options: visibleFieldsOptions, isLoading: isLoadingVisibleFields } = useVisibleFieldsOptions([ownerClassName ?? ''])
 
   useEffect(() => {
@@ -46,37 +47,55 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
     }
   }, [visibleFieldsOptions, isLoadingVisibleFields, visibleFields, form])
 
-  const isLoading = isLoadingClassOptions || isLoadingVisibleFields
+  useEffect(() => {
+    if (isLoadingOwnerFieldName) {
+      return
+    }
+
+    const availableFieldValues = new Set<string>(ownerFieldNameOptions.map((option) => option.value))
+
+    if (ownerFieldName !== undefined && !availableFieldValues.has(ownerFieldName)) {
+      form.setFieldValue('ownerFieldName', undefined)
+    }
+  }, [ownerFieldNameOptions, isLoadingOwnerFieldName, ownerFieldName, form])
+
+  const isLoading = isLoadingClassOptions || isLoadingVisibleFields || isLoadingOwnerFieldName
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
-      <>
-        <Form.Item name="allowToCreateNewObject">
-          <Switch labelRight={ t('allow-to-create-new-object') } />
-        </Form.Item>
+    <>
+      <Form.Item name="allowToCreateNewObject">
+        <Switch labelRight={ t('allow-to-create-new-object') } />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('path-formatter-service') }
-          name="pathFormatterClass"
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('path-formatter-service') }
+        name="pathFormatterClass"
+      >
+        <Input />
+      </Form.Item>
+
+      <FormKit.Panel
+        border
+        theme="fieldset"
+        title={ t('owner') }
+        tooltip={ t('reverse-object-relation.tooltip') }
+      >
 
         <Form.Item
           label={ t('owner-class') }
@@ -94,6 +113,7 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
           name="ownerFieldName"
         >
           <Select
+            loadingSkeleton={ isLoadingOwnerFieldName }
             options={ ownerFieldNameOptions }
             showSearch
           />
@@ -114,14 +134,14 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
             showSearch
           />
         </Form.Item>
+      </FormKit.Panel>
 
-        <Form.Item
-          name="optimizedAdminLoading"
-          tooltip={ t('enable-async-load-in-admin-tooltip') }
-        >
-          <Switch labelRight={ t('enable-async-load-in-admin') } />
-        </Form.Item>
-      </>
-    </FormKit.Panel>
+      <Form.Item
+        name="optimizedAdminLoading"
+        tooltip={ t('enable-async-load-in-admin-tooltip') }
+      >
+        <Switch labelRight={ t('enable-async-load-in-admin') } />
+      </Form.Item>
+    </>
   )
 }

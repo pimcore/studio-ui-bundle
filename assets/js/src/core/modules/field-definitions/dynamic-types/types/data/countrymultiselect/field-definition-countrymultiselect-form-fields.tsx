@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, Select } from '@sdk/components'
+import { Form, Input, Select } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { isString } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -28,7 +28,7 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
   }, [countriesData])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -72,6 +72,6 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

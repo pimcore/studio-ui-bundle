@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionManyToOneRelationFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToOneRelation/field-definition-many-to-one-relation-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -25,19 +25,27 @@ export class DynamicTypeFieldDefinitionManyToOne extends DynamicTypeFieldDefinit
     return [...super.getGroup(), 'relation']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      displayMode: 'grid'
+    }
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
-      <>
-        {super.getFormFields({ ...context, hideUnique: true })}
-        <FieldDefinitionManyToOneRelationFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
-      </>
+      <FieldDefinitionManyToOneRelationFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
     )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({ ...context, hideUnique: true })
   }
 }

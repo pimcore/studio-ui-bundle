@@ -18,7 +18,7 @@ export const SidebarModalHolder = (): React.JSX.Element => {
 
   return (
     <>
-      {open && <AddModal />}
+      {open && AddModal !== undefined && <AddModal />}
     </>
   )
 }

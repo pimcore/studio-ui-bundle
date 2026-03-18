@@ -47,7 +47,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
   const [isValidDragOver, setIsValidDragOver] = useState<boolean>(false)
   const dragInfoRef = useRef<DragAndDropInfo | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const hotspotRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
   const isInIframe = wrapperRef.current?.ownerDocument !== document
   const isVisible = useElementVisible(wrapperRef, true, disableDndActiveIndicator || isInIframe)
 
@@ -66,17 +66,17 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
       }
     }))
 
-    document.body.classList.toggle('dnd--invalid', finalState === 'error')
+    document.getElementById('studio-dnd-overlay')?.classList.toggle('dnd--invalid', finalState === 'error')
   }, [disableDndActiveIndicator])
 
   // Update global valid drop state whenever hotspot states change
   useEffect(() => {
     const hasAnyValidDrop = Object.values(hotspotStates).some(state => state.dragState === 'valid')
-    const hasAnyValidOver = Object.values(hotspotStates).some(state => state.dragState === 'valid')
+    const hasAnyValidOver = hasAnyValidDrop
 
     setHasValidDrop(hasAnyValidDrop)
     setIsValidDragOver(hasAnyValidOver)
-    document.body.classList.toggle('dnd--has-valid-drop', hasAnyValidDrop)
+    document.getElementById('studio-dnd-overlay')?.classList.toggle('dnd--has-valid-drop', hasAnyValidDrop)
   }, [hotspotStates])
 
   const updateAllHotspotStates = useCallback((info: DragAndDropInfo | null): void => {
@@ -96,7 +96,7 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
       )
       // Clear global drag state classes when drag ends
       setHasValidDrop(false)
-      document.body.classList.remove('dnd--has-valid-drop')
+      document.getElementById('studio-dnd-overlay')?.classList.remove('dnd--has-valid-drop')
       return
     }
 
@@ -239,7 +239,6 @@ export const BaseHotspotDroppable = ({ children, className, hotspots, disableDnd
             onDragLeave={ isVisible ? handlers.handleDragLeave : undefined }
             onDragOver={ isVisible ? handlers.handleDragOver : undefined }
             onDrop={ isVisible ? handlers.handleDrop : undefined }
-            ref={ (el) => { hotspotRefs.current[hotspot.id] = el } }
             role="none"
             style={ {
               ...getHotspotStyles(hotspot.position),

@@ -45,7 +45,6 @@ export const FieldDefinitionRegexValidation = (): React.JSX.Element => {
         tooltip={ t('regex-flags-tooltip') }
       >
         <Select
-          defaultValue=""
           mode="multiple"
           options={ flagOptions }
         />

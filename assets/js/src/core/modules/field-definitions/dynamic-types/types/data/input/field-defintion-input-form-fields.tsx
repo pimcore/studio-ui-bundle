@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { FieldDefinitionRegexValidation } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-regex-validation/field-definition-regex-validation'
-import { Form, FormKit, Input, Switch, InputNumber } from '@sdk/components'
+import { Form, Input, Switch, InputNumber } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -19,7 +19,7 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
   const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <>
           <Form.Item
@@ -65,6 +65,6 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
 
       <FieldDefinitionRegexValidation />
 
-    </FormKit.Panel>
+    </>
   )
 }

@@ -8,6 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { create } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { create, type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import React from 'react'
 
-export const { LayoutProvider, useLayout } = create()
+const { LayoutProvider: LayoutProviderInternal, useLayout } = create()
+
+export { useLayout }
+
+export const LayoutProvider = (props: Omit<LayoutProviderProps, 'fieldDefinitionRegistry'>): React.JSX.Element => {
+  const { fieldDefinitionRegistry } = useSettings()
+
+  return (
+    <LayoutProviderInternal
+      { ...props }
+      fieldDefinitionRegistry={ fieldDefinitionRegistry }
+    />
+  )
+}

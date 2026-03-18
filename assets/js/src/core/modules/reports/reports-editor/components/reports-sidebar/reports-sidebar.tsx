@@ -153,6 +153,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
           <Flex
             align="center"
             className={ styles.sidebarReportItem }
+            data-testid={ `reports-editor-sidebar-item-${item.id}` }
             gap="mini"
             onClick={ () => { handleOpenReport(item) } }
           >

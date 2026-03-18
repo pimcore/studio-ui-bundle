@@ -25,7 +25,7 @@ export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: Field
   const documentTypeOptions = useDocumentTypeOptions()
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -176,6 +176,6 @@ export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: Field
         <Switch labelRight={ t('enable-async-load-in-admin') } />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

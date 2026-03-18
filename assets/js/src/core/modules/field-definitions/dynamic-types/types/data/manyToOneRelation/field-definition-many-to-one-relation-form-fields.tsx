@@ -32,7 +32,7 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
   }, [displayMode, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
 
       <FormKit.Panel
         border
@@ -159,6 +159,6 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
         />
       </Form.Item>
 
-    </FormKit.Panel>
+    </>
   )
 }

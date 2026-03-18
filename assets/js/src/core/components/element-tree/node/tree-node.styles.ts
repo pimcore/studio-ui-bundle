@@ -69,6 +69,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .tree-node__content-wrapper-outer {
         position: relative;
         padding: 2px 0 2px 0;
+        gap: ${token.paddingXXS}px;
       }
 
       .tree-node__content--selected {
@@ -84,6 +85,7 @@ export const useStyles = createStyles(({ token, css }) => {
         display: inline-block;
         text-overflow: ellipsis;
         overflow: hidden;
+        color: ${token.colorTextTreeElement};
       }
     `
   }

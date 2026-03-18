@@ -9,14 +9,13 @@
  */
 
 /* eslint-disable max-lines */
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+import { globalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitions/utils/global-clipboard'
 import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
-import { useInjection } from '@sdk/app'
 import { uuid } from '@sdk/utils'
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 export type Layout = LayoutType
 
@@ -54,11 +53,12 @@ export interface ILayoutContext {
   isValidChildFieldDefinition: (targetPath: string[], childPath: string[]) => boolean
   isValidExternalChildFieldDefinition: (targetPath: string[], externalLayout: Layout) => boolean
   getLayout: (props?: GetLayoutProps) => Layout | undefined
-  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => void
+  addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => StructureNode
 }
 
 export interface LayoutProviderProps {
   layout: Layout | undefined
+  fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   children: React.ReactNode
 }
 
@@ -155,13 +155,14 @@ export const create = (): LayoutProviderFactoryReturn => {
     const [currentFieldDefinitionIdPath, setCurrentFieldDefinitionIdPath] = useState<ILayoutContext['currentFieldDefinitionIdPath']>(null)
     const [invalidFieldDefinitionIds, setInvalidFieldDefinitionIds] = useState<ILayoutContext['invalidFieldDefinitionIds']>([])
     const [copiedPath, setCopiedPath] = useState<ILayoutContext['copiedPath']>(undefined)
-    const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+    const fieldDefinitionRegistry = props.fieldDefinitionRegistry
     const { area } = useArea()
 
     // Use refs to always access latest values in callbacks
     const structureRef = React.useRef(structure)
     const fieldDefinitionsRef = React.useRef(fieldDefinitions)
     const areaRef = React.useRef(area)
+    const isInitializedRef = useRef(false)
 
     React.useEffect(() => {
       structureRef.current = structure
@@ -171,6 +172,8 @@ export const create = (): LayoutProviderFactoryReturn => {
 
     useEffect(() => {
       if (props.layout === undefined) {
+        // Reset: layout cleared or switching away
+        isInitializedRef.current = false
         setStructure(undefined)
         setFieldDefinitions({})
         setInvalidFieldDefinitionIds([])
@@ -180,6 +183,15 @@ export const create = (): LayoutProviderFactoryReturn => {
         return
       }
 
+      if (isInitializedRef.current) {
+        // Already initialized — ignore post-save refetches.
+        // The explicit refresh button remounts the component via key increment,
+        // which is the correct mechanism to re-sync from server.
+        return
+      }
+
+      // First time we have a defined layout — initialize
+      isInitializedRef.current = true
       const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout })!
 
       setCurrentFieldDefinitionId(null)
@@ -416,6 +428,34 @@ export const create = (): LayoutProviderFactoryReturn => {
 
     const copyFieldDefinition = useCallback((path: string[]): void => {
       setCopiedPath(path)
+
+      // Also write a Layout snapshot to the global clipboard so it can be
+      // pasted into other editor instances (cross-configuration copy/paste).
+      const nodeId = path[path.length - 1]
+      const currentStructure = structureRef.current
+      const currentFieldDefs = fieldDefinitionsRef.current
+
+      if (currentStructure === undefined || nodeId === undefined) {
+        return
+      }
+
+      const buildLayoutFromNode = (node: StructureNode): Layout => {
+        const fieldDef = currentFieldDefs[node.id]
+        const children = node.children.map(buildLayoutFromNode)
+        const { id, ...restFieldDef } = fieldDef
+
+        /* eslint-disable @typescript-eslint/consistent-type-assertions */
+        return {
+          ...restFieldDef,
+          children: (children.length > 0 ? children : null) as Layout['children']
+        } as unknown as Layout
+        /* eslint-enable @typescript-eslint/consistent-type-assertions */
+      }
+
+      const targetNode = findNode(currentStructure, nodeId)
+      if (targetNode !== undefined) {
+        globalFieldDefinitionClipboard.set(buildLayoutFromNode(targetNode))
+      }
     }, [])
 
     const pasteFieldDefinition = useCallback((path: string[]): void => {
@@ -503,7 +543,6 @@ export const create = (): LayoutProviderFactoryReturn => {
         /* eslint-enable @typescript-eslint/consistent-type-assertions */
       }
 
-      // @todo ensure structure is defined by injecting pimcore_root early on when necessary
       return buildLayoutRecursively(structureToConvert)
     }, [structure, fieldDefinitions])
 
@@ -547,9 +586,9 @@ export const create = (): LayoutProviderFactoryReturn => {
       const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
       const childDynType = fieldDefinitionRegistry.getDynamicType(childFieldDef?.fieldtype, false)
 
-      const isRoot = currentFieldDef.name === 'pimcore_root'
+      const isRoot = currentTargetPath.length === 1
 
-      if ((childDynType === undefined) || (currentDynType === undefined && currentTargetPath.length > 1)) {
+      if ((childDynType === undefined) || (currentDynType === undefined && !isRoot)) {
         return false
       }
 
@@ -647,9 +686,9 @@ export const create = (): LayoutProviderFactoryReturn => {
       const currentDynType = fieldDefinitionRegistry.getDynamicType(currentFieldDef.fieldtype, false)
       const childDynType = fieldDefinitionRegistry.getDynamicType(externalFieldtype, false)
 
-      const isRoot = currentFieldDef.name === 'pimcore_root'
+      const isRoot = currentTargetPath.length === 1
 
-      if ((childDynType === undefined) || (currentDynType === undefined && currentTargetPath.length > 1)) {
+      if ((childDynType === undefined) || (currentDynType === undefined && !isRoot)) {
         return false
       }
 
@@ -698,6 +737,8 @@ export const create = (): LayoutProviderFactoryReturn => {
         ...prevDefs,
         ...externalFieldDefinitions
       }))
+
+      return externalStructure
     }, [])
 
     return useMemo(() => (

@@ -10,10 +10,10 @@
 
 import { type ThumbnailConfigurationData, type ThumbnailConfigurationFolderData } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 
-export function findThumbnailById (
+export const findThumbnailById = (
   id: string,
   items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>
-): ThumbnailConfigurationData | ThumbnailConfigurationFolderData | null {
+): ThumbnailConfigurationData | ThumbnailConfigurationFolderData | null => {
   for (const item of items) {
     if (item.id === id) {
       return item
@@ -30,10 +30,10 @@ export function findThumbnailById (
   return null
 }
 
-export function filterThumbnailsRecursive (
+export const filterThumbnailsRecursive = (
   items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>,
   searchTerm: string
-): Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> {
+): Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData> => {
   const searchLower = searchTerm.toLowerCase()
 
   return items.filter(item => {
@@ -57,4 +57,18 @@ export function filterThumbnailsRecursive (
 
     return item
   })
+}
+
+export const getFolderKeysFromTree = (
+  items: Array<ThumbnailConfigurationData | ThumbnailConfigurationFolderData>
+): string[] => {
+  const keys: string[] = []
+
+  for (const item of items) {
+    if ('children' in item && Array.isArray(item.children)) {
+      keys.push(String(item.id), ...getFolderKeysFromTree(item.children))
+    }
+  }
+
+  return keys
 }

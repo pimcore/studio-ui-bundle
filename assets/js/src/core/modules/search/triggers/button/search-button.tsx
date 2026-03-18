@@ -25,6 +25,7 @@ export const SearchButton = (): React.JSX.Element => {
 
   return (
     <IconButton
+      data-testid="search-button"
       icon={ { value: 'search' } }
       onClick={ () => { open('all') } }
       type='text'

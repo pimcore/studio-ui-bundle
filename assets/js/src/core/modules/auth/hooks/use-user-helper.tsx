@@ -81,7 +81,10 @@ export const useUserHelper = (): UseUserReturn => {
         }
       }))
 
+
       await handleNotification(t('user-management.save-user.password.success'), passwordError)
+      dispatch(userProfileUpdated(data))
+      return data
     }
 
     await handleNotification(t('user-management.save-user.success'), error)

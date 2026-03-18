@@ -13,6 +13,7 @@ import { isEmpty } from 'lodash'
 import { Card } from '@Pimcore/components/card/card'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
+import { type CollapseProps } from 'antd'
 
 export interface BaseViewProps {
   title?: React.ReactNode
@@ -20,6 +21,8 @@ export interface BaseViewProps {
   bordered?: boolean
   border?: boolean
   collapsed?: boolean
+  active?: boolean
+  onChange?: CollapseProps['onChange']
   collapsible?: boolean
   theme?: 'fieldset' | 'card-with-highlight' | 'default' | 'border-highlight'
   contentPadding?: BoxProps['padding']
@@ -46,6 +49,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     if (finalProps.collapsible === true) {
       return (
         <CollapseItem
+          active={ finalProps.active }
           bordered={ finalProps.bordered }
           contentPadding={ finalProps.contentPadding }
           defaultActive={ !(finalProps.collapsed ?? true) }
@@ -54,6 +58,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           forceRender
           hasContentSeparator={ theme !== 'fieldset' }
           label={ (<>{finalProps.title}</>) }
+          onChange={ finalProps.onChange }
           size='small'
           theme={ theme }
         >

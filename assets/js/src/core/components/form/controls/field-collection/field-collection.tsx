@@ -23,6 +23,7 @@ export interface FieldCollectionProps {
   maxItems?: number
   title?: string
   collapsed?: boolean
+  addLabel?: string
 }
 
 export const FieldCollection = (props: FieldCollectionProps): React.JSX.Element => {

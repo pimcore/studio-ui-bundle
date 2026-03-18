@@ -15,10 +15,16 @@ import { ConfigProvider } from 'antd'
 import { Tabpanel } from '../tabpanel/tabpanel'
 import { Region } from '../region/region'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { ItemSpacer } from './layouts/item-spacer/item-spacer'
 
 export interface FormKitProps {
   formProps?: Omit<FormProps, 'children'>
   children?: React.ReactNode
+  /**
+   * When false, children are rendered directly inside the Form without
+   * a Panel wrapper. Use this when the child already owns its own layout.
+   */
+  wrapInPanel?: boolean
 }
 
 const FormKit = (props: FormKitProps): React.JSX.Element => {
@@ -34,9 +40,9 @@ const FormKit = (props: FormKitProps): React.JSX.Element => {
     <FieldWidthProvider fieldWidthValues={ { small: 200, medium: 300, large: 900 } }>
       <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
         <Form { ...finalProps.formProps }>
-          <Panel>
-            {props.children}
-          </Panel>
+          { props.wrapInPanel !== false
+            ? <Panel>{ props.children }</Panel>
+            : props.children }
         </Form>
       </ConfigProvider>
     </FieldWidthProvider>
@@ -47,10 +53,12 @@ const TypedFormKit = FormKit as typeof FormKit & {
   Panel: typeof Panel
   TabPanel: typeof Tabpanel
   Region: typeof Region
+  ItemSpacer: typeof ItemSpacer
 }
 
 TypedFormKit.Panel = Panel
 TypedFormKit.TabPanel = Tabpanel
 TypedFormKit.Region = Region
+TypedFormKit.ItemSpacer = ItemSpacer
 
 export { TypedFormKit as FormKit }

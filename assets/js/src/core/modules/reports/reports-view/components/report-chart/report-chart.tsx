@@ -51,14 +51,18 @@ export const ReportChart = ({ chartData, reportData, chartConfig }: IReportsChar
     )
   }
 
-  switch (chartType) {
-    case CHART_TYPE_PIE:
-      return <PieChart { ...commonProps } />
-    case CHART_TYPE_LINE:
-      return <LineChart { ...commonProps } />
-    case CHART_TYPE_BAR:
-      return <BarChart { ...commonProps } />
-    default:
-      return <PieChart { ...commonProps } />
-  }
+  const chartElement = (() => {
+    switch (chartType) {
+      case CHART_TYPE_PIE:
+        return <PieChart { ...commonProps } />
+      case CHART_TYPE_LINE:
+        return <LineChart { ...commonProps } />
+      case CHART_TYPE_BAR:
+        return <BarChart { ...commonProps } />
+      default:
+        return <PieChart { ...commonProps } />
+    }
+  })()
+
+  return <div data-testid="report-chart-container">{chartElement}</div>
 }

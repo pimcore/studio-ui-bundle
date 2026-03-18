@@ -81,6 +81,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              data-testid="widget-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
               onClick={ async () => {
@@ -100,6 +101,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
 
             <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
               <IconButton
+                data-testid="widget-form-delete-button"
                 disabled={ isLoading || !isWriteable }
                 icon={ { value: 'trash' } }
                 onClick={ () => {
@@ -115,6 +117,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
 
           <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
             <Button
+              data-testid="widget-form-save-button"
               disabled={ !isWriteable }
               htmlType='submit'
               loading={ isLoading }

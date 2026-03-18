@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import { Form, Input, InputNumber, Select } from '@sdk/components'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,7 +27,7 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
   }, [useCalculatorType, form])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       {!isCustomLayout && (
         <Form.Item
           label={ t('type') }
@@ -99,6 +99,6 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
         </Form.Conditional>
       </>
       )}
-    </FormKit.Panel>
+    </>
   )
 }

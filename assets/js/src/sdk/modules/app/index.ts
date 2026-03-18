@@ -17,7 +17,7 @@ export * from '@Pimcore/modules/app/context-menu-registry'
 export * from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
-export { default as trackError, ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+export { default as trackError, ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 export * from '@Pimcore/modules/app/error-handler/types'
 
 export * from '@Pimcore/modules/app/theme/theme-provider'

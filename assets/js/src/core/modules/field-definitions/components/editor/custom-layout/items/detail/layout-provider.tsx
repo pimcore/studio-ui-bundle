@@ -8,9 +8,30 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { create } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { create, type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import React from 'react'
 
-export const {
-  LayoutProvider: CustomLayoutLayoutProvider,
-  useLayout: useCustomLayoutLayout
-} = create()
+const { LayoutProvider: CustomLayoutLayoutProviderInternal, useLayout: useCustomLayoutLayout } = create()
+
+export { useCustomLayoutLayout }
+
+/**
+ * Wrapper that reads fieldDefinitionRegistry from the nearest SettingsProvider
+ * and injects it into the raw factory LayoutProvider, the same way
+ * DefaultLayoutProvider works in items/detail/layout-provider.tsx.
+ *
+ * Created at module level (not inside a component) so the React context
+ * identity is stable across renders and the class definition custom layout
+ * editor does not share context with other editors.
+ */
+export const CustomLayoutLayoutProvider = (props: Omit<LayoutProviderProps, 'fieldDefinitionRegistry'>): React.JSX.Element => {
+  const { fieldDefinitionRegistry } = useSettings()
+
+  return (
+    <CustomLayoutLayoutProviderInternal
+      { ...props }
+      fieldDefinitionRegistry={ fieldDefinitionRegistry }
+    />
+  )
+}

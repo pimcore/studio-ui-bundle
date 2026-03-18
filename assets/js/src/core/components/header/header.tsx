@@ -15,22 +15,23 @@ import {
 } from '@Pimcore/components/header/header.styles'
 import cn from 'classnames'
 
-export interface HeaderProps {
+export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: React.JSX.Element
-  className?: string
   fullWidth?: boolean
   title: string
-  children?: React.ReactNode
 }
 
 export const Header = (props: HeaderProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { icon, title, children } = props
+  const { icon, title, children, fullWidth, ...rest } = props
   const classNames = cn(styles.header, props.className)
 
   return (
-    <div className={ classNames }>
-      { title !== '' && (
+    <div
+      { ...rest }
+      className={ classNames }
+    >
+      {title !== '' && (
         <span className={ 'header__text' }>
           <Title icon={ icon }>
             {title}
@@ -38,7 +39,7 @@ export const Header = (props: HeaderProps): React.JSX.Element => {
         </span>
       )}
 
-      <div className={ cn('header__content', { 'w-full': props.fullWidth === true }) }>
+      <div className={ cn('header__content', { 'w-full': fullWidth === true }) }>
         {children}
       </div>
     </div>

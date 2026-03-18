@@ -10,7 +10,7 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
-import { Form, FormKit, Input, InputNumber, Select } from '@sdk/components'
+import { Form, Input, InputNumber, Select } from '@sdk/components'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,7 +27,7 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
   }, [getAllSites])
 
   return (
-    <FormKit.Panel title={ t('specific-settings') }>
+    <>
       <Form.Item
         label={ t('width') }
         name="width"
@@ -42,7 +42,10 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
             label={ t('domain-label-width') }
             name="domainLabelWidth"
           >
-            <InputNumber />
+            <InputNumber
+              min={ 0 }
+              precision={ 0 }
+            />
           </Form.Item>
 
           <Form.Item
@@ -65,6 +68,6 @@ export const FieldDefinitionUrlSlugFormFields = (props: FieldDefinitionAbstractF
         </>
       ) }
 
-    </FormKit.Panel>
+    </>
   )
 }

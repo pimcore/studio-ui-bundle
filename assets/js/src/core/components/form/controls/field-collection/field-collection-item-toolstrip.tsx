@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { ToolStrip } from '../../../toolstrip/tool-strip'
 import { useFieldCollection } from './field-collection-provider'
 import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
@@ -21,15 +21,19 @@ export interface FieldCollectionItemToolStripProps {
   field: number
 }
 
-export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStripProps): React.JSX.Element => {
+export const FieldCollectionItemToolStrip = React.memo((props: FieldCollectionItemToolStripProps): React.JSX.Element => {
   const { field } = props
   const { values, getValueByKey, operations } = useNumberedList()
   const value = getValueByKey(field.toString())
   const type = value?.type
-  const { registry, maxItems, disallowAddRemove, disallowReorder } = useFieldCollection()
+  const { registry, maxItems, disallowAddRemove, disallowReorder, addLabel } = useFieldCollection()
   const registryItem = registry.getItemByType(type as string)
   const { t } = useTranslation()
   const hasMaxItems = maxItems !== undefined && values.length >= maxItems
+
+  const handleMoveDown = useCallback(() => { operations.move(field, field + 1) }, [operations, field])
+  const handleMoveUp = useCallback(() => { operations.move(field, field - 1) }, [operations, field])
+  const handleRemove = useCallback(() => { operations.remove(field) }, [operations, field])
 
   if (registryItem === undefined) {
     throw new Error(`No registry item found for type "${type}"`)
@@ -38,6 +42,7 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
   return (
     <ToolStrip title={ t(registryItem.translationKey) }>
       <FieldCollectionAddControl
+        addLabel={ addLabel }
         disabled={ hasMaxItems || disallowAddRemove }
         field={ field }
       />
@@ -45,15 +50,15 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
       <Space size="mini">
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
-          onClick={ () => { operations.move(field, field + 1) } }
+          icon={ { value: 'chevron-down' } }
+          onClick={ handleMoveDown }
           size="small"
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
-          onClick={ () => { operations.move(field, field - 1) } }
+          icon={ { value: 'chevron-up' } }
+          onClick={ handleMoveUp }
           size="small"
         />
       </Space>
@@ -61,9 +66,10 @@ export const FieldCollectionItemToolStrip = (props: FieldCollectionItemToolStrip
       <IconButton
         disabled={ disallowAddRemove }
         icon={ { value: 'trash' } }
-        onClick={ () => { operations.remove(field) } }
+        onClick={ handleRemove }
         size="small"
       />
     </ToolStrip>
   )
-}
+})
+FieldCollectionItemToolStrip.displayName = 'FieldCollectionItemToolStrip'

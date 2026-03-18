@@ -42,26 +42,18 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
     return [...super.getDisallowedRecursiveChildTags(props), 'block']
   }
 
+  opensNamespace (): boolean {
+    return true
+  }
+
   getGroup (): string[] {
     return [...super.getGroup(), 'structured']
   }
 
-  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+  getCustomLayoutOptions (context: FieldDefinitionContext): React.JSX.Element {
     const isCustomLayout = context.area.includes('custom-layout')
-    const id = this.getId(context)
-    const fieldDefinition = context.fieldDefinitions[id]
-
-    const enrichedContext = {
-      ...context,
-      hideUnique: true,
-      disableMandatory: true,
-      disableIndex: true,
-      disableVisibleGridView: true,
-      disableVisibleSearch: true
-    }
     return (
       <>
-        {super.getFormFields(enrichedContext)}
         {!isCustomLayout && (
           <FormKit.Panel
             theme="card-with-highlight"
@@ -75,12 +67,31 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
             </Form.Item>
           </FormKit.Panel>
         )}
-        <FieldDefinitionBlockFormFields
-          context={ context }
-          id={ fieldDefinition?.name ?? id }
-          type={ this.id }
-        />
       </>
     )
+  }
+
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    const id = this.getId(context)
+    const fieldDefinition = context.fieldDefinitions[id]
+
+    return (
+      <FieldDefinitionBlockFormFields
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
+      />
+    )
+  }
+
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
+    return super.getFormFields({
+      ...context,
+      hideUnique: true,
+      disableMandatory: true,
+      disableIndex: true,
+      disableVisibleGridView: true,
+      disableVisibleSearch: true
+    })
   }
 }

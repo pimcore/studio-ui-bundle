@@ -49,6 +49,7 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
   return (
     <Modal
       closable={ false }
+      data-testid="upload-modal"
       footer={ null }
       open={ props.open }
       title={ (

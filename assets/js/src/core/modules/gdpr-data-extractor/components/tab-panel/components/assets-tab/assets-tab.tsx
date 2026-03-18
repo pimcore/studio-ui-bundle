@@ -17,9 +17,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DeleteButton } from '../../../delete-button/delete-button'
-import { ExportButton } from '../../../export-button/export-button'
 import { OpenButton } from '../../../open-button/open-button'
 import { type GDPRProviderTabProps } from '../../tab-panel'
+import { ExportButton } from './components/export-button/export-button'
 
 interface AssetRow {
   data: {
@@ -86,14 +86,16 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
         return (
           <Flex>
             <ExportButton
+              data-testid={ `gdpr-assets-export-${data.id}` }
+              filename={ data.fullPath.split('/').pop() ?? `asset-${data.id}` }
               id={ data.id }
-              providerKey={ providerKey }
               tooltip={ {
                 title: t('gdpr-extractor.assets.table.actions.export')
               } }
             />
 
             <OpenButton
+              data-testid={ `gdpr-assets-open-${data.id}` }
               elementType={ elementTypes.asset }
               id={ data.id }
               tooltip={ {
@@ -102,6 +104,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
             />
 
             <DeleteButton
+              data-testid={ `gdpr-assets-delete-${data.id}` }
               disabled={ !data.__gdprIsDeletable }
               elementType={ elementTypes.asset }
               id={ data.id }
@@ -122,6 +125,7 @@ export const AssetsTab = ({ data, providerKey, onSortingChange, ...props }: Asse
       autoWidth
       columns={ columns }
       data={ data.map((item) => item.data) }
+      dataTestId="gdpr-assets-grid"
       enableSorting
       onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!

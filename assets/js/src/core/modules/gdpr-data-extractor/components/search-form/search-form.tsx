@@ -68,21 +68,21 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
         label={ t('gdpr-extractor.search-form.field.id') }
         name={ ['id'] }
       >
-        <Input />
+        <Input data-testid="gdpr-search-id-input" />
       </Form.Item>
 
       <Form.Item
         label={ t('gdpr-extractor.search-form.field.firstname') }
         name={ ['firstname'] }
       >
-        <Input />
+        <Input data-testid="gdpr-search-firstname-input" />
       </Form.Item>
 
       <Form.Item
         label={ t('gdpr-extractor.search-form.field.lastname') }
         name={ ['lastname'] }
       >
-        <Input />
+        <Input data-testid="gdpr-search-lastname-input" />
       </Form.Item>
 
       <Flex
@@ -93,10 +93,11 @@ export const SearchForm = ({ onSearch, onValueChange, isLoading }: SearchFormPro
           label={ t('gdpr-extractor.search-form.field.email') }
           name={ ['email'] }
         >
-          <Input />
+          <Input data-testid="gdpr-search-email-input" />
         </Form.Item>
 
         <Button
+          data-testid="gdpr-search-submit-button"
           htmlType="submit"
           loading={ isLoading }
           type="primary"

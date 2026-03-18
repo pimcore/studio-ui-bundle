@@ -122,6 +122,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
               className='w-full'
             >
               <IconButton
+                data-testid="action-open-element"
                 icon={ { value: 'open-folder' } }
                 onClick={ async () => {
                   !isUndefined(elementType) &&
@@ -133,6 +134,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
                 type="link"
               />
               <IconButton
+                data-testid="action-show-details"
                 icon={ { value: 'show-details' } }
                 onClick={ async () => {
                   setNoteDetail(info.row.original)
@@ -147,6 +149,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
               className='w-full'
             >
               <IconButton
+                data-testid="action-show-details"
                 icon={ { value: 'show-details' } }
                 onClick={ async () => {
                   setNoteDetail(info.row.original)

@@ -85,6 +85,7 @@ export const DataObjectsTab = ({ data, providerKey, onSortingChange, ...props }:
         return (
           <Flex>
             <ExportButton
+              data-testid={ `gdpr-data-objects-export-${data.id}` }
               id={ data.id }
               providerKey={ providerKey }
               tooltip={ {
@@ -93,6 +94,7 @@ export const DataObjectsTab = ({ data, providerKey, onSortingChange, ...props }:
             />
 
             <OpenButton
+              data-testid={ `gdpr-data-objects-open-${data.id}` }
               elementType={ elementTypes.dataObject }
               id={ data.id }
               tooltip={ {
@@ -101,6 +103,7 @@ export const DataObjectsTab = ({ data, providerKey, onSortingChange, ...props }:
             />
 
             <DeleteButton
+              data-testid={ `gdpr-data-objects-delete-${data.id}` }
               disabled={ !data.__gdprIsDeletable }
               elementType={ elementTypes.dataObject }
               id={ data.id }
@@ -121,6 +124,7 @@ export const DataObjectsTab = ({ data, providerKey, onSortingChange, ...props }:
       autoWidth
       columns={ columns }
       data={ data.map((item) => item.data) }
+      dataTestId="gdpr-data-objects-grid"
       enableSorting
       onSortingChange={ (sorting) => {
         const newSorting = transformToSortingState(sorting)!
