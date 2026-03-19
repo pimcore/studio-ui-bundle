@@ -23,18 +23,16 @@ export const Notification = (): React.JSX.Element => {
   useEffect(() => {
     if (hasJobs) {
       notificationApi.open({
+        key: 'jobs-notification',
         message: t('jobs.notification.title'),
-        description: <JobList />,
-        duration: 0,
-        closable: false,
-        placement: 'bottomRight'
+        description: <JobList />
       })
     }
 
     if (!hasJobs) {
-      notificationApi.destroy()
+      notificationApi.destroy('jobs-notification')
     }
-  }, [hasJobs])
+  }, [jobs.length])
 
   return <></>
 }

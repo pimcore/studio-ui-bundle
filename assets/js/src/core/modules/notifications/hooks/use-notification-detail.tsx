@@ -17,6 +17,7 @@ import { isNil } from 'lodash'
 
 export interface UseNotificationDetailProps {
   id: number
+  activeNotification?: number
 }
 
 interface UseNotificationsReturn {
@@ -28,8 +29,8 @@ interface UseNotificationsReturn {
   deleteLoading: boolean
 }
 
-export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNotificationsReturn => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+export const useNotificationDetail = ({ id, activeNotification }: UseNotificationDetailProps): UseNotificationsReturn => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(id === activeNotification)
   const { updateNotificationReadStateById, removeNotificationFromCollectionById } = useOptimisticUpdate()
   const [deleteNotificationMutation, { isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
 

@@ -619,6 +619,12 @@ modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
+notifications.new-notification: New Notification
+notifications.from: From
+notifications.hide: Hide
+notifications.new-notifications.show: View
+notifications.new-notifications.title.single: You have a new notification!
+notifications.new-notifications.title: You have new notifications!
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
@@ -1002,7 +1008,7 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
-jobs.notification.title: Notifications
+jobs.notification.title: Running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
