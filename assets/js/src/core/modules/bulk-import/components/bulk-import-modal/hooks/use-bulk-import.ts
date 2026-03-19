@@ -41,7 +41,7 @@ export const useBulkImport = (): UseBulkImportReturn => {
   const executionEngine = useExecutionEngine()
 
   const handleUpload = useCallback(async (file: File): Promise<PrepareResult> => {
-    const result = await triggerPrepare({ body: { file: file as unknown as Blob } })
+    const result = await triggerPrepare({ body: { file } })
 
     if (!('data' in result) || isNil(result.data)) {
       throw new GeneralError('Bulk import prepare failed')
