@@ -47,6 +47,8 @@ export * from '@Pimcore/modules/document/editor/widget'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/inheritance-overlay/inheritance-overlay'
 
+export { default as ContentEditable, type ContentEditableProps } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/content-editable/content-editable'
+
 export * from '@Pimcore/modules/document/tree/utils/transform-api-data-to-node'
 
 export * from '@Pimcore/modules/document/document-provider'
