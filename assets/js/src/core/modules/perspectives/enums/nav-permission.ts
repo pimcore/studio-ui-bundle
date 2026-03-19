@@ -28,6 +28,7 @@ export enum NavPermission {
   SelectOptions = 'dataManagement.dataModel_selectOptions',
   QuantityValues = 'dataManagement.dataModel_quantityValue',
   BulkExport = 'dataManagement.dataModel_bulkExport',
+  BulkImport = 'dataManagement.dataModel_bulkImport',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
 

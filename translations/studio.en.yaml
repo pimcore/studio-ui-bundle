@@ -1412,6 +1412,7 @@ navigation.class-definitions: Classes
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
 navigation.bulk-export: Bulk Export
+navigation.bulk-import: Bulk Import
 navigation.quantity-values: Quantity Values
 navigation.select-options: Select Options
 navigation.experience-ecommerce: Experience & E-commerce
@@ -2560,3 +2561,17 @@ bulk-export.type.class: Classes
 bulk-export.type.customlayout: Custom Layouts
 bulk-export.type.fieldcollection: Field Collections
 bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Bulk Import
+bulk-import.cancel: Cancel
+bulk-import.next: Next
+bulk-import.back: Back
+bulk-import.import: Import
+bulk-import.job-title: Bulk Import
+bulk-import.browse-files: Browse Files
+bulk-import.remove-file: Remove
+bulk-import.select-all: Select All
+bulk-import.deselect-all: Deselect All
+bulk-import.type.class: Classes
+bulk-import.type.customlayout: Custom Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks
