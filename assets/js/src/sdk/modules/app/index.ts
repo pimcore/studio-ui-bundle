@@ -17,7 +17,7 @@ export * from '@Pimcore/modules/app/context-menu-registry'
 export * from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
-export { default as trackError, ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+export { default as trackError, ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 export * from '@Pimcore/modules/app/error-handler/types'
 
 export * from '@Pimcore/modules/app/theme/theme-provider'
@@ -37,3 +37,4 @@ export * from '@Pimcore/modules/app/base-layout/right-sidebar/logo/subscription-
 export * from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 
 export * from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
+export * from '@Pimcore/modules/app/utils/download'

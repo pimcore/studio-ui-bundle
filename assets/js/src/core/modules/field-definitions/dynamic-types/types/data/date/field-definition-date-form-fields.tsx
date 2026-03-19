@@ -53,7 +53,6 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
       </FormKit.Panel>
 
       <Form.Item
-        initialValue="date"
         label={ t('column-type') }
         name="columnType"
       >

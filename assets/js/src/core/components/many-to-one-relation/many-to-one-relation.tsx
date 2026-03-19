@@ -22,6 +22,7 @@ import {
   createElementSelectorConfig,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -175,7 +176,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
               onFinish: (event) => {
                 if (!isEmpty(event.items)) {
                   handleValueChange({
-                    type: event.items[0].elementType,
+                    type: mapToLegacyElementType(event.items[0].elementType),
                     subtype: event.items[0].data.type,
                     id: event.items[0].data.id,
                     fullPath: event.items[0].data.fullpath

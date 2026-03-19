@@ -12,6 +12,7 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export * from '@Pimcore/modules/perspectives/enums/nav-permission'
 export * from '@Pimcore/modules/perspectives/enums/tree-permission'
 export * from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 

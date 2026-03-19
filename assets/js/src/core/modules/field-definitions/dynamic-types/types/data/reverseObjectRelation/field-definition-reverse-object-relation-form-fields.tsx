@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, Input, Select, Switch } from '@sdk/components'
+import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
@@ -90,43 +90,51 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('owner-class') }
-        name="ownerClassName"
+      <FormKit.Panel
+        border
+        theme="fieldset"
+        title={ t('owner') }
+        tooltip={ t('reverse-object-relation.tooltip') }
       >
-        <Select
-          loadingSkeleton={ isLoadingClassOptions }
-          options={ classOptions }
-          showSearch
-        />
-      </Form.Item>
 
-      <Form.Item
-        label={ t('owner-field-name') }
-        name="ownerFieldName"
-      >
-        <Select
-          loadingSkeleton={ isLoadingOwnerFieldName }
-          options={ ownerFieldNameOptions }
-          showSearch
-        />
-      </Form.Item>
-      <Form.Item
-        { ...relationSelectFormItemTransformation('visibleFields') }
-        getValueFromEvent={ (value: string[]) => value.join(',') }
-        getValueProps={ (value: string | string[]) => ({
-          value: isString(value) ? value.split(',').filter(Boolean) : value
-        }) }
-        label={ t('visible-fields') }
-        name="visibleFields"
-      >
-        <Select
-          loadingSkeleton={ isLoading }
-          mode="multiple"
-          options={ visibleFieldsOptions }
-          showSearch
-        />
-      </Form.Item>
+        <Form.Item
+          label={ t('owner-class') }
+          name="ownerClassName"
+        >
+          <Select
+            loadingSkeleton={ isLoadingClassOptions }
+            options={ classOptions }
+            showSearch
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('owner-field-name') }
+          name="ownerFieldName"
+        >
+          <Select
+            loadingSkeleton={ isLoadingOwnerFieldName }
+            options={ ownerFieldNameOptions }
+            showSearch
+          />
+        </Form.Item>
+        <Form.Item
+          { ...relationSelectFormItemTransformation('visibleFields') }
+          getValueFromEvent={ (value: string[]) => value.join(',') }
+          getValueProps={ (value: string | string[]) => ({
+            value: isString(value) ? value.split(',').filter(Boolean) : value
+          }) }
+          label={ t('visible-fields') }
+          name="visibleFields"
+        >
+          <Select
+            loadingSkeleton={ isLoading }
+            mode="multiple"
+            options={ visibleFieldsOptions }
+            showSearch
+          />
+        </Form.Item>
+      </FormKit.Panel>
 
       <Form.Item
         name="optimizedAdminLoading"

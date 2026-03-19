@@ -40,7 +40,7 @@ export const FieldDefinitionOptionsSourceFields = (props: FieldDefinitionOptions
       <Form.Conditional condition={ (values) => values.optionsProviderType === 'configure' || values.optionsProviderType === undefined || values.optionsProviderType === '' }>
         <FormKit.Panel contentPadding={ { top: 'extra-small' } }>
           <Form.Item
-            label={ t('selection-options') }
+            label={ t('select-options') }
             name="options"
           >
             <FieldDefinitionSelectOptionsGrid />
@@ -52,7 +52,7 @@ export const FieldDefinitionOptionsSourceFields = (props: FieldDefinitionOptions
       <Form.Conditional condition={ (values) => values.optionsProviderType === 'select_options' }>
         <FormKit.Panel contentPadding={ { top: 'extra-small' } }>
           <Form.Item
-            label={ t('options') }
+            label={ t('select-options') }
             name="optionsProviderData"
           >
             <Select options={ selectOptions } />

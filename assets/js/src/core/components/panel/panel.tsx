@@ -15,9 +15,10 @@ import { Box, type BoxProps } from '@Pimcore/components/box/box'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { TooltipIcon } from '@Pimcore/components/tooltip-icon/tooltip-icon'
 import { type CollapseProps } from 'antd'
+import { ItemSpacer } from '@Pimcore/components/form/layouts/item-spacer/item-spacer'
 
 export interface PanelProps {
-  title?: string
+  title?: ReactNode
   tooltip?: ReactNode
   border?: boolean
   collapsible?: boolean
@@ -79,13 +80,9 @@ export const Panel = ({
       theme={ theme }
       title={ renderTitle() }
     >
-      <Space
-        className='w-full'
-        direction='vertical'
-        size='extra-small'
-      >
+      <ItemSpacer>
         {children}
-      </Space>
+      </ItemSpacer>
     </BaseView>
   )
 

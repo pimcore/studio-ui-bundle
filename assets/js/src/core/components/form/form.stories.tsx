@@ -33,6 +33,7 @@ import { NumericRange } from '../numeric-range/numeric-range'
 import { ContentLayout } from '../content-layout/content-layout'
 import { Content } from '../content/content'
 import { Toolbar } from '../toolbar/toolbar'
+import type { ValidateErrorEntity } from 'rc-field-form/lib/interface'
 
 const config: Meta<typeof Form> = {
   title: 'Components/Data Entry/Form/Basic Form',
@@ -939,6 +940,295 @@ export const AllControlsShowcase: Story = {
 - **Full control**: Complete flexibility over form behavior and appearance
 
 Compare this with the FormKit AllControlsShowcase to see the differences in structure, styling, and developer experience.`
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// WithMixedValidation story
+// Mixes regular Form.Item fields (AntD validation) with KeyedList and
+// NumberedList fields (virtual-item validation). All errors appear at once
+// on a single submit click – both from AntD fields and virtual fields.
+// ---------------------------------------------------------------------------
+
+interface TeamFormValues {
+  projectName: string
+  description: string
+  contacts: Record<string, { name: string, email: string, handle: string }>
+  tasks: Array<{ title: string, priority: string }>
+}
+
+const initialTeamValues: TeamFormValues = {
+  projectName: '',
+  description: '',
+  contacts: {
+    alice: { name: 'Alice', email: '', handle: 'admin' },
+    bob: { name: '', email: 'not-an-email', handle: 'bob' }
+  },
+  tasks: [
+    { title: '', priority: 'medium' },
+    { title: 'Write tests', priority: 'high' }
+  ]
+}
+
+// Simulates a server-side uniqueness check. Rejects for the value "admin".
+async function checkHandleAvailable (_: unknown, value: string): Promise<void> {
+  await new Promise<void>(resolve => { setTimeout(resolve, 300) })
+  if (value !== undefined && value !== '' && value.toLowerCase() === 'admin') {
+    throw new Error('"admin" is reserved – choose a different handle')
+  }
+}
+
+const MixedValidationComponent = (): React.JSX.Element => {
+  const [form] = Form.useForm<TeamFormValues>()
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'failed'>('idle')
+  const [submittedValues, setSubmittedValues] = useState<TeamFormValues | null>(null)
+  const [errorSummary, setErrorSummary] = useState<string[]>([])
+
+  const onFinish = (values: TeamFormValues): void => {
+    setSubmitStatus('success')
+    setSubmittedValues(values)
+    setErrorSummary([])
+  }
+
+  const onFinishFailed = (info: ValidateErrorEntity<TeamFormValues>): void => {
+    setSubmitStatus('failed')
+    setSubmittedValues(null)
+    // Collect the human-readable field paths from all failing fields
+    setErrorSummary(
+      info.errorFields.map(f => `${f.name.join(' › ')}: ${f.errors.join(', ')}`)
+    )
+  }
+
+  return (
+    <div style={ { maxWidth: 760, padding: '24px' } }>
+      <h3 style={ { marginTop: 0 } }>Team Project Form – Mixed Validation</h3>
+      <p style={ { color: '#555', marginBottom: 24 } }>
+        The form intentionally starts with invalid data across <strong>all three sections</strong>.
+        Click <strong>Validate &amp; Submit</strong> once to see errors from standard{' '}
+        <code>Form.Item</code> fields and virtual fields (inside KeyedList / NumberedList) appear
+        simultaneously in a single pass.
+      </p>
+
+      <Form
+        form={ form }
+        initialValues={ initialTeamValues }
+        layout="vertical"
+        onFinish={ onFinish }
+        onFinishFailed={ onFinishFailed }
+      >
+        {/* ── Section 1: Regular AntD Form.Item fields ───────────────── */}
+        <h4 style={ { margin: '0 0 12px', color: '#666', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 } }>
+          Standard fields (AntD Form.Item)
+        </h4>
+
+        <Form.Item
+          label="Project Name"
+          name="projectName"
+          rules={ [{ required: true, message: 'Project name is required' }] }
+        >
+          <Input placeholder="e.g. Phoenix" />
+        </Form.Item>
+
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={ [
+            { required: true, message: 'Please add a short description' },
+            { min: 10, message: 'Description must be at least 10 characters' }
+          ] }
+        >
+          <TextArea
+            placeholder="What is this project about?"
+            rows={ 3 }
+          />
+        </Form.Item>
+
+        {/* ── Section 2: KeyedList with virtual-item validation ────── */}
+        <h4 style={ { margin: '24px 0 12px', color: '#666', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 } }>
+          Contacts (KeyedList with virtual-item validation)
+        </h4>
+
+        <Form.Item
+          label="Contacts"
+          name="contacts"
+        >
+          <KeyedList>
+            <KeyedList.Iterator>
+              <Form.Item
+                label="Full Name"
+                name="name"
+                rules={ [{ required: true, message: 'Name is required' }] }
+              >
+                <Input placeholder="Full name" />
+              </Form.Item>
+
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={ [
+                  { required: true, message: 'Email is required' },
+                  { type: 'email', message: 'Must be a valid email address' }
+                ] }
+              >
+                <Input placeholder="name@example.com" />
+              </Form.Item>
+
+              <Form.Item
+                label="Handle"
+                name="handle"
+                rules={ [
+                  { required: true, message: 'Handle is required' },
+                  // Promise-style async validator – blocks submit when the handle is reserved
+                  { validator: checkHandleAvailable },
+                  // Callback-style validator with warningOnly – warns but does not block submit.
+                  // AntD's callback type signature accepts a string; Error is not assignable here.
+                  /* eslint-disable n/no-callback-literal */
+                  {
+                    warningOnly: true,
+                    validator: (_, value, callback) => {
+                      if (typeof value === 'string' && value.length > 0 && value === value.toLowerCase()) {
+                        callback('Consider using mixed case for better readability')
+                      } else {
+                        callback()
+                      }
+                    }
+                  }
+                  /* eslint-enable n/no-callback-literal */
+                ] }
+              >
+                <Input placeholder="e.g. AliceW" />
+              </Form.Item>
+            </KeyedList.Iterator>
+          </KeyedList>
+        </Form.Item>
+
+        {/* ── Section 3: NumberedList with virtual-item validation ─── */}
+        <h4 style={ { margin: '24px 0 12px', color: '#666', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 } }>
+          Tasks (NumberedList with virtual-item validation)
+        </h4>
+
+        <Form.Item
+          label="Tasks"
+          name="tasks"
+        >
+          <NumberedList>
+            <NumberedList.Iterator>
+              <Form.Item
+                label="Title"
+                name="title"
+                rules={ [
+                  { required: true, message: 'Task title is required' },
+                  { min: 3, message: 'Title must be at least 3 characters' }
+                ] }
+              >
+                <Input placeholder="Task description" />
+              </Form.Item>
+
+              <Form.Item
+                label="Priority"
+                name="priority"
+              >
+                <Select
+                  options={ [
+                    { value: 'low', label: 'Low' },
+                    { value: 'medium', label: 'Medium' },
+                    { value: 'high', label: 'High' }
+                  ] }
+                  placeholder="Select priority"
+                  style={ { width: '100%' } }
+                />
+              </Form.Item>
+            </NumberedList.Iterator>
+          </NumberedList>
+        </Form.Item>
+
+        {/* ── Actions ─────────────────────────────────────────────── */}
+        <Form.Item style={ { marginTop: 24 } }>
+          <Space>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >
+              Validate &amp; Submit
+            </Button>
+            <Button
+              onClick={ () => {
+                form.resetFields()
+                form.setFieldsValue(initialTeamValues)
+                setSubmitStatus('idle')
+                setSubmittedValues(null)
+                setErrorSummary([])
+              } }
+            >
+              Reset
+            </Button>
+          </Space>
+        </Form.Item>
+      </Form>
+
+      {/* ── Result panel ─────────────────────────────────────────── */}
+      {submitStatus !== 'idle' && (
+        <div style={ {
+          marginTop: 24,
+          padding: '16px',
+          borderRadius: 6,
+          backgroundColor: submitStatus === 'success' ? '#f6ffed' : '#fff2f0',
+          border: `1px solid ${submitStatus === 'success' ? '#b7eb8f' : '#ffccc7'}`
+        } }
+        >
+          {submitStatus === 'success' && (
+            <>
+              <h4 style={ { margin: '0 0 8px', color: '#52c41a' } }>Submitted successfully</h4>
+              <pre style={ { margin: 0, fontSize: 12, overflow: 'auto' } }>
+                {JSON.stringify(submittedValues, null, 2)}
+              </pre>
+            </>
+          )}
+
+          {submitStatus === 'failed' && (
+            <>
+              <h4 style={ { margin: '0 0 8px', color: '#ff4d4f' } }>Validation failed</h4>
+              <p style={ { margin: '0 0 8px', fontSize: 13, color: '#555' } }>
+                The following fields have errors (merged from AntD + virtual validators):
+              </p>
+              <ul style={ { margin: 0, paddingLeft: 20, fontSize: 12 } }>
+                {errorSummary.map((msg, i) => (
+                  <li key={ i }>{msg}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const WithMixedValidation: Story = {
+  render: () => <MixedValidationComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `Demonstrates **unified single-pass validation** across a form that mixes standard \`Form.Item\` fields with virtual-item fields inside \`KeyedList\` and \`NumberedList\`.
+
+The form starts with intentionally invalid data in all three sections:
+
+| Section | Component | Validator |
+|---|---|---|
+| Project Name / Description | \`Form.Item\` | AntD built-in |
+| Contacts | \`Form.KeyedList\` → \`Form.Item\` | Virtual-item |
+| Tasks | \`Form.NumberedList\` → \`Form.Item\` | Virtual-item |
+
+The **Handle** field inside each contact demonstrates all three validator styles supported by virtual items:
+- **Schema rule** – \`required\` blocks an empty value
+- **Promise-style async \`validator\`** – simulates a server uniqueness check; rejects when the value is \`"admin"\`
+- **Callback-style \`validator\` with \`warningOnly: true\`** – warns when the handle is all-lowercase but does not block submit
+
+Click **Validate & Submit** once. All errors from AntD fields **and** virtual fields appear simultaneously in a single pass. The result panel lists every failing field with its full name path (e.g. \`contacts › alice › email\`).
+
+Fix all highlighted controls and submit again to see the success result.`
       }
     }
   }

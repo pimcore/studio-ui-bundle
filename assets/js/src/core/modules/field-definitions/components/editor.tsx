@@ -30,6 +30,7 @@ export interface EditorProps {
   fieldDefinitionRegistry?: DynamicTypeFieldDefinitionRegistry
   customLayouts?: SettingsProviderProps['customLayouts']
   importExportConfig?: SettingsProviderProps['importExportConfig']
+  hideTreeExpanders?: SettingsProviderProps['hideTreeExpanders']
   view?: React.JSX.Element
 }
 

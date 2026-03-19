@@ -36,6 +36,7 @@ import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.s
 import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import arrowSquareRight from '@Pimcore/assets/icons/arrow-square-right.inline.svg?react'
+import assetMetadataClassDefinition from '@Pimcore/assets/icons/asset-metadata-class-definition.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
@@ -88,6 +89,7 @@ import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?r
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import contrast01 from '@Pimcore/assets/icons/contrast-01.inline.svg?react'
 import convert from '@Pimcore/assets/icons/convert.inline.svg?react'
+import copilotJobRuns from '@Pimcore/assets/icons/copilot-job-runs.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
@@ -375,6 +377,7 @@ import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import videoThumbnail from '@Pimcore/assets/icons/video-thumbnail.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
+import voucher from '@Pimcore/assets/icons/voucher.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
 import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
@@ -471,6 +474,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'arrow-square-right',
       component: arrowSquareRight
+    })
+    iconLibrary.register({
+      name: 'asset-metadata-class-definition',
+      component: assetMetadataClassDefinition
     })
     iconLibrary.register({
       name: 'asset',
@@ -679,6 +686,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'convert',
       component: convert
+    })
+    iconLibrary.register({
+      name: 'copilot-job-runs',
+      component: copilotJobRuns
     })
     iconLibrary.register({
       name: 'copilot',
@@ -1827,6 +1838,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'view',
       component: view
+    })
+    iconLibrary.register({
+      name: 'voucher',
+      component: voucher
     })
     iconLibrary.register({
       name: 'warning-circle',

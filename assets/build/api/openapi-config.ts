@@ -128,6 +128,10 @@ const config: ConfigFile = {
     {
       pattern: 'classificationStoreConfigurationCollectionRelationCollection',
       type: 'query'
+    },
+    {
+      pattern: 'unitQuantityValueUnitsCollection',
+      type: 'query'
     }
   ],
   outputFiles: {

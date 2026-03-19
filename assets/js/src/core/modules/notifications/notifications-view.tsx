@@ -29,9 +29,10 @@ interface NotificationsViewProps {
   page: number
   setPage: (page: number) => void
   setPageSize: (pageSize: number) => void
+  activeNotification?: number
 }
 
-const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize }: NotificationsViewProps): React.JSX.Element => {
+const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize, activeNotification }: NotificationsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -83,7 +84,12 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
             y: 'none'
           } }
         >
-          {notifications !== undefined && <NotificationList notifications={ notifications } />}
+          {notifications !== undefined && (
+          <NotificationList
+            activeNotification={ activeNotification }
+            notifications={ notifications }
+          />
+          )}
         </Box>
       </Content>
     </ContentLayout>

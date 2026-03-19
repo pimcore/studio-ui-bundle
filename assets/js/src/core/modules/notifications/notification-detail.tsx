@@ -26,9 +26,10 @@ import { useStyles } from './notifications.styles'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
+  activeNotification?: number
 }
 
-export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
+export const NotificationDetail = ({ notification, activeNotification }: NotificationDetailProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
   const {
@@ -38,7 +39,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     detailLoading,
     deleteNotification,
     deleteLoading
-  } = useNotificationDetail({ id: notification.id })
+  } = useNotificationDetail({ id: notification.id, activeNotification })
 
   useEffect(() => {
     if (notificationDetail !== undefined) {

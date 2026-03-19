@@ -43,7 +43,7 @@ export interface ManyToManyRelationGridProps {
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
-  const { mapToElementType } = useElementHelper()
+  const { mapToLegacyElementType } = useElementHelper()
   const { columns } = useColumns(props)
   const [data, setData] = useState(getDataArray())
 
@@ -55,7 +55,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
     const result = props.value ?? []
 
     return result.map((item: ManyToManyRelationValueItem) => {
-      const elementType = mapToElementType(item.type)
+      const elementType = mapToLegacyElementType(item.type)
       const resultRow = { ...item, type: elementType ?? '' }
 
       if (props.enrichRowData !== undefined) {

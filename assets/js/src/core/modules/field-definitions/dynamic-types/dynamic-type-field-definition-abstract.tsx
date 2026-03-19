@@ -23,6 +23,7 @@ export interface FieldDefinitionContext extends Record<string, any> {
   area: string[]
   path: string[]
   fieldDefinitions: ILayoutContext['fieldDefinitions']
+  disableName?: boolean
 }
 
 export interface FieldDefinitionConvertibleContext extends FieldDefinitionContext {

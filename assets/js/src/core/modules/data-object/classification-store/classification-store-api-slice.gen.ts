@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            classificationStoreConfigurationCollectionCollection: build.query<
+            classificationStoreConfigurationCollectionCollection: build.mutation<
                 ClassificationStoreConfigurationCollectionCollectionApiResponse,
                 ClassificationStoreConfigurationCollectionCollectionApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionCreate: build.mutation<
                 ClassificationStoreConfigurationCollectionCreateApiResponse,
@@ -49,7 +49,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationCollectionRelationCollection: build.query<
+            classificationStoreConfigurationCollectionRelationCollection: build.mutation<
                 ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
                 ClassificationStoreConfigurationCollectionRelationCollectionApiArg
             >({
@@ -58,7 +58,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionRelationCreate: build.mutation<
                 ClassificationStoreConfigurationCollectionRelationCreateApiResponse,
@@ -82,7 +82,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationGroupCollection: build.query<
+            classificationStoreConfigurationGroupCollection: build.mutation<
                 ClassificationStoreConfigurationGroupCollectionApiResponse,
                 ClassificationStoreConfigurationGroupCollectionApiArg
             >({
@@ -91,7 +91,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationGroupCreate: build.mutation<
                 ClassificationStoreConfigurationGroupCreateApiResponse,
@@ -125,7 +125,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyCollection: build.query<
+            classificationStoreConfigurationKeyCollection: build.mutation<
                 ClassificationStoreConfigurationKeyCollectionApiResponse,
                 ClassificationStoreConfigurationKeyCollectionApiArg
             >({
@@ -134,7 +134,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationKeyCreate: build.mutation<
                 ClassificationStoreConfigurationKeyCreateApiResponse,
@@ -168,7 +168,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyGroupRelationCollection: build.query<
+            classificationStoreConfigurationKeyGroupRelationCollection: build.mutation<
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
             >({
@@ -177,7 +177,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationKeyGroupRelationCreate: build.mutation<
                 ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse,
@@ -349,7 +349,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type ClassificationStoreConfigurationCollectionCollectionApiResponse =
-    /** status 200 classification_store_configuration_collection_collection_success_response */ {
+    /** status 200 Paginated list of collection configurations */ {
         totalItems: number;
         items: ClassificationStoreConfigurationCollectionDetail[];
     };
@@ -366,12 +366,12 @@ export type ClassificationStoreConfigurationCollectionCollectionApiArg = {
     };
 };
 export type ClassificationStoreConfigurationCollectionCreateApiResponse =
-    /** status 200 classification_store_configuration_collection_create_success_response */ ClassificationStoreConfigurationCollectionDetail;
+    /** status 200 Created collection configuration */ ClassificationStoreConfigurationCollectionDetail;
 export type ClassificationStoreConfigurationCollectionCreateApiArg = {
     classificationStoreConfigurationCollectionCreate: ClassificationStoreConfigurationCollectionCreate;
 };
 export type ClassificationStoreConfigurationCollectionUpdateApiResponse =
-    /** status 200 classification_store_configuration_collection_update_success_response */ ClassificationStoreConfigurationCollectionDetail;
+    /** status 200 Updated collection configuration */ ClassificationStoreConfigurationCollectionDetail;
 export type ClassificationStoreConfigurationCollectionUpdateApiArg = {
     /** Id of the collection configuration */
     id: number;
@@ -383,7 +383,7 @@ export type ClassificationStoreConfigurationCollectionDeleteApiArg = {
     id: number;
 };
 export type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse =
-    /** status 200 classification_store_configuration_collection_relation_collection_success_response */ {
+    /** status 200 Paginated list of collection-group relations */ {
         totalItems: number;
         items: ClassificationStoreConfigurationCollectionRelationDetail[];
     };
@@ -400,7 +400,7 @@ export type ClassificationStoreConfigurationCollectionRelationCollectionApiArg =
     };
 };
 export type ClassificationStoreConfigurationCollectionRelationCreateApiResponse =
-    /** status 200 classification_store_configuration_collection_relation_create_success_response */ ClassificationStoreConfigurationCollectionRelationDetail;
+    /** status 200 Created or updated collection-group relation */ ClassificationStoreConfigurationCollectionRelationDetail;
 export type ClassificationStoreConfigurationCollectionRelationCreateApiArg = {
     classificationStoreConfigurationCollectionRelationCreate: ClassificationStoreConfigurationCollectionRelationCreate;
 };
@@ -409,7 +409,7 @@ export type ClassificationStoreConfigurationCollectionRelationDeleteApiArg = {
     classificationStoreConfigurationCollectionRelationDelete: ClassificationStoreConfigurationCollectionRelationDelete;
 };
 export type ClassificationStoreConfigurationGroupCollectionApiResponse =
-    /** status 200 classification_store_configuration_group_collection_success_response */ {
+    /** status 200 Paginated list of group configurations */ {
         totalItems: number;
         items: ClassificationStoreConfigurationGroupDetail[];
     };
@@ -426,12 +426,12 @@ export type ClassificationStoreConfigurationGroupCollectionApiArg = {
     };
 };
 export type ClassificationStoreConfigurationGroupCreateApiResponse =
-    /** status 200 classification_store_configuration_group_create_success_response */ ClassificationStoreConfigurationGroupDetail;
+    /** status 200 Created group configuration */ ClassificationStoreConfigurationGroupDetail;
 export type ClassificationStoreConfigurationGroupCreateApiArg = {
     classificationStoreConfigurationGroupCreate: ClassificationStoreConfigurationGroupCreate;
 };
 export type ClassificationStoreConfigurationGroupUpdateApiResponse =
-    /** status 200 classification_store_configuration_group_update_success_response */ ClassificationStoreConfigurationGroupDetail;
+    /** status 200 Updated group configuration */ ClassificationStoreConfigurationGroupDetail;
 export type ClassificationStoreConfigurationGroupUpdateApiArg = {
     /** Id of the group configuration */
     id: number;
@@ -443,7 +443,7 @@ export type ClassificationStoreConfigurationGroupDeleteApiArg = {
     id: number;
 };
 export type ClassificationStoreConfigurationKeyCollectionApiResponse =
-    /** status 200 classification_store_configuration_key_collection_success_response */ {
+    /** status 200 Paginated list of key configurations */ {
         totalItems: number;
         items: ClassificationStoreConfigurationKeyDetail[];
     };
@@ -460,12 +460,12 @@ export type ClassificationStoreConfigurationKeyCollectionApiArg = {
     };
 };
 export type ClassificationStoreConfigurationKeyCreateApiResponse =
-    /** status 200 classification_store_configuration_key_create_success_response */ ClassificationStoreConfigurationKeyDetail;
+    /** status 200 Created key configuration */ ClassificationStoreConfigurationKeyDetail;
 export type ClassificationStoreConfigurationKeyCreateApiArg = {
     classificationStoreConfigurationKeyCreate: ClassificationStoreConfigurationKeyCreate;
 };
 export type ClassificationStoreConfigurationKeyUpdateApiResponse =
-    /** status 200 classification_store_configuration_key_update_success_response */ ClassificationStoreConfigurationKeyDetail;
+    /** status 200 Updated key configuration */ ClassificationStoreConfigurationKeyDetail;
 export type ClassificationStoreConfigurationKeyUpdateApiArg = {
     /** Id of the key configuration */
     id: number;
@@ -477,7 +477,7 @@ export type ClassificationStoreConfigurationKeyDeleteApiArg = {
     id: number;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse =
-    /** status 200 classification_store_configuration_key_group_relation_collection_success_response */ {
+    /** status 200 Paginated list of key-group relations */ {
         totalItems: number;
         items: ClassificationStoreConfigurationKeyGroupRelationDetail[];
     };
@@ -494,7 +494,7 @@ export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg = {
     };
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse =
-    /** status 200 classification_store_configuration_key_group_relation_create_success_response */ ClassificationStoreConfigurationKeyGroupRelationDetail;
+    /** status 200 Created or updated key-group relation */ ClassificationStoreConfigurationKeyGroupRelationDetail;
 export type ClassificationStoreConfigurationKeyGroupRelationCreateApiArg = {
     classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate;
 };
@@ -503,22 +503,22 @@ export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
     classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
 };
 export type ClassificationStoreConfigurationStoreCreateApiResponse =
-    /** status 200 classification_store_configuration_store_create_success_response */ ClassificationStoreConfigurationStoreDetail;
+    /** status 200 Created store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreCreateApiArg = {
     classificationStoreConfigurationStoreCreate: ClassificationStoreConfigurationStoreCreate;
 };
 export type ClassificationStoreConfigurationStoreTreeApiResponse =
-    /** status 200 classification_store_configuration_store_tree_success_response */ ClassificationStoreConfigurationStoreTreeNode[];
+    /** status 200 List of store tree nodes */ ClassificationStoreConfigurationStoreTreeNode[];
 export type ClassificationStoreConfigurationStoreTreeApiArg = void;
 export type ClassificationStoreConfigurationStoreUpdateApiResponse =
-    /** status 200 classification_store_configuration_store_update_success_response */ ClassificationStoreConfigurationStoreDetail;
+    /** status 200 Updated store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreUpdateApiArg = {
     /** Id of the store configuration */
     id: number;
     classificationStoreConfigurationStoreUpdate: ClassificationStoreConfigurationStoreUpdate;
 };
 export type ClassificationStoreConfigurationGetPageApiResponse =
-    /** status 200 classification_store_configuration_get_page_success_response */ ClassificationStoreConfigurationGetPageResponse;
+    /** status 200 Page number where the item is located */ ClassificationStoreConfigurationGetPageResponse;
 export type ClassificationStoreConfigurationGetPageApiArg = {
     /** Table to search in (keys or groups) */
     table: string;
@@ -533,11 +533,10 @@ export type ClassificationStoreConfigurationGetPageApiArg = {
     /** Sort direction (ASC or DESC) */
     sortDir?: string;
 };
-export type ClassificationStoreGetCollectionsApiResponse =
-    /** status 200 classification_store_get_collections_response */ {
-        totalItems: number;
-        items: ClassificationStoreCollection[];
-    };
+export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List of classification store collections */ {
+    totalItems: number;
+    items: ClassificationStoreCollection[];
+};
 export type ClassificationStoreGetCollectionsApiArg = {
     /** Classification Store ID */
     storeId: number;
@@ -552,7 +551,7 @@ export type ClassificationStoreGetCollectionsApiArg = {
     /** Search Term */
     searchTerm?: string;
 };
-export type ClassificationStoreGetGroupsApiResponse = /** status 200 classification_store_get_groups_response */ {
+export type ClassificationStoreGetGroupsApiResponse = /** status 200 List of classification store groups */ {
     totalItems: number;
     items: ClassificationStoreGroup[];
 };
@@ -571,7 +570,7 @@ export type ClassificationStoreGetGroupsApiArg = {
     fieldName: string;
 };
 export type ClassificationStoreGetKeyGroupRelationsApiResponse =
-    /** status 200 classification_store_get_key_group_relations_response */ {
+    /** status 200 List of classification store key group relations */ {
         totalItems: number;
         items: ClassificationStoreKeyGroupRelation[];
     };
@@ -590,7 +589,7 @@ export type ClassificationStoreGetKeyGroupRelationsApiArg = {
     fieldName: string;
 };
 export type ClassificationStoreGetLayoutByCollectionApiResponse =
-    /** status 200 classification_store_get_layout_by_collection_response */ ClassificationStoreGroupLayout;
+    /** status 200 Layout definition */ ClassificationStoreGroupLayout;
 export type ClassificationStoreGetLayoutByCollectionApiArg = {
     /** object ID */
     objectId: number;
@@ -600,7 +599,7 @@ export type ClassificationStoreGetLayoutByCollectionApiArg = {
     fieldName: string;
 };
 export type ClassificationStoreGetLayoutByGroupApiResponse =
-    /** status 200 classification_store_get_layout_by_group_response */ ClassificationStoreGroupLayout2;
+    /** status 200 Layout definition */ ClassificationStoreGroupLayout2;
 export type ClassificationStoreGetLayoutByGroupApiArg = {
     /** object ID */
     objectId: number;
@@ -610,7 +609,7 @@ export type ClassificationStoreGetLayoutByGroupApiArg = {
     fieldName: string;
 };
 export type ClassificationStoreGetLayoutByKeyApiResponse =
-    /** status 200 classification_store_get_layout_by_key_response */ ClassificationStoreCollection2;
+    /** status 200 Layout definition */ ClassificationStoreCollection2;
 export type ClassificationStoreGetLayoutByKeyApiArg = {
     /** object ID */
     objectId?: number;
@@ -620,7 +619,7 @@ export type ClassificationStoreGetLayoutByKeyApiArg = {
     fieldName: string;
 };
 export type ClassificationStoreGetConfigCollectionApiResponse =
-    /** status 200 classification_store_get_config_collection_success_response */ {
+    /** status 200 List of classification store configurations */ {
         totalItems: number;
         items: ClassificationStoreConfiguration[];
     };
@@ -930,22 +929,22 @@ export type ClassificationStoreConfiguration = {
     name: string;
 };
 export const {
-    useClassificationStoreConfigurationCollectionCollectionQuery,
+    useClassificationStoreConfigurationCollectionCollectionMutation,
     useClassificationStoreConfigurationCollectionCreateMutation,
     useClassificationStoreConfigurationCollectionUpdateMutation,
     useClassificationStoreConfigurationCollectionDeleteMutation,
-    useClassificationStoreConfigurationCollectionRelationCollectionQuery,
+    useClassificationStoreConfigurationCollectionRelationCollectionMutation,
     useClassificationStoreConfigurationCollectionRelationCreateMutation,
     useClassificationStoreConfigurationCollectionRelationDeleteMutation,
-    useClassificationStoreConfigurationGroupCollectionQuery,
+    useClassificationStoreConfigurationGroupCollectionMutation,
     useClassificationStoreConfigurationGroupCreateMutation,
     useClassificationStoreConfigurationGroupUpdateMutation,
     useClassificationStoreConfigurationGroupDeleteMutation,
-    useClassificationStoreConfigurationKeyCollectionQuery,
+    useClassificationStoreConfigurationKeyCollectionMutation,
     useClassificationStoreConfigurationKeyCreateMutation,
     useClassificationStoreConfigurationKeyUpdateMutation,
     useClassificationStoreConfigurationKeyDeleteMutation,
-    useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
+    useClassificationStoreConfigurationKeyGroupRelationCollectionMutation,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
     useClassificationStoreConfigurationStoreCreateMutation,

@@ -41,7 +41,10 @@ export const VideoMediaQueryTransformationsField = ({
     }
   }, [onChange])
 
-  const fieldCollectionRegistry = container.get<VideoTransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/VideoTransformationFieldCollectionRegistry'])
+  const fieldCollectionRegistry = useMemo(() =>
+    container.get<VideoTransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/VideoTransformationFieldCollectionRegistry']),
+  []
+  )
 
   return (
     <FieldCollection
