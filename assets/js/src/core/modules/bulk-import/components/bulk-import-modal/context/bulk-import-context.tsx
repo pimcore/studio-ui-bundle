@@ -78,7 +78,7 @@ export const BulkImportProvider = ({ children }: { children: React.ReactNode }):
   }), [open, close, isOpen, selectedItems, toggleItem, selectAll, deselectAll, isSelected])
 
   return (
-    <BulkImportContext.Provider value={value}>
+    <BulkImportContext.Provider value={ value }>
       {children}
     </BulkImportContext.Provider>
   )
