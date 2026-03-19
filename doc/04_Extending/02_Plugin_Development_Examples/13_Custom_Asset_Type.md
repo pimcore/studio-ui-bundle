@@ -30,3 +30,7 @@ documentation in the Pimcore core.
 ## Code Example on GitHub
 
 > [Custom Asset Type example on GitHub](https://github.com/pimcore/studio-example-bundle/tree/main/assets/js/src/examples/custom-asset-type).
+
+- [Plugin entry (index.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-asset-type/index.ts) — binds TabManager and registers the module
+- [Module (indesign-asset-module.tsx)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-asset-type/modules/indesign-asset-module.tsx) — registers type, tabs, and context menu
+- [TabManager (indesign-tab-manager.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-asset-type/asset/editor/types/indesign/tab-manager/indesign-tab-manager.ts) — extends `TabManager` with `type = 'indesign'`
