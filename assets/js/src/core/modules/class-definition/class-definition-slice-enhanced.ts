@@ -239,6 +239,26 @@ const api = baseApi.enhanceEndpoints({
     },
     classSelectOptionGetUsages: {
       providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
+    },
+    classBulkImportPrepare: (endpoint): void => {
+      const originalQuery = endpoint.query
+
+      if (originalQuery !== undefined) {
+        endpoint.query = (queryArg) => {
+          const baseResult = originalQuery(queryArg)
+          const formData = new FormData()
+          formData.append('file', queryArg.body.file)
+
+          if (baseResult === null || typeof baseResult !== 'object') {
+            return baseResult
+          }
+
+          return {
+            ...baseResult,
+            body: formData
+          }
+        }
+      }
     }
   }
 })
@@ -309,7 +329,10 @@ export const {
   useClassSelectOptionDeleteMutation,
   useClassSelectOptionGetUsagesQuery,
   useClassBulkExportAvailableQuery,
-  useClassBulkExportMutation
+  useClassBulkExportMutation,
+  useClassBulkImportPrepareMutation,
+  useClassBulkImportMutation,
+  useClassBulkImportDeleteFileMutation
 } = api
 
 export { api }

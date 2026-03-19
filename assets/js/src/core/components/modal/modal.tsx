@@ -20,12 +20,13 @@ export interface IModalProps extends AntModalProps {
   icon?: React.JSX.Element
   iconName?: string
   size?: ModalSize
+  limitContentHeight?: boolean
   className?: string
   useModal?: typeof useModal
   children: React.ReactNode
 }
 
-export const Modal = ({ iconName, size = 'M', className, title, children, ...props }: IModalProps): React.JSX.Element => {
+export const Modal = ({ iconName, size = 'M', limitContentHeight, className, title, children, styles: stylesProp, ...props }: IModalProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   const classes = [styles.modal, className].filter(Boolean)
@@ -38,9 +39,17 @@ export const Modal = ({ iconName, size = 'M', className, title, children, ...pro
     M: 530
   }[size]
 
+  const mergedStyles: AntModalProps['styles'] = limitContentHeight === true
+    ? {
+        ...stylesProp,
+        body: { maxHeight: '60vh', overflowY: 'auto', ...stylesProp?.body }
+      }
+    : stylesProp
+
   return (
     <AntModal
       className={ classes.join(' ') }
+      styles={ mergedStyles }
       title={ (
         <ModalTitle iconName={ iconName }>{title}</ModalTitle>
         ) }

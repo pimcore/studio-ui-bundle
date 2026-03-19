@@ -129,8 +129,8 @@ export const BulkExportModal = (props: BulkExportModalProps): React.JSX.Element 
     <Modal
       { ...modalProps }
       footer={ footer }
+      limitContentHeight
       size='L'
-      styles={ { body: { maxHeight: '60vh', overflowY: 'auto' } } }
       title={ t('bulk-export.title') }
     >
       {isLoading && (

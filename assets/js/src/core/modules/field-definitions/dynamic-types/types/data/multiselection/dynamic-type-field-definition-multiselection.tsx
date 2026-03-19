@@ -34,7 +34,7 @@ export class DynamicTypeFieldDefinitionMultiselection extends DynamicTypeFieldDe
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:select', 'encryptedFieldSupport']
+    return [...super.getTags(props), 'group:select', 'encryptedFieldSupport', 'classificationStore']
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
