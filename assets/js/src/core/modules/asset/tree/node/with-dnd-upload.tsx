@@ -29,7 +29,10 @@ export const withDndUpload = (Component: typeof TreeNode): typeof TreeNode => {
         { ...props }
         ref={ ref }
         wrapNode={ (children) => (
-          <DndUpload nodeId={ props.id }>
+          <DndUpload
+            nodeId={ props.id }
+            nodePath={ props.fullPath ?? '' }
+          >
             {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
           </DndUpload>
         ) }
