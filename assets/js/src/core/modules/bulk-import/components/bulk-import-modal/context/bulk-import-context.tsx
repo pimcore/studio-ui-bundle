@@ -10,6 +10,7 @@
 
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
+import { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface BulkImportItem {
   type: string
@@ -78,7 +79,7 @@ export const BulkImportProvider = ({ children }: { children: React.ReactNode }):
   }), [open, close, isOpen, selectedItems, toggleItem, selectAll, deselectAll, isSelected])
 
   return (
-    <BulkImportContext.Provider value={ value }>
+    <BulkImportContext.Provider value={value}>
       {children}
     </BulkImportContext.Provider>
   )
