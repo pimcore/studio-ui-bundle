@@ -28,7 +28,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type WorkflowGetDetailsApiResponse = /** status 200 workflow_get_details_success_response */ {
+export type WorkflowGetDetailsApiResponse = /** status 200 Detail data of element workflows */ {
     items: WorkflowDetails[];
     layoutId: string;
 };
@@ -38,11 +38,12 @@ export type WorkflowGetDetailsApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type WorkflowActionSubmitApiResponse = /** status 200 workflow_action_submit_success_response */ {
-    workflowName?: string;
-    actionName?: string;
-    actionType?: string;
-};
+export type WorkflowActionSubmitApiResponse =
+    /** status 200 Json encoded name of workflow, name and type of submitted action. */ {
+        workflowName?: string;
+        actionName?: string;
+        actionType?: string;
+    };
 export type WorkflowActionSubmitApiArg = {
     submitAction: SubmitAction;
 };

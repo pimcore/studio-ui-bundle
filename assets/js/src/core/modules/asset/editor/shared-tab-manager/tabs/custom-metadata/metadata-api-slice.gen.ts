@@ -21,14 +21,14 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type AssetCustomMetadataGetByIdApiResponse = /** status 200 asset_custom_metadata_get_by_id_success_response */ {
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
 export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type MetadataGetCollectionApiResponse = /** status 200 metadata_get_collection_success_response */ {
+export type MetadataGetCollectionApiResponse = /** status 200 Predefined metadata collection */ {
     items?: PredefinedMetadata[];
 };
 export type MetadataGetCollectionApiArg = {
