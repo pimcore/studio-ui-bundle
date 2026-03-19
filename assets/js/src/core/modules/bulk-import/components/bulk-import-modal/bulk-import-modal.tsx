@@ -138,9 +138,9 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
     <Modal
       { ...modalProps }
       footer={ step === 'upload' ? uploadFooter : selectFooter }
+      limitContentHeight
       onCancel={ handleClose }
       size='L'
-      styles={ { body: { maxHeight: '60vh', overflowY: 'auto' } } }
       title={ t('bulk-import.title') }
     >
       {step === 'upload' && (
