@@ -12,9 +12,9 @@ import React, { useRef } from 'react'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
+import { useStyles } from './bulk-import-upload-step.styles'
 
 interface BulkImportUploadStepProps {
   selectedFile: File | null
@@ -24,7 +24,7 @@ interface BulkImportUploadStepProps {
 
 export const BulkImportUploadStep = ({ selectedFile, onFileSelect, isPreparing }: BulkImportUploadStepProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { token } = theme.useToken()
+  const { styles } = useStyles()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleBrowseClick = (): void => {
@@ -53,10 +53,10 @@ export const BulkImportUploadStep = ({ selectedFile, onFileSelect, isPreparing }
       <input
         accept='.json,application/json'
         aria-label={ t('bulk-import.browse-files') }
+        className={ styles.fileInput }
         disabled={ isPreparing }
         onChange={ handleInputChange }
         ref={ fileInputRef }
-        style={ { display: 'none' } }
         type='file'
       />
 
@@ -64,8 +64,8 @@ export const BulkImportUploadStep = ({ selectedFile, onFileSelect, isPreparing }
         ? (
           <Flex
             align='center'
+            className={ styles.dropZone }
             justify='center'
-            style={ { minHeight: 120, border: `1px dashed ${token.colorBorder}`, borderRadius: token.borderRadius, cursor: 'pointer' } }
           >
             <IconTextButton
               icon={ { value: 'upload-import' } }
@@ -79,10 +79,10 @@ export const BulkImportUploadStep = ({ selectedFile, onFileSelect, isPreparing }
         : (
           <Flex
             align='center'
+            className={ styles.selectedFileRow }
             gap='small'
-            style={ { padding: `${token.paddingXS}px`, border: `1px solid ${token.colorBorder}`, borderRadius: token.borderRadius } }
           >
-            <span style={ { flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }>
+            <span className={ styles.fileName }>
               {selectedFile.name}
             </span>
             <Button
