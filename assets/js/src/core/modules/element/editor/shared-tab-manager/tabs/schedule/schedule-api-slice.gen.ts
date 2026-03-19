@@ -47,18 +47,20 @@ export type ScheduleDeleteByIdApiArg = {
     /** Id of the schedule */
     id: number;
 };
-export type ScheduleGetCollectionForElementByTypeAndIdApiResponse = /** status 200 List of schedules for element */ {
-    items?: Schedule[];
-};
+export type ScheduleGetCollectionForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_get_collection_for_element_by_type_and_id_success_response */ {
+        items?: Schedule[];
+    };
 export type ScheduleGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
     id: number;
 };
-export type ScheduleUpdateForElementByTypeAndIdApiResponse = /** status 200 List of updated schedules */ {
-    items?: Schedule[];
-};
+export type ScheduleUpdateForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_update_for_element_by_type_and_id_success_response */ {
+        items?: Schedule[];
+    };
 export type ScheduleUpdateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
@@ -68,7 +70,8 @@ export type ScheduleUpdateForElementByTypeAndIdApiArg = {
         items?: UpdateSchedule[];
     };
 };
-export type ScheduleCreateForElementByTypeAndIdApiResponse = /** status 200 Created schedule for element */ Schedule;
+export type ScheduleCreateForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_create_for_element_by_type_and_id_success_response */ Schedule;
 export type ScheduleCreateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";

@@ -77,7 +77,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type RoleCloneByIdApiResponse = /** status 200 Node of the cloned Role. */ TreeNode;
+export type RoleCloneByIdApiResponse = /** status 200 role_clone_by_id_success_response */ TreeNode;
 export type RoleCloneByIdApiArg = {
     /** Id of the role */
     id: number;
@@ -85,14 +85,14 @@ export type RoleCloneByIdApiArg = {
         name?: string;
     };
 };
-export type RoleFolderCreateApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
+export type RoleFolderCreateApiResponse = /** status 200 role_folder_create_success_response */ TreeNode;
 export type RoleFolderCreateApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
+export type RoleCreateApiResponse = /** status 200 role_create_success_response */ TreeNode;
 export type RoleCreateApiArg = {
     body: {
         parentId: number | null;
@@ -104,12 +104,12 @@ export type RoleFolderDeleteByIdApiArg = {
     /** Id of the folder */
     id: number;
 };
-export type RoleGetByIdApiResponse = /** status 200 List of available user roles. */ DetailedUserRole;
+export type RoleGetByIdApiResponse = /** status 200 role_get_by_id_success_response */ DetailedUserRole;
 export type RoleGetByIdApiArg = {
     /** Id of the role */
     id: number;
 };
-export type RoleUpdateByIdApiResponse = /** status 200 Updated data. */ DetailedUserRole;
+export type RoleUpdateByIdApiResponse = /** status 200 role_update_by_id_response */ DetailedUserRole;
 export type RoleUpdateByIdApiArg = {
     /** Id of the Role */
     id: number;
@@ -120,12 +120,12 @@ export type RoleDeleteByIdApiArg = {
     /** Id of the role */
     id: number;
 };
-export type RoleGetCollectionApiResponse = /** status 200 List of available roles. */ {
+export type RoleGetCollectionApiResponse = /** status 200 role_get_collection_success_response */ {
     totalItems: number;
     items: SimpleUserRole[];
 };
 export type RoleGetCollectionApiArg = void;
-export type RoleListWithPermissionApiResponse = /** status 200 List of roles with the given permission */ {
+export type RoleListWithPermissionApiResponse = /** status 200 role_list_with_permission_success_response */ {
     totalItems: number;
     items: SimpleUserRole[];
 };
@@ -133,7 +133,7 @@ export type RoleListWithPermissionApiArg = {
     /** List roles with this permission */
     permission: string;
 };
-export type RoleGetTreeApiResponse = /** status 200 Collection of roles including folders for the given parent id. */ {
+export type RoleGetTreeApiResponse = /** status 200 role_get_tree_success_response */ {
     totalItems: number;
     items: TreeNode[];
 };
@@ -141,7 +141,7 @@ export type RoleGetTreeApiArg = {
     /** Filter roles by parent id. */
     parentId: number;
 };
-export type RoleSearchApiResponse = /** status 200 List of roles */ {
+export type RoleSearchApiResponse = /** status 200 role_search_success_response */ {
     totalItems: number;
     items: SimpleUserRole[];
 };

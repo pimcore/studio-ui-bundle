@@ -92,11 +92,10 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type EmailBlocklistGetCollectionApiResponse =
-    /** status 200 Paginated E-Mail blocklist entries with total count as header param */ {
-        totalItems: number;
-        items: Blocklist[];
-    };
+export type EmailBlocklistGetCollectionApiResponse = /** status 200 email_blocklist_get_collection_success_response */ {
+    totalItems: number;
+    items: Blocklist[];
+};
 export type EmailBlocklistGetCollectionApiArg = {
     /** Page number */
     page: number;
@@ -111,21 +110,20 @@ export type EmailBlocklistAddApiArg = {
 };
 export type EmailBlocklistDeleteApiResponse = unknown;
 export type EmailBlocklistDeleteApiArg = {
-    /** Email address to be deleted from blocklist */
+    /**  Email address to be deleted from blocklist */
     email?: string;
 };
-export type EmailLogGetCollectionApiResponse =
-    /** status 200 Paginated E-Mail log entries with total count as header param */ {
-        totalItems: number;
-        items: EmailLog[];
-    };
+export type EmailLogGetCollectionApiResponse = /** status 200 email_log_get_collection_success_response */ {
+    totalItems: number;
+    items: EmailLog[];
+};
 export type EmailLogGetCollectionApiArg = {
     /** Page number */
     page: number;
     /** Number of items per page */
     pageSize: number;
 };
-export type EmailLogGetByIdApiResponse = /** status 200 E-Mail log entry data as JSON */ EmailLogDetail;
+export type EmailLogGetByIdApiResponse = /** status 200 email_log_get_by_id_success_response */ EmailLogDetail;
 export type EmailLogGetByIdApiArg = {
     /** Id of the E-Mail */
     id: number;
@@ -135,7 +133,7 @@ export type EmailLogDeleteApiArg = {
     /** Id of the E-Mail */
     id: number;
 };
-export type EmailLogGetHtmlApiResponse = /** status 200 HTML content of the E-Mail log entry */ {
+export type EmailLogGetHtmlApiResponse = /** status 200 email_log_get_html_success_response */ {
     /** Email log entry HTML data. */
     data: string;
 };
@@ -143,7 +141,7 @@ export type EmailLogGetHtmlApiArg = {
     /** Id of the E-Mail */
     id: number;
 };
-export type EmailLogGetParamsApiResponse = /** status 200 Parameters of the E-Mail log entry */ {
+export type EmailLogGetParamsApiResponse = /** status 200 email_log_get_params_success_response */ {
     /** Email log entry parameters */
     data: EmailLogParameters[];
 };
@@ -151,7 +149,7 @@ export type EmailLogGetParamsApiArg = {
     /** Id of the E-Mail */
     id: number;
 };
-export type EmailLogGetTextApiResponse = /** status 200 Text content of the E-Mail log entry */ {
+export type EmailLogGetTextApiResponse = /** status 200 email_log_get_text_success_response */ {
     /** Email log entry text data. */
     data: string;
 };

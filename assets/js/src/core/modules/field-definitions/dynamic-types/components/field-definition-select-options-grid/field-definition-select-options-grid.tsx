@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { IconButton, OperationalGrid, Space } from '@sdk/components'
 import { isString } from 'lodash'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -30,45 +30,19 @@ export interface FieldDefinitionSelectOptionsGridProps {
 
 const columnHelper = createColumnHelper<SelectOption>()
 
-const useColumns = (value: SelectOption[], onChange?: (value: SelectOption[]) => void, autoWidth?: boolean): Array<ColumnDef<SelectOption, any>> => {
+const useColumns = (autoWidth?: boolean): Array<ColumnDef<SelectOption, any>> => {
   const { t } = useTranslation()
 
   return useMemo(() => [
     columnHelper.accessor('key', {
       header: t('display-name'),
-      meta: { editable: true }
+      meta: { editable: true, type: 'input' }
     }),
     columnHelper.accessor('value', {
       header: t('value'),
-      meta: { editable: true }
-    }),
-    columnHelper.display({
-      header: t('delete'),
-      cell: (info) => (
-        <Box padding="mini">
-          <ButtonGroup
-            items={ [
-              <IconButton
-                icon={ { value: 'trash' } }
-                key="delete"
-                onClick={ () => {
-                  const newValue = [...value]
-                  newValue.splice(info.row.index, 1)
-                  onChange?.(newValue)
-                } }
-                size="small"
-                tooltip={ { title: t('delete') } }
-                type="link"
-              />
-            ] }
-            noSpacing
-          />
-        </Box>
-      ),
-      id: 'actions',
-      size: 70
+      meta: { editable: true, type: 'input' }
     })
-  ], [t, value, onChange, autoWidth])
+  ], [t, autoWidth])
 }
 
 export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, className, autoWidth }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
@@ -76,7 +50,9 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, classNa
   const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const columns = useColumns(value, onChange, autoWidth)
+  const columns = useColumns(autoWidth)
+
+  const hasSelection = Object.values(selectedRows).some(Boolean)
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
@@ -151,6 +127,14 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, classNa
                     })
                   } }
                   tooltip={ { title: t('add') } }
+                  type="default"
+                />
+
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
+                  tooltip={ { title: t('delete') } }
                   type="default"
                 />
 

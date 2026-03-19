@@ -237,7 +237,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type DocumentAddApiResponse = /** status 200 ID of added document */ {
+export type DocumentAddApiResponse = /** status 200 document_add_success_response */ {
     /** ID of created document element */
     id: number;
 };
@@ -246,11 +246,10 @@ export type DocumentAddApiArg = {
     parentId: number;
     documentAddParameters: DocumentAdd;
 };
-export type DocumentCloneApiResponse =
-    /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type DocumentCloneApiResponse = /** status 201 document_clone_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type DocumentCloneApiArg = {
     /** Id of the document */
     id: number;
@@ -265,11 +264,12 @@ export type DocumentConvertApiArg = {
     /** Document type to convert to */
     type: string;
 };
-export type DocumentDocTypeAddApiResponse = /** status 200 New DocType data as JSON */ DocType;
+export type DocumentDocTypeAddApiResponse = /** status 200 document_doc_type_add_success_response */ DocType;
 export type DocumentDocTypeAddApiArg = {
     docTypeAddParameters: DocTypeAdd;
 };
-export type DocumentDocTypeUpdateByIdApiResponse = /** status 200 Successfully updated DocType */ DocType;
+export type DocumentDocTypeUpdateByIdApiResponse =
+    /** status 200 document_doc_type_update_by_id_success_response */ DocType;
 export type DocumentDocTypeUpdateByIdApiArg = {
     /** The Id of the DocType to update */
     id: string;
@@ -280,29 +280,28 @@ export type DocumentDocTypeDeleteApiArg = {
     /** The Id of the DocType to delete */
     id: string;
 };
-export type DocumentDocTypeTypeListApiResponse = /** status 200 List of available DocType types */ {
+export type DocumentDocTypeTypeListApiResponse = /** status 200 document_doc_type_type_list_success_response */ {
     items: DocTypeType[];
 };
 export type DocumentDocTypeTypeListApiArg = void;
-export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
+export type DocumentDocTypeListApiResponse = /** status 200 document_doc_type_list_success_response */ {
     items: DocType[];
 };
 export type DocumentDocTypeListApiArg = {
     /** Filter results by docType type */
     type?: string;
 };
-export type DocumentGetTypesApiResponse = /** status 200 Successfully retrieved all available document types */ {
+export type DocumentGetTypesApiResponse = /** status 200 document_get_types_success_response */ {
     totalItems: number;
     items: DocumentType[];
 };
 export type DocumentGetTypesApiArg = void;
-export type DocumentGetByIdApiResponse =
-    /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
+export type DocumentGetByIdApiResponse = /** status 200 document_get_by_id_success_response */ DocumentDetailData;
 export type DocumentGetByIdApiArg = {
     /** Id of the document */
     id: number;
 };
-export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
+export type DocumentUpdateByIdApiResponse = /** status 200 document_update_by_id_success_response */ DocumentDetailData;
 export type DocumentUpdateByIdApiArg = {
     /** Id of the document */
     id: number;
@@ -328,7 +327,7 @@ export type DocumentPageCheckPrettyUrlApiArg = {
     id: number;
     checkPrettyUrl: CheckPrettyUrl;
 };
-export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
+export type DocumentPageStreamPreviewApiResponse = /** status 200 document_page_stream_preview_success_response */ Blob;
 export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
     id: number;
@@ -350,7 +349,7 @@ export type DocumentPageSnippetChangeMainDocumentApiArg = {
     changeMainDocument: ChangeMainDocument;
 };
 export type DocumentPageSnippetAreaBlockRenderApiResponse =
-    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
+    /** status 200 document_page_snippet_area_block_render_success_response */ AreaBlockRenderDataForEditmode;
 export type DocumentPageSnippetAreaBlockRenderApiArg = {
     /** Id of the document */
     id: number;
@@ -363,7 +362,7 @@ export type DocumentPageSnippetAreaBlockRenderApiArg = {
         areaBlockData?: object | null;
     };
 };
-export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
+export type DocumentRenderletRenderApiResponse = /** status 200 document_renderlet_render_success_response */ Blob;
 export type DocumentRenderletRenderApiArg = {
     /** ElementId of the renderlet element */
     id: number;
@@ -383,7 +382,7 @@ export type DocumentReplaceContentApiArg = {
     /** TargetId of the document */
     targetId: number;
 };
-export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
+export type DocumentsListAvailableSitesApiResponse = /** status 200 documents_list_available_sites_success_response */ {
     items: Site[];
 };
 export type DocumentsListAvailableSitesApiArg = {
@@ -401,7 +400,7 @@ export type DocumentDeleteSiteApiArg = {
     /** Id of the document */
     id: number;
 };
-export type DocumentGetSiteApiResponse = /** status 200 Site detail data */ SiteDetailData;
+export type DocumentGetSiteApiResponse = /** status 200 document_get_site_success_response */ SiteDetailData;
 export type DocumentGetSiteApiArg = {
     /** DocumentId of the document */
     documentId: number;
@@ -421,24 +420,23 @@ export type DocumentDeleteTranslationApiArg = {
     translationId: number;
 };
 export type DocumentGetTranslationsApiResponse =
-    /** status 200 Get all existing translations */ DocumentTranslationLinks;
+    /** status 200 document_get_translations_success_response */ DocumentTranslationLinks;
 export type DocumentGetTranslationsApiArg = {
     /** Id of the document */
     id: number;
 };
 export type DocumentGetTranslationParentByLanguageApiResponse =
-    /** status 200 Parent translation document data */ DocumentTranslationParent;
+    /** status 200 document_get_translation_parent_by_language_success_response */ DocumentTranslationParent;
 export type DocumentGetTranslationParentByLanguageApiArg = {
     /** Id of the document */
     id: number;
     /** Language code for the translation parent */
     language: string;
 };
-export type DocumentGetTreeApiResponse =
-    /** status 200 Paginated documents with total count as header param as JSON */ {
-        totalItems: number;
-        items: Document[];
-    };
+export type DocumentGetTreeApiResponse = /** status 200 document_get_tree_success_response */ {
+    totalItems: number;
+    items: Document[];
+};
 export type DocumentGetTreeApiArg = {
     /** Page number */
     page: number;

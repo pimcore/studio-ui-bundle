@@ -29,7 +29,7 @@ export class DynamicTypeFieldDefinitionLanguageMultiselect extends DynamicTypeFi
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'encryptedFieldSupport']
+    return [...super.getTags(props), 'encryptedFieldSupport', 'classificationStore']
   }
 
   getDefaultData (): FieldDefinitionData {

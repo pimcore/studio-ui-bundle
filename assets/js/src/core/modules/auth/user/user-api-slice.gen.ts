@@ -157,7 +157,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type UserCloneByIdApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
+export type UserCloneByIdApiResponse = /** status 200 user_clone_by_id_success_response */ TreeNode;
 export type UserCloneByIdApiArg = {
     /** Id of the user */
     id: number;
@@ -165,28 +165,29 @@ export type UserCloneByIdApiArg = {
         name?: string;
     };
 };
-export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
+export type UserCreateApiResponse = /** status 200 user_create_success_response */ TreeNode;
 export type UserCreateApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
+export type UserFolderCreateApiResponse = /** status 200 user_folder_create_success_response */ TreeNode;
 export type UserFolderCreateApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type UserGetCurrentInformationApiResponse = /** status 200 Current user information's. */ UserInformation;
+export type UserGetCurrentInformationApiResponse =
+    /** status 200 user_get_current_information_success_response */ UserInformation;
 export type UserGetCurrentInformationApiArg = void;
-export type UserGetByIdApiResponse = /** status 200 Node of the requested user. */ User;
+export type UserGetByIdApiResponse = /** status 200 user_get_by_id_success_response */ User;
 export type UserGetByIdApiArg = {
     /** Id of the user */
     id: number;
 };
-export type UserUpdateByIdApiResponse = /** status 200 Updated data. */ User;
+export type UserUpdateByIdApiResponse = /** status 200 user_update_by_id_success_response */ User;
 export type UserUpdateByIdApiArg = {
     /** Id of the User */
     id: number;
@@ -202,7 +203,7 @@ export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
 };
-export type UserGetImageApiResponse = /** status 200 User profile image */ Blob;
+export type UserGetImageApiResponse = /** status 200 user_get_image_success_response */ Blob;
 export type UserGetImageApiArg = {
     /** Id of the User */
     id: number;
@@ -212,22 +213,22 @@ export type UserImageDeleteByIdApiArg = {
     /** Id of the user */
     id: number;
 };
-export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
+export type UserDefaultKeyBindingsApiResponse = /** status 200 user_default_key_bindings_response */ {
     totalItems: number;
     items: KeyBindingForAUser[];
 };
 export type UserDefaultKeyBindingsApiArg = void;
-export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
+export type UserGetAvailablePermissionsApiResponse = /** status 200 user_get_available_permissions_success_response */ {
     totalItems: number;
     items: UserPermission[];
 };
 export type UserGetAvailablePermissionsApiArg = void;
-export type UserGetCollectionApiResponse = /** status 200 List of users */ {
+export type UserGetCollectionApiResponse = /** status 200 user_get_collection_success_response */ {
     totalItems: number;
     items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
-export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+export type UserListWithPermissionApiResponse = /** status 200  user_list_with_permission_success_response */ {
     totalItems: number;
     items: SimpleUser[];
 };
@@ -241,7 +242,7 @@ export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users */ {
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_success_response */ {
     totalItems: number;
     items: SimpleUser[];
 };
@@ -249,7 +250,7 @@ export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
 };
-export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
+export type UserTokenLinkGetApiResponse = /** status 200 user_token_link_get_success_response */ {
     /** Token link URL including the generated token as parameter. */
     link: string;
 };
@@ -273,7 +274,7 @@ export type UserUpdatePasswordByIdApiArg = {
         oldPassword?: string;
     };
 };
-export type UserUpdateProfileApiResponse = /** status 200 Successfully updated user profile */ UserInformation;
+export type UserUpdateProfileApiResponse = /** status 200 user_update_profile_success_response */ UserInformation;
 export type UserUpdateProfileApiArg = {
     updateUserProfile: UserProfile;
 };
@@ -286,7 +287,7 @@ export type UserUploadImageApiArg = {
         userImage: Blob;
     };
 };
-export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
+export type UserGetTreeApiResponse = /** status 200 user_get_tree_success_response */ {
     totalItems: number;
     items: TreeNode[];
 };

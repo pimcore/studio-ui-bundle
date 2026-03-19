@@ -25,6 +25,10 @@ export class DynamicTypeFieldDefinitionQuantityValue extends DynamicTypeFieldDef
     return [...super.getGroup(), 'numeric']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'classificationStore']
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]

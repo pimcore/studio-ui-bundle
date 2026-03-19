@@ -24,6 +24,7 @@ export enum NavPermission {
   ClassDefinitions = 'dataManagement.dataModel_classes',
   FieldCollections = 'dataManagement.dataModel_fieldCollections',
   ObjectBricks = 'dataManagement.dataModel_objectBricks',
+  ClassificationStore = 'dataManagement.dataModel_classificationStore',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
 

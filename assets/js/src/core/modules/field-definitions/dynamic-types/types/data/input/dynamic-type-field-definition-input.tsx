@@ -26,7 +26,7 @@ export class DynamicTypeFieldDefinitionInput extends DynamicTypeFieldDefinitionD
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'encryptedFieldSupport']
+    return [...super.getTags(props), 'encryptedFieldSupport', 'classificationStore']
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {

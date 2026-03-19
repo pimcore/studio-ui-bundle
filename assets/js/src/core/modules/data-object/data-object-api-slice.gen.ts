@@ -243,7 +243,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type DataObjectAddApiResponse = /** status 200 ID of added data object */ {
+export type DataObjectAddApiResponse = /** status 200 data_object_add_success_response */ {
     /** ID of created data object */
     id: number;
 };
@@ -252,21 +252,19 @@ export type DataObjectAddApiArg = {
     parentId: number;
     dataObjectAddParameters: DataObjectAdd;
 };
-export type DataObjectBatchDeleteApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type DataObjectBatchDeleteApiResponse = /** status 201 data_object_batch_delete_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type DataObjectBatchDeleteApiArg = {
     body: {
         ids?: number[];
     };
 };
-export type DataObjectCloneApiResponse =
-    /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type DataObjectCloneApiResponse = /** status 201 data_object_clone_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type DataObjectCloneApiArg = {
     /** Id of the data-object */
     id: number;
@@ -274,14 +272,14 @@ export type DataObjectCloneApiArg = {
     parentId: number;
     cloneParameters: DataObjectCloneParameters;
 };
-export type DataObjectGetByIdApiResponse = /** status 200 Successfully retrieved data object data as JSON */
+export type DataObjectGetByIdApiResponse = /** status 200 data_object_get_by_id_success_response */
     | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectGetByIdApiArg = {
     /** Id of the data-object */
     id: number;
 };
-export type DataObjectUpdateByIdApiResponse = /** status 200 Successfully updated data object */
+export type DataObjectUpdateByIdApiResponse = /** status 200 data_object_update_by_id_success_response */
     | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectUpdateByIdApiArg = {
@@ -304,7 +302,7 @@ export type DataObjectUpdateByIdApiArg = {
     };
 };
 export type DataObjectGetGridPreviewApiResponse =
-    /** status 200 Preview of an Advanced Column Grid for a given Data Object. */ GridColumnData;
+    /** status 200 data_object_get_grid_preview_success_response */ GridColumnData;
 export type DataObjectGetGridPreviewApiArg = {
     body: {
         objectId: number;
@@ -328,7 +326,7 @@ export type DataObjectGetGridConfigurationApiArg = {
     configurationId?: number;
 };
 export type DataObjectListSavedGridConfigurationsApiResponse =
-    /** status 200 List of saved grid configurations for data objects */ {
+    /** status 200 data_object_list_saved_grid_configurations_success_response */ {
         totalItems: number;
         items: GridConfiguration[];
     };
@@ -337,7 +335,7 @@ export type DataObjectListSavedGridConfigurationsApiArg = {
     classId: string;
 };
 export type DataObjectSaveGridConfigurationApiResponse =
-    /** status 200 Data Object grid configuration saved successfully */ GridConfiguration;
+    /** status 200 data_object_save_grid_configuration_success_response */ GridConfiguration;
 export type DataObjectSaveGridConfigurationApiArg = {
     /** Class Id of the data object */
     classId: string;
@@ -381,7 +379,7 @@ export type DataObjectUpdateGridConfigurationApiArg = {
     };
 };
 export type DataObjectGetAvailableGridColumnsApiResponse =
-    /** status 200 List of available grid columns for data objects */ {
+    /** status 200 data_object_get_available_grid_columns_success_response */ {
         columns?: GridColumnConfiguration[];
     };
 export type DataObjectGetAvailableGridColumnsApiArg = {
@@ -391,7 +389,7 @@ export type DataObjectGetAvailableGridColumnsApiArg = {
     folderId?: number;
 };
 export type DataObjectGetAvailableGridColumnsForRelationApiResponse =
-    /** status 200 List of available grid columns for data objects Many to many relation field */ {
+    /** status 200 data_object_get_available_grid_columns_success_for_relation_response */ {
         columns?: GridColumnConfiguration[];
     };
 export type DataObjectGetAvailableGridColumnsForRelationApiArg = {
@@ -400,7 +398,7 @@ export type DataObjectGetAvailableGridColumnsForRelationApiArg = {
     /** relationField as dot notation, e.g. "myBlock.mySubRelationField" */
     relationField?: string;
 };
-export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
+export type DataObjectGetGridApiResponse = /** status 200 data_object_get_grid_success_response */ {
     totalItems: number;
     items: {
         id?: number;
@@ -418,24 +416,23 @@ export type DataObjectGetGridApiArg = {
         filters?: GridFilter;
     };
 };
-export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of available PHPCode transformers */ {
-    totalItems: number;
-    items: SimplePhpCodeTransformer[];
-};
+export type DataObjectGetPhpcodeTransformersApiResponse =
+    /** status 200 data_object_get_phpcode_transformers_success_response */ {
+        totalItems: number;
+        items: SimplePhpCodeTransformer[];
+    };
 export type DataObjectGetPhpcodeTransformersApiArg = void;
-export type DataObjectGetLayoutByIdApiResponse =
-    /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
+export type DataObjectGetLayoutByIdApiResponse = /** status 200 data_object_get_layout_by_id_success_response */ Layout;
 export type DataObjectGetLayoutByIdApiArg = {
     /** Id of the data-object */
     id: number;
     /** ID to get specific layout */
     layoutId?: string;
 };
-export type DataObjectPatchByIdApiResponse =
-    /** status 201 Successfully created jobRun for patching multiple data objects */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type DataObjectPatchByIdApiResponse = /** status 201 data_object_patch_by_id_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type DataObjectPatchByIdApiArg = {
     body: {
         data: {
@@ -453,11 +450,10 @@ export type DataObjectPatchByIdApiArg = {
         }[];
     };
 };
-export type DataObjectPatchFolderByIdApiResponse =
-    /** status 201 Successfully created jobRun for patching multiple data objects */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type DataObjectPatchFolderByIdApiResponse = /** status 201 data_object_patch_by_id_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type DataObjectPatchFolderByIdApiArg = {
     body: {
         data: {
@@ -476,7 +472,7 @@ export type DataObjectPatchFolderByIdApiArg = {
         classId: string;
     };
 };
-export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
+export type DataObjectFormatPathApiResponse = /** status 200 data_object_format_path_success_response */ {
     totalItems: number;
     items: SelectOption[];
 };
@@ -502,7 +498,7 @@ export type DataObjectReplaceContentApiArg = {
     /** TargetId of the data-object */
     targetId: number;
 };
-export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
+export type DataObjectGetSelectOptionsApiResponse = /** status 200 data_object_get_select_options_success_response */ {
     totalItems: number;
     items: SelectOption2[];
 };
@@ -514,11 +510,10 @@ export type DataObjectGetSelectOptionsApiArg = {
         context: object;
     };
 };
-export type DataObjectGetTreeApiResponse =
-    /** status 200 Paginated data objects with total count as header param as JSON */ {
-        totalItems: number;
-        items: (DataObject | DataObjectFolder)[];
-    };
+export type DataObjectGetTreeApiResponse = /** status 200 data_object_get_tree_success_response */ {
+    totalItems: number;
+    items: (DataObject | DataObjectFolder)[];
+};
 export type DataObjectGetTreeApiArg = {
     /** Page number */
     page: number;

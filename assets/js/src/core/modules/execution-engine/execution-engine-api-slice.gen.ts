@@ -50,7 +50,7 @@ export type ExecutionEngineHideJobRunsApiArg = {
         jobRunIds?: number[];
     };
 };
-export type ExecutionEngineListJobsApiResponse = /** status 200 List of studio jobs */ {
+export type ExecutionEngineListJobsApiResponse = /** status 200 execution_engine_list_jobs_success_response */ {
     totalItems: number;
     items: JobRun[];
 };

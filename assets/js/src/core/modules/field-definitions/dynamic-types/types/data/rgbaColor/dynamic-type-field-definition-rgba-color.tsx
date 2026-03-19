@@ -26,7 +26,7 @@ export class DynamicTypeFieldDefinitionRgbaColor extends DynamicTypeFieldDefinit
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'encryptedFieldSupport']
+    return [...super.getTags(props), 'encryptedFieldSupport', 'classificationStore']
   }
 
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {

@@ -1,0 +1,394 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+"use strict";
+(self["webpackChunkpimcore_studio_ui_bundle"] = self["webpackChunkpimcore_studio_ui_bundle"] || []).push([["js_src_core_modules_user_user-api-slice-enhanced_ts"], {
+"./js/src/core/modules/auth/user/user-api-slice.gen.ts": (function (module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  addTagTypes: () => (addTagTypes),
+  api: () => (injectedRtkApi),
+  usePimcoreStudioApiUserSearchQuery: () => (usePimcoreStudioApiUserSearchQuery),
+  useUserCloneByIdMutation: () => (useUserCloneByIdMutation),
+  useUserCreateMutation: () => (useUserCreateMutation),
+  useUserDefaultKeyBindingsQuery: () => (useUserDefaultKeyBindingsQuery),
+  useUserDeleteByIdMutation: () => (useUserDeleteByIdMutation),
+  useUserFolderCreateMutation: () => (useUserFolderCreateMutation),
+  useUserFolderDeleteByIdMutation: () => (useUserFolderDeleteByIdMutation),
+  useUserGetAvailablePermissionsQuery: () => (useUserGetAvailablePermissionsQuery),
+  useUserGetByIdQuery: () => (useUserGetByIdQuery),
+  useUserGetCollectionQuery: () => (useUserGetCollectionQuery),
+  useUserGetCurrentInformationQuery: () => (useUserGetCurrentInformationQuery),
+  useUserGetImageQuery: () => (useUserGetImageQuery),
+  useUserGetTreeQuery: () => (useUserGetTreeQuery),
+  useUserImageDeleteByIdMutation: () => (useUserImageDeleteByIdMutation),
+  useUserListWithPermissionQuery: () => (useUserListWithPermissionQuery),
+  useUserResetPasswordMutation: () => (useUserResetPasswordMutation),
+  useUserTokenLinkGetQuery: () => (useUserTokenLinkGetQuery),
+  useUserUpdateActivePerspectiveMutation: () => (useUserUpdateActivePerspectiveMutation),
+  useUserUpdateByIdMutation: () => (useUserUpdateByIdMutation),
+  useUserUpdatePasswordByIdMutation: () => (useUserUpdatePasswordByIdMutation),
+  useUserUpdateProfileMutation: () => (useUserUpdateProfileMutation),
+  useUserUploadImageMutation: () => (useUserUploadImageMutation)
+});
+/* ESM import */var _sdk_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./js/src/sdk/api/index.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rsbuild/plugin-react/node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+const addTagTypes = [
+    "User Management"
+];
+const injectedRtkApi = _sdk_api__WEBPACK_IMPORTED_MODULE_0__.api.enhanceEndpoints({
+    addTagTypes
+}).injectEndpoints({
+    endpoints: (build)=>({
+            userCloneById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/clone/${queryArg.id}`,
+                        method: "POST",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userCreate: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/`,
+                        method: "POST",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userFolderCreate: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/folder`,
+                        method: "POST",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetCurrentInformation: build.query({
+                query: ()=>({
+                        url: `/pimcore-studio/api/user/current-user-information`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetById: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/${queryArg.id}`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userUpdateById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/${queryArg.id}`,
+                        method: "PUT",
+                        body: queryArg.updateUser
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userDeleteById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/${queryArg.id}`,
+                        method: "DELETE"
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userFolderDeleteById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/folder/${queryArg.id}`,
+                        method: "DELETE"
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetImage: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/image/${queryArg.id}`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userImageDeleteById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/image/${queryArg.id}`,
+                        method: "DELETE"
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userDefaultKeyBindings: build.query({
+                query: ()=>({
+                        url: `/pimcore-studio/api/users/default-key-bindings`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetAvailablePermissions: build.query({
+                query: ()=>({
+                        url: `/pimcore-studio/api/user/available-permissions`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetCollection: build.query({
+                query: ()=>({
+                        url: `/pimcore-studio/api/users`
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userListWithPermission: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/users/with-permission`,
+                        params: {
+                            permission: queryArg.permission,
+                            includeCurrentUser: queryArg.includeCurrentUser
+                        }
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userResetPassword: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/reset-password`,
+                        method: "POST",
+                        body: queryArg.resetPassword
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            pimcoreStudioApiUserSearch: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/search`,
+                        params: {
+                            searchQuery: queryArg.searchQuery
+                        }
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userTokenLinkGet: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
+                        method: "POST",
+                        body: queryArg.tokenLink
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            }),
+            userUpdateActivePerspective: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
+                        method: "PUT"
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userUpdatePasswordById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/${queryArg.id}/password`,
+                        method: "PUT",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userUpdateProfile: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/update-profile`,
+                        method: "PUT",
+                        body: queryArg.updateUserProfile
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userUploadImage: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
+                        method: "POST",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "User Management"
+                ]
+            }),
+            userGetTree: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/users/tree`,
+                        params: {
+                            parentId: queryArg.parentId
+                        }
+                    }),
+                providesTags: [
+                    "User Management"
+                ]
+            })
+        }),
+    overrideExisting: false
+});
+
+const { useUserCloneByIdMutation, useUserCreateMutation, useUserFolderCreateMutation, useUserGetCurrentInformationQuery, useUserGetByIdQuery, useUserUpdateByIdMutation, useUserDeleteByIdMutation, useUserFolderDeleteByIdMutation, useUserGetImageQuery, useUserImageDeleteByIdMutation, useUserDefaultKeyBindingsQuery, useUserGetAvailablePermissionsQuery, useUserGetCollectionQuery, useUserListWithPermissionQuery, useUserResetPasswordMutation, usePimcoreStudioApiUserSearchQuery, useUserTokenLinkGetQuery, useUserUpdateActivePerspectiveMutation, useUserUpdatePasswordByIdMutation, useUserUpdateProfileMutation, useUserUploadImageMutation, useUserGetTreeQuery } = injectedRtkApi;
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./js/src/core/modules/user/user-api-slice-enhanced.ts": (function (module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  api: () => (api),
+  useLazyUserTokenLinkGetQuery: () => (useLazyUserTokenLinkGetQuery),
+  usePimcoreStudioApiUserSearchQuery: () => (usePimcoreStudioApiUserSearchQuery),
+  useUserCloneByIdMutation: () => (useUserCloneByIdMutation),
+  useUserCreateMutation: () => (useUserCreateMutation),
+  useUserDefaultKeyBindingsQuery: () => (useUserDefaultKeyBindingsQuery),
+  useUserDeleteByIdMutation: () => (useUserDeleteByIdMutation),
+  useUserFolderCreateMutation: () => (useUserFolderCreateMutation),
+  useUserFolderDeleteByIdMutation: () => (useUserFolderDeleteByIdMutation),
+  useUserGetAvailablePermissionsQuery: () => (useUserGetAvailablePermissionsQuery),
+  useUserGetByIdQuery: () => (useUserGetByIdQuery),
+  useUserGetCollectionQuery: () => (useUserGetCollectionQuery),
+  useUserGetCurrentInformationQuery: () => (useUserGetCurrentInformationQuery),
+  useUserGetImageQuery: () => (useUserGetImageQuery),
+  useUserGetTreeQuery: () => (useUserGetTreeQuery),
+  useUserResetPasswordMutation: () => (useUserResetPasswordMutation),
+  useUserTokenLinkGetQuery: () => (useUserTokenLinkGetQuery),
+  useUserUpdateByIdMutation: () => (useUserUpdateByIdMutation),
+  useUserUpdatePasswordByIdMutation: () => (useUserUpdatePasswordByIdMutation),
+  useUserUploadImageMutation: () => (useUserUploadImageMutation)
+});
+/* ESM import */var _Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./js/src/core/app/api/pimcore/tags.ts");
+/* ESM import */var _Pimcore_modules_auth_user_user_api_slice_gen__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./js/src/core/modules/auth/user/user-api-slice.gen.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rsbuild/plugin-react/node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */ 
+
+const api = _Pimcore_modules_auth_user_user_api_slice_gen__WEBPACK_IMPORTED_MODULE_1__.api.enhanceEndpoints({
+    addTagTypes: [
+        _Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.tagNames.USERS,
+        _Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.tagNames.USER_DETAIL,
+        _Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.tagNames.USER_TREE
+    ],
+    endpoints: {
+        userUploadImage: (endpoint)=>{
+            const originalQuery = endpoint.query;
+            if (originalQuery !== undefined) {
+                endpoint.query = (queryArg)=>{
+                    const baseResult = originalQuery(queryArg);
+                    const formData = new FormData();
+                    formData.append('userImage', queryArg.body.userImage);
+                    if (baseResult === null || typeof baseResult !== 'object') {
+                        return baseResult;
+                    }
+                    return {
+                        ...baseResult,
+                        body: formData
+                    };
+                };
+            }
+        },
+        userGetCollection: {
+            providesTags: (result, error, args)=>{
+                let detailTags = [];
+                if (result !== undefined) {
+                    detailTags = result === null || result === void 0 ? void 0 : result.items.flatMap((item)=>_Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USER_DETAIL(item.id));
+                }
+                return [
+                    ...detailTags,
+                    ..._Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USERS()
+                ];
+            }
+        },
+        userGetById: {
+            providesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USER_DETAIL(args.id)
+        },
+        userDeleteById: {
+            invalidatesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.invalidatingTags.USER_DETAIL(args.id)
+        },
+        userUpdateById: {
+            invalidatesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.invalidatingTags.USER_DETAIL(args.id)
+        },
+        userGetTree: {
+            providesTags: (result, error, args)=>{
+                let detailTags = [];
+                if (result !== undefined) {
+                    detailTags = result === null || result === void 0 ? void 0 : result.items.flatMap((item)=>_Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USER_DETAIL(item.id));
+                }
+                return [
+                    ...detailTags,
+                    ..._Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USER_TREE(),
+                    ..._Pimcore_app_api_pimcore_tags__WEBPACK_IMPORTED_MODULE_0__.providingTags.USERS()
+                ];
+            }
+        }
+    }
+});
+const { useUserCloneByIdMutation, useUserCreateMutation, useUserFolderCreateMutation, useUserGetCurrentInformationQuery, useUserGetByIdQuery, useUserUpdateByIdMutation, useUserDeleteByIdMutation, useUserFolderDeleteByIdMutation, useUserDefaultKeyBindingsQuery, useUserGetAvailablePermissionsQuery, useUserGetCollectionQuery, useUserResetPasswordMutation, usePimcoreStudioApiUserSearchQuery, useUserUpdatePasswordByIdMutation, useUserUploadImageMutation, useUserGetImageQuery, useUserGetTreeQuery, useUserTokenLinkGetQuery, useLazyUserTokenLinkGetQuery } = api;
+
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+
+}]);
+//# sourceMappingURL=js_src_core_modules_user_user-api-slice-enhanced_ts.js.map

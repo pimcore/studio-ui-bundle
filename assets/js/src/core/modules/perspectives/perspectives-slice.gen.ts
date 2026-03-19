@@ -107,13 +107,14 @@ export type PerspectiveCreateApiResponse = unknown;
 export type PerspectiveCreateApiArg = {
     addPerspectiveConfig: AddPerspectiveConfig;
 };
-export type PerspectiveGetConfigCollectionApiResponse = /** status 200 List of perspective configurations */ {
-    totalItems: number;
-    items: PerspectiveConfig[];
-};
+export type PerspectiveGetConfigCollectionApiResponse =
+    /** status 200 perspective_get_config_collection_success_response */ {
+        totalItems: number;
+        items: PerspectiveConfig[];
+    };
 export type PerspectiveGetConfigCollectionApiArg = void;
 export type PerspectiveGetConfigByIdApiResponse =
-    /** status 200 Perspective configuration data as JSON */ PerspectiveConfigDetail;
+    /** status 200 perspective_get_config_by_id_success_response */ PerspectiveConfigDetail;
 export type PerspectiveGetConfigByIdApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
@@ -139,18 +140,20 @@ export type PerspectiveWidgetCreateApiArg = {
         };
     };
 };
-export type PerspectiveWidgetGetConfigCollectionApiResponse = /** status 200 List of widget configurations */ {
-    totalItems: number;
-    items: WidgetConfig[];
-};
+export type PerspectiveWidgetGetConfigCollectionApiResponse =
+    /** status 200 perspective_widget_get_config_collection_success_response */ {
+        totalItems: number;
+        items: WidgetConfig[];
+    };
 export type PerspectiveWidgetGetConfigCollectionApiArg = {
     /** Skip wrapper widget configurations */
     skipWrapperWidgets?: boolean;
 };
-export type PerspectiveWidgetGetConfigByIdApiResponse = /** status 200 Widget configuration data as JSON */ {
-    /** Data of the widget configuration */
-    data: string;
-};
+export type PerspectiveWidgetGetConfigByIdApiResponse =
+    /** status 200 perspective_widget_get_config_by_id_success_response */ {
+        /** Data of the widget configuration */
+        data: string;
+    };
 export type PerspectiveWidgetGetConfigByIdApiArg = {
     /** Filter widgets by matching widget Id */
     widgetId: string;
@@ -176,9 +179,10 @@ export type PerspectiveWidgetDeleteApiArg = {
     /** Filter widgets by matching widget type */
     widgetType: string;
 };
-export type PerspectiveWidgetGetTypeCollectionApiResponse = /** status 200 List of widget types */ {
-    items: WidgetType[];
-};
+export type PerspectiveWidgetGetTypeCollectionApiResponse =
+    /** status 200 perspective_widget_get_type_collection_success_response */ {
+        items: WidgetType[];
+    };
 export type PerspectiveWidgetGetTypeCollectionApiArg = void;
 export type Error = {
     /** Message */
