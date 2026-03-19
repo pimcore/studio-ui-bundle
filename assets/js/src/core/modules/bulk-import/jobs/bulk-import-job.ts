@@ -29,14 +29,14 @@ export class BulkImportJob implements JobInterface {
   private readonly title: string
   private readonly onFinish?: () => void
 
-  constructor(options: BulkImportJobOptions) {
+  constructor (options: BulkImportJobOptions) {
     this.fileId = options.fileId
     this.items = options.items
     this.title = options.title
     this.onFinish = options.onFinish
   }
 
-  async run(options: JobRunOptions): Promise<void> {
+  async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
 
     try {
@@ -66,7 +66,7 @@ export class BulkImportJob implements JobInterface {
           if (data.isFinished) {
             this.onFinish?.()
           } else {
-            trackError(new GeneralError(`Bulk import job failed`))
+            trackError(new GeneralError('Bulk import job failed'))
           }
         },
         onRetry: async () => {
