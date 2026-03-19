@@ -204,6 +204,16 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/assets/grid/configurations` }),
                 providesTags: ["Asset Grid"],
             }),
+            assetRemoveGridConfigurationAsFavorite: build.mutation<
+                AssetRemoveGridConfigurationAsFavoriteApiResponse,
+                AssetRemoveGridConfigurationAsFavoriteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/grid/configuration/remove-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Asset Grid"],
+            }),
             assetSaveGridConfiguration: build.mutation<
                 AssetSaveGridConfigurationApiResponse,
                 AssetSaveGridConfigurationApiArg
@@ -675,6 +685,13 @@ export type AssetGetSavedGridConfigurationsApiResponse =
         items: GridConfiguration[];
     };
 export type AssetGetSavedGridConfigurationsApiArg = void;
+export type AssetRemoveGridConfigurationAsFavoriteApiResponse = unknown;
+export type AssetRemoveGridConfigurationAsFavoriteApiArg = {
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    /** FolderId of the folderId */
+    folderId: number;
+};
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
@@ -1399,6 +1416,7 @@ export const {
     useAssetGetAvailableGridColumnsQuery,
     useAssetGetGridConfigurationByFolderIdQuery,
     useAssetGetSavedGridConfigurationsQuery,
+    useAssetRemoveGridConfigurationAsFavoriteMutation,
     useAssetSaveGridConfigurationMutation,
     useAssetSetGridConfigurationAsFavoriteMutation,
     useAssetUpdateGridConfigurationMutation,

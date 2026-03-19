@@ -15,6 +15,7 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { Input } from '@Pimcore/components/input/input'
+import { toDisplayString } from '@Pimcore/utils/type-utils'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -44,8 +45,10 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
+    const cellValue = props.getValue()
+    const displayValue = toDisplayString(cellValue)
+
     if (!isInEditMode) {
-      const cellValue = props.getValue()
       const renderAsHtml = props.column.columnDef.meta?.config?.renderAsHtml === true
 
       if (renderAsHtml && isString(cellValue)) {
@@ -54,14 +57,14 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
 
       return (
         <>
-          { cellValue }
+          { displayValue }
         </>
       )
     }
 
     return (
       <Input
-        defaultValue={ props.getValue() }
+        defaultValue={ displayValue }
         onBlur={ onBlur }
         onKeyDown={ onKeyDown }
         ref={ element }

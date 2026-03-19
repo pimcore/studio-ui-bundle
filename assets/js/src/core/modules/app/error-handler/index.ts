@@ -12,3 +12,5 @@ export { default } from './error-handler'
 
 export { default as ApiError, isApiErrorData } from './classes/api-error'
 export { default as GeneralError } from './classes/general-error'
+export { getErrorKey } from './utils/get-error-key'
+export { ErrorKeyTypes } from './constants/errorTypes'

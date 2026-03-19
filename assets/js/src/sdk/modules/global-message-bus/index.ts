@@ -16,3 +16,4 @@ export { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/mess
 export { GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 export { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 export type { AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
+export { GlobalMessageBusProcess } from '@Pimcore/modules/background-processor/process/global-message-bus-process'

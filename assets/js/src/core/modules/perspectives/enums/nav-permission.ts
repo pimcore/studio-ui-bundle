@@ -28,6 +28,7 @@ export enum NavPermission {
   QuantityValues = 'dataManagement.dataModel_quantityValue',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
+  PredefinedAssetMetadata = 'assetManagement.predefinedAssetMetadata',
 
   ExperienceEcommerceHidden = 'experienceEcommerce.hidden',
   Mails = 'experienceEcommerce.emails',
