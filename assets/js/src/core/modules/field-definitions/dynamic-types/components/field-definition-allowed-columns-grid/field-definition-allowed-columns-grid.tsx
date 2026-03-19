@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { Box, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +31,7 @@ interface FieldDefinitionAllowedColumnsGridProps {
 
 const columnHelper = createColumnHelper<AllowedColumn>()
 
-const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) => void): Array<ColumnDef<AllowedColumn, any>> => {
+const useColumns = (): Array<ColumnDef<AllowedColumn, any>> => {
   const { t } = useTranslation()
 
   return useMemo(() => [
@@ -46,12 +46,12 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
     columnHelper.accessor('key', {
       header: t('key'),
       size: 100,
-      meta: { editable: true }
+      meta: { editable: true, type: 'input' }
     }),
     columnHelper.accessor('label', {
       header: t('label'),
       size: 120,
-      meta: { editable: true }
+      meta: { editable: true, type: 'input' }
     }),
     columnHelper.accessor('type', {
       header: t('type'),
@@ -74,7 +74,7 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
     columnHelper.accessor('value', {
       header: t('value'),
       size: 110,
-      meta: { editable: true }
+      meta: { editable: true, type: 'input' }
     }),
     columnHelper.accessor('width', {
       header: t('width'),
@@ -83,41 +83,17 @@ const useColumns = (value: AllowedColumn[], onChange?: (value: AllowedColumn[]) 
         editable: true,
         type: 'number'
       }
-    }),
-    columnHelper.display({
-      header: t('delete'),
-      cell: (info) => (
-        <Box padding="mini">
-          <ButtonGroup
-            items={ [
-              <IconButton
-                icon={ { value: 'trash' } }
-                key="delete"
-                onClick={ () => {
-                  const newValue = [...value]
-                  newValue.splice(info.row.index, 1)
-                  onChange?.(newValue)
-                } }
-                size="small"
-                tooltip={ { title: t('delete') } }
-                type="link"
-              />
-            ] }
-            noSpacing
-          />
-        </Box>
-      ),
-      id: 'actions',
-      size: 70
     })
-  ], [t, value, onChange])
+  ], [t])
 }
 
 export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: FieldDefinitionAllowedColumnsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const columns = useColumns(value, onChange)
+  const columns = useColumns()
+
+  const hasSelection = Object.values(selectedRows).some(Boolean)
 
   const validateKey = (keyValue: string): boolean => {
     const trimmedValue = keyValue.trim()
@@ -153,6 +129,7 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
   return (
     <OperationalGrid
       columns={ columns }
+      enableRowSelection
       enableSorting={ false }
       onChange={ onChange as (value: any[]) => void }
       onSelectedRowsChange={ setSelectedRows }
@@ -186,6 +163,14 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
                     })
                   } }
                   tooltip={ { title: t('add') } }
+                  type="default"
+                />
+
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
+                  tooltip={ { title: t('delete') } }
                   type="default"
                 />
               </Space>

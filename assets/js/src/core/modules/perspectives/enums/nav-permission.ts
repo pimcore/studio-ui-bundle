@@ -24,6 +24,7 @@ export enum NavPermission {
   ClassDefinitions = 'dataManagement.dataModel_classes',
   FieldCollections = 'dataManagement.dataModel_fieldCollections',
   ObjectBricks = 'dataManagement.dataModel_objectBricks',
+  ClassificationStore = 'dataManagement.dataModel_classificationStore',
   SelectOptions = 'dataManagement.dataModel_selectOptions',
   QuantityValues = 'dataManagement.dataModel_quantityValue',
   BulkExport = 'dataManagement.dataModel_bulkExport',

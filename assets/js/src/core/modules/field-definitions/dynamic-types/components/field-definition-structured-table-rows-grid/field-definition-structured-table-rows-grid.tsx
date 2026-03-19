@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { Box, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -28,7 +28,7 @@ interface FieldDefinitionStructuredTableRowsGridProps {
 
 const columnHelper = createColumnHelper<StructuredTableRow>()
 
-const useColumns = (value: StructuredTableRow[], onChange?: (value: StructuredTableRow[]) => void): Array<ColumnDef<StructuredTableRow, any>> => {
+const useColumns = (): Array<ColumnDef<StructuredTableRow, any>> => {
   const { t } = useTranslation()
 
   return useMemo(() => [
@@ -49,41 +49,17 @@ const useColumns = (value: StructuredTableRow[], onChange?: (value: StructuredTa
       header: t('label'),
       size: 160,
       meta: { editable: true }
-    }),
-    columnHelper.display({
-      header: t('delete'),
-      cell: (info) => (
-        <Box padding="mini">
-          <ButtonGroup
-            items={ [
-              <IconButton
-                icon={ { value: 'trash' } }
-                key="delete"
-                onClick={ () => {
-                  const newValue = [...value]
-                  newValue.splice(info.row.index, 1)
-                  onChange?.(newValue)
-                } }
-                size="small"
-                tooltip={ { title: t('delete') } }
-                type="link"
-              />
-            ] }
-            noSpacing
-          />
-        </Box>
-      ),
-      id: 'actions',
-      size: 70
     })
-  ], [t, value, onChange])
+  ], [t])
 }
 
 export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }: FieldDefinitionStructuredTableRowsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const columns = useColumns(value, onChange)
+  const columns = useColumns()
+
+  const hasSelection = Object.values(selectedRows).some(Boolean)
 
   const validateKey = (keyValue: string): boolean => {
     const trimmedValue = keyValue.trim()
@@ -118,6 +94,7 @@ export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }:
   return (
     <OperationalGrid
       columns={ columns }
+      enableRowSelection
       enableSorting={ false }
       onChange={ onChange as (value: any[]) => void }
       onSelectedRowsChange={ setSelectedRows }
@@ -148,6 +125,14 @@ export const FieldDefinitionStructuredTableRowsGrid = ({ value = [], onChange }:
                     })
                   } }
                   tooltip={ { title: t('add') } }
+                  type="default"
+                />
+
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
+                  tooltip={ { title: t('delete') } }
                   type="default"
                 />
               </Space>

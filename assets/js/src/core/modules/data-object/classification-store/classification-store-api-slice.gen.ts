@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            classificationStoreConfigurationCollectionCollection: build.mutation<
+            classificationStoreConfigurationCollectionCollection: build.query<
                 ClassificationStoreConfigurationCollectionCollectionApiResponse,
                 ClassificationStoreConfigurationCollectionCollectionApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionCreate: build.mutation<
                 ClassificationStoreConfigurationCollectionCreateApiResponse,
@@ -49,7 +49,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationCollectionRelationCollection: build.mutation<
+            classificationStoreConfigurationCollectionRelationCollection: build.query<
                 ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
                 ClassificationStoreConfigurationCollectionRelationCollectionApiArg
             >({
@@ -58,7 +58,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionRelationCreate: build.mutation<
                 ClassificationStoreConfigurationCollectionRelationCreateApiResponse,
@@ -82,7 +82,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationGroupCollection: build.mutation<
+            classificationStoreConfigurationGroupCollection: build.query<
                 ClassificationStoreConfigurationGroupCollectionApiResponse,
                 ClassificationStoreConfigurationGroupCollectionApiArg
             >({
@@ -91,7 +91,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationGroupCreate: build.mutation<
                 ClassificationStoreConfigurationGroupCreateApiResponse,
@@ -125,7 +125,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyCollection: build.mutation<
+            classificationStoreConfigurationKeyCollection: build.query<
                 ClassificationStoreConfigurationKeyCollectionApiResponse,
                 ClassificationStoreConfigurationKeyCollectionApiArg
             >({
@@ -134,7 +134,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationKeyCreate: build.mutation<
                 ClassificationStoreConfigurationKeyCreateApiResponse,
@@ -168,7 +168,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyGroupRelationCollection: build.mutation<
+            classificationStoreConfigurationKeyGroupRelationCollection: build.query<
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
             >({
@@ -177,7 +177,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationKeyGroupRelationCreate: build.mutation<
                 ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse,
@@ -929,22 +929,22 @@ export type ClassificationStoreConfiguration = {
     name: string;
 };
 export const {
-    useClassificationStoreConfigurationCollectionCollectionMutation,
+    useClassificationStoreConfigurationCollectionCollectionQuery,
     useClassificationStoreConfigurationCollectionCreateMutation,
     useClassificationStoreConfigurationCollectionUpdateMutation,
     useClassificationStoreConfigurationCollectionDeleteMutation,
-    useClassificationStoreConfigurationCollectionRelationCollectionMutation,
+    useClassificationStoreConfigurationCollectionRelationCollectionQuery,
     useClassificationStoreConfigurationCollectionRelationCreateMutation,
     useClassificationStoreConfigurationCollectionRelationDeleteMutation,
-    useClassificationStoreConfigurationGroupCollectionMutation,
+    useClassificationStoreConfigurationGroupCollectionQuery,
     useClassificationStoreConfigurationGroupCreateMutation,
     useClassificationStoreConfigurationGroupUpdateMutation,
     useClassificationStoreConfigurationGroupDeleteMutation,
-    useClassificationStoreConfigurationKeyCollectionMutation,
+    useClassificationStoreConfigurationKeyCollectionQuery,
     useClassificationStoreConfigurationKeyCreateMutation,
     useClassificationStoreConfigurationKeyUpdateMutation,
     useClassificationStoreConfigurationKeyDeleteMutation,
-    useClassificationStoreConfigurationKeyGroupRelationCollectionMutation,
+    useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
     useClassificationStoreConfigurationStoreCreateMutation,

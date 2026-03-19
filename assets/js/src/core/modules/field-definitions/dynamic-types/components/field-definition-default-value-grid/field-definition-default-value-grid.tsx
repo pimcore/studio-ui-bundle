@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { IconButton, OperationalGrid, Space } from '@sdk/components'
 import { isString } from 'lodash'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -27,41 +27,15 @@ interface FieldDefinitionDefaultValueGridProps {
 
 const columnHelper = createColumnHelper<DefaultValueItem>()
 
-const useColumns = (value: DefaultValueItem[], onChange?: (value: DefaultValueItem[]) => void): Array<ColumnDef<DefaultValueItem, any>> => {
+const useColumns = (): Array<ColumnDef<DefaultValueItem, any>> => {
   const { t } = useTranslation()
 
   return useMemo(() => [
     columnHelper.accessor('value', {
       header: t('value'),
-      meta: { editable: true }
-    }),
-    columnHelper.display({
-      header: t('delete'),
-      cell: (info) => (
-        <Box padding="mini">
-          <ButtonGroup
-            items={ [
-              <IconButton
-                icon={ { value: 'trash' } }
-                key="delete"
-                onClick={ () => {
-                  const newValue = [...value]
-                  newValue.splice(info.row.index, 1)
-                  onChange?.(newValue)
-                } }
-                size="small"
-                tooltip={ { title: t('delete') } }
-                type="link"
-              />
-            ] }
-            noSpacing
-          />
-        </Box>
-      ),
-      id: 'actions',
-      size: 70
+      meta: { editable: true, type: 'input' }
     })
-  ], [t, value, onChange])
+  ], [t])
 }
 
 export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldDefinitionDefaultValueGridProps): React.JSX.Element => {
@@ -69,7 +43,9 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
   const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
 
-  const columns = useColumns(value, onChange)
+  const columns = useColumns()
+
+  const hasSelection = Object.values(selectedRows).some(Boolean)
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
@@ -142,6 +118,15 @@ export const FieldDefinitionDefaultValueGrid = ({ value = [], onChange }: FieldD
                   tooltip={ { title: t('add') } }
                   type="default"
                 />
+
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
+                  tooltip={ { title: t('delete') } }
+                  type="default"
+                />
+
                 <IconButton
                   icon={ { value: 'edit' } }
                   onClick={ openCsvModal }
