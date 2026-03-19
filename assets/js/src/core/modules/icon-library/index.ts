@@ -166,6 +166,7 @@ import folderPlus from '@Pimcore/assets/icons/folder-plus.inline.svg?react'
 import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg?react'
 import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import formatters from '@Pimcore/assets/icons/formatters.inline.svg?react'
+import gdprExtractor from '@Pimcore/assets/icons/gdpr-extractor.inline.svg?react'
 import gender from '@Pimcore/assets/icons/gender.inline.svg?react'
 import geographicalBounds from '@Pimcore/assets/icons/geographical-bounds.inline.svg?react'
 import geographicalPolygon from '@Pimcore/assets/icons/geographical-polygon.inline.svg?react'
@@ -262,6 +263,7 @@ import numberRange from '@Pimcore/assets/icons/number-range.inline.svg?react'
 import numberType from '@Pimcore/assets/icons/number-type.inline.svg?react'
 import objectBricks from '@Pimcore/assets/icons/object-bricks.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
+import openidConnect from '@Pimcore/assets/icons/openid-connect.inline.svg?react'
 import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.inline.svg?react'
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
@@ -996,6 +998,10 @@ moduleSystem.registerModule({
       component: formatters
     })
     iconLibrary.register({
+      name: 'gdpr-extractor',
+      component: gdprExtractor
+    })
+    iconLibrary.register({
       name: 'gender',
       component: gender
     })
@@ -1378,6 +1384,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'open-folder',
       component: openFolder
+    })
+    iconLibrary.register({
+      name: 'openid-connect',
+      component: openidConnect
     })
     iconLibrary.register({
       name: 'operator-concatenator',
