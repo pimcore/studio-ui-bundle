@@ -9,10 +9,7 @@
  */
 
 import { useState, useCallback } from 'react'
-import { isNil } from 'lodash'
-import { GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
-  useClassBulkImportPrepareMutation,
   type BulkExportAvailableItem
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
@@ -27,8 +24,7 @@ interface PrepareResult {
 interface UseBulkImportReturn {
   fileId: string | null
   availableItems: BulkExportAvailableItem[]
-  isPreparing: boolean
-  handleUpload: (file: File) => Promise<PrepareResult>
+  setUploadResult: (result: PrepareResult) => void
   handleImport: (fileId: string, items: BulkImportItem[], title: string) => void
   reset: () => void
 }
@@ -37,23 +33,12 @@ export const useBulkImport = (): UseBulkImportReturn => {
   const [fileId, setFileId] = useState<string | null>(null)
   const [availableItems, setAvailableItems] = useState<BulkExportAvailableItem[]>([])
 
-  const [triggerPrepare, { isLoading: isPreparing }] = useClassBulkImportPrepareMutation()
   const executionEngine = useExecutionEngine()
 
-  const handleUpload = useCallback(async (file: File): Promise<PrepareResult> => {
-    const result = await triggerPrepare({ body: { file } })
-
-    if (!('data' in result) || isNil(result.data)) {
-      throw new GeneralError('Bulk import prepare failed')
-    }
-
-    const { fileId: newFileId, items } = result.data
-
-    setFileId(newFileId)
-    setAvailableItems(items)
-
-    return { fileId: newFileId, items }
-  }, [triggerPrepare])
+  const setUploadResult = useCallback((result: PrepareResult): void => {
+    setFileId(result.fileId)
+    setAvailableItems(result.items)
+  }, [])
 
   const handleImport = useCallback((importFileId: string, items: BulkImportItem[], title: string): void => {
     const job = new BulkImportJob({
@@ -73,8 +58,7 @@ export const useBulkImport = (): UseBulkImportReturn => {
   return {
     fileId,
     availableItems,
-    isPreparing,
-    handleUpload,
+    setUploadResult,
     handleImport,
     reset
   }
