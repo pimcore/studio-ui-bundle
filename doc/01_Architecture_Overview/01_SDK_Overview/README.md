@@ -1,7 +1,11 @@
+---
+title: SDK Overview 
+---
+
 # SDK Overview 
 
-The Pimcore Studio UI SDK empowers developers to extend and customize specific features seamlessly.  
-This documentation provides a comprehensive overview of the SDK's core concepts and functionalities.
+The Pimcore Studio SDK lets developers extend and customize the UI through plugins, services, and component registries.
+This section covers the SDK's core concepts and how they work together.
 
 For practical examples and step-by-step guides on implementing specific features, refer to the [Getting started with your first plugin guide](../../04_Extending/01_Getting_Started_with_Your_First_Plugin.md) and explore our [Plugin Development Examples](../../04_Extending/02_Plugin_Development_Examples/README.md).
 

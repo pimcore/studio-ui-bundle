@@ -1,6 +1,11 @@
+---
+title: SDK Imports
+---
+
 # SDK Imports
 
-The Pimcore Studio UI SDK provides a set of predefined imports that developers can use to build and extend functionalities. These imports act as modules that encapsulate specific functionalities or utilities.
+The Pimcore Studio SDK provides predefined imports for building and extending functionality.
+These imports act as modules that encapsulate specific functionalities or utilities.
 
 The SDK defines the public API of Studio, meaning that not all components of the UI are exported by default. Only the components and modules intended to be used for extensions are made available through the SDK.
 

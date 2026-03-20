@@ -1,11 +1,14 @@
+---
+title: UI Components and Storybook
+---
+
 # UI Components and Storybook
 
-Pimcore Studio UI offers React components to simplify your work.  
-These components are designed to help you build consistent and efficient user interfaces.
+Pimcore Studio provides reusable React components for building consistent user interfaces.
 
 ## How to Use
 
-To use these components, import them into your React project after setting up the SDK as follows:
+Import components into your React project after setting up the SDK:
 
 ```typescript
 import { ComponentName } from '@pimcore/studio-ui-bundle/components'
@@ -14,8 +17,10 @@ import { ComponentName } from '@pimcore/studio-ui-bundle/components'
 Replace `ComponentName` with the specific component you want to use.  
 Refer to the Storybook for detailed usage examples and prop documentation.
 
-> **Hint:** Most components are based on [Ant Design](https://ant.design/).  
-> You can refer to its documentation for additional insights and best practices.
+:::tip
+Most components are based on [Ant Design](https://ant.design/).
+Refer to its documentation for additional usage details.
+:::
 
 ## Storybook
 

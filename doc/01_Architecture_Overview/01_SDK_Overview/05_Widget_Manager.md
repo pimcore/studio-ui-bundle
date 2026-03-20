@@ -1,43 +1,60 @@
+---
+title: Widget Manager
+---
+
 # Widget Manager
 
-The Widget Manager is a powerful tool that allows you to manage and interact with widgets in the Pimcore Studio UI.  
-It provides functionality to open, close, and manipulate widgets programmatically, enabling seamless integration into your custom components.
+The Widget Manager controls the layout of widgets in Pimcore Studio.
+It provides functionality to open, close, and manipulate widgets programmatically from custom components.
 
-## Example: Opening a Widget with the Widget Manager
+## Opening a Widget
 
-The following example demonstrates how to use the `useWidgetManager` hook to open a widget programmatically:
+Use the `useWidgetManager` hook to open a widget programmatically:
 
 ```typescript
+import { Button } from 'antd'
+import { useWidgetManager } from '@pimcore/studio-ui-bundle/modules/widget-manager'
+
 export const MyFirstTabComponent = (): React.JSX.Element => {
-  const widgetManager = useWidgetManager();
+  const widgetManager = useWidgetManager()
 
   function onClick(): void {
     widgetManager.openBottomWidget({
       name: 'My first widget',
       component: 'my-first-widget',
-    });
+    })
   }
 
   return (
     <div>
       <h1>My First Tab</h1>
       <p>This is a simple tab component.</p>
-      
-      <Button type="primary" onClick={onClick}>Open up my first widget</Button>
+      <Button type="primary" onClick={onClick}>Open my first widget</Button>
     </div>
-  );
+  )
 }
 ```
 
-### Key Features of the Widget Manager
+## `useWidgetManager` Hook
 
-- **Open Widgets**: Use `openBottomWidget` or similar methods to display widgets in specific areas of the UI.
-- **Close Widgets**: Programmatically close widgets when they are no longer needed.
-- **Custom Components**: Specify custom React components to be rendered within widgets.
+The hook returns the following methods:
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `openMainWidget` | `(tabConfig: WidgetManagerTabConfig) => void` | Opens a widget in the main content area |
+| `openBottomWidget` | `(tabConfig: WidgetManagerTabConfig) => void` | Opens a widget in the bottom panel |
+| `openLeftWidget` | `(tabConfig: WidgetManagerTabConfig) => void` | Opens a widget in the left sidebar |
+| `openRightWidget` | `(tabConfig: WidgetManagerTabConfig) => void` | Opens a widget in the right sidebar |
+| `updateWidget` | `(tabConfig: WidgetManagerTabConfig) => void` | Updates an existing widget's configuration |
+| `switchToWidget` | `(id: string) => void` | Activates/focuses a widget by ID |
+| `closeWidget` | `(id: string) => void` | Closes a widget by ID |
+| `isMainWidgetOpen` | `(id: string) => boolean` | Checks if a widget is open in the main area |
+| `hasOuterWidget` | `(id: string) => boolean` | Checks if a widget exists in the outer layout (sidebars/bottom) |
+| `getOpenedMainWidget` | `() => TabNode \| undefined` | Returns the currently active main widget node |
 
 ## Transform Configuration
 
-Use `transformConfig` to dynamically modify widget configuration when widgets are created. This allows configuration transformation based on widget properties:
+Use `transformConfig` to dynamically modify widget configuration when widgets are created:
 
 ```typescript
 widgetRegistry.registerWidget({
@@ -45,26 +62,30 @@ widgetRegistry.registerWidget({
   component: MyWidgetComponent,
   transformConfig: (config) => ({
     ...config,
-    translationKey: `widgets.${config.name}` // Set translation key from name
+    translationKey: `widgets.${config.name}`
   })
 })
 ```
 
 ## Title Components
 
-When registering widgets, you can customize both the tab/button titles and widget content headers using specialized title components.
+Customize both the tab/button titles and widget content headers using specialized title components.
 
 ### titleComponent - Tab/Button Titles
 
-Controls the title displayed in tabs or sidebar buttons. Use `TabTitleContainer` for full functionality with auto-detection:
+Controls the title displayed in tabs or sidebar buttons.
+Use `TabTitleContainer` for full functionality with auto-detection:
 
 ```typescript
-import { TabTitleContainer, type TabTitleContainerProps } from '@pimcore/studio-ui-bundle/modules/widget-manager'
+import {
+  TabTitleContainer,
+  type TabTitleContainerProps
+} from '@pimcore/studio-ui-bundle/modules/widget-manager'
 
 const MyCustomTitle = ({ node, modified }: TabTitleContainerProps) => {
   const config = node.getConfig()
   const customTitle = `${config.elementType || 'Widget'}`
-  
+
   return <TabTitleContainer node={node} modified={modified} title={customTitle} />
 }
 
@@ -77,14 +98,18 @@ widgetRegistry.registerWidget({
 
 ### contentTitleComponent - Widget Content Headers
 
-Controls the header inside the widget content area. Use `WidgetContentTitleView` for styled headers:
+Controls the header inside the widget content area.
+Use `WidgetContentTitleView` for styled headers:
 
 ```typescript
-import { WidgetContentTitleView, type WidgetContentTitleViewProps } from '@pimcore/studio-ui-bundle/modules/widget-manager'
+import {
+  WidgetContentTitleView,
+  type WidgetContentTitleViewProps
+} from '@pimcore/studio-ui-bundle/modules/widget-manager'
 
 const MyContentTitle = ({ node, icon, title }: WidgetContentTitleViewProps) => {
   const customTitle = `Dashboard: ${title}`
-  
+
   return (
     <WidgetContentTitleView
       node={node}
@@ -103,11 +128,18 @@ widgetRegistry.registerWidget({
 
 ### Custom Conditional Logic
 
-For advanced use cases where you need different behavior for sidebar buttons vs tabs, you can implement custom logic using `BorderTitleView` and `TabTitleView` directly. Widgets appear as border buttons when placed in sidebars, and as tabs when in the main content area:
+For advanced use cases with different behavior for sidebar buttons vs tabs,
+use `BorderTitleView` and `TabTitleView` directly.
+Widgets appear as border buttons in sidebars and as tabs in the main content area:
 
 ```typescript
 import { BorderNode } from 'flexlayout-react'
-import { BorderTitleView, TabTitleView, type TabTitleContainerProps, useWidgetManager } from '@pimcore/studio-ui-bundle'
+import {
+  BorderTitleView,
+  TabTitleView,
+  type TabTitleContainerProps,
+  useWidgetManager
+} from '@pimcore/studio-ui-bundle/modules/widget-manager'
 
 const MyAdvancedTitle = ({ node, modified }: TabTitleContainerProps) => {
   const { closeWidget } = useWidgetManager()
@@ -115,9 +147,9 @@ const MyAdvancedTitle = ({ node, modified }: TabTitleContainerProps) => {
   const isBorderNode = node.getParent() instanceof BorderNode
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
   const title = `Custom ${config.elementType ?? 'Widget'}`
-  
+
   const onClose = () => closeWidget(node.getId())
-  
+
   if (isBorderNode) {
     return (
       <BorderTitleView
@@ -126,7 +158,7 @@ const MyAdvancedTitle = ({ node, modified }: TabTitleContainerProps) => {
       />
     )
   }
-  
+
   return (
     <TabTitleView
       icon={icon}
@@ -144,17 +176,19 @@ widgetRegistry.registerWidget({
 })
 ```
 
-### Available Components
+### Available Title Components
 
-- **`TabTitleContainer`** - Full-featured with auto-detection, close buttons, modified state
-- **`BorderTitleView`** - Sidebar button style only
-- **`TabTitleView`** - Tab style only
-- **`WidgetContentTitleView`** - Simple content header without translation
-- **`TitleView`** - Basic title with icon and text
+| Component | Import from | Purpose |
+|-----------|-------------|---------|
+| `TabTitleContainer` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Full-featured with auto-detection, close buttons, modified state |
+| `BorderTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Sidebar button style only |
+| `TabTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Tab style only |
+| `WidgetContentTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Content header without translation |
 
-### Step-by-step guide
+### Step-by-Step Guide
 
-For a step-by-step guide on how to add a new widget to the Widget Manager, refer to the [How to Use the Widget Manager example](../../04_Extending/02_Plugin_Development_Examples/05_Use_the_Widget_Manager.md).
+For a step-by-step guide on adding a widget,
+refer to the [Widget Manager example](../../04_Extending/02_Plugin_Development_Examples/05_Use_the_Widget_Manager.md).
 
 ### Source
 

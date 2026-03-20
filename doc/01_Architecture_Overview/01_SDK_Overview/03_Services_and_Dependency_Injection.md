@@ -1,10 +1,12 @@
+---
+title: Services and Dependency Injection
+---
+
 # Services and Dependency Injection
 
-Services are straightforward objects that assist with specific tasks. To maximize the benefits of services, we’ve introduced a service container using [Inversify](https://github.com/inversify/InversifyJS).  
+Services are objects that handle specific tasks. The SDK uses a service container based on [Inversify](https://github.com/inversify/InversifyJS), initialized early in the application lifecycle so it is accessible throughout the app.
 
-This container is initialized early in the application lifecycle, ensuring accessibility throughout the entire app.
-
-To interact with the service container, the following three main SDK imports are relevant:
+Three main SDK imports are relevant for working with the service container:
 
 ```typescript
 import { container } from '@pimcore/studio-ui-bundle' // Provides access to the service container
@@ -12,11 +14,13 @@ import { serviceIds } from '@pimcore/studio-ui-bundle/app' // Contains identifie
 import { useInjection } from '@pimcore/studio-ui-bundle/app' // A hook for injecting services in functional components
 ```
 
-> **Note:** `serviceIds` is a list of registered services in the container. It ensures that the service you are trying to retrieve from Studio UI is properly registered in the container.
+:::note
+`serviceIds` is a list of registered services in the container. It ensures that the service you are trying to retrieve from Pimcore Studio is properly registered in the container.
+:::
 
 ## Example: Creating a New Tab
 
-Below is an example of how to create and register a new tab using the service container:
+Create and register a new tab using the service container:
 
 ```typescript
 import { container } from '@pimcore/studio-ui-bundle'

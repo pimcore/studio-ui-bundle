@@ -1,8 +1,12 @@
+---
+title: Context Menu Registry
+---
+
 # Context Menu Registry
 
-The Context Menu Registry is a centralized system for managing context menu items in Pimcore Studio UI. It enables developers to register custom menu items for different contexts such as tree nodes, grid rows, and editor toolbars.
+The Context Menu Registry is a centralized system for managing context menu items in Pimcore Studio. It enables developers to register custom menu items for different contexts such as tree nodes, grid rows, and editor toolbars.
 
-Context menu items are organized into **slots**, which are specific locations where menu items can be registered with configurable priorities.
+Context menu items are organized into **slots** - specific locations where you register menu items with configurable priorities.
 
 ## Available Context Menu Slots
 

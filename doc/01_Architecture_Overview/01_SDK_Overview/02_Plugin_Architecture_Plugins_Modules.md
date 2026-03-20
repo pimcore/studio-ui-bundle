@@ -1,3 +1,7 @@
+---
+title: Plugin Architecture, Plugins, and Modules
+---
+
 # Plugin Architecture, Plugins, and Modules
 
 ## Plugin Architecture
@@ -10,7 +14,7 @@ Overview of how a plugin would be integrated in the Pimcore Studio Core lifecycl
 
 ## Plugins
 
-Plugins empower you to enhance the Pimcore Studio UI by integrating methods directly into its lifecycle.
+Plugins extend Pimcore Studio by hooking into its lifecycle through dedicated methods.
 
 ### Key Methods
 
@@ -42,7 +46,7 @@ For more details on plugins, refer to the [Plugin system source](https://github.
 
 ## Modules
 
-Modules consist of code snippets executed immediately after initializing all services from the Studio UI Core and Plugins.  
+Modules consist of code snippets executed immediately after initializing all services from the Pimcore Studio core and plugins.  
 They run before the initial app render, enabling you to leverage existing services (such as a tab manager) to provide additional configuration for React components during rendering.
 
 ### Example: Registering a New Tab for Folder Assets

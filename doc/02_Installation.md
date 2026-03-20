@@ -1,10 +1,12 @@
+---
+title: Installation of the Studio UI Bundle
+---
+
 # Installation of the Studio UI Bundle
 
 ## Bundle Installation
 
-To install the Studio UI Bundle, follow the steps below:
-
-1) Make sure prerequisites are met:
+1) Verify these prerequisites:
 
 - [GenericExecutionEngineBundle](https://docs.pimcore.com/platform/Pimcore/Development_Tools_and_Details/Generic_Execution_Engine/) installed and activated
 - [GenericDataIndexBundle](https://docs.pimcore.com/platform/Generic_Data_Index/Installation/) installed and activated
@@ -16,7 +18,7 @@ To install the Studio UI Bundle, follow the steps below:
 composer require pimcore/studio-ui-bundle
 ```
 
-3) Make sure the bundle is enabled in the `config/bundles.php` file. The following lines should be added:
+3) Add the bundle to `config/bundles.php`:
 ```php
 use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
 // ...
