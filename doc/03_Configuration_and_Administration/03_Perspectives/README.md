@@ -4,9 +4,9 @@ title: Perspectives
 
 # Perspectives
 
-Perspectives allow creating different views in Pimcore Studio by customizing which trees, menus, and widgets are visible. Widgets provide custom tree views for subsets of documents, assets, and data objects. Together, perspectives and widgets let you tailor the interface for specific user roles or workflows.
+Perspectives and widgets let you tailor the Pimcore Studio interface
+for specific user roles or workflows by controlling which tree views
+and navigation items are visible.
 
-## Table of Contents
-
-- [Widgets](./01_Widgets.md) - custom tree views for subsets of documents, assets, and data objects
-- [Perspectives](./02_Perspectives.md) - perspective configuration and layout customization
+- [Widgets](./01_Widgets.md) - configure custom tree views for subsets of documents, assets, and data objects
+- [Perspectives](./02_Perspectives.md) - arrange widgets into panels and control navigation visibility

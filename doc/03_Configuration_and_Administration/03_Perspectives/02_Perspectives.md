@@ -1,262 +1,70 @@
-# Perspectives 
+---
+title: Perspectives
+---
 
-## General
+# Perspectives
 
-Perspectives allow creating different views in Pimcore Studio and even customize the standard perspective.
-This feature can be combined with the configuration options available for [Widgets](./01_Widgets.md).
+Perspectives define the layout of Pimcore Studio by controlling which
+[tree widgets](./01_Widgets.md) are visible and where they are positioned.
+Each perspective arranges widgets into left, right, and bottom panels
+and controls which navigation menu items are available.
 
-You can create or edit perspectives and widgets within Pimcore Studio using the [perspective editor](https://pimcore.com/docs/platform/Perspective_Editor/) bundle.
+Create and manage perspectives through the built-in perspective editor in Pimcore Studio.
 
-> **Security Note**
-> Perspectives and Widgets are not intended to be used to restrict access to data
+:::warning
+Perspectives and widgets are not intended to restrict access to data.
+Use [permissions](../02_Users_and_Roles/README.md) for access control.
+:::
 
-Please be aware that if combined with widgets, the widget settings must be defined in the `customviews.yaml` (the filename is up to you).
-The link is accomplished via the ID.
+## Perspective Configuration
 
-You can define:
+| Property | Type | Description |
+|----------|------|-------------|
+| `name` | string | Display name |
+| `icon` | ElementIcon | Icon with `type` and `value` for the perspective switcher |
+| `widgetsLeft` | array | Widgets assigned to the left panel |
+| `widgetsRight` | array | Widgets assigned to the right panel |
+| `widgetsBottom` | array | Widgets assigned to the bottom panel |
+| `expandedLeft` | string | ID of the widget expanded by default in the left panel |
+| `expandedRight` | string | ID of the widget expanded by default in the right panel |
+| `contextPermissions` | object | Navigation menu visibility (see below) |
 
-* which trees you want to see
-* where it is positioned (left/right)
-* the order and which one should be expanded by default
-* the available tree context menu items 
-* the navigation menu items
-* the standard elements on the welcome screen
-* which portlets can be added to a dashboard
+Perspectives reference widgets by their unique ID.
+Define widgets first (see [Widgets](./01_Widgets.md)),
+then assign them to the perspective's widget arrays.
 
-![Perspectives - basic examples](../../img/perspectives_example_backend.png)
+## Navigation Context Permissions
 
-You can define an arbitrary number of perspectives and switch between them via the File menu.
+The `contextPermissions` property controls which navigation menu items
+are visible in a perspective. Permissions are organized into groups
+matching the Pimcore Studio mega menu structure.
+Each group supports a `hidden` flag to hide the entire group, plus boolean flags for individual items within the group.
 
-![Perspectives - menu](../../img/perspectives_menu.png)
+## Switching Perspectives
 
-You can restrict the access to certain perspectives via the user settings.
+Users switch between perspectives through the perspective selector in Pimcore Studio.
 
-![Perspectives - miltiselect](../../img/perspectives_multiselect.png)
+## Restricting Perspective Access
 
-## The Configuration File
+Restrict which perspectives a user sees through the user settings.
+Navigate to `System` > `Users & Roles` > `Users`, select a user,
+and assign the allowed perspectives.
 
-Format and location of the perspective configuration depends on your environment.
-By default, the Symfony config is used.
-If you want to change the default behaviour, have a look at the environment-specific configuration options in the Pimcore documentation.
+## Example
 
-The example below demonstrates how the default view is prepared and how to add a special perspective.
+A perspective for catalog administrators showing only product data objects and assets:
 
-The table below, describes the most useful of available options in the configuration file.
+1. Create a widget for the product objects tree:
+   - Element type: `data-object`
+   - Root folder: `/Product Data/Cars`
+   - Classes: `['CAR']`
 
-| Reference                                                         | Value                                          | Description                                                                                |
-|-------------------------------------------------------------------|------------------------------------------------|--------------------------------------------------------------------------------------------|
-| `[perspectiveName]["icon"]`                                       | string                                         | Path to the icon file.                                                                     |
-| `[perspectiveName]["iconCls"]`                                    | string                                         | The CSS class added to the icon.                                                           |
-| `[perspectiveName]["elementTree"]`                                | array                                          | Array which contain the rows with configuration information like the tree type .           |
-| `[perspectiveName]["elementTree"][i]["type"]`                     | string (documents,objects,assets,customview)   | What type of elements will be rendered in the tree.                                        |
-| `[perspectiveName]["elementTree"][i]["position"]`                 | string (left,right)                            | a place, where the tree is initially generated                                             |
-| `[perspectiveName]["elementTree"][i]["id"]`                       | integer                                        | The id of widget elements rendered in the tree. (works only with the *customview* type)    |
-| `[perspectiveName]["toolbar"]`                                    | array                                          | that option allows to add changes in the toolbar menu.                                     |
-| `[perspectiveName]["toolbar"][i][menuName]`                       | string (file,marketing,extras,settings,search) | these are the default toolbar menus                                                        |
-| `[perspectiveName]["toolbar"][i][menuName]["hidden"]`             | boolean                                        | ability to hide a specified menu (the available list you can find in the example below)    |
-| `[perspectiveName]["toolbar"][i][menuName]["items"]["itemsName"]` | boolean                                        | You could specify there, which submenu elements you would like to generate.                |
+2. Create a perspective referencing this widget by its ID:
+   - Add the product widget to `widgetsLeft`
+   - Add a standard asset tree to `widgetsRight`
+   - Set the product widget as `expandedLeft`
+   - Hide irrelevant navigation groups via `contextPermissions`
+     (e.g., set `experienceEcommerce.hidden` to `true`)
 
-
-## Simple example
-
-Note: This is a simple example, which could be used for catalog administrators.
-
-We need only to see 
-* products (objects from a specific directory)
-* assets
-* search button
-
-To specify the range of objects you're going to use, you first need to add a widget.
-See the [Widgets](./01_Widgets.md) section for more details.
-
-The widget definition would look like this:
-
-```yaml
-#var/config/perspectives/perspective.yaml
-
-...
-4e9f892c-7734-f5fa-d6f0-31e7f9787ffc:
-    name: Cars
-    treetype: object
-    position: left
-    rootfolder: '/Product Data/Cars'
-    showroot: false
-    sort: 3
-    treeContextMenu:
-        object:
-            items:
-                add: true
-                addFolder: true
-                importCsv: true
-                cut: true
-                copy: true
-                paste: true
-                delete: true
-                rename: true
-                reload: true
-                publish: true
-                unpublish: true
-                searchAndMove: true
-                lock: true
-                unlock: true
-                lockAndPropagate: true
-                unlockAndPropagate: true
-                changeChildrenSortBy: true
-    icon: /bundles/pimcoreadmin/img/flat-white-icons/automotive.svg
-    classes: CAR
-    joins: {  }
-    id: 4e9f892c-7734-f5fa-d6f0-31e7f9787ffc
-```
-
-Let's update the `var/config/perspectives/example.yaml` by the new perspective.
-
-```yaml
-#var/config/perspectives/perspective.yaml
-
-...
-demo:
-    elementTree:
-        -
-            type: customview
-            position: left
-            sort: 0
-            expanded: false
-            hidden: false
-            id: 4e9f892c-7734-f5fa-d6f0-31e7f9787ffc
-        -
-            type: assets
-            position: right
-            sort: 0
-            expanded: false
-            hidden: false
-            treeContextMenu:
-                asset:
-                    items:
-                        add:
-                            hidden: false
-                            items:
-                                upload: true
-                                uploadCompatibility: true
-                                uploadZip: true
-                        addFolder: true
-                        rename: true
-                        copy: true
-                        cut: true
-                        paste: true
-                        pasteCut: true
-                        delete: true
-                        searchAndMove: true
-                        lock: true
-                        unlock: true
-                        lockAndPropagate: true
-                        unlockAndPropagate: true
-                        reload: true
-    iconCls: pimcore_nav_icon_perspective
-    icon: null
-    toolbar:
-        file:
-            hidden: true
-            items:
-                perspectives: false
-                dashboards: false
-                openDocument: false
-                openAsset: false
-                openObject: false
-                searchReplace: false
-                schedule: false
-                seemode: false
-                closeAll: false
-                help: false
-                about: false
-        marketing:
-            hidden: true
-            items:
-                reports: false
-                tagmanagement: false
-                targeting: false
-                seo:
-                    hidden: false
-                    items:
-                        documents: false
-                        robots: false
-                        httperrors: false
-        extras:
-            hidden: true
-            items:
-                glossary: false
-                redirects: false
-                translations: false
-                recyclebin: false
-                plugins: false
-                notesEvents: false
-                applicationlog: false
-                gdpr_data_extractor: false
-                emails: false
-                maintenance: false
-                systemtools:
-                    hidden: false
-                    items:
-                        phpinfo: false
-                        opcache: false
-                        requirements: false
-                        serverinfo: false
-                        database: false
-                        fileexplorer: false
-        settings:
-            hidden: true
-            items:
-                customReports: false
-                marketingReports: false
-                documentTypes: false
-                predefinedProperties: false
-                predefinedMetadata: false
-                system: false
-                website: false
-                web2print: false
-                users:
-                    hidden: false
-                    items:
-                        users: false
-                        roles: false
-                thumbnails: false
-                objects:
-                    hidden: false
-                    items:
-                        classes: false
-                        fieldcollections: false
-                        objectbricks: false
-                        quantityValue: false
-                        classificationstore: false
-                        bulkExport: false
-                        bulkImport: false
-                routes: false
-                cache:
-                    hidden: false
-                    items:
-                        clearAll: false
-                        clearData: false
-                        clearSymfony: false
-                        clearOutput: false
-                        clearTemp: false
-                adminTranslations: false
-                tagConfiguration: false
-                perspectiveEditor: false
-        search:
-            hidden: false
-            items:
-                quickSearch: false
-                documents: true
-                assets: false
-                objects: false
-        datahub:
-            hidden: false
-```
-
-This configuration changes the number of elements rendered in the main Pimcore menu.
-
-Also two trees were added. The first (on the right side) for assets and the second on the left side for the
-widget with product objects.
- 
-The view after switch looks like in the picture.
-
-![Custom perspective](../../img/perspectives_custom_perspective.png)
+This gives catalog administrators a focused view with only the relevant
+data objects and assets visible, and a simplified navigation menu.
