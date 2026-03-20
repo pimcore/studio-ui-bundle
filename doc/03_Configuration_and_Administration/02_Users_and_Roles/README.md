@@ -1,3 +1,7 @@
+---
+title: Users and Roles
+---
+
 # Users and Roles
 
 ## General
@@ -21,10 +25,12 @@ In Pimcore, there are two levels of user permissions:
 1) Permissions on system components,
 2) Permissions on data elements (Assets, Data Objects, and Documents). 
 
-Permissions can be granted to individual users or groups of users (called "roles" in Pimcore). 
-The following paragraphs describe how and where permissions can be set and how they will or will not affect each other.
+Grant permissions to individual users or groups of users (called "roles" in Pimcore).
+The sections below cover how and where to set permissions and how they interact.
 
-It is not mandatory to use roles, permissions can be granted to users directly. However, it is advised to use roles if there is a larger user group to manage. In the `Users/Roles` settings tab it can be decided which permissions are granted to that user or role. An individual user has a few more general settings than the role.
+Using roles is not mandatory - you can grant permissions to users directly. However, roles are recommended
+for larger user groups. In the `Users/Roles` settings tab, select which permissions to grant to a user or role.
+An individual user has a few more general settings than the role.
 
 ### System Permissions
 
@@ -34,7 +40,7 @@ It is not mandatory to use roles, permissions can be granted to users directly. 
 * Roles - Select all roles incorporated by the user
 * Perspectives - Which [perspectives](../03_Perspectives/02_Perspectives.md) are available for this user
 
-The following list outlines what the different system permissions (available for users and roles) mean:
+System permissions available for users and roles:
 
 * **Assets**: Assets tree is visible
 * **Classes**: Object classes editor visible (user can create and modify object classes)
@@ -64,34 +70,38 @@ The following list outlines what the different system permissions (available for
 * **Users**: defines whether a user may manage other users' settings and system permissions
 * **Website Settings**: User can create and modify website settings
 
-Users will benefit from any system permission that is granted to them directly or to any role they incorporate. 
-Permission granted to a role incorporated by an individual user can not be rescinded for that particular user. So it does not matter if the user's individual permissions settings checkbox is unchecked once this permission is granted through a role.
+Users benefit from any system permission granted to them directly or to any role they incorporate.
+A permission granted through a role cannot be rescinded for that particular user. Once a role grants
+a permission, unchecking the user's individual permissions checkbox has no effect.
 
 ### Element Permissions - Workspaces
 
-Beyond the permissions mentioned above, a user's access can be restricted on element basis. This can be done by defining workspaces for a user or role. Provided that a user may generally access documents, it can be specified what a user/role may do or not do with each document or workspace. The same is true for Data Objects and Assets. These settings are manipulated in the `Workspaces` tab of a user/role. 
+Beyond the permissions mentioned above, restrict a user's access on an element basis by defining workspaces
+for a user or role. Provided that a user may generally access documents, specify what a user/role may do
+or not do with each document or workspace. The same applies to Data Objects and Assets.
+Configure these settings in the `Workspaces` tab of a user/role.
 
-A user needs to be granted access to one or more workspaces. The user can not access any resources outside his workspace(s). 
+Grant a user access to one or more workspaces. The user cannot access any resources outside their workspace(s).
 
 However, there are a few general rules on element permissions that need to be regarded:
-* if an user does not have the right to list an element, all other permissions are obsolete.
-* if an user does not have the list permission on an element, all permissions on this element's children are obsolete.
+* if a user does not have the right to list an element, all other permissions are obsolete.
+* if a user does not have the list permission on an element, all permissions on this element's children are obsolete.
 
 ![User permission workspaces](../../img/permissions1.png)
 
-The user permissions on element basis are summed up as follows:
+Workspace permissions per element (applies to the element and its children):
 
-* **list**: this element (and potential child elements) can be listed in tree
-* **view**: this element (and potential child elements) can be opened
-* **save**: this element (and potential child elements) can be saved (save button visible)
-* **publish**: this element (and potential child elements) can be published (publish button visible)
-* **unpublish**: this element (and potential child elements) can be unpublished (unpublish button visible); does not exist for assets
-* **create**: new child elements can be created (does not exist for assets)
-* **delete**: this element (and potential child elements) can be deleted
-* **rename**: this element's (and potential child elements') name can be changed
-* **settings**: this element's (and potential child elements') settings can be managed i.e. the settings tab is visible; the settings permission also the path and thereby the right to move the element in tree
-* **versions**: the `versions` tab is available
-* **properties**: the `properties` tab is available and can be managed
+* **list**: list in tree
+* **view**: open in editor
+* **save**: save (save button visible)
+* **publish**: publish (publish button visible)
+* **unpublish**: unpublish (unpublish button visible); not available for assets
+* **create**: create child elements (not available for assets)
+* **delete**: delete
+* **rename**: rename
+* **settings**: manage settings (settings tab visible); also controls the path and the right to move the element in the tree
+* **versions**: access the `versions` tab
+* **properties**: manage the `properties` tab
 
 Individual users are granted access to all defined workspaces for any role they incorporate. In addition to that, users can have their own workspaces. These are added to the permissions granted by roles.
 
@@ -116,4 +126,8 @@ The configuration panel is accessible via the `Special Settings` column. The sam
 
 By using the event `Pimcore\Event\ElementEvents::ELEMENT_PERMISSION_IS_ALLOWED`, it is possible to dynamically manipulate a user's permissions on a specific element on request.
 
-Please note: When listing (tree view, search, etc.), this event is fired afterward on each element of the filtered result list. Therefore, in the case of granting a `list` permission on a disallowed element (list=0), it DOES NOT affect the listing conditions nor results (as if the element would be considered as allowed for filtering purposes).
+:::note
+When listing (tree view, search, etc.), this event fires afterward on each element of the filtered result list.
+Therefore, granting a `list` permission on a disallowed element (list=0) does NOT affect the listing conditions
+or results (the element is not considered as allowed for filtering purposes).
+:::

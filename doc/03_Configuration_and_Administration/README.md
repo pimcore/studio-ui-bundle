@@ -8,6 +8,6 @@ This section covers configuration, user management, and UI customization options
 
 ## Table of Contents
 
-- [Configuration of the Studio UI Bundle](./01_Configuration/README.md)
+- [Configuration of Pimcore Studio](./01_Configuration/README.md)
 - [Users and Roles](./02_Users_and_Roles/README.md)
 - [Perspectives](./03_Perspectives/README.md)

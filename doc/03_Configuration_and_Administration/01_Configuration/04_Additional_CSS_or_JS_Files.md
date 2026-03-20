@@ -1,12 +1,17 @@
+---
+title: Including Additional CSS or JS Files
+---
+
 # Including Additional CSS or JS Files
 
-In general, Studio UI plugins require a frontend build and entry point files to function correctly. For more details, refer to the [Getting started with your first plugin guide](../../04_Extending/01_Getting_Started_with_Your_First_Plugin.md).
+Pimcore Studio plugins typically require a frontend build and entry point files.
+For details, refer to the [Getting started with your first plugin guide](../../04_Extending/01_Getting_Started_with_Your_First_Plugin.md).
 
-However, if you want to include additional CSS or JS files that are not part of the frontend build (e.g., to add a basic CSS class or include an external script), you can configure them via the config tree as shown below:
+However, if you want to include additional CSS or JS files that are not part of the frontend build (e.g., to add a basic CSS class or include an external script), configure them in the config tree:
 
-## Regular Studio UI Resources
+## Regular Pimcore Studio Resources
 
-For the main Studio UI interface:
+For the main Pimcore Studio interface:
 
 ```yaml
 pimcore_studio_ui:

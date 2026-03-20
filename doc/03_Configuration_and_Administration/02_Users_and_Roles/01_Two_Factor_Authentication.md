@@ -1,10 +1,14 @@
+---
+title: Two Factor Authentication
+---
+
 # Two Factor Authentication
 
 Pimcore has an integrated two factor authentication using the Google Authenticator ([Android](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2), [iOS](https://itunes.apple.com/at/app/google-authenticator/id388497605))
 
 ## User Setup
 
-By default every user can enable or disable their two factor authentication freely in the profile settings.
+By default, each user enables or disables their two factor authentication in the profile settings.
  ![Settings](../../img/Icon_settings.png)
 **(Settings -> My Profile)**
 
@@ -21,7 +25,7 @@ After reloading you will be prompted to enter the verification code for the firs
  
 ## Admin Setup
 
-It is also possible to force users to use two factor authentication. This can be done in the Users menu by checking 'Two Factor Authentication required'.
+To force users to use two factor authentication, check 'Two Factor Authentication required' in the Users menu.
  ![Settings](../../img/Icon_settings.png)
 **(Settings -> Users / Roles -> Users)**
 
@@ -31,7 +35,7 @@ If this is enabled the user will have to setup two factor authentication and can
   
   
 ## Config
-If you want to change the default name / description that is displayed in the app you can do this by overwriting the following config:
+To change the default name / description displayed in the app, overwrite the following config:
 
 ```yaml
  scheb_two_factor:

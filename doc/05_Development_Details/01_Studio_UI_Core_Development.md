@@ -1,59 +1,62 @@
+---
+title: Studio UI Core Development
+---
+
 # Studio UI Core Development
 
-### How to install
+## How to install
 
 1. Navigate to the plugin directory.
 2. Change to the assets directory `cd ./assets`
 3. Install dependencies `npm install`
 
-### How to build
+## How to build
 
 Create a new build by running:
 
 `npm run build-app`
 
-### How to run the dev-server (HMR/Live reloading)
+## How to run the dev-server (HMR/Live reloading)
 
-To use hmr you need two commands constantly running.
-And they need to be executed in the order like listed:
+HMR requires two commands running simultaneously, started in the order listed:
 
-```
+```bash
 npm run dev-server-sdk
 npm run dev-server
 ```
 
-Now your dev-server should be running (the dev server started on the same URL, using HMR for live reloading).  
-You can access it under your normal project domain: 
+The dev server runs on the same URL as the project, with HMR for live reloading.
+Access it at:
 
 `{your-domain}/pimcore-studio`
 
-### Storybook
+## Storybook
 
-Pimcore studio is using [Storybook](https://storybook.js.org/) for documentation of React components.
+Pimcore Studio uses [Storybook](https://storybook.js.org/) for documentation of React components.
 
-#### Commands
+### Commands
 
+```bash
+npm run storybook # run storybook with live reloading
+npm run build-storybook # for building storybook for a static hosting
 ```
-npm run storybook // run storybook with live reloading
-npm run build-storybook // for building storybook for a static hosting
-```
 
-#### Docker environment
+### Docker environment
 
-To use Storybook in your local environment ensure that you open up port `6006`
+For local Docker environments, expose port `6006`:
 
-```
+```yaml
 node:
-  ports: 
+  ports:
     - "6006:6006"
   ...
 ```
 
-#### Nginx configuration
+### Nginx configuration
 
-You should take care of the following configuration:
+Add the following Nginx configuration:
 
-```
+```nginx
 server {
   location ^~ /storybook/ {
       proxy_pass http://node:6006/;
@@ -65,21 +68,23 @@ server {
 }
 ```
 
-Now ensure that Storybook is running via `npm run storybook`.
-Finally, you can access it under `{your-domain/storybook}`
+Start Storybook with `npm run storybook`.
+Access it at `{your-domain}/storybook`
 
-### How to test the package
+## How to test the package
 
-To test or debug implementations you can build the package locally:
+Build and link the package locally for testing:
 
-```
+```bash
 npm run build-app
 npm run build-rsbuild-plugins
 npm run generate-types
 npm link
 
-// in your bundle
+# in your bundle
 npm link @pimcore/studio-ui-bundle
 ```
 
-Please note that the link in the bundle needs to be recreated after an npm install in the bundle.
+:::note
+Re-run `npm link @pimcore/studio-ui-bundle` in the bundle after every `npm install`, as npm install removes symlinks.
+:::

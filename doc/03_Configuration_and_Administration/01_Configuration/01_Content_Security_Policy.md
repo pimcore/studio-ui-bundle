@@ -1,8 +1,15 @@
+---
+title: Content Security Policy
+---
+
 # Content Security Policy
 
 ## Overview
 
-Pimcore Studio UI provides a Content Security Policy (CSP) handler that adds an additional security layer to protect from attacks like Cross-Site Scripting (XSS) by adding a `Content-Security-Policy` HTTP header with [nonce](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) to every Studio request. CSP is **enabled by default**.
+Pimcore Studio provides a Content Security Policy (CSP) handler that adds an additional security layer
+to protect from attacks like Cross-Site Scripting (XSS) by adding a `Content-Security-Policy` HTTP header
+with [nonce](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) to every Studio request.
+CSP is **enabled by default**.
 
 Read more about [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
 
@@ -120,11 +127,13 @@ services:
         tags: ['kernel.event_subscriber']
 ```
 
-Alternatively, the `ContentSecurityPolicyHandlerInterface` can be injected directly into your services for configuration-time setup.
+Alternatively, inject the `ContentSecurityPolicyHandlerInterface` directly into your services for configuration-time setup.
 
 ## Troubleshooting
 
 - **CSP violations**: Ensure inline scripts have nonce attributes and external origins are registered
-- **Dev servers**: Development server origins (e.g., `http://localhost:3030`, `http://localhost:3031`) are automatically detected from entry point JSON files. Additional bundle-specific dev servers can be added via `CspEvent` subscriber (e.g., by scanning additional files or manually specifying origins)
+- **Dev servers**: Development server origins (e.g., `http://localhost:3030`, `http://localhost:3031`)
+  are automatically detected from entry point JSON files. Add additional bundle-specific dev servers
+  through a `CspEvent` subscriber (e.g., by scanning additional files or manually specifying origins)
 - **Production**: Configure additional resources in `additional_urls` (e.g., CDN origins)
 
