@@ -88,7 +88,7 @@ When the command is finished you should have a few new files in your `./public/b
 
 ### Register JS Entrypoint
 
-Most important is the `entrypoint.json`, which tells Pimcore where to find the generated frontend files.
+Most important is the generated `entrypoints.json` manifest in `./public/build`, which tells Pimcore where to find the generated frontend files.
 Register a `WebpackEntryPointProviderInterface` service in the Pimcore service container:
 
 - [WebpackEntryPointProvider.php](https://github.com/pimcore/studio-example-bundle/blob/main/src/Webpack/WebpackEntryPointProvider.php)
