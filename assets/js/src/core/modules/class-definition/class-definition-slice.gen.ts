@@ -1031,14 +1031,18 @@ export type BulkExportAvailableItem = {
 export type BulkExportParameters = {
     /** Items to export */
     items: {
+        /** Type of the item */
         type?: string;
+        /** Name of the item */
         name?: string;
     }[];
 };
 export type BulkImportParameters = {
     /** Items to import from the uploaded file */
     items: {
+        /** Type of the item */
         type?: string;
+        /** Name of the item */
         name?: string;
     }[];
 };
@@ -1106,9 +1110,9 @@ export type Layout = {
     /** Name */
     name: string;
     /** Data Type */
-    dataType: string;
+    datatype: string;
     /** Field Type */
-    fieldType: string;
+    fieldtype: string;
     /** Type */
     type: string | null;
     /** Layout */
@@ -1452,7 +1456,7 @@ export type FieldCollectionTreeNodeFolder = {
     /** Key of folder with group_ prefix */
     key: string;
     /** Group name */
-    name?: string;
+    name: string;
     /** icon */
     icon: ElementIcon;
     /** Group */
@@ -1521,7 +1525,9 @@ export type ObjectBrickDetail = {
     isWriteable: boolean;
     /** Class definitions assigned to this object brick */
     classDefinitions: {
+        /** Name of the class */
         classname?: string;
+        /** Name of the field */
         fieldname?: string;
     }[];
 };

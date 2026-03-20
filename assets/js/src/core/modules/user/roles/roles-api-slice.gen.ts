@@ -64,6 +64,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Role Management"],
             }),
+            roleGetShareCollection: build.query<RoleGetShareCollectionApiResponse, RoleGetShareCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/roles-share-list` }),
+                providesTags: ["Role Management"],
+            }),
             roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/role/search`,
@@ -141,6 +145,11 @@ export type RoleGetTreeApiArg = {
     /** Filter roles by parent id. */
     parentId: number;
 };
+export type RoleGetShareCollectionApiResponse = /** status 200 List of roles for sharing */ {
+    totalItems: number;
+    items: SimpleUserRole[];
+};
+export type RoleGetShareCollectionApiArg = void;
 export type RoleSearchApiResponse = /** status 200 List of roles */ {
     totalItems: number;
     items: SimpleUserRole[];
@@ -288,5 +297,6 @@ export const {
     useRoleGetCollectionQuery,
     useRoleListWithPermissionQuery,
     useRoleGetTreeQuery,
+    useRoleGetShareCollectionQuery,
     useRoleSearchQuery,
 } = injectedRtkApi;

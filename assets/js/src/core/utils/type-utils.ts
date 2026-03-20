@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isString, isEmpty, trim } from 'lodash'
+import { isString, isEmpty, trim, isNil, isObject } from 'lodash'
 
 // Difference from Lodash: primitive values like booleans and numbers are NOT considered empty
 export const isEmptyValue = (value: unknown): boolean => {
@@ -36,4 +36,24 @@ export const isEmptyValue = (value: unknown): boolean => {
  */
 export const isNonEmptyString = (value: unknown): value is string => {
   return isString(value) && !isEmpty(trim(value))
+}
+
+/**
+ * Converts any value to a string representation.
+ * Objects/arrays are JSON-stringified, nil values return empty string.
+ */
+export const toDisplayString = (value: unknown): string => {
+  if (isNil(value)) {
+    return ''
+  }
+
+  if (isString(value)) {
+    return value
+  }
+
+  if (isObject(value)) {
+    return JSON.stringify(value)
+  }
+
+  return String(value)
 }

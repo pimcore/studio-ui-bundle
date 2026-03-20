@@ -512,6 +512,7 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+data-type.select: Select
 open-data-object.button: Open Data Object
 open-data-object-modal.title: Open Data Object
 open-data-object-modal.label: Please enter the ID or Path of the data object
@@ -1421,6 +1422,7 @@ navigation.experience-ecommerce: Experience & E-commerce
 navigation.asset-management: Asset Management
 navigation.image-thumbnails: Image Thumbnails
 navigation.video-thumbnails: Video Thumbnails
+navigation.predefined-asset-metadata: Predefined Asset Metadata
 navigation.automation-integration: Automation & Integration
 navigation.translations: Translations
 navigation.appearance-branding: Appearance & Branding
@@ -1517,6 +1519,20 @@ widget.select-options: Select Options
 widget.appearance-branding: Appearance & Branding
 widget.image-thumbnails: Image Thumbnails
 widget.video-thumbnails: Video Thumbnails
+widget.predefined-asset-metadata: Predefined Asset Metadata
+predefined-asset-metadata.new: New
+predefined-asset-metadata.columns.icon: " "
+predefined-asset-metadata.columns.name: Name
+predefined-asset-metadata.columns.group: Group
+predefined-asset-metadata.columns.description: Description
+predefined-asset-metadata.columns.type: Type
+predefined-asset-metadata.columns.value: Value
+predefined-asset-metadata.columns.config: Configuration
+predefined-asset-metadata.columns.language: Language
+predefined-asset-metadata.columns.target-type: Target Type
+predefined-asset-metadata.columns.actions: Actions
+predefined-asset-metadata.duplicate-entry.title: Predefined Metadata already exists
+predefined-asset-metadata.duplicate-entry.error: An entry with this name and language combination already exists. Please change one of the following values.
 appearance-branding.title: "Appearance & Branding"
 image-thumbnails.title: "Image Thumbnails"
 image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."

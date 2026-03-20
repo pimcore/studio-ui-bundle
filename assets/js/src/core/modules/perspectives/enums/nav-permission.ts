@@ -31,6 +31,7 @@ export enum NavPermission {
   BulkImport = 'dataManagement.dataModel_bulkImport',
 
   AssetThumbnails = 'assetManagement.assetThumbnails',
+  PredefinedAssetMetadata = 'assetManagement.predefinedAssetMetadata',
 
   ExperienceEcommerceHidden = 'experienceEcommerce.hidden',
   Mails = 'experienceEcommerce.emails',

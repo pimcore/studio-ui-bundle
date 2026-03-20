@@ -153,6 +153,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userGetShareCollection: build.query<UserGetShareCollectionApiResponse, UserGetShareCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
+                providesTags: ["User Management"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -294,6 +298,11 @@ export type UserGetTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
+export type UserGetShareCollectionApiResponse = /** status 200 List of users for sharing */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type UserGetShareCollectionApiArg = void;
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -657,4 +666,5 @@ export const {
     useUserUpdateProfileMutation,
     useUserUploadImageMutation,
     useUserGetTreeQuery,
+    useUserGetShareCollectionQuery,
 } = injectedRtkApi;
