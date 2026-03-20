@@ -33,7 +33,7 @@ npm install @pimcore/studio-ui-bundle@canary react@18.3.x react-dom@18.3.x
 
 :::warning
 Ensure the React version matches the React version Pimcore Studio uses.
-::: 
+:::
 
 With our dependency in place we should now setup our bundling process. We recommend [Rsbuild](https://rsbuild.rs/). Of course you also can choose your preferred custom bundling process,
 or add additional steps like linting etc. to the bundling process. 
