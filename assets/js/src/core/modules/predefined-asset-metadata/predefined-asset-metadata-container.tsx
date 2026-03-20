@@ -21,7 +21,7 @@ import { useLazyMetadataGetCollectionQuery } from '@Pimcore/modules/asset/editor
 import trackError, { ApiError, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type PredefinedAssetMetadataRow, usePredefinedAssetMetadata } from './hooks/use-predefined-asset-metadata'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { Button } from 'antd'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -72,7 +72,7 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
 
   const handleRefresh = (): void => {
     const inputEl = searchInputRef.current?.input
-    if (inputEl !== undefined && inputEl !== null) {
+    if (!isNil(inputEl)) {
       inputEl.value = ''
     }
     void fetchMetadata()
