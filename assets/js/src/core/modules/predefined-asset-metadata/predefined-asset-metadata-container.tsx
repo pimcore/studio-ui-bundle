@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -32,7 +32,7 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
 
   const [predefinedAssetMetadataRows, setPredefinedAssetMetadataRows] = useState<PredefinedAssetMetadataRow[]>([])
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true)
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [triggerQuery, { error }] = useLazyMetadataGetCollectionQuery()
 
@@ -67,12 +67,13 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
   }, [])
 
   const handleSearch = (value: string): void => {
-    setSearchTerm(value)
     void fetchMetadata(value.length > 0 ? value : undefined)
   }
 
   const handleRefresh = (): void => {
-    setSearchTerm('')
+    if (searchInputRef.current !== null) {
+      searchInputRef.current.value = ''
+    }
     void fetchMetadata()
   }
 
@@ -136,11 +137,10 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
           <Title>{t('widget.predefined-asset-metadata')}</Title>
           <SearchInput
             loading={ isDataLoading }
-            onChange={ (e) => { setSearchTerm(e.target.value) } }
             onClear={ () => { handleSearch('') } }
             onSearch={ handleSearch }
             placeholder="Search"
-            value={ searchTerm }
+            ref={ searchInputRef }
             withPrefix={ false }
             withoutAddon={ false }
           />
