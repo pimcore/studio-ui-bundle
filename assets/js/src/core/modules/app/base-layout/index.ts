@@ -14,6 +14,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { MainNav } from '@Pimcore/modules/app/base-layout/main-nav/main-nav'
 import { Search } from '@Pimcore/modules/search/search'
+import { NotificationButton } from '@Pimcore/modules/execution-engine/notification/notification-button'
 import { Logo as LogoImage } from '@Pimcore/components/logo/logo'
 import { Logo } from './right-sidebar/logo'
 import { SubscriptionDetails } from './right-sidebar/logo/subscription-details'
@@ -32,6 +33,12 @@ moduleSystem.registerModule({
       name: 'search',
       priority: 200,
       component: Search
+    })
+
+    componentRegistry.registerToSlot(componentConfig.leftSidebar.slot.name, {
+      name: 'runningJobs',
+      priority: 200,
+      component: NotificationButton
     })
 
     componentRegistry.registerToSlot(componentConfig.rightSidebar.slot.name, {

@@ -36,6 +36,7 @@ export enum UserPermission {
   Classes = 'classes',
   FieldCollections = 'fieldcollections',
   ObjectBricks = 'objectbricks',
+  ClassificationStore = 'classificationstore',
   SelectOptions = 'selectoptions',
   QuantityValues = 'quantityValueUnits',
   AssetMetadata = 'asset_metadata'

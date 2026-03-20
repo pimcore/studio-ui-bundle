@@ -25,6 +25,10 @@ export class DynamicTypeFieldDefinitionCalculatedValue extends DynamicTypeFieldD
     return [...super.getGroup(), 'other']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'classificationStore']
+  }
+
   getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),

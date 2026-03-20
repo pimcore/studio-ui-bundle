@@ -74,6 +74,8 @@ asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
+asset.upload.folder-drop.creating-folders: Creating folders
+asset.upload.folder-drop.creating-folders-hint: "Please wait while the folder structure is being created…"
 upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
 upload.error.max-file-size-exceeded: "File size exceeds the maximum allowed size of {{maxSize}}"
 upload.error.generic: "The file could not be uploaded."
@@ -620,6 +622,12 @@ modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
+notifications.new-notification: New Notification
+notifications.from: From
+notifications.hide: Hide
+notifications.new-notifications.show: View
+notifications.new-notifications.title.single: You have a new notification!
+notifications.new-notifications.title: You have new notifications!
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
@@ -1003,7 +1011,7 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
-jobs.notification.title: Notifications
+jobs.notification.title: Running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
@@ -1406,6 +1414,8 @@ navigation.data-model-definitions: Data Model Definitions
 navigation.class-definitions: Classes
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
+navigation.bulk-export: Bulk Export
+navigation.bulk-import: Bulk Import
 navigation.quantity-values: Quantity Values
 navigation.select-options: Select Options
 navigation.experience-ecommerce: Experience & E-commerce
@@ -1846,6 +1856,44 @@ classification-store.column.id: ID
 classification-store.column.group: Group
 classification-store.column.name: Name
 classification-store.column.description: Description
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
+classification-store.tabs.collections: Collections
+classification-store.tabs.groups: Groups
+classification-store.tabs.keys: Keys
+classification-store.add-store: Add store
+classification-store.rename-store: Rename store
+classification-store.delete-store: "Delete store \"{{storeName}}\"?"
+classification-store.add-group: Add group
+classification-store.rename-group: Rename group
+classification-store.delete-group: "Delete group \"{{groupName}}\"?"
+classification-store.add-collection: Add collection
+classification-store.rename-collection: Rename collection
+classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
+classification-store.add-key: Add key
+classification-store.rename-key: Rename key
+classification-store.delete-key: "Delete key \"{{keyName}}\"?"
+classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
+classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.edit-definition: Edit definition
+classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Name
+classification-store.columns.title: Title
+classification-store.columns.type: Type
+classification-store.columns.description: Description
+classification-store.columns.actions: Actions
+classification-store.columns.mandatory: Mandatory
+classification-store.columns.sorter: Sorter
+classification-store.columns.enabled: Enabled
+classification-store.relations-title: "Keys in group: {{name}}"
+classification-store.select-group-hint: Select a group to view its keys
+classification-store.collection-relations-title: "Groups in collection: {{name}}"
+classification-store.select-collection-hint: Select a collection to view its groups
+classification-store.select-key: Select key
+classification-store.search-keys: Search keys…
+classification-store.select-group: Select group
+classification-store.search-groups: Search groups…
 home: Home
 preview.label: Preview
 preview.desktop: Desktop
@@ -2522,3 +2570,26 @@ owner: Owner
 reverse-object-relation.tooltip: "Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored."
 disabled-fields: Disabled fields
 allowed-targets: Allowed Targets
+bulk-export.title: Bulk Export
+bulk-export.select-all: Select All
+bulk-export.deselect-all: Deselect All
+bulk-export.export: Export
+bulk-export.cancel: Cancel
+bulk-export.type.class: Classes
+bulk-export.type.customlayout: Custom Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Bulk Import
+bulk-import.cancel: Cancel
+bulk-import.next: Next
+bulk-import.back: Back
+bulk-import.import: Import
+bulk-import.job-title: Bulk Import
+bulk-import.browse-files: Browse Files
+bulk-import.remove-file: Remove
+bulk-import.select-all: Select All
+bulk-import.deselect-all: Deselect All
+bulk-import.type.class: Classes
+bulk-import.type.customlayout: Custom Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks

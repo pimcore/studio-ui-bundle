@@ -125,6 +125,7 @@ export const Grid = ({
   const tableElement = useRef<HTMLTableElement>(null)
   const scrollElementRef = useRef<HTMLDivElement>(null) // ref to the scrollable container used by row and column virtualizers
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
+  const warnedUndefinedRowIdRef = useRef(false)
 
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
@@ -209,12 +210,27 @@ export const Grid = ({
     onSortingChange: updateSorting,
     enableSorting,
     manualSorting,
-    getRowId: props.setRowId,
+    getRowId: props.setRowId !== undefined
+      ? (originalRow, index, parent): string => {
+          const rowId = props.setRowId?.(originalRow, index, parent)
+
+          if (rowId !== undefined) {
+            return rowId
+          }
+
+          if (props.isLoading !== true && !warnedUndefinedRowIdRef.current) {
+            console.warn('Grid: setRowId returned undefined for at least one row. Falling back to index-based row id for that row. Ensure setRowId always returns a defined string for real data rows.')
+            warnedUndefinedRowIdRef.current = true
+          }
+
+          return parent?.id !== undefined ? `${String(parent.id)}.${String(index)}` : String(index)
+        }
+      : undefined,
     enableMultiSorting: false,
     meta: {
       onUpdateCellData: props.onUpdateCellData
     }
-  }), [data, columns, rowSelection, props.initialState])
+  }), [data, columns, rowSelection, props.initialState, props.setRowId, props.isLoading])
 
   if (props.resizable === true) {
     tableProps.columnResizeMode = columnResizeMode

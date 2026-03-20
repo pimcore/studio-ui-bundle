@@ -13,11 +13,27 @@ import { type NotificationGetCollectionApiArg, useNotificationDeleteAllMutation,
 import { ApiError, trackError } from '@sdk/modules/app'
 import { NotificationsView } from './notifications-view'
 
-const NotificationsContainer = (): React.JSX.Element => {
+interface NotificationsContainerProps {
+  activeNotification?: number
+}
+
+const NotificationsContainer = ({ activeNotification }: NotificationsContainerProps): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize, page])
+  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({
+    body: {
+      filters: {
+        page,
+        pageSize,
+        includeDescendants: true,
+        sortFilter: {
+          key: 'creationDate',
+          direction: 'DESC'
+        }
+      }
+    }
+  }), [page, pageSize])
 
   const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
@@ -39,6 +55,7 @@ const NotificationsContainer = (): React.JSX.Element => {
 
   return (
     <NotificationsView
+      activeNotification={ activeNotification }
       deleteLoading={ deleteLoading }
       deleteNotificationsForUser={ deleteNotificationsForUser }
       isFetching={ isFetching }

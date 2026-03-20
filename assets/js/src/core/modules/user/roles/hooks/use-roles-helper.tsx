@@ -10,7 +10,6 @@
 
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { roleOpened, roleClosed, roleUpdated } from '@Pimcore/modules/user/roles/roles-slice'
-import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import {
   api, type RoleGetCollectionApiResponse,
@@ -25,6 +24,7 @@ import {
   type RoleFolderDeleteByIdApiResponse,
   type RoleGetByIdApiResponse, type RoleSearchApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface IAddRoleArgs {
   parentId: number
@@ -50,23 +50,17 @@ interface IUseRoleReturn {
 
 export const useRoleHelper = (): IUseRoleReturn => {
   const { t } = useTranslation()
-  const [notificationApi] = useNotification()
+  const messageApi = useMessage()
   const dispatch = useAppDispatch()
 
   const activeId = useAppSelector(state => state.role.activeId)
   const getAllIds = useAppSelector(state => state.role.ids)
 
-  const handleNotification = (successMessage, error): void => {
+  const handleNotification = async (successMessage: string, error?: any): Promise<void> => {
     if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: error?.data?.message ?? t('error')
-      })
+      await messageApi.error((error?.data?.message as string) ?? t('error'))
     } else {
-      notificationApi.open({
-        type: 'success',
-        message: successMessage
-      })
+      await messageApi.success(successMessage)
     }
   }
   function openRole (id: number): void {
@@ -100,7 +94,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCreate.initiate({ body: { parentId, name } }))
 
-    handleNotification(t('roles.add-item.success'), error)
+    await handleNotification(t('roles.add-item.success'), error)
     return data
   }
 
@@ -108,7 +102,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderCreate.initiate({ body: { parentId, name } }))
 
-    handleNotification(t('roles.add-folder.success'), error)
+    await handleNotification(t('roles.add-folder.success'), error)
 
     return data
   }
@@ -117,7 +111,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleDeleteById.initiate({ id }))
 
-    handleNotification(t('roles.remove-item.success'), error)
+    await handleNotification(t('roles.remove-item.success'), error)
 
     return data
   }
@@ -126,7 +120,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderDeleteById.initiate({ id }))
 
-    handleNotification(t('roles.remove-folder.success'), error)
+    await handleNotification(t('roles.remove-folder.success'), error)
 
     return data
   }
@@ -135,7 +129,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
-    handleNotification(t('roles.clone-item.success'), error)
+    await handleNotification(t('roles.clone-item.success'), error)
     dispatch(roleOpened(data.id as number))
     return data
   }
@@ -159,7 +153,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
         perspectives: item.perspectives
       }
     }))
-    handleNotification(t('roles.save-item.success'), error)
+    await handleNotification(t('roles.save-item.success'), error)
 
     dispatch(roleUpdated(id))
 
@@ -172,7 +166,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const role = await fetchRoleById({ id })
     const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...role, parentId } }))
 
-    handleNotification(t('roles.save-item.success'), error)
+    await handleNotification(t('roles.save-item.success'), error)
     return data
   }
 
