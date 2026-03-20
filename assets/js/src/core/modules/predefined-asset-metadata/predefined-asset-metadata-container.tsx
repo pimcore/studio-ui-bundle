@@ -16,7 +16,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput } from '@sdk/components'
+import { Box, IconTextButton, SearchInput, type InputRef } from '@sdk/components'
 import { useLazyMetadataGetCollectionQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -32,7 +32,7 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
 
   const [predefinedAssetMetadataRows, setPredefinedAssetMetadataRows] = useState<PredefinedAssetMetadataRow[]>([])
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchInputRef = useRef<InputRef>(null)
 
   const [triggerQuery, { error }] = useLazyMetadataGetCollectionQuery()
 
@@ -71,8 +71,9 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
   }
 
   const handleRefresh = (): void => {
-    if (searchInputRef.current !== null) {
-      searchInputRef.current.value = ''
+    const inputEl = searchInputRef.current?.input
+    if (inputEl !== undefined && inputEl !== null) {
+      inputEl.value = ''
     }
     void fetchMetadata()
   }
