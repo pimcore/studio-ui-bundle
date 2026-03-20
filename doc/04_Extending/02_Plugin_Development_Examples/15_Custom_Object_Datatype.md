@@ -1,3 +1,7 @@
+---
+title: How to Add a Custom Object Datatype
+---
+
 # How to Add a Custom Object Datatype
 
 ## Overview

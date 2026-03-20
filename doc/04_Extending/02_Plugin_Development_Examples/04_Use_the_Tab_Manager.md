@@ -1,8 +1,12 @@
+---
+title: How to Use the Tab Manager
+---
+
 # How to Use the Tab Manager
 
 ## Overview
 
-This example demonstrates how you can use the different tab-managers of Pimcore Studio. Commonly you want to add new tabs or overwrite existing one in the different element types
+Use the different tab managers of Pimcore Studio to add new tabs or overwrite existing ones in the different element types.
 
 ## Screenshot
 

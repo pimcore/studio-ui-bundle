@@ -1,3 +1,7 @@
+---
+title: How to Add a Custom Document Editable
+---
+
 # How to Add a Custom Document Editable
 
 ## Overview
@@ -7,7 +11,7 @@ appear inline in the document editor alongside built-in types like input, textar
 
 ## Details
 
-Adding a custom document editable requires both a PHP backend and a Studio UI frontend plugin:
+Adding a custom document editable requires both a PHP backend and a Pimcore Studio frontend plugin:
 
 **Backend (PHP):**
 - An editable model class extending `Pimcore\Model\Document\Editable` and implementing `EditmodeDataInterface`
@@ -23,21 +27,21 @@ Adding a custom document editable requires both a PHP backend and a Studio UI fr
 **Service Configuration:**
 - The bundle's `WebpackEntryPointProvider` must be tagged with both
   `pimcore_studio_ui.webpack_entry_point_provider` and
-  `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` —
-  document editables render inside an iframe with its own plugin bootstrap
+  `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe`,
+  since document editables render inside an iframe with its own plugin bootstrap
 
 The example implements the `markdown` type as a plain `<textarea>` with monospace font,
 demonstrating the full pattern without external dependencies.
 
 For the full backend + frontend guide, see the
-[Adding Document Editables](https://github.com/pimcore/pimcore/blob/2025.x/doc/10_Extending_Pimcore/03_Custom_Extension_Guides/03_Adding_Document_Editables.md)
+[Adding Document Editables](https://github.com/pimcore/pimcore/blob/2026.x/doc/10_Extending_Pimcore/03_Custom_Extension_Guides/03_Adding_Document_Editables.md)
 documentation in the Pimcore core.
 
 ## Code Example on GitHub
 
 > [Custom Document Editable example on GitHub](https://github.com/pimcore/studio-example-bundle/tree/main/assets/js/src/examples/custom-document-editable).
 
-- [Plugin entry (index.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/index.ts) — binds the dynamic type and registers the module
-- [Module (markdown-editable-module.tsx)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/modules/markdown-editable-module.tsx) — registers the type in the `DynamicTypeDocumentEditableRegistry`
-- [Dynamic type (dynamic-type-document-editable-markdown.tsx)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/dynamic-types/definitions/dynamic-type-document-editable-markdown.tsx) — extends `DynamicTypeDocumentEditableAbstract` with a `<textarea>` component
-- [Styles (dynamic-type-document-editable-markdown.styles.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/dynamic-types/definitions/dynamic-type-document-editable-markdown.styles.ts) — theme-aware styling via `createStyles`
+- [Plugin entry (index.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/index.ts) - binds the dynamic type and registers the module
+- [Module (markdown-editable-module.tsx)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/modules/markdown-editable-module.tsx) - registers the type in the `DynamicTypeDocumentEditableRegistry`
+- [Dynamic type (dynamic-type-document-editable-markdown.tsx)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/dynamic-types/definitions/dynamic-type-document-editable-markdown.tsx) - extends `DynamicTypeDocumentEditableAbstract` with a `<textarea>` component
+- [Styles (dynamic-type-document-editable-markdown.styles.ts)](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-document-editable/dynamic-types/definitions/dynamic-type-document-editable-markdown.styles.ts) - theme-aware styling via `createStyles`

@@ -1,3 +1,7 @@
+---
+title: How to Use Dynamic Types
+---
+
 # How to Use Dynamic Types
 
 ## Overview

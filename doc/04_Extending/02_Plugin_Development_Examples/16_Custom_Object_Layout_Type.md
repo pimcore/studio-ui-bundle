@@ -1,3 +1,7 @@
+---
+title: How to Add a Custom Object Layout Type
+---
+
 # How to Add a Custom Object Layout Type
 
 ## Overview
@@ -8,7 +12,7 @@ editor's "Add Layout Component" dropdown and render as structural
 containers in the data object editor.
 
 Unlike data types, layout types do **not** require GDI adapters,
-Studio Backend data adapters, or grid column definitions — they are
+Studio Backend data adapters, or grid column definitions - they are
 purely structural.
 
 ## Files Overview

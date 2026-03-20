@@ -1,7 +1,11 @@
+---
+title: How to Customize Context Menus
+---
+
 # How to Customize Context Menus
 
 ## Overview
-This example demonstrates how to add custom items to context menus and modify existing menu items in the Pimcore Studio UI. Context menus appear on right-click in tree views, grids, and other areas.
+Add custom items to context menus and modify existing menu items in Pimcore Studio. Context menus appear on right-click in tree views, grids, and other areas.
 
 ## Example 1: Add a Custom Context Menu Item
 ![Custom Context Menu Item](../../img/examples/context-menu-custom-item.png)

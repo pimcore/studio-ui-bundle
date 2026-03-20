@@ -1,3 +1,7 @@
+---
+title: How to Add a Custom Grid Column
+---
+
 # How to Add a Custom Grid Column
 
 ## Overview

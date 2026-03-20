@@ -1,3 +1,7 @@
+---
+title: How to Add a Custom GDPR Data Extractor Provider
+---
+
 # How to Add a Custom GDPR Data Extractor Provider
 
 ## Overview

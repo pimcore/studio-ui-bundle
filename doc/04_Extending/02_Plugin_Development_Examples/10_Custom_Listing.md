@@ -1,7 +1,11 @@
+---
+title: How to Create a Custom Listing
+---
+
 # How to Create a Custom Listing
 
 ## Overview
-This example demonstrates how you can create a Custom Listing based on an existing Data Object Listing
+Create a Custom Listing based on an existing Data Object Listing.
 
 ## Screenshot
 ![Custom Listing Example](../../img/examples/custom-listing.jpg)
