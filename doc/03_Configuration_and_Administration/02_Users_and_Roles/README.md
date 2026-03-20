@@ -6,7 +6,7 @@ title: Users and Roles
 
 ## General
 
-User permissions in Pimcore are based on a users and roles concept. Each user can have several roles and both - users and roles - can have permissions. 
+User permissions in Pimcore are based on users and roles. Each user can have several roles, and both users and roles can have permissions. 
  
 Users and roles are configured in Pimcore Studio at `Settings` > `Users & Roles` > `Users` and
  `Settings` > `Users & Roles` > `Roles`. 
