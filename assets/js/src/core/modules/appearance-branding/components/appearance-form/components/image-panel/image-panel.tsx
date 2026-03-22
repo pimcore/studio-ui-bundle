@@ -21,12 +21,14 @@ interface ImagePanelProps {
   fieldName: string | string[]
   width?: string | number | null
   height?: string | number | null
+  dataTestId?: string
 }
 
-export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150 }: ImagePanelProps): React.JSX.Element => {
+export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150, dataTestId }: ImagePanelProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
+    <div data-testid={ dataTestId }>
     <Panel
       border={ false }
       collapsed={ false }
@@ -68,5 +70,6 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
         />
       </Form.Item>
     </Panel>
+    </div>
   )
 }
