@@ -80,6 +80,7 @@ export const ReloadButton = (): React.JSX.Element => {
         title={ t('toolbar.reload.confirmation') }
       >
         <IconButton
+          data-testid="data-object-editor-reload-button"
           icon={ { value: 'refresh' } }
         >
           {t('toolbar.reload')}
