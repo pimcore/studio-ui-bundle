@@ -88,6 +88,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
+            data-testid="listing-filter-clear-button"
             icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
@@ -96,6 +97,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
           </IconTextButton>
 
           <Button
+            data-testid="listing-filter-apply-button"
             onClick={ handleApplyClick }
             type='primary'
           >
@@ -114,6 +116,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             <Text>{t('toggle.advanced-mode')}</Text>
             <Switch
               checked={ isAdvancedMode }
+              data-testid="listing-filter-advanced-toggle"
               onChange={ () => {
                 setIsAdvancedMode(!isAdvancedMode)
               } }
