@@ -39,26 +39,24 @@ export const FieldDefinitionTextareaFormFields = (props: FieldDefinitionAbstract
         <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <>
-            <Form.Item
-              label={ t('max-length') }
-              name="maxLength"
-              rules={ [{ min: 0, type: 'number' }] }
-            >
-              <InputNumber
-                min={ 0 }
-                precision={ 0 }
-              />
-            </Form.Item>
+      {!isCustomLayout && (
+        <>
+          <Form.Item
+            label={ t('max-length') }
+            name="maxLength"
+            rules={ [{ min: 0, type: 'number' }] }
+          >
+            <InputNumber
+              min={ 0 }
+              precision={ 0 }
+            />
+          </Form.Item>
 
-            <Form.Item name="excludeFromSearchIndex">
-              <Switch labelRight={ t('exclude-from-search-index') } />
-            </Form.Item>
-          </>
-          )
-        : null}
+          <Form.Item name="excludeFromSearchIndex">
+            <Switch labelRight={ t('exclude-from-search-index') } />
+          </Form.Item>
+        </>
+      )}
     </>
   )
 }

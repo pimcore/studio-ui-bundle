@@ -51,7 +51,7 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
         <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
-      {(!isCustomLayout || !isInClassificationStore) && (
+      {!isCustomLayout && !isInClassificationStore && (
       <>
         <Form.Item
           label={ t('column-length') }
