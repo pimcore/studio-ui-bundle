@@ -11,14 +11,18 @@
 import { Button } from '@Pimcore/components/button/button'
 import { CollapseItem } from '@Pimcore/components/collapse/collapse'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { ImportModal } from '@Pimcore/components/import-modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 import { Space } from '@Pimcore/components/space/space'
-import { type BulkExportAvailableItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import {
+  type BulkExportAvailableItem,
+  type BulkImportPrepareResponse
+} from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { BulkExportItemsTable } from '@Pimcore/modules/bulk-export/components/bulk-export-modal/components/bulk-export-items-table'
-import React, { useState, useMemo } from 'react'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import React, { useState, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BulkImportUploadStep } from './components/bulk-import-upload-step'
 import { type BulkImportItem } from './context/bulk-import-context'
 import { useBulkImport } from './hooks/use-bulk-import'
 import { isNil } from 'lodash'
@@ -39,9 +43,9 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
   const { t } = useTranslation()
 
   const [step, setStep] = useState<Step>('upload')
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const uploadSucceededRef = useRef(false)
 
-  const { fileId, availableItems, isPreparing, handleUpload, handleImport, reset } = useBulkImport()
+  const { fileId, availableItems, setUploadResult, handleImport, reset } = useBulkImport()
 
   const groupedItems = useMemo(() => {
     return availableItems.reduce<Record<string, BulkExportAvailableItem[]>>((groups, item) => {
@@ -66,12 +70,12 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
     })
   }, [groupedItems])
 
-  const onUpload = async (): Promise<void> => {
-    if (isNil(selectedFile)) return
-
-    const { items } = await handleUpload(selectedFile)
-    const allItems: BulkImportItem[] = items.map((item) => ({ type: item.type, name: item.name }))
+  const handleUploadSuccess = (response: unknown): void => {
+    const data = response as BulkImportPrepareResponse
+    setUploadResult({ fileId: data.fileId, items: data.items })
+    const allItems: BulkImportItem[] = data.items.map((item) => ({ type: item.type, name: item.name }))
     selectAll(allItems)
+    uploadSucceededRef.current = true
     setStep('select')
   }
 
@@ -84,7 +88,6 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
 
   const resetState = (): void => {
     setStep('upload')
-    setSelectedFile(null)
     deselectAll()
     reset()
   }
@@ -98,27 +101,19 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
     closeModal()
   }
 
-  const uploadFooter = (
-    <ModalFooter>
-      <Button onClick={ handleClose }>
-        {t('bulk-import.cancel')}
-      </Button>
-
-      <Button
-        disabled={ isNil(selectedFile) || isPreparing }
-        loading={ isPreparing }
-        onClick={ onUpload }
-        type='primary'
-      >
-        {t('bulk-import.next')}
-      </Button>
-    </ModalFooter>
-  )
+  const handleUploadModalClose = (open: boolean): void => {
+    if (!open) {
+      if (uploadSucceededRef.current) {
+        uploadSucceededRef.current = false
+        return
+      }
+      handleClose()
+    }
+  }
 
   const selectFooter = (
     <ModalFooter>
       <Button
-        disabled={ isPreparing }
         onClick={ handleBack }
       >
         {t('bulk-import.back')}
@@ -135,67 +130,75 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
   )
 
   return (
-    <Modal
-      { ...modalProps }
-      footer={ step === 'upload' ? uploadFooter : selectFooter }
-      limitContentHeight
-      onCancel={ handleClose }
-      size='L'
-      title={ t('bulk-import.title') }
-    >
+    <>
       {step === 'upload' && (
-        <BulkImportUploadStep
-          isPreparing={ isPreparing }
-          onFileSelect={ setSelectedFile }
-          selectedFile={ selectedFile }
+        <ImportModal
+          accept='.json,application/json'
+          acceptMimeTypes={ ['application/json'] }
+          action={ `${getPrefix()}/class/bulk-import/prepare` }
+          onOpenChange={ handleUploadModalClose }
+          onUploadSuccess={ handleUploadSuccess }
+          open={ modalProps.open }
+          showSuccessMessage={ false }
+          title={ t('bulk-import.title') }
+          uploadButtonLabel={ t('bulk-import.next') }
         />
       )}
 
       {step === 'select' && (
-        <Flex
-          gap={ 'extra-small' }
-          vertical
+        <Modal
+          footer={ selectFooter }
+          limitContentHeight
+          onCancel={ handleClose }
+          open
+          size='L'
+          title={ t('bulk-import.title') }
         >
-          <Flex gap='small'>
-            <Button
-              onClick={ () => {
-                const allItems: BulkImportItem[] = availableItems.map((item) => ({
-                  type: item.type,
-                  name: item.name
-                }))
-                selectAll(allItems)
-              } }
-              size='small'
-            >
-              {t('bulk-import.select-all')}
-            </Button>
-
-            <Button
-              onClick={ deselectAll }
-              size='small'
-            >
-              {t('bulk-import.deselect-all')}
-            </Button>
-          </Flex>
-
-          <Space direction='vertical'>
-            {sortedTypes.map((type) => (
-              <CollapseItem
-                defaultActive
-                key={ type }
-                label={ t(`bulk-import.type.${type}`) }
-                theme='default'
+          <Flex
+            gap={ 'extra-small' }
+            vertical
+          >
+            <Flex gap='small'>
+              <Button
+                onClick={ () => {
+                  const allItems: BulkImportItem[] = availableItems.map((item) => ({
+                    type: item.type,
+                    name: item.name
+                  }))
+                  selectAll(allItems)
+                } }
+                size='small'
               >
-                <BulkExportItemsTable
-                  isSelected={ isSelected }
-                  items={ groupedItems[type] }
-                  toggleItem={ toggleItem }
-                />
-              </CollapseItem>
-            ))}
-          </Space>
-        </Flex>
+                {t('bulk-import.select-all')}
+              </Button>
+
+              <Button
+                onClick={ deselectAll }
+                size='small'
+              >
+                {t('bulk-import.deselect-all')}
+              </Button>
+            </Flex>
+
+            <Space direction='vertical'>
+              {sortedTypes.map((type) => (
+                <CollapseItem
+                  defaultActive
+                  key={ type }
+                  label={ t(`bulk-import.type.${type}`) }
+                  theme='default'
+                >
+                  <BulkExportItemsTable
+                    isSelected={ isSelected }
+                    items={ groupedItems[type] }
+                    toggleItem={ toggleItem }
+                  />
+                </CollapseItem>
+              ))}
+            </Space>
+          </Flex>
+        </Modal>
       )}
-    </Modal>
+    </>
   )
 }

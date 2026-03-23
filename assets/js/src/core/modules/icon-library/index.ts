@@ -99,6 +99,7 @@ import countriesMultiple from '@Pimcore/assets/icons/countries-multiple.inline.s
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
 import crm from '@Pimcore/assets/icons/crm.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
+import customLayout from '@Pimcore/assets/icons/custom-layout.inline.svg?react'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg?react'
 import customerAutomation from '@Pimcore/assets/icons/customer-automation.inline.svg?react'
 import customerDuplicate from '@Pimcore/assets/icons/customer-duplicate.inline.svg?react'
@@ -728,6 +729,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'crop',
       component: crop
+    })
+    iconLibrary.register({
+      name: 'custom-layout',
+      component: customLayout
     })
     iconLibrary.register({
       name: 'custom-metadata',
