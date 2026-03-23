@@ -50,16 +50,14 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <Form.Item name="index">
-            <Switch
-              disabled={ props.context.disableIndex }
-              labelRight={ t('index') }
-            />
-          </Form.Item>
-          )
-        : null}
+      {!isCustomLayout && (
+      <Form.Item name="index">
+        <Switch
+          disabled={ props.context.disableIndex }
+          labelRight={ t('index') }
+        />
+      </Form.Item>
+      )}
 
       {/* @todo check behavior for unique fields */}
       {props.context.hideUnique !== true && (

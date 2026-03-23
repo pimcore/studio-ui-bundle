@@ -35,47 +35,45 @@ export const FieldDefinitionSliderFormFields = (props: FieldDefinitionAbstractFo
         <Input />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <>
-            <Form.Item
-              label={ t('min-value') }
-              name="minValue"
-            >
-              <InputNumber />
-            </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('min-value') }
+          name="minValue"
+        >
+          <InputNumber />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('max-value') }
-              name="maxValue"
-            >
-              <InputNumber />
-            </Form.Item>
+        <Form.Item
+          label={ t('max-value') }
+          name="maxValue"
+        >
+          <InputNumber />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('increment-step') }
-              name="increment"
-            >
-              <InputNumber />
-            </Form.Item>
+        <Form.Item
+          label={ t('increment-step') }
+          name="increment"
+        >
+          <InputNumber />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('decimal-precision') }
-              name="decimalPrecision"
-              rules={ [{ min: 0, type: 'number' }] }
-            >
-              <InputNumber
-                min={ 0 }
-                precision={ 0 }
-              />
-            </Form.Item>
+        <Form.Item
+          label={ t('decimal-precision') }
+          name="decimalPrecision"
+          rules={ [{ min: 0, type: 'number' }] }
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
 
-            <Form.Item name="vertical">
-              <Switch labelRight={ t('vertical') } />
-            </Form.Item>
-          </>
-          )
-        : null}
+        <Form.Item name="vertical">
+          <Switch labelRight={ t('vertical') } />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }

@@ -27,20 +27,18 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
         <Input />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <Form.Item
-            label={ t('min-length') }
-            name="minimumLength"
-            rules={ [{ min: 0, type: 'number' }] }
-          >
-            <InputNumber
-              min={ 0 }
-              precision={ 0 }
-            />
-          </Form.Item>
-          )
-        : null}
+      {!isCustomLayout && (
+      <Form.Item
+        label={ t('min-length') }
+        name="minimumLength"
+        rules={ [{ min: 0, type: 'number' }] }
+      >
+        <InputNumber
+          min={ 0 }
+          precision={ 0 }
+        />
+      </Form.Item>
+      )}
     </>
   )
 }

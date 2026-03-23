@@ -37,22 +37,20 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
 
   getCustomLayoutOptions (context: FieldDefinitionContext): React.JSX.Element {
     return (
-      <>
-        <FormKit.Panel
-          theme="card-with-highlight"
-          title={ t('layout-options') }
-        >
-          <Form.Item name="collapsible">
-            <Switch labelRight={ t('collapsible') } />
-          </Form.Item>
-          <Form.Item name="collapsed">
-            <Switch labelRight={ t('collapsed') } />
-          </Form.Item>
-          <Form.Item name="border">
-            <Switch labelRight={ t('border') } />
-          </Form.Item>
-        </FormKit.Panel>
-      </>
+      <FormKit.Panel
+        theme="card-with-highlight"
+        title={ t('layout-options') }
+      >
+        <Form.Item name="collapsible">
+          <Switch labelRight={ t('collapsible') } />
+        </Form.Item>
+        <Form.Item name="collapsed">
+          <Switch labelRight={ t('collapsed') } />
+        </Form.Item>
+        <Form.Item name="border">
+          <Switch labelRight={ t('border') } />
+        </Form.Item>
+      </FormKit.Panel>
     )
   }
 

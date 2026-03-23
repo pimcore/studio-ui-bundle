@@ -28,35 +28,33 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
         <Input />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <>
-            <FieldDefinitionDecimalSettings />
+      {!isCustomLayout && (
+      <>
+        <FieldDefinitionDecimalSettings />
 
-            <Form.Item name="integer">
-              <Switch labelRight={ t('integer') } />
-            </Form.Item>
+        <Form.Item name="integer">
+          <Switch labelRight={ t('integer') } />
+        </Form.Item>
 
-            <Form.Item name="unsigned">
-              <Switch labelRight={ t('unsigned') } />
-            </Form.Item>
+        <Form.Item name="unsigned">
+          <Switch labelRight={ t('unsigned') } />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('min-value') }
-              name="minValue"
-            >
-              <InputNumber />
-            </Form.Item>
+        <Form.Item
+          label={ t('min-value') }
+          name="minValue"
+        >
+          <InputNumber />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('max-value') }
-              name="maxValue"
-            >
-              <InputNumber />
-            </Form.Item>
-          </>
-          )
-        : null}
+        <Form.Item
+          label={ t('max-value') }
+          name="maxValue"
+        >
+          <InputNumber />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }
