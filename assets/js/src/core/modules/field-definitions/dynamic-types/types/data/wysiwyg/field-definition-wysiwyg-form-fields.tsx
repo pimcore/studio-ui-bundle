@@ -35,35 +35,33 @@ export const FieldDefinitionWysiwygFormFields = (props: FieldDefinitionAbstractF
         <Input />
       </Form.Item>
 
-      {!isCustomLayout
-        ? (
-          <>
-            <Form.Item
-              label={ t('toolbar-config') }
-              name="toolbarConfig"
-            >
-              <TextArea />
-            </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('toolbar-config') }
+          name="toolbarConfig"
+        >
+          <TextArea />
+        </Form.Item>
 
-            <Form.Item
-              name="excludeFromSearchIndex"
-            >
-              <Switch labelRight={ t('exclude-from-search-index') } />
-            </Form.Item>
+        <Form.Item
+          name="excludeFromSearchIndex"
+        >
+          <Switch labelRight={ t('exclude-from-search-index') } />
+        </Form.Item>
 
-            <Form.Item
-              label={ t('max-length') }
-              name="maxCharacters"
-              rules={ [{ min: 0, type: 'number' }] }
-            >
-              <InputNumber
-                min={ 0 }
-                precision={ 0 }
-              />
-            </Form.Item>
-          </>
-          )
-        : null}
+        <Form.Item
+          label={ t('max-length') }
+          name="maxCharacters"
+          rules={ [{ min: 0, type: 'number' }] }
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }

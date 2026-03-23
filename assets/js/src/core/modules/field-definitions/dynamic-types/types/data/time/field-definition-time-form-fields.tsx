@@ -35,7 +35,6 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
       </Form.Item>
 
       {!isCustomLayout && (
-      <>
         <FormKit.Panel
           border
           theme="fieldset"
@@ -79,7 +78,6 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
           </Button>
 
         </FormKit.Panel>
-      </>
       )
       }
     </>
