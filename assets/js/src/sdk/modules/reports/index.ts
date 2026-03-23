@@ -24,5 +24,6 @@ export * from '@Pimcore/modules/reports/reports-view/components/report-chart/rep
 export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
 export * from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
+export * from '@Pimcore/modules/reports/reports-view/helpers'
 
 export * as ReportsApiSlice from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
