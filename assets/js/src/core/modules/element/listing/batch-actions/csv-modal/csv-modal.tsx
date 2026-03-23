@@ -148,8 +148,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       }
 
       const promise = fetchCreateFolderCsv({
+        id,
         body: {
-          folders: [id],
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
@@ -175,7 +175,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           config: {
             delimiter,
             header
-          }
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

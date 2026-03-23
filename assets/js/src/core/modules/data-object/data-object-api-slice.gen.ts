@@ -186,7 +186,7 @@ const injectedRtkApi = api
                 DataObjectPatchFolderByIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/folder`,
+                    url: `/pimcore-studio/api/data-objects/folder/${queryArg.id}`,
                     method: "PATCH",
                     body: queryArg.body,
                 }),
@@ -476,10 +476,10 @@ export type DataObjectPatchFolderByIdApiResponse =
         jobRunId: number;
     };
 export type DataObjectPatchFolderByIdApiArg = {
+    /** Id of the folder */
+    id: number;
     body: {
         data: {
-            /** Folder ID */
-            folderId: number;
             parentId?: number | null;
             index?: number | null;
             key?: string | null;
@@ -488,7 +488,7 @@ export type DataObjectPatchFolderByIdApiArg = {
             childrenSortOrder?: string | null;
             published?: boolean | null;
             editableData?: object | null;
-        }[];
+        };
         filters?: ExportAllFilter;
         classId: string;
     };
@@ -940,9 +940,9 @@ export type SelectOption = {
         [key: string]: string | number | boolean | object;
     };
     /** Object Reference */
-    objectReference: string;
+    objectReference: string | number;
     /** Formated Path */
-    formatedPath: string;
+    formatedPath: string | number;
 };
 export type SelectOption2 = {
     /** AdditionalAttributes */

@@ -26,17 +26,18 @@ import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
  * Can be used directly or extended by specific job handlers
  */
 export class MessageBusJobHandler extends AbstractMessageHandler {
-  private jobRunId: number
+  protected jobRunId: number
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
-  private currentStep: number = 1
+  protected currentStep: number = 1
   private readonly totalSteps?: number
-  private lastProgressValue: number = -1
+  protected lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
-  private readonly polling: JobRunPolling
+  protected readonly stepDescriptions?: Record<number, string>
+  protected polling: JobRunPolling
 
   private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -48,6 +49,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.jobRunId = options.jobRunId
     this.totalSteps = options.totalSteps
     this.title = options.title
+    this.stepDescriptions = options.stepDescriptions
 
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
@@ -106,12 +108,15 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
    * Calculate progress percent from message data
    * Handles both step-based progress (if totalSteps > 1) and direct progress values (0-100)
    */
-  private calculateProgress (data: any): number | null {
-    if (!isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1) {
+  protected calculateProgress (data: any): number | null {
+    const hasSteps = !isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1
+    const hasProgress = !isNil(data?.progress)
+
+    if (hasSteps) {
       return Math.max(0, Math.round(((data.currentStep - 1) / data.totalSteps) * 100))
     }
 
-    if (!isNil(data?.progress)) {
+    if (hasProgress) {
       return Math.max(0, Math.min(100, data.progress as number))
     }
 
@@ -148,7 +153,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return job
   }
 
-  private updateJob (changes: Partial<MessageBusJob>): void {
+  protected updateJob (changes: Partial<MessageBusJob>): void {
     const job = this.getJob()
     const nextJobState = { ...job, ...changes }
 
@@ -166,7 +171,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }))
   }
 
-  private transitionToChildJob (newJobRunId: number): void {
+  protected transitionToChildJob (newJobRunId: number): void {
     const oldJobRunId = this.jobRunId
 
     this.jobRunId = newJobRunId
@@ -179,19 +184,29 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     messageBus.unregisterHandler(oldJobRunId)
     messageBus.registerHandler(this)
 
+    // Recreate polling for the child job
+    this.polling = new JobRunPolling(this.jobRunId, {
+      onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
+      onError: (error) => { console.error('Job run polling error:', error) }
+    })
+
     this.lastProgressValue = -1
 
     this.updateJob({
       status: JobStatus.RUNNING,
       progress: 0,
-      currentStep: this.currentStep
+      currentStep: this.currentStep,
+      jobRunId: newJobRunId
     })
   }
 
-  private async handleStatusUpdate (data: any): Promise<void> {
+  /**
+   * @returns true if a child job transition occurred (caller should stop further processing)
+   */
+  private async handleStatusUpdate (data: any): Promise<boolean> {
     if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
       this.transitionToChildJob(Number(data.messages.jobRunChildId))
-      return
+      return true
     }
 
     const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
@@ -229,9 +244,15 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     } else if (data.status === 'running') {
       this.updateJob({ status: JobStatus.RUNNING })
     }
+
+    return false
   }
 
-  private handleProgressUpdate (progress: number, data: any): void {
+  protected handleProgressUpdate (progress: number, data: any): void {
+    if (progress < this.lastProgressValue && progress !== 0) {
+      return
+    }
+
     if (Math.abs(progress - this.lastProgressValue) < 1 && progress !== 100) {
       return
     }
@@ -260,9 +281,25 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     await this.processUpdate(polledData)
   }
 
-  private async processUpdate (data: any): Promise<void> {
+  protected async processUpdate (data: any): Promise<void> {
     if (!isNil(data?.status)) {
-      await this.handleStatusUpdate(data)
+      const transitioned = await this.handleStatusUpdate(data)
+      if (transitioned) {
+        return
+      }
+    }
+
+    const stepChanges: Partial<MessageBusJob> = {}
+    if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
+      this.currentStep = data.currentStep
+      stepChanges.currentStep = data.currentStep
+      stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
+    }
+    if (!isNil(data?.totalSteps)) {
+      stepChanges.totalSteps = data.totalSteps
+    }
+    if (Object.keys(stepChanges).length > 0) {
+      this.updateJob(stepChanges)
     }
 
     const progress = this.calculateProgress(data)
@@ -274,8 +311,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
 export interface MessageBusJob extends AbstractJob {
   progress?: number
+  indeterminate?: boolean
   currentStep?: number
   totalSteps?: number
+  stepDescriptionKey?: string
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
   messages?: string[]
@@ -294,6 +333,7 @@ export interface MessageBusJobHandlerOptions {
   jobRunId: number
   title: string | ((job: MessageBusJob) => string)
   totalSteps?: number
+  stepDescriptions?: Record<number, string>
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void

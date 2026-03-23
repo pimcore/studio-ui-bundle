@@ -9,6 +9,8 @@
  */
 
 import { AbstractBatchEditJob, type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
+import { type MessageBusJobHandler, type MessageBusJobHandlerOptions } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { CombinedProgressJobHandler } from '../../message-handlers/message-bus-job/combined-progress-job-handler'
 
 export interface DataObjectFolderBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchObjectsInFolder: (args: any) => Promise<any>
@@ -34,15 +36,23 @@ export class DataObjectFolderBatchEditJob extends AbstractBatchEditJob {
     this.classId = options.classId
   }
 
+  protected override createHandler (options: MessageBusJobHandlerOptions): MessageBusJobHandler {
+    return new CombinedProgressJobHandler({
+      ...options,
+      stepDescriptions: {
+        1: 'jobs.job.step.preparing-elements',
+        2: 'jobs.job.step.patching-elements'
+      }
+    })
+  }
+
   protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchObjectsInFolder({
+      id: this.folderId,
       body: {
-        data: [
-          {
-            folderId: this.folderId,
-            editableData: this.values
-          }
-        ],
+        data: {
+          editableData: this.values
+        },
         filters: this.filters,
         classId: this.classId
       }

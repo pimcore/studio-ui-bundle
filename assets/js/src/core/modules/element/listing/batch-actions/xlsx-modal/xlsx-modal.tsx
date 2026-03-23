@@ -146,8 +146,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
       }
 
       const promise = fetchCreateFolderXlsx({
+        id,
         body: {
-          folders: [id],
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
@@ -171,7 +171,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             header
-          }
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

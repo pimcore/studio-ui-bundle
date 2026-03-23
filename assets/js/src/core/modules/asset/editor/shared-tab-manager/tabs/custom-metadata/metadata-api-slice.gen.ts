@@ -34,7 +34,11 @@ const injectedRtkApi = api
                 MetadataPredefinedCreateApiResponse,
                 MetadataPredefinedCreateApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/metadata/predefined`, method: "POST" }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/metadata/predefined`,
+                    method: "POST",
+                    body: queryArg.createPredefinedMetadata,
+                }),
                 invalidatesTags: ["Metadata"],
             }),
             metadataPredefinedUpdate: build.mutation<
@@ -104,7 +108,9 @@ export type MetadataGetCollectionApiArg = {
 };
 export type MetadataPredefinedCreateApiResponse =
     /** status 200 Newly created predefined metadata entry */ PredefinedMetadata;
-export type MetadataPredefinedCreateApiArg = void;
+export type MetadataPredefinedCreateApiArg = {
+    createPredefinedMetadata: CreatePredefinedMetadata;
+};
 export type MetadataPredefinedUpdateApiResponse =
     /** status 200 Updated predefined metadata entry */ PredefinedMetadata;
 export type MetadataPredefinedUpdateApiArg = {
@@ -170,6 +176,24 @@ export type CustomMetadata = {
     type: string;
     /** Data */
     data: any | null;
+};
+export type CreatePredefinedMetadata = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+    /** Description */
+    description: string | null;
+    /** Target sub type */
+    targetSubType: string | null;
+    /** Data */
+    data: any | null;
+    /** Config */
+    config: string | null;
+    /** Language */
+    language: string | null;
+    /** Group */
+    group: string | null;
 };
 export type UpdatePredefinedMetadata = {
     /** Name */

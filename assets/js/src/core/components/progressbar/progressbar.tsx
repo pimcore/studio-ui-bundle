@@ -30,10 +30,10 @@ export const Progressbar = ({ progressStatus, description, descriptionAction, ..
         </div>
       </div>
       <Progress
+        status='normal'
         { ...props }
         aria-labelledby={ 'progressbarLabel' }
         showInfo={ false }
-        status='normal'
       />
       <div className={ 'progressbar-status' }>
         <p>{progressStatus}</p>

@@ -58,7 +58,7 @@ export class DownloadJob implements JobInterface {
           label: t('jobs.job.button-download'),
           handler: () => {
             const a = document.createElement('a')
-            a.href = downloadUrl.replace('{jobRunId}', jobRunId.toString())
+            a.href = downloadUrl.replace('{jobRunId}', context.jobRunId.toString())
             a.download = ''
             a.click()
           }
