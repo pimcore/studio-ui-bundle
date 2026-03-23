@@ -92,7 +92,7 @@ export const useFormatPath = (): UseFormatPathReturn => {
     itemsToRequest: IFormatPathItem[]
   ): void => {
     data.items?.forEach(item => {
-      const originalItem = itemsToRequest.find(reqItem => `${reqItem.type}_${reqItem.id}` === item.objectReference)
+      const originalItem = itemsToRequest.find(reqItem => `${reqItem.type}_${reqItem.id}` === String(item.objectReference))
       if (!isNil(originalItem)) {
         const cacheKey = buildCacheKey(dataObjectId, fieldName, originalItem.type, originalItem.id)
         formatPathCache.set(cacheKey, item.formatedPath)

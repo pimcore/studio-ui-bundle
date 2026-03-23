@@ -12,7 +12,7 @@ import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/mess
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
-import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
+import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
 import { isFunction, isNil, throttle } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
@@ -20,11 +20,10 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
 import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
+import { type MessageBusJob, type JobCompletionData, type MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
 
-/**
- * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
- * Can be used directly or extended by specific job handlers
- */
+export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
+
 export class MessageBusJobHandler extends AbstractMessageHandler {
   protected jobRunId: number
   private job: MessageBusJob | null = null
@@ -104,10 +103,6 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return this.title
   }
 
-  /**
-   * Calculate progress percent from message data
-   * Handles both step-based progress (if totalSteps > 1) and direct progress values (0-100)
-   */
   protected calculateProgress (data: any): number | null {
     const hasSteps = !isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1
     const hasProgress = !isNil(data?.progress)
@@ -200,9 +195,6 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     })
   }
 
-  /**
-   * @returns true if a child job transition occurred (caller should stop further processing)
-   */
   private async handleStatusUpdate (data: any): Promise<boolean> {
     if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
       this.transitionToChildJob(Number(data.messages.jobRunChildId))
@@ -212,20 +204,12 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
 
     if (isComplete) {
-      let jobStatus: JobStatus
-      switch (data.status) {
-        case 'finished':
-          jobStatus = JobStatus.SUCCESS
-          break
-        case 'finished_with_errors':
-          jobStatus = JobStatus.FINISHED_WITH_ERRORS
-          break
-        case 'failed':
-          jobStatus = JobStatus.FAILED
-          break
-        default:
-          jobStatus = JobStatus.FAILED
+      const statusMap: Record<string, JobStatus> = {
+        finished: JobStatus.SUCCESS,
+        finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
+        failed: JobStatus.FAILED
       }
+      const jobStatus = statusMap[data.status] ?? JobStatus.FAILED
 
       const completionData: JobCompletionData = {
         isSuccessful: String(data.status) === 'finished',
@@ -307,34 +291,4 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       this.handleProgressUpdate(progress, data)
     }
   }
-}
-
-export interface MessageBusJob extends AbstractJob {
-  progress?: number
-  indeterminate?: boolean
-  currentStep?: number
-  totalSteps?: number
-  stepDescriptionKey?: string
-  onRetry?: () => void | Promise<void>
-  onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
-  messages?: string[]
-  jobRunId: number
-}
-
-export interface JobCompletionData {
-  isSuccessful: boolean
-  isFinished: boolean
-  isFailed: boolean
-  status: JobStatus
-  payload: any
-}
-
-export interface MessageBusJobHandlerOptions {
-  jobRunId: number
-  title: string | ((job: MessageBusJob) => string)
-  totalSteps?: number
-  stepDescriptions?: Record<number, string>
-  onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
-  onRetry?: () => void | Promise<void>
-  onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 }
