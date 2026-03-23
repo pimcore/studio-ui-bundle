@@ -42,7 +42,8 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
   const allowedTypes = config.config?.objects?.allowedTypes
   const allowedClasses = config.config?.objects?.allowedClasses
 
-  const typeRestriction: TypeFilterDecoratorConfig['restrictedOptions'] = allowedTypes ?? []
+  const effectiveAllowedTypes = allowedTypes ?? (allowedClasses !== undefined && allowedClasses !== null && allowedClasses.length > 0 ? ['object', 'variant'] : [])
+  const typeRestriction: TypeFilterDecoratorConfig['restrictedOptions'] = effectiveAllowedTypes
   const classRestriction: ClassDefinitionSelectionDecoratorConfig['classRestriction'] =
     allowedClasses?.map((className) => ({ classes: className })) ?? []
 
