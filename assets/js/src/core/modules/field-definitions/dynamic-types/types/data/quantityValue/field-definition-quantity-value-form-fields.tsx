@@ -93,37 +93,36 @@ export const FieldDefinitionQuantityValueFormFields = (props: FieldDefinitionAbs
             showSearch
           />
         </Form.Item>
+
+        <Form.Item name="autoConvert">
+          <Switch labelRight={ t('auto-convert') } />
+        </Form.Item>
+
+        <FieldDefinitionDecimalSettings />
+
+        <Form.Item name="integer">
+          <Switch labelRight={ t('integer') } />
+        </Form.Item>
+
+        <Form.Item name="unsigned">
+          <Switch labelRight={ t('unsigned') } />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('min-value') }
+          name="minValue"
+        >
+          <InputNumber />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('max-value') }
+          name="maxValue"
+        >
+          <InputNumber />
+        </Form.Item>
       </>
       )}
-
-      <Form.Item name="autoConvert">
-        <Switch labelRight={ t('auto-convert') } />
-      </Form.Item>
-
-      <FieldDefinitionDecimalSettings />
-
-      <Form.Item name="integer">
-        <Switch labelRight={ t('integer') } />
-      </Form.Item>
-
-      <Form.Item name="unsigned">
-        <Switch labelRight={ t('unsigned') } />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('min-value') }
-        name="minValue"
-      >
-        <InputNumber />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('max-value') }
-        name="maxValue"
-      >
-        <InputNumber />
-      </Form.Item>
-
     </>
   )
 }

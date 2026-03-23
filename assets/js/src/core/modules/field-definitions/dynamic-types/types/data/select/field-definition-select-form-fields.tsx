@@ -17,6 +17,7 @@ import { FieldDefinitionOptionsSourceFields } from '@Pimcore/modules/field-defin
 export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
+  const isInClassificationStore = props.context.area.includes('classification-store')
 
   return (
     <>
@@ -31,16 +32,18 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
       {!isCustomLayout && (
         <>
 
-          <Form.Item
-            label={ t('column-length') }
-            name="columnLength"
-            rules={ [{ min: 0, type: 'number' }] }
-          >
-            <InputNumber
-              min={ 0 }
-              precision={ 0 }
-            />
-          </Form.Item>
+            {!isInClassificationStore && (
+            <Form.Item
+              label={ t('column-length') }
+              name="columnLength"
+              rules={ [{ min: 0, type: 'number' }] }
+            >
+              <InputNumber
+                min={ 0 }
+                precision={ 0 }
+              />
+            </Form.Item>
+            )}
 
           <FormKit.Panel
             border

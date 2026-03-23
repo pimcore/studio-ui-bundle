@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
+  const isInClassificationStore = props.context.area.includes('classification-store')
 
   return (
     <>
@@ -50,20 +51,22 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
         <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
-      {!isCustomLayout && (
-      <Form.Item
-        label={ t('column-length') }
-        name="columnLength"
-        rules={ [{ min: 0, type: 'number' }] }
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
-      )}
+      {(!isCustomLayout || !isInClassificationStore) && (
+      <>
+        <Form.Item
+          label={ t('column-length') }
+          name="columnLength"
+          rules={ [{ min: 0, type: 'number' }] }
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
 
-      <FieldDefinitionRegexValidation />
+        <FieldDefinitionRegexValidation />
+      </>
+      )}
 
     </>
   )

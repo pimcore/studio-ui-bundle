@@ -35,23 +35,26 @@ export const FieldDefinitionLanguageMultiselectFormFields = (props: FieldDefinit
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('multiselect-render-type') }
-        name="renderType"
-      >
-        <Select
-          options={ [
-            { label: 'List', value: 'list' },
-            { label: 'Tags', value: 'tags' }
-          ] }
-        />
-      </Form.Item>
-
       {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('multiselect-render-type') }
+          name="renderType"
+        >
+          <Select
+            options={ [
+              { label: 'List', value: 'list' },
+              { label: 'Tags', value: 'tags' }
+            ] }
+          />
+        </Form.Item>
+
         <Form.Item name="onlySystemLanguages">
           <Switch labelRight={ t('only-configured-languages') } />
         </Form.Item>
-      )}
+      </>
+      )
+        }
     </>
   )
 }

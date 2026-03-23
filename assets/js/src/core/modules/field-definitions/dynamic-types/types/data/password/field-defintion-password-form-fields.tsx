@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
     <>
@@ -26,6 +27,7 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
         <Input />
       </Form.Item>
 
+      {!isCustomLayout && (
       <Form.Item
         label={ t('min-length') }
         name="minimumLength"
@@ -36,7 +38,7 @@ export const FieldDefinitionPasswordFormFields = (props: FieldDefinitionAbstract
           precision={ 0 }
         />
       </Form.Item>
-
+      )}
     </>
   )
 }

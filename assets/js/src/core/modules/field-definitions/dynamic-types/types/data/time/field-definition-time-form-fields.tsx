@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   function resetMinMax (): void {
     form.setFieldValue('minValue', null, { triggerChange: true })
@@ -33,50 +34,52 @@ export const FieldDefinitionTimeFormFields = (props: FieldDefinitionAbstractForm
         <Input />
       </Form.Item>
 
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('min-max-settings') }
-      >
-
-        <Form.Item
-          label={ t('increment-step') }
-          name="increment"
+      {!isCustomLayout && (
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('min-max-settings') }
         >
-          <InputNumber />
-        </Form.Item>
 
-        <Form.Item
-          label={ t('min-value') }
-          name="minValue"
-        >
-          <DatePicker.TimePicker
-            outputFormat="HH:mm"
-            outputType="dateString"
-            showSecond={ false }
-          />
-        </Form.Item>
+          <Form.Item
+            label={ t('increment-step') }
+            name="increment"
+          >
+            <InputNumber />
+          </Form.Item>
 
-        <Form.Item
-          label={ t('max-value') }
-          name="maxValue"
-        >
-          <DatePicker.TimePicker
-            outputFormat="HH:mm"
-            outputType="dateString"
-            showSecond={ false }
-          />
-        </Form.Item>
+          <Form.Item
+            label={ t('min-value') }
+            name="minValue"
+          >
+            <DatePicker.TimePicker
+              outputFormat="HH:mm"
+              outputType="dateString"
+              showSecond={ false }
+            />
+          </Form.Item>
 
-        <Button onClick={ () => {
-          resetMinMax()
-        } }
-        >
-          { t('reset') }
-        </Button>
+          <Form.Item
+            label={ t('max-value') }
+            name="maxValue"
+          >
+            <DatePicker.TimePicker
+              outputFormat="HH:mm"
+              outputType="dateString"
+              showSecond={ false }
+            />
+          </Form.Item>
 
-      </FormKit.Panel>
+          <Button onClick={ () => {
+            resetMinMax()
+          } }
+          >
+            { t('reset') }
+          </Button>
 
+        </FormKit.Panel>
+      )
+      }
     </>
   )
 }
