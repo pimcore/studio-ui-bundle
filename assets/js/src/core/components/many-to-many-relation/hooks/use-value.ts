@@ -121,11 +121,11 @@ export const useValue = (
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
 
-  function mapNewValues (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string | number, formatedPath: string }> }): DisplayManyToManyRelationValue {
+  function mapNewValues (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string | number, formatedPath: string | number }> }): DisplayManyToManyRelationValue {
     return value.map((item): DisplayManyToManyRelationValueItem => ({
       ...item,
       originalPath: item.fullPath,
-      fullPath: data.items.find(i => String(i.objectReference) === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
+      fullPath: String(data.items.find(i => String(i.objectReference) === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath)
     }))
   }
 
@@ -164,7 +164,7 @@ export const useValue = (
 
   function applyFormattingWithLoadingState (
     items: ManyToManyRelationValue,
-    cachedData?: { items: Array<{ objectReference: string | number, formatedPath: string }> }
+    cachedData?: { items: Array<{ objectReference: string | number, formatedPath: string | number }> }
   ): DisplayManyToManyRelationValue {
     return items.map((item): DisplayManyToManyRelationValueItem => {
       const objectReference = `${item.type}_${item.id}`
@@ -173,7 +173,7 @@ export const useValue = (
       return {
         ...item,
         originalPath: item.fullPath,
-        fullPath: cachedItem?.formatedPath ?? item.fullPath,
+        fullPath: String(cachedItem?.formatedPath ?? item.fullPath),
         loading: isNil(cachedItem)
       }
     })
