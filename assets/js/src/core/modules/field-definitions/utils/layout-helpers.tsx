@@ -123,7 +123,7 @@ export const getNamesInNamespace = (
   const collect = (node: StructureNode, isRoot: boolean): void => {
     if (!isRoot) {
       const name = fieldDefinitions[node.id]?.name as string | undefined
-      if (name !== undefined && name !== '') names.push(name)
+      if (name !== undefined && name !== '' && fieldDefinitions[node.id]?.datatype !== 'layout') names.push(name)
       if (isOpener(node.id)) return
     }
     node.children.forEach(child => { collect(child, false) })
