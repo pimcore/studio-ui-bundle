@@ -940,9 +940,9 @@ export type SelectOption = {
         [key: string]: string | number | boolean | object;
     };
     /** Object Reference */
-    objectReference: string;
+    objectReference: string | number;
     /** Formated Path */
-    formatedPath: string;
+    formatedPath: string | number;
 };
 export type SelectOption2 = {
     /** AdditionalAttributes */
