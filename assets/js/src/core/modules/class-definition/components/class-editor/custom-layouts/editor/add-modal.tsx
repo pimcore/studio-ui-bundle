@@ -47,7 +47,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
     }
 
     createCustomLayout({
-      customLayoutId: data.suggestedId,
+      customLayoutId: values.uniqueIdentifier,
       customLayoutNew: {
         // todo what kind of id is needed here? type says only number but shouldn't it be string?
         // @ts-expect-error check with backend / schema expected type is number
