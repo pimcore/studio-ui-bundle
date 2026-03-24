@@ -16,6 +16,8 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionProps } from './field-collection'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useFieldCollection } from './providers/use-field-collection'
+import { useTranslation } from 'react-i18next'
 
 export interface FieldCollectionToolStripProps {
   field: number
@@ -23,23 +25,26 @@ export interface FieldCollectionToolStripProps {
   disallowAdd: boolean
   disallowDelete: boolean
   disallowReorder: boolean
+  layoutDefinition: FieldCollectionProps
 }
 
-export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
+export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder, layoutDefinition }: FieldCollectionToolStripProps): React.JSX.Element => {
   const { operations } = useNumberedList()
+  const fieldCollection = useFieldCollection()
+  const { t } = useTranslation()
 
   const type = operations.getValue([field, 'type'])
 
   const dropDownItems: DropdownMenuProps['items'] = allowedTypes.map((type, index) => {
     return {
       key: index,
-      label: type,
+      label: fieldCollection?.data?.items?.find(item => item.key === type)?.title === '' ? type : t(fieldCollection?.data?.items?.find(item => item.key === type)?.title as string),
       onClick: (e) => { e.domEvent.stopPropagation(); operations.add({ type }) }
     }
   })
 
   return (
-    <ToolStrip title={ type }>
+    <ToolStrip title={ layoutDefinition.title === '' || layoutDefinition.title === undefined ? type : t(layoutDefinition.title as string) }>
       <Split
         dividerSize='small'
         size='mini'
