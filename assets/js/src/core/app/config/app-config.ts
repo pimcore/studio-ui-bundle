@@ -40,5 +40,5 @@ export const appConfig: AppConfig = {
       document: {}
     }
   },
-  ...(appConfigData !== null ? appConfigData : {})
+  ...(appConfigData ?? {})
 }
