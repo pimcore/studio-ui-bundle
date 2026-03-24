@@ -24,13 +24,14 @@ interface CreateWidgetFormProps {
   form: formInstanceType<WidgetForm>
   inputRef?: React.RefObject<InputRef>
   initialValues?: Partial<WidgetForm>
+  onPressEnter?: () => void
 }
 
 enum WidgetTypes {
   ElementTree = 'element_tree'
 }
 
-export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidgetFormProps): React.JSX.Element => {
+export const CreateWidgetForm = ({ form, initialValues, inputRef, onPressEnter }: CreateWidgetFormProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -49,7 +50,10 @@ export const CreateWidgetForm = ({ form, initialValues, inputRef }: CreateWidget
           { required: true, message: t('widget-editor.create-form.name.required') }
         ] }
       >
-        <Input ref={ inputRef } />
+        <Input
+          onPressEnter={ onPressEnter }
+          ref={ inputRef }
+        />
       </Form.Item>
 
       <Form.Item
