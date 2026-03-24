@@ -49,7 +49,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const reformattedEmbeddedMetaData = Object.entries(embeddedMetaData).map(([key, value]) => {
     return {
       name: String(key).toString(),
-      value: String(value).toString()
+      value: (value as string).toString()
     }
   })
 

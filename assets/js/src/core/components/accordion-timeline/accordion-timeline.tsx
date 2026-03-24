@@ -27,7 +27,7 @@ interface AccordionTimelineProps {
 export const AccordionTimeline = ({ items }: AccordionTimelineProps): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const selectedItem = items.find(item => item.selected)
+  const selectedItem = items.find(item => item.selected === true)
   const activeKey = !isUndefined(selectedItem) ? selectedItem.key : undefined
 
   const ItemAccordions = items.map((item) => {

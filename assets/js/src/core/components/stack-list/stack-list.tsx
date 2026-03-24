@@ -66,8 +66,8 @@ export const StackList = ({ items, onItemsChange, sortable }: StackListProps): R
 
     if (over !== null && active.id !== over.id) {
       setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.key ?? item.id === active.id)
-        const newIndex = items.findIndex((item) => item.key ?? item.id === over.id)
+        const oldIndex = items.findIndex((item) => (item.key ?? item.id) === active.id)
+        const newIndex = items.findIndex((item) => (item.key ?? item.id) === over.id)
 
         const newItems = arrayMove(items, oldIndex, newIndex)
 

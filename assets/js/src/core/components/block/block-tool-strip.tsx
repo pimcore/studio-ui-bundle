@@ -54,7 +54,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
   const dynamicTitle = getItemTitle?.(currentValue, field)
 
   // Convert title to string for ToolStrip
-  const titleString = dynamicTitle !== null && dynamicTitle !== undefined ? String(dynamicTitle) : undefined
+  const titleString = dynamicTitle !== null && dynamicTitle !== undefined ? dynamicTitle as string : undefined
 
   return (
     <ToolStrip title={ titleString }>

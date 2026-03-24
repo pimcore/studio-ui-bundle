@@ -242,7 +242,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
-                const label = option?.label?.toString() ?? ''
+                const label = (option?.label as string) ?? ''
                 return label.toLowerCase().includes(input.toLowerCase())
               } }
               loading={ languagesLoading }

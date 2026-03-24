@@ -71,7 +71,7 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
       // @ts-expect-error - the prop exists trust me bro ;)
       item.children = filteredChildren
 
-      return filteredChildren.length
+      return filteredChildren.length > 0
     }
 
     return true

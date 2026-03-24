@@ -31,7 +31,7 @@ export const ImageGallery = ({ value }: ImageGalleryProps): React.JSX.Element =>
         gap="extra-small"
       >
         {value
-          .filter(item => item.image?.id)
+          .filter(item => item.image?.id !== undefined)
           .map((item, index) => (
             <div key={ index }>
               <ImagePreview

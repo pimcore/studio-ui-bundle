@@ -137,7 +137,7 @@ export const useValue = (
     return items
       .map((item, originalIndex): DisplayManyToManyRelationValueItem => ({ ...item, originalIndex }))
       .filter((item: DisplayManyToManyRelationValueItem) => {
-        let matched: boolean | undefined = false
+        let matched = false
 
         if (hasVisibleFields) {
           const visibleItem = find(visibleFieldsValue, (visibleField) => visibleField?.id === item.id)
