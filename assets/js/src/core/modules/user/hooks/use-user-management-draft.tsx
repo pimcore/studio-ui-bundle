@@ -51,6 +51,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
       return data
     }
 
+     
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {} as UserGetByIdApiResponse
   }

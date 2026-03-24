@@ -36,7 +36,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
     setValue(() => newValue)
-    baseOnChange !== undefined && baseOnChange(newValue)
+    baseOnChange?.(newValue)
   }, [baseOnChange])
 
   useEffect(() => {

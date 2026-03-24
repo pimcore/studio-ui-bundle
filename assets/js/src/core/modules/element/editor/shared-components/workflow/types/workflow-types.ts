@@ -69,14 +69,14 @@ export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsLi
   const transitions: WorkflowAction[] = isNil(workflow.allowedTransitions)
     ? []
     : workflow.allowedTransitions.map((transition) =>
-      createWorkflowAction('transition', workflow.workflowName, transition as ActionItem)
-    )
+        createWorkflowAction('transition', workflow.workflowName, transition as ActionItem)
+      )
 
   const globalActions: WorkflowAction[] = isNil(workflow.globalActions)
     ? []
     : workflow.globalActions.map((action) =>
-      createWorkflowAction('global', workflow.workflowName, action as ActionItem)
-    )
+        createWorkflowAction('global', workflow.workflowName, action as ActionItem)
+      )
 
   return [...transitions, ...globalActions]
 }

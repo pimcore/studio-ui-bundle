@@ -253,6 +253,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     if (isFetchUserAvailablePermissionsError) {
       trackError(new ApiError(error))
     }
+     
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {} as UserGetAvailablePermissionsApiResponse
   }

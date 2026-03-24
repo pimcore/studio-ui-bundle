@@ -46,10 +46,11 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
   const classRestriction: ClassDefinitionSelectionDecoratorConfig['classRestriction'] =
     allowedClasses?.map((className) => ({ classes: className })) ?? []
 
-  /* eslint-disable @typescript-eslint/consistent-type-assertions */
+   
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
     PagingDecorator,
     ColumnConfigurationDecorator,
+    /* eslint-disable @typescript-eslint/consistent-type-assertions */
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],
@@ -69,8 +70,9 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
         restrictedOptions: typeRestriction.length > 0 ? typeRestriction : undefined
       } as TypeFilterDecoratorConfig
     ]
+    /* eslint-enable @typescript-eslint/consistent-type-assertions */
   )(defaultProps), [config])
-  /* eslint-enable @typescript-eslint/consistent-type-assertions */
+   
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [

@@ -153,7 +153,13 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
               dropToGap: evt.dropToGap
             })
           } }
-          onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
+          onExpand={ (keys): void => {
+            if (onExpand != null) {
+              onExpand(keys)
+            } else {
+              setExpandedKeys(keys)
+            }
+          } }
           selectable={ onSelected !== undefined }
           selectedKeys={ selectedKeys }
           showIcon

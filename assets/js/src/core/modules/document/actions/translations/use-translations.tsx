@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'

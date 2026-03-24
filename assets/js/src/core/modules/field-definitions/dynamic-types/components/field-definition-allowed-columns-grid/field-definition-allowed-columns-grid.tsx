@@ -126,8 +126,8 @@ export const FieldDefinitionAllowedColumnsGrid = ({ value = [], onChange }: Fiel
       return false
     }
 
-    // eslint-disable-next-line prefer-regex-literals
-    const validKeyPattern = new RegExp('^[a-zA-Z0-9_]+$')
+     
+    const validKeyPattern = /^[a-zA-Z0-9_]+$/
     const match = validKeyPattern.exec(trimmedValue)
 
     if (match === null) {

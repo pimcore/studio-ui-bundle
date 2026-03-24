@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { find, isNil, isUndefined } from 'lodash'

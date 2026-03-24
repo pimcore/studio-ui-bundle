@@ -30,8 +30,8 @@ export * from '@Pimcore/modules/rule-builder/dynamic-types/rule-condition/dynami
 export * from '@Pimcore/modules/rule-builder/dynamic-types/rule-trigger/dynamic-type-rule-trigger-registry'
 
 // Types
-export * from '@Pimcore/modules/rule-builder/components/rule-actions/types/rule-actions.types'
-export * from '@Pimcore/modules/rule-builder/components/rule-triggers/types/rule-triggers.types'
-export * from '@Pimcore/modules/rule-builder/components/rule-conditions/types/rule-conditions.types'
+export type * from '@Pimcore/modules/rule-builder/components/rule-actions/types/rule-actions.types'
+export type * from '@Pimcore/modules/rule-builder/components/rule-triggers/types/rule-triggers.types'
+export type * from '@Pimcore/modules/rule-builder/components/rule-conditions/types/rule-conditions.types'
 // Condition types (re-exported from components for convenience)
-export * from '@Pimcore/components/rule-condition/types/rule-condition.types'
+export type * from '@Pimcore/components/rule-condition/types/rule-condition.types'

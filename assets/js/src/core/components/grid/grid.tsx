@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -66,10 +66,10 @@ export interface ColumnMetaType {
 }
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType { }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   export interface TableMeta<TData extends RowData> {
     onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData, meta?: Record<string, any> }) => void
   }
@@ -158,12 +158,12 @@ export const Grid = ({
     () =>
       props.isLoading === true
         ? props.columns.map((column) => ({
-          ...column,
-          cell: <Skeleton.Input
-            active
-            size={ 'small' }
-                />
-        }))
+            ...column,
+            cell: <Skeleton.Input
+              active
+              size={ 'small' }
+                  />
+          }))
         : props.columns,
     [props.isLoading, props.columns]
   ) as Array<ColumnDef<any>>
@@ -355,17 +355,17 @@ export const Grid = ({
   const renderRows = (): React.JSX.Element[] => {
     const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
-        row: rowsList[vRow.index],
-        virtualIndex: vRow.index,
-        rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
-        measureElement: rowVirtualizer.measureElement
-      }))
+          row: rowsList[vRow.index],
+          virtualIndex: vRow.index,
+          rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
+          measureElement: rowVirtualizer.measureElement
+        }))
       : rowsList.map(row => ({
-        row,
-        virtualIndex: undefined,
-        rowStyle: isEnableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
-        measureElement: undefined
-      }))
+          row,
+          virtualIndex: undefined,
+          rowStyle: isEnableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
+          measureElement: undefined
+        }))
 
     return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
       <GridRow

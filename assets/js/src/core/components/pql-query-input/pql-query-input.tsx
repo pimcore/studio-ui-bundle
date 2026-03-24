@@ -62,7 +62,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
                 <Trans
                   components={ {
                     anchorPQL: (
-                    // eslint-disable-next-line jsx-a11y/anchor-has-content
+                      // eslint-disable-next-line jsx-a11y/anchor-has-content
                       <a
                         className={ styles.link }
                         href={ PQL_DOCUMENTATION_LINK }

@@ -59,7 +59,7 @@ export const createVersionAccordionItem = ({
   }
 
   const handleClick = (): void => {
-    selectable ? handleComparisonAction() : handleDetailAction()
+    if (selectable) { handleComparisonAction() } else { handleDetailAction() }
   }
 
   const Title = (): React.JSX.Element => {

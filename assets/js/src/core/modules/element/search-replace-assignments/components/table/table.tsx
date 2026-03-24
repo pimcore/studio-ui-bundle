@@ -81,12 +81,12 @@ export const Table = (): React.JSX.Element => {
         type: 'element',
         config: {
           getElementInfo: (props: ElementInfoProps): ElementInfo => {
-            /* eslint-disable react/prop-types */
             return {
+              // eslint-disable-next-line react/prop-types
               id: props.row.original.id,
+              // eslint-disable-next-line react/prop-types
               fullPath: props.row.original.path
             }
-            /* eslint-enable react/prop-types */
           }
         }
       }

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 
 import { DynamicTypeThemeAbstract, type PimcoreThemeConfig } from '../dynamic-type-theme-abstract'
 import { studioThemeIds } from '../../../constants/theme-ids'

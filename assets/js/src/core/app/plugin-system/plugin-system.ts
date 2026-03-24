@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 import { moduleSystem } from '../module-system/module-system'
-import { getInstance, loadRemote, registerRemotes } from '@module-federation/enhanced/runtime'
+import { getInstance, loadRemote, type registerRemotes } from '@module-federation/enhanced/runtime'
 
 export interface ILifeCycleEvents {
   onInit?: (config: { container: Container }) => void

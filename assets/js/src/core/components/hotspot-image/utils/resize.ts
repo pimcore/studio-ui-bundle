@@ -75,12 +75,12 @@ export const resizeItem = (
 
   return hotspots.map((h, i) => i === hotspotIndex
     ? convertHotspotToPercent({
-      ...h,
-      x: newX,
-      y: newY,
-      width: newWidth,
-      height: newHeight
-    }, containerBounds)
+        ...h,
+        x: newX,
+        y: newY,
+        width: newWidth,
+        height: newHeight
+      }, containerBounds)
     : h)
 }
 

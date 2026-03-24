@@ -13,7 +13,7 @@ export enum JobStatus {
   RUNNING = 'running',
   SUCCESS = 'success',
   FINISHED_WITH_ERRORS = 'finished_with_errors',
-  FAILED = 'failed',
+  FAILED = 'failed'
 }
 
 export interface AbstractJob {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 
 import React from 'react'
 import { type InputRef, type ModalFuncProps } from 'antd'

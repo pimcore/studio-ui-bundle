@@ -52,7 +52,7 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
 
     perspectiveFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError(new ApiError(error))
+        if (isError) { trackError(new ApiError(error)) }
 
         if (isSuccess && isPlainObject(data)) {
           dispatch(setActivePerspective(data))

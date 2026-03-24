@@ -70,9 +70,7 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
         savedExpandedKeysRef.current = null
       }
     } else {
-      if (savedExpandedKeysRef.current === null) {
-        savedExpandedKeysRef.current = expandedKeys
-      }
+      savedExpandedKeysRef.current ??= expandedKeys
       const filtered = filterThumbnailsRecursive(thumbnailsListData, searchValue)
       setFilteredData(filtered)
       setExpandedKeys(getFolderKeysFromTree(filtered))

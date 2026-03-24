@@ -79,16 +79,16 @@ export const Table = ({
     }),
     !isAsset
       ? columnHelper.accessor('save', {
-        header: t('user-management.workspaces.columns.save'),
-        size: 72,
-        meta: {
-          type: 'checkbox',
-          editable: true,
-          config: {
-            align: 'center'
+          header: t('user-management.workspaces.columns.save'),
+          size: 72,
+          meta: {
+            type: 'checkbox',
+            editable: true,
+            config: {
+              align: 'center'
+            }
           }
-        }
-      })
+        })
       : null,
     columnHelper.accessor('publish', {
       header: t('user-management.workspaces.columns.publish'),
@@ -103,16 +103,16 @@ export const Table = ({
     }),
     !isAsset
       ? columnHelper.accessor('unpublish', {
-        header: t('user-management.workspaces.columns.unpublish'),
-        size: 72,
-        meta: {
-          type: 'checkbox',
-          editable: true,
-          config: {
-            align: 'center'
+          header: t('user-management.workspaces.columns.unpublish'),
+          size: 72,
+          meta: {
+            type: 'checkbox',
+            editable: true,
+            config: {
+              align: 'center'
+            }
           }
-        }
-      })
+        })
       : null,
     columnHelper.accessor('delete', {
       header: t('user-management.workspaces.columns.delete'),

@@ -43,6 +43,7 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
       return data
     }
 
+     
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {} as RoleGetByIdApiResponse
   }

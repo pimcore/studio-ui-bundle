@@ -22,9 +22,7 @@ export function formatNumber ({ value, lng, options = { useGrouping: false } }: 
     return ''
   }
 
-  if (lng === undefined) {
-    lng = i18n.language
-  }
+  lng ??= i18n.language
 
   return i18n.format(
     value,

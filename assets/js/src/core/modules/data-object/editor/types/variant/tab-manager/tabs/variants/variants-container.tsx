@@ -52,11 +52,12 @@ export const VariantsContainer = (): React.JSX.Element => {
   const draft = useDataObjectDraft(id)
   const currentClassName = 'className' in draft ? draft.className : undefined
 
-  /* eslint-disable @typescript-eslint/consistent-type-assertions */
+   
   const props = compose<AbstractDecoratorProps>(
     ActionColumnDecorator,
     SortingDecorator,
     PagingDecorator,
+    /* eslint-disable @typescript-eslint/consistent-type-assertions */
     [ClassDefinitionSelectionDecorator, { isResolvingClassDefinitionsBasedOnElementId: false, classRestriction: [{ classes: currentClassName }] } as ClassDefinitionSelectionDecoratorConfig],
     ColumnConfigurationDecorator,
     [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
@@ -65,8 +66,9 @@ export const VariantsContainer = (): React.JSX.Element => {
     TagFilterDecorator,
     GeneralFiltersDecorator,
     [TypeFilterDecorator, { elementType: 'data-object', restrictedOptions: ['variant'] } as TypeFilterDecoratorConfig]
+    /* eslint-enable @typescript-eslint/consistent-type-assertions */
   )(defaultProps)
-  /* eslint-enable @typescript-eslint/consistent-type-assertions */
+   
 
   return (
     <DynamicTypeRegistryProvider

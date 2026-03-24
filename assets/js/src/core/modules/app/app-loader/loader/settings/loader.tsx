@@ -25,7 +25,7 @@ export const useSettingsLoader = (): UseSettingsLoaderReturn => {
 
     settingsFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError(new ApiError(error))
+        if (isError) { trackError(new ApiError(error)) }
 
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))

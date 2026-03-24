@@ -21,9 +21,7 @@ interface IFormatDateTimeProps {
 }
 
 export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
-  if (lng === undefined) {
-    lng = i18n.language
-  }
+  lng ??= i18n.language
 
   if (timestamp === null) {
     return ''

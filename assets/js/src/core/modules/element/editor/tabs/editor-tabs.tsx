@@ -83,7 +83,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   }
 
   items = items.filter((item) => {
-    if (item.hidden !== undefined && item.hidden(element)) {
+    if (item.hidden?.(element)) {
       return false
     }
 

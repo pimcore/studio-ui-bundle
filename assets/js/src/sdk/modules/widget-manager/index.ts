@@ -19,7 +19,7 @@ export * from '@Pimcore/modules/widget-manager/widget-manager-slice'
 export type { Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
 export type { ElementIcon } from '@Pimcore/components/icon/icon'
 export type { ElementType } from '@Pimcore/types/enums/element/element-type'
-export * from '@Pimcore/modules/widget-manager/events'
+export type * from '@Pimcore/modules/widget-manager/events'
 
 // Processor Registry for widget manipulation
 export * from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'

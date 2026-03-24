@@ -82,7 +82,7 @@ export const create = (props?: CreateProps): ModalFactoryItem => {
 
   const Modal = (props: IModalContext): React.JSX.Element => {
     const { closeModal, openModal, ...modalProps } = useModal()
-    /* eslint-disable @typescript-eslint/consistent-type-assertions */
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const finalModalProps = { ...defaultProps, ...modalProps, ...props } as IModalProps
 
     return (

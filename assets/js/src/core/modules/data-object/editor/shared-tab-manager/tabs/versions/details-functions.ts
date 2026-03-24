@@ -55,8 +55,7 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
         const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
           objectValuesData = {}
 
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
+          // @ts-expect-error TODO: fieldData type does not include children property
           if (!isEmpty(processedDataItem?.fieldData?.children) && !fieldTypesRequiringChildren.includes(processedDataItem?.fieldData?.fieldtype as DynamicTypesList)) {
             const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title ?? '')
 
@@ -147,8 +146,7 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
     if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue ?? null, compareVersionItem?.fieldValue ?? null)) {
       field.isModifiedValue = true
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+      // @ts-expect-error TODO: fieldData type does not include fieldtype for DynamicTypesList comparison
       if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
         const mainVersionLength = mainVersionItem?.fieldValue?.length
         const compareVersionLength = compareVersionItem?.fieldValue?.length

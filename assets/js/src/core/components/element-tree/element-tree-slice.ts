@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'

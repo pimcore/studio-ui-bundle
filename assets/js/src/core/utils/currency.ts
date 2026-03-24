@@ -17,9 +17,7 @@ interface IFormatCurrencyProps {
 }
 
 export function formatCurrency ({ value, lng, options }: IFormatCurrencyProps): string {
-  if (lng === undefined) {
-    lng = i18n.language
-  }
+  lng ??= i18n.language
 
   return i18n.format(
     value,

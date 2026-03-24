@@ -232,7 +232,7 @@ export * from '@Pimcore/modules/element/editor/services/type-registry'
 export * from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 export * from '@Pimcore/modules/element/editor/shared-tab-manager/hooks/use-tab-manager'
 export * from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
-export * from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
+export type * from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 
 export * from '@Pimcore/modules/element/element-helper'
 
@@ -254,7 +254,7 @@ export * from '@Pimcore/modules/element/utils/element-type'
 export * from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 
 export * from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
-export * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+export type * from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'

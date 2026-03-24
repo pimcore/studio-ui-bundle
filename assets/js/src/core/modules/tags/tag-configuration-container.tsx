@@ -58,18 +58,16 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   useEffect(() => {
-    (tagsFetching && loadingTagKey === undefined)
-      ? showRootLoading()
-      : hideRootLoading()
+    if (tagsFetching && loadingTagKey === undefined) { showRootLoading() } else { hideRootLoading() }
   }, [tagsFetching])
 
   const tagActions: TreeAction[] =
-        [{ key: 'add-tag', icon: 'new' },
-          { key: 'rename-tag', icon: 'edit' },
-          { key: 'delete-tag', icon: 'trash' }]
+    [{ key: 'add-tag', icon: 'new' },
+      { key: 'rename-tag', icon: 'edit' },
+      { key: 'delete-tag', icon: 'trash' }]
 
   const rootActions: TreeAction[] =
-        [{ key: 'add-tag', icon: 'new' }]
+    [{ key: 'add-tag', icon: 'new' }]
 
   const showRootLoading = (): void => {
     setLoadingTagKey(rootTagFolder.id.toString())

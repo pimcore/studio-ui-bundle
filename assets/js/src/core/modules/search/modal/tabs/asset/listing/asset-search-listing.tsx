@@ -34,17 +34,19 @@ const defaultProps = {
   useElementId: useRootElementId
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
+ 
 const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
   TagFilterDecorator,
+  /* eslint-disable @typescript-eslint/consistent-type-assertions */
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig]
+  /* eslint-enable @typescript-eslint/consistent-type-assertions */
 )(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
+ 
 
 export const AssetSearchListing = (): React.JSX.Element => {
   return (

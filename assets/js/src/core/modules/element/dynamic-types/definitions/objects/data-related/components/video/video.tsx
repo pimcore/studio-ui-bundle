@@ -119,7 +119,7 @@ export const Video = (props: VideoProps): React.JSX.Element => {
         variant="outline"
       >
 
-        { /* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */
+        {  
           videoValue !== null && videoValue?.data !== null
             ? (
               <VideoPreview

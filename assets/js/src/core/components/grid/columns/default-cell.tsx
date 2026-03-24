@@ -86,9 +86,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
 
   let { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [cellType], target: 'GRID_CELL' })
 
-  if (ComponentRenderer === null) {
-    ComponentRenderer = getComponentRenderer({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
-  }
+  ComponentRenderer ??= getComponentRenderer({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
 
   return useMemo(() => {
     const isInAutoWidthColumnEditMode = isInEditMode && column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true

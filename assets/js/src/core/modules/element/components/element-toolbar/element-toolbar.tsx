@@ -35,7 +35,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
 
-    editorTabsWidth <= 800 ? setEditorTabsBlockSize('S') : setEditorTabsBlockSize('L')
+    if (editorTabsWidth <= 800) { setEditorTabsBlockSize('S') } else { setEditorTabsBlockSize('L') }
   }, [editorTabsWidth])
 
   if (element === undefined) {

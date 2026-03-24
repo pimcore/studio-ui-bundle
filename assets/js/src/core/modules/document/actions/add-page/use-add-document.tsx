@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
+ 
 import { useAppDispatch } from '@sdk/app'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -81,16 +81,14 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
       .filter(docType => docType.type === type) // Filter for a certain docType
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, DocType[]>>((acc, docType) => {
-      const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
+        const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
 
-      if (acc[groupName] === undefined) {
-        acc[groupName] = []
-      }
+        acc[groupName] ??= []
 
-      acc[groupName].push(docType)
+        acc[groupName].push(docType)
 
-      return acc
-    }, {})
+        return acc
+      }, {})
 
     if (structuredDocumentTypes.undefined !== undefined) {
       documentHierarchy = structuredDocumentTypes.undefined.map(docType => getDocumentEntry(docType, node))
@@ -229,7 +227,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
       const buttonId = uuid()
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+       
       modal.confirm({
         icon: null,
         title: modalTitle,

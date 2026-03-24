@@ -71,7 +71,7 @@ export * from '@Pimcore/components/element-tree/provider/tree-permission-provide
 export { Skeleton as ElementTreeSkeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 export { PagerContainer as ElementTreePagerContainer } from '@Pimcore/components/element-tree/pager/pager-container'
 export { SearchContainer as ElementTreeSearchContainer } from '@Pimcore/components/element-tree/search/search-container'
-export * from '@Pimcore/components/element-tree/types/node-api-hook'
+export type * from '@Pimcore/components/element-tree/types/node-api-hook'
 export * from '@Pimcore/components/empty/empty'
 export * from '@Pimcore/components/field-filters/field-filters'
 export * from '@Pimcore/components/filename/filename'

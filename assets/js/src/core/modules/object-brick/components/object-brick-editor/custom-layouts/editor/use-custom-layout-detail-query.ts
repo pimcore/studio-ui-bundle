@@ -33,7 +33,6 @@ export const useObjectBrickCustomLayoutDetailQuery: AnyQueryHook = (data) => {
     'status' in result.error &&
     result.error.status === 404
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return {
       ...result,
       error: undefined,

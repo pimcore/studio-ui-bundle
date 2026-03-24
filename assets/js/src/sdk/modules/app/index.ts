@@ -14,14 +14,14 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/app/component-registry/component-registry'
 export * from '@Pimcore/modules/app/context-menu-registry'
-export * from '@Pimcore/modules/app/context-menu-registry/context-types'
+export type * from '@Pimcore/modules/app/context-menu-registry/context-types'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
 export { default as trackError, ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-export * from '@Pimcore/modules/app/error-handler/types'
+export type * from '@Pimcore/modules/app/error-handler/types'
 
 export * from '@Pimcore/modules/app/theme/theme-provider'
-export * from '@Pimcore/modules/app/theme/utils/themes/theme-tokens'
+export type * from '@Pimcore/modules/app/theme/utils/themes/theme-tokens'
 
 export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
 export * from '@Pimcore/modules/app/hook/use-date-converter'

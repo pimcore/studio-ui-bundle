@@ -37,7 +37,7 @@ export const useReportFormState = (): IUseReportFormStateReturn => {
   }
 
   const markFormSaved = (): void => {
-    !isNull(currentData) && setInitialData({ ...currentData })
+    if (!isNull(currentData)) { setInitialData({ ...currentData }) }
   }
 
   const isDirty = useMemo(() => {

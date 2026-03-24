@@ -242,7 +242,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           onDrop={ handleDroppableDrop }
           variant="outline"
         >
-          { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+          {  
             imageValue !== null && imageValue?.image !== null
               ? (
                 <HotspotImagePreview

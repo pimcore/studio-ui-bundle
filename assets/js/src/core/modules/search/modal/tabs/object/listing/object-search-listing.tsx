@@ -37,18 +37,20 @@ const defaultProps = {
   useColumnMapper: useDataObjectColumnMapper
 }
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
+ 
 const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   ColumnConfigurationDecorator,
   TagFilterDecorator,
+  /* eslint-disable @typescript-eslint/consistent-type-assertions */
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
   SortingDecorator,
   [ClassDefinitionSelectionDecorator, { showConfigLayer: false } as ClassDefinitionSelectionDecoratorConfig],
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig]
+  /* eslint-enable @typescript-eslint/consistent-type-assertions */
 )(defaultProps)
-/* eslint-enable @typescript-eslint/consistent-type-assertions */
+ 
 
 export const ObjectSearchListing = (): React.JSX.Element => {
   return (

@@ -250,11 +250,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
               } }
               type={ 'button' }
             >
-              {styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
-                ? (
-                    styleOptions[hotspot.type].icon
-                  )
-                : null}
+              {styleOptions[hotspot.type]?.icon ?? null}
             </button>
           </Popover>
         ))

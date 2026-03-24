@@ -47,5 +47,5 @@ export enum TreePermission {
   Open = 'open',
   PasteCut = 'pasteCut',
   RemoveSite = 'removeSite',
-  UseAsSite = 'useAsSite',
+  UseAsSite = 'useAsSite'
 }

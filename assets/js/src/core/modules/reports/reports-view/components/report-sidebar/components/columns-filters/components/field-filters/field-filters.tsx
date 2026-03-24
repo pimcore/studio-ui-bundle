@@ -119,7 +119,7 @@ export const FieldFilters = (): React.JSX.Element => {
         }))
       })
 
-    !isUndefined(updatedColumnFilters) && setColumnsFilters(updatedColumnFilters)
+    if (!isUndefined(updatedColumnFilters)) { setColumnsFilters(updatedColumnFilters) }
   }
 
   useEffect(() => {

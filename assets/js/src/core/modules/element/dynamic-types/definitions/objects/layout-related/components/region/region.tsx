@@ -25,7 +25,7 @@ export enum AvailableRegions {
   South = 'south',
   East = 'east',
   West = 'west',
-  Center = 'center',
+  Center = 'center'
 }
 
 export const Region = ({ children, noteditable, ...props }: RegionProps): React.JSX.Element => {

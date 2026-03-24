@@ -52,7 +52,7 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
           model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
             const component = widgetRegistryService.getWidget(tabNode.getComponent() ?? '')
             const isModified = component?.isModified
-            if (isModified !== undefined && isModified(tabNode)) {
+            if (isModified?.(tabNode)) {
               return
             }
 

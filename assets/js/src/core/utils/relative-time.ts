@@ -18,9 +18,7 @@ interface IFormatRelativeTimeProps {
 }
 
 export function formatRelativeTime ({ value, unit, lng, options }: IFormatRelativeTimeProps): string {
-  if (lng === undefined) {
-    lng = i18n.language
-  }
+  lng ??= i18n.language
 
   const formatter = new Intl.RelativeTimeFormat(lng, options)
 

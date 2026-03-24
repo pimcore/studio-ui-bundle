@@ -30,9 +30,7 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   let config = column.columnDef.meta?.config as CheckboxCellConfig | undefined
-  if (config === undefined) {
-    config = { align: 'left' }
-  }
+  config ??= { align: 'left' }
 
   function getCellContent (): React.JSX.Element {
     return (
