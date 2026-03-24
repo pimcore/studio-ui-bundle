@@ -14,17 +14,24 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
 use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
+use Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Pimcore\Tool;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DefaultController extends FrontendController
 {
+    /**
+     * @param iterable<AppConfigProviderInterface> $appConfigProviders
+     */
     public function __construct(
         private StaticResourcesResolverInterface $staticResourcesResolver,
         private UrlServiceInterface $mercureUrlService,
+        #[TaggedIterator('pimcore_studio_ui.app_config_provider')]
+        private iterable $appConfigProviders,
     ) {
 
     }
@@ -37,6 +44,16 @@ final class DefaultController extends FrontendController
         string $studioUrlPath,
         array $studioWysiwygConfiguration
     ): Response {
+        $appConfig = [
+            'baseUrl' => $studioUrlPath . '/',
+            'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
+            'wysiwyg' => $studioWysiwygConfiguration,
+        ];
+
+        foreach ($this->appConfigProviders as $provider) {
+            $appConfig = array_merge($appConfig, $provider->getAppConfig());
+        }
+
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
             'studioCssFiles' => $this->staticResourcesResolver->getStudioCssFiles(),
             'studioJsFiles' => $this->staticResourcesResolver->getStudioJsFiles(),
@@ -44,9 +61,7 @@ final class DefaultController extends FrontendController
             'bundleJsFiles' => $this->staticResourcesResolver->getBundleJsFiles(),
             'additionalCssFiles' => $this->staticResourcesResolver->getAdditionalCssFiles(),
             'additionalJsFiles' => $this->staticResourcesResolver->getAdditionalJsFiles(),
-            'baseUrl' => $studioUrlPath,
-            'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
-            'wysiwygConfiguration' => $studioWysiwygConfiguration,
+            'appConfig' => $appConfig,
             'hostname' => Tool::getHostname(),
         ]);
     }
