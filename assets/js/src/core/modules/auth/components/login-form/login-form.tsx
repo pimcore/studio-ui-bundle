@@ -119,9 +119,8 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
       )}
 
       <SlotRenderer
-        props={ { onHideCredentialsForm: setHideCredentialsForm } }
+        props={ { hideCredentialsForm, onHideCredentialsForm: setHideCredentialsForm } }
         slot={ componentConfig.form.login.name }
-        withDivider={ !hideCredentialsForm }
       />
     </div>
   )

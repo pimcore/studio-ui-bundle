@@ -8,30 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Divider } from '@Pimcore/components/divider/divider'
 import { isUndefined } from 'lodash'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { useComponentRegistry } from './component-registry'
 
 interface SlotRendererProps {
   slot: string
   props?: Record<string, any>
   onRenderComponent?: (Component: React.JSX.Element, context: { name?: string, index?: number, props?: Record<string, any> }) => React.JSX.Element
-  withDivider?: boolean
 }
 
-export const SlotRenderer = ({ slot, props, onRenderComponent, withDivider = false }: SlotRendererProps): React.JSX.Element => {
+export const SlotRenderer = ({ slot, props, onRenderComponent }: SlotRendererProps): React.JSX.Element => {
   const name = slot
   const ComponentRegistry = useComponentRegistry()
   const components = ComponentRegistry.getSlotComponents(name)
-  const { t } = useTranslation()
 
   return (
     <>
-      {withDivider && components.length > 0 && (
-        <Divider plain>{ t('login-form-additional-logins.or') }</Divider>
-      )}
       {components.map(({ component: Component, name }, index) => {
         const renderedComponent = (
           <Component
