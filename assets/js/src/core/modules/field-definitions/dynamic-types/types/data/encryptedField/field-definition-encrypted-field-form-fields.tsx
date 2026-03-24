@@ -105,7 +105,7 @@ export const FieldDefinitionEncryptedFieldFormFields = (props: FieldDefinitionAb
       </Form.Item>
 
       {selectedType !== undefined && selectedType !== '' && fieldDefinitionRegistry.hasDynamicType(selectedType) && (
-        fieldDefinitionRegistry.getDynamicType(selectedType).getSpecificFormFields({...props.context, isEncryptedField: true})
+        fieldDefinitionRegistry.getDynamicType(selectedType).getSpecificFormFields({ ...props.context, isEncryptedField: true })
       )}
     </>
   )
