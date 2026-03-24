@@ -10,6 +10,9 @@
 
 import { type DefaultOptionType } from 'antd/es/select'
 import { isUndefined } from 'lodash'
+import React from 'react'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { isHtmlContent, stripTags } from '@Pimcore/utils/html'
 
 export type SelectOptionType = DefaultOptionType & {
   displayValue?: string | boolean
@@ -18,6 +21,28 @@ export type SelectOptionType = DefaultOptionType & {
 export interface SelectOptionsConfig {
   options?: string[] | SelectOptionType[]
   useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+}
+
+/**
+ * Converts a raw option key (which may contain HTML markup) into a React label
+ * and — only when the key contains HTML — a plain-text title for search filtering.
+ * When the label is a plain string, title is omitted so optionFilterProp="label"
+ * works without needing a redundant duplicate field.
+ */
+export const renderSelectOptionLabel = (key: string): { label: React.ReactNode, title?: string } => {
+  if (isHtmlContent(key)) {
+    return {
+      label: (
+        <SanitizeHtml
+          html={ key }
+          tag="span"
+        />
+      ),
+      title: stripTags(key)
+    }
+  }
+
+  return { label: key }
 }
 
 export const resolveOptions = (

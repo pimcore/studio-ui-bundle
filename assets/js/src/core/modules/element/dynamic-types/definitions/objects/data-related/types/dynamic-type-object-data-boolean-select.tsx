@@ -31,7 +31,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
 
   dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number | null }> | undefined {
     if (isNil(options)) {
       return undefined
     }

@@ -10,12 +10,19 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
     'multi-select-cell': css`
       .ant-select, .studio-select {
         width: 100%;
       }
+    `,
+
+    'multi-select-cell--read': css`
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: ${token.paddingXXS}px;
     `
   }
 })

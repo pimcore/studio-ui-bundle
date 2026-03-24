@@ -13,6 +13,7 @@ import { type RefSelectProps } from 'antd/es/select'
 import cn from 'classnames'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Select } from '@Pimcore/components/select/select'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { useStyles } from './multi-select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Spin } from '@Pimcore/components/spin/spin'
@@ -64,12 +65,14 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
     return option?.displayValue ?? option?.label ?? _value
   })
 
-  const displayValue = displayOptions.join(', ')
-
   if (!isInEditMode) {
     return (
-      <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
-        {displayValue}
+      <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell'], styles['multi-select-cell--read']) }>
+        {displayOptions.map((v, i) => (
+          typeof v === 'string'
+            ? <Tag key={ i }>{v}</Tag>
+            : <React.Fragment key={ i }>{v}</React.Fragment>
+        ))}
       </div>
     )
   }
