@@ -141,7 +141,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       // DEFAULT select
       &.ant-select-open, &.ant-select-focused {
-        .ant-select-selection-item {
+        .ant-select-selection-item:not(:has(.pimcore-workflow-place-indicator)) {
           color: ${token.colorPrimary};
         }
 
@@ -151,7 +151,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       }
 
       &:hover {
-        .ant-select-selection-item {
+        .ant-select-selection-item:not(:has(.pimcore-workflow-place-indicator)) {
           color: ${token.colorPrimary};
         }
 

@@ -20,6 +20,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { toCssDimension } from '@Pimcore/utils/css'
 import i18n from '@Pimcore/app/i18n'
+import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -35,6 +36,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
 
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     const options = this.convertOptions(props.options)
+    const hasHtmlLabels = options?.some(o => o.title !== undefined) ?? false
     return (
       <Select
         allowClear={ props.allowClear !== false }
@@ -43,7 +45,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         inherited={ props.inherited }
         maxCount={ props.maxItems ?? undefined }
         mode={ props.multiSelect === true ? 'multiple' : undefined }
-        optionFilterProp="label"
+        optionFilterProp={ hasHtmlLabels ? 'title' : 'label' }
         options={ options }
         showSearch
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
@@ -61,11 +63,17 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: string, value: string | number | null }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: React.ReactNode, title?: string, value: string | number | null }> | undefined {
     if (isNil(options)) {
       return
     }
-    return options.map(option => ({ label: i18n.t(option.key), value: option.value }))
+    return options.map(option => {
+      const translatedKey = i18n.t(option.key)
+      return {
+        ...renderSelectOptionLabel(translatedKey),
+        value: option.value
+      }
+    })
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
