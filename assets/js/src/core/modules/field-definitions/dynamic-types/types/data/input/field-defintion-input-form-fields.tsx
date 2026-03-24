@@ -18,6 +18,7 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const isInClassificationStore = props.context.area.includes('classification-store')
+  const isEncryptedField = props.context.isEncryptedField === true
 
   return (
     <>
@@ -51,19 +52,20 @@ export const FieldDefinitionInputFormFields = (props: FieldDefinitionAbstractFor
         <Switch labelRight={ t('show-char-count') } />
       </Form.Item>
 
-      {(!isCustomLayout || !isInClassificationStore) && (
+      {(!isCustomLayout && !isInClassificationStore) && (
       <>
-        <Form.Item
-          label={ t('column-length') }
-          name="columnLength"
-          rules={ [{ min: 0, type: 'number' }] }
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
-        </Form.Item>
-
+          {!isEncryptedField && (
+          <Form.Item
+            label={ t('column-length') }
+            name="columnLength"
+            rules={ [{ min: 0, type: 'number' }] }
+          >
+            <InputNumber
+              min={ 0 }
+              precision={ 0 }
+            />
+          </Form.Item>
+          )}
         <FieldDefinitionRegexValidation />
       </>
       )}
