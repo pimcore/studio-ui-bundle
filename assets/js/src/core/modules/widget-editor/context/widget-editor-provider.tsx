@@ -10,7 +10,7 @@
 
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { Form, Modal } from '@sdk/components'
-import React, { createContext, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react'
+import React, { createContext, type Dispatch, type SetStateAction, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
 import { type InputRef } from 'antd'
@@ -41,12 +41,6 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   const { t } = useTranslation()
   const [tmpForm] = Form.useForm()
   const inputRef = React.useRef<InputRef>(null)
-
-  useEffect(() => {
-    if (isModalOpen) {
-      inputRef.current?.focus()
-    }
-  }, [isModalOpen])
 
   const openWidget = async (id: string, type: string): Promise<void> => {
     const widget = await getWidgetById(id, type)
@@ -117,6 +111,11 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
       {children}
 
       <Modal
+        afterOpenChange={ (open) => {
+          if (open) {
+            inputRef.current?.focus()
+          }
+        } }
         okButtonProps={ {
           loading: isLoading
         } }
@@ -133,6 +132,7 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
         <CreateWidgetForm
           form={ tmpForm }
           inputRef={ inputRef }
+          onPressEnter={ () => { void submit() } }
         />
       </Modal>
     </WidgetEditorContext.Provider>
