@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import React from 'react'
 import { useComponentRegistry } from './component-registry'
-import { isUndefined } from 'lodash'
 
 interface SlotRendererProps {
   slot: string
