@@ -62,16 +62,16 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   const displayOptions = value.map((_value: string) => {
     const option = options.find((option: SelectOptionType) => option.value === _value)
-    return option?.displayValue ?? option?.label ?? _value
+    return { key: _value, display: option?.displayValue ?? option?.label ?? _value }
   })
 
   if (!isInEditMode) {
     return (
       <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell'], styles['multi-select-cell--read']) }>
-        {displayOptions.map((v, i) => (
-          typeof v === 'string'
-            ? <Tag key={ i }>{v}</Tag>
-            : <React.Fragment key={ i }>{v}</React.Fragment>
+        {displayOptions.map(({ key, display }) => (
+          typeof display === 'string'
+            ? <Tag key={ key }>{display}</Tag>
+            : <React.Fragment key={ key }>{display}</React.Fragment>
         ))}
       </div>
     )
