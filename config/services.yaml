@@ -7,6 +7,10 @@ services:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
             $studioUrlPath: '%pimcore_studio_ui.url_path%'
 
+    _instanceof:
+        Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:
+            tags: ['pimcore_studio_ui.app_config_provider']
+
     Pimcore\Bundle\StudioUiBundle\Controller\DefaultController:
         public: true
         tags: ['controller.service_arguments']
