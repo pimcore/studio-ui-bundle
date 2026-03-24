@@ -9,6 +9,8 @@
  */
 
 import { Divider } from '@Pimcore/components/divider/divider'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,8 +20,11 @@ interface LoginFormDividerProps {
 
 export const LoginFormDivider = ({ hideCredentialsForm = false }: LoginFormDividerProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const ComponentRegistry = useComponentRegistry()
+  const slotComponents = ComponentRegistry.getSlotComponents(componentConfig.form.login.name)
+  const hasOtherComponents = slotComponents.length > 1
 
-  if (hideCredentialsForm) {
+  if (hideCredentialsForm || !hasOtherComponents) {
     return <></>
   }
 
