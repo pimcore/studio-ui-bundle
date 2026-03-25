@@ -65,7 +65,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('message', {
       header: t('application-logger.columns.message'),
       cell: ({ getValue }) => (
-        <span className={styles.cellTruncate}>
+        <span className={ styles.cellTruncate }>
           {getValue()}
         </span>
       )
@@ -86,7 +86,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
         return (
           <Button
-            href={fileObjectBasePath + column.fileObject}
+            href={ fileObjectBasePath + column.fileObject }
             target="_blank"
             type="link"
           >
@@ -109,12 +109,12 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
         return (
           <Button
-            onClick={() => {
+            onClick={ () => {
               openElement({
                 id: element.id,
                 type: (element.type === 'object' ? 'data-object' : element.type) as ElementType
               }).catch(() => { })
-            }}
+            } }
             type="link"
           >
             {`${element.type} ${element.id}`}
@@ -141,10 +141,10 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             className='w-full'
           >
             <IconButton
-              icon={{ value: 'expand-01' }}
-              onClick={async () => {
+              icon={ { value: 'expand-01' } }
+              onClick={ async () => {
                 openModal(column)
-              }}
+              } }
               type="link"
             />
           </Flex>
@@ -158,17 +158,17 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     <>
       <Grid
         autoWidth
-        columns={columns}
-        data={tableItems}
+        columns={ columns }
+        data={ tableItems }
         // isLoading={notesAndEventsFetching}
-        modifiedCells={[]}
+        modifiedCells={ [] }
         resizable
       />
 
       <DetailModal
-        data={modelData}
-        open={open}
-        setOpen={setOpen}
+        data={ modelData }
+        open={ open }
+        setOpen={ setOpen }
       />
     </>
   )
