@@ -18,8 +18,8 @@ interface GetLanguageNameProps {
 export function getLanguageName ({ locale, lng }: GetLanguageNameProps): string {
   lng ??= i18n.language
 
-  const normalizedLng = lng.replace(/_/g, '-')
-  const normalizedLocale = locale.replace(/_/g, '-')
+  const normalizedLng = lng.replaceAll('_', '-')
+  const normalizedLocale = locale.replaceAll('_', '-')
 
   const localizer = new Intl.DisplayNames([normalizedLng], { type: 'language' })
 
