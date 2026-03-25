@@ -1,7 +1,6 @@
 {
   "name": "@pimcore/studio-ui-bundle",
   "version": "0.0.1",
-  "type": "module",
   "keywords": [
     "pimcore",
     "pimcore-studio-ui"
