@@ -171,7 +171,7 @@ export default defineConfig({
         },
         'inversify': {
           eager: true,
-          version: packages.dependencies.inversify
+          requiredVersion: packages.dependencies.inversify
         },
         'antd': {
           singleton: true,
@@ -191,7 +191,6 @@ export default defineConfig({
         '@uiw/react-codemirror': {
           singleton: true,
           eager: true,
-          version: packages.dependencies['@uiw/react-codemirror'],
           requiredVersion: packages.dependencies['@uiw/react-codemirror']
         }
       }

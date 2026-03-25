@@ -45,7 +45,7 @@ export const initialState: WidgetManagerState = {
   mainWidgetContext: null
 }
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'widget-manager',
 
   initialState,

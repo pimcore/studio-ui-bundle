@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
-
 import React, { useEffect, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'

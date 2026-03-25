@@ -23,7 +23,6 @@ import {
 type PatchFn<T> = (draft: T) => void
 interface PatchResult { undo: () => void }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function patchAllCacheEntries<T> (dispatch: (thunk: any) => void, endpointName: string, patch: PatchFn<T>): void {
   // Accessing internal RTK Query store state to fan-out cache patches across all pages
   dispatch((innerDispatch: unknown, getState: () => unknown) => {
@@ -44,7 +43,6 @@ function patchAllCacheEntries<T> (dispatch: (thunk: any) => void, endpointName: 
 }
 
 // Like patchAllCacheEntries but returns PatchResults so callers can undo on failure.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function optimisticPatchAllCacheEntries<T> (dispatch: (thunk: any) => any, endpointName: string, patch: PatchFn<T>): PatchResult[] {
   const results: PatchResult[] = []
 

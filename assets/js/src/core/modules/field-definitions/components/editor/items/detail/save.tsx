@@ -53,6 +53,7 @@ export const DetailSave = (): React.JSX.Element => {
     for (const [key, definition] of Object.entries(fieldDefinitions)) {
       // Skip the root layout node — its name is structural, not user-editable,
       // and it is stripped from the payload before saving anyway
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (structure !== undefined && key === structure.id) continue
       if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
         const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
@@ -141,7 +142,6 @@ export const DetailSave = (): React.JSX.Element => {
 
     updateDetailMutation({}).unwrap()
       .then(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         messageApi.success(t('field-definitions.saved-successfully'))
       })
       .catch((e) => {

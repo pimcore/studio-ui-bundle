@@ -45,10 +45,10 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const isDocumentType = version.ctype === elementTypes.document
   const scheduledDate = !isNil(version.scheduled)
     ? formatDateTime({
-      timestamp: version.scheduled,
-      dateStyle: 'short',
-      timeStyle: 'short'
-    })
+        timestamp: version.scheduled,
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })
     : undefined
 
   const { isLoading, url } = useVersionUrl({ versionId: version.id, isSkip: !isDocumentType })

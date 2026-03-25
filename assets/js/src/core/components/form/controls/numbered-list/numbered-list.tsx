@@ -36,6 +36,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
     setValue(() => newValue)
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     baseOnChange !== undefined && baseOnChange(newValue)
   }, [baseOnChange])
 

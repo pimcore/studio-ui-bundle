@@ -17,7 +17,6 @@ import { type Meta } from '@storybook/react'
 import React from 'react'
 import { Content } from '../content/content'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Components/layout/Content-Layout',
   component: ContentLayout,

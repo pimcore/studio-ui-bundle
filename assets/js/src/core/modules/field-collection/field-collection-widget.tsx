@@ -87,10 +87,8 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
   }, [result.data])
 
   if (mappedData !== undefined) {
-    return { ...result, data: mappedData } as any // eslint-disable-line @typescript-eslint/no-explicit-any
-  }
-
-  return result
+    return { ...result, data: mappedData } as any
+  }  return result
 }
 
 // Wrapper: maps delete to use key (id) as the key arg

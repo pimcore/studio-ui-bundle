@@ -8,4 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import('@sdk/_internal_/mf-bootstrap-document-editor-iframe')
+void import('@sdk/_internal_/mf-bootstrap-document-editor-iframe')

@@ -13,7 +13,6 @@ import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux
 import { api as pimcoreApi } from '@sdk/api'
 import { rtkQueryErrorLogger } from './middleware/rtkQueryErrorLogger'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LazyloadedSlices { };
 
 interface SliceLike<ReducerPath extends string, State> {

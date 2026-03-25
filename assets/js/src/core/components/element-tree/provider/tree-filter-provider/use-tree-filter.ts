@@ -19,6 +19,7 @@ export const useTreeFilter = (): ITreeFilterContext & {
 } => {
   let context = useContext(TreeFilterContext)
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   if (context === undefined) {
     context = { pageSize: 30 }
   }

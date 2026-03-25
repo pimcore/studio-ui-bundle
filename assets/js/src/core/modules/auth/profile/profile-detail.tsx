@@ -82,8 +82,8 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
 
     modifiedKeyBindings = modifiedKeyBindings.some((keyBinding) => keyBinding.action === name)
       ? modifiedKeyBindings.map((keyBinding) =>
-        keyBinding.action === name ? { ...keyBinding, ...code } : keyBinding
-      )
+          keyBinding.action === name ? { ...keyBinding, ...code } : keyBinding
+        )
       : [...modifiedKeyBindings, { action: name, ...code }]
 
     setModifiedCells({ keyBindings: modifiedKeyBindings })

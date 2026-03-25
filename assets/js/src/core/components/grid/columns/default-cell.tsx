@@ -86,6 +86,7 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
 
   let { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [cellType], target: 'GRID_CELL' })
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   if (ComponentRenderer === null) {
     ComponentRenderer = getComponentRenderer({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
   }

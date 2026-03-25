@@ -32,6 +32,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
     if (hasChildren === true) {
       const newExpandedValue = !isExpanded
 
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (newExpandedValue && onLoad !== undefined && children !== undefined && children.length === 0) {
         await onLoad(node)
       }

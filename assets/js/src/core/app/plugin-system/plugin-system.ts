@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 import { moduleSystem } from '../module-system/module-system'
-import { getInstance, type init, loadRemote } from '@module-federation/enhanced/runtime'
+import { getInstance, loadRemote, type registerRemotes } from '@module-federation/enhanced/runtime'
 
 export interface ILifeCycleEvents {
   onInit?: (config: { container: Container }) => void
@@ -35,13 +35,10 @@ export class PluginSystem {
       return
     }
 
-    const initConfig: Parameters<typeof init>[0] = {
-      name: 'mf-test',
-      remotes: []
-    }
+    const remoteList: Parameters<typeof registerRemotes>[0] = []
     for (const [name, url] of Object.entries(remotes)) {
       if (url !== undefined) {
-        initConfig.remotes.push({
+        remoteList.push({
           name,
           entry: url,
           alias: name
@@ -49,9 +46,9 @@ export class PluginSystem {
       }
     }
 
-    getInstance()?.registerRemotes(initConfig.remotes)
+    getInstance()?.registerRemotes(remoteList)
 
-    for (const remote of initConfig.remotes) {
+    for (const remote of remoteList) {
       const alternativeExport = alternativePaths?.[remote.name] ?? ''
       const moduleId = alternativeExport !== '' ? `${remote.alias}${alternativeExport}` : remote.alias!
       promises.push(loadRemote(moduleId))

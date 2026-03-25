@@ -375,6 +375,7 @@ const ValidationExampleComponent = (): React.JSX.Element => {
               },
               {
                 validator: async (_, value) => {
+                  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
                   if ((value !== null && value !== undefined) && value.textInput === true && (value.fullPath === null || value.fullPath === undefined || value.fullPath.trim() === '')) {
                     return await Promise.reject(new Error('Path cannot be empty'))
                   }

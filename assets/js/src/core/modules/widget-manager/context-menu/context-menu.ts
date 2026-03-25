@@ -52,6 +52,7 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
           model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
             const component = widgetRegistryService.getWidget(tabNode.getComponent() ?? '')
             const isModified = component?.isModified
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (isModified !== undefined && isModified(tabNode)) {
               return
             }

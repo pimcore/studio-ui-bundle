@@ -98,7 +98,6 @@ export const useHandleCheck = ({
       const errorMessage = info.checked
         ? t('failed-to-assign-tag-to-element')
         : t('failed-to-un-assign-tag-to-element')
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({
         content: errorMessage,
         type: 'error',
