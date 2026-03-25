@@ -42,6 +42,25 @@ const documentEditorSlice = createSlice({
       }
       state.documentAreablocks[action.payload.documentId][action.payload.editableTypeId] = action.payload.areablockTypes
     },
+    mergeDocumentAreablockTypes: (state, action: PayloadAction<{ documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes }>) => {
+      if (isNil(state.documentAreablocks[action.payload.documentId])) {
+        state.documentAreablocks[action.payload.documentId] = {}
+      }
+
+      const existing = state.documentAreablocks[action.payload.documentId][action.payload.editableTypeId] ?? {}
+      const incoming = action.payload.areablockTypes
+
+      // Merge-only: add new groups/entries, never remove existing ones.
+      const merged: AreablockGroupedTypes = { ...existing }
+      for (const [groupName, incomingEntries] of Object.entries(incoming)) {
+        const existingEntries = merged[groupName] ?? []
+        const existingKeys = new Set(existingEntries.map(e => `${e.areablockName}:${e.type}`))
+        const newEntries = incomingEntries.filter(e => !existingKeys.has(`${e.areablockName}:${e.type}`))
+        merged[groupName] = [...existingEntries, ...newEntries]
+      }
+
+      state.documentAreablocks[action.payload.documentId][action.payload.editableTypeId] = merged
+    },
     setDocumentTimeSliderVisible: (state, action: PayloadAction<{ documentId: number, visible: boolean }>) => {
       state.timeSliderVisible[action.payload.documentId] = action.payload.visible
     },
@@ -63,7 +82,7 @@ const documentEditorSlice = createSlice({
   }
 })
 
-export const { setDocumentAreablockTypes, setDocumentTimeSliderVisible, removeDocument, clearAllDocuments } = documentEditorSlice.actions
+export const { setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, removeDocument, clearAllDocuments } = documentEditorSlice.actions
 
 export const selectDocumentEditorState = (state: any): DocumentEditorState => state['document-editor']
 

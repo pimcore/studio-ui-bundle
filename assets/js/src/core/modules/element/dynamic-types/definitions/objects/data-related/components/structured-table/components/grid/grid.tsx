@@ -85,17 +85,14 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     return rowData
   })
 
-  const normalizeValues = (newValue: Record<string, Record<string, StructuredTableColumnValue>>, rows: Array<{ rowLabel: string } & Record<string, any>>): StructuredTableValue => {
+  const normalizeValues = (newValue: Record<string, Record<string, StructuredTableColumnValue>>): StructuredTableValue => {
     const result = {}
 
-    rows.forEach(row => {
-      const rowKey = row[ROW_LABEL_ID]
-      const columnKeys = Object.keys(row).filter(key => key !== ROW_LABEL_ID)
+    props.rows.forEach(row => {
+      result[row.key] = {}
 
-      result[rowKey] = {}
-
-      columnKeys.forEach(columnKey => {
-        result[rowKey][columnKey] = newValue?.[rowKey]?.[columnKey] ?? ''
+      props.cols.forEach(col => {
+        result[row.key][col.key] = newValue?.[row.key]?.[col.key] ?? ''
       })
     })
 
@@ -116,7 +113,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
             [data.columnId]: props.castColumnValue(data.value as StructuredTableColumnValue, data.columnId)
           }
         }
-        const newValue = normalizeValues(updatedValue, rows)
+        const newValue = normalizeValues(updatedValue)
 
         props.onChange?.(newValue)
       } }

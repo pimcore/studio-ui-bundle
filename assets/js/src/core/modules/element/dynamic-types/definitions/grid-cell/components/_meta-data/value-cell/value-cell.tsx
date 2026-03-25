@@ -15,6 +15,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import { type DynamicTypeMetaDataRegistry } from '../../../../meta-data/dynamic-type-metadata-registry'
 import { type DynamicTypeMetadataAbstract } from '../../../../meta-data/dynamic-type-metadata-abstract'
+import { ValueSelectCell } from '../value-select/value-select-cell'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type as unknown as string
@@ -37,6 +38,11 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
         />
       )
     }
+
+    if (propertyType === 'metadata.select' && 'config' in props.row.original) {
+      return <ValueSelectCell { ...props } />
+    }
+
     return metadataType.getGridCellComponent(props)
   }
 

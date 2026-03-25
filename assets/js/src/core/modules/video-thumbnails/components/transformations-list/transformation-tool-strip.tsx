@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
@@ -25,7 +25,7 @@ export interface VideoTransformationToolStripProps {
   onMoveDown?: () => void
 }
 
-export const VideoTransformationToolStrip = ({
+export const VideoTransformationToolStrip = memo(({
   transformation,
   onRemove,
   onMoveUp,
@@ -33,7 +33,11 @@ export const VideoTransformationToolStrip = ({
 }: VideoTransformationToolStripProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const transformationDynamicTypeRegistry = container.get<VideoTransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/VideoTransformationDynamicTypeRegistry'])
+  const transformationDynamicTypeRegistry = useMemo(
+    () => container.get<VideoTransformationDynamicTypeRegistry>(serviceIds['DynamicTypes/VideoTransformationDynamicTypeRegistry']),
+    []
+  )
+
   const transformationType = transformationDynamicTypeRegistry.getDynamicType(transformation.type, false)
   const title = transformationType?.getSummary(transformation.config) ?? transformation.type
 
@@ -67,4 +71,5 @@ export const VideoTransformationToolStrip = ({
       </Space>
     </ToolStrip>
   )
-}
+})
+VideoTransformationToolStrip.displayName = 'VideoTransformationToolStrip'

@@ -13,7 +13,7 @@ import { markDocumentEditablesAsModified, selectDocumentById } from '@Pimcore/mo
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
-import { type AreablockGroupedTypes, setDocumentAreablockTypes, setDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
+import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -29,6 +29,7 @@ export interface DocumentApi {
   triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
   notifyAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
+  mergeAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   notifyTimeSliderVisible: (documentId: number, visible: boolean) => void
   isIframeReady: (documentId: number) => boolean
   onReady: (documentId: number, callback: () => void) => void
@@ -104,6 +105,10 @@ class DocumentApiImpl implements DocumentApi {
 
   notifyAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
     store.dispatch(setDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
+  }
+
+  mergeAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
+    store.dispatch(mergeDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
   }
 
   notifyTimeSliderVisible (documentId: number, visible: boolean): void {

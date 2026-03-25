@@ -108,6 +108,30 @@ const config: ConfigFile = {
     {
       pattern: 'gdprSearchData',
       type: 'query'
+    },
+    {
+      pattern: 'classificationStoreConfigurationCollectionCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'classificationStoreConfigurationGroupCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'classificationStoreConfigurationKeyCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'classificationStoreConfigurationKeyGroupRelationCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'classificationStoreConfigurationCollectionRelationCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'unitQuantityValueUnitsCollection',
+      type: 'query'
     }
   ],
   outputFiles: {

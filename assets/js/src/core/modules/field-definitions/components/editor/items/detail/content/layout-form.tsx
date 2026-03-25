@@ -16,7 +16,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useTranslation } from 'react-i18next'
 
-export const LayoutForm = (): React.JSX.Element => {
+interface ILayoutFormProps {
+  noPadding?: boolean
+}
+
+export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { useLayout, fieldDefinitionRegistry } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
@@ -54,8 +58,8 @@ export const LayoutForm = (): React.JSX.Element => {
       {dynamicType !== null
         ? (
           <Content
-            padded
-            padding={ { x: 'small', bottom: 'small', top: 'none' } }
+            padded={ !noPadding }
+            padding={ noPadding ? undefined : { x: 'small', bottom: 'small', top: 'none' } }
           >
             <FormKit
               formProps={ {

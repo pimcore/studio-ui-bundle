@@ -131,7 +131,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
 
     const data = response.data!
 
-    data.items!.forEach((predefinedDefinition) => {
+    data.items.forEach((predefinedDefinition) => {
       if (customMetadata?.find((cm) => cm.name === predefinedDefinition.name && cm.language === (predefinedDefinition.language ?? '')) !== undefined) {
         return
       }

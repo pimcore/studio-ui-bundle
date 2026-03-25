@@ -18,6 +18,15 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     metadataGetCollection: {
       providesTags: (result, error, args) => providingTags.PREDEFINED_ASSET_METADATA()
+    },
+    metadataPredefinedCreate: {
+      invalidatesTags: () => []
+    },
+    metadataPredefinedUpdate: {
+      invalidatesTags: () => []
+    },
+    metadataPredefinedDelete: {
+      invalidatesTags: () => []
     }
   }
 })
@@ -27,5 +36,10 @@ export type * from './metadata-api-slice.gen'
 export const {
   useAssetCustomMetadataGetByIdQuery,
   useMetadataGetCollectionQuery,
-  useLazyMetadataGetCollectionQuery
+  useLazyMetadataGetCollectionQuery,
+  useMetadataPredefinedCreateMutation,
+  useMetadataPredefinedUpdateMutation,
+  useMetadataPredefinedDeleteMutation
 } = api
+
+export { api }

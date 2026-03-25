@@ -18,6 +18,8 @@ import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-ema
 import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
 import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
 import { AboutDialogWrapper } from '@Pimcore/modules/about/components/about-dialog/about-dialog-wrapper'
+import { BulkExportWrapper } from '@Pimcore/modules/bulk-export/components/bulk-export-modal/bulk-export-wrapper'
+import { BulkImportWrapper } from '@Pimcore/modules/bulk-import/components/bulk-import-modal/bulk-import-wrapper'
 import { OpenElementWrapper } from '@Pimcore/modules/open-element/open-element-wrapper'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
@@ -40,12 +42,16 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
               <VideoModalProvider>
                 <SendTestEmailProvider>
                   <AboutDialogWrapper>
-                    <OpenElementWrapper>
-                      <SiteModalProvider>
-                        <SlotRenderer slot={ componentConfig.global.modal.name } />
-                        {children}
-                      </SiteModalProvider>
-                    </OpenElementWrapper>
+                    <BulkExportWrapper>
+                      <BulkImportWrapper>
+                        <OpenElementWrapper>
+                          <SiteModalProvider>
+                            <SlotRenderer slot={ componentConfig.global.modal.name } />
+                            {children}
+                          </SiteModalProvider>
+                        </OpenElementWrapper>
+                      </BulkImportWrapper>
+                    </BulkExportWrapper>
                   </AboutDialogWrapper>
                 </SendTestEmailProvider>
               </VideoModalProvider>

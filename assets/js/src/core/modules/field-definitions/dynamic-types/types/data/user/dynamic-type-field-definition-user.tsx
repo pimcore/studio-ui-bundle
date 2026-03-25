@@ -24,6 +24,6 @@ export class DynamicTypeFieldDefinitionUser extends DynamicTypeFieldDefinitionDa
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'group:select', 'encryptedFieldSupport']
+    return [...super.getTags(props), 'group:select', 'encryptedFieldSupport', 'classificationStore']
   }
 }

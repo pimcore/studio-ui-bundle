@@ -6,6 +6,17 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            unitQuantityValueUnitsCollection: build.query<
+                UnitQuantityValueUnitsCollectionApiResponse,
+                UnitQuantityValueUnitsCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/unit/quantity-value/units/collection`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Units"],
+            }),
             unitQuantityValueConvertAll: build.query<
                 UnitQuantityValueConvertAllApiResponse,
                 UnitQuantityValueConvertAllApiArg
@@ -30,6 +41,56 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Units"],
             }),
+            unitQuantityValueUnitsCreate: build.mutation<
+                UnitQuantityValueUnitsCreateApiResponse,
+                UnitQuantityValueUnitsCreateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/unit/quantity-value/units`,
+                    method: "POST",
+                    body: queryArg.createUnitParameters,
+                }),
+                invalidatesTags: ["Units"],
+            }),
+            unitQuantityValueUnitsUpdate: build.mutation<
+                UnitQuantityValueUnitsUpdateApiResponse,
+                UnitQuantityValueUnitsUpdateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/unit/quantity-value/units/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateUnitParameters,
+                }),
+                invalidatesTags: ["Units"],
+            }),
+            unitQuantityValueUnitsDelete: build.mutation<
+                UnitQuantityValueUnitsDeleteApiResponse,
+                UnitQuantityValueUnitsDeleteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/unit/quantity-value/units/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Units"],
+            }),
+            unitQuantityValueUnitsExport: build.query<
+                UnitQuantityValueUnitsExportApiResponse,
+                UnitQuantityValueUnitsExportApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/unit/quantity-value/units/export` }),
+                providesTags: ["Units"],
+            }),
+            unitQuantityValueUnitsImport: build.mutation<
+                UnitQuantityValueUnitsImportApiResponse,
+                UnitQuantityValueUnitsImportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/unit/quantity-value/units/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Units"],
+            }),
             unitQuantityValueList: build.query<UnitQuantityValueListApiResponse, UnitQuantityValueListApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/unit/quantity-value/unit-list` }),
                 providesTags: ["Units"],
@@ -38,6 +99,21 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type UnitQuantityValueUnitsCollectionApiResponse =
+    /** status 200 Paginated collection of quantity value units */ {
+        totalItems: number;
+        items: QuantityValueUnit[];
+    };
+export type UnitQuantityValueUnitsCollectionApiArg = {
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+        };
+    };
+};
 export type UnitQuantityValueConvertAllApiResponse = /** status 200 Converted quantity value */ ConvertedQuantityValues;
 export type UnitQuantityValueConvertAllApiArg = {
     /** Id of the unit to convert from */
@@ -57,40 +133,34 @@ export type UnitQuantityValueConvertApiArg = {
     /** Value to convert. */
     value: number;
 };
+export type UnitQuantityValueUnitsCreateApiResponse = /** status 200 Created quantity value unit */ QuantityValueUnit;
+export type UnitQuantityValueUnitsCreateApiArg = {
+    createUnitParameters: CreateUnitParameters;
+};
+export type UnitQuantityValueUnitsUpdateApiResponse = /** status 200 Updated quantity value unit */ QuantityValueUnit;
+export type UnitQuantityValueUnitsUpdateApiArg = {
+    /** ID of the unit to update */
+    id: string;
+    updateUnitParameters: UpdateUnitParameters;
+};
+export type UnitQuantityValueUnitsDeleteApiResponse = unknown;
+export type UnitQuantityValueUnitsDeleteApiArg = {
+    /** ID of the unit to delete */
+    id: string;
+};
+export type UnitQuantityValueUnitsExportApiResponse = /** status 200 JSON export of quantity value units */ Blob;
+export type UnitQuantityValueUnitsExportApiArg = void;
+export type UnitQuantityValueUnitsImportApiResponse = unknown;
+export type UnitQuantityValueUnitsImportApiArg = {
+    body: {
+        /** JSON file containing quantity value unit definitions */
+        file: Blob;
+    };
+};
 export type UnitQuantityValueListApiResponse = /** status 200 List of quantity value units */ {
     items: QuantityValueUnit[];
 };
 export type UnitQuantityValueListApiArg = void;
-export type ConvertedQuantityValues2 = {
-    /** Unit Abbreviation */
-    unitAbbreviation: string;
-    /** Unit Long Name */
-    unitLongName: string;
-    /** Converted Values */
-    convertedValue: number;
-};
-export type ConvertedQuantityValues = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Original Value */
-    originalValue: any | number;
-    /** From Unit Id */
-    fromUnitId: string;
-    /** Converted Values */
-    convertedValues: ConvertedQuantityValues2[];
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type QuantityValueUnit = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -115,5 +185,82 @@ export type QuantityValueUnit = {
     /** Converter */
     converter: string | null;
 };
-export const { useUnitQuantityValueConvertAllQuery, useUnitQuantityValueConvertQuery, useUnitQuantityValueListQuery } =
-    injectedRtkApi;
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type ConvertedQuantityValues2 = {
+    /** Unit Abbreviation */
+    unitAbbreviation: string;
+    /** Unit Long Name */
+    unitLongName: string;
+    /** Converted Values */
+    convertedValue: number;
+};
+export type ConvertedQuantityValues = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Original Value */
+    originalValue: any | number;
+    /** From Unit Id */
+    fromUnitId: string;
+    /** Converted Values */
+    convertedValues: ConvertedQuantityValues2[];
+};
+export type CreateUnitParameters = {
+    /** Unique unit ID */
+    id: string;
+    /** Abbreviation */
+    abbreviation?: string | null;
+    /** Long name */
+    longname?: string | null;
+    /** Group */
+    group?: string | null;
+    /** Base unit ID */
+    baseunit?: string | null;
+    /** Conversion factor */
+    factor?: number | null;
+    /** Conversion offset */
+    conversionOffset?: number | null;
+    /** Converter service class */
+    converter?: string | null;
+    /** Reference */
+    reference?: string | null;
+};
+export type UpdateUnitParameters = {
+    /** Abbreviation */
+    abbreviation?: string | null;
+    /** Long name */
+    longname?: string | null;
+    /** Group */
+    group?: string | null;
+    /** Base unit ID */
+    baseunit?: string | null;
+    /** Conversion factor */
+    factor?: number | null;
+    /** Conversion offset */
+    conversionOffset?: number | null;
+    /** Converter service class */
+    converter?: string | null;
+    /** Reference */
+    reference?: string | null;
+};
+export const {
+    useUnitQuantityValueUnitsCollectionQuery,
+    useUnitQuantityValueConvertAllQuery,
+    useUnitQuantityValueConvertQuery,
+    useUnitQuantityValueUnitsCreateMutation,
+    useUnitQuantityValueUnitsUpdateMutation,
+    useUnitQuantityValueUnitsDeleteMutation,
+    useUnitQuantityValueUnitsExportQuery,
+    useUnitQuantityValueUnitsImportMutation,
+    useUnitQuantityValueListQuery,
+} = injectedRtkApi;

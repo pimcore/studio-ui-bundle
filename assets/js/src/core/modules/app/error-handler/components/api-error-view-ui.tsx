@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { isString, isUndefined } from 'lodash'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { DEFAULT_ERROR_CONTENT } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 interface IApiErrorViewUIProps {
   errorContent: IErrorGetContent['data']
@@ -32,6 +33,6 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
   const textValue: string = isString(errorContent) ? errorContent : getErrorKeyValue()
 
   return (
-    <>{textValue}</>
+    <SanitizeHtml html={ textValue } />
   )
 }

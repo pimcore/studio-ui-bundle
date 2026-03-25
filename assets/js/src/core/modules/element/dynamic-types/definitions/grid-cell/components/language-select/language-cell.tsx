@@ -26,8 +26,10 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
     displayValue: locale
   }))
 
+  const existingConfig = props.column.columnDef.meta?.config as SelectCellConfig | undefined
   const columnConfig: SelectCellConfig = {
-    options: languageSelectionOptions
+    options: languageSelectionOptions,
+    allowClear: existingConfig?.allowClear
   }
 
   return (

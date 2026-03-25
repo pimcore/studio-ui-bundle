@@ -297,6 +297,11 @@ import { DynamicTypeFieldDefinitionGeopoint } from '@Pimcore/modules/field-defin
 import { DynamicTypeFieldDefinitionGeobounds } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/geobounds/dynamic-type-field-definition-geobounds'
 import { DynamicTypeFieldDefinitionGeopolygon } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/geopolygon/dynamic-type-field-definition-geopolygon'
 import { DynamicTypeFieldDefinitionGeopolyline } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/geopolyline/dynamic-type-field-definition-geopolyline'
+import { DynamicTypeFieldDefinitionFirstname } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/firstname/dynamic-type-field-definition-firstname'
+import { DynamicTypeFieldDefinitionLastname } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/lastname/dynamic-type-field-definition-lastname'
+import { DynamicTypeFieldDefinitionEmail } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/email/dynamic-type-field-definition-email'
+import { DynamicTypeFieldDefinitionGender } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/gender/dynamic-type-field-definition-gender'
+import { DynamicTypeFieldDefinitionConsent } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/consent/dynamic-type-field-definition-consent'
 import { DynamicTypeFieldDefinitionSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/select/dynamic-type-field-definition-select'
 import { DynamicTypeFieldDefinitionBooleanSelect } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/booleanSelect/dynamic-type-field-definition-boolean-select'
 import { DynamicTypeFieldDefinitionMultiselection } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiselection/dynamic-type-field-definition-multiselection'
@@ -783,6 +788,11 @@ container.bind(serviceIds['DynamicTypes/FieldDefinition/Fieldcollections']).to(D
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Objectbricks']).to(DynamicTypeFieldDefinitionObjectbricks).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Classificationstore']).to(DynamicTypeFieldDefinitionClassificationstore).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldDefinition/Localizedfields']).to(DynamicTypeFieldDefinitionLocalizedfields).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Firstname']).to(DynamicTypeFieldDefinitionFirstname).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Lastname']).to(DynamicTypeFieldDefinitionLastname).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Email']).to(DynamicTypeFieldDefinitionEmail).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Gender']).to(DynamicTypeFieldDefinitionGender).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldDefinition/Consent']).to(DynamicTypeFieldDefinitionConsent).inSingletonScope()
 
 // Image Thumbnails Transformation Registry
 container.bind(serviceIds['DynamicTypes/TransformationDynamicTypeRegistry']).to(TransformationDynamicTypeRegistry).inSingletonScope()

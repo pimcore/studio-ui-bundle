@@ -40,6 +40,33 @@ export interface ModalUploadPropsBase {
   uploadComponent?: React.ComponentType<AntUploadProps>
   uploadComponentClassName?: string
   openFileDialogOnClick?: AntUploadProps['openFileDialogOnClick']
+  /** Override Ant Design's default XHR transport. When provided, the `action` prop is ignored. */
+  customRequest?: AntUploadProps['customRequest']
+  /**
+   * When provided, overrides `targetFolderId` on a per-file basis for the
+   * upload `action` URL. Useful for folder drag-and-drop uploads where each
+   * file should be uploaded into a different subfolder.
+   * The callback receives the file and returns the folder ID to upload into,
+   * or undefined to fall back to `targetFolderId`.
+   */
+  getTargetFolderIdForFile?: (file: RcFile) => number | undefined
+  /**
+   * When provided, supplements the built-in conflict handler's `getReplaceId`
+   * with an external lookup. Useful when conflict resolution was handled
+   * outside of `beforeUpload` (e.g. during folder drag-and-drop tree traversal)
+   * and the replace-ID map is owned by the caller.
+   * Returns the asset ID to replace, or undefined if no replacement applies.
+   */
+  getExternalReplaceId?: (file: RcFile) => number | undefined
+  /**
+   * When true, skips the duplicate-file conflict check in `beforeUpload`.
+   * Use this when conflict resolution has already been handled externally
+   * (e.g. during folder drag-and-drop tree traversal).
+   *
+   * Can also be a React ref so that the value is read at `beforeUpload` call
+   * time rather than at render time.
+   */
+  skipConflictCheck?: boolean | React.RefObject<boolean>
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
@@ -85,19 +112,28 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
-    action: (file): string => {
-      if (isString(props.action)) {
-        return props.action
-      }
+    ...(!isNil(props.customRequest)
+      ? { customRequest: props.customRequest }
+      : {
+          action: (file): string => {
+            if (isString(props.action)) {
+              return props.action
+            }
 
-      const replaceId = getReplaceId(file)
+            // External replace ID (e.g. from folder-drop conflict resolution) takes
+            // priority, then fall back to the built-in conflict handler's result.
+            const replaceId = props.getExternalReplaceId?.(file) ?? getReplaceId(file)
 
-      if (!isNil(replaceId)) {
-        return `${getPrefix()}/assets/${replaceId}/replace`
-      }
+            if (!isNil(replaceId)) {
+              return `${getPrefix()}/assets/${replaceId}/replace`
+            }
 
-      return `${getPrefix()}/assets/add/${targetFolderId}`
-    },
+            const perFileFolderId = props.getTargetFolderIdForFile?.(file)
+            const effectiveFolderId = perFileFolderId ?? targetFolderId
+
+            return `${getPrefix()}/assets/add/${effectiveFolderId}`
+          }
+        }),
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
     accept: props.accept,
@@ -112,6 +148,14 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
       }
 
       await props.beforeUpload?.(file, fileList)
+
+      const shouldSkipCheck = typeof props.skipConflictCheck === 'object' && !isNil(props.skipConflictCheck)
+        ? props.skipConflictCheck.current === true
+        : props.skipConflictCheck === true
+
+      if (shouldSkipCheck) {
+        return true
+      }
 
       if (file.uid === fileList[0].uid) {
         reset()
@@ -195,7 +239,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
         cleanupProcessedFiles(doneFiles)
 
-        if (props.action === undefined && props.skipAssetFetch !== true) {
+        if (props.action === undefined && !('skipAssetFetch' in props && props.skipAssetFetch === true)) {
           const assetFetchPromises = assetIds
             .map(async id => {
               if (isNil(id)) return undefined

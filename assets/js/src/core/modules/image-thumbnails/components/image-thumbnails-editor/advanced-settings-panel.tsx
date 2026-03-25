@@ -47,7 +47,6 @@ export const AdvancedSettingsPanel = (): React.JSX.Element => {
         <InputNumber
           max={ 10 }
           min={ 1 }
-          placeholder="2.0"
           step={ 0.1 }
         />
       </Form.Item>
@@ -103,22 +102,22 @@ export const AdvancedSettingsPanel = (): React.JSX.Element => {
       </Form.Item>
 
       <Form.Item
-        name="downloadable"
-        valuePropName="checked"
-      >
-        <Switch
-          labelRight={ t('image-thumbnails.editor.downloadable') }
-          tooltip={ t('image-thumbnails.editor.downloadable.tooltip') }
-        />
-      </Form.Item>
-
-      <Form.Item
         name="preserveAnimation"
         valuePropName="checked"
       >
         <Switch
           labelRight={ t('image-thumbnails.editor.preserve-animation') }
           tooltip={ t('image-thumbnails.editor.preserve-animation.tooltip') }
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="downloadable"
+        valuePropName="checked"
+      >
+        <Switch
+          labelRight={ t('image-thumbnails.editor.downloadable') }
+          tooltip={ t('image-thumbnails.editor.downloadable.tooltip') }
         />
       </Form.Item>
     </Panel>

@@ -79,7 +79,28 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 
   const computedWidth = getComputedWidth()
 
-  const { styles } = useStyles({ width: computedWidth, theme })
+  let computedMinWidth: undefined | number
+
+  if (typeof minWidth === 'number') {
+    computedMinWidth = minWidth
+  }
+
+  if (typeof minWidth === 'string') {
+    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
+  }
+
+  const selectStyle = antdSelectProps.style
+  const skeletonWidth = computedWidth ?? selectStyle?.width ?? selectStyle?.maxWidth ?? '100%'
+  const skeletonMaxWidth = selectStyle?.maxWidth ?? '100%'
+  const skeletonMinWidth = computedMinWidth ?? selectStyle?.minWidth
+
+  const { styles } = useStyles({
+    width: computedWidth,
+    theme,
+    skeletonWidth,
+    skeletonMaxWidth,
+    skeletonMinWidth
+  })
 
   // Show skeleton if loading
   if (loadingSkeleton) {
@@ -91,11 +112,14 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     }
 
     return (
-      <Skeleton.Input
-        active
-        size={ getSkeletonSize() }
-        style={ { width: computedWidth } }
-      />
+      <div
+        className={ cn(styles.skeletonLoading, className) }
+      >
+        <Skeleton.Input
+          active
+          size={ getSkeletonSize() }
+        />
+      </div>
     )
   }
 
@@ -141,16 +165,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     }
 
     return null
-  }
-
-  let computedMinWidth: undefined | number
-
-  if (typeof minWidth === 'number') {
-    computedMinWidth = minWidth
-  }
-
-  if (typeof minWidth === 'string') {
-    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
   }
 
   // Apply field width as default maxWidth, with optional explicit minWidth

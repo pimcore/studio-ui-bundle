@@ -18,6 +18,44 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
+            classBulkExportAvailable: build.query<ClassBulkExportAvailableApiResponse, ClassBulkExportAvailableApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/class/bulk-export/available` }),
+                providesTags: ["Class Definition"],
+            }),
+            classBulkExport: build.mutation<ClassBulkExportApiResponse, ClassBulkExportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-export`,
+                    method: "POST",
+                    body: queryArg.bulkExportParameters,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImport: build.mutation<ClassBulkImportApiResponse, ClassBulkImportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/${queryArg.fileId}`,
+                    method: "POST",
+                    body: queryArg.bulkImportParameters,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImportDeleteFile: build.mutation<
+                ClassBulkImportDeleteFileApiResponse,
+                ClassBulkImportDeleteFileApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/${queryArg.fileId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classBulkImportPrepare: build.mutation<ClassBulkImportPrepareApiResponse, ClassBulkImportPrepareApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/bulk-import/prepare`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             classDefinitionCollection: build.query<
                 ClassDefinitionCollectionApiResponse,
                 ClassDefinitionCollectionApiArg
@@ -459,6 +497,33 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/usages` }),
                 providesTags: ["Class Definition"],
             }),
+            classSelectOptionCreate: build.mutation<ClassSelectOptionCreateApiResponse, ClassSelectOptionCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/select-option`,
+                    method: "POST",
+                    body: queryArg.createSelectOption,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classSelectOptionGet: build.query<ClassSelectOptionGetApiResponse, ClassSelectOptionGetApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/select-option/${queryArg.id}` }),
+                providesTags: ["Class Definition"],
+            }),
+            classSelectOptionUpdate: build.mutation<ClassSelectOptionUpdateApiResponse, ClassSelectOptionUpdateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/select-option/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateSelectOption,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
+            classSelectOptionDelete: build.mutation<ClassSelectOptionDeleteApiResponse, ClassSelectOptionDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/select-option/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             classSelectOptionGetTree: build.query<ClassSelectOptionGetTreeApiResponse, ClassSelectOptionGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/select-option/tree`,
@@ -466,6 +531,13 @@ const injectedRtkApi = api
                         withGroup: queryArg.withGroup,
                     },
                 }),
+                providesTags: ["Class Definition"],
+            }),
+            classSelectOptionGetUsages: build.query<
+                ClassSelectOptionGetUsagesApiResponse,
+                ClassSelectOptionGetUsagesApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/select-option/${queryArg.id}/usages` }),
                 providesTags: ["Class Definition"],
             }),
         }),
@@ -480,6 +552,36 @@ export type ClassGetAvailableVisibleFieldsApiResponse =
 export type ClassGetAvailableVisibleFieldsApiArg = {
     /** Comma-separated list of class names */
     classNames?: string;
+};
+export type ClassBulkExportAvailableApiResponse = /** status 200 List of available exportable items */ {
+    items: BulkExportAvailableItem[];
+};
+export type ClassBulkExportAvailableApiArg = void;
+export type ClassBulkExportApiResponse = /** status 200 Bulk export JSON file download */ Blob;
+export type ClassBulkExportApiArg = {
+    bulkExportParameters: BulkExportParameters;
+};
+export type ClassBulkImportApiResponse = /** status 201 Successfully created jobRun for bulk import */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
+export type ClassBulkImportApiArg = {
+    /** File identifier returned by the prepare import endpoint */
+    fileId: string;
+    bulkImportParameters: BulkImportParameters;
+};
+export type ClassBulkImportDeleteFileApiResponse = unknown;
+export type ClassBulkImportDeleteFileApiArg = {
+    /** File identifier returned by the prepare import endpoint */
+    fileId: string;
+};
+export type ClassBulkImportPrepareApiResponse =
+    /** status 200 File identifier and list of importable items */ BulkImportPrepareResponse;
+export type ClassBulkImportPrepareApiArg = {
+    body: {
+        /** Bulk export JSON file to analyze */
+        file: Blob;
+    };
 };
 export type ClassDefinitionCollectionApiResponse = /** status 200 List of class definitions */ {
     totalItems: number;
@@ -856,6 +958,28 @@ export type ClassObjectBrickGetUsagesApiArg = {
     /** Object brick unique key */
     key: string;
 };
+export type ClassSelectOptionCreateApiResponse =
+    /** status 200 Newly created select option configuration detail */ SelectOptionDetail;
+export type ClassSelectOptionCreateApiArg = {
+    createSelectOption: SchemaUsedToCreateSelectOptionConfigurations;
+};
+export type ClassSelectOptionGetApiResponse = /** status 200 Select option configuration detail */ SelectOptionDetail;
+export type ClassSelectOptionGetApiArg = {
+    /** Select option configuration ID */
+    id: string;
+};
+export type ClassSelectOptionUpdateApiResponse =
+    /** status 200 Updated select option configuration detail */ SelectOptionDetail;
+export type ClassSelectOptionUpdateApiArg = {
+    /** Select option configuration ID */
+    id: string;
+    updateSelectOption: SchemaUsedToUpdateSelectOptionConfigurations;
+};
+export type ClassSelectOptionDeleteApiResponse = unknown;
+export type ClassSelectOptionDeleteApiArg = {
+    /** Select option configuration ID */
+    id: string;
+};
 export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
     totalItems: number;
     items: (SelectOptionTreeItem | SelectOptionTreeFolder)[];
@@ -863,6 +987,14 @@ export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options 
 export type ClassSelectOptionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
+};
+export type ClassSelectOptionGetUsagesApiResponse =
+    /** status 200 List of classes and fields using the select option configuration */ {
+        items: SelectOptionUsageItem[];
+    };
+export type ClassSelectOptionGetUsagesApiArg = {
+    /** Select option configuration ID */
+    id: string;
 };
 export type ClassDefinitionVisibleField = {
     /** AdditionalAttributes */
@@ -881,6 +1013,48 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type BulkExportAvailableItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Definition type */
+    type: string;
+    /** Definition name or identifier */
+    name: string;
+    /** Human-readable display name */
+    displayName: string;
+    /** Icon identifier */
+    icon: string;
+};
+export type BulkExportParameters = {
+    /** Items to export */
+    items: {
+        /** Type of the item */
+        type?: string;
+        /** Name of the item */
+        name?: string;
+    }[];
+};
+export type BulkImportParameters = {
+    /** Items to import from the uploaded file */
+    items: {
+        /** Type of the item */
+        type?: string;
+        /** Name of the item */
+        name?: string;
+    }[];
+};
+export type BulkImportPrepareResponse = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Unique file identifier for the stored import file */
+    fileId: string;
+    /** List of importable items found in the file */
+    items: BulkExportAvailableItem[];
 };
 export type ElementIcon = {
     /** Icon type */
@@ -936,9 +1110,9 @@ export type Layout = {
     /** Name */
     name: string;
     /** Data Type */
-    dataType: string;
+    datatype: string;
     /** Field Type */
-    fieldType: string;
+    fieldtype: string;
     /** Type */
     type: string | null;
     /** Layout */
@@ -1282,7 +1456,7 @@ export type FieldCollectionTreeNodeFolder = {
     /** Key of folder with group_ prefix */
     key: string;
     /** Group name */
-    name?: string;
+    name: string;
     /** icon */
     icon: ElementIcon;
     /** Group */
@@ -1351,7 +1525,9 @@ export type ObjectBrickDetail = {
     isWriteable: boolean;
     /** Class definitions assigned to this object brick */
     classDefinitions: {
+        /** Name of the class */
         classname?: string;
+        /** Name of the field */
         fieldname?: string;
     }[];
 };
@@ -1433,6 +1609,52 @@ export type ObjectBrickUsageData = {
     /** Name of the field in the class */
     field: string;
 };
+export type SelectOptionData = {
+    /** Value of the select option */
+    value: string;
+    /** Display label of the select option */
+    label: string;
+    /** Enum case name of the select option */
+    name: string;
+};
+export type SelectOptionDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the select options configuration */
+    id: string;
+    /** Group name */
+    group: string | null;
+    /** Whether this configuration is restricted to admin */
+    adminOnly: boolean;
+    /** PHP traits to use */
+    useTraits: string;
+    /** PHP interfaces to implement */
+    implementsInterfaces: string;
+    /** Select option entries */
+    selectOptions: SelectOptionData[];
+    /** Fully qualified enum name */
+    enumName: string;
+    /** Whether the configuration is writeable */
+    isWriteable: boolean;
+};
+export type SchemaUsedToCreateSelectOptionConfigurations = {
+    /** ID of the select options configuration */
+    id: string;
+};
+export type SchemaUsedToUpdateSelectOptionConfigurations = {
+    /** Group name */
+    group: string | null;
+    /** Whether this configuration is restricted to admin */
+    adminOnly: boolean;
+    /** PHP traits to use */
+    useTraits: string;
+    /** PHP interfaces to implement */
+    implementsInterfaces: string;
+    /** Select option entries */
+    selectOptions: SelectOptionData[] | null;
+};
 export type SelectOptionTreeItem = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1465,8 +1687,23 @@ export type SelectOptionTreeFolder = {
     /** Child nodes */
     children: SelectOptionTreeItem[];
 };
+export type SelectOptionUsageItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name of the class using the select options */
+    class: string;
+    /** Name of the field using the select options */
+    field: string;
+};
 export const {
     useClassGetAvailableVisibleFieldsQuery,
+    useClassBulkExportAvailableQuery,
+    useClassBulkExportMutation,
+    useClassBulkImportMutation,
+    useClassBulkImportDeleteFileMutation,
+    useClassBulkImportPrepareMutation,
     useClassDefinitionCollectionQuery,
     useClassDefinitionCollectionCreatableQuery,
     useClassCustomLayoutCollectionQuery,
@@ -1522,5 +1759,10 @@ export const {
     useClassObjectBrickGetLayoutByKeyQuery,
     useClassObjectBrickGetTreeQuery,
     useClassObjectBrickGetUsagesQuery,
+    useClassSelectOptionCreateMutation,
+    useClassSelectOptionGetQuery,
+    useClassSelectOptionUpdateMutation,
+    useClassSelectOptionDeleteMutation,
     useClassSelectOptionGetTreeQuery,
+    useClassSelectOptionGetUsagesQuery,
 } = injectedRtkApi;

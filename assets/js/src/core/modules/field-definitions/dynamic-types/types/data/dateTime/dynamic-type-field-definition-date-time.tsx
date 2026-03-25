@@ -26,7 +26,7 @@ export class DynamicTypeFieldDefinitionDateTime extends DynamicTypeFieldDefiniti
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'encryptedFieldSupport']
+    return [...super.getTags(props), 'encryptedFieldSupport', 'classificationStore']
   }
 
   getDefaultData (): FieldDefinitionData {

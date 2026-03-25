@@ -456,6 +456,11 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/Objectbricks': 'DynamicTypes/FieldDefinition/Objectbricks',
   'DynamicTypes/FieldDefinition/Classificationstore': 'DynamicTypes/FieldDefinition/Classificationstore',
   'DynamicTypes/FieldDefinition/Localizedfields': 'DynamicTypes/FieldDefinition/Localizedfields',
+  'DynamicTypes/FieldDefinition/Firstname': 'DynamicTypes/FieldDefinition/Firstname',
+  'DynamicTypes/FieldDefinition/Lastname': 'DynamicTypes/FieldDefinition/Lastname',
+  'DynamicTypes/FieldDefinition/Email': 'DynamicTypes/FieldDefinition/Email',
+  'DynamicTypes/FieldDefinition/Gender': 'DynamicTypes/FieldDefinition/Gender',
+  'DynamicTypes/FieldDefinition/Consent': 'DynamicTypes/FieldDefinition/Consent',
 
   // GDPR Providers
   'DynamicTypes/GDPRProvider/DataObjects': 'DynamicTypes/GDPRProvider/DataObjects',

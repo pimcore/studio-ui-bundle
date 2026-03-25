@@ -66,3 +66,8 @@ class ApiError extends Error {
 }
 
 export default ApiError
+
+/** Narrows an unknown caught value to the ApiErrorData shape accepted by the ApiError constructor. */
+export function isApiErrorData (error: unknown): error is ConstructorParameters<typeof ApiError>[0] {
+  return typeof error === 'object' && error !== null && !(error instanceof Error)
+}

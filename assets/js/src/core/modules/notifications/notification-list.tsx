@@ -16,9 +16,10 @@ import { type NotificationGetCollectionApiResponse } from './notifications-slice
 
 export interface NotificationDetailProps {
   notifications: NotificationGetCollectionApiResponse
+  activeNotification?: number
 }
 
-export const NotificationList = ({ notifications }: NotificationDetailProps): React.JSX.Element => {
+export const NotificationList = ({ notifications, activeNotification }: NotificationDetailProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
@@ -28,6 +29,7 @@ export const NotificationList = ({ notifications }: NotificationDetailProps): Re
       size={ 'small' }
     >{notifications?.items.map(notification => (
       <NotificationDetail
+        activeNotification={ activeNotification }
         key={ notification.id }
         notification={ notification }
       />

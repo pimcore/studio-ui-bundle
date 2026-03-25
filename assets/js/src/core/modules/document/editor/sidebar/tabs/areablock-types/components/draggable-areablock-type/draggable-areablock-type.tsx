@@ -10,9 +10,11 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 import { GridButton } from '@Pimcore/components/grid-button/grid-button'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
 import { getAreablockTypeIcon } from '../../utils/icon-fallback'
 
@@ -40,10 +42,12 @@ export const DraggableAreablockType = ({
 
   return (
     <Draggable info={ dragInfo }>
-      <GridButton
-        icon={ iconConfig }
-        label={ t(type.name) }
-      />
+      <Tooltip title={ isUndefined(type.description) ? undefined : t(type.description) }>
+        <GridButton
+          icon={ iconConfig }
+          label={ t(type.name) }
+        />
+      </Tooltip>
     </Draggable>
   )
 }

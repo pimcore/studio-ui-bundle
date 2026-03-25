@@ -62,15 +62,12 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
       setLayout({
         name: 'pimcore_root',
         children: [],
-        fieldType: 'panel',
-        // @todo
-        // @ts-expect-error remove when backend provides the right typo
         fieldtype: 'panel',
         bodyStyle: '',
         border: false,
         collapsible: false,
         title: '',
-        dataType: 'layout',
+        datatype: 'layout',
         collapsed: false,
         height: 0,
         width: 0,

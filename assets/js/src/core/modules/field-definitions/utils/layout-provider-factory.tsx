@@ -677,7 +677,7 @@ export const create = (): LayoutProviderFactoryReturn => {
         return false
       }
 
-      const externalFieldtype = externalLayout.fieldType ?? (externalLayout as any).fieldtype
+      const externalFieldtype: string | undefined = externalLayout.fieldtype
 
       if (externalFieldtype === undefined) {
         return false

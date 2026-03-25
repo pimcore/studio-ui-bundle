@@ -10,8 +10,14 @@
 
 import { type FormItemProps } from 'antd'
 import React, { createContext, useMemo } from 'react'
+import { type VirtualValidationState } from '../../hooks/use-virtual-validation'
 
-export interface ItemData extends FormItemProps {}
+export interface ItemData extends FormItemProps {
+  validationState?: VirtualValidationState
+  onValidate?: (value: unknown) => Promise<VirtualValidationState>
+  /** Called by child controls so VirtualItem can keep track of the current value for submit-time validation. */
+  onUpdateCurrentValue?: (value: unknown) => void
+}
 
 export type ItemContextProps = ItemData | undefined
 

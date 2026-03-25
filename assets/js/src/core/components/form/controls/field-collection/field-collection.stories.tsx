@@ -22,6 +22,7 @@ import { DatePicker } from '../../../date-picker/date-picker'
 import { ColorPicker } from '../../../color-picker/color-picker'
 import { Content } from '../../../content/content'
 import { Panel } from '../../../panel'
+import { Button } from '../../../button/button'
 
 const config: Meta<typeof FieldCollection> = {
   title: 'Components/Data Entry/Form/Controls/FieldCollection',
@@ -618,6 +619,153 @@ export const ComplexFieldTypes: Story = {
     docs: {
       description: {
         story: 'Demonstrates complex field types where each collection item contains multiple form fields in its data object. This shows how field collection can handle sophisticated data structures with nested form fields, validation, and complex field interactions.'
+      }
+    }
+  }
+}
+
+// Validation story – demonstrates inline error/warning messages on Field Collection items
+const RequiredTextFieldComponent = (): React.JSX.Element => (
+  <Form.Item
+    label="Text Value"
+    name="text"
+    rules={ [{ required: true, message: 'Text value is required' }] }
+  >
+    <Input placeholder="Enter text…" />
+  </Form.Item>
+)
+
+const ValidatedEmailFieldComponent = (): React.JSX.Element => (
+  <Form.Item
+    label="Email"
+    name="email"
+    rules={ [
+      { required: true, message: 'Email is required' },
+      { type: 'email', message: 'Must be a valid email address' }
+    ] }
+  >
+    <Input placeholder="Enter email…" />
+  </Form.Item>
+)
+
+const MinLengthFieldComponent = (): React.JSX.Element => (
+  <Form.Item
+    label="Username"
+    name="username"
+    rules={ [
+      { required: true, message: 'Username is required' },
+      { min: 3, message: 'Username must be at least 3 characters' }
+    ] }
+  >
+    <Input placeholder="At least 3 characters" />
+  </Form.Item>
+)
+
+const createValidationRegistry = (): FieldCollectionRegistry => {
+  const registry = new FieldCollectionRegistry()
+
+  registry.register({
+    type: 'text',
+    key: 'required-text-field',
+    translationKey: 'field-collection.types.text',
+    component: <RequiredTextFieldComponent />
+  })
+
+  registry.register({
+    type: 'email',
+    key: 'validated-email-field',
+    translationKey: 'field-collection.types.email',
+    component: <ValidatedEmailFieldComponent />
+  })
+
+  registry.register({
+    type: 'username',
+    key: 'min-length-field',
+    translationKey: 'field-collection.types.username',
+    component: <MinLengthFieldComponent />
+  })
+
+  return registry
+}
+
+const WithValidationComponent = (): React.JSX.Element => {
+  const [form] = Form.useForm()
+  const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const registry = createValidationRegistry()
+
+  const handleFinish = (values: any): void => {
+    setSubmitResult(JSON.stringify(values, null, 2))
+  }
+
+  const handleFinishFailed = (): void => {
+    setSubmitResult('Validation failed – fix the errors above and try again.')
+  }
+
+  return (
+    <Content padded>
+      <p style={ { marginBottom: 16, color: '#555' } }>
+        Add items, leave fields empty or enter invalid values, then click
+        <strong> Validate &amp; Submit</strong> to see inline error messages appear below each control.
+      </p>
+      <Form
+        form={ form }
+        initialValues={ { fieldCollection: [] } }
+        layout="vertical"
+        onFinish={ handleFinish }
+        onFinishFailed={ handleFinishFailed }
+      >
+        <Form.Item name="fieldCollection">
+          <FieldCollection
+            registry={ registry }
+            title='Validated Field Collection'
+          />
+        </Form.Item>
+
+        <Form.Item style={ { marginTop: 16 } }>
+          <Button
+            htmlType="submit"
+            type="primary"
+          >
+            Validate &amp; Submit
+          </Button>
+        </Form.Item>
+      </Form>
+
+      {submitResult !== null && (
+        <div style={ { marginTop: 16 } }>
+          <h4>Result:</h4>
+          <pre style={ {
+            backgroundColor: '#f5f5f5',
+            padding: '12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            overflow: 'auto'
+          } }
+          >
+            {submitResult}
+          </pre>
+        </div>
+      )}
+    </Content>
+  )
+}
+
+export const WithValidation: Story = {
+  render: () => <WithValidationComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `Demonstrates **inline field validation** on FieldCollection items.
+
+Add one or more items (text, email, username), leave fields empty or enter invalid values,
+then click **Validate & Submit** to trigger validation. Each item shows error messages directly
+below the offending control – matching the AntD Form.Item style – without requiring a full
+AntD form context around each virtual item.
+
+**Rules exercised:**
+- \`required\` – fires when the field is empty
+- \`type: 'email'\` – fires when the value is not a valid e-mail address
+- \`min\` – fires when the string is shorter than the given length`
       }
     }
   }

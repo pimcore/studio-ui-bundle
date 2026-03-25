@@ -41,7 +41,10 @@ export const MediaQueryTransformationsField = ({
     }
   }, [onChange])
 
-  const fieldCollectionRegistry = container.get<TransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/TransformationFieldCollectionRegistry'])
+  const fieldCollectionRegistry = useMemo(
+    () => container.get<TransformationFieldCollectionRegistry>(serviceIds['DynamicTypes/TransformationFieldCollectionRegistry']),
+    []
+  )
 
   return (
     <FieldCollection
