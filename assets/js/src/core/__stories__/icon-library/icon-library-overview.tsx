@@ -70,11 +70,9 @@ export const IconLibraryOverview = (): React.JSX.Element => {
     void copyToClipboardWithFeedback(
       name,
       () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         success('Copied to clipboard')
       },
       () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         error('Failed to copy to clipboard')
       }
     )

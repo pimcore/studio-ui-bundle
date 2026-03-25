@@ -79,7 +79,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
       updateTagParameters
     })) as { error?: { data?: { error?: string | null } } }
     if ('data' in response) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success({
         content: t('tag-configuration.successful-update'),
         type: 'success',
@@ -114,7 +113,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const response = (await createTag({ createTagParameters })) as { error?: { data?: { error?: string | null } } }
 
     if ('data' in response) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success({
         content: t('tag-configuration.successful-add'),
         type: 'success',
@@ -144,7 +142,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const response = (await deleteTag({ id: tagId })) as { error?: { data?: { error?: string | null } } }
 
     if ('data' in response) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success({
         content: t('tag-configuration.successful-deletion'),
         type: 'success',

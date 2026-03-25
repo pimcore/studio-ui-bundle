@@ -15,7 +15,7 @@ type AnyQueryHook<TData = any, TArg = any> = (
 ) => TypedUseQueryHookResult<TData, TArg, BaseQueryFn>
 
 type AnyMutationHook<TResult = any, TArg = any> = TypedUseMutation<
-TResult,
-TArg,
-BaseQueryFn
+  TResult,
+  TArg,
+  BaseQueryFn
 >

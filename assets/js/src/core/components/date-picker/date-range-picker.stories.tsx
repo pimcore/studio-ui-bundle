@@ -14,7 +14,6 @@ import { Form } from '@Pimcore/components/form/form'
 import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Components/Data Entry/DateRangePicker',
   component: DateRangePicker,

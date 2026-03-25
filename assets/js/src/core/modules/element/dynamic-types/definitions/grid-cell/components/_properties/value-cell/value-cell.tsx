@@ -43,9 +43,9 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       enrichedProps = addColumnConfig(props, {
         options: isString(props.row.original.config)
           ? props.row.original.config.split(',').map((value: string) => {
-            return { value, label: value }
-          }
-          )
+              return { value, label: value }
+            }
+            )
           : undefined
       })
     }

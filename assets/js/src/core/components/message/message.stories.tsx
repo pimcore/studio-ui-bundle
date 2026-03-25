@@ -19,7 +19,6 @@ const config: Meta = {
     const messageApi = useMessage()
 
     const showMessage = (): void => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.open({
         type: args.type,
         content: args.content,

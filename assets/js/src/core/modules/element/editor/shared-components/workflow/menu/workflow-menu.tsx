@@ -55,13 +55,13 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
               ? { backgroundColor: `${status.color}33` }
               : {}
             const tag =
-                {
-                  children: t(`${status.label}`),
-                  icon: <Badge
-                    color={ status.color }
-                        />,
-                  style
-                }
+              {
+                children: t(`${status.label}`),
+                icon: <Badge
+                  color={ status.color }
+                      />,
+                style
+              }
             result.push(tag)
           }
         })

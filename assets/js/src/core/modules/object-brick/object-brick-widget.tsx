@@ -90,12 +90,11 @@ const useObjectBrickCollectionQuery: AnyQueryHook = () => {
   }, [result.data])
 
   if (mappedData !== undefined) {
-    return { ...result, data: mappedData } as any // eslint-disable-line @typescript-eslint/no-explicit-any
+    return { ...result, data: mappedData } as any
   }
 
   return result
 }
-
 // Wrapper: maps delete to use key (id) as the key arg
 const useObjectBrickDeleteMutation: AnyMutationHook = (...args) => {
   const [deleteFn, result] = useClassObjectBrickDeleteMutation(...args)
@@ -104,7 +103,7 @@ const useObjectBrickDeleteMutation: AnyMutationHook = (...args) => {
     return deleteFn({ key: String(arg.id) })
   }
 
-  return [wrappedDelete as any, result] // eslint-disable-line @typescript-eslint/no-explicit-any
+  return [wrappedDelete as any, result]
 }
 
 const objectBrickImportExportConfig: ImportExportConfig = {

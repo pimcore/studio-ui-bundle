@@ -49,7 +49,6 @@ export const CollectionGroupRelationsGrid = ({
   const [pageSize, setPageSize] = useState(20)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationCollectionRelationCollectionQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     { colId: colId!, body: { filters: { page, pageSize } } },
     { skip: colId === undefined }
   )

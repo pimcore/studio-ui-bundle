@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 export type ComposeFn<T = unknown> = (props: T, ...args: any) => T
 export type ComposeProps<T = unknown> = ComposeFn<T> | [ComposeFn<T>, ...any]
 

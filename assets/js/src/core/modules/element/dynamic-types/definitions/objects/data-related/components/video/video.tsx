@@ -119,23 +119,22 @@ export const Video = (props: VideoProps): React.JSX.Element => {
         variant="outline"
       >
 
-        { /* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */
-          videoValue !== null && videoValue?.data !== null
-            ? (
-              <VideoPreview
-                height={ height! }
-                value={ videoValue }
-                width={ width! }
-              />
-              )
-            : (
-              <AssetTarget
-                dndIcon={ props.disabled !== true }
-                height={ height }
-                title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
-                width={ width }
-              />
-              ) }
+        { videoValue !== null && videoValue?.data !== null
+          ? (
+            <VideoPreview
+              height={ height! }
+              value={ videoValue }
+              width={ width! }
+            />
+            )
+          : (
+            <AssetTarget
+              dndIcon={ props.disabled !== true }
+              height={ height }
+              title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
+              width={ width }
+            />
+            ) }
       </Droppable>
     </Card>
   )

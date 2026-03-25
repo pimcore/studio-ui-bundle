@@ -70,6 +70,7 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
         savedExpandedKeysRef.current = null
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       if (savedExpandedKeysRef.current === null) {
         savedExpandedKeysRef.current = expandedKeys
       }

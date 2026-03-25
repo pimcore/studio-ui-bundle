@@ -39,7 +39,6 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
   useEffect(() => {
     if (isSuccess) {
       if (showNotifications) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         messageApi.success(t('save-success'))
       }
       resetSchedulesChanges()
@@ -52,7 +51,6 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
 
   useEffect(() => {
     if (isError && showNotifications) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error(t('save-failed'))
     }
   }, [isError])
