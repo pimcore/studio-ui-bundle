@@ -255,7 +255,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   return (
     <div
       className={ getClasses() }
-      data-testid={ createNodeTestId(parseInt(id, 10), props.elementType) }
+      data-testid={ createNodeTestId(id, props.elementType) }
       ref={ forwardRef }
     >
       {!isNil(tooltipSlotName)

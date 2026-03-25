@@ -51,6 +51,8 @@ export const ColorPanel = (): React.JSX.Element => {
             noStyle
           >
             <ColorPicker
+              allowClear
+              data-testid="appearance-branding-brand-color"
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)
@@ -70,6 +72,8 @@ export const ColorPanel = (): React.JSX.Element => {
             noStyle
           >
             <ColorPicker
+              allowClear
+              data-testid="appearance-branding-background-shade"
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)

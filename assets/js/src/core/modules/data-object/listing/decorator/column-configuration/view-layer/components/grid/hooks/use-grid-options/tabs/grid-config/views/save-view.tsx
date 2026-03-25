@@ -59,6 +59,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
                 title={ t('grid.configuration.delete-this-template') }
               >
                 <IconTextButton
+                  data-testid="listing-grid-config-delete-template-button"
                   disabled={ isLoading }
                   icon={ { value: 'trash' } }
                   loading={ isDeleting }
@@ -78,6 +79,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
             >{ t('button.cancel') }</IconTextButton>
 
             <Button
+              data-testid="listing-grid-config-save-apply-button"
               disabled={ isDeleting }
               loading={ isLoading }
               onClick={ () => form?.submit() }

@@ -82,6 +82,7 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
   return (
     <Select
       className='w-full'
+      data-testid="listing-class-definition-select"
       disabled={ isDisabled }
       minWidth={ 'normal' }
       onChange={ (value) => { onChange(value) } }

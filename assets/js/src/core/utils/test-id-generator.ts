@@ -71,7 +71,7 @@ export const createGenericTestId = (
  * createNodeTestId(123, 'document')
  * // Returns: 'tree-node-document-123'
  */
-export const createNodeTestId = (id: number, elementType?: string): string => {
+export const createNodeTestId = (id: number | string, elementType?: string): string => {
   return createGenericTestId(id, {
     prefix: 'tree-node',
     elementType
