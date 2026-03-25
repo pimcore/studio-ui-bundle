@@ -22,7 +22,9 @@ import { useTranslation } from 'react-i18next'
 import { type AnyMutationHook } from 'types/react-query'
 
 // A stable no-op hook used when useItemsDeleteMutation is not provided
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const useNoOpDeleteMutation: AnyMutationHook = () => [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (async () => { }) as any,
   {} as any
 ]

@@ -68,6 +68,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       try {
         return JSON.parse(props.predefinedDataTemplates) as DataTemplates
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error('Failed to parse predefinedDataTemplates', e)
         return {}
       }

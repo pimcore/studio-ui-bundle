@@ -51,6 +51,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     if (isError) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error(t('auto-save-failed'))
     }
   }, [isError])

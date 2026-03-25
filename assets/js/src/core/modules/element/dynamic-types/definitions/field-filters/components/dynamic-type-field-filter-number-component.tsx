@@ -120,7 +120,7 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
     >
       <Select
         defaultValue={ NumberFilterSettingValue.IS }
-        onChange={ (value: NumberFilterSettingValue) => { handleSettingChange(value) } }
+        onChange={ (value: NumberFilterSettingValue) => { handleSettingChange(value as NumberFilterSettingValue) } }
         options={ SETTING_OPTIONS }
         width={ currentSetting === NumberFilterSettingValue.MORE ? 100 : 90 }
       />

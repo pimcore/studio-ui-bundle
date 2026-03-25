@@ -250,12 +250,11 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
               } }
               type={ 'button' }
             >
-              { // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
-                  ? (
-                      styleOptions[hotspot.type].icon
-                    )
-                  : null}
+              {styleOptions[hotspot.type]?.icon !== undefined && styleOptions[hotspot.type]?.icon !== null
+                ? (
+                    styleOptions[hotspot.type].icon
+                  )
+                : null}
             </button>
           </Popover>
         ))

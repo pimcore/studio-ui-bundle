@@ -125,7 +125,7 @@ export const DynamicTypeFieldFilterTimeComponent = (props: DynamicTypeFieldFilte
     >
       <Select
         defaultValue={ TimePickerSettingValue.ON }
-        onChange={ (value: TimePickerSettingValue) => { handleSettingChange(value) } }
+        onChange={ (value: TimePickerSettingValue) => { handleSettingChange(value as TimePickerSettingValue) } }
         options={ SETTING_OPTIONS }
         width={ 90 }
       />

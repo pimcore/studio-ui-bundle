@@ -51,9 +51,9 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
   const typeOptions: SelectOption[] = !isUndefined(websiteSettingTypes)
     ? websiteSettingTypes.map(setting => ({
-        value: setting.key,
-        label: setting.title
-      }))
+      value: setting.key,
+      label: setting.title
+    }))
     : []
 
   const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ({

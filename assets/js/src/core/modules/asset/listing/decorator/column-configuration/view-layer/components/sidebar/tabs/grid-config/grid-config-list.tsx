@@ -33,6 +33,7 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
   items: ColumnStackListItemProps[]
 }
 
+/* eslint-disable react/jsx-key */
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
   const { setColumns } = useGridConfig()
   const settings = useSettings()

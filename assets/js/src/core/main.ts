@@ -8,4 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-void import('@sdk/_internal_/mf-bootstrap')
+import('@sdk/_internal_/mf-bootstrap')

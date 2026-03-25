@@ -375,7 +375,7 @@ const ValidationExampleComponent = (): React.JSX.Element => {
               },
               {
                 validator: async (_, value) => {
-                  if (value?.textInput === true && (value.fullPath === null || value.fullPath === undefined || value.fullPath.trim() === '')) {
+                  if ((value !== null && value !== undefined) && value.textInput === true && (value.fullPath === null || value.fullPath === undefined || value.fullPath.trim() === '')) {
                     return await Promise.reject(new Error('Path cannot be empty'))
                   }
                   await Promise.resolve()

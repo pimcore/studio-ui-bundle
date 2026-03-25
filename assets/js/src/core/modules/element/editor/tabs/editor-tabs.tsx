@@ -83,7 +83,6 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   }
 
   items = items.filter((item) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (item.hidden !== undefined && item.hidden(element)) {
       return false
     }

@@ -50,19 +50,18 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     const structuredClassDefinitions = [...classDefinitions]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
-        const groupName = isNil(classDefinition.group) || isEmpty(classDefinition.group)
-          ? 'undefined'
-          : classDefinition.group
+      const groupName = isNil(classDefinition.group) || isEmpty(classDefinition.group)
+        ? 'undefined'
+        : classDefinition.group
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        if (acc[groupName] === undefined) {
-          acc[groupName] = []
-        }
+      if (acc[groupName] === undefined) {
+        acc[groupName] = []
+      }
 
-        acc[groupName].push(classDefinition)
+      acc[groupName].push(classDefinition)
 
-        return acc
-      }, {})
+      return acc
+    }, {})
 
     if (structuredClassDefinitions.undefined !== undefined) {
       classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))

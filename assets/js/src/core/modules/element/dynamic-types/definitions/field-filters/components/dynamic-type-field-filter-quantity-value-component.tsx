@@ -128,7 +128,7 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
     >
       <Select
         defaultValue={ QuantityValueFilterSettingValue.IS }
-        onChange={ (value: QuantityValueFilterSettingValue) => { handleSettingChange(value) } }
+        onChange={ (value: QuantityValueFilterSettingValue) => { handleSettingChange(value as QuantityValueFilterSettingValue) } }
         options={ SETTING_OPTIONS }
         width={ currentSetting === QuantityValueFilterSettingValue.MORE ? 100 : 90 }
       />

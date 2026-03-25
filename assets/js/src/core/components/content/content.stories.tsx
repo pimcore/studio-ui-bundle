@@ -11,6 +11,7 @@
 import { type Meta } from '@storybook/react'
 import { Content } from './content'
 
+/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Components/General/Content',
   component: Content,

@@ -90,7 +90,7 @@ const useObjectBrickCollectionQuery: AnyQueryHook = () => {
   }, [result.data])
 
   if (mappedData !== undefined) {
-    return { ...result, data: mappedData } as any
+    return { ...result, data: mappedData } as any // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   return result
@@ -104,7 +104,7 @@ const useObjectBrickDeleteMutation: AnyMutationHook = (...args) => {
     return deleteFn({ key: String(arg.id) })
   }
 
-  return [wrappedDelete as any, result]
+  return [wrappedDelete as any, result] // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 const objectBrickImportExportConfig: ImportExportConfig = {

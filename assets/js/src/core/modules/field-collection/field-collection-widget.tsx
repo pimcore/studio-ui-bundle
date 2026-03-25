@@ -87,7 +87,7 @@ const useFieldCollectionCollectionQuery: AnyQueryHook = () => {
   }, [result.data])
 
   if (mappedData !== undefined) {
-    return { ...result, data: mappedData } as any
+    return { ...result, data: mappedData } as any // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   return result
