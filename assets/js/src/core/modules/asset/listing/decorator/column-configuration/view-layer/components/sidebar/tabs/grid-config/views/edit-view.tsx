@@ -69,6 +69,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <Button
+            data-testid='listing-grid-config-cancel-button'
             onClick={ onCancelClick }
             type='default'
           >
@@ -79,6 +80,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
             { renderSaveButton() }
 
             <Button
+              data-testid='listing-grid-config-apply-button'
               onClick={ onApplyClick }
               type='primary'
             >
@@ -97,6 +99,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
             >
               <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
                 <IconTextButton
+                  data-testid='listing-grid-config-template-button'
                   disabled={ savedGridConfigurations?.length === 0 && !isLoading }
                   icon={ { value: 'style' } }
                   loading={ isLoading }
@@ -128,6 +131,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
           {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
+                data-testid='listing-grid-config-add-column-button'
                 icon={ { value: 'new' } }
                 type='link'
               >
@@ -145,6 +149,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
       <>
         { saveEnabled === true && !isSavedConfiguration && (
           <Button
+            data-testid='listing-grid-config-save-template-button'
             onClick={ onSaveConfigurationClick }
             type='default'
           >
@@ -157,6 +162,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
             { isGridTemplateOwner && (
               <Compact>
                 <Button
+                  data-testid='listing-grid-config-update-template-button'
                   loading={ isUpdating }
                   onClick={ onUpdateConfigurationClick }
                   type='default'
@@ -189,6 +195,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
                 }
                 >
                   <IconButton
+                    data-testid='listing-grid-config-options-button'
                     icon={ { value: 'more' } }
                     type='default'
                   />
@@ -198,6 +205,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
 
             { saveEnabled && !isGridTemplateOwner && (
               <Button
+                data-testid='listing-grid-config-save-template-button'
                 onClick={ onSaveConfigurationClick }
                 type='default'
               >
