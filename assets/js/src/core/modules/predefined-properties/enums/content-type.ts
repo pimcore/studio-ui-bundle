@@ -14,5 +14,5 @@ export enum ContentType {
   Asset = 'asset',
   Object = 'object',
   Boolean = 'bool',
-  Select = 'select'
+  Select = 'select',
 }

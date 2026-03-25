@@ -33,7 +33,7 @@ export const useDetachTab = (): IUseDetachTabReturn => {
     }
 
     openBottomWidget({
-      name: i18next.t(tab.label as string),
+      name: i18next.t(String(tab.label)),
       id: `${tabKey}-detached`,
       component: 'detachable-tab',
       config: {

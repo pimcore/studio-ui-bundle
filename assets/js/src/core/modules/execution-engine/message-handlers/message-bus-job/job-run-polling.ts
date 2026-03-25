@@ -180,7 +180,7 @@ export class JobRunPolling {
         this.scheduleNextPoll()
       }
     } catch (error) {
-      if (this.callbacks.onError != null) { this.callbacks.onError(error as Error) } else { console.error('Error polling job run status:', error) }
+      this.callbacks.onError?.(error as Error) ?? console.error('Error polling job run status:', error)
       this.scheduleNextPoll()
     }
   }

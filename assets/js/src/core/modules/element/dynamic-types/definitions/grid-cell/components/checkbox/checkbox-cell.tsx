@@ -30,7 +30,10 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   let config = column.columnDef.meta?.config as CheckboxCellConfig | undefined
-  config ??= { align: 'left' }
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  if (config === undefined) {
+    config = { align: 'left' }
+  }
 
   function getCellContent (): React.JSX.Element {
     return (

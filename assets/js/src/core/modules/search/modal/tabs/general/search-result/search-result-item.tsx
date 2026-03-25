@@ -38,7 +38,8 @@ export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Eleme
   )
 
   const onClick = (): void => {
-    void openElement({
+    /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
+    openElement({
       id: item.id,
       type: item.elementType as unknown as ElementType
     })

@@ -26,7 +26,8 @@ export const withOpenElementEvent = (useBaseHook: AbstractDecoratorProps['useGri
         const { id } = row.original
         const { elementType } = config
 
-        void openElement({
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        openElement({
           id,
           type: elementType!
         })

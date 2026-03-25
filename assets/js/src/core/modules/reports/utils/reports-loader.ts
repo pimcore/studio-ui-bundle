@@ -53,7 +53,7 @@ export const loadReportsMenuItems = async (): Promise<void> => {
         const itemsToRemove = currentItems.filter(item =>
           item.path.startsWith(`${REPORTS_SECTION_NAME}/`) &&
           !validPaths.has(item.path) &&
-          item.id?.startsWith(DYNAMIC_REPORT_PREFIX) === true
+          item.id?.startsWith(DYNAMIC_REPORT_PREFIX)
         )
 
         itemsToRemove.forEach(item => {

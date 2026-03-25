@@ -19,7 +19,7 @@ export interface IUseShowMoreReturn<T> {
 
 const INITIAL_VISIBLE_COUNT = 5
 
-export const useShowMore = <T>(items: T[] = []): IUseShowMoreReturn<T> => {
+export const useShowMore = <T,>(items: T[] = []): IUseShowMoreReturn<T> => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const visibleItems = useMemo(() => {

@@ -14,7 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/data-object/actions/add-object/use-add-object'
 export * from '@Pimcore/modules/data-object/actions/save/use-save'
-export type * from '@Pimcore/modules/data-object/events/post-update-event'
+export * from '@Pimcore/modules/data-object/events/post-update-event'
 
 export * from '@Pimcore/modules/data-object/services/processors/data-object-save-data-processor-registry'
 
@@ -28,7 +28,7 @@ export * from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 export * from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 export * from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 
-export type * from '@Pimcore/types/components/types'
+export * from '@Pimcore/types/components/types'
 export * from '@Pimcore/types/enums/element/element-type'
 
 export * from '@Pimcore/modules/data-object/editor/types/folder/tab-manager/folder-tab-manager'

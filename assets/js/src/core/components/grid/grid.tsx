@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -66,10 +66,8 @@ export interface ColumnMetaType {
 }
 
 declare module '@tanstack/react-table' {
-   
   export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType { }
 
-   
   export interface TableMeta<TData extends RowData> {
     onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData, meta?: Record<string, any> }) => void
   }

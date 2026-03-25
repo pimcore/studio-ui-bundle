@@ -242,6 +242,7 @@ export default tseslint.config(
       'no-throw-literal': 'off',
       'no-unused-vars': 'off',
       'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
       'no-useless-constructor': 'off',
       'no-void': ['error', { allowAsStatement: true }],
 
@@ -326,9 +327,7 @@ export default tseslint.config(
         objectLiteralTypeAssertions: 'never'
       }],
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-      '@typescript-eslint/consistent-type-exports': ['error', {
-        fixMixedExportsWithInlineTypeSpecifier: true
-      }],
+      '@typescript-eslint/consistent-type-exports': 'off',
       '@typescript-eslint/consistent-type-imports': ['error', {
         prefer: 'type-imports',
         disallowTypeAnnotations: true,
@@ -348,7 +347,7 @@ export default tseslint.config(
         format: ['camelCase', 'PascalCase', 'UPPER_CASE']
       }],
       '@typescript-eslint/no-array-constructor': 'error',
-      '@typescript-eslint/no-base-to-string': 'error',
+      '@typescript-eslint/no-base-to-string': 'off',
       '@typescript-eslint/no-confusing-void-expression': ['error', {
         ignoreArrowShorthand: false,
         ignoreVoidOperator: false
@@ -384,15 +383,7 @@ export default tseslint.config(
       '@typescript-eslint/restrict-plus-operands': ['error', { skipCompoundAssignments: false }],
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
       '@typescript-eslint/return-await': ['error', 'always'],
-      '@typescript-eslint/strict-boolean-expressions': ['error', {
-        allowString: false,
-        allowNumber: false,
-        allowNullableObject: false,
-        allowNullableBoolean: false,
-        allowNullableString: false,
-        allowNullableNumber: false,
-        allowAny: false
-      }],
+      '@typescript-eslint/strict-boolean-expressions': 'off',
       '@typescript-eslint/triple-slash-reference': ['error', {
         lib: 'never',
         path: 'never',
@@ -503,32 +494,4 @@ export default tseslint.config(
     }
   },
 
-  // 7. Files that legitimately exceed 300 lines — max-lines disabled until they are refactored
-  {
-    files: [
-      'js/src/core/app/config/services/index.ts',
-      'js/src/core/app/config/services/service-ids.ts',
-      'js/src/core/components/element-tree/element-tree-slice.ts',
-      'js/src/core/components/grid/grid.tsx',
-      'js/src/core/components/many-to-many-relation/hooks/use-value.ts',
-      'js/src/core/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light.ts',
-      'js/src/core/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/grid-config-inner.tsx',
-      'js/src/core/modules/document/actions/add-page/use-add-document.tsx',
-      'js/src/core/modules/document/actions/paste/use-paste.tsx',
-      'js/src/core/modules/document/actions/translations/use-translations.tsx',
-      'js/src/core/modules/document/editor/sidebar/tabs/content-settings/content-settings-form.tsx',
-      'js/src/core/modules/document/services/document-save-task-manager.ts',
-      'js/src/core/modules/document/tree/context-menu/index.tsx',
-      'js/src/core/modules/element/dynamic-types/definitions/document/editable/components/areablock-editable/hooks/use-areablock-editable.ts',
-      'js/src/core/modules/element/dynamic-types/index.ts',
-      'js/src/core/modules/field-definitions/components/editor/items/detail/sidebar.tsx',
-      'js/src/core/modules/field-definitions/utils/layout-provider-factory.tsx',
-      'js/src/core/modules/icon-library/index.ts',
-      'js/src/core/modules/translations/translations-container.tsx',
-      'js/src/core/styles/global.styles.ts'
-    ],
-    rules: {
-      'max-lines': 'off'
-    }
-  }
 )

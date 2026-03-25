@@ -21,7 +21,10 @@ interface IFormatDateTimeProps {
 }
 
 export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
-  lng ??= i18n.language
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   if (timestamp === null) {
     return ''

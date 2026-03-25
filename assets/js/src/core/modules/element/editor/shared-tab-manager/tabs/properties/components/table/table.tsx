@@ -144,12 +144,10 @@ export const Table = ({
                   onClick={ async () => {
                     const typeValue = mapToElementType(info.row.original.type)
 
-                    if (!isUndefined(typeValue)) {
-                      await openElement({
-                        type: typeValue,
-                        id: info.row.original.data.id
-                      })
-                    }
+                    !isUndefined(typeValue) && await openElement({
+                      type: typeValue,
+                      id: info.row.original.data.id
+                    })
                   } }
                   type="link"
                 />

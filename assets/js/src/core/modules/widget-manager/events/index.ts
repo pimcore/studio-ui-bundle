@@ -8,4 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export type * from './close-widget-events'
+export * from './close-widget-events'

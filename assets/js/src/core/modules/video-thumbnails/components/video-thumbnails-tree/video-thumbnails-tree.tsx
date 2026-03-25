@@ -70,7 +70,10 @@ export const VideoThumbnailsTree = ({ onThumbnailSelect, openedThumbnails, activ
         savedExpandedKeysRef.current = null
       }
     } else {
-      savedExpandedKeysRef.current ??= expandedKeys
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      if (savedExpandedKeysRef.current === null) {
+        savedExpandedKeysRef.current = expandedKeys
+      }
       const filtered = filterThumbnailsRecursive(thumbnailsListData, searchValue)
       setFilteredData(filtered)
       setExpandedKeys(getFolderKeysFromTree(filtered))

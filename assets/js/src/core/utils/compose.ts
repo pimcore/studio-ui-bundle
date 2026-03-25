@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 export type ComposeFn<T = unknown> = (props: T, ...args: any) => T
 export type ComposeProps<T = unknown> = ComposeFn<T> | [ComposeFn<T>, ...any]
 
@@ -16,7 +16,6 @@ export const compose = <T = unknown>(...fns: Array<ComposeProps<T>>): (props: T)
   return (initialArg) => {
     return fns.reduce((arg, fn) => {
       if (Array.isArray(fn)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return fn[0](arg, ...fn.slice(1))
       }
       return fn(arg)

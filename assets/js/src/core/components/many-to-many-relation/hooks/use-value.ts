@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { find, isNil, isUndefined } from 'lodash'
@@ -137,7 +137,7 @@ export const useValue = (
     return items
       .map((item, originalIndex): DisplayManyToManyRelationValueItem => ({ ...item, originalIndex }))
       .filter((item: DisplayManyToManyRelationValueItem) => {
-        let matched = false
+        let matched: boolean | undefined = false
 
         if (hasVisibleFields) {
           const visibleItem = find(visibleFieldsValue, (visibleField) => visibleField?.id === item.id)

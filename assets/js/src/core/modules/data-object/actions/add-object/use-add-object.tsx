@@ -54,7 +54,10 @@ export const useAddObject = (): UseAddObjectHookReturn => {
           ? 'undefined'
           : classDefinition.group
 
-        acc[groupName] ??= []
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        if (acc[groupName] === undefined) {
+          acc[groupName] = []
+        }
 
         acc[groupName].push(classDefinition)
 

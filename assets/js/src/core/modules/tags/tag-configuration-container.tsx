@@ -58,7 +58,9 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   useEffect(() => {
-    if (tagsFetching && loadingTagKey === undefined) { showRootLoading() } else { hideRootLoading() }
+    (tagsFetching && loadingTagKey === undefined)
+      ? showRootLoading()
+      : hideRootLoading()
   }, [tagsFetching])
 
   const tagActions: TreeAction[] =

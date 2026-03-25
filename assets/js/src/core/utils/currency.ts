@@ -17,7 +17,10 @@ interface IFormatCurrencyProps {
 }
 
 export function formatCurrency ({ value, lng, options }: IFormatCurrencyProps): string {
-  lng ??= i18n.language
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   return i18n.format(
     value,

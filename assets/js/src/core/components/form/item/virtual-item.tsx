@@ -26,7 +26,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
 
   const isRequired = useMemo(() => {
     if (rules !== undefined && Array.isArray(rules)) {
-      return rules.some(rule => 'required' in rule && rule.required === true)
+      return rules.some(rule => 'required' in rule && rule.required)
     }
     return false
   }, [rules])

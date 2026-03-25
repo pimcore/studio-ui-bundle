@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'

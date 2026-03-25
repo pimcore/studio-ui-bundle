@@ -125,12 +125,11 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
                 data-testid="action-open-element"
                 icon={ { value: 'open-folder' } }
                 onClick={ async () => {
-                  if (!isUndefined(elementType)) {
-                    await openElement({
-                      type: elementType,
-                      id: elementId
-                    })
-                  }
+                  !isUndefined(elementType) &&
+                                    await openElement({
+                                      type: elementType,
+                                      id: elementId
+                                    })
                 } }
                 type="link"
               />

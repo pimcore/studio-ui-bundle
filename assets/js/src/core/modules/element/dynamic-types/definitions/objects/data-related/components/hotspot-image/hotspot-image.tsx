@@ -242,32 +242,31 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           onDrop={ handleDroppableDrop }
           variant="outline"
         >
-          {  
-            imageValue !== null && imageValue?.image !== null
-              ? (
-                <HotspotImagePreview
-                  assetId={ imageValue.image.id }
-                  disabled={ props.disabled }
-                  height={ height! }
-                  markerModalOpen={ false }
-                  onChange={ handleChange }
-                  ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
-                  ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
-                  setMarkerModalOpen={ openHotspotMarkersModal }
-                  value={ imageValue }
-                  width={ width! }
-                />
-                )
-              : (
-                <AssetTarget
-                  dndIcon={ props.disabled !== true }
-                  height={ height }
-                  onSearch={ openElementSelector }
-                  onUpload={ handleUpload }
-                  title={ t(props.disabled === true ? 'empty-image' : 'image.upload.add.and.dnd') }
-                  width={ width }
-                />
-                ) }
+          { imageValue !== null && imageValue?.image !== null
+            ? (
+              <HotspotImagePreview
+                assetId={ imageValue.image.id }
+                disabled={ props.disabled }
+                height={ height! }
+                markerModalOpen={ false }
+                onChange={ handleChange }
+                ratioX={ !isNil(props.ratioX) ? Number(props.ratioX) : undefined }
+                ratioY={ !isNil(props.ratioY) ? Number(props.ratioY) : undefined }
+                setMarkerModalOpen={ openHotspotMarkersModal }
+                value={ imageValue }
+                width={ width! }
+              />
+              )
+            : (
+              <AssetTarget
+                dndIcon={ props.disabled !== true }
+                height={ height }
+                onSearch={ openElementSelector }
+                onUpload={ handleUpload }
+                title={ t(props.disabled === true ? 'empty-image' : 'image.upload.add.and.dnd') }
+                width={ width }
+              />
+              ) }
         </Droppable>
       </InlineUpload>
     </Card>

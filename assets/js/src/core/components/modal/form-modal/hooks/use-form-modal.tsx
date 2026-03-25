@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
-
 import React from 'react'
 import { type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'

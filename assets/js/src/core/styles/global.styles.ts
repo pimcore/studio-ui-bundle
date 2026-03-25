@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 
 import { createGlobalStyle } from 'antd-style'
 

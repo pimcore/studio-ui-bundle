@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { globalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitions/utils/global-clipboard'
@@ -296,8 +296,9 @@ export const create = (): LayoutProviderFactoryReturn => {
           const newDefs = { ...prevDefs }
 
           childIds.forEach((id) => {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            /* eslint-disable @typescript-eslint/no-dynamic-delete */
             delete newDefs[id]
+            /* eslint-enable @typescript-eslint/no-dynamic-delete */
           })
 
           return newDefs
@@ -443,7 +444,6 @@ export const create = (): LayoutProviderFactoryReturn => {
         const children = node.children.map(buildLayoutFromNode)
         const { id, ...restFieldDef } = fieldDef
 
-         
         return {
           ...restFieldDef,
           children: (children.length > 0 ? children : null) as Layout['children']
@@ -533,7 +533,6 @@ export const create = (): LayoutProviderFactoryReturn => {
 
         const { id, ...restFieldDef } = fieldDef
 
-         
         return {
           ...restFieldDef,
           children: (children.length > 0 ? children : null) as Layout['children']

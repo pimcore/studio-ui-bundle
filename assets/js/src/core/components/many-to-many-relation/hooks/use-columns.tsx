@@ -100,12 +100,10 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
               onClick={ async () => {
                 const typeValue = mapToElementType(rowValue.type)
 
-                if (!isUndefined(typeValue)) {
-                  await openElement({
-                    type: typeValue,
-                    id: rowValue.id
-                  })
-                }
+                !isUndefined(typeValue) && await openElement({
+                  type: typeValue,
+                  id: rowValue.id
+                })
               } }
               type="link"
             />

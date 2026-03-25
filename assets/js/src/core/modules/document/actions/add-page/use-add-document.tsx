@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 import { useAppDispatch } from '@sdk/app'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -83,7 +83,10 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
       .reduce<Record<string, DocType[]>>((acc, docType) => {
         const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
 
-        acc[groupName] ??= []
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        if (acc[groupName] === undefined) {
+          acc[groupName] = []
+        }
 
         acc[groupName].push(docType)
 
@@ -227,7 +230,6 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
 
       const buttonId = uuid()
 
-       
       modal.confirm({
         icon: null,
         title: modalTitle,

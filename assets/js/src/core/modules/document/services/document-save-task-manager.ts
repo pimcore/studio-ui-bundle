@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { selectDocumentById, setDraftData } from '@Pimcore/modules/document/document-draft-slice'
@@ -181,7 +181,7 @@ export class DocumentSaveTaskManager {
 
         onFinish?.()
       } else {
-        throw result.error instanceof Error ? result.error : new Error(String(result.error))
+        throw result.error
       }
     } catch (error) {
       console.error(`Save failed for document ${this.documentId}:`, error)

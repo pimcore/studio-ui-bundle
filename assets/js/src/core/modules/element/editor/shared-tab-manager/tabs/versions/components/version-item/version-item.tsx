@@ -114,7 +114,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
               aria-label={ t('aria.version.delete') }
               icon={ { value: 'open-folder' } }
               loading={ isLoading }
-              onClick={ () => { if (!isNull(url)) { window.open(url, '_blank') } } }
+              onClick={ () => { !isNull(url) && window.open(url, '_blank') } }
               type={ 'default' }
             />
           )}

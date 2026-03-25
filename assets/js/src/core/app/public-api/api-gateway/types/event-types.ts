@@ -20,7 +20,7 @@ export enum ApiGatewayEventType {
   openCropModal = 'openCropModal',
   openHotspotMarkersModal = 'openHotspotMarkersModal',
   openVideoModal = 'openVideoModal',
-  locateInTree = 'locateInTree'
+  locateInTree = 'locateInTree',
 }
 
 /**

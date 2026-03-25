@@ -39,7 +39,7 @@ export const DetailParentTree = (): React.JSX.Element => {
   } = useLayout()
 
   const titleRender: ITreeElementProps['titleRender'] = useMemo(() => {
-    // eslint-disable-next-line react/display-name
+    /* eslint-disable react/display-name */
     return (node, initialComponent) => {
       const currentFieldDefinition = fieldDefinitions[node.key as string]
 

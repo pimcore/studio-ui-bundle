@@ -126,7 +126,7 @@ export const filterInheritedFields = (obj: any, isInherited: (name: string) => b
 
       if (isLanguageGroupEmpty) {
         if (result[groupKey] !== undefined && result[groupKey][languageKey] !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          /* eslint-disable-next-line @typescript-eslint/no-dynamic-delete */
           delete result[groupKey][languageKey]
         }
       }

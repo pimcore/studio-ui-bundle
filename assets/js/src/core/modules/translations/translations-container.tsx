@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/* eslint-disable max-lines */
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
@@ -242,7 +242,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
-                const label = (option?.label as string) ?? ''
+                const label = option?.label?.toString() ?? ''
                 return label.toLowerCase().includes(input.toLowerCase())
               } }
               loading={ languagesLoading }

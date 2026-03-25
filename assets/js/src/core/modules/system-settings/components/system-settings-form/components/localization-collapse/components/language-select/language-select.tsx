@@ -50,7 +50,7 @@ export const LanguageSelect = (props: LanguageSelectProps): React.JSX.Element =>
       filterOption={ (input, option) => {
         if (isNil(option) || isNil(option.label)) return false
 
-        return (option.label as string).toLowerCase().includes(input.toLowerCase())
+        return String(option.label).toLowerCase().includes(input.toLowerCase())
       } }
       options={ options }
       showSearch

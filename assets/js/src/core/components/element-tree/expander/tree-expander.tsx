@@ -51,8 +51,8 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
       )}
 
       {node.hasChildren === true && (
-      // keyboard navigation is already handled on parent level
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+        // keyboard navigation is already handled on parent level
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <span
           aria-label={ t('tree.aria.expand-and-collapse') }
           onClick={ onClick }

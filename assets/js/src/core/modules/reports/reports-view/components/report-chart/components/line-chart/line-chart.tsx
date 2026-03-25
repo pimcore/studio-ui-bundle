@@ -37,7 +37,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap, chartConfig, s
 
   const formattedChartData = chartData.flatMap((item: object, index) => {
     return Object.entries(item)
-      .filter(([key]) => key !== xAxis && yAxis?.includes(key) === true)
+      .filter(([key]) => key !== xAxis && yAxis?.includes(key))
       .map(([key, value]) => ({
         [xAxis]: item?.[xAxis],
         [CHART_FIELD_NAME_KEY]: key,

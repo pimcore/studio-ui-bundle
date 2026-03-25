@@ -15,7 +15,7 @@ export interface IGridFilter {
 
 export enum FilterDrillDown {
   ONLY_FILTER = 'only_filter',
-  FILTER_AND_SHOW = 'filter_and_show'
+  FILTER_AND_SHOW = 'filter_and_show',
 }
 
 export type FilterDrillDownType = FilterDrillDown | undefined

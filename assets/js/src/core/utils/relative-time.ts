@@ -18,7 +18,10 @@ interface IFormatRelativeTimeProps {
 }
 
 export function formatRelativeTime ({ value, unit, lng, options }: IFormatRelativeTimeProps): string {
-  lng ??= i18n.language
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   const formatter = new Intl.RelativeTimeFormat(lng, options)
 

@@ -55,5 +55,5 @@ export enum ContextMenuActionName {
   download = 'download',
   clearImageThumbnails = 'clearImageThumbnails',
   clearVideoThumbnails = 'clearVideoThumbnails',
-  clearPdfThumbnails = 'clearPdfThumbnails'
+  clearPdfThumbnails = 'clearPdfThumbnails',
 }

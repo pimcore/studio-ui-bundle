@@ -17,8 +17,7 @@ const { render: oldRenderFn, ...testingLibaryProps } = testingLibrary
 const render = (
   ui: ReactElement,
   options?: Omit<testingLibrary.RenderOptions, 'wrapper'>
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-) => oldRenderFn(ui, { wrapper: GlobalProvider, ...options })  
+) => oldRenderFn(ui, { wrapper: GlobalProvider, ...options }) /* eslint-disable-line @typescript-eslint/explicit-function-return-type */
 
 export { testingLibaryProps }
 export { render }

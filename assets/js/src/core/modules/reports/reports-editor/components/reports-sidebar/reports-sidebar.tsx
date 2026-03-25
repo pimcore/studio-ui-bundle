@@ -69,7 +69,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
 
         const addedReport = updatedData?.items?.find((item) => item.id === value)
 
-        if (!isUndefined(addedReport)) { handleOpenReport(addedReport) }
+        !isUndefined(addedReport) && handleOpenReport(addedReport)
       }
     })
   }
@@ -91,7 +91,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
 
         const clonedReport = updatedData?.items?.find((item) => item.id === value)
 
-        if (!isUndefined(clonedReport)) { handleOpenReport(clonedReport) }
+        !isUndefined(clonedReport) && handleOpenReport(clonedReport)
       }
     })
   }

@@ -61,7 +61,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
 
   const displayOptions = value.map((_value: string) => {
     const option = options.find((option: SelectOptionType) => option.value === _value)
-    return (option?.displayValue ?? option?.label ?? _value) as string
+    return option?.displayValue ?? option?.label ?? _value
   })
 
   const displayValue = displayOptions.join(', ')

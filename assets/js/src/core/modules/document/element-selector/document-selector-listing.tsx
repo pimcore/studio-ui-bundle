@@ -41,11 +41,10 @@ export const DocumentSelectorListing = (): React.JSX.Element => {
 
   const allowedTypes: string[] = config.config?.documents?.allowedTypes ?? []
 
-   
+  /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
     PagingDecorator,
     StaticColumnConfigurationDecorator,
-    /* eslint-disable @typescript-eslint/consistent-type-assertions */
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     TagFilterDecorator,
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
@@ -58,9 +57,8 @@ export const DocumentSelectorListing = (): React.JSX.Element => {
         elementType: elementTypes.document
       } as TypeFilterDecoratorConfig
     ]
-    /* eslint-enable @typescript-eslint/consistent-type-assertions */
   )(defaultProps), [config])
-   
+  /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [

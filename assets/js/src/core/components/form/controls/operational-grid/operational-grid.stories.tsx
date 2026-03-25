@@ -687,8 +687,8 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
           allowedTypes: ['asset'],
           expectsStringValue: false,
           allowTextInput: false,
+          /* eslint-disable react/prop-types */
           getElementInfo: (props: { getValue: () => any }) => {
-            // eslint-disable-next-line react/prop-types
             const value = props.getValue()
             if ((value === null || value === undefined) || typeof value !== 'object') {
               return {
@@ -707,7 +707,7 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
               disabled: false
             }
           }
-           
+          /* eslint-enable react/prop-types */
         }
       }
     }),

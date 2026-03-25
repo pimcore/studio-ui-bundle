@@ -23,7 +23,7 @@ import { useStyle } from './preview-card.styles'
 
 export enum SizeTypes {
   SMALL = 'small',
-  MEDIUM = 'medium'
+  MEDIUM = 'medium',
 }
 
 interface PreviewCardProps {

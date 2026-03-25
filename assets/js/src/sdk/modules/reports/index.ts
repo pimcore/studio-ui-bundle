@@ -16,7 +16,7 @@ export * from '@Pimcore/modules/reports'
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 export * from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
 
-export type * from '@Pimcore/modules/reports/reports-editor/types'
+export * from '@Pimcore/modules/reports/reports-editor/types'
 export * from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 export * from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/constants'
 

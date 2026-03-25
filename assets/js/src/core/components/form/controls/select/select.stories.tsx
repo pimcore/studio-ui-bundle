@@ -78,7 +78,7 @@ const FormExampleComponent = (): React.JSX.Element => {
             >
               <Select
                 filterOption={ (input, option) =>
-                  (option?.label as string ?? '').toLowerCase().includes(input.toLowerCase())
+                  String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                 }
                 mode="multiple"
                 options={ tagOptions }

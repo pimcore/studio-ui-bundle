@@ -8,7 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
- 
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+/* eslint-disable max-lines */
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'

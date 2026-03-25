@@ -135,7 +135,6 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         return data
       }
 
-       
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return {} as AssetGetByIdApiResponse
     }
@@ -150,7 +149,6 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         return data
       }
 
-       
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return {} as DataObjectGetByIdApiResponse
     }
