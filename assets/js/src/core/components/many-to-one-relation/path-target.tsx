@@ -60,10 +60,10 @@ export const PathTarget = forwardRef(function PathTarget (
 
   const hasPathFormatterClass = isNonEmptyString(props.pathFormatterClass)
 
-  function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
+  function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string | number, formatedPath: string | number }> }): IFormatPathItem[] {
     return value.map((item) => ({
       ...item,
-      fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
+      fullPath: String(data.items.find(i => String(i.objectReference) === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath)
     }))
   }
 

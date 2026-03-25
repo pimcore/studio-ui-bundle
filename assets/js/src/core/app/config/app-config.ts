@@ -11,7 +11,7 @@
 import { type WysiwygAppConfigInterface } from '@Pimcore/modules/wysiwyg/interface/wysiwyg-app-config'
 import { getParentDocument } from '@Pimcore/utils/iframe'
 
-interface AppConfig {
+export interface AppConfig {
   baseUrl: string
   mercureUrl: string
   wysiwyg: WysiwygAppConfigInterface
@@ -39,5 +39,6 @@ export const appConfig: AppConfig = {
       dataObject: {},
       document: {}
     }
-  }
+  },
+  ...(appConfigData ?? {})
 }

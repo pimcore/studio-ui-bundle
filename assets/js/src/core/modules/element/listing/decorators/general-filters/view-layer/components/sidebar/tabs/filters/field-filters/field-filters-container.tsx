@@ -275,6 +275,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
       <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
         <IconTextButton
+          data-testid="listing-field-filter-add-button"
           icon={ { value: 'new' } }
           type='link'
         >

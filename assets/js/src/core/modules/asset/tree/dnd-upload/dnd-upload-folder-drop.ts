@@ -15,6 +15,8 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { collectDroppedTree, resolveFolderIdByRelativePath } from './dnd-upload-folder-utils'
 import type { FolderDropConflictMaps } from '@Pimcore/components/modal-upload/hooks/use-folder-drop-conflict-handler'
 
+const fileRelativePathMap = new WeakMap<File, string>()
+
 /** Minimal shape of rc-upload's private AjaxUploader. */
 interface RcAjaxUploader {
   uploadFiles: (files: File[]) => void
@@ -34,8 +36,9 @@ interface ProcessDirectoryDropParams {
   checkFile: (file: File, parentFolderId: number) => Promise<void>
 }
 
-export function buildFileKey (file: Pick<File, 'name' | 'size'>): string {
-  return `${file.name}-${file.size}`
+export function buildFileKey (file: File): string {
+  const relativePath = fileRelativePathMap.get(file) ?? ''
+  return `${relativePath}/${file.name}-${file.size}`
 }
 
 export async function processDirectoryDrop ({
@@ -59,6 +62,8 @@ export async function processDirectoryDrop ({
 
   folderIdByKey.clear()
   for (const { file, parentRelativeFolderPath } of droppedFiles) {
+    fileRelativePathMap.set(file, parentRelativeFolderPath)
+
     const parentFolderId = await resolveFolderIdByRelativePath(
       rootFolderId,
       rootPath,

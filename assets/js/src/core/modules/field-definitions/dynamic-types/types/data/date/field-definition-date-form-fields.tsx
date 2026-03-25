@@ -17,12 +17,18 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
   const { t } = useTranslation()
   const form = Form.useFormInstance()
   const useCurrentDate = Form.useWatch('useCurrentDate')
+  const isCustomLayout = props.context.area.includes('custom-layout')
+  const isEncryptedField = props.context.isEncryptedField === true
 
   useEffect(() => {
     if (useCurrentDate === true) {
       form.setFieldValue('defaultValue', null)
     }
   }, [useCurrentDate, form])
+
+  if (isCustomLayout) {
+    return <></>
+  }
 
   return (
     <>
@@ -52,17 +58,19 @@ export const FieldDefinitionDateFormFields = (props: FieldDefinitionAbstractForm
         </Form.Item>
       </FormKit.Panel>
 
-      <Form.Item
-        label={ t('column-type') }
-        name="columnType"
-      >
-        <Select
-          options={ [
-            { label: 'DATE', value: 'date' },
-            { label: 'BIGINT', value: 'bigint(20)' }
-          ] }
-        />
-      </Form.Item>
+      {!isEncryptedField && (
+        <Form.Item
+          label={ t('column-type') }
+          name="columnType"
+        >
+          <Select
+            options={ [
+              { label: 'DATE', value: 'date' },
+              { label: 'BIGINT', value: 'bigint(20)' }
+            ] }
+          />
+        </Form.Item>
+      )}
     </>
   )
 }

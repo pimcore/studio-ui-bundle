@@ -664,4 +664,22 @@ export const GlobalStyles = createGlobalStyle`
   .ant-notification-stack > .ant-notification-notice-wrapper {
       transition: transform 0.3s, backdrop-filter 0s;
   }
+
+  /** WORKFLOW PLACE INDICATOR **/
+  span:has(> .pimcore-workflow-place-indicator) {
+    display: contents;
+  }
+
+  .pimcore-workflow-place-indicator {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 2px 8px;
+    border-radius: 3px;
+    line-height: 1.4;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+  }
 `

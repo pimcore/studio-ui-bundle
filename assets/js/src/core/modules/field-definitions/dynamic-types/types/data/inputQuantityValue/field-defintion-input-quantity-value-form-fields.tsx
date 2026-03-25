@@ -21,16 +21,16 @@ export const FieldDefinitionInputQuantityValueFormFields = (props: FieldDefiniti
 
   return (
     <>
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
+      >
+        <Input />
+      </Form.Item>
+
       {!isCustomLayout && (
       <>
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
-
         <Form.Item
           label={ t('default-value') }
           name="defaultValue"

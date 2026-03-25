@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
     <>
@@ -27,30 +28,33 @@ export const FieldDefinitionNumericRangeFormFields = (props: FieldDefinitionAbst
         <Input />
       </Form.Item>
 
-      <FieldDefinitionDecimalSettings />
+      {!isCustomLayout && (
+      <>
+        <FieldDefinitionDecimalSettings />
 
-      <Form.Item name="integer">
-        <Switch labelRight={ t('integer') } />
-      </Form.Item>
+        <Form.Item name="integer">
+          <Switch labelRight={ t('integer') } />
+        </Form.Item>
 
-      <Form.Item name="unsigned">
-        <Switch labelRight={ t('unsigned') } />
-      </Form.Item>
+        <Form.Item name="unsigned">
+          <Switch labelRight={ t('unsigned') } />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('min-value') }
-        name="minValue"
-      >
-        <InputNumber />
-      </Form.Item>
+        <Form.Item
+          label={ t('min-value') }
+          name="minValue"
+        >
+          <InputNumber />
+        </Form.Item>
 
-      <Form.Item
-        label={ t('max-value') }
-        name="maxValue"
-      >
-        <InputNumber />
-      </Form.Item>
-
+        <Form.Item
+          label={ t('max-value') }
+          name="maxValue"
+        >
+          <InputNumber />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }

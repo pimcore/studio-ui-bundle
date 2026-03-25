@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
+import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
 
 export type MultiselectValue = string[]
 
@@ -24,7 +25,7 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
 
   if (Array.isArray(options)) {
     formattedOptions = options.map((opt) => ({
-      label: opt?.key,
+      ...renderSelectOptionLabel(String(opt?.key)),
       value: opt?.value
     }))
   }
@@ -38,10 +39,13 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     setData(value)
   }
 
+  const hasHtmlLabels = formattedOptions.some(o => o.title !== undefined)
+
   return (
     <Select
       mode="multiple"
       onChange={ handleChange }
+      optionFilterProp={ hasHtmlLabels ? 'title' : 'label' }
       options={ formattedOptions }
       showSearch={ config?.showSearch ?? false }
       style={ { width: '100%' } }

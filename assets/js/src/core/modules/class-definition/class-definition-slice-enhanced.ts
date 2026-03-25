@@ -49,7 +49,10 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
     },
     classDefinitionDelete: {
-      invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION()
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.CLASS_DEFINITION_DETAIL(args.id),
+        ...invalidatingTags.CLASS_DEFINITION_COLLECTION()
+      ]
     },
     classDefinitionImport: {
       invalidatesTags: (result, error, args) => [
@@ -130,7 +133,10 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => invalidatingTags.FIELD_COLLECTION_COLLECTION()
     },
     classFieldCollectionDelete: {
-      invalidatesTags: () => invalidatingTags.FIELD_COLLECTION_COLLECTION()
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.FIELD_COLLECTION_DETAIL(args.key),
+        ...invalidatingTags.FIELD_COLLECTION_COLLECTION()
+      ]
     },
     classFieldCollectionImport: {
       invalidatesTags: (result, error, args) => [
@@ -172,7 +178,10 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION()
     },
     classObjectBrickDelete: {
-      invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION()
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key),
+        ...invalidatingTags.OBJECT_BRICK_COLLECTION()
+      ]
     },
     classObjectBrickImport: {
       invalidatesTags: (result, error, args) => [

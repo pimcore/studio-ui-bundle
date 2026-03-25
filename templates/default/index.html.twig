@@ -4,7 +4,7 @@
 {# @var bundleJsFiles string[] #}
 {# @var additionalCssFiles string[] #}
 {# @var additionalJsFiles string[] #}
-{# @var wysiwygConfiguration [] #}
+{# @var appConfig array #}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,11 +51,7 @@
     </head>
 
     <body>
-        <div id="app" data-app-config="{{ {
-            baseUrl: baseUrl ~ '/',
-            mercureUrl: mercureUrl,
-            wysiwyg: wysiwygConfiguration,
-        }|json_encode }}"></div>
+        <div id="app" data-app-config="{{ appConfig|json_encode }}"></div>
 
         {% for jsFile in bundleJsFiles %}
             <script src="{{ jsFile }}"></script>

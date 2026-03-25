@@ -273,3 +273,6 @@ export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
+
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'

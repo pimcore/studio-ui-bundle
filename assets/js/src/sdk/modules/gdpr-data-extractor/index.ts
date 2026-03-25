@@ -9,6 +9,10 @@
  */
 
 export * from '@Pimcore/modules/gdpr-data-extractor/components/export-button/export-button'
+export * from '@Pimcore/modules/gdpr-data-extractor/components/open-button/open-button'
+export * from '@Pimcore/modules/gdpr-data-extractor/components/delete-button/delete-button'
 export * from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-abstract-gdpr-provider'
+export * from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
 
 export { type GDPRProviderTabProps } from '@Pimcore/modules/gdpr-data-extractor/components/tab-panel/tab-panel'
+export { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'

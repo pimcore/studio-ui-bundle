@@ -14,9 +14,10 @@ import DOMPurify from 'dompurify'
 export interface SanitizeHtmlProps {
   html: string
   options?: DOMPurify.Config
+  tag?: keyof HTMLElementTagNameMap
 }
 
-export const SanitizeHtml = ({ html, options }: SanitizeHtmlProps): React.JSX.Element => {
+export const SanitizeHtml = ({ html, options, tag: Tag = 'div' }: SanitizeHtmlProps): React.JSX.Element => {
   let cleanHtml: string
 
   if (options !== undefined) {
@@ -25,5 +26,5 @@ export const SanitizeHtml = ({ html, options }: SanitizeHtmlProps): React.JSX.El
     cleanHtml = DOMPurify.sanitize(html)
   }
 
-  return <div dangerouslySetInnerHTML={ { __html: cleanHtml } } />
+  return <Tag dangerouslySetInnerHTML={ { __html: cleanHtml } } />
 }

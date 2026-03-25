@@ -19,6 +19,7 @@ import { ObjectBrickAddButton } from './object-brick-add-button'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { ObjectBrickItem } from './object-brick-item'
+import { useObjectBrick } from './providers/use-object-brick'
 
 export interface ObjectBrickContentProps extends ObjectBrickProps {}
 
@@ -27,6 +28,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
 
   const modal = useFormModal()
   const { t } = useTranslation()
+  const objectBrick = useObjectBrick()
 
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
@@ -39,7 +41,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
   const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
       key,
-      label: key,
+      label: objectBrick?.data?.items?.find(item => item.key === key)?.title === '' || objectBrick?.data?.items?.find(item => item.key === key)?.title === undefined ? key : t(objectBrick?.data?.items?.find(item => item.key === key).title as string),
       closable: true,
       forceRender: true,
       children: (
@@ -73,7 +75,12 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ !isHideAddButton && <ObjectBrickAddButton allowedTypes={ allowedTypes } /> }
+      extra={ !isHideAddButton && (
+      <ObjectBrickAddButton
+        allowedTypes={ allowedTypes }
+        objectBrick={ objectBrick?.data?.items }
+      />
+      ) }
       extraPosition='start'
       theme='default'
       title={ props.title }
@@ -83,5 +90,5 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
         onClose={ !isNoteditable ? onClose : undefined }
       />
     </BaseView>
-  ), [values])
+  ), [values, objectBrick])
 }

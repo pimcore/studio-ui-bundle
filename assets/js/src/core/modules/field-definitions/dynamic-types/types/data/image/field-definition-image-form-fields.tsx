@@ -16,7 +16,7 @@ import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-
+  const isCustomLayout = props.context.area.includes('custom-layout')
   return (
     <>
       <Form.Item
@@ -33,6 +33,8 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
       >
         <Input />
       </Form.Item>
+
+      {!isCustomLayout && (
       <Form.Item
         label={ t('upload-path') }
         name="uploadPath"
@@ -43,6 +45,8 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
           assetsAllowed
         />
       </Form.Item>
+      )
+        }
 
     </>
   )

@@ -43,6 +43,7 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: { chec
 
   return (
     <Flex
+      data-testid="tag-filter-tree"
       gap={ 'small' }
       vertical
     >

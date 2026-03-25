@@ -28048,7 +28048,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "ID of the created job run",
             "content": {
               "application/json": {
@@ -28059,7 +28059,7 @@
             }
           },
           "default": {
-            "description": "201 - Created<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -28220,10 +28220,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BundleCopilotActionInteractionChatHistory"
-                  }
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCopilotActionInteractionChatHistory"
+                      }
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -28310,10 +28318,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BundleCopilotActionInteractionChatHistory"
-                  }
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCopilotActionInteractionChatHistory"
+                      }
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -29065,7 +29081,7 @@
       }
     },
     "/pimcore-studio/api/bundle/copilot/configuration/export/{name}": {
-      "get": {
+      "post": {
         "tags": [
           "Bundle Copilot"
         ],
@@ -29639,7 +29655,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Canceled job run."
+            "description": "Canceled job run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCopilotJobRunId"
+                }
+              }
+            }
           },
           "default": {
             "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
@@ -29952,7 +29975,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "The newly created job run.",
             "content": {
               "application/json": {
@@ -29963,7 +29986,7 @@
             }
           },
           "default": {
-            "description": "201 - Created<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -34922,251 +34945,6 @@
           },
           "default": {
             "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error"
-                    },
-                    {
-                      "$ref": "#/components/schemas/DevError"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pimcore-studio/api/bundle/direct-edit/assets/{id}/cancel": {
-      "delete": {
-        "tags": [
-          "Bundle Direct Edit"
-        ],
-        "summary": "Cancel direct edit session",
-        "description": "Cancel an active direct-edit session. Removes the edit lock and any pending version file for the given asset.",
-        "operationId": "bundle_direct_edit_cancel",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Asset ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Edit session cancelled",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error"
-                    },
-                    {
-                      "$ref": "#/components/schemas/DevError"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pimcore-studio/api/bundle/direct-edit/assets/{id}/confirm-upload": {
-      "post": {
-        "tags": [
-          "Bundle Direct Edit"
-        ],
-        "summary": "Confirm uploaded asset version",
-        "description": "Confirm that the desktop client has uploaded a new version of the asset. Saves the uploaded file to the asset if no version conflict exists. Returns conflict information if a conflict is detected.",
-        "operationId": "bundle_direct_edit_confirm_upload",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Asset ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Upload confirmed and asset saved, or conflict detected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error"
-                    },
-                    {
-                      "$ref": "#/components/schemas/DevError"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pimcore-studio/api/bundle/direct-edit/assets/{id}/generate-link": {
-      "post": {
-        "tags": [
-          "Bundle Direct Edit"
-        ],
-        "summary": "Generate direct edit link",
-        "description": "Generate a pimcorefile:// desktop protocol link to open an asset in a local application for editing. Returns an existing link if the user already holds the lock with a pending upload.",
-        "operationId": "bundle_direct_edit_generate_link",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Asset ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Desktop client protocol link generated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error"
-                    },
-                    {
-                      "$ref": "#/components/schemas/DevError"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pimcore-studio/api/bundle/direct-edit/assets/{id}/status": {
-      "get": {
-        "tags": [
-          "Bundle Direct Edit"
-        ],
-        "summary": "Get direct edit status",
-        "description": "Get the current direct-edit status for an asset. Returns whether the asset is idle, being edited, has an uploaded pending version, or is in a conflict state.",
-        "operationId": "bundle_direct_edit_get_status",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Asset ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Current direct edit status",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error"
-                    },
-                    {
-                      "$ref": "#/components/schemas/DevError"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pimcore-studio/api/bundle/direct-edit/assets/{id}/resolve-conflict": {
-      "post": {
-        "tags": [
-          "Bundle Direct Edit"
-        ],
-        "summary": "Resolve version conflict",
-        "description": "Resolve a version conflict after a desktop client upload. Strategy \"overwrite\" replaces the current published version with the local edit. Strategy \"save-as-version\" saves the local edit as a new version and keeps the current published version active.",
-        "operationId": "bundle_direct_edit_resolve_conflict",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Asset ID",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Conflict resolved",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -51051,8 +50829,6 @@
           "title",
           "jsAdapterName",
           "jsConfig",
-          "icon",
-          "iconCls",
           "context",
           "searchTerms",
           "category",
@@ -51146,6 +50922,26 @@
           "role"
         ],
         "properties": {
+          "additionalAttributes": {
+            "description": "AdditionalAttributes",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          },
           "content": {
             "description": "Content",
             "type": "string",
@@ -51189,6 +50985,26 @@
           "result"
         ],
         "properties": {
+          "additionalAttributes": {
+            "description": "AdditionalAttributes",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          },
           "result": {
             "description": "Result",
             "type": "string",
@@ -52095,6 +51911,26 @@
           "id"
         ],
         "properties": {
+          "additionalAttributes": {
+            "description": "AdditionalAttributes",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          },
           "id": {
             "description": "Id",
             "type": "integer",
@@ -68371,13 +68207,27 @@
           },
           "objectReference": {
             "description": "Object Reference",
-            "type": "string",
-            "example": "object_11"
+            "example": "object_11",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
           },
           "formatedPath": {
             "description": "Formated Path",
-            "type": "string",
-            "example": "nice/path"
+            "example": "nice/path",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
           }
         },
         "type": "object"
