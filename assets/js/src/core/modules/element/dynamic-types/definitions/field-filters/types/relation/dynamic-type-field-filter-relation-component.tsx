@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { theme } from 'antd'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -22,11 +23,22 @@ import {
   dndIsValidData,
   type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { mapToLegacyElementType, isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Droppable, type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { type SelectedItem } from '@sdk/modules/element'
 import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
+
+const getDisplayName = (fullPath: string): string => {
+  const parts = fullPath.split('/')
+  return parts[parts.length - 1] !== '' ? parts[parts.length - 1] : fullPath
+}
+
+const getElementTypeIcon = (type: string): string => {
+  if (type === 'object') return 'data-object'
+  if (type === 'asset') return 'asset'
+  return 'document'
+}
 
 export type RelationFilterEntry = { type: 'asset' | 'object' | 'document', ids: number[] }
 export type RelationFilterValue = RelationFilterEntry[] | null
@@ -53,6 +65,101 @@ const getSubType = (item: SelectedItem): string | null => {
     return item.data.classname ?? 'folder'
   }
   return item.data.type ?? null
+}
+
+interface RelationFilterDropAreaProps {
+  items: ManyToManyRelationValueItem[]
+  onRemove: (id: number, type: string) => void
+  onClear: () => void
+  onSelect: () => void
+  selectorAreas: ReturnType<typeof createElementSelectorAreas>
+  selectorConfig: ReturnType<typeof createElementSelectorConfig>
+  onFinish: (event: { items: SelectedItem[] }) => void
+}
+
+const RelationFilterInner = ({
+  items,
+  onRemove,
+  onClear,
+  selectorAreas,
+  selectorConfig,
+  onFinish
+}: RelationFilterDropAreaProps): React.JSX.Element => {
+  const { isDragActive, isOver } = useDroppable()
+  const { token } = theme.useToken()
+
+  const dropAreaStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '6px 8px',
+    border: `1px dashed ${isOver ? token.colorPrimary : token.colorBorder}`,
+    borderRadius: token.borderRadius,
+    background: isOver ? token.colorPrimaryBg : token.colorFillAlter,
+    color: isOver ? token.colorPrimary : token.colorTextSecondary,
+    fontSize: token.fontSizeSM,
+    textAlign: 'center',
+    boxSizing: 'border-box',
+    transition: 'all 0.2s'
+  }
+
+  return (
+    <Flex
+      align="flex-start"
+      justify="space-between"
+      style={ { width: '100%' } }
+    >
+      <Flex
+        gap="extra-small"
+        style={ { flex: 1, flexWrap: 'wrap', minHeight: 24 } }
+        vertical
+      >
+        { isDragActive && (
+          <div style={ dropAreaStyle }>
+            Drop here
+          </div>
+        ) }
+
+        <Flex
+          gap="extra-small"
+          style={ { flexWrap: 'wrap' } }
+        >
+          { items.map((item) => (
+            <ElementTag
+              elementType={ item.type === 'object' ? 'data-object' : item.type as 'asset' | 'document' }
+              iconName={ getElementTypeIcon(item.type) }
+              id={ item.id }
+              inline
+              key={ `${item.type}-${item.id}` }
+              onClose={ () => { onRemove(item.id, item.type) } }
+              path={ getDisplayName(item.fullPath) }
+              published={ item.isPublished ?? undefined }
+            />
+          )) }
+        </Flex>
+      </Flex>
+
+      <Flex
+        gap="mini"
+        style={ { flexShrink: 0, marginLeft: 4 } }
+      >
+        <ElementSelectorButton
+          elementSelectorConfig={ {
+            selectionType: SelectionType.Multiple,
+            areas: selectorAreas,
+            config: selectorConfig,
+            onFinish
+          } }
+          type="default"
+        />
+
+        <IconButton
+          disabled={ items.length === 0 }
+          icon={ { value: 'trash' } }
+          onClick={ onClear }
+          type="default"
+        />
+      </Flex>
+    </Flex>
+  )
 }
 
 export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => {
@@ -109,67 +216,32 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   const selectorAreas = createElementSelectorAreas(allowedTypes)
   const selectorConfig = createElementSelectorConfig(allowedTypes)
 
+  const handleFinish = (event: { items: SelectedItem[] }): void => {
+    const newItems: ManyToManyRelationValueItem[] = event.items.map((item) => ({
+      id: item.data.id,
+      type: mapToLegacyElementType(item.elementType),
+      subtype: getSubType(item),
+      fullPath: item.data.fullpath,
+      isPublished: item.data.published ?? null
+    }))
+    addItems(newItems)
+  }
+
   return (
     <Droppable
       isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
       isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, allowedTypes) }
       onDrop={ handleDrop }
     >
-      <Flex
-        align="flex-start"
-        gap="extra-small"
-        vertical
-      >
-        <Flex
-          gap="extra-small"
-          style={ { flexWrap: 'wrap', minHeight: 24 } }
-        >
-          { items.map((item) => (
-            <ElementTag
-              elementType={ item.type === 'object' ? 'data-object' : item.type as 'asset' | 'document' }
-              id={ item.id }
-              key={ `${item.type}-${item.id}` }
-              onClose={ () => { removeItem(item.id, item.type) } }
-              path={ item.fullPath }
-              published={ item.isPublished ?? undefined }
-            />
-          )) }
-        </Flex>
-
-        <Flex
-          align="center"
-          gap="extra-small"
-          style={ { width: '100%' } }
-        >
-          <ElementSelectorButton
-            elementSelectorConfig={ {
-              selectionType: SelectionType.Multiple,
-              areas: selectorAreas,
-              config: selectorConfig,
-              onFinish: (event) => {
-                const newItems: ManyToManyRelationValueItem[] = event.items.map((item) => ({
-                  id: item.data.id,
-                  type: mapToLegacyElementType(item.elementType),
-                  subtype: getSubType(item),
-                  fullPath: item.data.fullpath,
-                  isPublished: item.data.published ?? null
-                }))
-                addItems(newItems)
-              }
-            } }
-            style={ { flex: 1 } }
-            type="default"
-          />
-
-          { items.length > 0 && (
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ clearAll }
-              type="default"
-            />
-          ) }
-        </Flex>
-      </Flex>
+      <RelationFilterInner
+        items={ items }
+        onClear={ clearAll }
+        onFinish={ handleFinish }
+        onRemove={ removeItem }
+        onSelect={ () => {} }
+        selectorAreas={ selectorAreas }
+        selectorConfig={ selectorConfig }
+      />
     </Droppable>
   )
 }
