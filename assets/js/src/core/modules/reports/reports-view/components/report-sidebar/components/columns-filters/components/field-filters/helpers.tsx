@@ -19,7 +19,7 @@ import {
 
 export const FIELD_TYPE_MAP = {
   string: {
-    frontendType: 'input',
+    frontendType: 'string',
     type: FieldFilterFrontendType.String
   },
   numeric: {
