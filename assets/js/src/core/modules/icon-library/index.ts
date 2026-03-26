@@ -42,6 +42,7 @@ import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
 import autofill from '@Pimcore/assets/icons/autofill.inline.svg?react'
+import automationAction from '@Pimcore/assets/icons/automation-action.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import blank from '@Pimcore/assets/icons/blank.inline.svg?react'
@@ -199,6 +200,7 @@ import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.s
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
 import inlineHelp from '@Pimcore/assets/icons/inline-help.inline.svg?react'
 import inputQuantityValue from '@Pimcore/assets/icons/input-quantity-value.inline.svg?react'
+import interactionAction from '@Pimcore/assets/icons/interaction-action.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
 import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
@@ -501,6 +503,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'autofill',
       component: autofill
+    })
+    iconLibrary.register({
+      name: 'automation-action',
+      component: automationAction
     })
     iconLibrary.register({
       name: 'automation-integration',
@@ -1129,6 +1135,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'input-quantity-value',
       component: inputQuantityValue
+    })
+    iconLibrary.register({
+      name: 'interaction-action',
+      component: interactionAction
     })
     iconLibrary.register({
       name: 'json',
