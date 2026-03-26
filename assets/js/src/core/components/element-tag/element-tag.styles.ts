@@ -16,6 +16,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
     &.ant-tag {
       display: flex;
+      align-items: center;
       cursor: default;
       
       > .tag-content {
