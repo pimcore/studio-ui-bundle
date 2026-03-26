@@ -24,8 +24,9 @@ export class DynamicTypeFieldFilterRelation extends DynamicTypeFieldFilterAbstra
   }
 
   shouldApply (filter: FieldFilter): boolean {
-    const value = filter.filterValue as { type?: string, ids?: number[] } | null | undefined
-    return value != null && typeof value.type === 'string' && Array.isArray(value.ids) && value.ids.length > 0
+    const value = filter.filterValue as Array<{ type?: string, ids?: number[] }> | null | undefined
+    return Array.isArray(value) && value.length > 0 &&
+      value.some((entry) => typeof entry.type === 'string' && Array.isArray(entry.ids) && entry.ids.length > 0)
   }
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
