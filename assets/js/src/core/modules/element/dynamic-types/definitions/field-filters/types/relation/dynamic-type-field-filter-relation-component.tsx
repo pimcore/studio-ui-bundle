@@ -10,6 +10,7 @@
 
 import React, { useState } from 'react'
 import { theme } from 'antd'
+import { isUndefined } from 'lodash'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -48,7 +49,7 @@ const buildFilterValue = (items: ManyToManyRelationValueItem[]): RelationFilterV
   const grouped: Record<string, number[]> = {}
   for (const item of items) {
     const t = item.type as 'asset' | 'object' | 'document'
-    if (grouped[t] === undefined) grouped[t] = []
+    if (isUndefined(grouped[t])) grouped[t] = []
     grouped[t].push(item.id)
   }
 
