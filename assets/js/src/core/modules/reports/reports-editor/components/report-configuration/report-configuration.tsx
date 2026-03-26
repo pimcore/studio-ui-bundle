@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
@@ -62,6 +62,8 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
 
   const { t } = useTranslation()
 
+  const prevDataSourceTypeRef = useRef<string | undefined>(undefined)
+
   useEffect(() => {
     if (!isUndefined(data)) {
       initializeForm(data)
@@ -69,7 +71,12 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
   }, [data])
 
   useEffect(() => {
-    if (!isNull(currentData) && !isUndefined(dataSourceConfig?.type)) {
+    const prevType = prevDataSourceTypeRef.current
+    const currentType = dataSourceConfig?.type
+
+    prevDataSourceTypeRef.current = currentType
+
+    if (!isNull(currentData) && !isUndefined(currentType) && !isUndefined(prevType) && prevType !== currentType) {
       form.resetFields()
       updateFormData?.({
         ...currentData,
