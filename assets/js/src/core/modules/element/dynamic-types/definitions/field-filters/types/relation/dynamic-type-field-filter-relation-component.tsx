@@ -39,7 +39,7 @@ const getElementTypeIcon = (type: string): string => {
   return 'document'
 }
 
-export type RelationFilterEntry = { type: 'asset' | 'object' | 'document', ids: number[] }
+export interface RelationFilterEntry { type: 'asset' | 'object' | 'document', ids: number[] }
 export type RelationFilterValue = RelationFilterEntry[] | null
 
 const buildFilterValue = (items: ManyToManyRelationValueItem[]): RelationFilterValue => {
@@ -151,11 +151,13 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   const { setData, config } = useDynamicFilter()
 
   const fieldDefinition = config?.fieldDefinition as IRelationAllowedTypesClassDefinition | undefined
-  const allowedTypes = fieldDefinition !== undefined ? convertAllowedTypes(fieldDefinition) : {
-    assetsAllowed: true,
-    dataObjectsAllowed: true,
-    documentsAllowed: true
-  }
+  const allowedTypes = fieldDefinition !== undefined
+    ? convertAllowedTypes(fieldDefinition)
+    : {
+        assetsAllowed: true,
+        dataObjectsAllowed: true,
+        documentsAllowed: true
+      }
 
   const [items, setItems] = useState<ManyToManyRelationValueItem[]>([])
 
@@ -177,11 +179,6 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
 
   const removeItem = (id: number, type: string): void => {
     updateItems(items.filter((item) => !(item.id === id && item.type === type)))
-  }
-
-  const clearAll = (): void => {
-    setItems([])
-    setData(null)
   }
 
   const handleDrop = (info: DragAndDropInfo): void => {
