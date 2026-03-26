@@ -12,7 +12,6 @@ import React, { useState } from 'react'
 import { theme } from 'antd'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
@@ -70,7 +69,6 @@ const getSubType = (item: SelectedItem): string | null => {
 interface RelationFilterDropAreaProps {
   items: ManyToManyRelationValueItem[]
   onRemove: (id: number, type: string) => void
-  onClear: () => void
   onSelect: () => void
   selectorAreas: ReturnType<typeof createElementSelectorAreas>
   selectorConfig: ReturnType<typeof createElementSelectorConfig>
@@ -80,7 +78,6 @@ interface RelationFilterDropAreaProps {
 const RelationFilterInner = ({
   items,
   onRemove,
-  onClear,
   selectorAreas,
   selectorConfig,
   onFinish
@@ -136,27 +133,16 @@ const RelationFilterInner = ({
         </Flex>
       </Flex>
 
-      <Flex
-        gap="mini"
+      <ElementSelectorButton
+        elementSelectorConfig={ {
+          selectionType: SelectionType.Multiple,
+          areas: selectorAreas,
+          config: selectorConfig,
+          onFinish
+        } }
         style={ { flexShrink: 0, marginLeft: 4 } }
-      >
-        <ElementSelectorButton
-          elementSelectorConfig={ {
-            selectionType: SelectionType.Multiple,
-            areas: selectorAreas,
-            config: selectorConfig,
-            onFinish
-          } }
-          type="default"
-        />
-
-        <IconButton
-          disabled={ items.length === 0 }
-          icon={ { value: 'trash' } }
-          onClick={ onClear }
-          type="default"
-        />
-      </Flex>
+        type="default"
+      />
     </Flex>
   )
 }
@@ -234,7 +220,6 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
     >
       <RelationFilterInner
         items={ items }
-        onClear={ clearAll }
         onFinish={ handleFinish }
         onRemove={ removeItem }
         onSelect={ () => {} }
