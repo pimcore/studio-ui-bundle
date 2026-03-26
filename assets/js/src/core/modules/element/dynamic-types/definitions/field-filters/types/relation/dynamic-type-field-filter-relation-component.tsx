@@ -130,7 +130,7 @@ const RelationFilterInner = ({
               inline
               key={ `${item.type}-${item.id}` }
               onClose={ () => { onRemove(item.id, item.type) } }
-              path={ getDisplayName(item.fullPath) }
+              path={ `${getDisplayName(item.fullPath)} (${item.id})` }
               published={ item.isPublished ?? undefined }
             />
           )) }
