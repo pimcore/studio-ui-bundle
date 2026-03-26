@@ -126,7 +126,6 @@ const RelationFilterInner = ({
             <ElementTag
               elementType={ item.type === 'object' ? 'data-object' : item.type as 'asset' | 'document' }
               iconName={ getElementTypeIcon(item.type) }
-              id={ item.id }
               inline
               key={ `${item.type}-${item.id}` }
               onClose={ () => { onRemove(item.id, item.type) } }
