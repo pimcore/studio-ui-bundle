@@ -136,7 +136,11 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
           )) }
         </Flex>
 
-        <Flex gap="extra-small">
+        <Flex
+          align="center"
+          gap="extra-small"
+          style={ { width: '100%' } }
+        >
           <ElementSelectorButton
             elementSelectorConfig={ {
               selectionType: SelectionType.Multiple,
@@ -153,6 +157,7 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
                 addItems(newItems)
               }
             } }
+            style={ { flex: 1 } }
             type="default"
           />
 
