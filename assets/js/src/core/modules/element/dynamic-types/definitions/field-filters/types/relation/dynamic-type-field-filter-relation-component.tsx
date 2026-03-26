@@ -14,7 +14,8 @@ import { Select } from '@Pimcore/components/select/select'
 import { ManyToManyRelation } from '@Pimcore/components/many-to-many-relation/many-to-many-relation'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
 
-export type RelationFilterValue = { type: 'asset' | 'object' | 'document', ids: number[] } | null
+export type RelationFilterEntry = { type: 'asset' | 'object' | 'document', ids: number[] }
+export type RelationFilterValue = RelationFilterEntry[] | null
 
 const TYPE_OPTIONS = [
   { label: 'Asset', value: 'asset' },
@@ -25,12 +26,13 @@ const TYPE_OPTIONS = [
 export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => {
   const { setData, data } = useDynamicFilter()
   const filterValue = data as RelationFilterValue
+  const firstEntry = Array.isArray(filterValue) ? filterValue[0] : null
 
-  const [selectedType, setSelectedType] = useState<'asset' | 'object' | 'document'>(filterValue?.type ?? 'object')
+  const [selectedType, setSelectedType] = useState<'asset' | 'object' | 'document'>(firstEntry?.type ?? 'object')
   const [items, setItems] = useState<ManyToManyRelationValue>([])
 
   useEffect(() => {
-    if (filterValue == null) {
+    if (filterValue == null || filterValue.length === 0) {
       setItems([])
     }
   }, [data])
@@ -47,7 +49,7 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
     if (newItems.length === 0) {
       setData(null)
     } else {
-      setData({ type: selectedType, ids: newItems.map((item: ManyToManyRelationValueItem) => item.id) })
+      setData([{ type: selectedType, ids: newItems.map((item: ManyToManyRelationValueItem) => item.id) }])
     }
   }
 
