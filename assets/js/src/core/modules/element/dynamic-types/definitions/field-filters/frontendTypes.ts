@@ -25,5 +25,7 @@ export enum FieldFilterFrontendType {
   String = 'system.string',
   Time = 'system.time',
 
-  Consent = 'crm.consent'
+  Consent = 'crm.consent',
+
+  Relation = 'dataobject.relation'
 }

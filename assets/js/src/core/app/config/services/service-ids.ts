@@ -160,6 +160,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
   'DynamicTypes/FieldFilter/Time': 'DynamicTypes/FieldFilter/Time',
   'DynamicTypes/FieldFilter/Color': 'DynamicTypes/FieldFilter/Color',
+  'DynamicTypes/FieldFilter/Relation': 'DynamicTypes/FieldFilter/Relation',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',

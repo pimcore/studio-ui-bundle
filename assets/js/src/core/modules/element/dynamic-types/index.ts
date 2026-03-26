@@ -222,6 +222,7 @@ import { type DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/eleme
 import { type DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 import { type DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { type DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
+import { type DynamicTypeFieldFilterRelation } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/relation/dynamic-type-field-filter-relation'
 import { type DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 
 moduleSystem.registerModule({
@@ -245,6 +246,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterColor>(serviceIds['DynamicTypes/FieldFilter/Color']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterTime>(serviceIds['DynamicTypes/FieldFilter/Time']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterRelation>(serviceIds['DynamicTypes/FieldFilter/Relation']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 
