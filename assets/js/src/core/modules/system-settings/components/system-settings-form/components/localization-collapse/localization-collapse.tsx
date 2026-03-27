@@ -27,11 +27,14 @@ export const LocalizationCollapse = (): React.JSX.Element => {
       return
     }
 
+    const normalizedLanguage = selectedLanguage.replaceAll('-', '_')
     const currentLanguages = (form.getFieldValue(['general', 'valid_languages']) ?? []) as string[]
-    if (!currentLanguages.includes(selectedLanguage)) {
+    if (!currentLanguages.includes(normalizedLanguage)) {
+      const currentFallbacks = (form.getFieldValue(['general', 'fallback_languages']) ?? {}) as Record<string, string[]>
       form.setFieldsValue({
         general: {
-          valid_languages: [...currentLanguages, selectedLanguage]
+          valid_languages: [...currentLanguages, normalizedLanguage],
+          fallback_languages: { ...currentFallbacks, [normalizedLanguage]: [] }
         }
       })
       setSelectedLanguage(undefined)

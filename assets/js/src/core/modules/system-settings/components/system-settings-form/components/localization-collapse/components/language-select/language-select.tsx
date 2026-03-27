@@ -35,7 +35,7 @@ export const LanguageSelect = (props: LanguageSelectProps): React.JSX.Element =>
   useEffect(() => {
     const selectedLanguages = alreadySelectedLanguages as string[]
     const newOptions: SelectOption[] = Object.entries(validLocales)
-      .filter(([key]) => !selectedLanguages.includes(key))
+      .filter(([key]) => !selectedLanguages.includes(key.replaceAll('-', '_')))
       .map(([key, value]) => ({
         label: value as string,
         value: key
