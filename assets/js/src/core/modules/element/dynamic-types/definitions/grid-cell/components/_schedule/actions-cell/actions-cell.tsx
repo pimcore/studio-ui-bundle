@@ -29,9 +29,9 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
 
   const selectOptions = (!isLoading && data !== undefined)
     ? data.items.map((action) => ({
-      value: action.key,
-      label: t(`schedule.action.${action.key}`)
-    }))
+        value: action.key,
+        label: t(`schedule.action.${action.key}`)
+      }))
     : []
 
   const columnConfig: SelectCellConfig = {
@@ -39,6 +39,6 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <SelectCell {...addColumnConfig(props, columnConfig)} />
+    <SelectCell { ...addColumnConfig(props, columnConfig) } />
   )
 }
