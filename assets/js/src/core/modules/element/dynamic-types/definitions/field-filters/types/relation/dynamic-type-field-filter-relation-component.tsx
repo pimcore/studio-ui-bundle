@@ -151,13 +151,14 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   const { setData, config } = useDynamicFilter()
 
   const fieldDefinition = config?.fieldDefinition as IRelationAllowedTypesClassDefinition | undefined
-  const allowedTypes = fieldDefinition !== undefined
-    ? convertAllowedTypes(fieldDefinition)
-    : {
-        assetsAllowed: true,
-        dataObjectsAllowed: true,
-        documentsAllowed: true
-      }
+  const convertedTypes = fieldDefinition !== undefined ? convertAllowedTypes(fieldDefinition) : undefined
+  const nothingAllowed = convertedTypes !== undefined &&
+    convertedTypes.assetsAllowed !== true &&
+    convertedTypes.dataObjectsAllowed !== true &&
+    convertedTypes.documentsAllowed !== true
+  const allowedTypes = convertedTypes === undefined || nothingAllowed
+    ? { assetsAllowed: true, dataObjectsAllowed: true, documentsAllowed: true }
+    : convertedTypes
 
   const [items, setItems] = useState<ManyToManyRelationValueItem[]>([])
 
