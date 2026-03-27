@@ -457,8 +457,10 @@ schedule.all: All scheduled (upcoming & archive)
 schedule.toolbar.filters.active-switch: Active only
 schedule.toolbar.new: New
 schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
-schedule.version.delete: Delete version
-schedule.version.publish: Publish version
+schedule.action.delete: Delete
+schedule.action.publish: Publish
+schedule.action.unpublish: Unpublish
+schedule.action.publish-version: Publish version
 schedule.select-an-action: Action
 schedule.select-a-version: Version
 schedule.archived: Archived
