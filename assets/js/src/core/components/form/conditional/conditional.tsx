@@ -9,7 +9,7 @@
  */
 
 import { isUndefined } from 'lodash'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Form } from '../form'
 
 export interface ConditionalProps {
@@ -23,12 +23,17 @@ export interface ConditionalProps {
 
 const ConditionalWithWatchFields = ({ condition, children, watchFields }: ConditionalProps & { watchFields: string[] }): React.JSX.Element => {
   const form = Form.useFormInstance()
-  const watchedValues = watchFields.map((field) => Form.useWatch(field, form))
+
+  const selector = useCallback((values: Record<string, unknown>) => {
+    return watchFields.map((field) => values[field])
+  }, [watchFields])
+
+  const watchedValues = Form.useWatch(selector, form)
 
   const isTrue = useMemo(() => {
     const values = form.getFieldsValue(true) as Record<string, unknown>
     return condition(values)
-  }, [condition, ...watchedValues])
+  }, [condition, watchedValues])
 
   return isTrue ? <>{children}</> : <></>
 }
