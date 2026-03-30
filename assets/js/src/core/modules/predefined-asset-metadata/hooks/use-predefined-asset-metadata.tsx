@@ -70,7 +70,18 @@ export const usePredefinedAssetMetadata = (): UsePredefinedAssetMetadataReturn =
   }, [updateError])
 
   const createNewMetadata = async (): Promise<MutationResult<PredefinedMetadata>> => {
-    const { data, error } = await createMetadata()
+    const { data, error } = await createMetadata({
+      createPredefinedMetadata: {
+        name: '',
+        type: 'input',
+        description: null,
+        targetSubType: null,
+        data: null,
+        config: null,
+        language: null,
+        group: null
+      }
+    })
 
     if (error !== undefined) {
       return { success: false, errorKey: getErrorKey(error) }

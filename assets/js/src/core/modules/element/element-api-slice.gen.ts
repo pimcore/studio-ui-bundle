@@ -135,7 +135,7 @@ export type ElementGetTreeLocationApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
 };
-export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
+export type ElementGetIdByPathApiResponse = /** status 200 ID of the element */ {
     /** ID of the element */
     id: number;
 };

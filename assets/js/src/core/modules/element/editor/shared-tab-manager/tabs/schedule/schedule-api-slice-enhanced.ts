@@ -42,5 +42,6 @@ export const {
   useScheduleDeleteByIdMutation,
   useScheduleGetCollectionForElementByTypeAndIdQuery,
   useScheduleUpdateForElementByTypeAndIdMutation,
-  useScheduleCreateForElementByTypeAndIdMutation
+  useScheduleCreateForElementByTypeAndIdMutation,
+  useScheduleListActionsForElementTypeQuery
 } = api
