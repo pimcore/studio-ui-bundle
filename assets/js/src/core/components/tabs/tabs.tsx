@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type RefObject } from 'react'
+import React, { type RefObject, useCallback, useMemo } from 'react'
 import { Tabs as AntdTabs, type TabsProps } from 'antd'
 import { useStyles } from '@Pimcore/components/tabs/tabs.styles'
 import cn from 'classnames'
@@ -38,42 +38,45 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
     }
   )
 
-  const onEdit = (key: string | React.MouseEvent<HTMLElement>, action: 'add' | 'remove'): void => {
+  const onEdit = useCallback((key: string | React.MouseEvent<HTMLElement>, action: 'add' | 'remove'): void => {
     if (action === 'remove' && onClose !== undefined) {
       onClose(key)
     }
-  }
+  }, [onClose])
 
   // Check if any tabs are explicitly closable to determine the tab type
   const hasClosableTabs = items?.some(item => item.closable !== false) ?? false
   const tabType = onClose !== undefined && hasClosableTabs ? 'editable-card' : 'line'
 
-  const handleMiddleClick = (tabKey: string) => (event: React.MouseEvent): void => {
+  const handleMiddleClick = useCallback((event: React.MouseEvent): void => {
     if (event.button === 1 && onClose !== undefined) {
-      // Check if this specific tab item is closable
-      const tabItem = items?.find(item => item.key === tabKey)
-      const isTabClosable = tabItem?.closable !== false
+      const tabKey = event.currentTarget.getAttribute('data-tab-key')
+      if (tabKey !== null) {
+        const tabItem = items?.find(item => item.key === tabKey)
+        const isTabClosable = tabItem?.closable !== false
 
-      if (isTabClosable) {
-        event.preventDefault()
-        onClose(tabKey)
+        if (isTabClosable) {
+          event.preventDefault()
+          onClose(tabKey)
+        }
       }
     }
-  }
+  }, [onClose, items])
 
   // Add mouse down handler to each tab item
-  const enhancedItems = items?.map(item => ({
+  const enhancedItems = useMemo(() => items?.map(item => ({
     ...item,
     label: (
       <button
-        onMouseDown={ handleMiddleClick(item.key) }
-        style={ { border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' } }
+        className={ styles.middleClickButton }
+        data-tab-key={ item.key }
+        onMouseDown={ handleMiddleClick }
         type="button"
       >
         {item.label}
       </button>
     )
-  }))
+  })), [items, handleMiddleClick])
 
   return (
     <AntdTabs

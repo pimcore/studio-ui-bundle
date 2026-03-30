@@ -127,6 +127,13 @@ export const useStyles = createStyles(({ token, css }) => {
           height: 100%;
         }
       }
+    `,
+    middleClickButton: css`
+      border: none;
+      background: none;
+      padding: 0;
+      font: inherit;
+      cursor: inherit;
     `
   }
 }, { hashPriority: 'high' })

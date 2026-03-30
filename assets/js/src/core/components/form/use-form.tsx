@@ -11,7 +11,7 @@
 import { Form, type FormInstance, type FormProps } from 'antd'
 import { type NamePath } from 'antd/es/form/interface'
 import { set } from 'lodash'
-import React, { createContext, useMemo } from 'react'
+import React, { createContext, useCallback, useMemo } from 'react'
 import type { VirtualValidatorRegistry } from './item/hooks/use-virtual-validator-registry'
 
 export interface CustomSetFieldValueOptions {
@@ -29,41 +29,39 @@ export type formInstanceType<Values = any> = Omit<FormInstance<Values>, 'setFiel
 
 export const useForm = <Values = any>(form?: FormInstance<Values>): [formInstanceType<Values>] => {
   const [formInstance] = Form.useForm<Values>(form) as [formInstanceType<Values>]
-  const originalSetFieldValue = formInstance.setFieldValue
-  const originalSetFieldsValue = formInstance.setFieldsValue
 
-  const setOnValuesChangeHandler = (handler: FormProps<Values>['onValuesChange']): void => {
+  const setOnValuesChangeHandler = useCallback((handler: FormProps<Values>['onValuesChange']): void => {
     formInstance._onValuesChangeHandler = handler
-  }
+  }, [formInstance])
 
-  const setFieldValue = (name: NamePath<Values>, value: any, options?: CustomSetFieldValueOptions): void => {
+  const setFieldValue = useCallback((name: NamePath<Values>, value: any, options?: CustomSetFieldValueOptions): void => {
     const { triggerChange = false } = options ?? {}
 
-    originalSetFieldValue(name, value)
+    formInstance.setFieldValue(name, value)
 
     if (triggerChange && formInstance._onValuesChangeHandler !== undefined) {
       const update = {}
       set(update, name as string, value)
       formInstance._onValuesChangeHandler(update as Partial<Values>, formInstance.getFieldsValue())
     }
-  }
+  }, [formInstance])
 
-  const setFieldsValue = (values: Partial<Values>, options?: CustomSetFieldValueOptions): void => {
+  const setFieldsValue = useCallback((values: Partial<Values>, options?: CustomSetFieldValueOptions): void => {
     const { triggerChange = false } = options ?? {}
 
-    originalSetFieldsValue(values)
+    formInstance.setFieldsValue(values)
 
     if (triggerChange && formInstance._onValuesChangeHandler !== undefined) {
       formInstance._onValuesChangeHandler(values, formInstance.getFieldsValue())
     }
-  }
+  }, [formInstance])
 
-  const newFormInstance: formInstanceType<Values> = {
+  const newFormInstance = useMemo((): formInstanceType<Values> => ({
     ...formInstance,
     setOnValuesChangeHandler,
     setFieldValue,
     setFieldsValue
-  }
+  }), [formInstance, setOnValuesChangeHandler, setFieldValue, setFieldsValue])
 
   return [newFormInstance]
 }
