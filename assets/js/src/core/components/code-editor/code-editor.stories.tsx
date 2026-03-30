@@ -22,7 +22,7 @@ const config: Meta = {
   argTypes: {
     preset: {
       control: { type: 'select' },
-      options: ['text', 'yaml']
+      options: ['text', 'yaml', 'html', 'json']
     }
   }
 }
@@ -74,6 +74,31 @@ settings:
   debug: true
   timeout: 30`,
     preset: 'yaml',
+    height: '300px'
+  }
+}
+
+export const JsonPreset: Story = {
+  args: {
+    value: `{
+  "name": "my-application",
+  "version": "1.0.0",
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "username": "admin"
+  },
+  "features": [
+    "authentication",
+    "logging",
+    "monitoring"
+  ],
+  "settings": {
+    "debug": true,
+    "timeout": 30
+  }
+}`,
+    preset: 'json',
     height: '300px'
   }
 }

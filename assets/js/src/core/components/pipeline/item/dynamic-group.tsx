@@ -16,9 +16,10 @@ export interface DynamicGroupProps {
   id: string
   dynamicTypeRegistryId: string
   showTitle?: boolean
+  translationKeyPrefix?: string
 }
 
-const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false }: DynamicGroupProps): React.JSX.Element => {
+const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false, translationKeyPrefix }: DynamicGroupProps): React.JSX.Element => {
   return (
     <Form.Item
       initialValue={ [] }
@@ -29,6 +30,7 @@ const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false }: 
           dynamicTypeRegistryId={ dynamicTypeRegistryId }
           id={ id }
           showTitle={ showTitle }
+          translationKeyPrefix={ translationKeyPrefix }
         />
       </Form.NumberedList>
     </Form.Item>
