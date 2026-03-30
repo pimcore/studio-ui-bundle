@@ -31,7 +31,7 @@ export const DocumentContextMenuOptionsPanel = ({ items, isLoading }: DocumentCo
     return (
       <Conditional
         condition={ (values) => values.elementType === elementTypes.document }
-        watchField="elementType"
+        watchFields={ ['elementType'] }
       >
         <FormKit.Panel
           collapsed={ false }
@@ -47,7 +47,7 @@ export const DocumentContextMenuOptionsPanel = ({ items, isLoading }: DocumentCo
   return (
     <Conditional
       condition={ (values) => values.elementType === elementTypes.document }
-      watchField="elementType"
+      watchFields={ ['elementType'] }
     >
       <FormKit.Panel
         collapsed={ false }

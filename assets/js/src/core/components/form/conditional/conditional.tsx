@@ -16,19 +16,19 @@ export interface ConditionalProps {
   /** Evaluate whether children should be rendered based on current form values */
   condition: (formValues: Record<string, unknown>) => boolean
   children: React.ReactNode
-  /** Optional: specify a single field name to watch. When provided, only changes to this
-   *  field trigger re-renders instead of subscribing to all form value changes. */
-  watchField?: string
+  /** Optional: specify field names to watch. When provided, only changes to these
+   *  fields trigger re-renders instead of subscribing to all form value changes. */
+  watchFields?: string[]
 }
 
-const ConditionalWithWatchField = ({ condition, children, watchField }: ConditionalProps & { watchField: string }): React.JSX.Element => {
+const ConditionalWithWatchFields = ({ condition, children, watchFields }: ConditionalProps & { watchFields: string[] }): React.JSX.Element => {
   const form = Form.useFormInstance()
-  const watchedValue = Form.useWatch(watchField, form)
+  const watchedValues = watchFields.map((field) => Form.useWatch(field, form))
 
   const isTrue = useMemo(() => {
     const values = form.getFieldsValue(true) as Record<string, unknown>
     return condition(values)
-  }, [condition, watchedValue])
+  }, [condition, ...watchedValues])
 
   return isTrue ? <>{children}</> : <></>
 }
@@ -46,15 +46,15 @@ const ConditionalWithAllValues = ({ condition, children }: ConditionalProps): Re
   return isTrue ? <>{children}</> : <></>
 }
 
-export const Conditional = ({ condition, children, watchField }: ConditionalProps): React.JSX.Element => {
-  if (!isUndefined(watchField)) {
+export const Conditional = ({ condition, children, watchFields }: ConditionalProps): React.JSX.Element => {
+  if (!isUndefined(watchFields)) {
     return (
-      <ConditionalWithWatchField
+      <ConditionalWithWatchFields
         condition={ condition }
-        watchField={ watchField }
+        watchFields={ watchFields }
       >
         {children}
-      </ConditionalWithWatchField>
+      </ConditionalWithWatchFields>
     )
   }
 

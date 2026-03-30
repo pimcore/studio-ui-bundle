@@ -31,7 +31,7 @@ export const AssetContextMenuOptionsPanel = ({ items, isLoading }: AssetContextM
     return (
       <Conditional
         condition={ (values) => values.elementType === elementTypes.asset }
-        watchField="elementType"
+        watchFields={ ['elementType'] }
       >
         <FormKit.Panel
           collapsed={ false }
@@ -47,7 +47,7 @@ export const AssetContextMenuOptionsPanel = ({ items, isLoading }: AssetContextM
   return (
     <Conditional
       condition={ (values) => values.elementType === elementTypes.asset }
-      watchField="elementType"
+      watchFields={ ['elementType'] }
     >
       <FormKit.Panel
         collapsed={ false }

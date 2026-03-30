@@ -31,7 +31,7 @@ export const DataObjectContextMenuOptionsPanel = ({ items, isLoading }: DataObje
     return (
       <Conditional
         condition={ (values) => values.elementType === elementTypes.dataObject }
-        watchField="elementType"
+        watchFields={ ['elementType'] }
       >
         <FormKit.Panel
           collapsed={ false }
@@ -47,7 +47,7 @@ export const DataObjectContextMenuOptionsPanel = ({ items, isLoading }: DataObje
   return (
     <Conditional
       condition={ (values) => values.elementType === elementTypes.dataObject }
-      watchField="elementType"
+      watchFields={ ['elementType'] }
     >
       <FormKit.Panel
         collapsed={ false }
