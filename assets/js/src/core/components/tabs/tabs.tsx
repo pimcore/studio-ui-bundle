@@ -12,6 +12,7 @@ import React, { type RefObject, useCallback, useMemo } from 'react'
 import { Tabs as AntdTabs, type TabsProps } from 'antd'
 import { useStyles } from '@Pimcore/components/tabs/tabs.styles'
 import cn from 'classnames'
+import { isUndefined } from 'lodash'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
@@ -48,10 +49,10 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
   const hasClosableTabs = items?.some(item => item.closable !== false) ?? false
   const tabType = onClose !== undefined && hasClosableTabs ? 'editable-card' : 'line'
 
-  const handleMiddleClick = useCallback((event: React.MouseEvent): void => {
+  const handleMiddleClick = useCallback((event: React.MouseEvent<HTMLElement>): void => {
     if (event.button === 1 && onClose !== undefined) {
-      const tabKey = event.currentTarget.getAttribute('data-tab-key')
-      if (tabKey !== null) {
+      const tabKey = event.currentTarget.dataset.tabKey
+      if (!isUndefined(tabKey)) {
         const tabItem = items?.find(item => item.key === tabKey)
         const isTabClosable = tabItem?.closable !== false
 
