@@ -12,6 +12,7 @@ import React from 'react'
 import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
 import { Form } from '../../form'
 import { useFieldCollection } from './field-collection-provider'
+import { FieldCollectionItemProvider } from './field-collection-item-provider'
 import { Input } from 'antd'
 import { ToolStripBox } from '../../../toolstrip/box/tool-strip-box'
 import { FieldCollectionItemToolStrip } from './field-collection-item-toolstrip'
@@ -35,18 +36,24 @@ export const FieldCollectionItem = React.memo((props: FieldCollectionItemProps):
   }
 
   return (
-    <ToolStripBox renderToolStripStart={ <FieldCollectionItemToolStrip field={ field } /> }>
-      <Form.Item
-        hidden
-        name={ 'type' }
-      >
-        <Input />
-      </Form.Item>
+    <FieldCollectionItemProvider
+      field={ field }
+      value={ value }
+    >
+      <ToolStripBox renderToolStripStart={ <FieldCollectionItemToolStrip field={ field } /> }>
+        <Form.Item
+          hidden
+          name={ 'type' }
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Group name={ 'data' }>
-        {registryItem.component}
-      </Form.Group>
-    </ToolStripBox>
+        <Form.Group name={ 'data' }>
+          {registryItem.component}
+        </Form.Group>
+      </ToolStripBox>
+    </FieldCollectionItemProvider>
   )
 })
+
 FieldCollectionItem.displayName = 'FieldCollectionItem'
