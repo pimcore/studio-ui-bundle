@@ -32,7 +32,7 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
   }, [setActiveTabId])
 
   const handleClose = useCallback((key: string) => {
-    closeWidget(key as string)
+    closeWidget(key)
   }, [closeWidget])
 
   return (
