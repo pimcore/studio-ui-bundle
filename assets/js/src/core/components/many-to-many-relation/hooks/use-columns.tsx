@@ -75,12 +75,6 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
     ? [...props.columnDefinition]
     : defaultColumns
 
-  if (props.enableRowDrag) {
-    columns.unshift(
-      columnHelper.accessor('rowDragCol', { header: '', size: 40 })
-    )
-  }
-
   columns.push(
     columnHelper.accessor('actions', {
       header: t('actions'),
