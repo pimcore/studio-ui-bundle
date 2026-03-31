@@ -1,0 +1,2595 @@
+common.owner: Ägare
+common.modification-date: Ändringsdatum
+common.globally: Globalt
+common.apply-selection: Tillämpa val
+dont-ask-again: "Fråga inte igen"
+widget.missing-context.title: "Saknar kontext"
+widget.missing-context.description: "Inget relaterat element hittades"
+widget.missing-tab-context.description: "Den här funktionen stöds inte för det relaterade elementet"
+block: Block
+error.error_something_generic_went_wrong: Något gick fel
+error.error_element_exists: Elementet finns redan
+error.error_folder_exists: Mappen finns redan
+error.error_invalid_argument: Ogiltigt argument
+error.error_widget_name_missing: Widgetnamn måste anges
+error.error_widget_name_invalid: Widgetnamnet är ogiltigt (bara alfanumeriska tecken, understreck och mellanslag tillåts, minst 3 och max 80 tecken)
+error.error_validation_failed: Validering misslyckades
+error.error_validation.email_failed: Ange en giltig e-postadress
+error.error_element_not_found: Elementet hittades inte
+error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
+sidebar.selected_elements: Valda element
+sidebar.grid_config: Rutnätskonfiguration
+sidebar.tag_filters: Taggfilter
+sidebar.search_filter: Sök & Filtrera
+sidebar.clear-all-filters: Rensa alla filter
+add-areas: Lägg till områden
+content-settings: Innehållsinställningar
+site-domain.main_site: Huvudsajt
+relation-invalid-key-in-columns: "Ogiltigt värde använt för nyckelkolumn. Undvik specialtecken och reserverade nyckelord."
+import-modal.title: Import
+import-modal.upload: Ladda upp
+import-modal.browse-files: Bläddra bland filer
+import-modal.drag-drop: Dra och släpp fil här eller klicka för att bläddra
+modal-search.field.mimeType: MIME-typ
+modal-search.field.thumbnail: Miniatyrbild
+modal-search.field.id: ID
+modal-search.field.userOwner: Ägare
+modal-search.field.userOwnerName: Ägarens namn
+modal-search.field.userModification: Ändrad av
+modal-search.field.userModificationName: Namn på ändrad av
+modal-search.field.creationDate: Skapandedatum
+modal-search.field.modificationDate: Ändringsdatum
+modal-search.field.description: Beskrivning
+modal-search.field.name: Namn
+modal-search.field.previewImage: Förhandsvisningsbild
+modal-search.field.title: Titel
+modal-search.field.class: Klass
+modal-search.field.language: Språk
+asset.sidebar.details: Detaljer
+asset.asset-tree.title: Assetträd
+asset.asset-tree.search: Sök i {{folderName}}
+asset.asset-editor-tabs.view: Visa
+asset.asset-editor-tabs.embedded-metadata: Inbäddad metadata
+asset.asset-editor-tabs.custom-metadata: Anpassad metadata
+asset.asset-editor-tabs.versions: Versioner
+asset.asset-editor-tabs.list.columns.preview: Förhandsvisning
+asset.asset-editor-tabs.list.columns.id: ID
+asset.asset-editor-tabs.list.columns.type: Typ
+asset.asset-editor-tabs.list.columns.fullPath: Fullständig sökväg
+asset.asset-editor-tabs.list.columns.creationDate: Skapandedatum
+asset.asset-editor-tabs.list.columns.modificationDate: Ändringsdatum
+asset.tree.context-menu.upload-new-version: Ladda upp ny version
+asset.copy-info: Kopiera & Info
+asset.upload: Ladda upp
+asset.upload.label: Välj fil
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} filer laddas upp ..."
+asset.upload.files.uploaded: "{{successItems}} filer har laddats upp"
+asset.upload.files.completed: Klart!
+asset.upload.files.successfully-uploaded: Uppladdning slutförd
+asset.upload.files.completed-actions: Slutförda åtgärder
+asset.upload.validation: "Lägg till en fil"
+asset.upload.file-exists.title: Filen finns redan
+asset.upload.file-exists.message: 'Filen "{{fileName}}" finns redan i den här mappen. Vill du skriva över den?'
+asset.upload.overwrite: Skriv över
+asset.upload.keep-both: Behåll båda
+asset.upload.skip: Hoppa över
+asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.folder-drop.creating-folders: Skapar mappar
+asset.upload.folder-drop.creating-folders-hint: "Vänta medan mappstrukturen skapas…"
+upload.error.file-too-large: "Filen är större än serverns nuvarande uppladdningsgräns."
+upload.error.max-file-size-exceeded: "Filstorleken överskrider den maximalt tillåtna storleken på {{maxSize}}"
+upload.error.generic: "Filen kunde inte laddas upp."
+upload.error.upload-failed: "Uppladdning misslyckades"
+upload.error.failed-to-fetch-asset-details: "Kunde inte hämta assetdetaljer"
+upload.success: "Filen har laddats upp"
+asset.select.type.nullable: "Alla typer"
+document.document-tree.title: Dokumentträd
+document.document-tree.search: Sök i {{folderName}}
+document.editable.inheritance.overwrite: Skriv över
+document.editable.inheritance.tooltip: Ärvt från content-main-dokument. Klicka för att skriva över.
+document.link.target: Länkmål
+document.hardlink.source: Källdokument
+document.hardlink.properties-from-source: Använd egenskaper från källdokument
+document.hardlink.children-from-source: Använd barn från källdokument
+document.paste-as-new-language-variant: Klistra in som ny språkvariant
+document.paste-as-new-language-variant-recursive: Klistra in som ny språkvariant (rekursivt)
+document.paste-language-recursive-updating-references: Klistra in språk (rekursivt), uppdatera referenser
+document.select-language-for-new-document: Välj språk för nytt dokument
+document.language-required: Välj ett språk
+document.paste-inheritance: Klistra in (arv)
+document.tree.copy-paste.replacing-content: Ersätter innehåll
+document.tree.context-menu.add-page: Ny sida
+document.tree.context-menu.add-snippet: Nytt kodavsnitt
+document.tree.context-menu.add-email: Ny e-post
+document.tree.context-menu.add-link: Ny länk
+document.tree.context-menu.add-hardlink: Ny Hardlink
+document.required-fields.validation-title: Obligatoriska fält saknas
+document.required-fields.validation-message: Följande obligatoriska fält måste fyllas i innan publicering
+document.site.remove-site: Ta bort sajt
+document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten? Åtgärden kan inte ångras.
+document.site.use-as-site: Använd som sajt
+document.site.edit-site: Redigera sajt
+document.site.form.main-domain: Huvuddomän
+document.site.form.additional-domains: Ytterligare domäner
+document.site.form.additional-domains-tooltip: Ange ytterligare domäner, en per rad. Jokertecken stöds (*example.com)
+document.site.form.redirect-to-main-domain: Omdirigera ytterligare domäner till huvuddomänen
+document.site.form.error-documents: Feldokument
+document.site.form.default-error-document: Standardfeldokument
+document.site.form.error-document-language: Feldokument ({{language}})
+save-and-continue: Spara och fortsätt
+discard-and-continue: Kassera och fortsätt
+discard-changes: Kassera ändringar
+unsaved-changes.title: Osparade ändringar
+unsaved-changes.message: Du har osparade ändringar. Vad vill du göra?
+unsaved-changes.close-message: Du har osparade ändringar. Är du säker på att du vill stänga utan att spara?
+convert-to: Konvertera till
+convert-document: Konvertera dokument
+convert-document-warning: Allt innehåll kommer att förloras. Är du säker på att du vill konvertera det här dokumentet?
+page: Sida
+email: E-post
+link: Länk
+hardlink: Hardlink
+blank: "Tom"
+data-object.data-object-tree.title: Data Object-träd
+data-object.data-object-tree.search: Sök i {{folderName}}
+data-object.select-class-to-display: Välj en klass att visa
+data-object.tree.context-menu.add-object: Nytt objekt
+data-object.tree.context-menu.add-variant: Ny variant
+data-object.variant-listing.create-data-variant: Ny variant
+data-object.create-data-object: Lägg till nytt objekt av typen {{className}}
+data-object.create-variant: Lägg till ny variant av typen {{className}}
+data-object.object-editor-tabs.variants: Varianter
+object.object-editor-tabs.children-listing: Barnrutnät
+workflow.label: Workflow
+workflow.headline: Workflowdetaljer
+workflow.no-workflows-found: Inga workflows hittades
+folder.folder-editor-tabs.preview: Förhandsvisning
+folder.folder-editor-tabs.view: Lista
+toolbar.reload.confirmation: Är du säker på att du vill ladda om den här fliken? Alla osparade ändringar kommer att förloras.
+toolbar.reload: Ladda om
+toolbar.save-and-publish: Spara & Publicera
+toolbar.save: Spara
+toolbar.save-draft: Spara utkast
+toolbar.more: Mer
+toolbar.workflow: Workflow
+toolbar.new: Ny
+toolbar.switch-layout: Byt anpassad layout
+import: Import
+export: Export
+more-actions: Fler åtgärder
+class-definition.import: Importera klassdefinition
+class-definition.export: Exportera klassdefinition
+class-definition.import-file-label: Välj JSON-fil
+class-definition.import-success: Klassdefinitionen har importerats
+class-definition.export-success: Klassdefinitionen har exporterats
+class-definition.custom-layouts.default-layout: Standardlayout
+class-definition.create-new: Skapa ny klassdefinition
+class-definition.class-name: Klassnamn
+class-definition.unique-identifier: Unik identifierare
+class-definition.unique-identifier-warning: Var försiktig med den unika identifieraren eftersom tabellnamn kan innehålla max 64 tecken.
+class-definition.validation.enter-class-name: Ange ett klassnamn
+class-definition.validation.class-name-format: Klassnamnet måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
+class-definition.validation.enter-unique-identifier: Ange en unik identifierare
+class-definition.validation.unique-identifier-in-use: Denna unika identifierare används redan
+class-definition.validation.unique-identifier-format: Den unika identifieraren måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck, med en maxlängd på 64 tecken.
+class-definition.general-settings.title: Allmänt
+class-definition.general-settings.description: Beskrivning
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP-klassnamn
+class-definition.general-settings.group: Grupp
+class-definition.general-settings.icon: Ikon
+class-definition.general-settings.parent-class: Föräldraklass
+class-definition.general-settings.implements-interfaces: Implementerar gränssnitt
+class-definition.general-settings.listing-parent-class: Listföräldraklass
+class-definition.general-settings.use-traits: Använd Traits
+class-definition.general-settings.listing-use-traits: Listning Använd Traits
+class-definition.general-settings.link-generator-reference: Länkgeneratorreferens
+class-definition.general-settings.preview-generator-reference: Förhandsvisningsgeneratorreferens
+class-definition.general-settings.allow-inherit: Tillåt arv
+class-definition.general-settings.allow-variants: Tillåt varianter
+class-definition.general-settings.show-variants: Visa varianter
+class-definition.general-settings.show-app-logger-tab: Visa App Logger-flik
+class-definition.general-settings.show-field-lookup: Visa fältsökning
+class-definition.general-settings.enable-grid-locking: Aktivera rutnätslåsning
+class-definition.general-settings.encrypt-data: Kryptera data
+class-definition.general-settings.enter-name: Ange ett namn
+class-definition.property-visibility.title: Egenskapssynlighet
+class-definition.property-visibility.id-grid: ID (Rutnät)
+class-definition.property-visibility.id-search: ID (Sök)
+class-definition.property-visibility.key-grid: Nyckel (Rutnät)
+class-definition.property-visibility.key-search: Nyckel (Sök)
+class-definition.property-visibility.path-grid: Sökväg (Rutnät)
+class-definition.property-visibility.path-search: Sökväg (Sök)
+class-definition.property-visibility.modification-date-grid: Ändringsdatum (Rutnät)
+class-definition.property-visibility.modification-date-search: Ändringsdatum (Sök)
+class-definition.property-visibility.creation-date-grid: Skapandedatum (Rutnät)
+class-definition.property-visibility.creation-date-search: Skapandedatum (Sök)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Sammansatta index
+class-definition.composite-indices.index-name: Indexnamn
+class-definition.composite-indices.type: Typ
+class-definition.composite-indices.columns: Kolumner
+class-definition.composite-indices.enter-index-name: Ange indexnamn
+class-definition.composite-indices.select-index-type: Välj indextyp
+class-definition.composite-indices.select-column-names: Välj eller ange kolumnnamn
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Lokaliserad Query
+class-definition.composite-indices.type-store: Store
+class-definition.composite-indices.type-localized-store: Lokaliserad Store
+class-definition.composite-indices.index-label: Index
+field-collection.create-new: Skapa ny Field Collection
+field-collection.key: Nyckel
+field-collection.validation.enter-key: Ange en nyckel
+field-collection.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
+field-collection.general-settings.title: Allmänt
+field-collection.general-settings.key: Nyckel
+field-collection.general-settings.title-label: Titel
+field-collection.general-settings.enter-title: Ange en titel
+field-collection.general-settings.group: Grupp
+field-collection.general-settings.parent-class: Förälder PHP-klass
+field-collection.general-settings.implements-interfaces: Implementerar gränssnitt
+field-collection.general-settings.usages.title: Användningar
+field-collection.general-settings.usages.class: Klass
+field-collection.general-settings.usages.field: Fält
+object-brick.create-new: Skapa ny Object Brick
+object-brick.key: Nyckel
+object-brick.validation.enter-key: Ange en nyckel
+object-brick.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
+object-brick.general-settings.title: Allmänt
+object-brick.general-settings.parent-class: Förälder PHP-klass
+object-brick.general-settings.implements-interfaces: Implementerar gränssnitt
+object-brick.general-settings.title-label: Titel
+object-brick.general-settings.group: Grupp
+object-brick.class-definitions-block.title: Klassdefinitioner
+object-brick.class-definitions-block.new-entry: Ny post
+object-brick.class-definitions-block.classname: Klass
+object-brick.class-definitions-block.select-classname: Välj klass
+object-brick.class-definitions-block.fieldname: Fält
+object-brick.class-definitions-block.select-fieldname: Välj fält
+select-option.create-new: Skapa nytt valalternativ
+select-option.id: ID
+select-option.enter-name-new-item: Ange namnet på det nya objektet
+select-option.validation.enter-id: Ange ett ID
+select-option.validation.id-format: Namnet måste börja med en stor bokstav, följt av alfanumeriska tecken
+select-option.general-settings.title: Allmänt
+select-option.general-settings.enum-name: Enum-namn
+select-option.general-settings.use-traits: Använd Traits
+select-option.general-settings.implements-interfaces: Implementerar gränssnitt
+select-option.general-settings.group: Grupp
+select-option.general-settings.admin-only: Bara admin
+select-option.entries.title: Alternativ
+select-option.entries.display-name: Visningsnamn
+select-option.entries.value: Värde
+select-option.entries.name: Namn
+select-option.entries.action: Åtgärd
+select-option.entries.move-up: Flytta upp
+select-option.entries.move-down: Flytta ner
+select-option.general-settings.usages.title: Användningar
+select-option.general-settings.usages.class: Klass
+select-option.general-settings.usages.field: Fält
+select-option.create.success: Valalternativet har skapats
+select-option.update.success: Valalternativet har uppdaterats
+select-option.delete.success: Valalternativet har tagits bort
+select-option.tree.all: Alla
+select-option.tree.search: Sök valalternativ
+select-option.tree.actions.select-option: Valalternativ
+custom-layout.import-success: Anpassad layout har importerats
+custom-layout.delete.confirmation: Är du säker på att du vill ta bort den här anpassade layouten?
+custom-layout.delete.success: Anpassad layout har tagits bort
+example-prefix: Exempelprefix
+pagination.show-total: Totalt {{total}} objekt
+pagination.page: Sida
+preview-card.locate-in-tree: Hitta i träd
+preview-card.rename: Byt namn
+preview-card.download-zip: Ladda ner som ZIP
+preview-card.delete: Ta bort
+grid.aria.column-resize: Ändra kolumnstorlek
+tree.aria.expand-and-collapse: Expandera eller fäll ihop trädelement
+image-sidebar.tab.details.custom-download: Anpassad nedladdning
+aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Val av anpassat miniatyrbildsläge
+aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Val av anpassat miniatyrbildsformat
+aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Ladda ner anpassad miniatyrbild
+aria.asset.image-sidebar.tab.details.precreated-thumbnail: Välj förskapad miniatyrbild att ladda ner
+aria.asset.image-sidebar.tab.details.download-thumbnail: Ladda ner miniatyrbild
+notification.action-list.actions: Åtgärder
+notification.action-list.cancel: Avbryt
+notification.action-list.cancel-all: Avbryt alla
+notification.action-list.completed-actions: Slutförda åtgärder
+aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
+aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
+aria.notification.action-list.cancel: Avbryt åtgärd
+asset.image.editor.zoom.reset: Återställ
+aria.asset.image.editor.zoom.reset: Återställ zoom
+aria.asset.image.editor.zoom.zoom-in: Zooma in
+aria.asset.image.editor.zoom.zoom-out: Zooma ut
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Val av fördefinierade zoomnivåer
+asset.preview.no-video-support: Din webbläsare stöder inte video.
+asset.preview.no-audio-support: Din webbläsare stöder inte ljud.
+grid.filter.before: Före
+grid.filter.after: Efter
+grid.filter.between: Mellan
+grid.filter.on: På
+grid.filter.from: Från
+grid.filter.to: Till
+grid.filter.is: Är
+grid.filter.less: Mindre än
+grid.filter.more: Mer än
+grid.copy-notice: Kopierat till urklipp
+grid.configuration.no-saved-templates: Inga sparade mallar tillgängliga
+grid.configuration.template: Mall
+grid.configuration.save-template: Spara som mall
+grid.configuration.save-new-template: Spara som ny mall
+grid.configuration.update-template: Uppdatera mallen
+grid.configuration.edit-template-details: Redigera malldetaljer
+grid.configuration.delete-template: Ta bort mall
+grid.configuration.delete-this-template: Ta bort den här mallen
+grid.configuration.delete-template-confirmation: Är du säker på att du vill ta bort den här mallen?
+grid.configuration.save-template-configuration: Spara konfiguration som mall
+grid.configuration.set-default-template: Ange som standardmall
+grid.configuration.shared: Delad
+grid.advanced-column.advancedColumns.group.boolean: Boolean
+grid.advanced-column.advancedColumns.group.date: Datum
+grid.advanced-column.advancedColumns.group.string: Sträng
+grid.advanced-column.advancedColumns.group.other: Övrigt
+grid.advanced-column.title.placeholder: Lägg till en titel
+grid.advanced-column.advancedColumns: Källfält
+grid.advanced-column.advancedColumns.add: Lägg till ett källfält
+grid.advanced-column.transformers: Transformerare
+grid.advanced-column.transformers.add: Lägg till en transformerare
+grid.advanced-column.preview: Förhandsvisning
+grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
+grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
+grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.trim: Trimma
+grid.advanced-column.find: Sök
+grid.advanced-column.replace: Ersätt
+grid.advanced-column.start: Start
+grid.advanced-column.length: Längd
+grid.advanced-column.trueLabel: Sant-etikett
+grid.advanced-column.falseLabel: Falskt-etikett
+grid.advanced-column.format: Format
+grid.advanced-column.delimiter: Avgränsare
+grid.advanced-column.twigTemplate: Twig-mall
+grid.advanced-column.blurringRule: Suddningsregel
+grid.advanced-column.anonymizationRule: Anonymiseringsregel
+grid.advanced-column.translationPrefix: Översättningsprefix
+grid.advanced-column.advancedColumns.simpleField: Enkelt fält
+grid.advanced-column.advancedColumns.relationField: Relationsfält
+grid.advanced-column.advancedColumns.staticText: Statisk text
+grid.advanced-column.advancedColumns.booleanFormatter: Boolean-formaterare
+grid.advanced-column.advancedColumns.caseChange: Ändra skiftläge
+grid.advanced-column.advancedColumns.combine: Kombinera värden
+grid.advanced-column.advancedColumns.dateFormatter: Datumformaterare
+grid.advanced-column.advancedColumns.elementCounter: Elementräknare
+grid.advanced-column.advancedColumns.explode: Dela upp
+grid.advanced-column.advancedColumns.stringReplace: Strängersättning
+grid.advanced-column.advancedColumns.substring: Delsträng
+grid.advanced-column.advancedColumns.trim: Trimma
+grid.advanced-column.advancedColumns.twigOperator: Twig-operator
+grid.advanced-column.advancedColumns.anonymizer: Anonymiserare
+grid.advanced-column.advancedColumns.blur: Sudda
+grid.advanced-column.advancedColumns.translate: Översätt
+grid.advanced-column.advancedColumns.phpCode: PHP-kod
+grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nyckel
+grid.advanced-column.advancedColumns.arguments: Argument
+component.workflow-card.action-btn: Workflowåtgärder
+component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
+asset.asset-editor-tabs.embedded-metadata.headline: Metainformation
+asset.asset-editor-tabs.embedded-metadata.columns.name: Namn
+asset.asset-editor-tabs.embedded-metadata.columns.value: Värde
+asset.asset-editor-tabs.preview.open-in-new-window: Öppna i nytt fönster
+login-form.remember-me: Kom ihåg mig
+login-form.forgot-password: Glömt lösenord
+login-form.login: Logga in
+login-form-additional-logins.or: eller
+login-form.username: Användarnamn
+login-form.password: Lösenord
+aria.login-form-additional-logins.additional-login-provider: "Ytterligare inloggningsleverantör:"
+aria.login-form-additional-logins.remember-me-checkbox: Kom ihåg mig-kryssruta
+unsaved-notice: Spara för att bekräfta dina ändringar
+widget-manager.tab-title.close-confirmation: Du har osparade ändringar, är du säker på att du vill stänga den här fliken?
+action-applied-successfully: Åtgärden har tillämpats
+action-could-not-be-applied: Åtgärden kunde inte tillämpas
+failed-to-assign-tag-to-element: Kunde inte tilldela tagg till element
+failed-to-un-assign-tag-to-element: Kunde inte ta bort tagg från element
+workflow-modal.perform-action: Utför åtgärd
+workflow-modal.cancel: Avbryt
+workflow-modal.notes: Anteckningar
+workflow-modal.notes-required: Ange dina anteckningar
+workflow-transitions.start-workflow: Starta Workflow
+workflow-transitions.finish-review: Slutför granskning
+workflow-transitions.restart-review: Starta om granskning
+save-success: Sparades
+save-failed: Sparandet misslyckades
+auto-save-failed: Automatisk sparning misslyckades
+version.label: Versioner
+version.versions: Versioner
+version.version: Version
+version.publish: Publicera
+version.published: Publicerad
+version.autosaved: Automatiskt sparad
+version.schedule-for: Schemalagd för
+version.note: Anteckning
+version.note.add: Lägg till en anteckning
+version.own-draft: Eget utkast
+version.compare-versions: Jämför versioner
+version.fileName: Namn
+version.dimensions: Dimensioner
+version.creationDate: Skapandedatum
+version.modificationDate: Ändringsdatum
+version.fileSize: Filstorlek
+version.mimeType: MIME-typ
+version.fullPath: Sökväg
+version.additionalAttributes: Ytterligare attribut
+version.image: Bild
+version.no-versions-to-show: Det finns inga versioner att visa.
+version.no-preview-available: Ingen förhandsvisning tillgänglig för den här filen.
+version.clear-unpublished: Rensa opublicerade
+version.clear-unpublished-versions: Rensa opublicerade versioner
+version.confirm-clear-unpublished: Är du säker på att du vill rensa alla opublicerade versioner?
+version.preview-notification: Förhandsvisningsdetaljer visas när en version är vald.
+version.expand-unmodified-fields: Expandera alla
+version.no-difference: Det finns ingen skillnad mellan de valda versionerna.
+version.category.title.systemData: Systemdata
+version.category.title.baseData: Basdata
+version.category.title.meta: Metadata
+aria.version.delete: Ta bort version
+aria.version.expand: Expandera version
+clear-all: Rensa allt
+empty: Tom
+none: Ingen
+yes: Ja
+no: Nej
+by: Av
+field: Fält
+no-data-available: Ingen data tillgänglig
+no-data-available-yet: Ingen data tillgänglig ännu.
+no-items: Inga objekt
+schedule.label: Schemaläggning
+schedule.headline: Schemaläggning
+schedule.columns.datetime: Datum & Tid
+schedule.columns.action: Åtgärd
+schedule.columns.version: Version
+schedule.columns.active: Aktiv
+schedule.columns.actions: Ta bort
+schedule.upcoming: Kommande
+schedule.all: Alla schemalagda (kommande & arkiv)
+schedule.toolbar.filters.active-switch: Bara aktiva
+schedule.toolbar.new: Ny
+schedule.toolbar.save-scheduled-tasks: Spara schemalagda uppgifter
+schedule.version.delete: Ta bort version
+schedule.version.publish: Publicera version
+schedule.select-an-action: Åtgärd
+schedule.select-a-version: Version
+schedule.archived: Arkiverade
+schedule.archived.cleanup-all: Rensa alla
+dependencies.label: Beroenden
+dependencies.requires: Kräver
+dependencies.required-by: Krävs av
+dependencies.columns.subtype: Undertyp
+dependencies.columns.path: Sökväg
+dependencies.columns.open: Öppna
+system: System
+default_metadata: Standardmetadata
+predefined_metadata: Fördefinierad metadata
+preview: Förhandsvisning
+id: ID
+type: Typ
+position: Position
+filename: Filnamn
+fullpath: Fullständig sökväg
+modificationDate: Ändringsdatum
+creationDate: Skapandedatum
+fileSize: Filstorlek
+mimetype: MIME-typ
+key: Nyckel
+published: Publicerad
+classname: Klassnamn
+index: Index
+listing.grid-config.title: Rutnätskonfiguration
+listing.add-column: Lägg till en kolumn
+listing.actions: Tillämpa på val
+listing.non-selected.actions: Tillämpa på alla
+listing.actions.zip-download: ZIP-nedladdning
+listing.actions.delete: Ta bort
+listing.actions.export: Exportera
+reports.csv-export-modal.title: CSV-exportalternativ
+reports.csv-export-modal.include-headers: Inkludera kolumnrubriker
+reports.csv-export-modal.delimiter-label: Avgränsare
+reports.csv-export-modal.delimiter-placeholder: Ange avgränsare
+listing.actions.csv-export: CSV-export
+listing.actions.xlsx-export: Excel-export
+listing.actions.batch-edit: Massredigering
+listing.selection.total: "{{total}} valda"
+data-type.input: Inmatning
+data-type.textarea: Textområde
+data-type.html: HTML
+data-type.number: Nummer
+data-type.boolean: Boolean
+data-type.date: Datum
+data-type.text: Text
+data-type.document: Dokument
+data-type.asset: Asset
+data-type.object: Objekt
+data-type.checkbox: Kryssruta
+data-type.select: Val
+open-data-object.button: Öppna Data Object
+open-data-object-modal.title: Öppna Data Object
+open-data-object-modal.label: Ange ID eller sökväg för dataobjektet
+open-data-object-modal.required-message: Ange ett ID eller en sökväg
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Avbryt
+open-asset.button: Öppna Asset
+open-asset-modal.title: Öppna Asset
+open-asset-modal.label: Ange ID eller sökväg för asseten
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Avbryt
+open-asset-modal.required-message: Ange ett ID eller en sökväg för dokumentet
+open-document.button: Öppna dokument
+open-document-modal.title: Öppna dokument
+open-document-modal.label: Ange ID eller sökväg för dokumentet
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Avbryt
+open-document-modal.required-message: Ange ett ID, sökväg eller URL
+notes-and-events-modal.detail-information: Detaljinformation
+notes-and-events.columns.type: Typ
+notes-and-events.columns.element: Element
+notes-and-events.columns.title: Titel
+notes-and-events.columns.description: Beskrivning
+notes-and-events.columns.details: Detaljer
+notes-and-events.columns.user: Användare
+notes-and-events.columns.date: Datum
+notes-and-events.columns.actions: Åtgärder
+website-settings.columns.type: Typ
+website-settings.columns.name: Namn
+website-settings.columns.language: Språk
+website-settings.columns.value: Värde
+website-settings.columns.site: Sajt
+website-settings.columns.actions: Åtgärder
+website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
+website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
+document-types.new: Ny
+document-types.columns.name: Namn
+document-types.columns.group: Grupp
+document-types.columns.controller: Controller
+document-types.columns.template: Mall
+document-types.columns.type: Typ
+document-types.columns.static: Statisk
+document-types.columns.priority: Prioritet
+document-types.columns.creation-date: Skapandedatum
+document-types.columns.modification-date: Ändringsdatum
+document-types.columns.actions: Åtgärder
+properties.label: Egenskaper
+properties.editable-properties: Redigerbara egenskaper
+properties.all-properties: Alla egenskaper
+properties.predefined-properties: Fördefinierade egenskaper
+properties.new-custom-property: Ny anpassad egenskap
+translations.columns.type: Typ
+translations.columns.key: Nyckel
+translations.columns.actions: Åtgärder
+translations.select-languages: Välj språk
+translations.select-domain: Välj domän
+translations.show-all-languages: Visa alla
+translations.show-minimal-languages: Visa minimalt
+translations.show-hide-locale: Visa/dölj språk
+translations.new-translation: Ny översättning
+translations.new: Lägg till
+translations.type-options.custom: ICU-format
+translations.type-options.simple: Enkel text
+translations.edit-modal.tab.plain-text: Ren text
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Spara
+translations.edit-modal.title: Redigera översättning
+translations.edit-modal.restore: Återställ ren text
+properties.columns.type: Typ
+properties.columns.key: Nyckel
+properties.columns.name: Namn
+properties.columns.description: Beskrivning
+properties.columns.data: Värde
+properties.columns.configuration: Konfiguration
+properties.columns.content-type: Innehållstyp
+properties.columns.inheritable: Ärftlig
+properties.columns.actions: Åtgärder
+properties.inherited.properties: Ärvda egenskaper
+properties.add-custom-property.cancel: Avbryt
+properties.add-custom-property.key: Nyckel
+translations.add-translation.key: Nyckel
+properties.add-custom-property.create: Skapa
+properties.add-custom-property.type: Typ
+properties.property-already-exist.title: Egenskapen finns redan
+properties.property-already-exist.error: Namnet används redan, välj ett annat
+properties.add-property-mandatory-fields-missing.title: Obligatoriska fält saknas
+properties.add-property-mandatory-fields-missing.error: Nyckel och typ är obligatoriska fält och måste fyllas i.
+properties.property-key-disallowed.title: Egenskapsnyckeln tillåts inte
+properties.property-key-disallowed.error: Den här egenskapsnyckeln är reserverad och kan inte användas. Välj ett annat nyckelnamn.
+translations.add-translation-mandatory-field-missing.title: Obligatoriskt fält saknas
+translations.add-translation-mandatory-field-missing.error: Nyckel är ett obligatoriskt fält och måste fyllas i.
+button.ok: Ok
+button.apply: Tillämpa
+button.cancel: Avbryt
+button.save: Spara
+button.confirm: Bekräfta
+button.save-apply: Spara & Tillämpa
+button.add-edit: Lägg till & Redigera
+button.cancel-edits: Avbryt redigeringar
+toggle.advanced-mode: Avancerat läge
+actions.open: Öppna
+open: Öppna
+edit: Redigera
+modify: Ändra
+component.no-content.no-content-available: Inget innehåll tillgängligt
+notifications.label: Aviseringar
+notifications.remove-all: Ta bort alla
+notifications.new-notification: Ny avisering
+notifications.from: Från
+notifications.hide: Dölj
+notifications.new-notifications.show: Visa
+notifications.new-notifications.title.single: Du har en ny avisering!
+notifications.new-notifications.title: Du har nya aviseringar!
+notes-and-events.label: Anteckningar & Händelser
+notes-and-events.notes-and-events: Anteckningar & Händelser
+notes-and-events.details: Detaljer
+notes-and-events.name: Namn
+notes-and-events.type: Typ
+notes-and-events.value: Värde
+notes-and-events.new-note: Ny anteckning
+notes-and-events.content: innehåll
+notes-and-events.seo: seo
+notes-and-events.warning: varning
+notes-and-events.notice: meddelande
+notes-and-events.status-update: statusuppdatering
+notes-and-events.erp_import: erp_import
+notes-and-events.no-notes-and-events-to-show: Det finns inga anteckningar eller händelser att visa.
+tags.label: Taggar
+tags.assigned-tags-text: Tilldelade taggar
+tags.apply-tags-to-children: Tillämpa taggar på barn
+tags.remove-and-apply-tags-to-children: Ta bort och tillämpa taggar på barn
+tags.columns.path: Sökväg
+tags.columns.actions: Ta bort
+csv-separated-options: CSV-separerade alternativ
+csv-separated-options-info: "Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde."
+add: Lägg till
+new: Ny
+save: Spara
+title: Titel
+description: Beskrivning
+select: Välj
+asset.asset-editor-tabs.custom-metadata.text: Anpassad metadata
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: Ny anpassad metadata
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Namn
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Typ
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Språk
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Avbryt
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Lägg till fördefinierad definition
+asset.asset-editor-tabs.custom-metadata.columns.type: Typ
+asset.asset-editor-tabs.custom-metadata.columns.name: Namn
+asset.asset-editor-tabs.custom-metadata.columns.language: Språk
+asset.asset-editor-tabs.custom-metadata.columns.value: Värde
+asset.asset-editor-tabs.custom-metadata.columns.actions: Åtgärder
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Skapa
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Anpassad metadata finns redan
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Namnet används redan, välj ett annat
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
+width: Bredd
+height: Höjd
+width-tooltip: "Bredden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter."
+width-field: Breddfält
+width-unit: Breddenhet
+height-tooltip: "Höjden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter."
+table-data-tooltip: "Exempel på hur man lägger till data: \n\n one|two|three \n four|five|six \n seven|eight|nine"
+use-current-date: Använd aktuellt datum
+respect-timezone: Respektera tidszon
+column-type: Kolumntyp
+specific-settings: Specifika inställningar
+restrict-selection-to: "Begränsa val till"
+only-configured-languages: Visa bara i systeminställningarna konfigurerade språk
+multiselect-render-type: Renderingstyp
+maximum-items: Maximalt antal objekt
+enforce-validation: Tvinga validering
+options-source: Alternativkälla
+options-source-configure: "Konfigurera"
+options-source-select-options: "Valalternativ"
+options-source-options-provider: "Alternativleverantör"
+options-provider-class: "Alternativleverantör klass eller tjänstnamn"
+options-provider-data: "Alternativleverantör data"
+switch-to-selection-mode: Byt till valläge
+switch-to-drag-mode: Byt till dragläge
+select-options: Valalternativ
+value: Värde
+display-name: Visningsnamn
+default-values-settings: Standardvärdeinställningar
+default-values-tooltip: "Standardvärdet används om arv är avaktiverat eller om förälderns värde är tomt."
+default-value: Standardvärde
+default-value-generator: Standardvärdegenerator tjänst / klass
+enforce-validation-tooltip: "När aktiverat förhindras sparning av ogiltiga alternativ. Som standard tillåter API:et att spara ogiltiga alternativ"
+show-char-count: Visa teckenräknare
+column-length: Kolumnlängd
+max-length: Maximal längd
+exclude-from-search-index: Exkludera från sökindex
+toolbar-config: Verktygsfältskonfiguration
+min-length: Minsta längd
+min-value: Minsta värde
+max-value: Högsta värde
+increment-step: Ökningssteg
+decimal-precision: Decimalprecision
+decimal-size: Decimalstorlek
+decimal-settings: Decimalinställningar
+decimal-settings-tooltip: "Om decimalstorlek eller precision anges används MySQL-typen DECIMAL(decimalSize, decimalPrecision). Standardvärden om de saknas är 64 som storlek och 0 som precision. Observera att i MySQL-termer kallas decimalSize för precision och decimalPrecision för scale."
+integer: Heltal
+unsigned: Bara osignerat
+auto-convert: Autokonvertera
+default-unit: Standardenhet
+valid-units: Giltiga enheter
+slider-min: Minsta reglagevärde
+slider-max: Högsta reglagevärde
+slider-step: Reglagesteg
+field-definitions.general-settings: Allmänna inställningar
+field-definitions.base: Bas
+field-definitions.configuration-invalid: Konfigurationen innehåller ogiltiga fältdefinitioner.
+field-definitions.saved-successfully: Sparades.
+field-definitions.select-item-configuration: Välj objektkonfiguration
+field-definitions.custom-layout-title: Custom Layout
+field-definitions.custom-layouts: Custom Layouts
+field-definitions.create-new-class-definition: Skapa ny anpassad layout
+field-definitions.select-field-message: Välj ett fält från trädet för att redigera dess egenskaper.
+field-definitions.loading-general-settings: Laddar allmänna inställningar...
+field-definitions.type-not-supported: Typen stöds inte
+field-definitions.validation.enter-class-name: Ange ett klassnamn
+field-definitions.validation.class-name-format: Klassnamnet måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
+field-definitions.validation.unique-identifier: Unik identifierare
+field-definitions.validation.enter-unique-identifier: Ange en unik identifierare
+field-definitions.validation.unique-identifier-in-use: Denna unika identifierare används redan
+field-definitions.validation.unique-identifier-format: Den unika identifieraren måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck, med en maxlängd på 64 tecken.
+field-definitions.validation.errors-found: Fältdefinitioner har fel
+field-definitions.validation.empty-name: "Följande fälttyper saknar ett namn:"
+field-definitions.validation.reserved-word: "Reserverat ord använt som namn:"
+field-definitions.validation.invalid-format: "Ogiltigt namnformat (måste matcha [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Duplikatnamn inom namnrymd:"
+object-brick-key: Object Brick-nyckel
+field-name: Fältnamn
+field-definition.geopoint: Geografisk punkt
+field-definition.geobounds: Geografiska gränser
+field-definition.geopolygon: Geografisk polygon
+field-definition.geopolyline: Geografisk polylinje
+field-definition.input: Inmatning
+field-definition.textarea: Textområde
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Lösenord
+field-definition.numeric: Nummer
+field-definition.numeric-range: Numeriskt intervall
+field-definition.slider: Reglage
+field-definition.quantity-value: Kvantitetsvärde
+field-definition.quantity-value-range: Kvantitetsvärdeintervall
+field-definition.input-quantity-value: Inmatning kvantitetsvärde
+field-definition.date: Datum
+field-definition.datetime: Datum och tid
+field-definition.date-range: Datumintervall
+field-definition.time: Tid
+field-definition.image: Bild
+field-definition.external-image: Extern bild
+field-definition.image-gallery: Bildgalleri
+field-definition.video: Video
+field-definition.hotspotimage: Bild avancerat
+field-definition.many-to-one-relation: Many-to-One Relation
+field-definition.many-to-many-relation: Many-to-Many Relation
+field-definition.many-to-many-object-relation: Many-to-Many Object Relation
+field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
+field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
+field-definition.reverse-object-relation: Omvänd objektrelation
+allowed-class: Tillåten klass
+allowed-classes: Tillåtna klasser
+allowed-asset-types: Tillåtna assettyper
+allowed-document-types: Tillåtna dokumenttyper
+visible-fields: Synliga fält
+enable-text-selection: Aktivera textmarkering
+allow-to-create-new-object: Tillåt att skapa nytt objekt i relationsfält
+enable-async-load-in-admin: Aktivera asynkron laddning i admin
+enable-async-load-in-admin-tooltip: "VARNING: Asynkron laddning är INTE möjlig inom Localized Fields och Blocks."
+path-formatter-service: "Formaterartjänst / Klass"
+allow-to-clear-relation: Tillåt att rensa relationer i det här fältet
+allow-multiple-assignments: Tillåt multipla tilldelningar
+number: Nummer
+bool: Bool
+column-bool: Kolumn Bool
+multiselect: Flerval
+layout: "Layout"
+layout-options: "Layoutalternativ"
+allow-documents: Tillåt dokument
+allow-assets: Tillåt assets
+asset-inline-download-allowed: Tillåt inline-nedladdning av asset
+allow-objects: Tillåt objekt
+path-restriction: Sökvägsrestriktion
+result-limit: Resultatgräns
+remote-owner: Fjärrägare
+columns: Kolumner
+enable-batch-edit: Aktivera massredigering för kolumner
+owner-class: Ägarklass
+owner-field-name: Ägarfältnamn
+crop-settings: Beskärningsinställningar
+ratio-x: Förhållande X
+ratio-y: Förhållande Y
+predefined-data-templates: Fördefinierade datamallar
+upload-path: Uppladdningssökväg
+preview-width: Förhandsvisningsbredd
+preview-height: Förhandsvisningshöjd
+url-width: URL-bredd
+allowed-video-types: Tillåtna videotyper
+allowed-video-types-tooltip: Tom = tillåt alla
+field-definition.select: Val
+field-definition.multiselect: Flerval
+field-definition.boolean-select: Booleskt val
+field-definition.country: Land
+field-definition.countrymultiselect: Land flerval
+field-definition.language: Språk
+field-definition.languagemultiselect: Språk flerval
+field-definition.rgba-color: RGBA-färg
+field-definition.encrypted-field: Krypterat fält
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Kryssruta
+field-definition.link: Länk
+field-definition.calculated-value: Beräknat värde
+field-definition.user: Användare
+field-definition.block: Block
+field-definition.panel: Panel
+field-definition.table: Tabell
+field-definition.structured-table: Strukturerad tabell
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classification Store
+field-definition.localizedfields: Lokaliserade fält
+field-definition.firstname: Förnamn
+field-definition.lastname: Efternamn
+field-definition.email: E-post
+field-definition.gender: Kön
+field-definition.consent: Samtycke
+field-definition.accordion: Dragspel
+field-definition.fieldset: Fältgrupp
+field-definition.fieldcontainer: Fältbehållare
+field-definition.iframe: Iframe
+field-definition.region: Region
+field-definition.tabpanel: Flikpanel
+field-definition.text: Text
+field-definition.groups.layout: Layoutkomponent
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Datakomponent
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Text
+field-definition.groups.data.numeric: Numeriskt
+field-definition.groups.data.date: Datum
+field-definition.groups.data.select: Val
+field-definition.groups.data.media: Media
+field-definition.groups.data.relation: Relation
+field-definition.groups.data.geographic: Geografiskt
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Strukturerat
+field-definition.groups.data.other: Övrigt
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+field-definition.firstname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.firstname)"
+field-definition.firstname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.firstname)"
+field-definition.lastname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.lastname)"
+field-definition.lastname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.lastname)"
+field-definition.email.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.email)"
+field-definition.email.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.email)"
+field-definition.gender.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.gender)"
+field-definition.gender.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.gender)"
+field-definition.consent.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.consent)"
+field-definition.consent.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.consent)"
+regex-validation: Reguljärt uttryck för validering
+regex: RegEx
+regex-flags: RegEx-flaggor
+regex-flags-tooltip: "RegExp utan avgränsare, måste fungera i JS (Avgränsare: #)"
+test-string: Teststräng
+regex-validation-error-message: "Strängen matchar inte det obligatoriska formatet."
+calculator-class: Kalkylatorklass
+calculator-expression: Kalkylatoruttryck
+calculator-type: Kalkylatortyp
+calculator-type-tooltip: "Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser."
+expression: Uttryck
+lazy-loading: Lazy Loading
+disallow-add-remove: Tillåt inte lägg till / ta bort
+disallow-reorder: Tillåt inte omordning
+css-style: CSS-stil
+collapsible: Ihopfällbar
+collapsed: Initialt ihopfälld
+border: Ram
+rows: Rader
+rows-fixed: Rader fast
+cols: Kolumner
+cols-fixed: Kolumner fast
+length: Längd
+label-width: Etikettbredd
+padding: Utfyllnad
+label-first-cell: Etikett första cell
+label-align: Etikettjustering
+allowed-types: Tillåtna typer
+localized: Lokaliserad
+allowed-group-ids: Tillåtna grupp-ID:n (csv)
+store: Store
+label: Etikett
+hide-empty-data: Dölj tom data
+tab-position: Flikposition
+maximum-tabs: Maximalt antal flikar
+hide-labels-when-tabs-reached: Dölj språketiketter när flikar nåtts
+provide-split-view: Tillhandahåll delad vy
+data: Data
+domain-label-width: Domänetikettbredd
+controller-action: Controller-åtgärd
+controller-action-tooltip: 'Ange controller & åtgärd i följande format: App\Controller\ProductController::slugAction'
+available-sites: "Tillgängliga sajter"
+empty-equals-allow-all-tooltip: "Tom = tillåt alla"
+reset: Återställ
+name: Namn
+tooltip: Tooltip
+mandatory: Obligatorisk
+unique: Unik
+not-editable: Ej redigerbar
+invisible: Osynlig
+visible-in-gridview: Synlig i rutnätsvy
+visible-in-searchresult: Synlig i sökresultat
+quality: Kvalitet
+mode: Läge
+format: Format
+default: standard
+resize: Ändra storlek
+scaleByWidth: Skala efter bredd
+scaleByHeight: Skala efter höjd
+min-max-settings: Min-Max gånger
+download: Ladda ner
+asset.sidebar.original-file: Originalfil
+asset.sidebar.web-format: Webbformat
+asset.sidebar.print-format: Utskriftsformat
+asset.sidebar.office-format: Kontorsformat
+jobs.notification.title: Pågående jobb
+jobs.notification.jobs_one: "{{count}} åtgärd"
+jobs.notification.jobs_other: "{{count}} åtgärder"
+jobs.job.in-progress: "{{title}} pågår"
+jobs.job.queued: "{{title}} köad"
+jobs.job.failed: "{{title}} misslyckades"
+jobs.job.finished: "{{title}} slutförd"
+jobs.job.finished-with-errors: "{{title}} slutförd med fel"
+jobs.job.progress: "{{progress}}% slutfört"
+jobs.job.button-retry: Försök igen
+jobs.job.button-reload: Ladda om
+jobs.job.button-hide: dölj
+jobs.job.button-download: ladda ner
+jobs.job.button-ignore-and-reload: ignorera och ladda om
+jobs.job.step_hint: "Steg {{step}}/{{total}}"
+jobs.job.step_hint_single: "Steg {{step}}"
+jobs.job.download-error: "Nedladdning misslyckades"
+jobs.job.button-show-errors: "Visa fel"
+jobs.job.error-modal.title: "Jobbfel"
+jobs.job.button-abort: Avbryt jobb
+jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
+jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
+jobs.batch-edit-job.title: "Massredigering av {{title}}"
+jobs.csv-job.title: "CSV-nedladdning av {{title}}"
+jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
+batch-edit.job-title: Massredigering
+jobs.zip-upload-job.title: "Ladda upp ZIP"
+jobs.zip-upload-job.step1.title: "Extraherar ZIP"
+jobs.zip-upload-job.step2.title: "Skapar assets"
+batch-edit.modal-title: Massredigering
+batch-edit.no-content: Det finns inga tillagda kolumner ännu
+batch-edit.modal-footer.apply-changes: Tillämpa ändringar
+batch-edit.modal-footer.discard-all-changes: Kassera alla ändringar
+batch-edit.modal-footer.add-a-column: Lägg till en kolumn
+batch-edit.append-mode.replace: Massersättning
+batch-edit.append-mode.add: Masstillägg
+batch-edit.append-mode.remove: Massborttagning
+batch-delete.job-title: Ta bort
+export-csv-form.modal-title: Exportera CSV
+export-csv-form.export-notice: Observera att exporten inte stöder vissa fält (t.ex. förhandsvisning, storlek). Tryck OK för att fortsätta med exporten.
+export-csv-form.form-field.delimiter: Avgränsare
+export-csv-form.form-field.header: Rubrik
+export-csv-form.form-field.header.option.name: Systemnyckel
+export-csv-form.form-field.header.option.title: Etikett
+export-csv-form.form-field.header.option.no-header: Ingen rubrik
+export-xlsx-form.modal-title: Exportera Excel
+export-xlsx-form.export-notice: Observera att exporten inte stöder vissa fält (t.ex. förhandsvisning, storlek). Tryck OK för att fortsätta med exporten.
+export-xlsx-form.form-field.delimiter: Avgränsare
+export-xlsx-form.form-field.header: Rubrik
+export-xlsx-form.form-field.header.option.name: Systemnyckel
+export-xlsx-form.form-field.header.option.title: Etikett
+export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.validation.required: Det här fältet är obligatoriskt
+form.validation.max-length: Maximal längd för det här fältet är {{max}} tecken
+form.validation.min: Minsta värde är {{min}}
+validation.required: Det här fältet är obligatoriskt
+validation.min: Minsta värde är {{min}}
+form.validation.numeric-range.first-value-missing: Första värdet saknas
+form.validation.numeric-range.second-value-missing: Andra värdet saknas
+form.validation.numeric-range.second-value-greater: Andra värdet kan inte vara mindre än det första
+form.validation.provide-name: Ange ett namn
+form.validation.provide-description: Ange en beskrivning
+form.label.new-item: Ange namnet på det nya objektet
+thumbnail: Miniatyrbild
+select-image-preview: Välj bildförhandsvisning
+choose-media: Välj media
+current-player-position: Aktuell spelarposition
+drag-and-drop-asset: Dra och släpp asset
+ok: OK
+apply: Tillämpa
+cancel: Avbryt
+close-tab: Stäng flik
+close-others: Stäng andra
+close-unmodified: Stäng oförändrade
+close-all: Stäng alla
+asset.tree.context-menu.download: Ladda ner
+asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
+element.tree.context-menu.new-assets: Ny(a) Asset(s)
+element.tree.context-menu.add-assets.upload-files: Ladda upp filer
+element.tree.context-menu.add-assets.upload-zip: Ladda upp Zip
+element.tree.context-menu.advanced: Avancerat
+element.tree.context-menu.search-and-move: Sök & Flytta
+element.tree.context-menu.expand-children: Expandera barn
+asset.tree.context-menu.clear-thumbnails: Rensa miniatyrbilder
+element.tree.copy: Kopiera
+element.tree.copy-success-description: '{{elementType}} "{{name}}" har kopierats och är redo att klistras in'
+element.tree.paste: Klistra in
+element.tree.paste-as-child: Klistra in som barn
+element.tree.paste-as-child-recursive: Klistra in som barn (rekursivt)
+element.tree.paste-recursive-updating-references: Klistra in rekursivt, uppdatera referenser
+element.tree.paste-only-contents: Klistra bara in innehåll här
+element.tree.cut: Klipp ut
+element.tree.cut-success-description: '{{elementType}} "{{name}}" har klippts ut och är redo att klistras in'
+element.tree.paste-cut: Klistra in utklippt element
+element.lock: Lås
+element.lock-and-propagate-to-children: Lås och sprid till barn
+element.unlock: Lås upp
+element.unlock-and-propagate-to-children: Lås upp och sprid till barn
+element.tree.sorting: Sortera barn efter
+element.tree.sorting.keyed-ascending: A till Ö (Nyckel)
+element.tree.sorting.keyed-descending: Ö till A (Nyckel)
+element.tree.sorting.indexed: Index (Manuell)
+element.tree.refresh: Uppdatera
+element.new-folder: Ny mapp
+element.new-folder.validation: "Ange ett giltigt namn"
+element.rename: Byt namn
+element.rename.label: "Ange det nya namnet"
+element.rename.validation: "Ange ett giltigt namn"
+element.delete: Ta bort
+element.delete.confirmation.title: Ta bort objekt
+element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
+element.delete.confirmation.ok: Ta bort permanent
+element.open: Öppna
+element.toolbar.copy-id: Kopiera ID
+element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
+element.toolbar.copy-deep-link-to-clipboard: Kopiera Deeplink
+element.toolbar.show-full-info: Fullständig information
+element.toolbar.copy-className: Klass {{className}} - Kopiera
+element.unpublish: Avpublicera
+element.publish: Publicera
+element.locate-in-tree: Hitta i träd
+element.sidebar.filter.only-direct-children: bara direkta barn
+element.sidebar.field-filters: Fältfilter
+element.full-information: Fullständig information
+system-information.id: ID
+system-information.path: Sökväg
+system-information.public-url: Publik URL
+system-information.parent-id: Förälder-ID
+system-information.type: Typ
+system-information.class-id: Klass-ID
+system-information.class: Klass
+system-information.file-size: Filstorlek
+system-information.modification-date: Ändringsdatum
+system-information.creation-date: Skapandedatum
+system-information.user-modification: Ändrad av
+system-information.owner: Ägare
+system-information.deeplink: Deeplink
+system-information.user-unknown: Okänd användare
+system-information.system: System
+system-information.click-to-open: klicka för att öppna
+male: Man
+female: Kvinna
+other: Annat
+unknown: Okänt
+warning: Varning
+error: Fel
+info: Info
+no-value-set: Inget värde angivet
+set-to-null: Tom (sätt till null)
+remove: Ta bort
+delete: Ta bort
+clone: Klona
+jobs.clone-job.step2.title: Uppdaterar referenser
+jobs.asset-clone-job.title: Klonar assets
+jobs.document-clone-job.title: Klonar dokument
+jobs.data-object-clone-job.title: Klonar dataobjekt
+latitude: Latitud
+longitude: Longitud
+search-address: Sök adress
+search: Sök
+geocode.address-not-found: "Den angivna adressen hittades inte"
+geocode.possible-causes: "Möjliga orsaker"
+geocode.postal-code-format-error: 'Postnummerformat, t.ex. använd "5020 Salzburg, Söllheimer Straße 16" istället för "A-5020 Salzburg, Söllheimer Straße 16"'
+delete-confirmation-advanced: Vill du verkligen ta bort {{type}} '{{value}}'?
+relations.id: ID
+relations.reference: Referens
+relations.type: Typ
+relations.subtype: Undertyp
+relations.classname: Klass
+relations.fullpath: Fullständig sökväg
+relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
+relation: relation
+items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+actions: Åtgärder
+asset: Asset
+data-object: Data Object
+document: Dokument
+folder: Mapp
+archive: Arkiv
+audio: Ljud
+image: Bild
+text: Text
+video: Video
+processing: Bearbetar
+upload: Ladda upp
+close: Stäng
+paste: Klistra in
+upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
+quantity-value.converted-units: Konverterade enheter
+table.empty.confirm: Är du säker på att du vill rensa all data?
+table.new-column: Ny kolumn
+table.delete-column: Ta bort kolumn
+table.new-row: Ny rad
+table.delete-row: Ta bort rad
+table.duplicate-row: Duplicera rad
+table.copy: Kopiera
+table.paste: Klistra in
+clipboard.copy.success: Kopierat till urklipp
+clipboard.copy.error: Kunde inte kopiera till urklipp
+table.empty: Tom
+table.paste-placeholder: Klistra in din data här
+empty.confirm: Är du säker på att du vill rensa all data?
+tree.actions.prefix.add: "Lägg till "
+tree.actions.convert: "Konvertera till "
+tree.actions.clone: Klona
+tree.actions.copy: Kopiera
+tree.actions.paste: Klistra in
+tree.actions.delete: Ta bort
+tree.actions.add-user: Lägg till användare
+tree.actions.clone-user: Klona användare
+tree.actions.remove-user: Ta bort användare
+tree.actions.folder: Mapp
+tree.actions.user: Användare
+tree.actions.add-folder: Ny mapp
+tree.actions.add-tag: Ny tagg
+tree.actions.delete-tag: Ta bort
+tree.actions.rename-tag: Byt namn
+tree.actions.role: Roll
+tree.actions.add-role: Lägg till roll
+tree.actions.clone-role: Klona roll
+tree.actions.remove-role: Ta bort roll
+tree.actions.remove-folder: Ta bort mapp
+tag-configuration.new: Ny
+tag-configuration.new-tag: Ny tagg
+tag-configuration.name: Namn
+tag-configuration.parent-tag: Överordnad tagg
+tag-configuration.create: Skapa
+tag-configuration.save: Spara
+tag-configuration.rename: Byt namn på tagg
+tag-configuration.successful-add: Taggen har lagts till
+tag-configuration.successful-update: Taggen har uppdaterats
+tag-configuration.successful-deletion: Taggen har tagits bort
+tag-configuration.warn-delete-tag-modal-title: Ta bort den här taggen
+tag-configuration.warn-delete-parent-tag-modal-title: Ta bort den här överordnade taggen
+tag-configuration.warn-delete-all-tags-title: Ta bort alla taggar
+tag-configuration.warn-delete-all-tags-modal-text: Är du säker på att du vill ta bort alla taggar?
+tag-configuration.warn-delete-tag-modal-text: Är du säker på att du vill ta bort den här taggen?
+tag-configuration.warn-delete-parent-tag-modal-text: Är du säker på att du vill ta bort den här överordnade taggen? Alla tillhörande taggar kommer att tas bort.
+tag-configuration.delete-tag: Ta bort
+tag-configuration.delete-all: Ta bort alla
+tag-configuration.delete-parent-tag: Ta bort överordnad tagg och alla underordnade taggar
+tag-configuration.cancel: Avbryt
+user-management.admin: Admin
+user-management.search: Sök
+user-management.doc-types: Dokumenttyper
+user-management.tree.all: Alla användare
+user-management.settings.title: Inställningar
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Tangentbindningar
+key-bindings.info: Glöm inte att ladda om Pimcore efter din ändring!
+key-bindings.reset: Återställ till standard
+key-bindings.general: Allmänt
+key-bindings.save: Spara
+key-bindings.publish: Publicera
+key-bindings.unpublish: Avpublicera
+key-bindings.rename: Byt namn
+key-bindings.refresh: Uppdatera
+key-bindings.navigation: Navigering
+key-bindings.openDocument: Öppna dokument
+key-bindings.openAsset: Öppna Asset
+key-bindings.openObject: Öppna objekt
+key-bindings.openClassEditor: Öppna klassredigerare
+key-bindings.openInTree: Öppna i träd
+key-bindings.closeAllTabs: Stäng alla flikar
+key-bindings.search: Sök
+key-bindings.searchDocument: Sök dokument
+key-bindings.searchAsset: Sök Asset
+key-bindings.searchObject: Sök objekt
+key-bindings.searchAndReplaceAssignments: Sök och ersätt tilldelningar
+key-bindings.quickSearch: Snabbsökning
+key-bindings.system: System
+key-bindings.showMetaInfo: Visa metainformation
+key-bindings.showElementHistory: Visa elementhistorik
+key-bindings.sharedTranslations: Delade översättningar
+key-bindings.recycleBin: Papperskorg
+key-bindings.notesEvents: Anteckningar & Händelser
+key-bindings.tagManager: Tagghanterare
+key-bindings.tagConfiguration: Taggkonfiguration
+key-bindings.user: Användare
+key-bindings.users: Användare
+key-bindings.role: Roll
+key-bindings.roles: Roller
+key-bindings.clearAllCaches: Rensa alla cacheminnen
+key-bindings.clearDataCache: Rensa datacache
+key-bindings.customReports: Anpassade rapporter
+key-bindings.reports: Rapporter
+key-bindings.applicationLogger: Application Logger
+key-bindings.glossary: Ordlista
+key-bindings.seoDocumentEditor: SEO-dokumentredigerare
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP-fellogg
+key-bindings.seo: SEO
+key-bindings.redirects: Omdirigeringar
+key-bindings.bundles: Paket
+user-management.references.title: Referenser
+user-management.references.documents: Dokument
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Sökväg
+user-management.references.columns.subtype: Undertyp
+user-management.general: Allmänt
+user-management.active: Aktiv
+user-management.name: Namn
+user-management.password: Lösenord
+user-management.user.search: Sök efter användare
+user-management.role.search: Sök efter roll
+user-management.twoFactorAuthenticationEnabled: Tvåfaktorsautentisering aktiverad
+user-management.firstname: Förnamn
+user-management.lastname: Efternamn
+user-management.email: E-post
+user-management.language: Språk
+user-management.dateTime: Datum- och tidslokal
+user-management.welcomeScreen: Visa välkomstskärm vid start
+user-management.memorizeTabs: Kom ihåg öppna flikar
+user-management.allowDirtyClose: Inaktivera varning för osparat innehåll
+user-management.closeWarning: Visa stängningsvarning
+user-management.admin.info: Adminanvändare får inte bara automatiskt alla behörigheter nedan, de har också tillåtelse att utföra alla åtgärder på dokument, assets och objekt utan begränsningar.
+user-management.admin.login: Logga in som den här användaren i en annan webbläsare
+user-management.customisation: Anpassning
+user-management.permissions.default: Behörigheter
+user-management.permissions.bundles: Paketbehörigheter
+user-management.types-and-classes: Tillåtna typer att skapa (standard alla)
+user-management.editor-settings: Redigerarinställningar
+user-management.shared-translation-settings: Delade översättningsinställningar
+user-management.document-types: Dokumenttyper
+user-management.classes: Klasser
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Välj en avatar
+user-management.settings.language.name: Språk
+user-management.settings.language.abbreviation: Förkortning
+user-management.settings.language.view: Visa
+user-management.settings.language.edit: Redigera
+user-management.two-factor-authentication: Tvåfaktorsautentisering
+user-management.workspaces.documents: Dokument
+user-management.workspaces.assets: Assets
+user-management.workspaces.objects: Data Objects
+user-management.workspaces.add: Lägg till
+user-management.workspaces.columns.cpath: Sökväg
+user-management.workspaces.columns.list: Lista
+user-management.workspaces.columns.view: Visa
+user-management.workspaces.columns.save: Spara
+user-management.workspaces.columns.publish: Publicera
+user-management.workspaces.columns.unpublish: Avpublicera
+user-management.workspaces.columns.delete: Ta bort
+user-management.workspaces.columns.rename: Byt namn
+user-management.workspaces.columns.create: Skapa
+user-management.workspaces.columns.settings: Inställningar
+user-management.workspaces.columns.versions: Versioner
+user-management.workspaces.columns.properties: Egenskaper
+user-management.workspaces.columns.path: Sökväg
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Undertyp
+user-management.workspaces.additional-settings: Ytterligare inställningar /Produkter
+user-management.workspaces.localized-fields: Lokaliserade fält
+user-management.workspaces.localized-fields.view: Visningsbehörigheter
+user-management.workspaces.localized-fields.edit: Redigeringsbehörigheter
+user-management.workspaces.custom-layouts: Custom Layouts
+user-management.workspaces.custom-layouts.select: Välj ett eller flera fält
+user-management.add-folder.success: Mappen har lagts till
+user-management.remove-folder.success: Mappen har tagits bort
+user-management.clone-user: Klona användare
+user-management.clone-user.text: Ange namnet på den nya användaren
+user-management.clone-user.success: Användaren har klonats
+user-management.save-user.success: Användaren har sparats
+user-management.save-user.password.success: Lösenordet har uppdaterats
+user-management.add-user.success: Användaren har lagts till
+user-management.remove-user: Ta bort användare
+user-management.remove-user.text: 'Är du säker på att du vill permanent ta bort användaren "{{name}}"? Åtgärden kan inte ångras.'
+user-management.remove-user.success: Användaren har tagits bort
+user-management.perspectives: Perspektiv
+user-management.roles: Roller
+user-management.role: Roll
+user-management.users: Användare
+user-management.user: Användare
+user-management.add-folder: Lägg till ny mapp
+user-management.add-folder.label: Ange namnet på den nya mappen
+user-management.add-user: Lägg till ny användare
+user-management.add-user.label: Ange namnet på den nya användaren
+user-management.last-login: Senaste inloggning
+user-management.search.id: ID
+roles.tree.all: Alla roller
+roles.save-item.success: Rollen har sparats
+roles.clone-item.success: Rollen har klonats
+roles.clone-role: Klona roll
+roles.clone-role.text: Ange namnet på den nya rollen
+roles.remove-role: Ta bort roll
+roles.remove-role.text: 'Är du säker på att du vill permanent ta bort rollen "{{name}}"? Åtgärden kan inte ångras.'
+roles.remove-folder.success: Mappen har tagits bort
+roles.remove-item.success: Rollen har tagits bort
+roles.add-item.success: Rollen har lagts till
+roles.add-folder.success: Mappen har lagts till
+roles.settings.title: Inställningar
+roles.workspaces.title: Workspaces
+roles.add-folder: Lägg till ny mapp
+roles.add-folder.label: Ange namnet på den nya mappen
+roles.add-role: Lägg till ny roll
+roles.add-role.label: Ange namnet på den nya rollen
+roles.search.id: ID
+navigation.quick-access: Snabbåtkomst
+navigation.data-management: Datahantering
+navigation.data-model-definitions: Datamodelldefinitioner
+navigation.class-definitions: Klasser
+navigation.field-collections: Field Collections
+navigation.object-bricks: Object Bricks
+navigation.bulk-export: Massexport
+navigation.bulk-import: Massimport
+navigation.quantity-values: Kvantitetsvärden
+navigation.select-options: Valalternativ
+navigation.experience-ecommerce: Upplevelse & E-handel
+navigation.asset-management: Assethantering
+navigation.image-thumbnails: Bildminiatyrbilder
+navigation.video-thumbnails: Videominiatyrbilder
+navigation.predefined-asset-metadata: Fördefinierad assetmetadata
+navigation.automation-integration: Automatisering & Integration
+navigation.translations: Översättningar
+navigation.appearance-branding: Utseende & Varumärke
+navigation.reporting: Rapportering
+navigation.system: System
+navigation.website-settings: Webbplatsinställningar
+navigation.document-types: Dokumenttyper
+navigation.clear-cache: Rensa helsidescache
+navigation.reports: Alla rapporter
+navigation.custom-reports: Konfiguration av anpassade rapporter
+navigation.perspectives: Perspektiv
+navigation.customise: Anpassa
+navigation.tag-configuration: Taggkonfiguration
+navigation.predefined-properties: Fördefinierade egenskaper
+navigation.user-and-roles: Användare & Roller
+navigation.users: Användare
+navigation.power-shortcuts: Snabbkommandon
+navigation.roles: Roller
+navigation.open-asset: Öppna Asset
+navigation.open-document: Öppna dokument
+navigation.open-data-object: Öppna Data Object
+navigation.notes-and-events: Anteckningar & Händelser
+navigation.search-replace-assignments: Sök & Ersätt tilldelningar
+navigation.sidebar-title: Navigering
+navigation.name: Namn
+navigation.exclude: Exkludera från navigering
+navigation.advanced-settings: Avancerade inställningar
+predefined-properties.new: Ny
+website-settings.new: Lägg till
+predefined-properties.type: Typ
+predefined-properties.name: Namn
+redirects.beginner: Nybörjare
+redirects.expert: Expertläge
+redirects.type: Typ
+redirects.search: Sök
+redirects.source-site: Källsajt
+redirects.source: Källa
+redirects.target-site: Målsajt
+redirects.target: Mål
+redirects.status: Status
+redirects.priority: Prioritet
+redirects.regex: RegEx
+redirects.pass-through: Genomströmning
+redirects.active: Aktiv
+redirects.actions: Åtgärder
+redirects.expiry: Utgångsdatum
+redirects.csv-import: Importera CSV
+redirects.csv-import-modal.redirects-import: CSV-import av omdirigeringar
+redirects.csv-export: CSV-export
+redirects.clean-up: Rensa utgångna omdirigeringar
+redirects.import-drag-drop: Bläddra bland dina filer eller släpp en CSV direkt här
+redirects.browse-files: Bläddra bland filer
+redirects.upload: Ladda upp
+redirects.beginner-modal.title: Ny nybörjaromdirigering
+redirects.beginner-modal.type: Typ
+redirects.beginner-modal.path: Sökväg
+redirects.beginner-modal.target: Mål
+redirects.beginner-modal.type.required: Lägg till en typ
+redirects.beginner-modal.path.required: Lägg till en sökväg
+redirects.beginner-modal.target.required: Lägg till ett mål
+redirects.beginner-modal.create: Skapa
+redirects.beginner-modal.cancel: Avbryt
+redirects.csv-import-results.title: Resultat av CSV-import av omdirigeringar
+redirects.csv-import-results.total: Totalt
+redirects.csv-import-results.created: Skapade
+redirects.csv-import-results.updated: Uppdaterade
+redirects.csv-import-results.errored: Felaktiga
+redirects.csv-import-results.close: Stäng
+redirects.csv-import-results.errors-details: Feldetaljer
+redirects.csv-import-results.line: Rad {{line}}
+path: Sökväg
+entire_uri: Hela URI:n
+path_query: Sökväg och Query
+auto_create: Skapa automatiskt
+widget.redirects: Omdirigeringar
+navigation.redirects: Omdirigeringar
+perspective.default: Standard
+perspective.switching.title: Byter perspektiv
+perspective.switching.description: Byter just nu till följande perspektiv
+widget.translations: Översättningar
+widget.notes-and-events: Anteckningar & Händelser
+widget.tag-configuration: Taggkonfiguration
+widget.predefined-properties: Fördefinierade egenskaper
+widget.search-replace-assignments: Sök & Ersätt tilldelningar
+widget.document-types: Dokumenttyper
+widget.website-settings: Webbplatsinställningar
+widget.role-management: Roller
+widget.user-management: Användare
+widget.class-definitions: Klasser
+widget.field-collections: Field Collections
+widget.object-bricks: Object Bricks
+widget.quantity-values: Kvantitetsvärden
+widget.select-options: Valalternativ
+widget.appearance-branding: Utseende & Varumärke
+widget.image-thumbnails: Bildminiatyrbilder
+widget.video-thumbnails: Videominiatyrbilder
+widget.predefined-asset-metadata: Fördefinierad assetmetadata
+predefined-asset-metadata.new: Ny
+predefined-asset-metadata.columns.icon: " "
+predefined-asset-metadata.columns.name: Namn
+predefined-asset-metadata.columns.group: Grupp
+predefined-asset-metadata.columns.description: Beskrivning
+predefined-asset-metadata.columns.type: Typ
+predefined-asset-metadata.columns.value: Värde
+predefined-asset-metadata.columns.config: Konfiguration
+predefined-asset-metadata.columns.language: Språk
+predefined-asset-metadata.columns.target-type: Måltyp
+predefined-asset-metadata.columns.actions: Åtgärder
+predefined-asset-metadata.duplicate-entry.title: Fördefinierad metadata finns redan
+predefined-asset-metadata.duplicate-entry.error: En post med denna kombination av namn och språk finns redan. Ändra ett av följande värden.
+appearance-branding.title: "Utseende & Varumärke"
+image-thumbnails.title: "Bildminiatyrbilder"
+image-thumbnails.description: "Hantera och konfigurera inställningar för bildminiatyrbilder för dina assets."
+image-thumbnails.search.placeholder: "Sök miniatyrbilder..."
+image-thumbnails.tree.empty: "Inga miniatyrbilder hittades"
+image-thumbnails.configuration.title: "Konfiguration"
+image-thumbnails.configuration.description: "Konfigurera inställningar för miniatyrbilder"
+image-thumbnails.preview.title: "Förhandsvisning"
+image-thumbnails.preview.description: "Förhandsvisning av miniatyrbildskonfiguration"
+image-thumbnails.editor.empty.title: "Välj en miniatyrbild"
+image-thumbnails.editor.empty.description: "Välj en miniatyrbild från trädet för att visa eller redigera dess konfiguration"
+image-thumbnails.editor.select-thumbnail: "Välj en miniatyrbildskonfiguration att redigera"
+image-thumbnails.editor.general-settings: "Allmänna inställningar"
+image-thumbnails.editor.name: "Namn"
+image-thumbnails.editor.name-required: "Namn är obligatoriskt"
+image-thumbnails.editor.description: "Beskrivning"
+image-thumbnails.editor.description-placeholder: "Ange beskrivning av miniatyrbild..."
+image-thumbnails.editor.group: "Grupp"
+image-thumbnails.editor.group-required: "Grupp är obligatoriskt"
+image-thumbnails.editor.group-placeholder: "Välj en grupp..."
+image-thumbnails.editor.no-group: "Ingen grupp"
+image-thumbnails.editor.format: "Format"
+image-thumbnails.editor.format-required: "Format är obligatoriskt"
+image-thumbnails.editor.format-placeholder: "Välj ett format..."
+image-thumbnails.editor.format-auto: "Auto (Webboptimerat - rekommenderat)"
+image-thumbnails.delete.confirm: "Vill du verkligen ta bort miniatyrbilden"
+image-thumbnails.add.content: "Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)"
+image-thumbnails.add.validation.message: "Miniatyrbildsnamnet är ogiltigt"
+image-thumbnails.editor.advanced: "Avancerat"
+image-thumbnails.editor.quality: "Kvalitet"
+image-thumbnails.editor.quality.tooltip: "JPEG-kvalitetsinställning (1-100)"
+image-thumbnails.editor.high-resolution: "Hög upplösning"
+image-thumbnails.editor.high-resolution.tooltip: "Högupplösningsfaktor för retinaskärmar"
+image-thumbnails.editor.preserve-color: "Bevara färg"
+image-thumbnails.editor.preserve-color.tooltip: "Bevara färg (profil, rymd) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
+image-thumbnails.editor.force-process-icc: "Tvinga bearbetning av ICC-profiler"
+image-thumbnails.editor.force-process-icc.tooltip: "Tvinga bearbetning av ICC-profiler (Imagick, ORIGINAL)"
+image-thumbnails.editor.preserve-metadata: "Bevara metadata"
+image-thumbnails.editor.preserve-metadata.tooltip: "Bevara metadata (ta inte bort) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
+image-thumbnails.editor.rasterize-svg: "Rastrera SVG:er"
+image-thumbnails.editor.rasterize-svg.tooltip: "Rastrera SVG:er (Imagick)\n(SVG:er rastreras automatiskt när en annan transformation än resize eller skalning efter bredd/höjd används.)"
+image-thumbnails.editor.use-cropbox: "Använd Cropbox"
+image-thumbnails.editor.use-cropbox.tooltip: "Använd Cropbox (Ghostscript)\n(Ställer in sidstorleken till CropBox istället för MediaBox, användbart för att exkludera marginaler och icke-innehållsområden.)"
+image-thumbnails.editor.downloadable: "Nedladdningsbar"
+image-thumbnails.editor.downloadable.tooltip: "Lista som alternativ i nedladdningssektionen i bilddetaljvyn"
+image-thumbnails.editor.preserve-animation: "Bevara animering"
+image-thumbnails.editor.preserve-animation.tooltip: "Bevara animeringar för GIF (Imagick)\n(Stödda transformationer är: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: "Media Queries"
+image-thumbnails.editor.media-queries.new: "Ny"
+image-thumbnails.editor.media-queries.default: "Standard"
+image-thumbnails.editor.media-queries.empty: "Inga media queries definierade. Klicka 'Ny' för att lägga till en CSS media query."
+image-thumbnails.editor.media-query.modal.title: "Ny Media Query"
+image-thumbnails.editor.media-query.modal.label: "Ange en giltig CSS media query"
+image-thumbnails.editor.media-queries.add.title: "Ny Media Query"
+image-thumbnails.editor.media-queries.add.label: "Ange en giltig CSS media query"
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: "Transformationer"
+image-thumbnails.editor.transformations.resize: "Ändra storlek"
+image-thumbnails.editor.transformations.scale-by-height: "Skala efter höjd"
+image-thumbnails.editor.transformations.trim: "Trimma"
+image-thumbnails.editor.transformations.effects: "Effekter"
+image-thumbnails.editor.transformations.effects.sepia: "Sepia"
+image-thumbnails.editor.transformations.effects.grayscale: "Gråskala"
+image-thumbnails.editor.transformations.effects.sharpen: "Skärpa"
+image-thumbnails.editor.transformations.empty: "Inga transformationer definierade. Använd knappen 'Transformationer' för att lägga till bildtransformationer."
+image-thumbnails.editor.save-error: "Kunde inte spara miniatyrbildskonfigurationen"
+
+# Transformationsgrupper
+image-thumbnails.transformations.groups.main: "Transformationer"
+image-thumbnails.transformations.groups.effects: "Effekter"
+
+# Media Query-översättningar
+image-thumbnails.media-queries.add-transformation: "Lägg till transformation"
+
+# Cover-transformation
+image-thumbnails.transformations.cover.title: "Konfigurera Cover"
+image-thumbnails.transformations.cover.width-height: "Bredd, Höjd"
+image-thumbnails.transformations.cover.width: "Bredd"
+image-thumbnails.transformations.cover.height: "Höjd"
+image-thumbnails.transformations.cover.focal-point-info: "Bilden beskärs automatiskt baserat på fokuspunkten som ställts in på källbilden. Om ingen fokuspunkt finns används standardpositioneringen nedan."
+image-thumbnails.transformations.cover.positioning: "Standardpositionering"
+image-thumbnails.transformations.cover.positioning-center: "Mitten"
+image-thumbnails.transformations.cover.positioning-topleft: "Uppe till vänster"
+image-thumbnails.transformations.cover.positioning-topright: "Uppe till höger"
+image-thumbnails.transformations.cover.positioning-bottomleft: "Nere till vänster"
+image-thumbnails.transformations.cover.positioning-bottomright: "Nere till höger"
+image-thumbnails.transformations.cover.force-resize: "Tvinga storleksändring"
+
+# Lägg till Overlay-transformation
+image-thumbnails.transformations.add-overlay.overlay-image: "Överlagringsbild"
+image-thumbnails.transformations.add-overlay.x: "X-position"
+image-thumbnails.transformations.add-overlay.y: "Y-position"
+image-thumbnails.transformations.add-overlay.origin: "Utgångspunkt"
+image-thumbnails.transformations.add-overlay.origin-top-left: "Uppe till vänster"
+image-thumbnails.transformations.add-overlay.origin-top-right: "Uppe till höger"
+image-thumbnails.transformations.add-overlay.origin-center: "Mitten"
+image-thumbnails.transformations.add-overlay.origin-bottom-left: "Nere till vänster"
+image-thumbnails.transformations.add-overlay.origin-bottom-right: "Nere till höger"
+image-thumbnails.transformations.add-overlay.alpha: "Opacitet"
+image-thumbnails.transformations.add-overlay.composite: "Komposit"
+
+# Gaussisk oskärpa-transformation
+image-thumbnails.transformations.gaussian-blur.radius: "Radie"
+image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+
+# Skala efter bredd-transformation
+image-thumbnails.transformations.scale-by-width.title: "Konfigurera Skala efter bredd"
+image-thumbnails.transformations.scale-by-width.width: "Bredd"
+image-thumbnails.transformations.scale-by-width.force-resize: "Tvinga storleksändring"
+
+# Storleksändringstransformation
+image-thumbnails.transformations.resize.config-title: "Konfigurera storleksändring"
+image-thumbnails.transformations.resize.width: "Bredd"
+image-thumbnails.transformations.resize.height: "Höjd"
+
+# Skala efter höjd-transformation
+image-thumbnails.transformations.scale-by-height.config-title: "Konfigurera Skala efter höjd"
+image-thumbnails.transformations.scale-by-height.height: "Höjd"
+image-thumbnails.transformations.scale-by-height.height-placeholder: "Ange höjd i pixlar"
+image-thumbnails.transformations.scale-by-height.force-resize: "Tvinga storleksändring"
+
+# Trimma-transformation
+image-thumbnails.transformations.trim.config-title: "Konfigurera Trimma"
+image-thumbnails.transformations.trim.trim-option: "Trimma-alternativ"
+image-thumbnails.transformations.trim.trim-option-placeholder: "Välj trimma-alternativ"
+image-thumbnails.transformations.trim.disabled: "Inaktiverad"
+image-thumbnails.transformations.trim.left: "Vänster"
+image-thumbnails.transformations.trim.right: "Höger"
+image-thumbnails.transformations.trim.both: "Båda"
+
+# Effekttransformation
+image-thumbnails.transformations.effects.config-title: "Konfigurera effekt"
+image-thumbnails.transformations.effects.effect-type: "Effekttyp"
+image-thumbnails.transformations.effects.effect-type-placeholder: "Välj effekttyp"
+image-thumbnails.transformations.effects.sepia: "Sepia"
+image-thumbnails.transformations.effects.grayscale: "Gråskala"
+image-thumbnails.transformations.effects.sharpen: "Skärpa"
+image-thumbnails.transformations.effects.intensity: "Intensitet"
+
+# Transformationsverktygsfält
+image-thumbnails.transformations.add: "Lägg till transformation"
+image-thumbnails.transformations.move-up: "Flytta upp"
+image-thumbnails.transformations.move-down: "Flytta ner"
+image-thumbnails.transformations.remove: "Ta bort"
+
+# Okänd/Reservtransformation
+image-thumbnails.transformations.unknown-type: "Okänd transformationstyp: {{type}}"
+image-thumbnails.transformations.no-configuration-required: "Ingen konfiguration krävs"
+
+video-thumbnails.title: "Videominiatyrbilder"
+video-thumbnails.description: "Hantera och konfigurera inställningar för videominiatyrbilder för dina assets."
+video-thumbnails.search.placeholder: "Sök miniatyrbilder..."
+video-thumbnails.tree.empty: "Inga miniatyrbilder hittades"
+video-thumbnails.editor.select-thumbnail: "Välj en videominiatyrbildskonfiguration att redigera"
+video-thumbnails.editor.name: "Namn"
+video-thumbnails.editor.name-required: "Namn är obligatoriskt"
+video-thumbnails.editor.description: "Beskrivning"
+video-thumbnails.editor.group: "Grupp"
+video-thumbnails.editor.no-group: "Ingen grupp"
+video-thumbnails.editor.presetting: "Välj en förinställning"
+video-thumbnails.editor.video-bitrate: "Videobitrate"
+video-thumbnails.editor.audio-bitrate: "Ljudbitrate"
+video-thumbnails.editor.transformations: "Transformationer"
+video-thumbnails.editor.media-segments: "Mediasegment"
+video-thumbnails.editor.media-segments.new: "Ny"
+video-thumbnails.editor.media-segments.empty: "Inga mediasegment definierade. Klicka 'Ny' för att lägga till ett segment (t.ex. 500K)."
+video-thumbnails.editor.media-segments.add.title: "Nytt mediasegment"
+video-thumbnails.editor.media-segments.add.label: "Ange ett segmentnamn (t.ex. 500K)"
+video-thumbnails.editor.media-segments.add.bitrate-hint: "Ange en giltig bitrate (t.ex. 400k, 1500k, 1M)"
+video-thumbnails.editor.media-segments.add.ok: "Skapa"
+video-thumbnails.editor.media-segments.default: "Standard"
+video-thumbnails.editor.transformations.empty: "Inga transformationer har valts"
+video-thumbnails.delete.confirm: "Vill du verkligen ta bort miniatyrbilden"
+video-thumbnails.add.content: "Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)"
+video-thumbnails.add.validation.message: "Miniatyrbildsnamnet är ogiltigt"
+
+# Videotransformationsverktygsfält
+video-thumbnails.transformations.move-up: "Flytta upp"
+video-thumbnails.transformations.move-down: "Flytta ner"
+video-thumbnails.transformations.remove: "Ta bort"
+
+# Storleksändringstransformation
+video-thumbnails.transformations.resize.config-title: "Konfigurera storleksändring"
+video-thumbnails.transformations.resize.width: "Bredd"
+video-thumbnails.transformations.resize.width-placeholder: "Ange bredd i pixlar"
+video-thumbnails.transformations.resize.height: "Höjd"
+video-thumbnails.transformations.resize.height-placeholder: "Ange höjd i pixlar"
+video-thumbnails.transformations.resize.even-number-hint: "Bredd och höjd måste vara jämna tal"
+
+# Skala efter bredd-transformation
+video-thumbnails.transformations.scale-by-width.config-title: "Konfigurera Skala efter bredd"
+video-thumbnails.transformations.scale-by-width.width: "Bredd"
+video-thumbnails.transformations.scale-by-width.width-placeholder: "Ange bredd i pixlar"
+
+# Skala efter höjd-transformation
+video-thumbnails.transformations.scale-by-height.config-title: "Konfigurera Skala efter höjd"
+video-thumbnails.transformations.scale-by-height.height: "Höjd"
+video-thumbnails.transformations.scale-by-height.height-placeholder: "Ange höjd i pixlar"
+
+# Klipp-transformation
+video-thumbnails.transformations.cut.config-title: "Konfigurera Klipp"
+video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: "Längd"
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Ställ in bildfrekvens-transformation
+video-thumbnails.transformations.set-framerate.config-title: "Konfigurera Bildfrekvens"
+video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Färgkanalmixer-transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: "Konfigurera Färgkanalmixer"
+video-thumbnails.transformations.color-channel-mixer.effect: "Effekt"
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Välj en effekt"
+video-thumbnails.transformations.color-channel-mixer.grayscale: "Gråskala"
+video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
+video-thumbnails.transformations.color-channel-mixer.cold: "Kall"
+
+# Tyst-transformation
+video-thumbnails.transformations.mute.config-title: "Tysta"
+video-thumbnails.transformations.no-configuration-required: "Ingen konfiguration krävs"
+
+appearance-branding.color.title: "Färg"
+appearance-branding.color.brand-color.label: "Varumärkesfärg"
+appearance-branding.color.brand-color.description: "Tillämpas på prenumerationsstatusindikatorn och standardavatar."
+appearance-branding.color.background-shade.label: "Bakgrundston"
+appearance-branding.color.background-shade.description: "Tillämpas på canvasbakgrunden med sänkt opacitet för en sömlös blandning."
+appearance-branding.custom-logo.title: "Anpassad logotyp"
+appearance-branding.custom-logo.description: "Används vid inloggning och i canvasbakgrunden"
+appearance-branding.custom-login-background.title: "Anpassad bakgrundsbild vid inloggning"
+appearance-branding.custom-login-background.description: "Används på inloggningsskärmen som bakgrundsbild"
+appearance-branding.update.success: "Utseendeinställningarna har uppdaterats"
+search-replace-assignments.search-for: Sök efter
+search-replace-assignments.replace-with: Ersätt med
+search-replace-assignments.select-element: Välj målelement
+search-replace-assignments.search: Sök användningar
+search-replace-assignments.apply-to-all: Tillämpa ersättning på alla
+search-replace-assignments.apply-to-selection: Tillämpa ersättning på val
+search-replace-assignments.confirm.title: Bekräfta ersättningen
+search-replace-assignments.confirm.description: Att återställa ersatta tilldelningar kan vara en tidskrävande process. Är du säker på att du vill tillämpa det på alla?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Typ
+search-replace-assignments.columns.path: Sökväg
+search-replace-assignments.job.title-all: Ersätt alla tilldelningar
+search-replace-assignments.job.title-selection: Ersätt {{count}} tilldelning(ar)
+hidden-dependencies-warning: Det finns ytterligare beroenden som din användare inte har behörighet att se.
+external-image.preview-placeholder: Lägg till en extern bild
+empty-image: Tom bild
+image.dnd-target: Släpp en bild här
+image.add.and.dnd: Lägg till eller släpp en bild direkt här
+image.upload.add.and.dnd: Ladda upp, lägg till eller släpp en bild direkt här
+fallback: Reserv
+url-slug.add-site: Lägg till sajt
+url-slug.invalid: Ange en giltig URL slug (börjar med '/')
+site-id: Sajt-ID
+deleted: borttagen
+collection.empty: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
+field-collection.add.default: "Lägg till samling"
+video.type: Videotyp
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video-ID
+video.url: Video-URL
+video.settings: Videoinställningar
+video.poster: Posterbild
+video.path: Sökväg
+video.dnd-target: Släpp en video här
+pdf-editable.dnd-target: Släpp en dokumentasset här
+many-to-one-relation.drop-placeholder: Släpp ett objekt här
+many-to-one-relation.drop-placeholder-text-input: Släpp ett objekt här eller ange ett värde
+reverse-object-relation.owner-hint: Det aktuella objektet äger inte dessa relationer, ändringar här kan göra sparandet av objektet långsamt.
+reverse-object-relation.owner-class: Ägarklass
+reverse-object-relation.owner-field: Ägarfält
+link.not-set: ej angiven
+link.edit-title: Redigera länk
+link.tab.basic: Grundläggande
+link.tab.advanced: Avancerat
+link.text: Text
+link.path: Sökväg
+link.properties: Egenskaper
+link.target: Mål
+link.parameters: Parametrar
+link.anchor: Ankare
+link.title: Titel
+link.accesskey: Snabbknapp
+link.rel: Relation
+link.tabindex: Tabbindex
+link.class: Klass
+link.attributes: Attribut
+crop: Beskär
+crop.remove: Ta bort beskärning
+hotspots-markers-modal.edit-button: Lägg till & Redigera data
+hotspots-markers-data-modal.title: Lägg till & Redigera data
+hotspots-markers-data-modal.new-data: Ny
+hotspots-markers-data-modal.apply: Tillämpa
+hotspots-markers-data-modal.name: Namn
+hotspots-markers-data-modal.data: Data
+hotspots-markers-data-modal.data-type.name: Namn
+hotspots-markers-data-modal.data-type.value: Värde
+hotspots-markers-data-modal.data-type.text-field: Textfält
+hotspots-markers-data-modal.data-type.text-area: Textområde
+hotspots-markers-data-modal.data-type.checkbox: Kryssruta
+hotspots-markers-data-modal.data-type.object: Objekt
+hotspots-markers-data-modal.data-type.document: Dokument
+hotspots-markers-data-modal.data-type.asset: Asset
+hotspots.edit: Redigera markörer och hotspots
+hotspots.show: Visa markörer och hotspots
+hotspots.new-marker: Ny markör
+hotspots.new-hotspot: Ny hotspot
+hotspots.clear-data: Rensa alla hotspots och markörer
+hotspots.clear-data.dnd-message: Den här bilden innehåller ytterligare data som markörer eller hotspots. Vill du rensa dem också?
+hotspots.data-cleared: Hotspot- och markördata rensade
+hotspots.has-hotspots-or-marker: Hotspots eller markörer har lagts till för det här objektet
+classification-store.collection: Samling
+classification-store.group: Grupp
+classification-store.group-by-key: Gruppera efter nyckel
+classification-store.column.id: ID
+classification-store.column.group: Grupp
+classification-store.column.name: Namn
+classification-store.column.description: Beskrivning
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
+classification-store.tabs.collections: Samlingar
+classification-store.tabs.groups: Grupper
+classification-store.tabs.keys: Nycklar
+classification-store.add-store: Lägg till store
+classification-store.rename-store: Byt namn på store
+classification-store.delete-store: "Ta bort store \"{{storeName}}\"?"
+classification-store.add-group: Lägg till grupp
+classification-store.rename-group: Byt namn på grupp
+classification-store.delete-group: "Ta bort grupp \"{{groupName}}\"?"
+classification-store.add-collection: Lägg till samling
+classification-store.rename-collection: Byt namn på samling
+classification-store.delete-collection: "Ta bort samling \"{{collectionName}}\"?"
+classification-store.add-key: Lägg till nyckel
+classification-store.rename-key: Byt namn på nyckel
+classification-store.delete-key: "Ta bort nyckel \"{{keyName}}\"?"
+classification-store.delete-key-relation: "Ta bort nyckel \"{{keyName}}\" från den här gruppen?"
+classification-store.delete-group-relation: "Ta bort grupp \"{{groupName}}\" från den här samlingen?"
+classification-store.edit-definition: Redigera definition
+classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Namn
+classification-store.columns.title: Titel
+classification-store.columns.type: Typ
+classification-store.columns.description: Beskrivning
+classification-store.columns.actions: Åtgärder
+classification-store.columns.mandatory: Obligatorisk
+classification-store.columns.sorter: Sorterare
+classification-store.columns.enabled: Aktiverad
+classification-store.relations-title: "Nycklar i grupp: {{name}}"
+classification-store.select-group-hint: Välj en grupp för att se dess nycklar
+classification-store.collection-relations-title: "Grupper i samling: {{name}}"
+classification-store.select-collection-hint: Välj en samling för att se dess grupper
+classification-store.select-key: Välj nyckel
+classification-store.search-keys: Sök nycklar…
+classification-store.select-group: Välj grupp
+classification-store.search-groups: Sök grupper…
+home: Hem
+preview.label: Förhandsvisning
+preview.desktop: Dator
+preview.tablet: Surfplatta
+preview.phone-vertical: Telefon vertikal
+preview.phone-horizontal: Telefon horisontell
+preview.select_date_time: Välj datum & tid
+preview.screen_size_too_small: Det tillgängliga utrymmet är för litet för att visa det valda förhandsvisningsläget.
+inheritance-active: "Data ärvt från objekt-ID {{id}}"
+inheritance-broken: "Dataarv brutet"
+main: Huvud
+main_admin: Huvud (Adminläge)
+draft-alert: Den aktuella versionen är ett utkast. Du kan ta bort utkastet för att återställa föregående version.
+draft-alert-auto-save: Den aktuella versionen är ett automatiskt sparat utkast. Du kan ta bort utkastet för att återställa föregående version.
+delete-draft: Ta bort utkast
+delete-draft-auto-save: Ta bort automatiskt sparat utkast
+delete-draft-confirmation: Är du säker på att du vill ta bort utkastet?
+auto-save.tooltip: Den här versionen är automatiskt sparad.
+auto-save.loading-tooltip: Automatisk sparning pågår
+detached-tab.draft-tooltip: Den aktuella versionen är ett utkast.
+detached-tab.draft-tooltip-addon: Du kan publicera i tillhörande element/objekts huvud/moderflik.
+details: Detaljer
+element: Element
+entries: poster
+entry: post
+error_element_validation_failed: "Validering misslyckades"
+element.delete.deleting-folder: Tar bort mapp
+component.pagination.showing-items: Visar {{total}}
+edit-modal.inline-edit: Inline-redigering
+edit-modal.apply-changes: Tillämpa ändringar
+edit-modal.discard: Kassera
+preview-not-available: Förhandsvisning ej tillgänglig
+user-menu.notifications: Aviseringar
+user-menu.my-profile: Min profil
+user-menu.log-out: Logga ut
+user-menu.title: Profil
+user-menu.notification.send: Skicka
+user-menu.notification.attachments: Bilagor
+user-menu.notification.type-not-supported: Bilagetyp stöds inte
+user-menu.notification.cancel: Avbryt
+user-menu.notification.modal.send-a-notification: Skicka en avisering
+user-menu.notification.modal.success-notification-has-been-sent: Aviseringen har skickats
+user-menu.notification.modal.to: Till
+user-menu.notification.modal.select: Välj
+user-menu.notification.modal.title: Titel
+user-menu.notification.modal.message: Meddelande
+user-menu.notification.modal.add-an-attachment: Lägg till en bilaga
+user-menu.notification.modal.form.validation.provide-recipient: Ange en mottagare
+user-menu.notification.modal.form.validation.provide-title: Ange en titel
+user-menu.notification.modal.form.validation.provide-message: Ange ett meddelande
+reports.reports-title: Rapporter
+reports.select-report-name: Välj rapportens namn
+reports.select-report: Välj rapport
+reports.export: Exportera
+reports.csv-export: CSV-export
+reports.csv-export-with-headers: CSV-export med rubriker
+reports.show-all-labels: Visa alla etiketter
+reports.show-fewer-labels: Visa färre etiketter
+reports.grid-config.title-columns: Kolumner
+reports.grid-config.restore-to-default: Återställ till standard
+reports.grid-config.add-column: Lägg till en kolumn
+reports.field-filters: Fältfilter
+reports.editor.delete.content: Vill du verkligen ta bort den anpassade rapporten "{{reportName}}"?
+reports.editor.clone.content: Ange namnet på det nya objektet (a-zA-Z-_)
+reports.editor.add.content: Ange namnet på det nya objektet. Namnet måste vara alfanumeriskt och minst 3 tecken långt (a-zA-Z0-9_-)
+reports.editor.content.validation.message: Rapportnamnet är ogiltigt
+reports.editor.general-settings.title: Allmänna inställningar
+reports.editor.general-settings.name-label: Namn
+reports.editor.general-settings.display-name-label: Visningsnamn
+reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.group-label: Ange ett befintligt gruppnamn eller skapa en ny grupp
+reports.editor.general-settings.group-tooltip: Du måste använda exakt samma namn som den befintliga menyetiketten. Om namnet är annorlunda eller nytt skapas en ny grupp.
+reports.editor.general-settings.report-class-label: Rapportklass
+reports.editor.general-settings.group-icon-class-label: Grupp Icon Class
+reports.editor.general-settings.shortcut-menu-label: Skapa genväg i menyn
+reports.editor.source-definition.title: Källdefinition
+reports.editor.source-definition.no-content: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
+reports.editor.source-definition.select-source-definition: Välj en källdefinition
+reports.editor.source-definition.sql-select-field: SELECT (t.ex. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (t.ex. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (t.ex. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (t.ex. b, c )
+reports.editor.source-definition.sql-initial-field-order: Inledande sortering efter fält (t.ex. b, c )
+reports.editor.source-definition.sql-initial-direction-order: Inledande sorteringsriktning
+reports.editor.manage-column-configuration.title: Hantera & Dela kolumnkonfiguration
+reports.editor.manage-column-configuration.name: Namn
+reports.editor.manage-column-configuration.display: Visa
+reports.editor.manage-column-configuration.export: Exportera
+reports.editor.manage-column-configuration.order: Ordning
+reports.editor.manage-column-configuration.filter-type: Filtertyp
+reports.editor.manage-column-configuration.filter-type.empty: Tom
+reports.editor.manage-column-configuration.filter-type.text: Text
+reports.editor.manage-column-configuration.filter-type.number: Nummer
+reports.editor.manage-column-configuration.filter-type.date: Datum
+reports.editor.manage-column-configuration.filter-type.bool: Bool
+reports.editor.manage-column-configuration.display-type: Visningstyp
+reports.editor.manage-column-configuration.display-type.none: Ingen
+reports.editor.manage-column-configuration.display-type.text: Text
+reports.editor.manage-column-configuration.display-type.date: Datum
+reports.editor.manage-column-configuration.display-type.hide: Dölj
+reports.editor.manage-column-configuration.filter-drilldown: Filter Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Tom
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Bara filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filtrera och visa
+reports.editor.manage-column-configuration.width: Bredd
+reports.editor.manage-column-configuration.label: Etikett
+reports.editor.manage-column-configuration.action: Åtgärd
+reports.editor.manage-column-configuration.action.none: Ingen
+reports.editor.manage-column-configuration.action.open-document: Öppna dokument
+reports.editor.manage-column-configuration.action.open-asset: Öppna Asset
+reports.editor.manage-column-configuration.action.open-object: Öppna objekt
+reports.editor.manage-column-configuration.action.open-url: Öppna URL
+reports.editor.chart-settings.title: Diagraminställningar
+reports.editor.chart-settings.chart-type: Diagramtyp
+reports.editor.chart-settings.chart-type.none: Ingen
+reports.editor.chart-settings.chart-type.pie-chart: Cirkeldiagram
+reports.editor.chart-settings.chart-type.line-chart: Linjediagram
+reports.editor.chart-settings.chart-type.bar-chart: Stapeldiagram
+reports.editor.chart-settings.settings: Inställningar
+reports.editor.chart-settings.pie-label: Etikettkolumn
+reports.editor.chart-settings.pie-data: Datakolumn
+reports.editor.chart-settings.x-axis: X-axel
+reports.editor.chart-settings.y-axis: Y-axel
+reports.editor.permissions.title: Behörigheter
+loading: Laddar...
+please-wait: Vänta...
+navigation.email: E-post
+navigation.email-blocklist: E-postblockeringslista
+widget.email-blocklist: E-postblockeringslista
+email-blocklist.new: Ny
+email-blocklist.add.validation: Ange en giltig e-postadress
+email-blocklist.add.label: Lägg till e-postadress
+email-blocklist.add.email-address.label: E-postadress
+email-blocklist.add.email.success: E-postadressen har lagts till
+aria.email-blocklist.remove.email: Ta bort e-postadress
+navigation.email-log: Skickade e-postmeddelanden
+widget.email-log: Skickade e-postmeddelanden
+widget.email-log.from: Från
+widget.email-log.to: Till
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Text
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parametrar
+widget.email-log.grid.name: Namn
+widget.email-log.grid.value: Värde
+email-log.subject: Ämne
+email-log.tooltip.resend: Skicka om e-post
+email-log.tooltip.forward: Vidarebefordra e-post
+email-log.tooltip.delete: Ta bort e-post
+email-log.resend.email.success: E-postmeddelandet har skickats igen
+email-log.resend.confirmation.title: Skicka om e-post
+email-log.resend.confirmation.text: Bekräfta att du vill skicka e-postmeddelandet igen till alla mottagare.
+email-log.resend.confirmation.ok: Skicka om e-post
+email-log.forward.email.success: E-postmeddelandet har vidarebefordrats
+email-log.forward.label: Vidarebefordra e-post
+email-log.send.label: Skicka
+email-log.forward.email-address.label: E-postadress
+email-log.delete.email.success: E-postmeddelandet har tagits bort
+email-log.html.preview: HTML-förhandsvisning
+aria.email-log.html.preview: HTML-förhandsvisning
+user-profile.label: Min profil
+user-profile.general: Allmänna uppgifter
+user-profile.change-password: Byt lösenord
+user-profile.password-old: Gammalt lösenord
+user-profile.password-new: Nytt lösenord
+user-profile.password-repeat: Upprepa lösenord
+user-profile.password-repeat-error: Lösenorden matchar inte
+creatable-select.add-custom-option: Lägg till anpassat alternativ
+creatable-select.add: Lägg till
+creatable-select.option-already-exists: Alternativet finns redan
+creatable-select.invalid-option: Ogiltigt alternativ
+drag-snippet-here: Dra ett kodavsnitt hit
+drop-snippet-here: Släpp ett kodavsnitt här
+drop-document-here: Släpp ett dokument här
+drop-document-asset-here: Släpp en dokumentasset här
+drop-asset-here: Släpp en asset här
+drop-object-here: Släpp ett objekt här
+drop-element-here: Släpp ett element här
+error-loading-renderlet: Fel vid laddning av renderlet
+snippet: Kodavsnitt
+navigation.application-logger: Application Logger
+widget.application-logger: Application Logger
+application-logger.label: Application Logger
+application-logger.columns.timestamp: Tidsstämpel
+application-logger.columns.pid: PID
+application-logger.columns.message: Meddelande
+application-logger.columns.file-object: Filobjekt
+application-logger.columns.related-object: Relaterat objekt
+application-logger.columns.component: Komponent
+application-logger.columns.source: Källa
+application-logger.columns.details: Detaljer
+application-logger.columns.type: Typ
+application-logger.sidebar.search-parameter: Sökparameter
+application-logger.detail-modal.title: Detaljinformation
+application-logger.filter.date-from: Från
+application-logger.filter.date-to: Till
+application-logger.filter.priority: Typ
+application-logger.filter.component: Komponent
+application-logger.filter.related-object-id: Relaterat objekt-ID
+application-logger.filter.message: Meddelande
+application-logger.filter.pid: Pid
+application-logger.refresh-interval: Uppdateringsintervall
+application-logger.refresh-interval.select: Välj uppdateringsfrekvens
+application-logger.refresh-interval.seconds: "{{seconds}} sekunder"
+application-logger.filter.priority-level.1: Nödsituation
+application-logger.filter.priority-level.2: Varning
+application-logger.filter.priority-level.3: Kritisk
+application-logger.filter.priority-level.4: Fel
+application-logger.filter.priority-level.5: Varning
+application-logger.filter.priority-level.6: Meddelande
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
+embed.url-modal.title: Redigera inbäddnings-URL
+embed.url-modal.label: URL (t.ex. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Ange en giltig URL
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Avbryt
+embed.placeholder: Ingen URL angiven - Klicka för att lägga till en inbäddnings-URL
+embed.add-url: Lägg till URL
+embed.edit-url: Redigera URL
+embed.clear: Rensa
+embed.loading: Laddar...
+embed.iframe-title: Inbäddat innehåll
+invalid-iframe: Den angivna iframe-URL:en är ogiltig
+document.open-in-new-window: Öppna i nytt fönster
+document.open-preview-in-new-window: Öppna förhandsvisning i nytt fönster
+document.translation.title: Översättning
+document.translation.open-translation: Öppna översättning
+document.translation.link-existing-document: Länka befintligt dokument
+document.translation.unlink-existing-document: Ta bort länk till befintligt dokument
+document.translation.all-translations: Alla översättningar
+document.translation.new-document: Nytt dokument
+document.translation.use-inheritance: Använder arv
+document.translation.new-document-with-inheritance.modal-title: Nytt dokument (med arv)
+document.translation.new-document-blank.modal-title: Nytt dokument (tomt)
+document.translation.new-document-modal.label.parent: Förälder
+document.translation.new-document-modal.label.language: Språk
+document.translation.new-document-modal.create: Skapa
+navigation.recycle-bin: Papperskorg
+widget.recycle-bin: Papperskorg
+recycle-bin.columns.type: Typ
+recycle-bin.columns.path: Sökväg
+recycle-bin.columns.amount: Antal
+recycle-bin.columns.deleted-by: Borttagen av
+recycle-bin.columns.date: Datum
+recycle-bin.columns.actions: Åtgärder
+recycle-bin.actions.cleanup: Rensa
+recycle-bin.actions.delete: Ta bort
+recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
+recycle-bin.actions.restore: Återställ
+recycle-bin.actions.restore.title: Återställer papperskorgens objekt
+component.search.pleaceholder: Sök
+focal-point.set: Ange fokuspunkt
+video.placeholder: Ingen video vald - Klicka för att lägga till en video
+video.add-video: Lägg till video
+image.alt-text-placeholder: Ange alt-text
+area-settings: Områdesinställningar
+unsupported_feature: Funktionen stöds inte - kontrollera systemkraven!
+document.version.comparison.error.title: Fel vid versionsjämförelse
+document.version.comparison.unsupported.requirements: Chromium-binärfil och PHP-tillägget Imagick krävs.
+navigation.test-email: Skicka testmail
+test-email.form.from: Från
+test-email.form.to: Till
+test-email.form.subject: Ämne
+test-email.form.contentType: Typ
+test-email.form.title: Titel
+test-email.form.message: Meddelande
+test-email.form.document: Dokument
+test-email.form.parameters: Parametrar
+test-email.form.parameters.add-parameter: Lägg till parameter
+test-email-modal-title: Skicka ett testmail
+test-email-modal-send: Skicka
+test-email.contentType.document: Dokument
+test-email.contentType.html: HTML
+test-email.contentType.text: Text
+test-email.parameters.columns.key: Nyckel
+test-email.parameters.columns.value: Värde
+test-email.parameters.add: Lägg till parameter
+test-email.send.error: Ett fel uppstod vid sändning av testmailet
+test-email.success.modal.title: Testmail skickat
+test-email.success.modal.text: Ditt testmail har skickats. Vill du behålla det här fönstret öppet för att skicka mailet igen?
+test-email.validation.documentPath.required: Ange en dokumentsökväg
+test-email.validation.documentParameters.required: Ange minst en parameter
+test-email.validation.content.required: Ange ett meddelande
+test-email.validation.from.required: Ange en avsändaradress
+test-email.validation.from.email.type: Ange en giltig avsändaradress
+test-email.validation.to.required: Ange en mottagaradress
+test-email.validation.to.email.type: Ange en giltig mottagaradress
+test-email.validation.subject.required: Ange ett ämne
+navigation.widget-editor: Widgetredigerare
+widget.widget-editor.perspective-editor: Perspektivredigerare
+navigation.widget-editor.perspective-editor: Perspektivredigerare
+widget.widget-editor.widget-editor: Widgetredigerare
+navigation.widget-editor.widget-editor: Widgetredigerare
+refresh: Uppdatera
+perspective-editor.add-modal.title: Lägg till ett nytt perspektiv
+perspective-editor.add-modal.name.label: Ange namnet på det nya perspektivet
+perspective-editor.add-modal.name.validation: Ange ett giltigt perspektivnamn
+perspective-editor.form.name.placeholder: Ange perspektivnamn
+perspective-editor.form.general.title: Allmänt
+perspective-editor.form.general.name: Namn
+perspective-editor.form.general.icon: Ikon
+perspective-editor.form.general.widget-configuration: Widgetområden
+perspective-editor.form.main-nav-permission.title: Tillåtna huvudnavigeringsåtgärder
+perspective-editor.form.main-nav-permission.category.quickAccess: Snabbåtkomst
+perspective-editor.form.main-nav-permission.quickAccess.hidden: Dölj snabbåtkomstmenyn
+perspective-editor.form.main-nav-permission.quickAccess.open_asset: Öppna Asset
+perspective-editor.form.main-nav-permission.quickAccess.open_document: Öppna dokument
+perspective-editor.form.main-nav-permission.quickAccess.open_object: Öppna objekt
+perspective-editor.form.main-nav-permission.quickAccess.recycle_bin: Papperskorg
+perspective-editor.form.main-nav-permission.category.dataManagement: Datahantering
+perspective-editor.form.main-nav-permission.dataManagement.hidden: Dölj datahanteringsmenyn
+perspective-editor.form.main-nav-permission.dataManagement.notesEvents: Anteckningar & Händelser
+perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: GDPR-dataextraherare
+perspective-editor.form.main-nav-permission.dataManagement.searchReplaceAssignments: Sök & Ersätt tilldelningar
+perspective-editor.form.main-nav-permission.dataManagement.predefinedProperties: Fördefinierade egenskaper
+perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Taggkonfiguration
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Datamodelldefinition > Massexport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Datamodelldefinition > Massimport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Datamodelldefinition > Klasser
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Datamodelldefinition > Classification Store
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Datamodelldefinition > Field Collections
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Dölj datamodelldefinitionsmenyn
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Datamodelldefinition > Object Bricks
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Datamodelldefinition > Kvantitetsvärde
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Datamodelldefinition > Valalternativ
+perspective-editor.form.main-nav-permission.category.experienceEcommerce: Upplevelse & E-handel
+perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Dölj Upplevelse & E-handelsmenyn
+perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-postmeddelanden
+perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
+perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Webbplatsinställningar
+perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringar
+perspective-editor.form.main-nav-permission.category.assetManagement: Assethantering
+perspective-editor.form.main-nav-permission.assetManagement.hidden: Dölj assethanteringsmenyn
+perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildminiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Fördefinierad assetmetadata
+perspective-editor.form.main-nav-permission.category.translations: Översättningar
+perspective-editor.form.main-nav-permission.translations.hidden: Dölj översättningsmenyn
+perspective-editor.form.main-nav-permission.translations.translations: Översättningar
+perspective-editor.form.main-nav-permission.category.system: System
+perspective-editor.form.main-nav-permission.system.hidden: Dölj systemmenyn
+perspective-editor.form.main-nav-permission.system.applicationLogger: Application Logger
+perspective-editor.form.main-nav-permission.system.users_hidden: Dölj Användare/Roller-menyn
+perspective-editor.form.main-nav-permission.system.users_roles: Roller
+perspective-editor.form.main-nav-permission.system.users_users: Användare
+perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende & Varumärke
+perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektivredigerare
+perspective-editor.form.main-nav-permission.system.widgetEditor: Widgetredigerare
+perspective-editor.form.main-nav-permission.system.maintenanceMode: Underhållsläge
+perspective-editor.form.main-nav-permission.system.cache_clearAll: Cache > Rensa alla
+perspective-editor.form.main-nav-permission.system.cache_clearData: Cache > Datacache
+perspective-editor.form.main-nav-permission.system.cache_clearOutput: Cache > Rensa helsidescache
+perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > Rensa Symfony-cache
+perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Rensa temporära filer
+perspective-editor.form.main-nav-permission.system.cache_hidden: Dölj cachemenyn
+perspective-editor.form.main-nav-permission.system.systemSettings: Systeminställningar
+perspective-editor.form.main-nav-permission.system.about: Om
+perspective-editor.form.main-nav-permission.category.reporting: Rapportering
+perspective-editor.form.main-nav-permission.reporting.hidden: Dölj rapporteringsmenyn
+perspective-editor.form.main-nav-permission.reporting.reports: Rapporter
+perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Konfiguration av anpassade rapporter
+perspective-editor.form.main-nav-permission.category.search: Sök
+perspective-editor.form.main-nav-permission.search.hidden: Dölj sökmenyn
+perspective-editor.create.success: Perspektivet har skapats
+perspective-editor.delete.success: Perspektivet har tagits bort
+perspective-editor.system-widgets.trees: Träd
+perspective-editor.system-widgets.left: Vänstra widgetar
+perspective-editor.system-widgets.bottom: Nedre widgetar
+perspective-editor.system-widgets.right: Högra widgetar
+perspective-editor.update.success: Perspektivet har uppdaterats
+widget-editor.create-modal.create: Skapa widget
+widget-editor.create-form.name: Namn
+widget-editor.create-form.name.required: Ange ett giltigt namn
+widget-editor.create-form.widgetType: Widgettyp
+widget-editor.create-form.widgetType.element_tree: Elementträd
+widget-editor.create-form.widgetTypeGroup.system-widgets: Systemwidgetar
+widget-editor.form.name.placeholder: Ange widgetnamn
+widget-editor.create.success: Widgeten har skapats
+widget-editor.delete.success: Widgeten har tagits bort
+widget-editor.update.success: Widgeten har uppdaterats
+widget-editor.widget-form.general.title: Allmänt
+widget-editor.widget-form.general.name: Namn
+widget-editor.widget-form.general.icon: Ikon
+widget-editor.widget-form.general.icon.select: Välj ikon
+widget-editor.widget-form.specific.title: Specifikt
+widget-editor.widget-form.specific.element-type: Elementtyp
+widget-editor.widget-form.specific.root-folder: Rotmapp
+widget-editor.widget-form.specific.show-root: Visa rot
+widget-editor.widget-form.specific.page-size: Sidstorlek
+widget-editor.widget-form.allowed-objects.title: Tillåtna objekt (standard allt tillåtet)
+widget-editor.widget-form.filters.title: Filter
+widget-editor.widget-form.filters.pql: PQL-uttryck
+widget-editor.widget-form.allowed-context-menu.title: Tillåtna kontextmenyåtgärder
+widget-editor.widget-form.allowed-context-menu.addObject: Nytt objekt
+widget-editor.widget-form.allowed-context-menu.addVariant: Ny variant
+widget-editor.widget-form.allowed-context-menu.copy: Kopiera
+widget-editor.widget-form.allowed-context-menu.lock: Lås
+widget-editor.widget-form.allowed-context-menu.publish: Publicera
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Sök & Flytta
+widget-editor.widget-form.allowed-context-menu.unpublish: Avpublicera
+widget-editor.widget-form.allowed-context-menu.addFolder: Ny mapp
+widget-editor.widget-form.allowed-context-menu.cut: Klipp ut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lås och sprid till barn
+widget-editor.widget-form.allowed-context-menu.refresh: Uppdatera
+widget-editor.widget-form.allowed-context-menu.unlock: Lås upp
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Ändra sortering av barn
+widget-editor.widget-form.allowed-context-menu.delete: Ta bort
+widget-editor.widget-form.allowed-context-menu.paste: Klistra in
+widget-editor.widget-form.allowed-context-menu.rename: Byt namn
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Lås upp och sprid till barn
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Ny(a) Asset(s) > Ladda upp Zip
+widget-editor.widget-form.allowed-context-menu.addUpload: Ny(a) Asset(s) > Ladda upp filer
+widget-editor.widget-form.allowed-context-menu.download: Ladda ner
+widget-editor.widget-form.allowed-context-menu.pasteCut: Klistra in utklippt
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Ladda upp ny version
+widget-editor.widget-form.allowed-context-menu.downloadZip: Ladda ner som ZIP
+widget-editor.widget-form.allowed-context-menu.convert: Konvertera
+widget-editor.widget-form.allowed-context-menu.removeSite: Ta bort sajt
+widget-editor.widget-form.allowed-context-menu.useAsSite: Använd som sajt
+widget-editor.widget-form.allowed-context-menu.editSite: Redigera sajt
+widget-editor.widget-form.allowed-context-menu.open: Öppna
+widget-editor.widget-form.allowed-context-menu.addPage: Ny sida
+widget-editor.widget-form.allowed-context-menu.addSnippet: Nytt kodavsnitt
+widget-editor.widget-form.allowed-context-menu.addLink: Ny länk
+widget-editor.widget-form.allowed-context-menu.addEmail: Ny e-post
+widget-editor.widget-form.allowed-context-menu.addHardlink: Ny Hardlink
+edit.label: Redigera
+scheduled-block.delete-all-in-past: Ta bort alla tidigare tidsstämplar
+scheduled-block.delete-all: Ta bort alla tidsstämplar
+scheduled-block.delete-all-in-past-confirmation: Är du säker på att du vill ta bort alla tidigare tidsstämplar?
+scheduled-block.delete-all-confirmation: Är du säker på att du vill ta bort alla tidsstämplar?
+scheduled-block.delete-confirmation: Är du säker på att du vill ta bort den här posten?
+icon-selector.title: Ikonväljare
+icon-selector.all-icons: Alla ikoner
+icon-selector.pimcore-library: Pimcore-bibliotek
+icon-selector.search-placeholder: Sök
+icon-selector.current-selection: Aktuellt val
+icon-selector.clear-selection: Rensa val
+icon-selector.no-selection: Ingen ikon vald
+icon-selector.save: Spara
+icon-selector.custom-icon: Anpassad ikon
+icon-selector.custom-icon-path: Anpassad sökväg
+icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
+icon-selector.Twemoji: Twemoji-bibliotek
+icon-selector.Pimcore: Pimcore-bibliotek
+language: Språk
+pretty-url: Snygg URL / URL Slug
+pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
+content-main-document: Content-Main-dokument
+content-main-document.apply: Tillämpa Content-Main-dokument
+content-main-document.apply-warning-title: Är du säker?
+content-main-document.apply-warning-message: Allt innehåll kommer att förloras
+never: aldrig
+document-configuration.sidebar-title: Dokumentkonfiguration
+document-configuration.predefined-document-type: Fördefinierad dokumenttyp
+document-configuration.controller: Controller
+document-configuration.template: Mall
+document-configuration.static-page-generator: Statisk sidgenerator
+document-configuration.enable-server-side-static-rendering: Aktivera server-side statisk rendering
+document-configuration.lifetime-for-static-page: Livstid för statisk sida (i minuter)
+document-configuration.last-generated: "Senast genererad: {{timestamp}}"
+email-settings.sidebar-title: E-postinställningar
+email-settings.subject: Ämne
+email-settings.from: Från
+email-settings.reply-to: Svara till
+email-settings.recipients: Mottagare
+email-settings.to: Till
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Flera mottagare kan anges genom att separera e-postadresserna med semikolon. Exempel: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "Du kan använda syntaxen: Mitt Namn <mitt-namn@example.com>"
+add-document-form.label.title: Titel
+add-document-form.label.navigation: Navigering
+add-document-form.label.key: Nyckel
+user-management.permissions.quantityValueUnits: Kvantitetsvärdeenheter
+user-management.permissions.recyclebin: Papperskorg
+user-management.permissions.redirects: Omdirigeringar
+user-management.permissions.seemode: Seemode
+user-management.permissions.selectoptions: Valalternativ
+user-management.permissions.share_configurations: Dela konfigurationer
+user-management.permissions.objects: Objekt
+user-management.permissions.objectbricks: Objectbricks
+user-management.permissions.notifications_send: Skicka aviseringar
+user-management.permissions.notifications: Aviseringar
+user-management.permissions.predefined_properties: Fördefinierade egenskaper
+user-management.permissions.perspective_editor: Perspektivredigerare
+user-management.permissions.perspective_editor_view_edit: Perspektivredigerare Visa & Redigera
+user-management.permissions.qr_codes: QR-koder
+user-management.permissions.plugins: Tillägg
+user-management.permissions.notes_events: Anteckningar & Händelser
+user-management.permissions.clear_cache: Rensa cache
+user-management.permissions.classificationstore: Classification Store
+user-management.permissions.classes: Klasser
+user-management.permissions.workflow_details: Workflowdetaljer
+user-management.permissions.users: Användare
+user-management.permissions.website_settings: Webbplatsinställningar
+user-management.permissions.asset_metadata: Assetmetadata
+user-management.permissions.clear_fullpage_cache: Rensa helsidescache
+user-management.permissions.clear_temp_files: Rensa temporära filer
+user-management.permissions.system_settings: Systeminställningar
+user-management.permissions.tags_assignment: Taggtilldelning
+user-management.permissions.tags_configuration: Taggkonfiguration
+user-management.permissions.tags_search: Taggsökning
+user-management.permissions.thumbnails: Miniatyrbilder
+user-management.permissions.translations: Översättningar
+user-management.permissions.fieldcollections: Field Collections
+user-management.permissions.emails: E-postmeddelanden
+user-management.permissions.document_types: Dokumenttyper
+user-management.permissions.documents: Dokument
+user-management.permissions.dashboards: Instrumentpaneler
+user-management.permissions.assets: Assets
+user-management.permissions.system_appearance_settings: Utseende & Varumärke
+user-management.permissions.gdpr_data_extractor: GDPR-dataextraherare
+user-management.permissions.admin_translations: Adminöversättningar
+user-management.permissions.application_logging: Application Logger
+user-management.permissions.reports_config: Rapportkonfiguration
+user-management.permissions.reports: Rapporter
+user-management.permissions.gee_job_run_permission: Jobbkörningsbehörighet
+user-management.permissions.gee_see_all_job_runs_permission: Se alla jobbkörningar-behörighet
+user-management.permissions.glossary: Ordlista
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Nyhetsbrev
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP-fel
+user-management.permissions.seo_document_editor: SEO-dokumentredigerare
+user-management.permissions."robots.txt": robots.txt
+user-management.permissions.routes: Rutter
+user-management.permissions.word_export: Word-export
+user-management.permissions.xliff_import_export: XLIFF Import/Export
+forgot-password-form.username: Ange ditt användarnamn så skickar Pimcore en inloggningslänk till din e-postadress
+forgot-password-form.username.placeholder: Användarnamn
+forgot-password-form.reset-password: Återställ lösenord
+forgot-password-form.success-message: En tillfällig inloggningslänk har skickats till din e-postadress. Kontrollera din inkorg.
+forgot-password-form.back: Tillbaka till inloggning
+subscription-details.community-edition: Läs mer om Pimcore-utgåvor
+config_not_writeable: Inte skrivbar, detta kan ha flera orsaker. Se dokumentationen för detaljer.
+navigation.about: Om
+about.title: Om
+about.platform-version: "Plattformsversion: {{version}}"
+about.version: "Kärnversion: {{version}}"
+about.copyright: "© av Pimcore GmbH"
+about.buttons.license: Licens
+about.buttons.contact: Kontakt
+custom-language.default: Standard
+login-token-modal.title: Logga in som den här användaren i en annan webbläsare
+login-token-modal.description: Följande länk är en tillfällig länk som gör det möjligt att logga in som den här användaren i en annan webbläsare
+login-token-modal.close: Stäng
+login-token-modal.copy-and-close: Kopiera & Stäng
+navigation.gdpr-extractor: GDPR-dataextraherare
+widget.gdpr-extractor: GDPR-dataextraherare
+gdpr-extractor.title: GDPR-dataextraherare
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: Förnamn
+gdpr-extractor.search-form.field.lastname: Efternamn
+gdpr-extractor.search-form.field.email: E-postadress
+gdpr-extractor.search-form.submit: Sök
+gdpr-extractor.data-objects.table.field.type: Typ
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Sökväg
+gdpr-extractor.data-objects.table.field.className: Klass
+gdpr-extractor.data-objects.table.actions.export: Exportera DataObject-data
+gdpr-extractor.data-objects.table.actions.open: Öppna DataObject
+gdpr-extractor.data-objects.table.actions.delete: Ta bort DataObject
+gdpr-extractor.assets.table.field.type: Typ
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Fullständig sökväg
+gdpr-extractor.assets.table.field.subType: Typ
+gdpr-extractor.assets.table.actions.export: Exportera assetdata
+gdpr-extractor.assets.table.actions.open: Öppna Asset
+gdpr-extractor.assets.table.actions.delete: Ta bort Asset
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Användarnamn
+gdpr-extractor.users.table.field.firstname: Förnamn
+gdpr-extractor.users.table.field.lastname: Efternamn
+gdpr-extractor.users.table.field.email: E-post
+gdpr-extractor.users.table.actions.export: Exportera användardata
+gdpr-extractor.users.table.actions.delete: Ta bort användare
+gdpr-extractor.table.field.actions: Åtgärder
+gdpr-extractor.emails.table.field.sentDate: Skickad datum
+gdpr-extractor.emails.table.field.from: Från
+gdpr-extractor.emails.table.field.to: Till
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Ämne
+gdpr-extractor.emails.table.actions.export: Exportera e-postdata
+gdpr-extractor.emails.table.actions.parameters: Expandera parametrar
+gdpr-extractor.emails.table.actions.html: Visa HTML
+navigation.systemSettings: Systeminställningar
+widget.system-settings: Systeminställningar
+system-settings.form.field.version-days: Spara versionshistorik i x dagar
+system-settings.form.field.version-count: Spara versionshistorik i x steg
+system-settings.collapse.debug: Debug
+system-settings.form.debug.field.enable-debug: Debug adminöversättningar (omslutna med +)
+system-settings.form.debug.field.email-addresses: Debug e-postadresser
+system-settings.form.debug.field.email-addresses.placeholder: Ange e-post och tryck Enter...
+system-settings.collapse.localization: Lokalisering & Internationalisering (l10n/i18n)
+system-settings.form.localization.field.add-language: Lägg till språk
+system-settings.form.localization.field.fallback-language: Reservspråk
+system-settings.form.localization.field.fallback-language-placeholder: Lägg till reservspråk
+system-settings.form.localization.field.default-language: Standardspråk
+system-settings.form.localization.field.mandatory: Obligatoriskt språk
+system-settings.form.localization.field.delete-language: Ta bort språk
+system-settings.collapse.website: Webbplats
+system-settings.form.field.main-domain: Huvuddomän
+system-settings.form.field.redirect-to-maindomain: Omdirigera okända domäner (som inte används för en sajt och för omdirigeringar, ...) till huvuddomänen (ovan)
+system-settings.form.field.default-error-page: Felsida (Standard)
+system-settings.update.success: Systeminställningarna har uppdaterats
+rule-condition.operator.and: "OCH"
+rule-condition.operator.or: "ELLER"
+rule-condition.operator.and-not: "OCH INTE"
+rule-condition.add-condition: "Lägg till villkor"
+rule-condition.move-up: "Flytta upp"
+rule-condition.move-down: "Flytta ner"
+rule-condition.remove: "Ta bort"
+rule-condition.bracket.toggle-left: "Växla vänster parentes"
+rule-condition.bracket.toggle-right: "Växla höger parentes"
+rule-condition.validation.brackets-closing-without-opening: "Avslutande parentes ')' hittades utan matchande öppnande parentes '('"
+rule-condition.validation.brackets-missing-closing: "Öppnande parentes '(' hittades utan matchande avslutande parentes ')'"
+rule-condition.validation.brackets-invalid: "Parenteser är inte korrekt balanserade"
+rule-builder.add-action: "Lägg till åtgärd"
+rule-builder.add-trigger: "Lägg till utlösare"
+rule-builder.move-up: "Flytta upp"
+rule-builder.move-down: "Flytta ner"
+rule-builder.remove: "Ta bort"
+document-restrictions: Dokumentrestriktioner
+asset-restrictions: Assetrestriktioner
+object-restrictions: Objektrestriktioner
+display-mode: Visningsläge
+display-mode-display: Visa sökvägssreferens
+display-mode-inline-search: Inline-sökning
+display-mode-grid-view: "Rutnätsvy"
+display-mode-tag-field: "Taggfält"
+activate-column-configuration: "Aktivera kolumnkonfiguration"
+table-column-configuration: "Tabellkolumnkonfiguration"
+center: Mitten
+north: Norr
+south: Söder
+east: Öst
+west: Väst
+top: Överst
+left: Vänster
+right: Höger
+bottom: Nederst
+region: Region
+icon: Ikon
+iframe-url: Iframe-URL
+rendering-class: Anpassad renderingsklass
+rendering-data: Data skickad till render
+zoom-level: Zoomnivå
+class: Klass
+layout.text.help: "Du kan använda följande markering (i källredigeringsläge) för att skapa anpassade varningar: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Ditt meddelande&lt;/div&gt;</pre>Följande kontextuella klasser finns tillgängliga: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>Du kan också använda Twig-syntax:</pre> <pre>Ytterligare data {{data}}</pre>"
+configuration: Konfiguration
+drag-object-for-preview: Dra objekt för förhandsvisning
+quantity-values.new: Ny
+quantity-values.columns.id: ID
+quantity-values.columns.abbreviation: Förkortning
+quantity-values.columns.long-name: Långt namn
+quantity-values.columns.base-unit: Basenhet
+quantity-values.columns.factor: Konverteringsfaktor
+quantity-values.columns.conversion-offset: Konverteringsoffset
+quantity-values.columns.converter: Konverterartjänst
+quantity-values.columns.actions: Åtgärder
+quantity-values.create-modal.title: Skapa kvantitetsvärdets enhet
+quantity-values.create-modal.id-label: Unik identifierare
+quantity-values.create-modal.id-placeholder: "t.ex. km, kg, ..."
+quantity-values.create-modal.id-required: Unik identifierare är obligatorisk
+quantity-values.create-modal.create: Skapa
+quantity-values.export: Exportera
+quantity-values.import: Importera
+quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+owner: Ägare
+reverse-object-relation.tooltip: "Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras."
+disabled-fields: Inaktiverade fält
+allowed-targets: Tillåtna mål
+bulk-export.title: Massexport
+bulk-export.select-all: Markera alla
+bulk-export.deselect-all: Avmarkera alla
+bulk-export.export: Exportera
+bulk-export.cancel: Avbryt
+bulk-export.type.class: Klasser
+bulk-export.type.customlayout: Custom Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Massimport
+bulk-import.cancel: Avbryt
+bulk-import.next: Nästa
+bulk-import.back: Tillbaka
+bulk-import.import: Importera
+bulk-import.job-title: Massimport
+bulk-import.browse-files: Bläddra bland filer
+bulk-import.remove-file: Ta bort
+bulk-import.select-all: Markera alla
+bulk-import.deselect-all: Avmarkera alla
+bulk-import.type.class: Klasser
+bulk-import.type.customlayout: Custom Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks
