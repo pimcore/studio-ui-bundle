@@ -38,9 +38,6 @@ export interface WidgetEditorActionsContextProps {
   createWidget: () => void
 }
 
-/** @deprecated Use useWidgetEditorData() + useWidgetEditorActions() instead for better performance */
-export type WidgetEditorContextProps = WidgetEditorDataContextProps & WidgetEditorActionsContextProps
-
 export const ActiveTabContext = createContext<ActiveTabContextProps | undefined>(undefined)
 export const WidgetEditorDataContext = createContext<WidgetEditorDataContextProps | undefined>(undefined)
 export const WidgetEditorActionsContext = createContext<WidgetEditorActionsContextProps | undefined>(undefined)

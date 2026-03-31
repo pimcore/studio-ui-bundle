@@ -12,7 +12,6 @@ import { useContext } from 'react'
 import {
   ActiveTabContext, type ActiveTabContextProps,
   WidgetEditorActionsContext, type WidgetEditorActionsContextProps,
-  type WidgetEditorContextProps,
   WidgetEditorDataContext, type WidgetEditorDataContextProps
 } from '../widget-editor-provider'
 
@@ -41,7 +40,7 @@ export const useWidgetEditorActions = (): WidgetEditorActionsContextProps => {
 
 /** @deprecated Use useWidgetEditorData() + useWidgetEditorActions() for better performance.
  *  This hook subscribes to BOTH data and actions, causing re-renders on any widgets change. */
-export const useWidgetEditorContext = (): WidgetEditorContextProps => {
+export const useWidgetEditorContext = (): WidgetEditorDataContextProps & WidgetEditorActionsContextProps => {
   const data = useWidgetEditorData()
   const actions = useWidgetEditorActions()
 

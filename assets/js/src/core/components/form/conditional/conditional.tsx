@@ -38,7 +38,7 @@ const ConditionalWithWatchFields = ({ condition, children, watchFields }: Condit
   return isTrue ? <>{children}</> : <></>
 }
 
-const ConditionalWithAllValues = ({ condition, children }: ConditionalProps): React.JSX.Element => {
+const ConditionalWithAllValues = ({ condition, children }: Omit<ConditionalProps, 'watchFields'>): React.JSX.Element => {
   const initialValues = Form.useFormInstance().getFieldsValue(true)
   const values = Form.useWatch((values) => {
     return values
