@@ -12,13 +12,25 @@ import React from 'react'
 import { DataObjectContextMenuOptionsPanel } from './data-object-context-menu-options-panel'
 import { AssetContextMenuOptionsPanel } from './asset-context-menu-options-panel'
 import { DocumentContextMenuOptionsPanel } from './document-context-menu-options-panel'
+import { useWidgetTypeForm } from '../../hooks/use-widget-type-form'
 
 export const AllowedContextMenuPanel = (): React.JSX.Element => {
+  const { dataObjectContextMenuItems, assetContextMenuItems, documentContextMenuItems, isLoading } = useWidgetTypeForm()
+
   return (
     <>
-      <DataObjectContextMenuOptionsPanel />
-      <AssetContextMenuOptionsPanel />
-      <DocumentContextMenuOptionsPanel />
+      <DataObjectContextMenuOptionsPanel
+        isLoading={ isLoading }
+        items={ dataObjectContextMenuItems }
+      />
+      <AssetContextMenuOptionsPanel
+        isLoading={ isLoading }
+        items={ assetContextMenuItems }
+      />
+      <DocumentContextMenuOptionsPanel
+        isLoading={ isLoading }
+        items={ documentContextMenuItems }
+      />
     </>
   )
 }

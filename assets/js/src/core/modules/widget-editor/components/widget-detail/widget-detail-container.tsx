@@ -9,29 +9,39 @@
  */
 
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import React from 'react'
-import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
+import React, { useCallback, useMemo } from 'react'
+import { useActiveTabContext, useWidgetEditorActions, useWidgetEditorData } from '../../context/hooks/use-widget-editor-context'
 import { WidgetDetailTab } from './tabs/widget-detail-tab/widget-detail-tab'
 
 export const WidgetDetailContainer = (): React.JSX.Element => {
-  const { widgets, activeTabId, setActiveTabId, closeWidget } = useWidgetEditorContext()
+  const { widgets } = useWidgetEditorData()
+  const { closeWidget } = useWidgetEditorActions()
+  const { activeTabId, setActiveTabId } = useActiveTabContext()
+
+  const items = useMemo(() => {
+    return widgets.map((widget) => ({
+      key: widget.id,
+      label: widget.name,
+      closable: true,
+      children: <WidgetDetailTab widget={ widget } />
+    }))
+  }, [widgets])
+
+  const handleChange = useCallback((key: string) => {
+    setActiveTabId(key)
+  }, [setActiveTabId])
+
+  const handleClose = useCallback((key: string) => {
+    closeWidget(key)
+  }, [closeWidget])
 
   return (
     <Tabs
       activeKey={ activeTabId }
       fullHeight
-      items={ widgets.map((widget) => ({
-        key: widget.id,
-        label: widget.name,
-        closable: true,
-        children: <WidgetDetailTab id={ widget.id } />
-      })) }
-      onChange={ (key) => {
-        setActiveTabId(key)
-      } }
-      onClose={ (key) => {
-        closeWidget(key as string)
-      } }
+      items={ items }
+      onChange={ handleChange }
+      onClose={ handleClose }
     />
   )
 }

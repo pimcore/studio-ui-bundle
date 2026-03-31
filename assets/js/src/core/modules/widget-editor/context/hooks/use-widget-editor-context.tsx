@@ -9,13 +9,49 @@
  */
 
 import { useContext } from 'react'
-import { WidgetEditorContext, type WidgetEditorContextProps } from '../widget-editor-provider'
+import {
+  ActiveTabContext, type ActiveTabContextProps,
+  WidgetEditorActionsContext, type WidgetEditorActionsContextProps,
+  WidgetEditorDataContext, type WidgetEditorDataContextProps
+} from '../widget-editor-provider'
 
-export const useWidgetEditorContext = (): WidgetEditorContextProps => {
-  const context = useContext(WidgetEditorContext)
+/** Returns only the widgets data. Re-renders when widgets array changes. */
+export const useWidgetEditorData = (): WidgetEditorDataContextProps => {
+  const context = useContext(WidgetEditorDataContext)
 
   if (context === undefined) {
-    throw new Error('useWidgetEditorContext must be used within a WidgetEditorProvider')
+    throw new Error('useWidgetEditorData must be used within a WidgetEditorProvider')
+  }
+
+  return context
+}
+
+/** Returns only action functions (setWidgets, openWidget, closeWidget, createWidget).
+ *  These are stable references — this hook will NOT cause re-renders on widgets/tab changes. */
+export const useWidgetEditorActions = (): WidgetEditorActionsContextProps => {
+  const context = useContext(WidgetEditorActionsContext)
+
+  if (context === undefined) {
+    throw new Error('useWidgetEditorActions must be used within a WidgetEditorProvider')
+  }
+
+  return context
+}
+
+/** @deprecated Use useWidgetEditorData() + useWidgetEditorActions() for better performance.
+ *  This hook subscribes to BOTH data and actions, causing re-renders on any widgets change. */
+export const useWidgetEditorContext = (): WidgetEditorDataContextProps & WidgetEditorActionsContextProps => {
+  const data = useWidgetEditorData()
+  const actions = useWidgetEditorActions()
+
+  return { ...data, ...actions }
+}
+
+export const useActiveTabContext = (): ActiveTabContextProps => {
+  const context = useContext(ActiveTabContext)
+
+  if (context === undefined) {
+    throw new Error('useActiveTabContext must be used within a WidgetEditorProvider')
   }
 
   return context
