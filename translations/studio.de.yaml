@@ -546,7 +546,7 @@ website-settings.columns.language: Sprache
 website-settings.columns.value: Wert
 website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
-website-settings.website-settings-already-exist.title: Website-Einstellung existiert bereits
+website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
 website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
@@ -1288,13 +1288,13 @@ key-bindings.sharedTranslations: Gemeinsame Übersetzungen
 key-bindings.recycleBin: Papierkorb
 key-bindings.notesEvents: Notizen & Ereignisse
 key-bindings.tagManager: Tag-Manager
-key-bindings.tagConfiguration: Tag-Konfiguration
+key-bindings.tagConfiguration: Tag Konfiguration
 key-bindings.user: Benutzer
 key-bindings.users: Benutzer
 key-bindings.role: Rolle
 key-bindings.roles: Rollen
 key-bindings.clearAllCaches: Alle Caches löschen
-key-bindings.clearDataCache: Daten-Cache löschen
+key-bindings.clearDataCache: Daten Cache löschen
 key-bindings.customReports: Benutzerdefinierte Berichte
 key-bindings.reports: Berichte
 key-bindings.applicationLogger: Application Logger
@@ -1410,7 +1410,7 @@ roles.add-role.label: Geben Sie den Namen der neuen Rolle ein
 roles.search.id: ID
 navigation.quick-access: Schnellzugriff
 navigation.data-management: Datenverwaltung
-navigation.data-model-definitions: Datenmodell-Definitionen
+navigation.data-model-definitions: Datenmodell Definitionen
 navigation.class-definitions: Klassen
 navigation.field-collections: Field Collections
 navigation.object-bricks: Object Bricks
@@ -1419,23 +1419,23 @@ navigation.bulk-import: Massenimport
 navigation.quantity-values: Mengenwerte
 navigation.select-options: Select Options
 navigation.experience-ecommerce: Experience & E-Commerce
-navigation.asset-management: Asset-Verwaltung
-navigation.image-thumbnails: Bild-Vorschaubilder
-navigation.video-thumbnails: Video-Vorschaubilder
+navigation.asset-management: Asset Verwaltung
+navigation.image-thumbnails: Bilder Thumbnails
+navigation.video-thumbnails: Video Thumbnails
 navigation.predefined-asset-metadata: Vordefinierte Asset-Metadaten
 navigation.automation-integration: Automatisierung & Integration
 navigation.translations: Übersetzungen
 navigation.appearance-branding: Erscheinungsbild & Branding
-navigation.reporting: Berichtswesen
+navigation.reporting: Berichte
 navigation.system: System
-navigation.website-settings: Website-Einstellungen
+navigation.website-settings: Website Einstellungen
 navigation.document-types: Dokumenttypen
 navigation.clear-cache: Ganzseitigen Cache löschen
 navigation.reports: Alle Berichte
-navigation.custom-reports: Konfiguration benutzerdefinierter Berichte
+navigation.custom-reports: Benutzerdefinierte Berichte
 navigation.perspectives: Perspektiven
 navigation.customise: Anpassen
-navigation.tag-configuration: Tag-Konfiguration
+navigation.tag-configuration: Tag Konfiguration
 navigation.predefined-properties: Vordefinierte Eigenschaften
 navigation.user-and-roles: Benutzer & Rollen
 navigation.users: Benutzer
@@ -1504,11 +1504,11 @@ perspective.switching.title: Perspektive wechseln
 perspective.switching.description: Es wird zur folgenden Perspektive gewechselt
 widget.translations: Übersetzungen
 widget.notes-and-events: Notizen & Ereignisse
-widget.tag-configuration: Tag-Konfiguration
+widget.tag-configuration: Tag Konfiguration
 widget.predefined-properties: Vordefinierte Eigenschaften
 widget.search-replace-assignments: Zuweisungen suchen & ersetzen
 widget.document-types: Dokumenttypen
-widget.website-settings: Website-Einstellungen
+widget.website-settings: Website Einstellungen
 widget.role-management: Rollen
 widget.user-management: Benutzer
 widget.class-definitions: Klassen
@@ -1517,8 +1517,8 @@ widget.object-bricks: Object Bricks
 widget.quantity-values: Mengenwerte
 widget.select-options: Select Options
 widget.appearance-branding: Erscheinungsbild & Branding
-widget.image-thumbnails: Bild-Vorschaubilder
-widget.video-thumbnails: Video-Vorschaubilder
+widget.image-thumbnails: Bilder Thumbnails
+widget.video-thumbnails: Video Thumbnails
 widget.predefined-asset-metadata: Vordefinierte Asset-Metadaten
 predefined-asset-metadata.new: Neu
 predefined-asset-metadata.columns.icon: " "
@@ -1534,7 +1534,7 @@ predefined-asset-metadata.columns.actions: Aktionen
 predefined-asset-metadata.duplicate-entry.title: Vordefinierte Metadaten existieren bereits
 predefined-asset-metadata.duplicate-entry.error: Ein Eintrag mit dieser Kombination aus Name und Sprache existiert bereits. Bitte ändern Sie einen der folgenden Werte.
 appearance-branding.title: "Erscheinungsbild & Branding"
-image-thumbnails.title: "Bild-Vorschaubilder"
+image-thumbnails.title: "Bilder Thumbnails"
 image-thumbnails.description: "Verwalten und konfigurieren Sie die Vorschaubild-Einstellungen für Ihre Assets."
 image-thumbnails.search.placeholder: "Vorschaubilder suchen..."
 image-thumbnails.tree.empty: "Keine Vorschaubilder gefunden"
@@ -1682,7 +1682,7 @@ image-thumbnails.transformations.remove: "Entfernen"
 image-thumbnails.transformations.unknown-type: "Unbekannter Transformationstyp: {{type}}"
 image-thumbnails.transformations.no-configuration-required: "Keine Konfiguration erforderlich"
 
-video-thumbnails.title: "Video-Vorschaubilder"
+video-thumbnails.title: "Video Thumbnails"
 video-thumbnails.description: "Verwalten und konfigurieren Sie die Video-Vorschaubild-Einstellungen für Ihre Assets."
 video-thumbnails.search.placeholder: "Vorschaubilder suchen..."
 video-thumbnails.tree.empty: "Keine Vorschaubilder gefunden"
@@ -1963,11 +1963,11 @@ reports.editor.content.validation.message: Der Name des benutzerdefinierten Beri
 reports.editor.general-settings.title: Allgemeine Einstellungen
 reports.editor.general-settings.name-label: Name
 reports.editor.general-settings.display-name-label: Anzeigename
-reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.icon-class-label: Icon Klasse
 reports.editor.general-settings.group-label: Bestehende Gruppe benennen oder neue Gruppe erstellen
 reports.editor.general-settings.group-tooltip: Sie müssen exakt denselben Namen wie das bestehende Menü-Label verwenden. Wenn der Name anders oder neu ist, wird eine neue Gruppe erstellt.
-reports.editor.general-settings.report-class-label: Berichtsklasse
-reports.editor.general-settings.group-icon-class-label: Gruppen-Icon-Klasse
+reports.editor.general-settings.report-class-label: Bericht Klasse
+reports.editor.general-settings.group-icon-class-label: Gruppen-Icon Klasse
 reports.editor.general-settings.shortcut-menu-label: Verknüpfung im Menü erstellen
 reports.editor.source-definition.title: Quelldefinition
 reports.editor.source-definition.no-content: Noch keine verfügbaren Felder. Beginnen Sie mit dem Hinzufügen eines Feldes.
@@ -2021,8 +2021,8 @@ reports.editor.permissions.title: Berechtigungen
 loading: Laden...
 please-wait: Bitte warten...
 navigation.email: E-Mail
-navigation.email-blocklist: E-Mail-Sperrliste
-widget.email-blocklist: E-Mail-Sperrliste
+navigation.email-blocklist: E-Mail Sperrliste
+widget.email-blocklist: E-Mail Sperrliste
 email-blocklist.new: Neu
 email-blocklist.add.validation: Bitte geben Sie eine gültige E-Mail-Adresse ein
 email-blocklist.add.label: E-Mail-Adresse hinzufügen
@@ -2184,11 +2184,11 @@ test-email.validation.from.email.type: Bitte geben Sie eine gültige Absender-E-
 test-email.validation.to.required: Bitte geben Sie eine Empfänger-E-Mail-Adresse an
 test-email.validation.to.email.type: Bitte geben Sie eine gültige Empfänger-E-Mail-Adresse an
 test-email.validation.subject.required: Bitte geben Sie einen Betreff an
-navigation.widget-editor: Widget-Editor
-widget.widget-editor.perspective-editor: Perspektiven-Editor
-navigation.widget-editor.perspective-editor: Perspektiven-Editor
-widget.widget-editor.widget-editor: Widget-Editor
-navigation.widget-editor.widget-editor: Widget-Editor
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspektiven Editor
+navigation.widget-editor.perspective-editor: Perspektiven Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
 refresh: Aktualisieren
 perspective-editor.add-modal.title: Neue Perspektive hinzufügen
 perspective-editor.add-modal.name.label: Geben Sie den Namen der neuen Perspektive ein
@@ -2200,63 +2200,63 @@ perspective-editor.form.general.icon: Icon
 perspective-editor.form.general.widget-configuration: Widget-Bereiche
 perspective-editor.form.main-nav-permission.title: Erlaubte Hauptnavigationsaktionen
 perspective-editor.form.main-nav-permission.category.quickAccess: Schnellzugriff
-perspective-editor.form.main-nav-permission.quickAccess.hidden: Schnellzugriff-Menü ausblenden
+perspective-editor.form.main-nav-permission.quickAccess.hidden: Schnellzugriff Menü ausblenden
 perspective-editor.form.main-nav-permission.quickAccess.open_asset: Asset öffnen
 perspective-editor.form.main-nav-permission.quickAccess.open_document: Dokument öffnen
 perspective-editor.form.main-nav-permission.quickAccess.open_object: Objekt öffnen
 perspective-editor.form.main-nav-permission.quickAccess.recycle_bin: Papierkorb
 perspective-editor.form.main-nav-permission.category.dataManagement: Datenverwaltung
-perspective-editor.form.main-nav-permission.dataManagement.hidden: Datenverwaltungs-Menü ausblenden
+perspective-editor.form.main-nav-permission.dataManagement.hidden: Datenverwaltung Menü ausblenden
 perspective-editor.form.main-nav-permission.dataManagement.notesEvents: Notizen & Ereignisse
-perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: GDPR Data Extractor
+perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: DSGVO-Datenexport
 perspective-editor.form.main-nav-permission.dataManagement.searchReplaceAssignments: Zuweisungen suchen & ersetzen
 perspective-editor.form.main-nav-permission.dataManagement.predefinedProperties: Vordefinierte Eigenschaften
-perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tag-Konfiguration
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Datenmodell-Definition > Massenexport
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Datenmodell-Definition > Massenimport
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Datenmodell-Definition > Klassen
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Datenmodell-Definition > Classification Store
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Datenmodell-Definition > Field Collections
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Datenmodell-Definition-Menü ausblenden
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Datenmodell-Definition > Object Bricks
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Datenmodell-Definition > Mengenwert
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Datenmodell-Definition > Select Options
+perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tag Konfiguration
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Datenmodell Definition > Massenexport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Datenmodell Definition > Massenimport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Datenmodell Definition > Klassen
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Datenmodell Definition > Classification Store
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Datenmodell Definition > Field Collections
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Datenmodell Definition Menü ausblenden
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Datenmodell Definition > Object Bricks
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Datenmodell Definition > Mengenwert
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Datenmodell Definition > Select Options
 perspective-editor.form.main-nav-permission.category.experienceEcommerce: Experience & E-Commerce
-perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Experience & E-Commerce-Menü ausblenden
+perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Experience & E-Commerce Menü ausblenden
 perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttypen
-perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website-Einstellungen
+perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website Einstellungen
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Weiterleitungen
-perspective-editor.form.main-nav-permission.category.assetManagement: Asset-Verwaltung
-perspective-editor.form.main-nav-permission.assetManagement.hidden: Asset-Verwaltungs-Menü ausblenden
-perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bild-Vorschaubilder
-perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Video-Vorschaubilder
+perspective-editor.form.main-nav-permission.category.assetManagement: Asset Verwaltung
+perspective-editor.form.main-nav-permission.assetManagement.hidden: Asset Verwaltung Menü ausblenden
+perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bilder Thumbnails
+perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Video Thumbnails
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Vordefinierte Asset-Metadaten
 perspective-editor.form.main-nav-permission.category.translations: Übersetzungen
-perspective-editor.form.main-nav-permission.translations.hidden: Übersetzungs-Menü ausblenden
+perspective-editor.form.main-nav-permission.translations.hidden: Übersetzung Menü ausblenden
 perspective-editor.form.main-nav-permission.translations.translations: Übersetzungen
 perspective-editor.form.main-nav-permission.category.system: System
-perspective-editor.form.main-nav-permission.system.hidden: System-Menü ausblenden
+perspective-editor.form.main-nav-permission.system.hidden: System Menü ausblenden
 perspective-editor.form.main-nav-permission.system.applicationLogger: Application Logger
-perspective-editor.form.main-nav-permission.system.users_hidden: Benutzer/Rollen-Menü ausblenden
+perspective-editor.form.main-nav-permission.system.users_hidden: Benutzer/Rollen Menü ausblenden
 perspective-editor.form.main-nav-permission.system.users_roles: Rollen
 perspective-editor.form.main-nav-permission.system.users_users: Benutzer
 perspective-editor.form.main-nav-permission.settings.appearanceBranding: Erscheinungsbild & Branding
-perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektiven-Editor
-perspective-editor.form.main-nav-permission.system.widgetEditor: Widget-Editor
+perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektiven Editor
+perspective-editor.form.main-nav-permission.system.widgetEditor: Widget Editor
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Wartungsmodus
 perspective-editor.form.main-nav-permission.system.cache_clearAll: Cache > Alle löschen
-perspective-editor.form.main-nav-permission.system.cache_clearData: Cache > Daten-Cache
+perspective-editor.form.main-nav-permission.system.cache_clearData: Cache > Daten Cache
 perspective-editor.form.main-nav-permission.system.cache_clearOutput: Cache > Ganzseitigen Cache löschen
-perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > Symfony-Cache bereinigen
+perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > Symfony Cache bereinigen
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Temporäre Dateien löschen
-perspective-editor.form.main-nav-permission.system.cache_hidden: Cache-Menü ausblenden
+perspective-editor.form.main-nav-permission.system.cache_hidden: Cache Menü ausblenden
 perspective-editor.form.main-nav-permission.system.systemSettings: Systemeinstellungen
 perspective-editor.form.main-nav-permission.system.about: Über
-perspective-editor.form.main-nav-permission.category.reporting: Berichtswesen
-perspective-editor.form.main-nav-permission.reporting.hidden: Berichtswesen-Menü ausblenden
+perspective-editor.form.main-nav-permission.category.reporting: Berichte
+perspective-editor.form.main-nav-permission.reporting.hidden: Berichte Menü ausblenden
 perspective-editor.form.main-nav-permission.reporting.reports: Berichte
-perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Konfiguration benutzerdefinierter Berichte
+perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Benutzerdefinierte Berichte
 perspective-editor.form.main-nav-permission.category.search: Suche
 perspective-editor.form.main-nav-permission.search.hidden: Suche-Menü ausblenden
 perspective-editor.create.success: Perspektive erfolgreich erstellt
@@ -2381,8 +2381,8 @@ user-management.permissions.objectbricks: Object Bricks
 user-management.permissions.notifications_send: Benachrichtigungen senden
 user-management.permissions.notifications: Benachrichtigungen
 user-management.permissions.predefined_properties: Vordefinierte Eigenschaften
-user-management.permissions.perspective_editor: Perspektiven-Editor
-user-management.permissions.perspective_editor_view_edit: Perspektiven-Editor Ansicht & Bearbeitung
+user-management.permissions.perspective_editor: Perspektiven Editor
+user-management.permissions.perspective_editor_view_edit: Perspektiven Editor Ansicht & Bearbeitung
 user-management.permissions.qr_codes: QR-Codes
 user-management.permissions.plugins: Plugins
 user-management.permissions.notes_events: Notizen & Ereignisse
@@ -2391,13 +2391,13 @@ user-management.permissions.classificationstore: Classification Store
 user-management.permissions.classes: Klassen
 user-management.permissions.workflow_details: Workflow-Details
 user-management.permissions.users: Benutzer
-user-management.permissions.website_settings: Website-Einstellungen
+user-management.permissions.website_settings: Website Einstellungen
 user-management.permissions.asset_metadata: Asset-Metadaten
 user-management.permissions.clear_fullpage_cache: Ganzseitigen Cache löschen
 user-management.permissions.clear_temp_files: Temporäre Dateien löschen
 user-management.permissions.system_settings: Systemeinstellungen
 user-management.permissions.tags_assignment: Tag-Zuweisungen
-user-management.permissions.tags_configuration: Tag-Konfiguration
+user-management.permissions.tags_configuration: Tag Konfiguration
 user-management.permissions.tags_search: Tag-Suche
 user-management.permissions.thumbnails: Vorschaubilder
 user-management.permissions.translations: Übersetzungen
@@ -2408,7 +2408,7 @@ user-management.permissions.documents: Dokumente
 user-management.permissions.dashboards: Dashboards
 user-management.permissions.assets: Assets
 user-management.permissions.system_appearance_settings: Erscheinungsbild & Branding
-user-management.permissions.gdpr_data_extractor: GDPR Data Extractor
+user-management.permissions.gdpr_data_extractor: DSGVO-Datenexport
 user-management.permissions.admin_translations: Admin-Übersetzungen
 user-management.permissions.application_logging: Application Logger
 user-management.permissions.reports_config: Berichts-Konfiguration
@@ -2444,9 +2444,9 @@ login-token-modal.title: Als dieser Benutzer in einem anderen Browser anmelden
 login-token-modal.description: Der folgende Link ist ein temporärer Link, mit dem Sie sich als dieser Benutzer in einem anderen Browser anmelden können
 login-token-modal.close: Schließen
 login-token-modal.copy-and-close: Kopieren & Schließen
-navigation.gdpr-extractor: GDPR Data Extractor
-widget.gdpr-extractor: GDPR Data Extractor
-gdpr-extractor.title: GDPR Data Extractor
+navigation.gdpr-extractor: DSGVO-Datenexport
+widget.gdpr-extractor: DSGVO-Datenexport
+gdpr-extractor.title: DSGVO-Datenexport
 gdpr-extractor.search-form.field.id: ID
 gdpr-extractor.search-form.field.firstname: Vorname
 gdpr-extractor.search-form.field.lastname: Nachname
