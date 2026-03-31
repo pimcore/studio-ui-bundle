@@ -2,10 +2,10 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
-dont-ask-again: "No volver a preguntar"
-widget.missing-context.title: "Contexto faltante"
-widget.missing-context.description: "No se encontró ningún elemento relacionado"
-widget.missing-tab-context.description: "Esta función no es compatible con el elemento relacionado"
+dont-ask-again: No volver a preguntar
+widget.missing-context.title: Contexto faltante
+widget.missing-context.description: No se encontró ningún elemento relacionado
+widget.missing-tab-context.description: Esta función no es compatible con el elemento relacionado
 block: Bloque
 error.error_something_generic_went_wrong: Algo salió mal
 error.error_element_exists: El elemento ya existe
@@ -25,7 +25,7 @@ sidebar.clear-all-filters: Borrar todos los filtros
 add-areas: Añadir áreas
 content-settings: Configuración de contenido
 site-domain.main_site: Sitio principal
-relation-invalid-key-in-columns: "Valor no válido utilizado para la columna clave. Evite caracteres especiales y palabras reservadas."
+relation-invalid-key-in-columns: Valor no válido utilizado para la columna clave. Evite caracteres especiales y palabras reservadas.
 import-modal.title: Importar
 import-modal.upload: Subir
 import-modal.browse-files: Explorar archivos
@@ -64,10 +64,10 @@ asset.upload: Subir
 asset.upload.label: Seleccionar archivo
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} archivos se están subiendo ..."
 asset.upload.files.uploaded: "{{successItems}} archivos subidos"
-asset.upload.files.completed: "¡Completado!"
+asset.upload.files.completed: ¡Completado!
 asset.upload.files.successfully-uploaded: Subida completada con éxito
 asset.upload.files.completed-actions: Acciones completadas
-asset.upload.validation: "Añada un archivo"
+asset.upload.validation: Añada un archivo
 asset.upload.file-exists.title: El archivo ya existe
 asset.upload.file-exists.message: 'El archivo "{{fileName}}" ya existe en esta carpeta. ¿Desea sobrescribirlo?'
 asset.upload.overwrite: Sobrescribir
@@ -75,14 +75,14 @@ asset.upload.keep-both: Conservar ambos
 asset.upload.skip: Omitir
 asset.upload.apply-to-all: Aplicar a todos
 asset.upload.folder-drop.creating-folders: Creando carpetas
-asset.upload.folder-drop.creating-folders-hint: "Espere mientras se crea la estructura de carpetas…"
-upload.error.file-too-large: "El archivo es más grande que el límite de subida actual del servidor."
+asset.upload.folder-drop.creating-folders-hint: Espere mientras se crea la estructura de carpetas…
+upload.error.file-too-large: El archivo es más grande que el límite de subida actual del servidor.
 upload.error.max-file-size-exceeded: "El tamaño del archivo excede el tamaño máximo permitido de {{maxSize}}"
-upload.error.generic: "No se pudo subir el archivo."
-upload.error.upload-failed: "Error en la subida"
-upload.error.failed-to-fetch-asset-details: "No se pudieron obtener los detalles del asset"
-upload.success: "Archivo subido con éxito"
-asset.select.type.nullable: "Todos los tipos"
+upload.error.generic: No se pudo subir el archivo.
+upload.error.upload-failed: Error en la subida
+upload.error.failed-to-fetch-asset-details: No se pudieron obtener los detalles del asset
+upload.success: Archivo subido con éxito
+asset.select.type.nullable: Todos los tipos
 document.document-tree.title: Árbol de documentos
 document.document-tree.search: Buscar en {{folderName}}
 document.editable.inheritance.overwrite: Sobrescribir
@@ -129,7 +129,7 @@ page: Página
 email: Correo electrónico
 link: Enlace
 hardlink: Hardlink
-blank: "Vacío"
+blank: Vacío
 data-object.data-object-tree.title: Árbol de Data Objects
 data-object.data-object-tree.search: Buscar en {{folderName}}
 data-object.select-class-to-display: Seleccione una clase para mostrar
@@ -626,8 +626,8 @@ notifications.new-notification: Nueva notificación
 notifications.from: De
 notifications.hide: Ocultar
 notifications.new-notifications.show: Ver
-notifications.new-notifications.title.single: "¡Tiene una nueva notificación!"
-notifications.new-notifications.title: "¡Tiene nuevas notificaciones!"
+notifications.new-notifications.title.single: ¡Tiene una nueva notificación!
+notifications.new-notifications.title: ¡Tiene nuevas notificaciones!
 notes-and-events.label: Notas y eventos
 notes-and-events.notes-and-events: Notas y eventos
 notes-and-events.details: Detalles
@@ -649,7 +649,7 @@ tags.remove-and-apply-tags-to-children: Eliminar y aplicar etiquetas a los hijos
 tags.columns.path: Ruta
 tags.columns.actions: Eliminar
 csv-separated-options: Opciones separadas por CSV
-csv-separated-options-info: "La lista de opciones disponibles se puede especificar como una lista separada por comas, como valores de una sola columna o mixta. Para el modo de columna única, la clave también se utilizará como valor."
+csv-separated-options-info: La lista de opciones disponibles se puede especificar como una lista separada por comas, como valores de una sola columna o mixta. Para el modo de columna única, la clave también se utilizará como valor.
 add: Añadir
 new: Nuevo
 save: Guardar
@@ -675,36 +675,36 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: El nombre y el tipo son campos obligatorios y deben completarse.
 width: Ancho
 height: Alto
-width-tooltip: "El ancho de este componente. Un valor numérico se interpretará como número de píxeles; un valor de cadena se tratará como un valor CSS con unidades."
+width-tooltip: El ancho de este componente. Un valor numérico se interpretará como número de píxeles; un valor de cadena se tratará como un valor CSS con unidades.
 width-field: Campo de ancho
 width-unit: Unidad de ancho
-height-tooltip: "El alto de este componente. Un valor numérico se interpretará como número de píxeles; un valor de cadena se tratará como un valor CSS con unidades."
+height-tooltip: El alto de este componente. Un valor numérico se interpretará como número de píxeles; un valor de cadena se tratará como un valor CSS con unidades.
 table-data-tooltip: "Ejemplo de cómo añadir datos: \n\n uno|dos|tres \n cuatro|cinco|seis \n siete|ocho|nueve"
 use-current-date: Usar fecha actual
 respect-timezone: Respetar zona horaria
 column-type: Tipo de columna
 specific-settings: Configuración específica
-restrict-selection-to: "Restringir selección a"
+restrict-selection-to: Restringir selección a
 only-configured-languages: Mostrar solo los idiomas configurados en la configuración del sistema
 multiselect-render-type: Tipo de renderizado
 maximum-items: Máximo de elementos
 enforce-validation: Forzar validación
 options-source: Origen de opciones
-options-source-configure: "Configurar"
-options-source-select-options: "Select Options"
-options-source-options-provider: "Options Provider"
-options-provider-class: "Clase o nombre de servicio del Options Provider"
-options-provider-data: "Datos del Options Provider"
+options-source-configure: Configurar
+options-source-select-options: Select Options
+options-source-options-provider: Options Provider
+options-provider-class: Clase o nombre de servicio del Options Provider
+options-provider-data: Datos del Options Provider
 switch-to-selection-mode: Cambiar al modo de selección
 switch-to-drag-mode: Cambiar al modo de arrastre
 select-options: Select Options
 value: Valor
 display-name: Nombre para mostrar
 default-values-settings: Configuración de valores predeterminados
-default-values-tooltip: "El valor predeterminado se usa si la herencia está desactivada o si el valor del padre está vacío."
+default-values-tooltip: El valor predeterminado se usa si la herencia está desactivada o si el valor del padre está vacío.
 default-value: Valor predeterminado
 default-value-generator: Servicio / clase generador de valor predeterminado
-enforce-validation-tooltip: "Cuando está habilitado, impide que se guarden opciones no válidas. De forma predeterminada, la API permite guardar opciones no válidas"
+enforce-validation-tooltip: Cuando está habilitado, impide que se guarden opciones no válidas. De forma predeterminada, la API permite guardar opciones no válidas
 show-char-count: Mostrar conteo de caracteres
 column-length: Longitud de columna
 max-length: Longitud máxima
@@ -717,7 +717,7 @@ increment-step: Paso de incremento
 decimal-precision: Precisión decimal
 decimal-size: Tamaño decimal
 decimal-settings: Configuración decimal
-decimal-settings-tooltip: "Si se especifican el tamaño decimal o la precisión, se utiliza el tipo MySQL DECIMAL(decimalSize, decimalPrecision). Los valores predeterminados si faltan son 64 como tamaño y 0 como precisión. Tenga en cuenta que en términos de MySQL, el decimalSize se llama precision y el decimalPrecision se llama scale."
+decimal-settings-tooltip: Si se especifican el tamaño decimal o la precisión, se utiliza el tipo MySQL DECIMAL(decimalSize, decimalPrecision). Los valores predeterminados si faltan son 64 como tamaño y 0 como precisión. Tenga en cuenta que en términos de MySQL, el decimalSize se llama precision y el decimalPrecision se llama scale.
 integer: Entero
 unsigned: Solo sin signo
 auto-convert: Conversión automática
@@ -788,15 +788,15 @@ enable-text-selection: Habilitar selección de texto
 allow-to-create-new-object: Permitir crear un nuevo objeto en el campo de relación
 enable-async-load-in-admin: Habilitar carga asíncrona en admin
 enable-async-load-in-admin-tooltip: "ADVERTENCIA: La carga asíncrona NO es posible dentro de Localized Fields y Blocks."
-path-formatter-service: "Servicio / clase de formateador"
+path-formatter-service: Servicio / clase de formateador
 allow-to-clear-relation: Permitir limpiar las relaciones de este campo
 allow-multiple-assignments: Permitir asignaciones múltiples
 number: Número
 bool: Bool
 column-bool: Column Bool
 multiselect: Multiselección
-layout: "Diseño"
-layout-options: "Opciones de diseño"
+layout: Diseño
+layout-options: Opciones de diseño
 allow-documents: Permitir documentos
 allow-assets: Permitir assets
 asset-inline-download-allowed: Permitir descarga en línea de asset
@@ -951,11 +951,11 @@ regex: RegEx
 regex-flags: Flags de RegEx
 regex-flags-tooltip: "RegExp sin delimitadores, debe funcionar en JS (Delimitador: #)"
 test-string: Cadena de prueba
-regex-validation-error-message: "La cadena no coincide con el formato requerido."
+regex-validation-error-message: La cadena no coincide con el formato requerido.
 calculator-class: Clase de calculadora
 calculator-expression: Expresión de calculadora
 calculator-type: Tipo de calculadora
-calculator-type-tooltip: "Consulte la documentación oficial para obtener más información sobre cómo definir expresiones o clases."
+calculator-type-tooltip: Consulte la documentación oficial para obtener más información sobre cómo definir expresiones o clases.
 expression: Expresión
 lazy-loading: Carga diferida
 disallow-add-remove: No permitir añadir/eliminar
@@ -987,8 +987,8 @@ data: Datos
 domain-label-width: Ancho de etiqueta de dominio
 controller-action: Acción del controlador
 controller-action-tooltip: 'Introduzca el controlador y la acción en el siguiente formato: App\Controller\ProductController::slugAction'
-available-sites: "Sitios disponibles"
-empty-equals-allow-all-tooltip: "Vacío = permitir todos"
+available-sites: Sitios disponibles
+empty-equals-allow-all-tooltip: Vacío = permitir todos
 reset: Restablecer
 name: Nombre
 tooltip: Tooltip
@@ -1027,9 +1027,9 @@ jobs.job.button-download: descargar
 jobs.job.button-ignore-and-reload: ignorar y recargar
 jobs.job.step_hint: "Paso {{step}}/{{total}}"
 jobs.job.step_hint_single: "Paso {{step}}"
-jobs.job.download-error: "Error en la descarga"
-jobs.job.button-show-errors: "Mostrar errores"
-jobs.job.error-modal.title: "Errores del trabajo"
+jobs.job.download-error: Error en la descarga
+jobs.job.button-show-errors: Mostrar errores
+jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
 jobs.job.abort-confirm: ¿Realmente desea cancelar este trabajo?
 jobs.zip-job.title: "Descarga ZIP de {{title}}"
@@ -1037,9 +1037,9 @@ jobs.batch-edit-job.title: "Edición por lotes de {{title}}"
 jobs.csv-job.title: "Descarga CSV de {{title}}"
 jobs.xlsx-job.title: "Descarga XLSX de {{title}}"
 batch-edit.job-title: Edición por lotes
-jobs.zip-upload-job.title: "Subir ZIP"
-jobs.zip-upload-job.step1.title: "Extrayendo ZIP"
-jobs.zip-upload-job.step2.title: "Creando assets"
+jobs.zip-upload-job.title: Subir ZIP
+jobs.zip-upload-job.step1.title: Extrayendo ZIP
+jobs.zip-upload-job.step2.title: Creando assets
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas
 batch-edit.modal-footer.apply-changes: Aplicar cambios
@@ -1115,10 +1115,10 @@ element.tree.sorting.keyed-descending: Z a A (Clave)
 element.tree.sorting.indexed: Índice (Manual)
 element.tree.refresh: Actualizar
 element.new-folder: Nueva carpeta
-element.new-folder.validation: "Introduzca un nombre válido"
+element.new-folder.validation: Introduzca un nombre válido
 element.rename: Renombrar
-element.rename.label: "Introduzca el nuevo nombre"
-element.rename.validation: "Introduzca un nombre válido"
+element.rename.label: Introduzca el nuevo nombre
+element.rename.validation: Introduzca un nombre válido
 element.delete: Eliminar
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?
@@ -1171,8 +1171,8 @@ latitude: Latitud
 longitude: Longitud
 search-address: Buscar dirección
 search: Buscar
-geocode.address-not-found: "No se encontró la dirección introducida"
-geocode.possible-causes: "Posibles causas"
+geocode.address-not-found: No se encontró la dirección introducida
+geocode.possible-causes: Posibles causas
 geocode.postal-code-format-error: 'Formato de código postal, ej. use "5020 Salzburg, Söllheimer Straße 16" en lugar de "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: ¿Realmente desea eliminar {{type}} '{{value}}'?
 relations.id: ID
@@ -1260,7 +1260,7 @@ user-management.tree.all: Todos los usuarios
 user-management.settings.title: Configuración
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Atajos de teclado
-key-bindings.info: "¡No olvide recargar Pimcore después de realizar modificaciones!"
+key-bindings.info: ¡No olvide recargar Pimcore después de realizar modificaciones!
 key-bindings.reset: Restablecer valores predeterminados
 key-bindings.general: General
 key-bindings.save: Guardar
@@ -1533,239 +1533,239 @@ predefined-asset-metadata.columns.target-type: Tipo de destino
 predefined-asset-metadata.columns.actions: Acciones
 predefined-asset-metadata.duplicate-entry.title: El metadato predefinido ya existe
 predefined-asset-metadata.duplicate-entry.error: Ya existe una entrada con esta combinación de nombre e idioma. Cambie uno de los siguientes valores.
-appearance-branding.title: "Apariencia y marca"
-image-thumbnails.title: "Miniaturas de imagen"
-image-thumbnails.description: "Gestione y configure los ajustes de miniaturas de imagen para sus assets."
-image-thumbnails.search.placeholder: "Buscar miniaturas..."
-image-thumbnails.tree.empty: "No se encontraron miniaturas"
-image-thumbnails.configuration.title: "Configuración"
-image-thumbnails.configuration.description: "Configurar ajustes de miniatura"
-image-thumbnails.preview.title: "Vista previa"
-image-thumbnails.preview.description: "Vista previa de la configuración de miniatura"
-image-thumbnails.editor.empty.title: "Seleccionar una miniatura"
-image-thumbnails.editor.empty.description: "Seleccione una miniatura del árbol para ver o editar su configuración"
-image-thumbnails.editor.select-thumbnail: "Seleccione una configuración de miniatura para editar"
-image-thumbnails.editor.general-settings: "Configuración general"
-image-thumbnails.editor.name: "Nombre"
-image-thumbnails.editor.name-required: "El nombre es obligatorio"
-image-thumbnails.editor.description: "Descripción"
-image-thumbnails.editor.description-placeholder: "Introduzca la descripción de la miniatura..."
-image-thumbnails.editor.group: "Grupo"
-image-thumbnails.editor.group-required: "El grupo es obligatorio"
-image-thumbnails.editor.group-placeholder: "Seleccione un grupo..."
-image-thumbnails.editor.no-group: "Sin grupo"
-image-thumbnails.editor.format: "Formato"
-image-thumbnails.editor.format-required: "El formato es obligatorio"
-image-thumbnails.editor.format-placeholder: "Seleccione un formato..."
-image-thumbnails.editor.format-auto: "Automático (optimizado para web - recomendado)"
-image-thumbnails.delete.confirm: "¿Realmente desea eliminar la miniatura?"
-image-thumbnails.add.content: "Introduzca el nombre de la nueva miniatura (a-zA-Z0-9_-)"
-image-thumbnails.add.validation.message: "El nombre de la miniatura no es válido"
-image-thumbnails.editor.advanced: "Avanzado"
-image-thumbnails.editor.quality: "Calidad"
-image-thumbnails.editor.quality.tooltip: "Configuración de calidad JPEG (1-100)"
-image-thumbnails.editor.high-resolution: "Alta resolución"
-image-thumbnails.editor.high-resolution.tooltip: "Factor de alta resolución para pantallas retina"
-image-thumbnails.editor.preserve-color: "Preservar color"
+appearance-branding.title: Apariencia y marca
+image-thumbnails.title: Miniaturas de imagen
+image-thumbnails.description: Gestione y configure los ajustes de miniaturas de imagen para sus assets.
+image-thumbnails.search.placeholder: Buscar miniaturas...
+image-thumbnails.tree.empty: No se encontraron miniaturas
+image-thumbnails.configuration.title: Configuración
+image-thumbnails.configuration.description: Configurar ajustes de miniatura
+image-thumbnails.preview.title: Vista previa
+image-thumbnails.preview.description: Vista previa de la configuración de miniatura
+image-thumbnails.editor.empty.title: Seleccionar una miniatura
+image-thumbnails.editor.empty.description: Seleccione una miniatura del árbol para ver o editar su configuración
+image-thumbnails.editor.select-thumbnail: Seleccione una configuración de miniatura para editar
+image-thumbnails.editor.general-settings: Configuración general
+image-thumbnails.editor.name: Nombre
+image-thumbnails.editor.name-required: El nombre es obligatorio
+image-thumbnails.editor.description: Descripción
+image-thumbnails.editor.description-placeholder: Introduzca la descripción de la miniatura...
+image-thumbnails.editor.group: Grupo
+image-thumbnails.editor.group-required: El grupo es obligatorio
+image-thumbnails.editor.group-placeholder: Seleccione un grupo...
+image-thumbnails.editor.no-group: Sin grupo
+image-thumbnails.editor.format: Formato
+image-thumbnails.editor.format-required: El formato es obligatorio
+image-thumbnails.editor.format-placeholder: Seleccione un formato...
+image-thumbnails.editor.format-auto: Automático (optimizado para web - recomendado)
+image-thumbnails.delete.confirm: ¿Realmente desea eliminar la miniatura?
+image-thumbnails.add.content: Introduzca el nombre de la nueva miniatura (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: El nombre de la miniatura no es válido
+image-thumbnails.editor.advanced: Avanzado
+image-thumbnails.editor.quality: Calidad
+image-thumbnails.editor.quality.tooltip: Configuración de calidad JPEG (1-100)
+image-thumbnails.editor.high-resolution: Alta resolución
+image-thumbnails.editor.high-resolution.tooltip: Factor de alta resolución para pantallas retina
+image-thumbnails.editor.preserve-color: Preservar color
 image-thumbnails.editor.preserve-color.tooltip: "Preservar color (perfil, espacio) (Imagick, ORIGINAL)\n('Preservar metadatos' y 'preservar color' solo funcionan para transiciones sin composiciones (marco, color de fondo, ...) y modificaciones de color (escala de grises, sepia, ...))"
-image-thumbnails.editor.force-process-icc: "Forzar procesamiento de perfiles ICC"
-image-thumbnails.editor.force-process-icc.tooltip: "Forzar procesamiento de perfiles ICC (Imagick, ORIGINAL)"
-image-thumbnails.editor.preserve-metadata: "Preservar metadatos"
+image-thumbnails.editor.force-process-icc: Forzar procesamiento de perfiles ICC
+image-thumbnails.editor.force-process-icc.tooltip: Forzar procesamiento de perfiles ICC (Imagick, ORIGINAL)
+image-thumbnails.editor.preserve-metadata: Preservar metadatos
 image-thumbnails.editor.preserve-metadata.tooltip: "Preservar metadatos (no eliminar) (Imagick, ORIGINAL)\n('Preservar metadatos' y 'preservar color' solo funcionan para transiciones sin composiciones (marco, color de fondo, ...) y modificaciones de color (escala de grises, sepia, ...))"
-image-thumbnails.editor.rasterize-svg: "Rasterizar SVGs"
+image-thumbnails.editor.rasterize-svg: Rasterizar SVGs
 image-thumbnails.editor.rasterize-svg.tooltip: "Rasterizar SVGs (Imagick)\n(Los SVGs se rasterizan automáticamente cuando se utiliza una transformación diferente a redimensionar o escalar por ancho/alto.)"
-image-thumbnails.editor.use-cropbox: "Usar Cropbox"
+image-thumbnails.editor.use-cropbox: Usar Cropbox
 image-thumbnails.editor.use-cropbox.tooltip: "Usar Cropbox (Ghostscript)\n(Establece el tamaño de página al CropBox en lugar del MediaBox, útil para excluir márgenes y áreas sin contenido.)"
-image-thumbnails.editor.downloadable: "Descargable"
-image-thumbnails.editor.downloadable.tooltip: "Listar como opción en la sección de descarga en la vista de detalle de imagen"
-image-thumbnails.editor.preserve-animation: "Preservar animación"
+image-thumbnails.editor.downloadable: Descargable
+image-thumbnails.editor.downloadable.tooltip: Listar como opción en la sección de descarga en la vista de detalle de imagen
+image-thumbnails.editor.preserve-animation: Preservar animación
 image-thumbnails.editor.preserve-animation.tooltip: "Preservar animaciones para GIF (Imagick)\n(Las transformaciones soportadas son: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
-image-thumbnails.editor.media-queries: "Media Queries"
-image-thumbnails.editor.media-queries.new: "Nuevo"
-image-thumbnails.editor.media-queries.default: "Predeterminado"
+image-thumbnails.editor.media-queries: Media Queries
+image-thumbnails.editor.media-queries.new: Nuevo
+image-thumbnails.editor.media-queries.default: Predeterminado
 image-thumbnails.editor.media-queries.empty: "No hay media queries definidas. Haga clic en 'Nuevo' para añadir una media query CSS."
-image-thumbnails.editor.media-query.modal.title: "Nueva Media Query"
-image-thumbnails.editor.media-query.modal.label: "Introduzca una media query CSS válida"
-image-thumbnails.editor.media-queries.add.title: "Nueva Media Query"
-image-thumbnails.editor.media-queries.add.label: "Introduzca una media query CSS válida"
+image-thumbnails.editor.media-query.modal.title: Nueva Media Query
+image-thumbnails.editor.media-query.modal.label: Introduzca una media query CSS válida
+image-thumbnails.editor.media-queries.add.title: Nueva Media Query
+image-thumbnails.editor.media-queries.add.label: Introduzca una media query CSS válida
 image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
-image-thumbnails.editor.transformations: "Transformaciones"
-image-thumbnails.editor.transformations.resize: "Redimensionar"
-image-thumbnails.editor.transformations.scale-by-height: "Escalar por alto"
-image-thumbnails.editor.transformations.trim: "Recortar"
-image-thumbnails.editor.transformations.effects: "Efectos"
-image-thumbnails.editor.transformations.effects.sepia: "Sepia"
-image-thumbnails.editor.transformations.effects.grayscale: "Escala de grises"
-image-thumbnails.editor.transformations.effects.sharpen: "Enfocar"
+image-thumbnails.editor.transformations: Transformaciones
+image-thumbnails.editor.transformations.resize: Redimensionar
+image-thumbnails.editor.transformations.scale-by-height: Escalar por alto
+image-thumbnails.editor.transformations.trim: Recortar
+image-thumbnails.editor.transformations.effects: Efectos
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Escala de grises
+image-thumbnails.editor.transformations.effects.sharpen: Enfocar
 image-thumbnails.editor.transformations.empty: "No hay transformaciones definidas. Use el botón 'Transformaciones' para añadir transformaciones de imagen."
-image-thumbnails.editor.save-error: "No se pudo guardar la configuración de miniatura"
+image-thumbnails.editor.save-error: No se pudo guardar la configuración de miniatura
 
 # Transformation Groups
-image-thumbnails.transformations.groups.main: "Transformaciones"
-image-thumbnails.transformations.groups.effects: "Efectos"
+image-thumbnails.transformations.groups.main: Transformaciones
+image-thumbnails.transformations.groups.effects: Efectos
 
 # Media Query Translations
-image-thumbnails.media-queries.add-transformation: "Añadir transformación"
+image-thumbnails.media-queries.add-transformation: Añadir transformación
 
 # Cover Transformation
-image-thumbnails.transformations.cover.title: "Configurar Cover"
-image-thumbnails.transformations.cover.width-height: "Ancho, Alto"
-image-thumbnails.transformations.cover.width: "Ancho"
-image-thumbnails.transformations.cover.height: "Alto"
-image-thumbnails.transformations.cover.focal-point-info: "La imagen se recorta automáticamente según el punto focal establecido en la imagen de origen. Si no hay punto focal, se utiliza la configuración de posicionamiento predeterminada a continuación."
-image-thumbnails.transformations.cover.positioning: "Posicionamiento predeterminado"
-image-thumbnails.transformations.cover.positioning-center: "Centro"
-image-thumbnails.transformations.cover.positioning-topleft: "Superior izquierdo"
-image-thumbnails.transformations.cover.positioning-topright: "Superior derecho"
-image-thumbnails.transformations.cover.positioning-bottomleft: "Inferior izquierdo"
-image-thumbnails.transformations.cover.positioning-bottomright: "Inferior derecho"
-image-thumbnails.transformations.cover.force-resize: "Forzar redimensionamiento"
+image-thumbnails.transformations.cover.title: Configurar Cover
+image-thumbnails.transformations.cover.width-height: Ancho, Alto
+image-thumbnails.transformations.cover.width: Ancho
+image-thumbnails.transformations.cover.height: Alto
+image-thumbnails.transformations.cover.focal-point-info: La imagen se recorta automáticamente según el punto focal establecido en la imagen de origen. Si no hay punto focal, se utiliza la configuración de posicionamiento predeterminada a continuación.
+image-thumbnails.transformations.cover.positioning: Posicionamiento predeterminado
+image-thumbnails.transformations.cover.positioning-center: Centro
+image-thumbnails.transformations.cover.positioning-topleft: Superior izquierdo
+image-thumbnails.transformations.cover.positioning-topright: Superior derecho
+image-thumbnails.transformations.cover.positioning-bottomleft: Inferior izquierdo
+image-thumbnails.transformations.cover.positioning-bottomright: Inferior derecho
+image-thumbnails.transformations.cover.force-resize: Forzar redimensionamiento
 
 # Add Overlay Transformation
-image-thumbnails.transformations.add-overlay.overlay-image: "Imagen de superposición"
-image-thumbnails.transformations.add-overlay.x: "Posición X"
-image-thumbnails.transformations.add-overlay.y: "Posición Y"
-image-thumbnails.transformations.add-overlay.origin: "Origen"
-image-thumbnails.transformations.add-overlay.origin-top-left: "Superior izquierdo"
-image-thumbnails.transformations.add-overlay.origin-top-right: "Superior derecho"
-image-thumbnails.transformations.add-overlay.origin-center: "Centro"
-image-thumbnails.transformations.add-overlay.origin-bottom-left: "Inferior izquierdo"
-image-thumbnails.transformations.add-overlay.origin-bottom-right: "Inferior derecho"
-image-thumbnails.transformations.add-overlay.alpha: "Opacidad"
-image-thumbnails.transformations.add-overlay.composite: "Composición"
+image-thumbnails.transformations.add-overlay.overlay-image: Imagen de superposición
+image-thumbnails.transformations.add-overlay.x: Posición X
+image-thumbnails.transformations.add-overlay.y: Posición Y
+image-thumbnails.transformations.add-overlay.origin: Origen
+image-thumbnails.transformations.add-overlay.origin-top-left: Superior izquierdo
+image-thumbnails.transformations.add-overlay.origin-top-right: Superior derecho
+image-thumbnails.transformations.add-overlay.origin-center: Centro
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Inferior izquierdo
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Inferior derecho
+image-thumbnails.transformations.add-overlay.alpha: Opacidad
+image-thumbnails.transformations.add-overlay.composite: Composición
 
 # Gaussian Blur Transformation
-image-thumbnails.transformations.gaussian-blur.radius: "Radio"
-image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+image-thumbnails.transformations.gaussian-blur.radius: Radio
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
 
 # Scale by Width Transformation
-image-thumbnails.transformations.scale-by-width.title: "Configurar escala por ancho"
-image-thumbnails.transformations.scale-by-width.width: "Ancho"
-image-thumbnails.transformations.scale-by-width.force-resize: "Forzar redimensionamiento"
+image-thumbnails.transformations.scale-by-width.title: Configurar escala por ancho
+image-thumbnails.transformations.scale-by-width.width: Ancho
+image-thumbnails.transformations.scale-by-width.force-resize: Forzar redimensionamiento
 
 # Resize Transformation
-image-thumbnails.transformations.resize.config-title: "Configurar redimensionamiento"
-image-thumbnails.transformations.resize.width: "Ancho"
-image-thumbnails.transformations.resize.height: "Alto"
+image-thumbnails.transformations.resize.config-title: Configurar redimensionamiento
+image-thumbnails.transformations.resize.width: Ancho
+image-thumbnails.transformations.resize.height: Alto
 
 # Scale by Height Transformation
-image-thumbnails.transformations.scale-by-height.config-title: "Configurar escala por alto"
-image-thumbnails.transformations.scale-by-height.height: "Alto"
-image-thumbnails.transformations.scale-by-height.height-placeholder: "Introduzca el alto en píxeles"
-image-thumbnails.transformations.scale-by-height.force-resize: "Forzar redimensionamiento"
+image-thumbnails.transformations.scale-by-height.config-title: Configurar escala por alto
+image-thumbnails.transformations.scale-by-height.height: Alto
+image-thumbnails.transformations.scale-by-height.height-placeholder: Introduzca el alto en píxeles
+image-thumbnails.transformations.scale-by-height.force-resize: Forzar redimensionamiento
 
 # Trim Transformation
-image-thumbnails.transformations.trim.config-title: "Configurar recorte"
-image-thumbnails.transformations.trim.trim-option: "Opción de recorte"
-image-thumbnails.transformations.trim.trim-option-placeholder: "Seleccione la opción de recorte"
-image-thumbnails.transformations.trim.disabled: "Desactivado"
-image-thumbnails.transformations.trim.left: "Izquierda"
-image-thumbnails.transformations.trim.right: "Derecha"
-image-thumbnails.transformations.trim.both: "Ambos"
+image-thumbnails.transformations.trim.config-title: Configurar recorte
+image-thumbnails.transformations.trim.trim-option: Opción de recorte
+image-thumbnails.transformations.trim.trim-option-placeholder: Seleccione la opción de recorte
+image-thumbnails.transformations.trim.disabled: Desactivado
+image-thumbnails.transformations.trim.left: Izquierda
+image-thumbnails.transformations.trim.right: Derecha
+image-thumbnails.transformations.trim.both: Ambos
 
 # Effects Transformation
-image-thumbnails.transformations.effects.config-title: "Configurar efecto"
-image-thumbnails.transformations.effects.effect-type: "Tipo de efecto"
-image-thumbnails.transformations.effects.effect-type-placeholder: "Seleccione el tipo de efecto"
-image-thumbnails.transformations.effects.sepia: "Sepia"
-image-thumbnails.transformations.effects.grayscale: "Escala de grises"
-image-thumbnails.transformations.effects.sharpen: "Enfocar"
-image-thumbnails.transformations.effects.intensity: "Intensidad"
+image-thumbnails.transformations.effects.config-title: Configurar efecto
+image-thumbnails.transformations.effects.effect-type: Tipo de efecto
+image-thumbnails.transformations.effects.effect-type-placeholder: Seleccione el tipo de efecto
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Escala de grises
+image-thumbnails.transformations.effects.sharpen: Enfocar
+image-thumbnails.transformations.effects.intensity: Intensidad
 
 # Transformation tool strip
-image-thumbnails.transformations.add: "Añadir transformación"
-image-thumbnails.transformations.move-up: "Mover arriba"
-image-thumbnails.transformations.move-down: "Mover abajo"
-image-thumbnails.transformations.remove: "Eliminar"
+image-thumbnails.transformations.add: Añadir transformación
+image-thumbnails.transformations.move-up: Mover arriba
+image-thumbnails.transformations.move-down: Mover abajo
+image-thumbnails.transformations.remove: Eliminar
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Tipo de transformación desconocido: {{type}}"
-image-thumbnails.transformations.no-configuration-required: "No se requiere configuración"
+image-thumbnails.transformations.no-configuration-required: No se requiere configuración
 
-video-thumbnails.title: "Miniaturas de vídeo"
-video-thumbnails.description: "Gestione y configure los ajustes de miniaturas de vídeo para sus assets."
-video-thumbnails.search.placeholder: "Buscar miniaturas..."
-video-thumbnails.tree.empty: "No se encontraron miniaturas"
-video-thumbnails.editor.select-thumbnail: "Seleccione una configuración de miniatura de vídeo para editar"
-video-thumbnails.editor.name: "Nombre"
-video-thumbnails.editor.name-required: "El nombre es obligatorio"
-video-thumbnails.editor.description: "Descripción"
-video-thumbnails.editor.group: "Grupo"
-video-thumbnails.editor.no-group: "Sin grupo"
-video-thumbnails.editor.presetting: "Seleccionar un preset"
-video-thumbnails.editor.video-bitrate: "Bitrate de vídeo"
-video-thumbnails.editor.audio-bitrate: "Bitrate de audio"
-video-thumbnails.editor.transformations: "Transformaciones"
-video-thumbnails.editor.media-segments: "Segmentos de medios"
-video-thumbnails.editor.media-segments.new: "Nuevo"
+video-thumbnails.title: Miniaturas de vídeo
+video-thumbnails.description: Gestione y configure los ajustes de miniaturas de vídeo para sus assets.
+video-thumbnails.search.placeholder: Buscar miniaturas...
+video-thumbnails.tree.empty: No se encontraron miniaturas
+video-thumbnails.editor.select-thumbnail: Seleccione una configuración de miniatura de vídeo para editar
+video-thumbnails.editor.name: Nombre
+video-thumbnails.editor.name-required: El nombre es obligatorio
+video-thumbnails.editor.description: Descripción
+video-thumbnails.editor.group: Grupo
+video-thumbnails.editor.no-group: Sin grupo
+video-thumbnails.editor.presetting: Seleccionar un preset
+video-thumbnails.editor.video-bitrate: Bitrate de vídeo
+video-thumbnails.editor.audio-bitrate: Bitrate de audio
+video-thumbnails.editor.transformations: Transformaciones
+video-thumbnails.editor.media-segments: Segmentos de medios
+video-thumbnails.editor.media-segments.new: Nuevo
 video-thumbnails.editor.media-segments.empty: "No hay segmentos de medios definidos. Haga clic en 'Nuevo' para añadir un segmento (ej. 500K)."
-video-thumbnails.editor.media-segments.add.title: "Nuevo segmento de medios"
-video-thumbnails.editor.media-segments.add.label: "Introduzca un nombre de segmento (ej. 500K)"
-video-thumbnails.editor.media-segments.add.bitrate-hint: "Introduzca un bitrate válido (ej. 400k, 1500k, 1M)"
-video-thumbnails.editor.media-segments.add.ok: "Crear"
-video-thumbnails.editor.media-segments.default: "Predeterminado"
-video-thumbnails.editor.transformations.empty: "No se han seleccionado transformaciones"
-video-thumbnails.delete.confirm: "¿Realmente desea eliminar la miniatura?"
-video-thumbnails.add.content: "Introduzca el nombre de la nueva miniatura (a-zA-Z0-9_-)"
-video-thumbnails.add.validation.message: "El nombre de la miniatura no es válido"
+video-thumbnails.editor.media-segments.add.title: Nuevo segmento de medios
+video-thumbnails.editor.media-segments.add.label: Introduzca un nombre de segmento (ej. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Introduzca un bitrate válido (ej. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Crear
+video-thumbnails.editor.media-segments.default: Predeterminado
+video-thumbnails.editor.transformations.empty: No se han seleccionado transformaciones
+video-thumbnails.delete.confirm: ¿Realmente desea eliminar la miniatura?
+video-thumbnails.add.content: Introduzca el nombre de la nueva miniatura (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: El nombre de la miniatura no es válido
 
 # Video Transformation tool strip
-video-thumbnails.transformations.move-up: "Mover arriba"
-video-thumbnails.transformations.move-down: "Mover abajo"
-video-thumbnails.transformations.remove: "Eliminar"
+video-thumbnails.transformations.move-up: Mover arriba
+video-thumbnails.transformations.move-down: Mover abajo
+video-thumbnails.transformations.remove: Eliminar
 
 # Resize Transformation
-video-thumbnails.transformations.resize.config-title: "Configurar redimensionamiento"
-video-thumbnails.transformations.resize.width: "Ancho"
-video-thumbnails.transformations.resize.width-placeholder: "Introduzca el ancho en píxeles"
-video-thumbnails.transformations.resize.height: "Alto"
-video-thumbnails.transformations.resize.height-placeholder: "Introduzca el alto en píxeles"
-video-thumbnails.transformations.resize.even-number-hint: "El ancho y el alto deben ser números pares"
+video-thumbnails.transformations.resize.config-title: Configurar redimensionamiento
+video-thumbnails.transformations.resize.width: Ancho
+video-thumbnails.transformations.resize.width-placeholder: Introduzca el ancho en píxeles
+video-thumbnails.transformations.resize.height: Alto
+video-thumbnails.transformations.resize.height-placeholder: Introduzca el alto en píxeles
+video-thumbnails.transformations.resize.even-number-hint: El ancho y el alto deben ser números pares
 
 # Scale by Width Transformation
-video-thumbnails.transformations.scale-by-width.config-title: "Configurar escala por ancho"
-video-thumbnails.transformations.scale-by-width.width: "Ancho"
-video-thumbnails.transformations.scale-by-width.width-placeholder: "Introduzca el ancho en píxeles"
+video-thumbnails.transformations.scale-by-width.config-title: Configurar escala por ancho
+video-thumbnails.transformations.scale-by-width.width: Ancho
+video-thumbnails.transformations.scale-by-width.width-placeholder: Introduzca el ancho en píxeles
 
 # Scale by Height Transformation
-video-thumbnails.transformations.scale-by-height.config-title: "Configurar escala por alto"
-video-thumbnails.transformations.scale-by-height.height: "Alto"
-video-thumbnails.transformations.scale-by-height.height-placeholder: "Introduzca el alto en píxeles"
+video-thumbnails.transformations.scale-by-height.config-title: Configurar escala por alto
+video-thumbnails.transformations.scale-by-height.height: Alto
+video-thumbnails.transformations.scale-by-height.height-placeholder: Introduzca el alto en píxeles
 
 # Cut Transformation
-video-thumbnails.transformations.cut.config-title: "Configurar corte"
-video-thumbnails.transformations.cut.start: "Inicio"
+video-thumbnails.transformations.cut.config-title: Configurar corte
+video-thumbnails.transformations.cut.start: Inicio
 video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
-video-thumbnails.transformations.cut.duration: "Duración"
+video-thumbnails.transformations.cut.duration: Duración
 video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
 
 # Set Framerate Transformation
-video-thumbnails.transformations.set-framerate.config-title: "Configurar frecuencia de fotogramas"
-video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.config-title: Configurar frecuencia de fotogramas
+video-thumbnails.transformations.set-framerate.fps: FPS
 video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
 
 # Color Channel Mixer Transformation
-video-thumbnails.transformations.color-channel-mixer.config-title: "Configurar mezclador de canales de color"
-video-thumbnails.transformations.color-channel-mixer.effect: "Efecto"
-video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Seleccione un efecto"
-video-thumbnails.transformations.color-channel-mixer.grayscale: "Escala de grises"
-video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
-video-thumbnails.transformations.color-channel-mixer.cold: "Frío"
+video-thumbnails.transformations.color-channel-mixer.config-title: Configurar mezclador de canales de color
+video-thumbnails.transformations.color-channel-mixer.effect: Efecto
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Seleccione un efecto
+video-thumbnails.transformations.color-channel-mixer.grayscale: Escala de grises
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Frío
 
 # Mute Transformation
-video-thumbnails.transformations.mute.config-title: "Silenciar"
-video-thumbnails.transformations.no-configuration-required: "No se requiere configuración"
+video-thumbnails.transformations.mute.config-title: Silenciar
+video-thumbnails.transformations.no-configuration-required: No se requiere configuración
 
-appearance-branding.color.title: "Color"
-appearance-branding.color.brand-color.label: "Color de marca"
-appearance-branding.color.brand-color.description: "Se aplica al indicador de estado de suscripción y al avatar de usuario predeterminado."
-appearance-branding.color.background-shade.label: "Tono de fondo"
-appearance-branding.color.background-shade.description: "Se aplica al fondo del lienzo con opacidad reducida para una mezcla uniforme."
-appearance-branding.custom-logo.title: "Logo personalizado"
-appearance-branding.custom-logo.description: "Utilizado en el inicio de sesión y en el fondo del lienzo"
-appearance-branding.custom-login-background.title: "Imagen de fondo de inicio de sesión personalizada"
-appearance-branding.custom-login-background.description: "Utilizada en la pantalla de inicio de sesión como imagen de fondo"
-appearance-branding.update.success: "Configuración de apariencia actualizada con éxito"
+appearance-branding.color.title: Color
+appearance-branding.color.brand-color.label: Color de marca
+appearance-branding.color.brand-color.description: Se aplica al indicador de estado de suscripción y al avatar de usuario predeterminado.
+appearance-branding.color.background-shade.label: Tono de fondo
+appearance-branding.color.background-shade.description: Se aplica al fondo del lienzo con opacidad reducida para una mezcla uniforme.
+appearance-branding.custom-logo.title: Logo personalizado
+appearance-branding.custom-logo.description: Utilizado en el inicio de sesión y en el fondo del lienzo
+appearance-branding.custom-login-background.title: Imagen de fondo de inicio de sesión personalizada
+appearance-branding.custom-login-background.description: Utilizada en la pantalla de inicio de sesión como imagen de fondo
+appearance-branding.update.success: Configuración de apariencia actualizada con éxito
 search-replace-assignments.search-for: Buscar
 search-replace-assignments.replace-with: Reemplazar con
 search-replace-assignments.select-element: Seleccionar elemento de destino
@@ -1791,7 +1791,7 @@ url-slug.invalid: Introduzca un URL slug válido (que comience con '/')
 site-id: ID del sitio
 deleted: eliminado
 collection.empty: Aún no hay campos disponibles. Comience añadiendo un campo.
-field-collection.add.default: "Añadir colección"
+field-collection.add.default: Añadir colección
 video.type: Tipo de vídeo
 video.type.asset: Asset
 video.type.youtube: YouTube
@@ -1903,7 +1903,7 @@ preview.phone-horizontal: Teléfono horizontal
 preview.select_date_time: Seleccionar fecha y hora
 preview.screen_size_too_small: El espacio disponible es demasiado pequeño para mostrar el modo de vista previa seleccionado.
 inheritance-active: "Datos heredados del objeto con ID {{id}}"
-inheritance-broken: "Herencia de datos interrumpida"
+inheritance-broken: Herencia de datos interrumpida
 main: Principal
 main_admin: Principal (Modo administrador)
 draft-alert: La versión actual es un borrador. Puede eliminar el borrador para restaurar la versión anterior.
@@ -1919,7 +1919,7 @@ details: Detalles
 element: Elemento
 entries: entradas
 entry: entrada
-error_element_validation_failed: "La validación falló"
+error_element_validation_failed: La validación falló
 element.delete.deleting-folder: Eliminando carpeta
 component.pagination.showing-items: Mostrando {{total}}
 edit-modal.inline-edit: Edición en línea
@@ -2152,7 +2152,7 @@ video.placeholder: No se ha seleccionado ningún vídeo - Haga clic para añadir
 video.add-video: Añadir vídeo
 image.alt-text-placeholder: Introduzca texto alternativo
 area-settings: Configuración de área
-unsupported_feature: "Función no soportada - ¡verifique los requisitos del sistema!"
+unsupported_feature: Función no soportada - ¡verifique los requisitos del sistema!
 document.version.comparison.error.title: Error en la comparación de versiones
 document.version.comparison.unsupported.requirements: Se requieren el binario de Chromium y la extensión PHP Imagick.
 navigation.test-email: Enviar correo de prueba
@@ -2436,7 +2436,7 @@ navigation.about: Acerca de
 about.title: Acerca de
 about.platform-version: "Versión de plataforma: {{version}}"
 about.version: "Versión del núcleo: {{version}}"
-about.copyright: "© por Pimcore GmbH"
+about.copyright: © por Pimcore GmbH
 about.buttons.license: Licencia
 about.buttons.contact: Contacto
 custom-language.default: Predeterminado
@@ -2503,33 +2503,33 @@ system-settings.form.field.main-domain: Dominio principal
 system-settings.form.field.redirect-to-maindomain: Redirigir dominios desconocidos (no utilizados para un sitio y para redirecciones, ...) al dominio principal (arriba)
 system-settings.form.field.default-error-page: Página de error (Predeterminada)
 system-settings.update.success: Configuración del sistema actualizada con éxito
-rule-condition.operator.and: "AND"
-rule-condition.operator.or: "OR"
-rule-condition.operator.and-not: "AND NOT"
-rule-condition.add-condition: "Añadir condición"
-rule-condition.move-up: "Mover arriba"
-rule-condition.move-down: "Mover abajo"
-rule-condition.remove: "Eliminar"
-rule-condition.bracket.toggle-left: "Alternar paréntesis izquierdo"
-rule-condition.bracket.toggle-right: "Alternar paréntesis derecho"
+rule-condition.operator.and: AND
+rule-condition.operator.or: OR
+rule-condition.operator.and-not: AND NOT
+rule-condition.add-condition: Añadir condición
+rule-condition.move-up: Mover arriba
+rule-condition.move-down: Mover abajo
+rule-condition.remove: Eliminar
+rule-condition.bracket.toggle-left: Alternar paréntesis izquierdo
+rule-condition.bracket.toggle-right: Alternar paréntesis derecho
 rule-condition.validation.brackets-closing-without-opening: "Se encontró un paréntesis de cierre ')' sin un paréntesis de apertura '(' correspondiente"
 rule-condition.validation.brackets-missing-closing: "Se encontró un paréntesis de apertura '(' sin un paréntesis de cierre ')' correspondiente"
-rule-condition.validation.brackets-invalid: "Los paréntesis no están correctamente equilibrados"
-rule-builder.add-action: "Añadir acción"
-rule-builder.add-trigger: "Añadir disparador"
-rule-builder.move-up: "Mover arriba"
-rule-builder.move-down: "Mover abajo"
-rule-builder.remove: "Eliminar"
+rule-condition.validation.brackets-invalid: Los paréntesis no están correctamente equilibrados
+rule-builder.add-action: Añadir acción
+rule-builder.add-trigger: Añadir disparador
+rule-builder.move-up: Mover arriba
+rule-builder.move-down: Mover abajo
+rule-builder.remove: Eliminar
 document-restrictions: Restricciones de documento
 asset-restrictions: Restricciones de asset
 object-restrictions: Restricciones de objeto
 display-mode: Modo de visualización
 display-mode-display: Mostrar referencia de ruta
 display-mode-inline-search: Búsqueda en línea
-display-mode-grid-view: "Vista de cuadrícula"
-display-mode-tag-field: "Campo de etiqueta"
-activate-column-configuration: "Activar configuración de columnas"
-table-column-configuration: "Configuración de columnas de tabla"
+display-mode-grid-view: Vista de cuadrícula
+display-mode-tag-field: Campo de etiqueta
+activate-column-configuration: Activar configuración de columnas
+table-column-configuration: Configuración de columnas de tabla
 center: Centro
 north: Norte
 south: Sur
@@ -2560,14 +2560,14 @@ quantity-values.columns.converter: Servicio de conversión
 quantity-values.columns.actions: Acciones
 quantity-values.create-modal.title: Crear unidad de valor de cantidad
 quantity-values.create-modal.id-label: Identificador único
-quantity-values.create-modal.id-placeholder: "ej. km, kg, ..."
+quantity-values.create-modal.id-placeholder: ej. km, kg, ...
 quantity-values.create-modal.id-required: El identificador único es obligatorio
 quantity-values.create-modal.create: Crear
 quantity-values.export: Exportar
 quantity-values.import: Importar
 quantity-values.import-modal.title: Importar unidades de valor de cantidad
 owner: Propietario
-reverse-object-relation.tooltip: "Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos."
+reverse-object-relation.tooltip: Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos.
 disabled-fields: Campos deshabilitados
 allowed-targets: Destinos permitidos
 bulk-export.title: Exportación masiva

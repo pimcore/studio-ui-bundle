@@ -2,10 +2,10 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
-dont-ask-again: "Fråga inte igen"
-widget.missing-context.title: "Saknar kontext"
-widget.missing-context.description: "Inget relaterat element hittades"
-widget.missing-tab-context.description: "Den här funktionen stöds inte för det relaterade elementet"
+dont-ask-again: Fråga inte igen
+widget.missing-context.title: Saknar kontext
+widget.missing-context.description: Inget relaterat element hittades
+widget.missing-tab-context.description: Den här funktionen stöds inte för det relaterade elementet
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
 error.error_element_exists: Elementet finns redan
@@ -25,7 +25,7 @@ sidebar.clear-all-filters: Rensa alla filter
 add-areas: Lägg till områden
 content-settings: Innehållsinställningar
 site-domain.main_site: Huvudsajt
-relation-invalid-key-in-columns: "Ogiltigt värde använt för nyckelkolumn. Undvik specialtecken och reserverade nyckelord."
+relation-invalid-key-in-columns: Ogiltigt värde använt för nyckelkolumn. Undvik specialtecken och reserverade nyckelord.
 import-modal.title: Import
 import-modal.upload: Ladda upp
 import-modal.browse-files: Bläddra bland filer
@@ -67,7 +67,7 @@ asset.upload.files.uploaded: "{{successItems}} filer har laddats upp"
 asset.upload.files.completed: Klart!
 asset.upload.files.successfully-uploaded: Uppladdning slutförd
 asset.upload.files.completed-actions: Slutförda åtgärder
-asset.upload.validation: "Lägg till en fil"
+asset.upload.validation: Lägg till en fil
 asset.upload.file-exists.title: Filen finns redan
 asset.upload.file-exists.message: 'Filen "{{fileName}}" finns redan i den här mappen. Vill du skriva över den?'
 asset.upload.overwrite: Skriv över
@@ -75,14 +75,14 @@ asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
 asset.upload.folder-drop.creating-folders: Skapar mappar
-asset.upload.folder-drop.creating-folders-hint: "Vänta medan mappstrukturen skapas…"
-upload.error.file-too-large: "Filen är större än serverns nuvarande uppladdningsgräns."
+asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
+upload.error.file-too-large: Filen är större än serverns nuvarande uppladdningsgräns.
 upload.error.max-file-size-exceeded: "Filstorleken överskrider den maximalt tillåtna storleken på {{maxSize}}"
-upload.error.generic: "Filen kunde inte laddas upp."
-upload.error.upload-failed: "Uppladdning misslyckades"
-upload.error.failed-to-fetch-asset-details: "Kunde inte hämta assetdetaljer"
-upload.success: "Filen har laddats upp"
-asset.select.type.nullable: "Alla typer"
+upload.error.generic: Filen kunde inte laddas upp.
+upload.error.upload-failed: Uppladdning misslyckades
+upload.error.failed-to-fetch-asset-details: Kunde inte hämta assetdetaljer
+upload.success: Filen har laddats upp
+asset.select.type.nullable: Alla typer
 document.document-tree.title: Dokumentträd
 document.document-tree.search: Sök i {{folderName}}
 document.editable.inheritance.overwrite: Skriv över
@@ -129,7 +129,7 @@ page: Sida
 email: E-post
 link: Länk
 hardlink: Hardlink
-blank: "Tom"
+blank: Tom
 data-object.data-object-tree.title: Data Object-träd
 data-object.data-object-tree.search: Sök i {{folderName}}
 data-object.select-class-to-display: Välj en klass att visa
@@ -649,7 +649,7 @@ tags.remove-and-apply-tags-to-children: Ta bort och tillämpa taggar på barn
 tags.columns.path: Sökväg
 tags.columns.actions: Ta bort
 csv-separated-options: CSV-separerade alternativ
-csv-separated-options-info: "Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde."
+csv-separated-options-info: Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde.
 add: Lägg till
 new: Ny
 save: Spara
@@ -675,33 +675,33 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 width: Bredd
 height: Höjd
-width-tooltip: "Bredden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter."
+width-tooltip: Bredden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter.
 width-field: Breddfält
 width-unit: Breddenhet
-height-tooltip: "Höjden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter."
+height-tooltip: Höjden på denna komponent. Ett numeriskt värde tolkas som antal pixlar; ett strängvärde behandlas som ett CSS-värde med enheter.
 table-data-tooltip: "Exempel på hur man lägger till data: \n\n one|two|three \n four|five|six \n seven|eight|nine"
 use-current-date: Använd aktuellt datum
 respect-timezone: Respektera tidszon
 column-type: Kolumntyp
 specific-settings: Specifika inställningar
-restrict-selection-to: "Begränsa val till"
+restrict-selection-to: Begränsa val till
 only-configured-languages: Visa bara i systeminställningarna konfigurerade språk
 multiselect-render-type: Renderingstyp
 maximum-items: Maximalt antal objekt
 enforce-validation: Tvinga validering
 options-source: Alternativkälla
-options-source-configure: "Konfigurera"
-options-source-select-options: "Valalternativ"
-options-source-options-provider: "Alternativleverantör"
-options-provider-class: "Alternativleverantör klass eller tjänstnamn"
-options-provider-data: "Alternativleverantör data"
+options-source-configure: Konfigurera
+options-source-select-options: Valalternativ
+options-source-options-provider: Alternativleverantör
+options-provider-class: Alternativleverantör klass eller tjänstnamn
+options-provider-data: Alternativleverantör data
 switch-to-selection-mode: Byt till valläge
 switch-to-drag-mode: Byt till dragläge
 select-options: Valalternativ
 value: Värde
 display-name: Visningsnamn
 default-values-settings: Standardvärdeinställningar
-default-values-tooltip: "Standardvärdet används om arv är avaktiverat eller om förälderns värde är tomt."
+default-values-tooltip: Standardvärdet används om arv är avaktiverat eller om förälderns värde är tomt.
 default-value: Standardvärde
 default-value-generator: Standardvärdegenerator tjänst / klass
 enforce-validation-tooltip: "När aktiverat förhindras sparning av ogiltiga alternativ. Som standard tillåter API:et att spara ogiltiga alternativ"
@@ -717,7 +717,7 @@ increment-step: Ökningssteg
 decimal-precision: Decimalprecision
 decimal-size: Decimalstorlek
 decimal-settings: Decimalinställningar
-decimal-settings-tooltip: "Om decimalstorlek eller precision anges används MySQL-typen DECIMAL(decimalSize, decimalPrecision). Standardvärden om de saknas är 64 som storlek och 0 som precision. Observera att i MySQL-termer kallas decimalSize för precision och decimalPrecision för scale."
+decimal-settings-tooltip: Om decimalstorlek eller precision anges används MySQL-typen DECIMAL(decimalSize, decimalPrecision). Standardvärden om de saknas är 64 som storlek och 0 som precision. Observera att i MySQL-termer kallas decimalSize för precision och decimalPrecision för scale.
 integer: Heltal
 unsigned: Bara osignerat
 auto-convert: Autokonvertera
@@ -788,15 +788,15 @@ enable-text-selection: Aktivera textmarkering
 allow-to-create-new-object: Tillåt att skapa nytt objekt i relationsfält
 enable-async-load-in-admin: Aktivera asynkron laddning i admin
 enable-async-load-in-admin-tooltip: "VARNING: Asynkron laddning är INTE möjlig inom Localized Fields och Blocks."
-path-formatter-service: "Formaterartjänst / Klass"
+path-formatter-service: Formaterartjänst / Klass
 allow-to-clear-relation: Tillåt att rensa relationer i det här fältet
 allow-multiple-assignments: Tillåt multipla tilldelningar
 number: Nummer
 bool: Bool
 column-bool: Kolumn Bool
 multiselect: Flerval
-layout: "Layout"
-layout-options: "Layoutalternativ"
+layout: Layout
+layout-options: Layoutalternativ
 allow-documents: Tillåt dokument
 allow-assets: Tillåt assets
 asset-inline-download-allowed: Tillåt inline-nedladdning av asset
@@ -951,11 +951,11 @@ regex: RegEx
 regex-flags: RegEx-flaggor
 regex-flags-tooltip: "RegExp utan avgränsare, måste fungera i JS (Avgränsare: #)"
 test-string: Teststräng
-regex-validation-error-message: "Strängen matchar inte det obligatoriska formatet."
+regex-validation-error-message: Strängen matchar inte det obligatoriska formatet.
 calculator-class: Kalkylatorklass
 calculator-expression: Kalkylatoruttryck
 calculator-type: Kalkylatortyp
-calculator-type-tooltip: "Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser."
+calculator-type-tooltip: Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser.
 expression: Uttryck
 lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
@@ -987,8 +987,8 @@ data: Data
 domain-label-width: Domänetikettbredd
 controller-action: Controller-åtgärd
 controller-action-tooltip: 'Ange controller & åtgärd i följande format: App\Controller\ProductController::slugAction'
-available-sites: "Tillgängliga sajter"
-empty-equals-allow-all-tooltip: "Tom = tillåt alla"
+available-sites: Tillgängliga sajter
+empty-equals-allow-all-tooltip: Tom = tillåt alla
 reset: Återställ
 name: Namn
 tooltip: Tooltip
@@ -1027,9 +1027,9 @@ jobs.job.button-download: ladda ner
 jobs.job.button-ignore-and-reload: ignorera och ladda om
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
-jobs.job.download-error: "Nedladdning misslyckades"
-jobs.job.button-show-errors: "Visa fel"
-jobs.job.error-modal.title: "Jobbfel"
+jobs.job.download-error: Nedladdning misslyckades
+jobs.job.button-show-errors: Visa fel
+jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
 jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
@@ -1037,9 +1037,9 @@ jobs.batch-edit-job.title: "Massredigering av {{title}}"
 jobs.csv-job.title: "CSV-nedladdning av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
 batch-edit.job-title: Massredigering
-jobs.zip-upload-job.title: "Ladda upp ZIP"
-jobs.zip-upload-job.step1.title: "Extraherar ZIP"
-jobs.zip-upload-job.step2.title: "Skapar assets"
+jobs.zip-upload-job.title: Ladda upp ZIP
+jobs.zip-upload-job.step1.title: Extraherar ZIP
+jobs.zip-upload-job.step2.title: Skapar assets
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
@@ -1115,10 +1115,10 @@ element.tree.sorting.keyed-descending: Ö till A (Nyckel)
 element.tree.sorting.indexed: Index (Manuell)
 element.tree.refresh: Uppdatera
 element.new-folder: Ny mapp
-element.new-folder.validation: "Ange ett giltigt namn"
+element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
-element.rename.label: "Ange det nya namnet"
-element.rename.validation: "Ange ett giltigt namn"
+element.rename.label: Ange det nya namnet
+element.rename.validation: Ange ett giltigt namn
 element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
@@ -1171,8 +1171,8 @@ latitude: Latitud
 longitude: Longitud
 search-address: Sök adress
 search: Sök
-geocode.address-not-found: "Den angivna adressen hittades inte"
-geocode.possible-causes: "Möjliga orsaker"
+geocode.address-not-found: Den angivna adressen hittades inte
+geocode.possible-causes: Möjliga orsaker
 geocode.postal-code-format-error: 'Postnummerformat, t.ex. använd "5020 Salzburg, Söllheimer Straße 16" istället för "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: Vill du verkligen ta bort {{type}} '{{value}}'?
 relations.id: ID
@@ -1533,239 +1533,239 @@ predefined-asset-metadata.columns.target-type: Måltyp
 predefined-asset-metadata.columns.actions: Åtgärder
 predefined-asset-metadata.duplicate-entry.title: Fördefinierad metadata finns redan
 predefined-asset-metadata.duplicate-entry.error: En post med denna kombination av namn och språk finns redan. Ändra ett av följande värden.
-appearance-branding.title: "Utseende & Varumärke"
-image-thumbnails.title: "Bildminiatyrbilder"
-image-thumbnails.description: "Hantera och konfigurera inställningar för bildminiatyrbilder för dina assets."
-image-thumbnails.search.placeholder: "Sök miniatyrbilder..."
-image-thumbnails.tree.empty: "Inga miniatyrbilder hittades"
-image-thumbnails.configuration.title: "Konfiguration"
-image-thumbnails.configuration.description: "Konfigurera inställningar för miniatyrbilder"
-image-thumbnails.preview.title: "Förhandsvisning"
-image-thumbnails.preview.description: "Förhandsvisning av miniatyrbildskonfiguration"
-image-thumbnails.editor.empty.title: "Välj en miniatyrbild"
-image-thumbnails.editor.empty.description: "Välj en miniatyrbild från trädet för att visa eller redigera dess konfiguration"
-image-thumbnails.editor.select-thumbnail: "Välj en miniatyrbildskonfiguration att redigera"
-image-thumbnails.editor.general-settings: "Allmänna inställningar"
-image-thumbnails.editor.name: "Namn"
-image-thumbnails.editor.name-required: "Namn är obligatoriskt"
-image-thumbnails.editor.description: "Beskrivning"
-image-thumbnails.editor.description-placeholder: "Ange beskrivning av miniatyrbild..."
-image-thumbnails.editor.group: "Grupp"
-image-thumbnails.editor.group-required: "Grupp är obligatoriskt"
-image-thumbnails.editor.group-placeholder: "Välj en grupp..."
-image-thumbnails.editor.no-group: "Ingen grupp"
-image-thumbnails.editor.format: "Format"
-image-thumbnails.editor.format-required: "Format är obligatoriskt"
-image-thumbnails.editor.format-placeholder: "Välj ett format..."
-image-thumbnails.editor.format-auto: "Auto (Webboptimerat - rekommenderat)"
-image-thumbnails.delete.confirm: "Vill du verkligen ta bort miniatyrbilden"
-image-thumbnails.add.content: "Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)"
-image-thumbnails.add.validation.message: "Miniatyrbildsnamnet är ogiltigt"
-image-thumbnails.editor.advanced: "Avancerat"
-image-thumbnails.editor.quality: "Kvalitet"
-image-thumbnails.editor.quality.tooltip: "JPEG-kvalitetsinställning (1-100)"
-image-thumbnails.editor.high-resolution: "Hög upplösning"
-image-thumbnails.editor.high-resolution.tooltip: "Högupplösningsfaktor för retinaskärmar"
-image-thumbnails.editor.preserve-color: "Bevara färg"
+appearance-branding.title: Utseende & Varumärke
+image-thumbnails.title: Bildminiatyrbilder
+image-thumbnails.description: Hantera och konfigurera inställningar för bildminiatyrbilder för dina assets.
+image-thumbnails.search.placeholder: Sök miniatyrbilder...
+image-thumbnails.tree.empty: Inga miniatyrbilder hittades
+image-thumbnails.configuration.title: Konfiguration
+image-thumbnails.configuration.description: Konfigurera inställningar för miniatyrbilder
+image-thumbnails.preview.title: Förhandsvisning
+image-thumbnails.preview.description: Förhandsvisning av miniatyrbildskonfiguration
+image-thumbnails.editor.empty.title: Välj en miniatyrbild
+image-thumbnails.editor.empty.description: Välj en miniatyrbild från trädet för att visa eller redigera dess konfiguration
+image-thumbnails.editor.select-thumbnail: Välj en miniatyrbildskonfiguration att redigera
+image-thumbnails.editor.general-settings: Allmänna inställningar
+image-thumbnails.editor.name: Namn
+image-thumbnails.editor.name-required: Namn är obligatoriskt
+image-thumbnails.editor.description: Beskrivning
+image-thumbnails.editor.description-placeholder: Ange beskrivning av miniatyrbild...
+image-thumbnails.editor.group: Grupp
+image-thumbnails.editor.group-required: Grupp är obligatoriskt
+image-thumbnails.editor.group-placeholder: Välj en grupp...
+image-thumbnails.editor.no-group: Ingen grupp
+image-thumbnails.editor.format: Format
+image-thumbnails.editor.format-required: Format är obligatoriskt
+image-thumbnails.editor.format-placeholder: Välj ett format...
+image-thumbnails.editor.format-auto: Auto (Webboptimerat - rekommenderat)
+image-thumbnails.delete.confirm: Vill du verkligen ta bort miniatyrbilden
+image-thumbnails.add.content: Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: Miniatyrbildsnamnet är ogiltigt
+image-thumbnails.editor.advanced: Avancerat
+image-thumbnails.editor.quality: Kvalitet
+image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinställning (1-100)
+image-thumbnails.editor.high-resolution: Hög upplösning
+image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor för retinaskärmar
+image-thumbnails.editor.preserve-color: Bevara färg
 image-thumbnails.editor.preserve-color.tooltip: "Bevara färg (profil, rymd) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
-image-thumbnails.editor.force-process-icc: "Tvinga bearbetning av ICC-profiler"
-image-thumbnails.editor.force-process-icc.tooltip: "Tvinga bearbetning av ICC-profiler (Imagick, ORIGINAL)"
-image-thumbnails.editor.preserve-metadata: "Bevara metadata"
+image-thumbnails.editor.force-process-icc: Tvinga bearbetning av ICC-profiler
+image-thumbnails.editor.force-process-icc.tooltip: Tvinga bearbetning av ICC-profiler (Imagick, ORIGINAL)
+image-thumbnails.editor.preserve-metadata: Bevara metadata
 image-thumbnails.editor.preserve-metadata.tooltip: "Bevara metadata (ta inte bort) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
 image-thumbnails.editor.rasterize-svg: "Rastrera SVG:er"
 image-thumbnails.editor.rasterize-svg.tooltip: "Rastrera SVG:er (Imagick)\n(SVG:er rastreras automatiskt när en annan transformation än resize eller skalning efter bredd/höjd används.)"
-image-thumbnails.editor.use-cropbox: "Använd Cropbox"
+image-thumbnails.editor.use-cropbox: Använd Cropbox
 image-thumbnails.editor.use-cropbox.tooltip: "Använd Cropbox (Ghostscript)\n(Ställer in sidstorleken till CropBox istället för MediaBox, användbart för att exkludera marginaler och icke-innehållsområden.)"
-image-thumbnails.editor.downloadable: "Nedladdningsbar"
-image-thumbnails.editor.downloadable.tooltip: "Lista som alternativ i nedladdningssektionen i bilddetaljvyn"
-image-thumbnails.editor.preserve-animation: "Bevara animering"
+image-thumbnails.editor.downloadable: Nedladdningsbar
+image-thumbnails.editor.downloadable.tooltip: Lista som alternativ i nedladdningssektionen i bilddetaljvyn
+image-thumbnails.editor.preserve-animation: Bevara animering
 image-thumbnails.editor.preserve-animation.tooltip: "Bevara animeringar för GIF (Imagick)\n(Stödda transformationer är: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
-image-thumbnails.editor.media-queries: "Media Queries"
-image-thumbnails.editor.media-queries.new: "Ny"
-image-thumbnails.editor.media-queries.default: "Standard"
+image-thumbnails.editor.media-queries: Media Queries
+image-thumbnails.editor.media-queries.new: Ny
+image-thumbnails.editor.media-queries.default: Standard
 image-thumbnails.editor.media-queries.empty: "Inga media queries definierade. Klicka 'Ny' för att lägga till en CSS media query."
-image-thumbnails.editor.media-query.modal.title: "Ny Media Query"
-image-thumbnails.editor.media-query.modal.label: "Ange en giltig CSS media query"
-image-thumbnails.editor.media-queries.add.title: "Ny Media Query"
-image-thumbnails.editor.media-queries.add.label: "Ange en giltig CSS media query"
+image-thumbnails.editor.media-query.modal.title: Ny Media Query
+image-thumbnails.editor.media-query.modal.label: Ange en giltig CSS media query
+image-thumbnails.editor.media-queries.add.title: Ny Media Query
+image-thumbnails.editor.media-queries.add.label: Ange en giltig CSS media query
 image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
-image-thumbnails.editor.transformations: "Transformationer"
-image-thumbnails.editor.transformations.resize: "Ändra storlek"
-image-thumbnails.editor.transformations.scale-by-height: "Skala efter höjd"
-image-thumbnails.editor.transformations.trim: "Trimma"
-image-thumbnails.editor.transformations.effects: "Effekter"
-image-thumbnails.editor.transformations.effects.sepia: "Sepia"
-image-thumbnails.editor.transformations.effects.grayscale: "Gråskala"
-image-thumbnails.editor.transformations.effects.sharpen: "Skärpa"
+image-thumbnails.editor.transformations: Transformationer
+image-thumbnails.editor.transformations.resize: Ändra storlek
+image-thumbnails.editor.transformations.scale-by-height: Skala efter höjd
+image-thumbnails.editor.transformations.trim: Trimma
+image-thumbnails.editor.transformations.effects: Effekter
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Gråskala
+image-thumbnails.editor.transformations.effects.sharpen: Skärpa
 image-thumbnails.editor.transformations.empty: "Inga transformationer definierade. Använd knappen 'Transformationer' för att lägga till bildtransformationer."
-image-thumbnails.editor.save-error: "Kunde inte spara miniatyrbildskonfigurationen"
+image-thumbnails.editor.save-error: Kunde inte spara miniatyrbildskonfigurationen
 
 # Transformationsgrupper
-image-thumbnails.transformations.groups.main: "Transformationer"
-image-thumbnails.transformations.groups.effects: "Effekter"
+image-thumbnails.transformations.groups.main: Transformationer
+image-thumbnails.transformations.groups.effects: Effekter
 
 # Media Query-översättningar
-image-thumbnails.media-queries.add-transformation: "Lägg till transformation"
+image-thumbnails.media-queries.add-transformation: Lägg till transformation
 
 # Cover-transformation
-image-thumbnails.transformations.cover.title: "Konfigurera Cover"
-image-thumbnails.transformations.cover.width-height: "Bredd, Höjd"
-image-thumbnails.transformations.cover.width: "Bredd"
-image-thumbnails.transformations.cover.height: "Höjd"
-image-thumbnails.transformations.cover.focal-point-info: "Bilden beskärs automatiskt baserat på fokuspunkten som ställts in på källbilden. Om ingen fokuspunkt finns används standardpositioneringen nedan."
-image-thumbnails.transformations.cover.positioning: "Standardpositionering"
-image-thumbnails.transformations.cover.positioning-center: "Mitten"
-image-thumbnails.transformations.cover.positioning-topleft: "Uppe till vänster"
-image-thumbnails.transformations.cover.positioning-topright: "Uppe till höger"
-image-thumbnails.transformations.cover.positioning-bottomleft: "Nere till vänster"
-image-thumbnails.transformations.cover.positioning-bottomright: "Nere till höger"
-image-thumbnails.transformations.cover.force-resize: "Tvinga storleksändring"
+image-thumbnails.transformations.cover.title: Konfigurera Cover
+image-thumbnails.transformations.cover.width-height: Bredd, Höjd
+image-thumbnails.transformations.cover.width: Bredd
+image-thumbnails.transformations.cover.height: Höjd
+image-thumbnails.transformations.cover.focal-point-info: Bilden beskärs automatiskt baserat på fokuspunkten som ställts in på källbilden. Om ingen fokuspunkt finns används standardpositioneringen nedan.
+image-thumbnails.transformations.cover.positioning: Standardpositionering
+image-thumbnails.transformations.cover.positioning-center: Mitten
+image-thumbnails.transformations.cover.positioning-topleft: Uppe till vänster
+image-thumbnails.transformations.cover.positioning-topright: Uppe till höger
+image-thumbnails.transformations.cover.positioning-bottomleft: Nere till vänster
+image-thumbnails.transformations.cover.positioning-bottomright: Nere till höger
+image-thumbnails.transformations.cover.force-resize: Tvinga storleksändring
 
 # Lägg till Overlay-transformation
-image-thumbnails.transformations.add-overlay.overlay-image: "Överlagringsbild"
-image-thumbnails.transformations.add-overlay.x: "X-position"
-image-thumbnails.transformations.add-overlay.y: "Y-position"
-image-thumbnails.transformations.add-overlay.origin: "Utgångspunkt"
-image-thumbnails.transformations.add-overlay.origin-top-left: "Uppe till vänster"
-image-thumbnails.transformations.add-overlay.origin-top-right: "Uppe till höger"
-image-thumbnails.transformations.add-overlay.origin-center: "Mitten"
-image-thumbnails.transformations.add-overlay.origin-bottom-left: "Nere till vänster"
-image-thumbnails.transformations.add-overlay.origin-bottom-right: "Nere till höger"
-image-thumbnails.transformations.add-overlay.alpha: "Opacitet"
-image-thumbnails.transformations.add-overlay.composite: "Komposit"
+image-thumbnails.transformations.add-overlay.overlay-image: Överlagringsbild
+image-thumbnails.transformations.add-overlay.x: X-position
+image-thumbnails.transformations.add-overlay.y: Y-position
+image-thumbnails.transformations.add-overlay.origin: Utgångspunkt
+image-thumbnails.transformations.add-overlay.origin-top-left: Uppe till vänster
+image-thumbnails.transformations.add-overlay.origin-top-right: Uppe till höger
+image-thumbnails.transformations.add-overlay.origin-center: Mitten
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Nere till vänster
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Nere till höger
+image-thumbnails.transformations.add-overlay.alpha: Opacitet
+image-thumbnails.transformations.add-overlay.composite: Komposit
 
 # Gaussisk oskärpa-transformation
-image-thumbnails.transformations.gaussian-blur.radius: "Radie"
-image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+image-thumbnails.transformations.gaussian-blur.radius: Radie
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
 
 # Skala efter bredd-transformation
-image-thumbnails.transformations.scale-by-width.title: "Konfigurera Skala efter bredd"
-image-thumbnails.transformations.scale-by-width.width: "Bredd"
-image-thumbnails.transformations.scale-by-width.force-resize: "Tvinga storleksändring"
+image-thumbnails.transformations.scale-by-width.title: Konfigurera Skala efter bredd
+image-thumbnails.transformations.scale-by-width.width: Bredd
+image-thumbnails.transformations.scale-by-width.force-resize: Tvinga storleksändring
 
 # Storleksändringstransformation
-image-thumbnails.transformations.resize.config-title: "Konfigurera storleksändring"
-image-thumbnails.transformations.resize.width: "Bredd"
-image-thumbnails.transformations.resize.height: "Höjd"
+image-thumbnails.transformations.resize.config-title: Konfigurera storleksändring
+image-thumbnails.transformations.resize.width: Bredd
+image-thumbnails.transformations.resize.height: Höjd
 
 # Skala efter höjd-transformation
-image-thumbnails.transformations.scale-by-height.config-title: "Konfigurera Skala efter höjd"
-image-thumbnails.transformations.scale-by-height.height: "Höjd"
-image-thumbnails.transformations.scale-by-height.height-placeholder: "Ange höjd i pixlar"
-image-thumbnails.transformations.scale-by-height.force-resize: "Tvinga storleksändring"
+image-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+image-thumbnails.transformations.scale-by-height.height: Höjd
+image-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
+image-thumbnails.transformations.scale-by-height.force-resize: Tvinga storleksändring
 
 # Trimma-transformation
-image-thumbnails.transformations.trim.config-title: "Konfigurera Trimma"
-image-thumbnails.transformations.trim.trim-option: "Trimma-alternativ"
-image-thumbnails.transformations.trim.trim-option-placeholder: "Välj trimma-alternativ"
-image-thumbnails.transformations.trim.disabled: "Inaktiverad"
-image-thumbnails.transformations.trim.left: "Vänster"
-image-thumbnails.transformations.trim.right: "Höger"
-image-thumbnails.transformations.trim.both: "Båda"
+image-thumbnails.transformations.trim.config-title: Konfigurera Trimma
+image-thumbnails.transformations.trim.trim-option: Trimma-alternativ
+image-thumbnails.transformations.trim.trim-option-placeholder: Välj trimma-alternativ
+image-thumbnails.transformations.trim.disabled: Inaktiverad
+image-thumbnails.transformations.trim.left: Vänster
+image-thumbnails.transformations.trim.right: Höger
+image-thumbnails.transformations.trim.both: Båda
 
 # Effekttransformation
-image-thumbnails.transformations.effects.config-title: "Konfigurera effekt"
-image-thumbnails.transformations.effects.effect-type: "Effekttyp"
-image-thumbnails.transformations.effects.effect-type-placeholder: "Välj effekttyp"
-image-thumbnails.transformations.effects.sepia: "Sepia"
-image-thumbnails.transformations.effects.grayscale: "Gråskala"
-image-thumbnails.transformations.effects.sharpen: "Skärpa"
-image-thumbnails.transformations.effects.intensity: "Intensitet"
+image-thumbnails.transformations.effects.config-title: Konfigurera effekt
+image-thumbnails.transformations.effects.effect-type: Effekttyp
+image-thumbnails.transformations.effects.effect-type-placeholder: Välj effekttyp
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Gråskala
+image-thumbnails.transformations.effects.sharpen: Skärpa
+image-thumbnails.transformations.effects.intensity: Intensitet
 
 # Transformationsverktygsfält
-image-thumbnails.transformations.add: "Lägg till transformation"
-image-thumbnails.transformations.move-up: "Flytta upp"
-image-thumbnails.transformations.move-down: "Flytta ner"
-image-thumbnails.transformations.remove: "Ta bort"
+image-thumbnails.transformations.add: Lägg till transformation
+image-thumbnails.transformations.move-up: Flytta upp
+image-thumbnails.transformations.move-down: Flytta ner
+image-thumbnails.transformations.remove: Ta bort
 
 # Okänd/Reservtransformation
 image-thumbnails.transformations.unknown-type: "Okänd transformationstyp: {{type}}"
-image-thumbnails.transformations.no-configuration-required: "Ingen konfiguration krävs"
+image-thumbnails.transformations.no-configuration-required: Ingen konfiguration krävs
 
-video-thumbnails.title: "Videominiatyrbilder"
-video-thumbnails.description: "Hantera och konfigurera inställningar för videominiatyrbilder för dina assets."
-video-thumbnails.search.placeholder: "Sök miniatyrbilder..."
-video-thumbnails.tree.empty: "Inga miniatyrbilder hittades"
-video-thumbnails.editor.select-thumbnail: "Välj en videominiatyrbildskonfiguration att redigera"
-video-thumbnails.editor.name: "Namn"
-video-thumbnails.editor.name-required: "Namn är obligatoriskt"
-video-thumbnails.editor.description: "Beskrivning"
-video-thumbnails.editor.group: "Grupp"
-video-thumbnails.editor.no-group: "Ingen grupp"
-video-thumbnails.editor.presetting: "Välj en förinställning"
-video-thumbnails.editor.video-bitrate: "Videobitrate"
-video-thumbnails.editor.audio-bitrate: "Ljudbitrate"
-video-thumbnails.editor.transformations: "Transformationer"
-video-thumbnails.editor.media-segments: "Mediasegment"
-video-thumbnails.editor.media-segments.new: "Ny"
+video-thumbnails.title: Videominiatyrbilder
+video-thumbnails.description: Hantera och konfigurera inställningar för videominiatyrbilder för dina assets.
+video-thumbnails.search.placeholder: Sök miniatyrbilder...
+video-thumbnails.tree.empty: Inga miniatyrbilder hittades
+video-thumbnails.editor.select-thumbnail: Välj en videominiatyrbildskonfiguration att redigera
+video-thumbnails.editor.name: Namn
+video-thumbnails.editor.name-required: Namn är obligatoriskt
+video-thumbnails.editor.description: Beskrivning
+video-thumbnails.editor.group: Grupp
+video-thumbnails.editor.no-group: Ingen grupp
+video-thumbnails.editor.presetting: Välj en förinställning
+video-thumbnails.editor.video-bitrate: Videobitrate
+video-thumbnails.editor.audio-bitrate: Ljudbitrate
+video-thumbnails.editor.transformations: Transformationer
+video-thumbnails.editor.media-segments: Mediasegment
+video-thumbnails.editor.media-segments.new: Ny
 video-thumbnails.editor.media-segments.empty: "Inga mediasegment definierade. Klicka 'Ny' för att lägga till ett segment (t.ex. 500K)."
-video-thumbnails.editor.media-segments.add.title: "Nytt mediasegment"
-video-thumbnails.editor.media-segments.add.label: "Ange ett segmentnamn (t.ex. 500K)"
-video-thumbnails.editor.media-segments.add.bitrate-hint: "Ange en giltig bitrate (t.ex. 400k, 1500k, 1M)"
-video-thumbnails.editor.media-segments.add.ok: "Skapa"
-video-thumbnails.editor.media-segments.default: "Standard"
-video-thumbnails.editor.transformations.empty: "Inga transformationer har valts"
-video-thumbnails.delete.confirm: "Vill du verkligen ta bort miniatyrbilden"
-video-thumbnails.add.content: "Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)"
-video-thumbnails.add.validation.message: "Miniatyrbildsnamnet är ogiltigt"
+video-thumbnails.editor.media-segments.add.title: Nytt mediasegment
+video-thumbnails.editor.media-segments.add.label: Ange ett segmentnamn (t.ex. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Ange en giltig bitrate (t.ex. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Skapa
+video-thumbnails.editor.media-segments.default: Standard
+video-thumbnails.editor.transformations.empty: Inga transformationer har valts
+video-thumbnails.delete.confirm: Vill du verkligen ta bort miniatyrbilden
+video-thumbnails.add.content: Ange namnet på den nya miniatyrbilden (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: Miniatyrbildsnamnet är ogiltigt
 
 # Videotransformationsverktygsfält
-video-thumbnails.transformations.move-up: "Flytta upp"
-video-thumbnails.transformations.move-down: "Flytta ner"
-video-thumbnails.transformations.remove: "Ta bort"
+video-thumbnails.transformations.move-up: Flytta upp
+video-thumbnails.transformations.move-down: Flytta ner
+video-thumbnails.transformations.remove: Ta bort
 
 # Storleksändringstransformation
-video-thumbnails.transformations.resize.config-title: "Konfigurera storleksändring"
-video-thumbnails.transformations.resize.width: "Bredd"
-video-thumbnails.transformations.resize.width-placeholder: "Ange bredd i pixlar"
-video-thumbnails.transformations.resize.height: "Höjd"
-video-thumbnails.transformations.resize.height-placeholder: "Ange höjd i pixlar"
-video-thumbnails.transformations.resize.even-number-hint: "Bredd och höjd måste vara jämna tal"
+video-thumbnails.transformations.resize.config-title: Konfigurera storleksändring
+video-thumbnails.transformations.resize.width: Bredd
+video-thumbnails.transformations.resize.width-placeholder: Ange bredd i pixlar
+video-thumbnails.transformations.resize.height: Höjd
+video-thumbnails.transformations.resize.height-placeholder: Ange höjd i pixlar
+video-thumbnails.transformations.resize.even-number-hint: Bredd och höjd måste vara jämna tal
 
 # Skala efter bredd-transformation
-video-thumbnails.transformations.scale-by-width.config-title: "Konfigurera Skala efter bredd"
-video-thumbnails.transformations.scale-by-width.width: "Bredd"
-video-thumbnails.transformations.scale-by-width.width-placeholder: "Ange bredd i pixlar"
+video-thumbnails.transformations.scale-by-width.config-title: Konfigurera Skala efter bredd
+video-thumbnails.transformations.scale-by-width.width: Bredd
+video-thumbnails.transformations.scale-by-width.width-placeholder: Ange bredd i pixlar
 
 # Skala efter höjd-transformation
-video-thumbnails.transformations.scale-by-height.config-title: "Konfigurera Skala efter höjd"
-video-thumbnails.transformations.scale-by-height.height: "Höjd"
-video-thumbnails.transformations.scale-by-height.height-placeholder: "Ange höjd i pixlar"
+video-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+video-thumbnails.transformations.scale-by-height.height: Höjd
+video-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
 
 # Klipp-transformation
-video-thumbnails.transformations.cut.config-title: "Konfigurera Klipp"
-video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.config-title: Konfigurera Klipp
+video-thumbnails.transformations.cut.start: Start
 video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
-video-thumbnails.transformations.cut.duration: "Längd"
+video-thumbnails.transformations.cut.duration: Längd
 video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
 
 # Ställ in bildfrekvens-transformation
-video-thumbnails.transformations.set-framerate.config-title: "Konfigurera Bildfrekvens"
-video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.config-title: Konfigurera Bildfrekvens
+video-thumbnails.transformations.set-framerate.fps: FPS
 video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
 
 # Färgkanalmixer-transformation
-video-thumbnails.transformations.color-channel-mixer.config-title: "Konfigurera Färgkanalmixer"
-video-thumbnails.transformations.color-channel-mixer.effect: "Effekt"
-video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Välj en effekt"
-video-thumbnails.transformations.color-channel-mixer.grayscale: "Gråskala"
-video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
-video-thumbnails.transformations.color-channel-mixer.cold: "Kall"
+video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurera Färgkanalmixer
+video-thumbnails.transformations.color-channel-mixer.effect: Effekt
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Välj en effekt
+video-thumbnails.transformations.color-channel-mixer.grayscale: Gråskala
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Kall
 
 # Tyst-transformation
-video-thumbnails.transformations.mute.config-title: "Tysta"
-video-thumbnails.transformations.no-configuration-required: "Ingen konfiguration krävs"
+video-thumbnails.transformations.mute.config-title: Tysta
+video-thumbnails.transformations.no-configuration-required: Ingen konfiguration krävs
 
-appearance-branding.color.title: "Färg"
-appearance-branding.color.brand-color.label: "Varumärkesfärg"
-appearance-branding.color.brand-color.description: "Tillämpas på prenumerationsstatusindikatorn och standardavatar."
-appearance-branding.color.background-shade.label: "Bakgrundston"
-appearance-branding.color.background-shade.description: "Tillämpas på canvasbakgrunden med sänkt opacitet för en sömlös blandning."
-appearance-branding.custom-logo.title: "Anpassad logotyp"
-appearance-branding.custom-logo.description: "Används vid inloggning och i canvasbakgrunden"
-appearance-branding.custom-login-background.title: "Anpassad bakgrundsbild vid inloggning"
-appearance-branding.custom-login-background.description: "Används på inloggningsskärmen som bakgrundsbild"
-appearance-branding.update.success: "Utseendeinställningarna har uppdaterats"
+appearance-branding.color.title: Färg
+appearance-branding.color.brand-color.label: Varumärkesfärg
+appearance-branding.color.brand-color.description: Tillämpas på prenumerationsstatusindikatorn och standardavatar.
+appearance-branding.color.background-shade.label: Bakgrundston
+appearance-branding.color.background-shade.description: Tillämpas på canvasbakgrunden med sänkt opacitet för en sömlös blandning.
+appearance-branding.custom-logo.title: Anpassad logotyp
+appearance-branding.custom-logo.description: Används vid inloggning och i canvasbakgrunden
+appearance-branding.custom-login-background.title: Anpassad bakgrundsbild vid inloggning
+appearance-branding.custom-login-background.description: Används på inloggningsskärmen som bakgrundsbild
+appearance-branding.update.success: Utseendeinställningarna har uppdaterats
 search-replace-assignments.search-for: Sök efter
 search-replace-assignments.replace-with: Ersätt med
 search-replace-assignments.select-element: Välj målelement
@@ -1791,7 +1791,7 @@ url-slug.invalid: Ange en giltig URL slug (börjar med '/')
 site-id: Sajt-ID
 deleted: borttagen
 collection.empty: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
-field-collection.add.default: "Lägg till samling"
+field-collection.add.default: Lägg till samling
 video.type: Videotyp
 video.type.asset: Asset
 video.type.youtube: YouTube
@@ -1903,7 +1903,7 @@ preview.phone-horizontal: Telefon horisontell
 preview.select_date_time: Välj datum & tid
 preview.screen_size_too_small: Det tillgängliga utrymmet är för litet för att visa det valda förhandsvisningsläget.
 inheritance-active: "Data ärvt från objekt-ID {{id}}"
-inheritance-broken: "Dataarv brutet"
+inheritance-broken: Dataarv brutet
 main: Huvud
 main_admin: Huvud (Adminläge)
 draft-alert: Den aktuella versionen är ett utkast. Du kan ta bort utkastet för att återställa föregående version.
@@ -1919,7 +1919,7 @@ details: Detaljer
 element: Element
 entries: poster
 entry: post
-error_element_validation_failed: "Validering misslyckades"
+error_element_validation_failed: Validering misslyckades
 element.delete.deleting-folder: Tar bort mapp
 component.pagination.showing-items: Visar {{total}}
 edit-modal.inline-edit: Inline-redigering
@@ -2436,7 +2436,7 @@ navigation.about: Om
 about.title: Om
 about.platform-version: "Plattformsversion: {{version}}"
 about.version: "Kärnversion: {{version}}"
-about.copyright: "© av Pimcore GmbH"
+about.copyright: © av Pimcore GmbH
 about.buttons.license: Licens
 about.buttons.contact: Kontakt
 custom-language.default: Standard
@@ -2503,33 +2503,33 @@ system-settings.form.field.main-domain: Huvuddomän
 system-settings.form.field.redirect-to-maindomain: Omdirigera okända domäner (som inte används för en sajt och för omdirigeringar, ...) till huvuddomänen (ovan)
 system-settings.form.field.default-error-page: Felsida (Standard)
 system-settings.update.success: Systeminställningarna har uppdaterats
-rule-condition.operator.and: "OCH"
-rule-condition.operator.or: "ELLER"
-rule-condition.operator.and-not: "OCH INTE"
-rule-condition.add-condition: "Lägg till villkor"
-rule-condition.move-up: "Flytta upp"
-rule-condition.move-down: "Flytta ner"
-rule-condition.remove: "Ta bort"
-rule-condition.bracket.toggle-left: "Växla vänster parentes"
-rule-condition.bracket.toggle-right: "Växla höger parentes"
+rule-condition.operator.and: OCH
+rule-condition.operator.or: ELLER
+rule-condition.operator.and-not: OCH INTE
+rule-condition.add-condition: Lägg till villkor
+rule-condition.move-up: Flytta upp
+rule-condition.move-down: Flytta ner
+rule-condition.remove: Ta bort
+rule-condition.bracket.toggle-left: Växla vänster parentes
+rule-condition.bracket.toggle-right: Växla höger parentes
 rule-condition.validation.brackets-closing-without-opening: "Avslutande parentes ')' hittades utan matchande öppnande parentes '('"
 rule-condition.validation.brackets-missing-closing: "Öppnande parentes '(' hittades utan matchande avslutande parentes ')'"
-rule-condition.validation.brackets-invalid: "Parenteser är inte korrekt balanserade"
-rule-builder.add-action: "Lägg till åtgärd"
-rule-builder.add-trigger: "Lägg till utlösare"
-rule-builder.move-up: "Flytta upp"
-rule-builder.move-down: "Flytta ner"
-rule-builder.remove: "Ta bort"
+rule-condition.validation.brackets-invalid: Parenteser är inte korrekt balanserade
+rule-builder.add-action: Lägg till åtgärd
+rule-builder.add-trigger: Lägg till utlösare
+rule-builder.move-up: Flytta upp
+rule-builder.move-down: Flytta ner
+rule-builder.remove: Ta bort
 document-restrictions: Dokumentrestriktioner
 asset-restrictions: Assetrestriktioner
 object-restrictions: Objektrestriktioner
 display-mode: Visningsläge
 display-mode-display: Visa sökvägssreferens
 display-mode-inline-search: Inline-sökning
-display-mode-grid-view: "Rutnätsvy"
-display-mode-tag-field: "Taggfält"
-activate-column-configuration: "Aktivera kolumnkonfiguration"
-table-column-configuration: "Tabellkolumnkonfiguration"
+display-mode-grid-view: Rutnätsvy
+display-mode-tag-field: Taggfält
+activate-column-configuration: Aktivera kolumnkonfiguration
+table-column-configuration: Tabellkolumnkonfiguration
 center: Mitten
 north: Norr
 south: Söder
@@ -2560,14 +2560,14 @@ quantity-values.columns.converter: Konverterartjänst
 quantity-values.columns.actions: Åtgärder
 quantity-values.create-modal.title: Skapa kvantitetsvärdets enhet
 quantity-values.create-modal.id-label: Unik identifierare
-quantity-values.create-modal.id-placeholder: "t.ex. km, kg, ..."
+quantity-values.create-modal.id-placeholder: t.ex. km, kg, ...
 quantity-values.create-modal.id-required: Unik identifierare är obligatorisk
 quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
 owner: Ägare
-reverse-object-relation.tooltip: "Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras."
+reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält
 allowed-targets: Tillåtna mål
 bulk-export.title: Massexport

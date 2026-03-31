@@ -3,9 +3,9 @@ common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
 dont-ask-again: "Don't ask again"
-widget.missing-context.title: "Missing Context"
-widget.missing-context.description: "No related element found"
-widget.missing-tab-context.description: "This feature is not supported for the related element"
+widget.missing-context.title: Missing Context
+widget.missing-context.description: No related element found
+widget.missing-tab-context.description: This feature is not supported for the related element
 block: Block
 error.error_something_generic_went_wrong: Something went wrong
 error.error_element_exists: Element already exists
@@ -25,7 +25,7 @@ sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
 content-settings: Content Settings
 site-domain.main_site: Main Site
-relation-invalid-key-in-columns: "Invalid value used for key column. Please avoid special characters and reserved keywords."
+relation-invalid-key-in-columns: Invalid value used for key column. Please avoid special characters and reserved keywords.
 import-modal.title: Import
 import-modal.upload: Upload
 import-modal.browse-files: Browse Files
@@ -67,7 +67,7 @@ asset.upload.files.uploaded: "{{successItems}} files are uploaded"
 asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Upload completed successfully
 asset.upload.files.completed-actions: Completed actions
-asset.upload.validation: "Please add a file"
+asset.upload.validation: Please add a file
 asset.upload.file-exists.title: File already exists
 asset.upload.file-exists.message: 'The file "{{fileName}}" already exists in this folder. Do you want to overwrite it?'
 asset.upload.overwrite: Overwrite
@@ -75,14 +75,14 @@ asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
 asset.upload.folder-drop.creating-folders: Creating folders
-asset.upload.folder-drop.creating-folders-hint: "Please wait while the folder structure is being created…"
-upload.error.file-too-large: "The file is bigger than the actual upload limit of the server."
+asset.upload.folder-drop.creating-folders-hint: Please wait while the folder structure is being created…
+upload.error.file-too-large: The file is bigger than the actual upload limit of the server.
 upload.error.max-file-size-exceeded: "File size exceeds the maximum allowed size of {{maxSize}}"
-upload.error.generic: "The file could not be uploaded."
-upload.error.upload-failed: "Upload failed"
-upload.error.failed-to-fetch-asset-details: "Failed to fetch asset details"
-upload.success: "File uploaded successfully"
-asset.select.type.nullable: "All types"
+upload.error.generic: The file could not be uploaded.
+upload.error.upload-failed: Upload failed
+upload.error.failed-to-fetch-asset-details: Failed to fetch asset details
+upload.success: File uploaded successfully
+asset.select.type.nullable: All types
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
@@ -129,7 +129,7 @@ page: Page
 email: Email
 link: Link
 hardlink: Hardlink
-blank: "Blank"
+blank: Blank
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.select-class-to-display: Select a class to display
@@ -651,7 +651,7 @@ tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 csv-separated-options: CSV separated options
-csv-separated-options-info: "The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value."
+csv-separated-options-info: The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value.
 add: Add
 new: New
 save: Save
@@ -677,36 +677,36 @@ asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
-width-tooltip: "The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+width-tooltip: The width of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units.
 width-field: Width field
 width-unit: Width unit
-height-tooltip: "The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units."
+height-tooltip: The height of this component. A numeric value will be interpreted as the number of pixels; a string value will be treated as a CSS value with units.
 table-data-tooltip: "Example of how to add data: \n\n one|two|three \n four|five|six \n seven|eight|nine"
 use-current-date: Use current date
 respect-timezone: Respect timezone
 column-type: Column type
 specific-settings: Specific Settings
-restrict-selection-to: "Restrict selection to"
+restrict-selection-to: Restrict selection to
 only-configured-languages: Show only in system settings configured languages
 multiselect-render-type: Render Type
 maximum-items: Maximum Items
 enforce-validation: Enforce Validation
 options-source: Options Source
-options-source-configure: "Configure"
-options-source-select-options: "Select Options"
-options-source-options-provider: "Options Provider"
-options-provider-class: "Options Provider Class or Service Name"
-options-provider-data: "Options Provider Data"
+options-source-configure: Configure
+options-source-select-options: Select Options
+options-source-options-provider: Options Provider
+options-provider-class: Options Provider Class or Service Name
+options-provider-data: Options Provider Data
 switch-to-selection-mode: Switch to selection mode
 switch-to-drag-mode: Switch to drag mode
 select-options: Select Options
 value: Value
 display-name: Display Name
 default-values-settings: Default value settings
-default-values-tooltip: "The default value is used if either inheritance is deactivated or if the parent value is empty."
+default-values-tooltip: The default value is used if either inheritance is deactivated or if the parent value is empty.
 default-value: Default value
 default-value-generator: Default value generator service / class
-enforce-validation-tooltip: "When enabled, it prevents invalid options from being saved. By default, the API allows saving invalid options"
+enforce-validation-tooltip: When enabled, it prevents invalid options from being saved. By default, the API allows saving invalid options
 show-char-count: Show character count
 column-length: Column length
 max-length: Maximum length
@@ -719,7 +719,7 @@ increment-step: Increment step
 decimal-precision: Decimal precision
 decimal-size: Decimal size
 decimal-settings: Decimal settings
-decimal-settings-tooltip: "If decimal size or precision are specified, DECIMAL(decimalSize, decimalPrecision) MySQL type is used. Default values if missing are 64 as size and 0 as precision. Please note that in MySQL terms, the decimalSize is called precision and the decimalPrecision is called scale."
+decimal-settings-tooltip: If decimal size or precision are specified, DECIMAL(decimalSize, decimalPrecision) MySQL type is used. Default values if missing are 64 as size and 0 as precision. Please note that in MySQL terms, the decimalSize is called precision and the decimalPrecision is called scale.
 integer: Integer
 unsigned: Only unsigned
 auto-convert: Auto convert
@@ -790,15 +790,15 @@ enable-text-selection: Enable text selection
 allow-to-create-new-object: Allow to create a new object in relation field
 enable-async-load-in-admin: Enable async load in admin
 enable-async-load-in-admin-tooltip: "WARNING: Async Loading is NOT possible within Localized Fields and Blocks."
-path-formatter-service: "Formatter Service / Class"
+path-formatter-service: Formatter Service / Class
 allow-to-clear-relation: Allow to clear relations of this field
 allow-multiple-assignments: Allow multiple assignments
 number: Number
 bool: Bool
 column-bool: Column Bool
 multiselect: Multiselect
-layout: "Layout"
-layout-options: "Layout Options"
+layout: Layout
+layout-options: Layout Options
 allow-documents: Allow documents
 allow-assets: Allow assets
 asset-inline-download-allowed: Allow asset inline download
@@ -953,11 +953,11 @@ regex: RegEx
 regex-flags: RegEx Flags
 regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #)"
 test-string: Test string
-regex-validation-error-message: "The string does not match the required format."
+regex-validation-error-message: The string does not match the required format.
 calculator-class: Calculator Class
 calculator-expression: Calculator Expression
 calculator-type: Calculator Type
-calculator-type-tooltip: "See the official documentation to learn more about defining expressions or classes."
+calculator-type-tooltip: See the official documentation to learn more about defining expressions or classes.
 expression: Expression
 lazy-loading: Lazy Loading
 disallow-add-remove: Disallow Add / Remove
@@ -989,8 +989,8 @@ data: Data
 domain-label-width: Domain label width
 controller-action: Controller action
 controller-action-tooltip: 'Enter the controller & action in the following format: App\Controller\ProductController::slugAction'
-available-sites: "Available sites"
-empty-equals-allow-all-tooltip: "Empty = allow all"
+available-sites: Available sites
+empty-equals-allow-all-tooltip: Empty = allow all
 reset: Reset
 name: Name
 tooltip: Tooltip
@@ -1029,9 +1029,9 @@ jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.job.step_hint_single: "Step {{step}}"
-jobs.job.download-error: "Download failed"
-jobs.job.button-show-errors: "Show errors"
-jobs.job.error-modal.title: "Job Errors"
+jobs.job.download-error: Download failed
+jobs.job.button-show-errors: Show errors
+jobs.job.error-modal.title: Job Errors
 jobs.job.button-abort: Abort Job
 jobs.job.abort-confirm: Do you really want to abort this job?
 jobs.zip-job.title: "ZIP download of {{title}}"
@@ -1039,9 +1039,9 @@ jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV download of {{title}}"
 jobs.xlsx-job.title: "XLSX download of {{title}}"
 batch-edit.job-title: Batch Edit
-jobs.zip-upload-job.title: "Upload ZIP"
-jobs.zip-upload-job.step1.title: "Extracting ZIP"
-jobs.zip-upload-job.step2.title: "Creating assets"
+jobs.zip-upload-job.title: Upload ZIP
+jobs.zip-upload-job.step1.title: Extracting ZIP
+jobs.zip-upload-job.step2.title: Creating assets
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
@@ -1117,10 +1117,10 @@ element.tree.sorting.keyed-descending: Z to A (Key)
 element.tree.sorting.indexed: Index (Manual)
 element.tree.refresh: Refresh
 element.new-folder: New Folder
-element.new-folder.validation: "Please enter a valid name"
+element.new-folder.validation: Please enter a valid name
 element.rename: Rename
-element.rename.label: "Please enter the new name"
-element.rename.validation: "Please enter a valid name"
+element.rename.label: Please enter the new name
+element.rename.validation: Please enter a valid name
 element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
@@ -1173,8 +1173,8 @@ latitude: Latitude
 longitude: Longitude
 search-address: Search address
 search: Search
-geocode.address-not-found: "The entered address was not found"
-geocode.possible-causes: "Possible causes"
+geocode.address-not-found: The entered address was not found
+geocode.possible-causes: Possible causes
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: Do you really want to delete {{type}} '{{value}}'?
 relations.id: ID
@@ -1535,239 +1535,239 @@ predefined-asset-metadata.columns.target-type: Target Type
 predefined-asset-metadata.columns.actions: Actions
 predefined-asset-metadata.duplicate-entry.title: Predefined Metadata already exists
 predefined-asset-metadata.duplicate-entry.error: An entry with this name and language combination already exists. Please change one of the following values.
-appearance-branding.title: "Appearance & Branding"
-image-thumbnails.title: "Image Thumbnails"
-image-thumbnails.description: "Manage and configure image thumbnail settings for your assets."
-image-thumbnails.search.placeholder: "Search thumbnails..."
-image-thumbnails.tree.empty: "No thumbnails found"
-image-thumbnails.configuration.title: "Configuration"
-image-thumbnails.configuration.description: "Configure thumbnail settings"
-image-thumbnails.preview.title: "Preview"
-image-thumbnails.preview.description: "Preview thumbnail configuration"
-image-thumbnails.editor.empty.title: "Select a thumbnail"
-image-thumbnails.editor.empty.description: "Select a thumbnail from the tree to view or edit its configuration"
-image-thumbnails.editor.select-thumbnail: "Select a thumbnail configuration to edit"
-image-thumbnails.editor.general-settings: "General Settings"
-image-thumbnails.editor.name: "Name"
-image-thumbnails.editor.name-required: "Name is required"
-image-thumbnails.editor.description: "Description"
-image-thumbnails.editor.description-placeholder: "Enter thumbnail description..."
-image-thumbnails.editor.group: "Group"
-image-thumbnails.editor.group-required: "Group is required"
-image-thumbnails.editor.group-placeholder: "Select a group..."
-image-thumbnails.editor.no-group: "No Group"
-image-thumbnails.editor.format: "Format"
-image-thumbnails.editor.format-required: "Format is required"
-image-thumbnails.editor.format-placeholder: "Select a format..."
-image-thumbnails.editor.format-auto: "Auto (Web-optimized - recommended)"
-image-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
-image-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
-image-thumbnails.add.validation.message: "The thumbnail name is invalid"
-image-thumbnails.editor.advanced: "Advanced"
-image-thumbnails.editor.quality: "Quality"
-image-thumbnails.editor.quality.tooltip: "JPEG quality setting (1-100)"
-image-thumbnails.editor.high-resolution: "High Resolution"
-image-thumbnails.editor.high-resolution.tooltip: "High resolution factor for retina displays"
-image-thumbnails.editor.preserve-color: "Preserve Color"
+appearance-branding.title: Appearance & Branding
+image-thumbnails.title: Image Thumbnails
+image-thumbnails.description: Manage and configure image thumbnail settings for your assets.
+image-thumbnails.search.placeholder: Search thumbnails...
+image-thumbnails.tree.empty: No thumbnails found
+image-thumbnails.configuration.title: Configuration
+image-thumbnails.configuration.description: Configure thumbnail settings
+image-thumbnails.preview.title: Preview
+image-thumbnails.preview.description: Preview thumbnail configuration
+image-thumbnails.editor.empty.title: Select a thumbnail
+image-thumbnails.editor.empty.description: Select a thumbnail from the tree to view or edit its configuration
+image-thumbnails.editor.select-thumbnail: Select a thumbnail configuration to edit
+image-thumbnails.editor.general-settings: General Settings
+image-thumbnails.editor.name: Name
+image-thumbnails.editor.name-required: Name is required
+image-thumbnails.editor.description: Description
+image-thumbnails.editor.description-placeholder: Enter thumbnail description...
+image-thumbnails.editor.group: Group
+image-thumbnails.editor.group-required: Group is required
+image-thumbnails.editor.group-placeholder: Select a group...
+image-thumbnails.editor.no-group: No Group
+image-thumbnails.editor.format: Format
+image-thumbnails.editor.format-required: Format is required
+image-thumbnails.editor.format-placeholder: Select a format...
+image-thumbnails.editor.format-auto: Auto (Web-optimized - recommended)
+image-thumbnails.delete.confirm: Do you really want to delete the Thumbnail
+image-thumbnails.add.content: Enter the name of the new thumbnail (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: The thumbnail name is invalid
+image-thumbnails.editor.advanced: Advanced
+image-thumbnails.editor.quality: Quality
+image-thumbnails.editor.quality.tooltip: JPEG quality setting (1-100)
+image-thumbnails.editor.high-resolution: High Resolution
+image-thumbnails.editor.high-resolution.tooltip: High resolution factor for retina displays
+image-thumbnails.editor.preserve-color: Preserve Color
 image-thumbnails.editor.preserve-color.tooltip: "Preserve color (profile, space) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
-image-thumbnails.editor.force-process-icc: "Force Process ICC Profiles"
-image-thumbnails.editor.force-process-icc.tooltip: "Force process ICC profiles (Imagick, ORIGINAL)"
-image-thumbnails.editor.preserve-metadata: "Preserve Meta Data"
+image-thumbnails.editor.force-process-icc: Force Process ICC Profiles
+image-thumbnails.editor.force-process-icc.tooltip: Force process ICC profiles (Imagick, ORIGINAL)
+image-thumbnails.editor.preserve-metadata: Preserve Meta Data
 image-thumbnails.editor.preserve-metadata.tooltip: "Preserve meta data (don't strip) (Imagick, ORIGINAL)\n('Preserve meta data' and 'preserve color' only works for transitions without compositions (frame, background color, ...) and color modifications (greyscale, sepia, ...))"
-image-thumbnails.editor.rasterize-svg: "Rasterize SVGs"
+image-thumbnails.editor.rasterize-svg: Rasterize SVGs
 image-thumbnails.editor.rasterize-svg.tooltip: "Rasterize SVGs (Imagick)\n(SVGs get automatically rasterized when a transformation other than resize or scale by width/height is used.)"
-image-thumbnails.editor.use-cropbox: "Use Cropbox"
+image-thumbnails.editor.use-cropbox: Use Cropbox
 image-thumbnails.editor.use-cropbox.tooltip: "Use Cropbox (Ghostscript)\n(Sets the page size to the CropBox rather than the MediaBox, useful to exclude some margins and non-content areas.)"
-image-thumbnails.editor.downloadable: "Downloadable"
-image-thumbnails.editor.downloadable.tooltip: "List as option in download section on image detail view"
-image-thumbnails.editor.preserve-animation: "Preserve Animation"
+image-thumbnails.editor.downloadable: Downloadable
+image-thumbnails.editor.downloadable.tooltip: List as option in download section on image detail view
+image-thumbnails.editor.preserve-animation: Preserve Animation
 image-thumbnails.editor.preserve-animation.tooltip: "Preserve animations for GIF (Imagick)\n(Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
-image-thumbnails.editor.media-queries: "Media Queries"
-image-thumbnails.editor.media-queries.new: "New"
-image-thumbnails.editor.media-queries.default: "Default"
+image-thumbnails.editor.media-queries: Media Queries
+image-thumbnails.editor.media-queries.new: New
+image-thumbnails.editor.media-queries.default: Default
 image-thumbnails.editor.media-queries.empty: "No media queries defined. Click 'New' to add a CSS media query."
-image-thumbnails.editor.media-query.modal.title: "New Media Query"
-image-thumbnails.editor.media-query.modal.label: "Enter a valid CSS media query"
-image-thumbnails.editor.media-queries.add.title: "New Media Query"
-image-thumbnails.editor.media-queries.add.label: "Enter a valid CSS media query"
+image-thumbnails.editor.media-query.modal.title: New Media Query
+image-thumbnails.editor.media-query.modal.label: Enter a valid CSS media query
+image-thumbnails.editor.media-queries.add.title: New Media Query
+image-thumbnails.editor.media-queries.add.label: Enter a valid CSS media query
 image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
-image-thumbnails.editor.transformations: "Transformations"
-image-thumbnails.editor.transformations.resize: "Resize"
-image-thumbnails.editor.transformations.scale-by-height: "Scale by Height"
-image-thumbnails.editor.transformations.trim: "Trim"
-image-thumbnails.editor.transformations.effects: "Effects"
-image-thumbnails.editor.transformations.effects.sepia: "Sepia"
-image-thumbnails.editor.transformations.effects.grayscale: "Grayscale"
-image-thumbnails.editor.transformations.effects.sharpen: "Sharpen"
+image-thumbnails.editor.transformations: Transformations
+image-thumbnails.editor.transformations.resize: Resize
+image-thumbnails.editor.transformations.scale-by-height: Scale by Height
+image-thumbnails.editor.transformations.trim: Trim
+image-thumbnails.editor.transformations.effects: Effects
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Grayscale
+image-thumbnails.editor.transformations.effects.sharpen: Sharpen
 image-thumbnails.editor.transformations.empty: "No transformations defined. Use the 'Transformations' button to add image transformations."
-image-thumbnails.editor.save-error: "Could not save thumbnail configuration"
+image-thumbnails.editor.save-error: Could not save thumbnail configuration
 
 # Transformation Groups
-image-thumbnails.transformations.groups.main: "Transformations"
-image-thumbnails.transformations.groups.effects: "Effects"
+image-thumbnails.transformations.groups.main: Transformations
+image-thumbnails.transformations.groups.effects: Effects
 
 # Media Query Translations
-image-thumbnails.media-queries.add-transformation: "Add Transformation"
+image-thumbnails.media-queries.add-transformation: Add Transformation
 
 # Cover Transformation
-image-thumbnails.transformations.cover.title: "Configure Cover"
-image-thumbnails.transformations.cover.width-height: "Width, Height"
-image-thumbnails.transformations.cover.width: "Width"
-image-thumbnails.transformations.cover.height: "Height"
-image-thumbnails.transformations.cover.focal-point-info: "The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used."
-image-thumbnails.transformations.cover.positioning: "Default Positioning"
-image-thumbnails.transformations.cover.positioning-center: "Center"
-image-thumbnails.transformations.cover.positioning-topleft: "Top Left"
-image-thumbnails.transformations.cover.positioning-topright: "Top Right"
-image-thumbnails.transformations.cover.positioning-bottomleft: "Bottom Left"
-image-thumbnails.transformations.cover.positioning-bottomright: "Bottom Right"
-image-thumbnails.transformations.cover.force-resize: "Force resize"
+image-thumbnails.transformations.cover.title: Configure Cover
+image-thumbnails.transformations.cover.width-height: Width, Height
+image-thumbnails.transformations.cover.width: Width
+image-thumbnails.transformations.cover.height: Height
+image-thumbnails.transformations.cover.focal-point-info: The image is cropped automatically based on the focal point set on the source image. If no focal point is present, the default positioning setting below is used.
+image-thumbnails.transformations.cover.positioning: Default Positioning
+image-thumbnails.transformations.cover.positioning-center: Center
+image-thumbnails.transformations.cover.positioning-topleft: Top Left
+image-thumbnails.transformations.cover.positioning-topright: Top Right
+image-thumbnails.transformations.cover.positioning-bottomleft: Bottom Left
+image-thumbnails.transformations.cover.positioning-bottomright: Bottom Right
+image-thumbnails.transformations.cover.force-resize: Force resize
 
 # Add Overlay Transformation
-image-thumbnails.transformations.add-overlay.overlay-image: "Overlay Image"
-image-thumbnails.transformations.add-overlay.x: "X Position"
-image-thumbnails.transformations.add-overlay.y: "Y Position"
-image-thumbnails.transformations.add-overlay.origin: "Origin"
-image-thumbnails.transformations.add-overlay.origin-top-left: "Top Left"
-image-thumbnails.transformations.add-overlay.origin-top-right: "Top Right"
-image-thumbnails.transformations.add-overlay.origin-center: "Center"
-image-thumbnails.transformations.add-overlay.origin-bottom-left: "Bottom Left"
-image-thumbnails.transformations.add-overlay.origin-bottom-right: "Bottom Right"
-image-thumbnails.transformations.add-overlay.alpha: "Opacity"
-image-thumbnails.transformations.add-overlay.composite: "Composite"
+image-thumbnails.transformations.add-overlay.overlay-image: Overlay Image
+image-thumbnails.transformations.add-overlay.x: X Position
+image-thumbnails.transformations.add-overlay.y: Y Position
+image-thumbnails.transformations.add-overlay.origin: Origin
+image-thumbnails.transformations.add-overlay.origin-top-left: Top Left
+image-thumbnails.transformations.add-overlay.origin-top-right: Top Right
+image-thumbnails.transformations.add-overlay.origin-center: Center
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Bottom Left
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Bottom Right
+image-thumbnails.transformations.add-overlay.alpha: Opacity
+image-thumbnails.transformations.add-overlay.composite: Composite
 
 # Gaussian Blur Transformation
-image-thumbnails.transformations.gaussian-blur.radius: "Radius"
-image-thumbnails.transformations.gaussian-blur.sigma: "Sigma"
+image-thumbnails.transformations.gaussian-blur.radius: Radius
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
 
 # Scale by Width Transformation
-image-thumbnails.transformations.scale-by-width.title: "Configure Scale by Width"
-image-thumbnails.transformations.scale-by-width.width: "Width"
-image-thumbnails.transformations.scale-by-width.force-resize: "Force Resize"
+image-thumbnails.transformations.scale-by-width.title: Configure Scale by Width
+image-thumbnails.transformations.scale-by-width.width: Width
+image-thumbnails.transformations.scale-by-width.force-resize: Force Resize
 
 # Resize Transformation
-image-thumbnails.transformations.resize.config-title: "Configure Resize"
-image-thumbnails.transformations.resize.width: "Width"
-image-thumbnails.transformations.resize.height: "Height"
+image-thumbnails.transformations.resize.config-title: Configure Resize
+image-thumbnails.transformations.resize.width: Width
+image-thumbnails.transformations.resize.height: Height
 
 # Scale by Height Transformation
-image-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
-image-thumbnails.transformations.scale-by-height.height: "Height"
-image-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
-image-thumbnails.transformations.scale-by-height.force-resize: "Force Resize"
+image-thumbnails.transformations.scale-by-height.config-title: Configure Scale by Height
+image-thumbnails.transformations.scale-by-height.height: Height
+image-thumbnails.transformations.scale-by-height.height-placeholder: Enter height in pixels
+image-thumbnails.transformations.scale-by-height.force-resize: Force Resize
 
 # Trim Transformation
-image-thumbnails.transformations.trim.config-title: "Configure Trim"
-image-thumbnails.transformations.trim.trim-option: "Trim Option"
-image-thumbnails.transformations.trim.trim-option-placeholder: "Select trim option"
-image-thumbnails.transformations.trim.disabled: "Disabled"
-image-thumbnails.transformations.trim.left: "Left"
-image-thumbnails.transformations.trim.right: "Right"
-image-thumbnails.transformations.trim.both: "Both"
+image-thumbnails.transformations.trim.config-title: Configure Trim
+image-thumbnails.transformations.trim.trim-option: Trim Option
+image-thumbnails.transformations.trim.trim-option-placeholder: Select trim option
+image-thumbnails.transformations.trim.disabled: Disabled
+image-thumbnails.transformations.trim.left: Left
+image-thumbnails.transformations.trim.right: Right
+image-thumbnails.transformations.trim.both: Both
 
 # Effects Transformation
-image-thumbnails.transformations.effects.config-title: "Configure Effect"
-image-thumbnails.transformations.effects.effect-type: "Effect Type"
-image-thumbnails.transformations.effects.effect-type-placeholder: "Select effect type"
-image-thumbnails.transformations.effects.sepia: "Sepia"
-image-thumbnails.transformations.effects.grayscale: "Grayscale"
-image-thumbnails.transformations.effects.sharpen: "Sharpen"
-image-thumbnails.transformations.effects.intensity: "Intensity"
+image-thumbnails.transformations.effects.config-title: Configure Effect
+image-thumbnails.transformations.effects.effect-type: Effect Type
+image-thumbnails.transformations.effects.effect-type-placeholder: Select effect type
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Grayscale
+image-thumbnails.transformations.effects.sharpen: Sharpen
+image-thumbnails.transformations.effects.intensity: Intensity
 
 # Transformation tool strip
-image-thumbnails.transformations.add: "Add transformation"
-image-thumbnails.transformations.move-up: "Move Up"
-image-thumbnails.transformations.move-down: "Move Down"
-image-thumbnails.transformations.remove: "Remove"
+image-thumbnails.transformations.add: Add transformation
+image-thumbnails.transformations.move-up: Move Up
+image-thumbnails.transformations.move-down: Move Down
+image-thumbnails.transformations.remove: Remove
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
-image-thumbnails.transformations.no-configuration-required: "No configuration required"
+image-thumbnails.transformations.no-configuration-required: No configuration required
 
-video-thumbnails.title: "Video Thumbnails"
-video-thumbnails.description: "Manage and configure video thumbnail settings for your assets."
-video-thumbnails.search.placeholder: "Search thumbnails..."
-video-thumbnails.tree.empty: "No thumbnails found"
-video-thumbnails.editor.select-thumbnail: "Select a video thumbnail configuration to edit"
-video-thumbnails.editor.name: "Name"
-video-thumbnails.editor.name-required: "Name is required"
-video-thumbnails.editor.description: "Description"
-video-thumbnails.editor.group: "Group"
-video-thumbnails.editor.no-group: "No Group"
-video-thumbnails.editor.presetting: "Select a presetting"
-video-thumbnails.editor.video-bitrate: "Video Bitrate"
-video-thumbnails.editor.audio-bitrate: "Audio Bitrate"
-video-thumbnails.editor.transformations: "Transformations"
-video-thumbnails.editor.media-segments: "Media Segments"
-video-thumbnails.editor.media-segments.new: "New"
+video-thumbnails.title: Video Thumbnails
+video-thumbnails.description: Manage and configure video thumbnail settings for your assets.
+video-thumbnails.search.placeholder: Search thumbnails...
+video-thumbnails.tree.empty: No thumbnails found
+video-thumbnails.editor.select-thumbnail: Select a video thumbnail configuration to edit
+video-thumbnails.editor.name: Name
+video-thumbnails.editor.name-required: Name is required
+video-thumbnails.editor.description: Description
+video-thumbnails.editor.group: Group
+video-thumbnails.editor.no-group: No Group
+video-thumbnails.editor.presetting: Select a presetting
+video-thumbnails.editor.video-bitrate: Video Bitrate
+video-thumbnails.editor.audio-bitrate: Audio Bitrate
+video-thumbnails.editor.transformations: Transformations
+video-thumbnails.editor.media-segments: Media Segments
+video-thumbnails.editor.media-segments.new: New
 video-thumbnails.editor.media-segments.empty: "No media segments defined. Click 'New' to add a segment (e.g. 500K)."
-video-thumbnails.editor.media-segments.add.title: "New Media Segment"
-video-thumbnails.editor.media-segments.add.label: "Enter a segment name (e.g. 500K)"
-video-thumbnails.editor.media-segments.add.bitrate-hint: "Please enter a valid bitrate (e.g. 400k, 1500k, 1M)"
-video-thumbnails.editor.media-segments.add.ok: "Create"
-video-thumbnails.editor.media-segments.default: "Default"
-video-thumbnails.editor.transformations.empty: "No transformations have been selected"
-video-thumbnails.delete.confirm: "Do you really want to delete the Thumbnail"
-video-thumbnails.add.content: "Enter the name of the new thumbnail (a-zA-Z0-9_-)"
-video-thumbnails.add.validation.message: "The thumbnail name is invalid"
+video-thumbnails.editor.media-segments.add.title: New Media Segment
+video-thumbnails.editor.media-segments.add.label: Enter a segment name (e.g. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Please enter a valid bitrate (e.g. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Create
+video-thumbnails.editor.media-segments.default: Default
+video-thumbnails.editor.transformations.empty: No transformations have been selected
+video-thumbnails.delete.confirm: Do you really want to delete the Thumbnail
+video-thumbnails.add.content: Enter the name of the new thumbnail (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: The thumbnail name is invalid
 
 # Video Transformation tool strip
-video-thumbnails.transformations.move-up: "Move Up"
-video-thumbnails.transformations.move-down: "Move Down"
-video-thumbnails.transformations.remove: "Remove"
+video-thumbnails.transformations.move-up: Move Up
+video-thumbnails.transformations.move-down: Move Down
+video-thumbnails.transformations.remove: Remove
 
 # Resize Transformation
-video-thumbnails.transformations.resize.config-title: "Configure Resize"
-video-thumbnails.transformations.resize.width: "Width"
-video-thumbnails.transformations.resize.width-placeholder: "Enter width in pixels"
-video-thumbnails.transformations.resize.height: "Height"
-video-thumbnails.transformations.resize.height-placeholder: "Enter height in pixels"
-video-thumbnails.transformations.resize.even-number-hint: "Width and height must be an even number"
+video-thumbnails.transformations.resize.config-title: Configure Resize
+video-thumbnails.transformations.resize.width: Width
+video-thumbnails.transformations.resize.width-placeholder: Enter width in pixels
+video-thumbnails.transformations.resize.height: Height
+video-thumbnails.transformations.resize.height-placeholder: Enter height in pixels
+video-thumbnails.transformations.resize.even-number-hint: Width and height must be an even number
 
 # Scale by Width Transformation
-video-thumbnails.transformations.scale-by-width.config-title: "Configure Scale by Width"
-video-thumbnails.transformations.scale-by-width.width: "Width"
-video-thumbnails.transformations.scale-by-width.width-placeholder: "Enter width in pixels"
+video-thumbnails.transformations.scale-by-width.config-title: Configure Scale by Width
+video-thumbnails.transformations.scale-by-width.width: Width
+video-thumbnails.transformations.scale-by-width.width-placeholder: Enter width in pixels
 
 # Scale by Height Transformation
-video-thumbnails.transformations.scale-by-height.config-title: "Configure Scale by Height"
-video-thumbnails.transformations.scale-by-height.height: "Height"
-video-thumbnails.transformations.scale-by-height.height-placeholder: "Enter height in pixels"
+video-thumbnails.transformations.scale-by-height.config-title: Configure Scale by Height
+video-thumbnails.transformations.scale-by-height.height: Height
+video-thumbnails.transformations.scale-by-height.height-placeholder: Enter height in pixels
 
 # Cut Transformation
-video-thumbnails.transformations.cut.config-title: "Configure Cut"
-video-thumbnails.transformations.cut.start: "Start"
+video-thumbnails.transformations.cut.config-title: Configure Cut
+video-thumbnails.transformations.cut.start: Start
 video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
-video-thumbnails.transformations.cut.duration: "Duration"
+video-thumbnails.transformations.cut.duration: Duration
 video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
 
 # Set Framerate Transformation
-video-thumbnails.transformations.set-framerate.config-title: "Configure Set Framerate"
-video-thumbnails.transformations.set-framerate.fps: "FPS"
+video-thumbnails.transformations.set-framerate.config-title: Configure Set Framerate
+video-thumbnails.transformations.set-framerate.fps: FPS
 video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
 
 # Color Channel Mixer Transformation
-video-thumbnails.transformations.color-channel-mixer.config-title: "Configure Color Channel Mixer"
-video-thumbnails.transformations.color-channel-mixer.effect: "Effect"
-video-thumbnails.transformations.color-channel-mixer.effect-placeholder: "Select an effect"
-video-thumbnails.transformations.color-channel-mixer.grayscale: "Grayscale"
-video-thumbnails.transformations.color-channel-mixer.sepia: "Sepia"
-video-thumbnails.transformations.color-channel-mixer.cold: "Cold"
+video-thumbnails.transformations.color-channel-mixer.config-title: Configure Color Channel Mixer
+video-thumbnails.transformations.color-channel-mixer.effect: Effect
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Select an effect
+video-thumbnails.transformations.color-channel-mixer.grayscale: Grayscale
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Cold
 
 # Mute Transformation
-video-thumbnails.transformations.mute.config-title: "Mute"
-video-thumbnails.transformations.no-configuration-required: "No configuration required"
+video-thumbnails.transformations.mute.config-title: Mute
+video-thumbnails.transformations.no-configuration-required: No configuration required
 
-appearance-branding.color.title: "Color"
-appearance-branding.color.brand-color.label: "Brand Color"
-appearance-branding.color.brand-color.description: "Applied to the subscription status indicator and the default user avatar."
-appearance-branding.color.background-shade.label: "Background Shade"
-appearance-branding.color.background-shade.description: "Applied to the canvas background with lowered opacity for a seamless blend."
-appearance-branding.custom-logo.title: "Custom Logo"
-appearance-branding.custom-logo.description: "Used in the login and in the canvas background"
-appearance-branding.custom-login-background.title: "Custom Login Background Image"
-appearance-branding.custom-login-background.description: "Used in the login screen as a background image"
-appearance-branding.update.success: "Appearance settings updated successfully"
+appearance-branding.color.title: Color
+appearance-branding.color.brand-color.label: Brand Color
+appearance-branding.color.brand-color.description: Applied to the subscription status indicator and the default user avatar.
+appearance-branding.color.background-shade.label: Background Shade
+appearance-branding.color.background-shade.description: Applied to the canvas background with lowered opacity for a seamless blend.
+appearance-branding.custom-logo.title: Custom Logo
+appearance-branding.custom-logo.description: Used in the login and in the canvas background
+appearance-branding.custom-login-background.title: Custom Login Background Image
+appearance-branding.custom-login-background.description: Used in the login screen as a background image
+appearance-branding.update.success: Appearance settings updated successfully
 search-replace-assignments.search-for: Search for
 search-replace-assignments.replace-with: Replace with
 search-replace-assignments.select-element: Select target element
@@ -1793,7 +1793,7 @@ url-slug.invalid: Please enter a valid URL slug (starting with a '/')
 site-id: Site ID
 deleted: deleted
 collection.empty: No available fields yet. Start by adding a field.
-field-collection.add.default: "Add collection"
+field-collection.add.default: Add collection
 video.type: Video Type
 video.type.asset: Asset
 video.type.youtube: YouTube
@@ -1905,7 +1905,7 @@ preview.phone-horizontal: Phone horizontal
 preview.select_date_time: Select date & time
 preview.screen_size_too_small: The available space is too small to display the selected preview mode.
 inheritance-active: "Data inherited from object ID {{id}}"
-inheritance-broken: "Data inheritance broken"
+inheritance-broken: Data inheritance broken
 main: Main
 main_admin: Main (Admin Mode)
 draft-alert: The current version is a draft. You can delete the draft to restore the previous version.
@@ -1921,7 +1921,7 @@ details: Details
 element: Element
 entries: entries
 entry: entry
-error_element_validation_failed: "Validation failed"
+error_element_validation_failed: Validation failed
 element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}}
 edit-modal.inline-edit: Inline edit
@@ -2438,7 +2438,7 @@ navigation.about: About
 about.title: About
 about.platform-version: "Platform Version: {{version}}"
 about.version: "Core Version: {{version}}"
-about.copyright: "© by Pimcore GmbH"
+about.copyright: © by Pimcore GmbH
 about.buttons.license: License
 about.buttons.contact: Contact
 custom-language.default: Default
@@ -2505,33 +2505,33 @@ system-settings.form.field.main-domain: Main Domain
 system-settings.form.field.redirect-to-maindomain: Redirect unknown domains (not used for a site and for redirects, ...) to the main domain (above)
 system-settings.form.field.default-error-page: Error Page (Default)
 system-settings.update.success: System settings updated successfully
-rule-condition.operator.and: "AND"
-rule-condition.operator.or: "OR"
-rule-condition.operator.and-not: "AND NOT"
-rule-condition.add-condition: "Add condition"
-rule-condition.move-up: "Move up"
-rule-condition.move-down: "Move down"
-rule-condition.remove: "Remove"
-rule-condition.bracket.toggle-left: "Toggle left bracket"
-rule-condition.bracket.toggle-right: "Toggle right bracket"
+rule-condition.operator.and: AND
+rule-condition.operator.or: OR
+rule-condition.operator.and-not: AND NOT
+rule-condition.add-condition: Add condition
+rule-condition.move-up: Move up
+rule-condition.move-down: Move down
+rule-condition.remove: Remove
+rule-condition.bracket.toggle-left: Toggle left bracket
+rule-condition.bracket.toggle-right: Toggle right bracket
 rule-condition.validation.brackets-closing-without-opening: "Closing bracket ')' found without a matching opening bracket '('"
 rule-condition.validation.brackets-missing-closing: "Opening bracket '(' found without a matching closing bracket ')'"
-rule-condition.validation.brackets-invalid: "Brackets are not properly balanced"
-rule-builder.add-action: "Add action"
-rule-builder.add-trigger: "Add trigger"
-rule-builder.move-up: "Move up"
-rule-builder.move-down: "Move down"
-rule-builder.remove: "Remove"
+rule-condition.validation.brackets-invalid: Brackets are not properly balanced
+rule-builder.add-action: Add action
+rule-builder.add-trigger: Add trigger
+rule-builder.move-up: Move up
+rule-builder.move-down: Move down
+rule-builder.remove: Remove
 document-restrictions: Document restrictions
 asset-restrictions: Asset restrictions
 object-restrictions: Object restrictions
 display-mode: Display mode
 display-mode-display: Display path reference
 display-mode-inline-search: Inline search
-display-mode-grid-view: "Grid view"
-display-mode-tag-field: "Tag field"
-activate-column-configuration: "Activate column configuration"
-table-column-configuration: "Table column configuration"
+display-mode-grid-view: Grid view
+display-mode-tag-field: Tag field
+activate-column-configuration: Activate column configuration
+table-column-configuration: Table column configuration
 center: Center
 north: North
 south: South
@@ -2562,14 +2562,14 @@ quantity-values.columns.converter: Converter Service
 quantity-values.columns.actions: Actions
 quantity-values.create-modal.title: Create Quantity Value Unit
 quantity-values.create-modal.id-label: Unique identifier
-quantity-values.create-modal.id-placeholder: "e.g. km, kg, ..."
+quantity-values.create-modal.id-placeholder: e.g. km, kg, ...
 quantity-values.create-modal.id-required: Unique identifier is required
 quantity-values.create-modal.create: Create
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Import Quantity Value Units
 owner: Owner
-reverse-object-relation.tooltip: "Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored."
+reverse-object-relation.tooltip: Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored.
 disabled-fields: Disabled fields
 allowed-targets: Allowed Targets
 bulk-export.title: Bulk Export
