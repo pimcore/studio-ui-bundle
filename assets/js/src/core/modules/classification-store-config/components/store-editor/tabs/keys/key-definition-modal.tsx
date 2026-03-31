@@ -61,7 +61,7 @@ const KeyDefinitionFormBridge = ({
     }
   }, [structure, currentFieldDefinitionId, setCurrentFieldDefinitionId, setCurrentFieldDefinitionIdPath])
 
-  return <LayoutForm noPadding={noPadding} />
+  return <LayoutForm noPadding={ noPadding } />
 }
 
 /**
@@ -175,29 +175,29 @@ export const KeyDefinitionModal = ({
   return (
     <Modal
       destroyOnClose
-      okText={t('save')}
-      onCancel={onClose}
-      onOk={() => { void handleSave() }}
-      open={open}
-      styles={{ body: { maxHeight: '65vh', overflowY: 'auto' } }}
-      title={keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : ''}
-      width={900}
+      okText={ t('save') }
+      onCancel={ onClose }
+      onOk={ () => { void handleSave() } }
+      open={ open }
+      styles={ { body: { maxHeight: '65vh', overflowY: 'auto' } } }
+      title={ keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : '' }
+      width={ 900 }
     >
       {keyDetail !== undefined && (
-        <AreaProvider area={AREA}>
+        <AreaProvider area={ AREA }>
           <SettingsProvider
-            GeneralSettingsFormFields={NoFormFields}
-            useDetailGeneralSettingsQuery={useStubQuery}
-            useDetailUpdateMutation={useStubMutation}
-            useItemsQuery={useStubQuery}
+            GeneralSettingsFormFields={ NoFormFields }
+            useDetailGeneralSettingsQuery={ useStubQuery }
+            useDetailUpdateMutation={ useStubMutation }
+            useItemsQuery={ useStubQuery }
           >
             <LayoutProvider
-              key={keyDetail.type ?? 'unknown'}
-              layout={layout}
+              key={ keyDetail.type ?? 'unknown' }
+              layout={ layout }
             >
               <KeyDefinitionFormBridge
                 noPadding
-                onGetLayout={handleGetLayout}
+                onGetLayout={ handleGetLayout }
               />
             </LayoutProvider>
           </SettingsProvider>
