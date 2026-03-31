@@ -188,8 +188,9 @@ export const Grid = ({
   })
 
   useMemo(() => {
+    updateRowDragColumn()
     updateRowSelectionColumn()
-  }, [columns, isRowSelectionEnabled, selectedRows])
+  }, [columns, isRowSelectionEnabled, enableRowDrag, selectedRows])
 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
@@ -389,7 +390,6 @@ export const Grid = ({
         columns={ columns }
         contextMenu={ props.contextMenu }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
-        enableRowDrag={ enableRowDrag }
         isSelected={ row.getIsSelected() }
         key={ row.id }
         measureElement={ measureElement }
@@ -604,6 +604,46 @@ export const Grid = ({
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()
+    }
+  }
+
+  function hasRowDragColumn (): boolean {
+    return columns.some(column => column.id === 'drag-handle')
+  }
+
+  function addRowDragColumn (): void {
+    if (hasRowDragColumn()) {
+      return
+    }
+
+    const column: ColumnDef<any> = {
+      id: 'drag-handle',
+      header: '',
+      cell: '',
+      enableResizing: false,
+      size: 50
+    }
+
+    columns.unshift(column)
+  }
+
+  function removeRowDragColumn (): void {
+    if (!hasRowDragColumn()) {
+      return
+    }
+
+    const index = columns.findIndex(column => column.id === 'drag-handle')
+
+    if (index !== -1) {
+      columns.splice(index, 1)
+    }
+  }
+
+  function updateRowDragColumn (): void {
+    if (enableRowDrag === true) {
+      addRowDragColumn()
+    } else {
+      removeRowDragColumn()
     }
   }
 

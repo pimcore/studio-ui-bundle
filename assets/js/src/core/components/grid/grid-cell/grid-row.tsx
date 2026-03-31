@@ -32,7 +32,6 @@ export interface GridRowProps {
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
-  enableRowDrag?: boolean
   enableColumnVirtualizer: boolean
   size?: GridProps['size']
   rowStyle?: CSSProperties
@@ -43,7 +42,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -134,7 +133,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
           : { ...style }
       }
     >
-      {visibleCells?.map((cell, index) => {
+      {visibleCells?.map((cell) => {
         return (
           <td
             className='ant-table-cell'
@@ -150,7 +149,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, rowStyle, virt
                 }
                       }
           >
-            {enableRowDrag === true && index === 0
+            {cell.column.id === 'drag-handle'
               ? renderRowReorderButton()
               : (
                 <GridCell

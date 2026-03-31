@@ -10,6 +10,7 @@
 
 import { useOperationalGridContext } from '../provider/operational-grid-provider'
 import { type ColumnDef } from '@tanstack/react-table'
+import { isNil } from 'lodash'
 
 export interface UseOperationsReturn {
   addRow: (data?: any) => void
@@ -26,6 +27,23 @@ export const useOperations = (): UseOperationsReturn => {
   const { value, onChange, finalGridProps, columns, onColumnsChange } = useOperationalGridContext()
   const selectedRows = finalGridProps.selectedRows
   const onSelectedRowsChange = finalGridProps.onSelectedRowsChange
+  const setRowId = finalGridProps.setRowId
+
+  const getRowId = (row: any, index: number): string => {
+    if (!isNil(setRowId)) {
+      return setRowId(row, index, undefined as any)
+    }
+
+    return String(index)
+  }
+
+  const getSelectedRowKeys = (): Set<string> => {
+    if (isNil(selectedRows)) return new Set()
+
+    return new Set(
+      Object.keys(selectedRows).filter(key => selectedRows[key])
+    )
+  }
 
   const addRow = (data?: any): void => {
     const newValue = [...value, data]
@@ -38,17 +56,12 @@ export const useOperations = (): UseOperationsReturn => {
   }
 
   const deleteSelectedRows = (): void => {
-    if (selectedRows === null || selectedRows === undefined) return
+    if (isNil(selectedRows)) return
 
-    const selectedIndices = Object.keys(selectedRows)
-      .filter(key => selectedRows[key])
-      .map(key => parseInt(key, 10))
-      .sort((a, b) => b - a) // Sort in reverse order to avoid index shifting
+    const selectedKeys = getSelectedRowKeys()
+    if (selectedKeys.size === 0) return
 
-    const newValue = [...value]
-    selectedIndices.forEach(index => {
-      newValue.splice(index, 1)
-    })
+    const newValue = value.filter((row, index) => !selectedKeys.has(getRowId(row, index)))
 
     onChange?.(newValue)
     onSelectedRowsChange?.({})
@@ -59,13 +72,12 @@ export const useOperations = (): UseOperationsReturn => {
   }
 
   const getSelectedRowsData = (): any[] => {
-    if (selectedRows === null || selectedRows === undefined) return []
+    if (isNil(selectedRows)) return []
 
-    return Object.keys(selectedRows)
-      .filter(key => selectedRows[key])
-      .map(key => parseInt(key, 10))
-      .filter(index => index < value.length)
-      .map(index => value[index])
+    const selectedKeys = getSelectedRowKeys()
+    if (selectedKeys.size === 0) return []
+
+    return value.filter((row, index) => selectedKeys.has(getRowId(row, index)))
   }
 
   const addColumn = (column: ColumnDef<any>, defaultValue: any = null): void => {
