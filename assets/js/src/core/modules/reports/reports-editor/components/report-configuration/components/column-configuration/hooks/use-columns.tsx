@@ -24,7 +24,6 @@ export const useColumns = (): Array<AccessorKeyColumnDef<unknown, never>> => {
   )
 
   return [
-    columnHelper.accessor(COLUMN_KEYS.ROW_DRAG, { header: '', size: 40 }),
     columnHelper.accessor(COLUMN_KEYS.NAME, {
       header: t('reports.editor.manage-column-configuration.name'),
       meta: { type: 'text-cell' }

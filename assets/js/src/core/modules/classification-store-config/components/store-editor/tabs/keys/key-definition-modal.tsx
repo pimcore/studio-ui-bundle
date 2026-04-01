@@ -181,9 +181,9 @@ export const KeyDefinitionModal = ({
       open={ open }
       styles={ { body: { maxHeight: '65vh', overflowY: 'auto' } } }
       title={ keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : '' }
-      width={ 700 }
+      width={ 900 }
     >
-      { keyDetail !== undefined && (
+      {keyDetail !== undefined && (
         <AreaProvider area={ AREA }>
           <SettingsProvider
             GeneralSettingsFormFields={ NoFormFields }
@@ -202,7 +202,7 @@ export const KeyDefinitionModal = ({
             </LayoutProvider>
           </SettingsProvider>
         </AreaProvider>
-      ) }
+      )}
     </Modal>
   )
 }
