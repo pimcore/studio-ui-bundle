@@ -51,3 +51,6 @@ export * from '@Pimcore/modules/data-object/data-object-provider'
 export * from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 
 export * from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+
+export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/advanced-column-form'
+export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/pipeline-layout-provider'

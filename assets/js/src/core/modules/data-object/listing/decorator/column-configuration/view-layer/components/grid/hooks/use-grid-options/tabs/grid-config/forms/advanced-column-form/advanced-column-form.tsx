@@ -26,9 +26,10 @@ import { useTranslation } from 'react-i18next'
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
   onChange?: (column: AvailableColumn) => void
+  showPreview?: boolean
 }
 
-export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps): React.JSX.Element => {
+export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: AdvancedColumnFormProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const { pipelineLayout } = usePipelineLayoutContext()
   const { t } = useTranslation()
@@ -143,10 +144,9 @@ export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps
                 </Pipeline.CustomItem>
               },
 
-              {
-                id: 'Preview',
-                component: <Preview column={ column } />
-              }
+              ...(showPreview
+                ? [{ id: 'Preview', component: <Preview column={ column } /> }]
+                : [])
             ] }
           />
         </Form.Item>
