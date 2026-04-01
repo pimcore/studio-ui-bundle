@@ -16,6 +16,7 @@ import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
+import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export interface IMainWidgetContext {
   nodeId: string
@@ -30,6 +31,7 @@ export interface WidgetManagerState {
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
+  permission?: UserPermission
   config: {
     translationKey?: string
     label?: string
