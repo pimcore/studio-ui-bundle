@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
@@ -18,6 +18,13 @@ export class DynamicTypeFieldDefinitionGender extends DynamicTypeFieldDefinition
 
   getIcon (): ElementIcon {
     return { type: 'name', value: 'gender' }
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      name: 'gender'
+    }
   }
 
   getGroup (): string[] {
