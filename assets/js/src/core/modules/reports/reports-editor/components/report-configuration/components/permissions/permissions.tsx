@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
-import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Form } from '@Pimcore/components/form/form'
@@ -29,8 +29,8 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const { data: roleList } = useRoleGetCollectionQuery()
-  const { data: userList } = useUserGetCollectionQuery()
+  const { data: roleList } = useRoleGetShareCollectionQuery()
+  const { data: userList } = useUserGetShareCollectionQuery()
 
   const [isSharedGlobally, setIsSharedGlobally] = useState(currentData.sharedGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
@@ -39,22 +39,22 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
 
   const initialUserList = useMemo(() => {
     return currentData.sharedUserNames
-      .map(item => userList?.items.find(user => user.username === item)?.id)
+      .map(item => userList?.items?.find(user => user.username === item)?.id)
       .filter(id => !isUndefined(id))
   }, [currentData.sharedUserNames])
 
   const initialRoleList = useMemo(() => {
     return currentData.sharedRoleNames
-      .map(item => roleList?.items.find(role => role.name === item)?.id)
+      .map(item => roleList?.items?.find(role => role.name === item)?.id)
       .filter(id => !isUndefined(id))
   }, [currentData.sharedRoleNames])
 
   const handleApplyChanges = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
     const updatedSharedUsers = sharedUsers
-      .map(id => userList?.items.find(user => user.id === id)?.username)
+      .map(id => userList?.items?.find(user => user.id === id)?.username)
       .filter(name => !isUndefined(name))
     const updatedSharedRoles = sharedRoles
-      .map(id => roleList?.items.find(role => role.id === id)?.name)
+      .map(id => roleList?.items?.find(role => role.id === id)?.name)
       .filter(name => !isUndefined(name))
 
     updateFormData?.({
