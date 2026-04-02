@@ -116,7 +116,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
 
     const fieldDefinition = isObject(column.config) && 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
 
-    const advancedDataObjectHeader = getDataObjectHeader(fieldDefinition?.title as string | undefined)
+    const advancedDataObjectHeader = getDataObjectHeader(isEmptyValue(fieldDefinition?.title) ? undefined : t(String(fieldDefinition?.title)))
     const defaultDataObjectHeader = getDataObjectHeader(column.title)
 
     const columnDefinition: IdentifiedColumnDef<unknown, never> = {
