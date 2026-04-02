@@ -98,7 +98,8 @@ export const {
   useUserGetImageQuery,
   useUserGetTreeQuery,
   useUserTokenLinkGetQuery,
-  useLazyUserTokenLinkGetQuery
+  useLazyUserTokenLinkGetQuery,
+  useUserGetShareCollectionQuery
 } = api
 
 export { api }
