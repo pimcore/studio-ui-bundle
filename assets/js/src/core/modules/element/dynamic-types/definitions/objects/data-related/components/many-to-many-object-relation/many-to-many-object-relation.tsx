@@ -102,23 +102,23 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
     return fieldDefinitions?.map((field: VisibleFieldDefinition) => {
       const newField = { ...field }
-
-      if (newField.key === 'id' || newField.key === 'fullpath' || newField.key === 'classname') {
-        if (newField.title === t('relations.reference')) {
-          return newField // skip modifications
-        }
-
-        newField.title = t(`relations.${newField.key}`)
-      } else {
-        newField.title = t(newField.title)
-      }
-
       const fieldData = find(availableGridColumnsData?.columns, { key: newField.key })
-
-      return {
+      const mergedField = {
         ...newField,
         ...fieldData?.config
       }
+
+      if (mergedField.key === 'id' || mergedField.key === 'fullpath' || mergedField.key === 'classname') {
+        if (mergedField.title === t('relations.reference')) {
+          return mergedField // skip modifications
+        }
+
+        mergedField.title = t(`relations.${mergedField.key}`)
+      } else {
+        mergedField.title = t(mergedField.title)
+      }
+
+      return mergedField
     })
   }, [availableGridColumnsData])
 
