@@ -31,6 +31,21 @@ export class CombinedProgressJobHandler extends MessageBusJobHandler {
 
     const progress = data.progress as number
 
+    // When this handler owns the step counter and the backend reports sub-steps
+    // within the child job, combine them into a single 0-100% value:
+    //   ((subStep - 1) / subTotalSteps) * 100 + progress / subTotalSteps
+    // e.g. sub-step 5/7 at 88% → (4/7)*100 + 88/7 ≈ 69.7%
+    if (!isNil(this.totalSteps)) {
+      const hasSubSteps = !isNil(data?.currentStep) && !isNil(data?.totalSteps) && (data.totalSteps as number) > 1
+      if (hasSubSteps) {
+        const subStep = data.currentStep as number
+        const subTotal = data.totalSteps as number
+        const combined = ((subStep - 1) / subTotal) * 100 + progress / subTotal
+        this.hadGradualProgress = true
+        return Math.max(0, Math.min(100, combined))
+      }
+    }
+
     if (progress < 100) {
       this.hadGradualProgress = true
       return Math.max(0, Math.min(100, progress))
@@ -44,8 +59,17 @@ export class CombinedProgressJobHandler extends MessageBusJobHandler {
     return null
   }
 
+  protected override transitionToChildJob (newJobRunId: number): void {
+    this.hadGradualProgress = false
+    super.transitionToChildJob(newJobRunId)
+  }
+
   protected override async processUpdate (data: any): Promise<void> {
-    if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
+    // When this handler owns the step counter (totalSteps set at construction),
+    // backend currentStep values are internal to the child job and must not
+    // be used to detect a step transition — transitionToChildJob handles that.
+    const isOwnedStep = !isNil(this.totalSteps)
+    if (!isOwnedStep && !isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
       this.hadGradualProgress = false
       this.lastProgressValue = -1
     }

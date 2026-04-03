@@ -36,6 +36,7 @@ export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
   protected override createHandler (options: MessageBusJobHandlerOptions): MessageBusJobHandler {
     return new CombinedProgressJobHandler({
       ...options,
+      totalSteps: 2,
       stepDescriptions: {
         1: 'jobs.job.step.preparing-elements',
         2: 'jobs.job.step.patching-elements'

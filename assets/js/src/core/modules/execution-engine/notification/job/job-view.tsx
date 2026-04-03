@@ -53,7 +53,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
       return null
     }
 
-    if (!isUndefined(props.totalSteps)) {
+    if (!isUndefined(props.totalSteps) && props.totalSteps > 1) {
       return <strong>{ t('jobs.job.step_hint', { step: props.currentStep, total: props.totalSteps }) }: </strong>
     }
 

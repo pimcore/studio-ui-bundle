@@ -1034,6 +1034,7 @@ jobs.job.button-abort: Abort Job
 jobs.job.abort-confirm: Do you really want to abort this job?
 jobs.job.step.preparing-elements: Preparing elements
 jobs.job.step.patching-elements: Patching elements
+jobs.job.step.creating-export-file: Creating export file
 jobs.zip-job.title: "ZIP download of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV download of {{title}}"

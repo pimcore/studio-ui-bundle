@@ -32,7 +32,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
   protected currentStep: number = 1
-  private readonly totalSteps?: number
+  protected readonly totalSteps?: number
   protected lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
   protected readonly stepDescriptions?: Record<number, string>
@@ -191,6 +191,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       status: JobStatus.RUNNING,
       progress: 0,
       currentStep: this.currentStep,
+      stepDescriptionKey: this.stepDescriptions?.[this.currentStep],
       jobRunId: newJobRunId
     })
   }
@@ -274,12 +275,12 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }
 
     const stepChanges: Partial<MessageBusJob> = {}
-    if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
+    if (!isNil(data?.currentStep) && isNil(this.totalSteps) && data.currentStep !== this.currentStep) {
       this.currentStep = data.currentStep
       stepChanges.currentStep = data.currentStep
       stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
     }
-    if (!isNil(data?.totalSteps)) {
+    if (!isNil(data?.totalSteps) && isNil(this.totalSteps)) {
       stepChanges.totalSteps = data.totalSteps
     }
     if (Object.keys(stepChanges).length > 0) {
