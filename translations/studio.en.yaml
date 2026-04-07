@@ -781,6 +781,10 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Reverse Object Relation
+field-definition.crm.gender.title: Gender
+field-definition.crm.firstname.title: Firstname
+field-definition.crm.email.title: Email
+field-definition.crm.lastname.title: Lastname
 allowed-class: Allowed class
 allowed-classes: Allowed classes
 allowed-asset-types: Allowed asset types
@@ -1865,18 +1869,18 @@ classification-store.tabs.groups: Groups
 classification-store.tabs.keys: Keys
 classification-store.add-store: Add store
 classification-store.rename-store: Rename store
-classification-store.delete-store: "Delete store \"{{storeName}}\"?"
+classification-store.delete-store: 'Delete store "{{storeName}}"?'
 classification-store.add-group: Add group
 classification-store.rename-group: Rename group
-classification-store.delete-group: "Delete group \"{{groupName}}\"?"
+classification-store.delete-group: 'Delete group "{{groupName}}"?'
 classification-store.add-collection: Add collection
 classification-store.rename-collection: Rename collection
-classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
+classification-store.delete-collection: 'Delete collection "{{collectionName}}"?'
 classification-store.add-key: Add key
 classification-store.rename-key: Rename key
-classification-store.delete-key: "Delete key \"{{keyName}}\"?"
-classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
-classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.delete-key: 'Delete key "{{keyName}}"?'
+classification-store.delete-key-relation: 'Remove key "{{keyName}}" from this group?'
+classification-store.delete-group-relation: 'Remove group "{{groupName}}" from this collection?'
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
 classification-store.columns.id: ID
