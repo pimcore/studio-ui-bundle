@@ -13,7 +13,6 @@ import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type SimpleSearchResult } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import classNames from 'classnames'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
@@ -27,7 +26,7 @@ export interface ISearchResultItemProps extends Omit<BoxProps, 'children'> {
 export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Element => {
   const { item, active, ...htmlProps } = props
   const { icon, path } = item
-  const { openElement } = useElementHelper()
+  const { openElement, mapToElementType } = useElementHelper()
   const { close } = useSearch()
 
   const className = classNames(
@@ -38,10 +37,16 @@ export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Eleme
   )
 
   const onClick = (): void => {
+    const mappedType = mapToElementType(item.elementType)
+
+    if (mappedType === undefined) {
+      return
+    }
+
     /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
     openElement({
       id: item.id,
-      type: item.elementType as unknown as ElementType
+      type: mappedType
     })
 
     close()
