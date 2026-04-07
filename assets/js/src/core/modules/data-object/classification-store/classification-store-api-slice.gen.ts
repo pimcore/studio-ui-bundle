@@ -329,7 +329,7 @@ const injectedRtkApi = api
                 ClassificationStoreGetLayoutByKeyApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/layout-by-key/${queryArg.keyId}`,
+                    url: `/pimcore-studio/api/classification-store/layout-by-key/${queryArg.keyId}/${queryArg.groupId}`,
                     params: {
                         objectId: queryArg.objectId,
                         fieldName: queryArg.fieldName,
@@ -615,6 +615,8 @@ export type ClassificationStoreGetLayoutByKeyApiArg = {
     objectId?: number;
     /** KeyId of the Key ID */
     keyId: number;
+    /** GroupId of the Group ID */
+    groupId: number;
     /** Field Name */
     fieldName: string;
 };
