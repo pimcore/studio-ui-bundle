@@ -17,7 +17,7 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-	  "php": "~8.3.0 || ~8.4.0",
+    "php": "~8.3.0 || ~8.4.0",
     "pimcore/pimcore": "^12.3",
     "pimcore/studio-backend-bundle": "^2025.4"
   },
