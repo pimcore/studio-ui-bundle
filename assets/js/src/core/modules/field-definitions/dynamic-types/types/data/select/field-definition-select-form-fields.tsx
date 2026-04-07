@@ -8,16 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, FormKit, Input, InputNumber, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/components'
 import { FieldDefinitionOptionsSourceFields } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-options-source-fields/field-definition-options-source-fields'
+import { type SelectOption } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-select-options-grid/field-definition-select-options-grid'
 
 export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const isInClassificationStore = props.context.area.includes('classification-store')
+
+  const optionsProviderType = Form.useWatch<string | undefined>('optionsProviderType')
+  const configuredOptions = Form.useWatch<SelectOption[] | undefined>('options')
+
+  const isConfigureMode = optionsProviderType === 'configure' || optionsProviderType === undefined || optionsProviderType === ''
+  const defaultValueOptions = (configuredOptions ?? []).map(opt => ({
+    label: opt.key,
+    value: opt.value
+  }))
 
   return (
     <>
@@ -54,7 +64,14 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
               label={ t('default-value') }
               name="defaultValue"
             >
-              <InputNumber />
+              {isConfigureMode
+                ? (
+                  <Select
+                    allowClear
+                    options={ defaultValueOptions }
+                  />
+                  )
+                : <Input />}
             </Form.Item>
 
             <Form.Item
