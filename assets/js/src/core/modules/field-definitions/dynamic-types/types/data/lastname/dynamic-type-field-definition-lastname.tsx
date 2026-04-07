@@ -18,11 +18,11 @@ import React from 'react'
 export class DynamicTypeFieldDefinitionLastname extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'lastname'
 
-  getIcon(): ElementIcon {
+  getIcon (): ElementIcon {
     return { type: 'name', value: 'name' }
   }
 
-  getDefaultData(): FieldDefinitionData {
+  getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),
       name: 'lastname',
@@ -30,32 +30,32 @@ export class DynamicTypeFieldDefinitionLastname extends DynamicTypeFieldDefiniti
     }
   }
 
-  getGroup(): string[] {
+  getGroup (): string[] {
     return [...super.getGroup(), 'crm']
   }
 
-  getTags(props: FieldDefinitionContext): string[] {
+  getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'encryptedFieldSupport']
   }
 
-  getFormFields(context: FieldDefinitionContext): React.JSX.Element {
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return super.getFormFields({ ...context, hideUnique: true, disableName: true })
   }
 
-  getSpecificFormFields(context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]
 
     return (
       <FieldDefinitionLastnameFormFields
-        context={context}
-        id={fieldDefinition?.name ?? id}
-        type={this.id}
+        context={ context }
+        id={ fieldDefinition?.name ?? id }
+        type={ this.id }
       />
     )
   }
 
-  normalizeFieldDefinition(fieldDef: Record<string, unknown>): Record<string, unknown> {
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
     const normalized = super.normalizeFieldDefinition(fieldDef)
     if (typeof normalized.title !== 'string' || normalized.title === '') {
       normalized.title = t('field-definition.crm.lastname.title')

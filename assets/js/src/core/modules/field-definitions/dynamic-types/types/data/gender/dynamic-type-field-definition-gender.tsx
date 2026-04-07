@@ -17,38 +17,38 @@ import React from 'react'
 export class DynamicTypeFieldDefinitionGender extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'gender'
 
-  getIcon(): ElementIcon {
+  getIcon (): ElementIcon {
     return {
       type: 'name',
       value: 'gender'
     }
   }
 
-  getDefaultData(): FieldDefinitionData {
+  getDefaultData (): FieldDefinitionData {
     return {
       ...super.getDefaultData(),
       name: 'gender',
-      title: t('field-definition.crm.gender.title'),
+      title: t('field-definition.crm.gender.title')
     }
   }
 
-  getGroup(): string[] {
+  getGroup (): string[] {
     return [...super.getGroup(), 'crm']
   }
 
-  getTags(props: FieldDefinitionContext): string[] {
+  getTags (props: FieldDefinitionContext): string[] {
     return [...super.getTags(props), 'encryptedFieldSupport']
   }
 
-  getFormFields(context: FieldDefinitionContext): React.JSX.Element {
+  getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return super.getFormFields({ ...context, hideUnique: true, disableName: true })
   }
 
-  getSpecificFormFields(_context: FieldDefinitionContext): React.JSX.Element {
+  getSpecificFormFields (_context: FieldDefinitionContext): React.JSX.Element {
     return <></>
   }
 
-  normalizeFieldDefinition(fieldDef: Record<string, unknown>): Record<string, unknown> {
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
     const normalized = super.normalizeFieldDefinition(fieldDef)
     if (typeof normalized.title !== 'string' || normalized.title === '') {
       normalized.title = t('field-definition.crm.gender.title')
