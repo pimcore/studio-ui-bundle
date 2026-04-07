@@ -20,16 +20,16 @@ export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
 
-  const formatColor = (color: any): string | null => {
+  const formatColor = (color: any): string => {
     if (isObject(color) && has(color, 'cleared') && color.cleared === true) {
-      return null
+      return ''
     }
 
     if (isObject(color)) {
       return (color as any).toHexString()
     }
 
-    return null
+    return ''
   }
 
   return (
