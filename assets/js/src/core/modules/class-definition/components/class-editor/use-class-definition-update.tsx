@@ -26,9 +26,7 @@ export const useClassDefinitionUpdate: AnyMutationHook = (options) => {
           children: getLayout()!.children ?? []
         },
         values: {
-          ...generalSettings!,
-          // @todo check how to handle new icon types with backend
-          icon: ''
+          ...generalSettings!
         }
       }
     })
