@@ -96,7 +96,7 @@
 {% endif %}
 
 <img style="visibility: hidden" id='image' src="{{ imageUrl }}" alt="editor preview" />
-<script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
+<script {{ pimcore_studio_csp.getNonceHtmlAttribute()|raw }}>
 
     /**
      * wait for image editor to be fully available
