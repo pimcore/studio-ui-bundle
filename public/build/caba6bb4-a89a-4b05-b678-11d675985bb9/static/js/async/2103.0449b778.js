@@ -1,2 +1,0 @@
-/*! For license information please see 2103.0449b778.js.LICENSE.txt */
-"use strict";(self["chunk_pimcore_studio_ui_bundle "]=self["chunk_pimcore_studio_ui_bundle "]||[]).push([["2103"],{18346(e,u,i){i.r(u),i.d(u,{PimcoreDocumentEditor:()=>t});let t={documentEditable:i(42817).g}}}]);
