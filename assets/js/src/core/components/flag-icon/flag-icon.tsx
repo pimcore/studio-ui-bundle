@@ -234,10 +234,10 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     void loadFlag()
   }, [value])
 
-  if (loading) return <div style={{ width, height, background: '#f0f0f0' }} />
+  if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
 
   if (flag === null || !React.isValidElement(flag)) {
-    return <UnknownFlag style={{ width, height }} />
+    return <UnknownFlag style={ { width, height } } />
   }
 
   return React.cloneElement(flag as React.ReactElement<any>, {
