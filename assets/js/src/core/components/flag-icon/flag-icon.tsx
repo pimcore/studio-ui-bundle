@@ -180,7 +180,7 @@ const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: st
     return { flagCode: normalizedCode, isLanguageFlag: true }
   }
 
-  if (countryCode !== null && countryCode !== languageOnly && await checkFlagExists(countryCode)) {
+  if (countryCode !== null && await checkFlagExists(countryCode)) {
     return { flagCode: countryCode, isLanguageFlag: false }
   }
 
@@ -234,10 +234,10 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     void loadFlag()
   }, [value])
 
-  if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
+  if (loading) return <div style={{ width, height, background: '#f0f0f0' }} />
 
   if (flag === null || !React.isValidElement(flag)) {
-    return <UnknownFlag style={ { width, height } } />
+    return <UnknownFlag style={{ width, height }} />
   }
 
   return React.cloneElement(flag as React.ReactElement<any>, {
