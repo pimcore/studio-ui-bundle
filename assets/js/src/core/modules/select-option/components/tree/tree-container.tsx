@@ -62,7 +62,7 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
           onActionsClick={ (key: string | number, action: string) => {
             const keyStr = String(key)
 
-            if (action === 'remove-item') {
+            if (action === 'delete') {
               removeWithConfirmation(keyStr, async () => {
                 closeSelectOption(keyStr)
                 setSelectOptions((prev) => prev.filter((s) => s.id !== keyStr))

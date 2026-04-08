@@ -48,7 +48,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
                     />,
               isLeaf: true,
               actions: [
-                { key: 'remove-item', icon: 'trash' }
+                { key: 'delete', icon: 'trash' }
               ]
             }))
         }
@@ -62,7 +62,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
               />,
         isLeaf: true,
         actions: [
-          { key: 'remove-item', icon: 'trash' }
+          { key: 'delete', icon: 'trash' }
         ]
       }
     })
