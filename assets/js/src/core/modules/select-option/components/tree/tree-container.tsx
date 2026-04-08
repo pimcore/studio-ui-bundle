@@ -23,7 +23,7 @@ interface ITreeContainerProps {
   treeData: TreeDataItem[]
   expandedKeys: React.Key[]
   isFetching: boolean
-  onReloadTree: () => Promise<void>
+  onReloadTree: () => void
   onSetExpandedKeys: (keys: React.Key[]) => void
 }
 
@@ -34,8 +34,8 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
   const classNames = [styles.treeContainer]
 
   const handleAddItem = (): void => {
-    createSelectOption(async () => {
-      await onReloadTree()
+    createSelectOption(() => {
+      onReloadTree()
     })
   }
 
@@ -44,7 +44,7 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
       renderToolbar={
         <ToolbarTree
           onAddItem={ handleAddItem }
-          onReload={ () => { void onReloadTree() } }
+          onReload={ onReloadTree }
         />
       }
     >
@@ -63,10 +63,10 @@ const TreeContainer = ({ expandedKeys, treeData, isFetching, onReloadTree, onSet
             const keyStr = String(key)
 
             if (action === 'remove-item') {
-              removeWithConfirmation(keyStr, async () => {
+              removeWithConfirmation(keyStr, () => {
                 closeSelectOption(keyStr)
                 setSelectOptions((prev) => prev.filter((s) => s.id !== keyStr))
-                await onReloadTree()
+                onReloadTree()
               })
             }
           } }
