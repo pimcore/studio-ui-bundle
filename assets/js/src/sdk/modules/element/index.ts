@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 if (module.hot !== undefined) {
   module.hot.accept()
 }
@@ -280,16 +282,20 @@ export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-
 export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'
 export * from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/row-selection-provider'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 export * from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
+export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/hooks/use-sidebar-options'
 export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/sidebar/hooks/with-selection-overview-tab'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/hooks/with-general-filters-tab'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
