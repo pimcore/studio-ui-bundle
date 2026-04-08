@@ -37,7 +37,7 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
   const formData = {
     date: props.data?.date ?? '',
     message: props.data?.message ?? '',
-
+    priority: t(`application-logger.filter.priority-level.${props.data?.priority ?? ''}`),
     component: props.data?.component ?? '',
     source: props.data?.source ?? '',
     fileObject: props.data?.relatedElementData ?? null
@@ -84,11 +84,9 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
 
           <Form.Item
             label={ t('application-logger.columns.type') }
+            name="priority"
           >
-            <Input
-              readOnly
-              value={ t(`application-logger.filter.priority-level.${props.data?.priority ?? ''}`) }
-            />
+            <Input readOnly />
           </Form.Item>
 
           <Form.Item
