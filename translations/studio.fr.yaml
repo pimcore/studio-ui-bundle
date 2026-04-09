@@ -2231,7 +2231,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings:
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Redirections
 perspective-editor.form.main-nav-permission.category.assetManagement: Gestion des assets
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Masquer le menu Gestion des assets
-perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Miniatures d'images
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Miniatures d'images
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Miniatures vidéo
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Métadonnées d'assets prédéfinies
 perspective-editor.form.main-nav-permission.category.translations: Traductions
@@ -2243,7 +2243,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Masquer le menu Utilisateurs/Rôles
 perspective-editor.form.main-nav-permission.system.users_roles: Rôles
 perspective-editor.form.main-nav-permission.system.users_users: Utilisateurs
-perspective-editor.form.main-nav-permission.settings.appearanceBranding: Apparence et identité visuelle
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Apparence et identité visuelle
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Éditeur de perspectives
 perspective-editor.form.main-nav-permission.system.widgetEditor: Éditeur de widgets
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Mode maintenance

@@ -2231,7 +2231,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings:
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringar
 perspective-editor.form.main-nav-permission.category.assetManagement: Assethantering
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Dölj assethanteringsmenyn
-perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildminiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bildminiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Fördefinierad assetmetadata
 perspective-editor.form.main-nav-permission.category.translations: Översättningar
