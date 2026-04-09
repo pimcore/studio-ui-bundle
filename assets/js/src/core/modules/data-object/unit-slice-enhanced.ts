@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './unit-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
@@ -20,19 +20,19 @@ const api = baseApi.enhanceEndpoints({
     },
 
     unitQuantityValueUnitsUpdate: {
-      invalidatesTags: () => []
+      invalidatesTags: () => [tagNames.QUANTITY_VALUE_UNITS]
     },
 
     unitQuantityValueUnitsDelete: {
-      invalidatesTags: () => []
+      invalidatesTags: () => [tagNames.QUANTITY_VALUE_UNITS]
     },
 
     unitQuantityValueUnitsCreate: {
-      invalidatesTags: () => []
+      invalidatesTags: () => [tagNames.QUANTITY_VALUE_UNITS]
     },
 
     unitQuantityValueList: {
-      providesTags: () => []
+      providesTags: () => providingTags.QUANTITY_VALUE_UNITS()
     },
 
     unitQuantityValueUnitsExport: {
