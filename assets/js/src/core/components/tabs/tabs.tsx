@@ -68,7 +68,7 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
 
   // Add mouse down handler to each tab item
   const enhancedItems = useMemo(() => {
-    const allKeys = items?.map(item => item.key as string) ?? []
+    const allKeys = items?.map(item => item.key) ?? []
 
     return items?.map(item => {
       const button = (
@@ -90,7 +90,7 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
               <TabContextMenu
                 allKeys={ allKeys }
                 onClose={ onClose }
-                tabKey={ item.key as string }
+                tabKey={ item.key }
               />
             ) }
           >
