@@ -13,6 +13,8 @@ import { Tabs as AntdTabs, type TabsProps } from 'antd'
 import { useStyles } from '@Pimcore/components/tabs/tabs.styles'
 import cn from 'classnames'
 import { isUndefined } from 'lodash'
+import { ContextMenuWrapper } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
+import { TabContextMenu } from '@Pimcore/components/tabs/tab-context-menu'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
@@ -65,19 +67,44 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
   }, [onClose, items])
 
   // Add mouse down handler to each tab item
-  const enhancedItems = useMemo(() => items?.map(item => ({
-    ...item,
-    label: (
-      <button
-        className={ styles.middleClickButton }
-        data-tab-key={ item.key }
-        onMouseDown={ handleMiddleClick }
-        type="button"
-      >
-        {item.label}
-      </button>
-    )
-  })), [items, handleMiddleClick])
+  const enhancedItems = useMemo(() => {
+    const allKeys = items?.map(item => item.key as string) ?? []
+
+    return items?.map(item => {
+      const button = (
+        <button
+          className={ styles.middleClickButton }
+          data-tab-key={ item.key }
+          onMouseDown={ handleMiddleClick }
+          type="button"
+        >
+          {item.label}
+        </button>
+      )
+
+      const label = onClose !== undefined
+        ? (
+          <ContextMenuWrapper
+            calculateAutoHeight={ false }
+            renderMenu={ () => (
+              <TabContextMenu
+                allKeys={ allKeys }
+                onClose={ onClose }
+                tabKey={ item.key as string }
+              />
+            ) }
+          >
+            {button}
+          </ContextMenuWrapper>
+          )
+        : button
+
+      return {
+        ...item,
+        label
+      }
+    })
+  }, [items, handleMiddleClick, onClose])
 
   return (
     <AntdTabs
