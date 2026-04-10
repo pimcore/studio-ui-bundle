@@ -60,7 +60,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
     if (isNull(errorDetails)) return []
 
     const position = errorDetails?.position
-    const message = errorDetails?.message ?? 'Syntax error'
+    const message = errorDetails?.message ?? t('error.syntax_error')
 
     const pqlLinter = linter((): Diagnostic[] => {
       if (isUndefined(position)) return []
@@ -121,7 +121,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
           lineWrapping
           onBlur={ handleBlur }
           onChange={ handleChange }
-          placeholder='Type your Query'
+          placeholder={ t('component.pql.placeholder') }
           value={ value }
         />
       </div>

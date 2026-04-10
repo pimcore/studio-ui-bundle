@@ -17,6 +17,7 @@ error.error_validation_failed: Validation failed
 error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 error.error_inconsistent_asset_type: Only assets of same type are allowed here.
+error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
@@ -373,6 +374,7 @@ grid.advanced-column.advancedColumns.phpCode: PHP Code
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
 grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Workflow Actions
+component.pql.placeholder: Type your Query
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
