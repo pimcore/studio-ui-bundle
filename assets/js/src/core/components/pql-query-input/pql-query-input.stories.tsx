@@ -19,20 +19,32 @@ const config: Meta = {
 
 export const _default = {
   args: {
-    value: ''
+    value: '',
+    isShowError: false
   }
 }
 
 export const WithValue = {
   args: {
-    value: "id='67'"
+    value: "id='67'",
+    isShowError: false
   }
 }
 
 export const WithErrorMessage = {
   args: {
-    value: 'id=csdghsgdh',
-    isShowError: true
+    value: 'color = "red"\nCar.name = "test"',
+    isShowError: true,
+    errorData: {
+      status: 422,
+      data: {
+        errorKey: 'error_gdi_parsing_exception',
+        message: 'Expected end of input, found `Car.name`.',
+        position: 14,
+        token: 'Car.name',
+        query: 'color = "red"\nCar.name = "test"'
+      }
+    }
   }
 }
 

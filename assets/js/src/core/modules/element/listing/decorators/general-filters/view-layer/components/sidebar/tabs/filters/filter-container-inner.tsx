@@ -41,6 +41,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const [isShowPqlError, setIsShowPqlError] = useState<boolean>(false)
   const [pqlError, setPqlError] = useState<FetchBaseQueryError | undefined>(undefined)
 
   const { setPage } = usePaging()
@@ -67,6 +68,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   useEffect(() => {
     const error = dataQueryResult?.error
     if (dataQueryResult?.isError === true && getErrorKey(error) === ErrorKeyTypes.GDI_PARSING_EXCEPTION) {
+      setIsShowPqlError(true)
       setPqlError(error as FetchBaseQueryError)
     }
   }, [dataQueryResult?.error])
@@ -139,11 +141,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
           ? (
             <PQLQueryInput
               errorData={ pqlError }
-              handleBlur={ (e) => { setPqlQuery(e.target.value) } }
-              handleChange={ (e) => {
-                setPqlQuery(e.target.value)
+              handleChange={ (val) => {
+                setPqlQuery(val)
+                setIsShowPqlError(false)
                 setPqlError(undefined)
               } }
+              isShowError={ isShowPqlError }
               value={ pqlQuery }
             />
             )
