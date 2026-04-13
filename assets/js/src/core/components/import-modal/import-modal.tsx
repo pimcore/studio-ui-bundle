@@ -12,11 +12,16 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Modal, IconTextButton, ModalFooter, Button, useMessage } from '@sdk/components'
 import type { UploadProps } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
+import { isNil, isEmpty } from 'lodash'
 import { useFileValidation } from './hooks/use-file-validation'
 import { useFileUpload } from './hooks/use-file-upload'
 import { FileDropZone } from './components/file-drop-zone/file-drop-zone'
 import { SelectedFileView } from './components/selected-file-view/selected-file-view'
+
+interface FileEntry {
+  id: string
+  file: File
+}
 
 export interface ImportModalProps {
   action: string
@@ -37,6 +42,7 @@ export interface ImportModalProps {
   onUploadError?: (error: Error, file: File) => void
   showSuccessMessage?: boolean
   successMessage?: React.ReactNode
+  multiple?: boolean
   children?: React.ReactNode
 }
 
@@ -59,12 +65,14 @@ export const ImportModal = ({
   onUploadError,
   showSuccessMessage = true,
   successMessage,
+  multiple = false,
   children
 }: ImportModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [internalOpen, setInternalOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFiles, setSelectedFiles] = useState<FileEntry[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileIdCounter = useRef(0)
   const messageApi = useMessage()
 
   const defaultValidateFile = useFileValidation({ accept, acceptMimeTypes, maxFileSize })
@@ -75,6 +83,8 @@ export const ImportModal = ({
     loading,
     isUploading,
     upload,
+    uploadMultiple,
+    fileUploadStates,
     resetUploadState
   } = useFileUpload({
     action,
@@ -96,16 +106,20 @@ export const ImportModal = ({
   }
 
   const handleFileReset = (): void => {
-    setSelectedFile(null)
+    setSelectedFiles([])
     resetUploadState()
     if (!isNil(fileInputRef.current)) {
       fileInputRef.current.value = ''
     }
   }
 
+  const handleFileRemove = (id: string): void => {
+    setSelectedFiles(prev => prev.filter(entry => entry.id !== id))
+  }
+
   useEffect(() => {
     if (open) {
-      setSelectedFile(null)
+      setSelectedFiles([])
       resetUploadState()
       if (!isNil(fileInputRef.current)) {
         fileInputRef.current.value = ''
@@ -114,10 +128,14 @@ export const ImportModal = ({
   }, [open, resetUploadState])
 
   const handleUpload = async (): Promise<void> => {
-    if (isNil(selectedFile)) return
+    if (isEmpty(selectedFiles)) return
 
     try {
-      await upload(selectedFile)
+      if (multiple) {
+        await uploadMultiple(selectedFiles)
+      } else {
+        await upload(selectedFiles[0].file)
+      }
 
       if (showSuccessMessage) {
         void messageApi.success(successMessage ?? t('upload.success'))
@@ -141,10 +159,19 @@ export const ImportModal = ({
   const handleFileSelect = (file: File): void => {
     const isValid = !isNil(validateFile) ? validateFile(file) : defaultValidateFile(file)
 
-    if (isValid) {
-      setSelectedFile(file)
-    } else if (!isNil(onValidationError)) {
-      onValidationError(file)
+    if (!isValid) {
+      if (!isNil(onValidationError)) {
+        onValidationError(file)
+      }
+      return
+    }
+
+    const entry: FileEntry = { id: `file_${fileIdCounter.current++}`, file }
+
+    if (multiple) {
+      setSelectedFiles(prev => [...prev, entry])
+    } else {
+      setSelectedFiles([entry])
     }
   }
 
@@ -153,15 +180,20 @@ export const ImportModal = ({
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0]
-    if (!isNil(file)) {
-      handleFileSelect(file)
+    const files = event.target.files
+
+    if (isNil(files)) return
+
+    Array.from(files).forEach(file => { handleFileSelect(file) })
+
+    if (!isNil(fileInputRef.current)) {
+      fileInputRef.current.value = ''
     }
   }
 
   const uploadProps: UploadProps = {
     name: 'file',
-    multiple: false,
+    multiple,
     accept,
     beforeUpload: (file) => {
       handleFileSelect(file as File)
@@ -170,6 +202,9 @@ export const ImportModal = ({
     showUploadList: false,
     disabled: loading || isUploading
   }
+
+  const hasFiles = !isEmpty(selectedFiles)
+  const isProcessing = loading || isUploading
 
   return (
     <>
@@ -194,11 +229,11 @@ export const ImportModal = ({
         footer={
           <ModalFooter
             divider
-            justify={ isNil(selectedFile) ? 'space-between' : 'end' }
+            justify={ !hasFiles ? 'space-between' : 'end' }
           >
-            {isNil(selectedFile) && (
+            {(!hasFiles || multiple) && (
               <IconTextButton
-                disabled={ loading || isUploading }
+                disabled={ isProcessing }
                 icon={ { value: 'upload-import' } }
                 onClick={ handleBrowseClick }
               >
@@ -206,8 +241,8 @@ export const ImportModal = ({
               </IconTextButton>
             )}
             <Button
-              disabled={ isNil(selectedFile) || loading || isUploading }
-              loading={ loading || isUploading }
+              disabled={ !hasFiles || isProcessing }
+              loading={ isProcessing }
               onClick={ handleUpload }
               type="primary"
             >
@@ -224,30 +259,39 @@ export const ImportModal = ({
         <input
           accept={ accept }
           aria-label={ browseButtonLabel ?? t('import-modal.browse-files') }
-          disabled={ loading || isUploading }
+          disabled={ isProcessing }
+          multiple={ multiple }
           onChange={ handleInputChange }
           ref={ fileInputRef }
           style={ { display: 'none' } }
           type="file"
         />
 
-        {isNil(selectedFile)
-          ? (
-            <FileDropZone
-              dragDropLabel={ dragDropLabel }
-              uploadProps={ uploadProps }
-            />
-            )
-          : (
+        {(!hasFiles || multiple) && (
+          <FileDropZone
+            dragDropLabel={ dragDropLabel }
+            uploadProps={ uploadProps }
+          />
+        )}
+
+        {hasFiles && selectedFiles.map(({ id, file }) => {
+          const fileState = fileUploadStates[id]
+          const fileProgress = fileState?.progress ?? uploadProgress
+          const fileStatus = fileState?.status ?? uploadStatus
+          const fileIsUploading = fileState?.status === 'active'
+
+          return (
             <SelectedFileView
-              file={ selectedFile }
-              isUploading={ isUploading }
-              loading={ loading }
-              onRemove={ handleFileReset }
-              uploadProgress={ uploadProgress }
-              uploadStatus={ uploadStatus }
+              file={ file }
+              isUploading={ multiple ? fileIsUploading : isUploading }
+              key={ id }
+              loading={ multiple ? fileIsUploading : loading }
+              onRemove={ multiple ? () => { handleFileRemove(id) } : handleFileReset }
+              uploadProgress={ multiple ? fileProgress : uploadProgress }
+              uploadStatus={ multiple ? fileStatus : uploadStatus }
             />
-            )}
+          )
+        })}
       </Modal>
     </>
   )
