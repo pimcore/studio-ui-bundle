@@ -11,7 +11,7 @@
 import React from 'react'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
-  type EditMode,
+  type EditMode, type EditModalSettings,
   type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
@@ -28,6 +28,10 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   id: string = 'image'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'L',
+    formLayout: 'vertical'
+  }
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
