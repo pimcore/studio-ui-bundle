@@ -9,7 +9,8 @@
  */
 
 import i18n from '@Pimcore/app/i18n'
-import { isNil } from 'lodash'
+import { isNil, isPlainObject } from 'lodash'
+import { isNonEmptyString } from '@sdk/utils'
 
 export interface I18nApi {
   getTranslationResources: () => Record<string, any>
@@ -40,8 +41,22 @@ class I18nApiImpl implements I18nApi {
   }
 
   getFallbackLanguage (): string {
-    const fallbackLng = i18n.options.fallbackLng as string
-    return fallbackLng !== '' ? fallbackLng : 'en'
+    const fallbackLng = i18n.options.fallbackLng
+
+    if (Array.isArray(fallbackLng)) {
+      return fallbackLng[0] ?? 'en'
+    }
+
+    if (isNonEmptyString(fallbackLng)) {
+      return fallbackLng
+    }
+
+    if (isPlainObject(fallbackLng)) {
+      const fallbackMap = fallbackLng as Record<string, string[]>
+      return fallbackMap.default?.[0] ?? 'en'
+    }
+
+    return 'en'
   }
 
   reportMissingTranslation (key: string): void {
