@@ -12,8 +12,15 @@ export interface DialogConfig {
   id: string
   width?: number
   height?: number
-  items: DialogConfigItem
+  items: DialogConfigItems
   reloadOnClose?: boolean
+}
+
+export type DialogConfigItems = DialogConfigItem | SerializedDialogConfigItems
+
+export interface SerializedDialogConfigItems {
+  items?: unknown
+  [key: string]: unknown
 }
 
 export interface DialogConfigItem {
