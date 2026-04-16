@@ -11,10 +11,14 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => ({
-  container: css``,
+  container: css`
+    .ant-upload-select {
+      display: contents !important;
+    }
+  `,
   containerFullWidth: css`
     .ant-upload-select {
-      display: initial;
+      display: block;
     }
   `,
 
