@@ -84,7 +84,7 @@ const config: Meta = {
                     )}
                     {operations.openCsvImport !== undefined && (
                       <IconButton
-                        icon={ { value: 'upload-import' } }
+                        icon={ { value: 'edit-pen' } }
                         onClick={ operations.openCsvImport }
                       >
                         Import CSV
@@ -333,7 +333,7 @@ export const WithColumnOperations = {
                     </div>
                     {operations.openCsvImport !== undefined && (
                       <IconButton
-                        icon={ { value: 'upload-import' } }
+                        icon={ { value: 'edit-pen' } }
                         onClick={ operations.openCsvImport }
                       >
                         Import CSV
@@ -457,7 +457,7 @@ export const WithDragAndDrop = {
                       </div>
                       {operations.openCsvImport !== undefined && (
                         <IconButton
-                          icon={ { value: 'upload-import' } }
+                          icon={ { value: 'edit-pen' } }
                           onClick={ operations.openCsvImport }
                         >
                           Import CSV
