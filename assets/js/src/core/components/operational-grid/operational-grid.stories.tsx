@@ -82,6 +82,15 @@ const config: Meta = {
                         </IconButton>
                       </>
                     )}
+                    {operations.openCsvImport !== undefined && (
+                      <IconButton
+                        icon={ { value: 'upload-import' } }
+                        onClick={ operations.openCsvImport }
+                      >
+                        Import CSV
+                      </IconButton>
+                    )}
+                    {operations.csvImportModal}
                   </Space>
                 )
               }}
@@ -322,6 +331,15 @@ export const WithColumnOperations = {
                         </IconButton>
                       </Space>
                     </div>
+                    {operations.openCsvImport !== undefined && (
+                      <IconButton
+                        icon={ { value: 'upload-import' } }
+                        onClick={ operations.openCsvImport }
+                      >
+                        Import CSV
+                      </IconButton>
+                    )}
+                    {operations.csvImportModal}
                   </Space>
                 )
               }}
@@ -437,6 +455,15 @@ export const WithDragAndDrop = {
                           Reset Order
                         </IconButton>
                       </div>
+                      {operations.openCsvImport !== undefined && (
+                        <IconButton
+                          icon={ { value: 'upload-import' } }
+                          onClick={ operations.openCsvImport }
+                        >
+                          Import CSV
+                        </IconButton>
+                      )}
+                      {operations.csvImportModal}
                     </Space>
                   )
                 }}
@@ -448,5 +475,19 @@ export const WithDragAndDrop = {
     }
 
     return <ComponentWrapper />
+  }
+}
+
+export const WithCsvImportDisabled = {
+  args: {
+    value: initialData,
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    enableMultipleRowSelection: true,
+    disableCsvImport: true,
+    onChange: (value: Item[]) => {
+      console.log('Data changed:', value)
+    }
   }
 }

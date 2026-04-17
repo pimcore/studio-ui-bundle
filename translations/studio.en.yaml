@@ -2347,6 +2347,10 @@ icon-selector.custom-icon-path: Custom path
 icon-selector.custom-icon-path-placeholder: Add a custom path and submit
 icon-selector.Twemoji: Twemoji Library
 icon-selector.Pimcore: Pimcore Library
+operational-grid.csv-import.title: Import CSV
+operational-grid.csv-import.description: Enter CSV data. Each line represents a row, columns are separated by commas.
+operational-grid.csv-import.ok: Import
+operational-grid.csv-import.cancel: Cancel
 language: Language
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)

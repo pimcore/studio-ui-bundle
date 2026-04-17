@@ -138,6 +138,15 @@ export const SelectOptionEntriesGrid = ({ value = [], onChange }: SelectOptionEn
                   tooltip={ { title: t('add') } }
                   type="default"
                 />
+                {operations.openCsvImport !== undefined && (
+                  <IconButton
+                    icon={ { value: 'upload-import' } }
+                    onClick={ operations.openCsvImport }
+                    tooltip={ { title: t('operational-grid.csv-import.title') } }
+                    type="default"
+                  />
+                )}
+                {operations.csvImportModal}
               </Space>
             )
           }}
