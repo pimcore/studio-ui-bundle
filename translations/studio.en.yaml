@@ -2574,6 +2574,7 @@ quantity-values.create-modal.create: Create
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Import Quantity Value Units
+quantity-values.search: Search
 owner: Owner
 reverse-object-relation.tooltip: Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored.
 disabled-fields: Disabled fields
