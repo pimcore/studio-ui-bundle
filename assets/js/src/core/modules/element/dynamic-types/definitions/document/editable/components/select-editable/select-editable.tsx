@@ -13,6 +13,7 @@ import { CreatableSelect } from '@sdk/components'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
 import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
+import { renderSanitizedLabel } from '../../utils/select-options'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 interface SelectEditableProps {
@@ -59,8 +60,10 @@ export const SelectEditable = ({
         className={ className }
         creatable={ editable }
         disabled={ inherited }
+        labelRender={ ({ label }) => renderSanitizedLabel(label) }
         onChange={ onChange }
         optionFilterProp="label"
+        optionRender={ (option) => renderSanitizedLabel(option.label) }
         options={ options }
         popupClassName={ className }
         popupMatchSelectWidth={ false }
