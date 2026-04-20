@@ -9,7 +9,7 @@
  */
 
 import { createStyles } from 'antd-style'
-import { keyframes } from '@emotion/react'
+import { keyframes } from 'antd-style'
 
 interface StyleProps {
   loading: boolean
