@@ -22,6 +22,7 @@ import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/co
 import { type DataObjectEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useShareViaNotification } from '@Pimcore/modules/notifications/actions/share-via-notification/use-share-via-notification'
+import { isNil } from 'lodash'
 import { type MenuProps } from 'antd'
 import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -40,9 +41,9 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.dataObjectEditorToolbar.name, contextMenuProps)
 
   const { shareViaNotificationContextMenuItem, shareViaNotificationModal } = useShareViaNotification(
-    dataObject !== undefined
-      ? { type: 'object', id: dataObject.id, fullPath: dataObject.fullPath ?? undefined }
-      : undefined
+    isNil(dataObject)
+      ? undefined
+      : { type: 'object', id: dataObject.id, fullPath: dataObject.fullPath ?? undefined }
   )
 
   const allItems = [...items, shareViaNotificationContextMenuItem]

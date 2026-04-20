@@ -23,6 +23,7 @@ import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/u
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type AssetEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { useShareViaNotification } from '@Pimcore/modules/notifications/actions/share-via-notification/use-share-via-notification'
+import { isNil } from 'lodash'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -37,9 +38,9 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.assetEditorToolbar.name, contextMenuProps)
 
   const { shareViaNotificationContextMenuItem, shareViaNotificationModal } = useShareViaNotification(
-    asset !== undefined
-      ? { type: 'asset', id: asset.id, fullPath: asset.fullPath ?? undefined }
-      : undefined
+    isNil(asset)
+      ? undefined
+      : { type: 'asset', id: asset.id, fullPath: asset.fullPath ?? undefined }
   )
 
   const allItems = [...items, shareViaNotificationContextMenuItem]
