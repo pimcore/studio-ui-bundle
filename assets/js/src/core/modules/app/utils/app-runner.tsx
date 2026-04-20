@@ -26,6 +26,12 @@ export function runApp (): void {
     return undefined
   }
 
+  const preloader = document.getElementById('app-preloader')
+  if (preloader !== null) {
+    preloader.classList.add('app-preloader--fading')
+    preloader.addEventListener('transitionend', () => { preloader.remove() }, { once: true })
+  }
+
   const root = createRoot(domElement)
   root.render(<AppView />)
 }
