@@ -8,4 +8,5 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export { ImportModal, type ImportModalProps } from './import-modal'
+export { ImportModal } from './import-modal'
+export { type ImportModalProps } from './types'
