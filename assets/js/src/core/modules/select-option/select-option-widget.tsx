@@ -11,8 +11,10 @@
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { Icon } from '@Pimcore/components/icon/icon'
 import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
-import { useClassSelectOptionGetTreeQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { api, useClassSelectOptionGetTreeQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import type { SelectOptionTreeItem, SelectOptionTreeFolder } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 import React, { useCallback, useEffect, useState } from 'react'
 import { SelectOptionEditorProvider } from './context/select-option-editor-provider'
 import { SelectOptionDetailContainer } from './components/detail/select-option-detail-container'
@@ -48,7 +50,7 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
                     />,
               isLeaf: true,
               actions: [
-                { key: 'remove-item', icon: 'trash' }
+                { key: 'delete', icon: 'trash' }
               ]
             }))
         }
@@ -62,14 +64,15 @@ const createNodesByResponse = (items: TreeApiItem[]): TreeDataItem[] => {
               />,
         isLeaf: true,
         actions: [
-          { key: 'remove-item', icon: 'trash' }
+          { key: 'delete', icon: 'trash' }
         ]
       }
     })
 }
 
 const SelectOptionWidgetInner = (): React.JSX.Element => {
-  const { data, isFetching, refetch } = useClassSelectOptionGetTreeQuery({ withGroup: true })
+  const { data, isFetching } = useClassSelectOptionGetTreeQuery({ withGroup: true })
+  const dispatch = useAppDispatch()
   const [treeData, setTreeData] = useState<TreeDataItem[]>([])
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
@@ -79,9 +82,9 @@ const SelectOptionWidgetInner = (): React.JSX.Element => {
     }
   }, [data])
 
-  const handleReloadTree = useCallback(async (): Promise<void> => {
-    await refetch()
-  }, [refetch])
+  const handleReloadTree = useCallback((): void => {
+    dispatch(api.util.invalidateTags(invalidatingTags.SELECT_OPTION_COLLECTION()))
+  }, [dispatch])
 
   const sidebar = {
     id: 'select-option-editor.sidebar',

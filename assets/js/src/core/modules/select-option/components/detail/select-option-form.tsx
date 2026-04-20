@@ -83,9 +83,14 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
             <IconButton
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
-              onClick={ () => {
-                form.resetFields()
-                form.setFieldsValue(initialValues)
+              onClick={ async () => {
+                const fresh = await getSelectOptionById(selectOption.id)
+                if (fresh !== undefined) {
+                  setSelectOptions((prev) =>
+                    prev.map((s) => s.id === fresh.id ? fresh : s)
+                  )
+                  form.setFieldsValue(fresh)
+                }
               } }
               title={ t('refresh') }
             />

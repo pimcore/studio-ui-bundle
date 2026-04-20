@@ -10,14 +10,14 @@
 
 import React from 'react'
 import { WindowModal, Card } from '@sdk/components'
-import { type DialogConfig, type DialogConfigItem } from './types'
+import { type DialogConfig, type DialogConfigItem, type DialogConfigItems, type SerializedDialogConfigItems } from './types'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isNil } from 'lodash'
+import { isArray, isNil, isPlainObject } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
 import { useTranslation } from 'react-i18next'
 
@@ -64,8 +64,19 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
     }
   }
 
-  const renderDialogContent = (configItem: DialogConfigItem): React.JSX.Element => {
-    // Check if this is an editable dialog layout type (tabpanel or panel)
+  const renderDialogContent = (configItem: DialogConfigItem | DialogConfigItem[]): React.JSX.Element => {
+    if (isArray(configItem)) {
+      return (
+        <>
+          {configItem.map((item, index) => (
+            <React.Fragment key={ item.name ?? index }>
+              {renderDialogContent(item)}
+            </React.Fragment>
+          ))}
+        </>
+      )
+    }
+
     if (!isNil(configItem.type) && editableDialogLayoutRegistry.hasDynamicType(configItem.type)) {
       return editableDialogLayoutRegistry.getComponent(configItem.type, {
         configItem,
@@ -73,7 +84,6 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
       })
     }
 
-    // Handle editable types
     if (!isNil(configItem.name) && !isNil(configItem.type)) {
       const editableType = documentEditableRegistry.hasDynamicType(configItem.type)
         ? documentEditableRegistry.getDynamicType(configItem.type)
@@ -98,6 +108,37 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
     return <></>
   }
 
+  const isDialogConfigItem = (value: unknown): value is DialogConfigItem => {
+    return isPlainObject(value) && typeof (value as { type?: unknown }).type === 'string'
+  }
+
+  const isSerializedDialogConfigItems = (value: DialogConfigItems): value is SerializedDialogConfigItems => {
+    return isPlainObject(value) && !isDialogConfigItem(value)
+  }
+
+  // Handles PHP-serialized flat dialog config: {"0": {...}, "items": [...]}.
+  const normaliseFlatItems = (items: DialogConfigItems): DialogConfigItem[] => {
+    if (isDialogConfigItem(items)) {
+      return [items]
+    }
+
+    if (!isSerializedDialogConfigItems(items)) {
+      return []
+    }
+
+    if (isArray(items.items)) {
+      return items.items.filter(isDialogConfigItem)
+    }
+
+    const serializedItems: Record<string, unknown> = items
+
+    return Object.keys(serializedItems)
+      .filter(key => /^\d+$/.test(key))
+      .sort((leftKey, rightKey) => Number(leftKey) - Number(rightKey))
+      .map(key => serializedItems[key])
+      .filter(isDialogConfigItem)
+  }
+
   return (
     <WindowModal
       cancelButtonProps={ { style: { display: 'none' } } }
@@ -111,7 +152,7 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
       title={ t('area-settings') }
       zIndex={ 10001 }
     >
-      {!isNil(config.items) && renderDialogContent(config.items)}
+      {!isNil(config.items) && renderDialogContent(normaliseFlatItems(config.items))}
     </WindowModal>
   )
 }
