@@ -17,6 +17,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { type DragInfoChangeEvent } from '@Pimcore/components/drag-and-drop/draggable'
 import { isNull } from 'lodash'
+import { Skeleton } from 'antd'
 
 export interface ElementTreeTooltipProps {
   node: TreeNodeProps
@@ -27,6 +28,7 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const { t } = useTranslation()
   const [isTooltipOpen, setIsTooltipOpen] = useState(false)
   const [isDragActive, setIsDragActive] = useState(false)
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const mouseEnterTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const mouseCheckIntervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -36,6 +38,11 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
   const isAsset = node.metaData?.asset !== undefined
   const isObject = node.metaData?.dataObject !== undefined
   const hasTooltip = element?.customAttributes?.tooltip !== null && element?.customAttributes?.tooltip !== undefined
+  const imageThumbnailPath: string | undefined = element?.imageThumbnailPath
+
+  useEffect(() => {
+    setIsImageLoaded(false)
+  }, [imageThumbnailPath])
 
   // Listen for global drag state changes
   useEffect(() => {
@@ -174,10 +181,17 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
                 justify="center"
                 style={ { maxHeight: 200, overflow: 'hidden' } }
               >
+                {!isImageLoaded && (
+                  <Skeleton.Image
+                    active
+                    style={ { width: 248, height: 150 } }
+                  />
+                )}
                 <Image
                   alt={ element.filename }
+                  onLoad={ () => { setIsImageLoaded(true) } }
                   src={ element.imageThumbnailPath }
-                  style={ { maxHeight: 200 } }
+                  style={ { maxHeight: 200, display: isImageLoaded ? undefined : 'none' } }
                 />
               </Flex>
             </Box>
