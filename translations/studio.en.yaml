@@ -2433,6 +2433,39 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Word Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
+user-management.permissions.bptb_aet_configuration_permission: Alternative Element Tree Config
+user-management.permissions.bptb_bookmark_list_permission: Bookmark Lists
+user-management.permissions.bptb_bookmark_list_share_permission: Share Bookmark Lists
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Ordering"
+user-management.permissions.bundle_ecommerce_pricing_rules: Pricing Rules
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Pimcore Copilot Configuration
+user-management.permissions.pcp_job_run_permission: Job Run Overview
+user-management.permissions.pcp_job_runs_see_all_permission: See All Job Runs
+user-management.permissions.permission_workflow_designer: Activate Workflow Designer
+user-management.permissions.permission_workflow_designer_place_permissions: Allow Place Permissions Configuration
+user-management.permissions.permission_workflow_designer_trans_notifications: Allow Transition Notifications Configuration
+user-management.permissions.plugin_cmf_perm_activityview: CMF Activity View
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Customer Automation Rules
+user-management.permissions.plugin_cmf_perm_customerview: CMF Customer View
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Customer Filter-Admin
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Newsletter Enqueue Customers
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Data Object Importer"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - File Export"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless Documents"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub Admin
+user-management.permissions.plugin_datahub_config: Datahub Configuration
+user-management.permissions.plugin_datahub_permission_delete: Datahub Delete
+user-management.permissions.plugin_datahub_permission_read: Datahub Read
+user-management.permissions.plugin_datahub_permission_update: Datahub Update
+user-management.permissions.portal-engine_collection-access: Backend Collection Access
+user-management.permissions.portal-engine_index-management: Portal Index Management
+user-management.permissions.portal-engine_wizard: Portal Setup Wizard
+user-management.permissions.wai_configuration_permission: Automation Blueprints Configuration
 forgot-password-form.username: Enter your username and Pimcore will send a login link to your email address
 forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset Password
