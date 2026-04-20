@@ -103,6 +103,7 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
       max-width: 586px;
       max-height: 373px;
       z-index: 1;
+      opacity: ${loading ? 0.4 : 1};
     `
   }
 }, { hashPriority: 'low' })
