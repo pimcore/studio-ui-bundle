@@ -8,6 +8,7 @@ widget.missing-context.description: Nessun elemento correlato trovato
 widget.missing-tab-context.description: "Questa funzionalità non è supportata per l'elemento correlato"
 block: Blocco
 error.error_something_generic_went_wrong: Qualcosa è andato storto
+error.syntax_error: Errore di sintassi
 error.error_element_exists: L'elemento esiste già
 error.error_folder_exists: La cartella esiste già
 error.error_invalid_argument: Argomento non valido
@@ -374,6 +375,7 @@ grid.advanced-column.advancedColumns.phpCodeKey: Chiave trasformatore PHP
 grid.advanced-column.advancedColumns.arguments: Argomenti
 component.workflow-card.action-btn: Azioni workflow
 component.pql.description: Pimcore Query Language (PQL) è un linguaggio di query semplice ma potente che consente di cercare dati utilizzando vari criteri, incluso il filtraggio dei valori negli elementi correlati, per consentire un recupero dati preciso e completo. Per dettagli vedere <anchorPQL>Documentazione PQL</anchorPQL>
+component.pql.placeholder: Digita la tua query
 asset.asset-editor-tabs.embedded-metadata.headline: Informazioni meta
 asset.asset-editor-tabs.embedded-metadata.columns.name: Nome
 asset.asset-editor-tabs.embedded-metadata.columns.value: Valore

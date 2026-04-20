@@ -8,6 +8,7 @@ widget.missing-context.description: Inget relaterat element hittades
 widget.missing-tab-context.description: Den här funktionen stöds inte för det relaterade elementet
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
+error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
 error.error_invalid_argument: Ogiltigt argument
@@ -374,6 +375,7 @@ grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nyckel
 grid.advanced-column.advancedColumns.arguments: Argument
 component.workflow-card.action-btn: Workflowåtgärder
 component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
+component.pql.placeholder: Skriv din fråga
 asset.asset-editor-tabs.embedded-metadata.headline: Metainformation
 asset.asset-editor-tabs.embedded-metadata.columns.name: Namn
 asset.asset-editor-tabs.embedded-metadata.columns.value: Värde
