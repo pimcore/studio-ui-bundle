@@ -9,89 +9,132 @@
  */
 
 import { createStyles } from 'antd-style'
+import { keyframes } from '@emotion/react'
 
 interface StyleProps {
   loading: boolean
 }
 
+// ---------------------------------------------------------------------------
+// Orbit keyframes — defined at module scope using emotion's keyframes helper.
+// The returned Keyframes object produces a stable, globally-registered name
+// that can be safely interpolated into any nested css block without risk of
+// the emotion hashing mismatch that broke the previous @keyframes-in-css approach.
+// ---------------------------------------------------------------------------
+
+const orbitTL = keyframes`
+  from { transform: translate(-50%, -50%) rotate(0deg)   translateX(340px); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(340px); }
+`
+
+const orbitBL = keyframes`
+  from { transform: translate(-50%, -50%) rotate(120deg) translateX(220px); }
+  to   { transform: translate(-50%, -50%) rotate(480deg) translateX(220px); }
+`
+
+const orbitBR = keyframes`
+  from { transform: translate(-50%, -50%) rotate(240deg) translateX(400px); }
+  to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
+`
+
 export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) => {
+  // -------------------------------------------------------------------------
+  // colorPulse — defined inside createStyles so token.colorPrimary is in scope.
+  // Oscillates the background between the brand primary colour (at 42% mix)
+  // and the signature blueish.  Each figure uses the same keyframe but with a
+  // different animation-delay, creating a dreamy, desynchronised colour drift.
+  // -------------------------------------------------------------------------
+  const colorPulse = keyframes`
+    0%   { background: color-mix(in srgb, ${token.colorPrimary} 42%, transparent); }
+    50%  { background: rgba(55, 217, 243, 0.20); }
+    100% { background: color-mix(in srgb, ${token.colorPrimary} 42%, transparent); }
+  `
+
   return {
     background: css`
       position: absolute;
       inset: 0;
       background: #FFF;
       overflow: hidden;
-      opacity: ${loading ? 1 : 0.4};
-
-      @keyframes pimcore-bubble-orbit-tl {
-        0%   { transform: translate(0,     0)    rotate(65.637deg); }
-        25%  { transform: translate(40px, -30px) rotate(75deg); }
-        50%  { transform: translate(20px,  50px) rotate(65.637deg); }
-        75%  { transform: translate(-30px, 20px) rotate(55deg); }
-        100% { transform: translate(0,     0)    rotate(65.637deg); }
-      }
-
-      @keyframes pimcore-bubble-orbit-bl {
-        0%   { transform: translate(0,     0)    rotate(28.303deg); }
-        33%  { transform: translate(-40px, 30px) rotate(38deg); }
-        66%  { transform: translate(30px, -40px) rotate(18deg); }
-        100% { transform: translate(0,     0)    rotate(28.303deg); }
-      }
-
-      @keyframes pimcore-bubble-orbit-br {
-        0%   { transform: translate(0,     0)    rotate(65.637deg); }
-        25%  { transform: translate(-30px, 40px) rotate(55deg); }
-        50%  { transform: translate(40px,  20px) rotate(75deg); }
-        75%  { transform: translate(10px, -30px) rotate(65.637deg); }
-        100% { transform: translate(0,     0)    rotate(65.637deg); }
-      }
-
-      @keyframes pimcore-bubble-hue {
-        0%   { filter: blur(310px) hue-rotate(0deg); }
-        100% { filter: blur(310px) hue-rotate(360deg); }
-      }
+      opacity: 0.3;
 
       .background-figure {
         position: absolute;
+        filter: blur(310px);
+
+        ${loading
+          ? /* Loading — all figures orbit the viewport centre */
+            css`
+              top: 50%;
+              left: 50%;
+            `
+          : /* Done — transition each figure to its final resting position */
+            css`
+              transition: top 1200ms ease, left 1200ms ease, transform 1200ms ease;
+            `
+        }
 
         &--top-left {
-          top: -80%;
-          left: -30%;
           width: 1324px;
           height: 1324px;
           flex-shrink: 0;
-          border-radius: var(--Components-Input-Component-paddingBlockSM, 1324px);
+          border-radius: 1324px;
           background: rgba(55, 217, 243, 0.20);
-          filter: blur(310px);
-          animation:
-            pimcore-bubble-orbit-tl 12s ease-in-out infinite,
-            pimcore-bubble-hue 16s linear infinite;
+
+          ${loading
+            ? css`
+                animation:
+                  ${orbitTL} 11s linear infinite,
+                  ${colorPulse} 6s linear 0s infinite;
+              `
+            : css`
+                top: -80%;
+                left: -30%;
+                transform: rotate(65.637deg);
+              `
+          }
         }
 
         &--bottom-left {
           width: 651.152px;
           height: 1503.398px;
           flex-shrink: 0;
-          border-radius: var(--Components-Input-Component-paddingBlockSM, 1503.398px);
+          border-radius: 1503.398px;
           background: #FDFFFF;
-          filter: blur(310px);
-          animation:
-            pimcore-bubble-orbit-bl 10s ease-in-out infinite,
-            pimcore-bubble-hue 20s linear infinite 2s;
+
+          ${loading
+            ? css`
+                animation:
+                  ${orbitBL} 9s linear infinite,
+                  ${colorPulse} 6s linear -2s infinite;
+              `
+            : css`
+                top: 0;
+                left: 0;
+                transform: rotate(28.303deg);
+              `
+          }
         }
 
         &--bottom-right {
-          top: 55%;
-          left: 33%;
           width: 1642px;
           height: 686px;
           flex-shrink: 0;
-          border-radius: var(--Components-Input-Component-paddingBlockSM, 1642px);
+          border-radius: 1642px;
           background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
-          filter: blur(310px);
-          animation:
-            pimcore-bubble-orbit-br 14s ease-in-out infinite 1s,
-            pimcore-bubble-hue 18s linear infinite 4s;
+
+          ${loading
+            ? css`
+                animation:
+                  ${orbitBR} 14s linear infinite,
+                  ${colorPulse} 6s linear -4s infinite;
+              `
+            : css`
+                top: 55%;
+                left: 33%;
+                transform: rotate(65.637deg);
+              `
+          }
         }
       }
     `,
@@ -103,7 +146,6 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
       max-width: 586px;
       max-height: 373px;
       z-index: 1;
-      opacity: ${loading ? 0.4 : 1};
     `
   }
 }, { hashPriority: 'low' })
