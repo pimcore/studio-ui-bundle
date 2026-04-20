@@ -10,14 +10,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+interface StyleProps {
+  loading: boolean
+}
+
+export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) => {
   return {
     background: css`
       position: absolute;
       inset: 0;
       background: #FFF;
-      overflow: hidden; 
-      opacity: 0.4;
+      overflow: hidden;
+      opacity: ${loading ? 1 : 0.4};
 
       @keyframes pimcore-bubble-orbit-tl {
         0%   { transform: translate(0,     0)    rotate(65.637deg); }

@@ -12,8 +12,12 @@ import React from 'react'
 import { useStyle } from './background.styles'
 import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
 
-const Background = (): React.JSX.Element => {
-  const { styles } = useStyle()
+export interface BackgroundProps {
+  loading?: boolean
+}
+
+const Background = ({ loading = false }: BackgroundProps): React.JSX.Element => {
+  const { styles } = useStyle({ loading })
   const { logoUrl } = useAdminThumbnails()
 
   return (

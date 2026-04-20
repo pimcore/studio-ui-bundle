@@ -10,7 +10,6 @@
         z-index: 9999;
         background: #fff;
         overflow: hidden;
-        opacity: 0.4;
         transition: opacity 300ms ease;
     }
     #app-preloader.app-preloader--fading { opacity: 0; }
@@ -20,7 +19,7 @@
         top: -80%; left: -30%;
         width: 1324px; height: 1324px;
         border-radius: 1324px;
-        background: rgba(55, 217, 243, 0.20);
+        background: rgba(55, 217, 243, 0.55);
         filter: blur(310px);
         animation:
             pimcore-bubble-orbit-tl 12s ease-in-out infinite,
@@ -29,7 +28,7 @@
     #app-preloader .background-figure--bottom-left {
         width: 651.152px; height: 1503.398px;
         border-radius: 1503.398px;
-        background: #FDFFFF;
+        background: rgba(122, 58, 212, 0.35);
         filter: blur(310px);
         animation:
             pimcore-bubble-orbit-bl 10s ease-in-out infinite,
@@ -39,7 +38,7 @@
         top: 55%; left: 33%;
         width: 1642px; height: 686px;
         border-radius: 1642px;
-        background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
+        background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.75));
         filter: blur(310px);
         animation:
             pimcore-bubble-orbit-br 14s ease-in-out infinite 1s,

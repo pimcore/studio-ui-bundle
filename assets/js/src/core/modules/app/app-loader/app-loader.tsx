@@ -117,7 +117,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     <>
       <GlobalStyles />
 
-      {isLoading && <Background />}
+      {isLoading && <Background loading />}
       {!isLoading && props.children}
     </>
   )
