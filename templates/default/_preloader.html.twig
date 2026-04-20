@@ -2,6 +2,8 @@
   App preloader — shown before JavaScript loads.
   To customise the loading screen in your bundle, override this template:
   templates/bundles/PimcoreStudioUIBundle/default/_preloader.html.twig
+
+  @var branding array{brandColor: string|null, logoUrl: string|null}
 #}
 <style>
     #app-preloader {
@@ -10,69 +12,102 @@
         z-index: 9999;
         background: #fff;
         overflow: hidden;
-        transition: opacity 300ms ease;
+        transition: opacity 500ms ease;
+        --pimcore-brand-color: #7a3ad4;
     }
     #app-preloader.app-preloader--fading { opacity: 0; }
-    #app-preloader .background-figure { position: absolute; }
+
+    #app-preloader .background-figure {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        filter: blur(310px);
+    }
 
     #app-preloader .background-figure--top-left {
-        top: -80%; left: -30%;
-        width: 1324px; height: 1324px;
+        width: 1324px;
+        height: 1324px;
         border-radius: 1324px;
-        background: rgba(55, 217, 243, 0.55);
-        filter: blur(310px);
+        background: rgba(55, 217, 243, 0.20);
         animation:
-            pimcore-bubble-orbit-tl 12s ease-in-out infinite,
-            pimcore-bubble-hue 16s linear infinite;
+            pimcore-orbit-tl 11s linear infinite,
+            pimcore-color-pulse 6s linear 0s infinite;
     }
     #app-preloader .background-figure--bottom-left {
-        width: 651.152px; height: 1503.398px;
+        width: 651.152px;
+        height: 1503.398px;
         border-radius: 1503.398px;
-        background: rgba(122, 58, 212, 0.35);
-        filter: blur(310px);
+        background: #FDFFFF;
         animation:
-            pimcore-bubble-orbit-bl 10s ease-in-out infinite,
-            pimcore-bubble-hue 20s linear infinite 2s;
+            pimcore-orbit-bl 9s linear infinite,
+            pimcore-color-pulse 6s linear -2s infinite;
     }
     #app-preloader .background-figure--bottom-right {
-        top: 55%; left: 33%;
-        width: 1642px; height: 686px;
+        width: 1642px;
+        height: 686px;
         border-radius: 1642px;
-        background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.75));
-        filter: blur(310px);
+        background: color-mix(in srgb, var(--pimcore-brand-color) 42%, transparent);
         animation:
-            pimcore-bubble-orbit-br 14s ease-in-out infinite 1s,
-            pimcore-bubble-hue 18s linear infinite 4s;
+            pimcore-orbit-br 14s linear infinite,
+            pimcore-color-pulse 6s linear -4s infinite;
     }
 
-    @keyframes pimcore-bubble-orbit-tl {
-        0%   { transform: translate(0,     0)    rotate(65.637deg); }
-        25%  { transform: translate(40px, -30px) rotate(75deg); }
-        50%  { transform: translate(20px,  50px) rotate(65.637deg); }
-        75%  { transform: translate(-30px, 20px) rotate(55deg); }
-        100% { transform: translate(0,     0)    rotate(65.637deg); }
+    /* Orbit keyframes — same geometry as the React Background component */
+    @keyframes pimcore-orbit-tl {
+        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(340px); }
+        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(340px); }
     }
-    @keyframes pimcore-bubble-orbit-bl {
-        0%   { transform: translate(0,     0)    rotate(28.303deg); }
-        33%  { transform: translate(-40px, 30px) rotate(38deg); }
-        66%  { transform: translate(30px, -40px) rotate(18deg); }
-        100% { transform: translate(0,     0)    rotate(28.303deg); }
+    @keyframes pimcore-orbit-bl {
+        from { transform: translate(-50%, -50%) rotate(120deg) translateX(220px); }
+        to   { transform: translate(-50%, -50%) rotate(480deg) translateX(220px); }
     }
-    @keyframes pimcore-bubble-orbit-br {
-        0%   { transform: translate(0,     0)    rotate(65.637deg); }
-        25%  { transform: translate(-30px, 40px) rotate(55deg); }
-        50%  { transform: translate(40px,  20px) rotate(75deg); }
-        75%  { transform: translate(10px, -30px) rotate(65.637deg); }
-        100% { transform: translate(0,     0)    rotate(65.637deg); }
+    @keyframes pimcore-orbit-br {
+        from { transform: translate(-50%, -50%) rotate(240deg) translateX(400px); }
+        to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
     }
-    @keyframes pimcore-bubble-hue {
-        0%   { filter: blur(310px) hue-rotate(0deg); }
-        100% { filter: blur(310px) hue-rotate(360deg); }
+
+    /* Default colour pulse — uses the hardcoded default brand colour as a literal
+       so the browser can smoothly interpolate between keyframe values.
+       Overridden below if branding.brandColor is provided. */
+    @keyframes pimcore-color-pulse {
+        0%   { background: color-mix(in srgb, #7a3ad4 42%, transparent); }
+        50%  { background: rgba(55, 217, 243, 0.20); }
+        100% { background: color-mix(in srgb, #7a3ad4 42%, transparent); }
+    }
+
+    #app-preloader .preloader-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 586px;
+        max-height: 373px;
+        z-index: 1;
+        opacity: 0.4;
     }
 </style>
 
-<div id="app-preloader">
+{% if branding.brandColor %}
+{# Override the colour-pulse keyframe with the actual brand colour as a literal value.
+   A later @keyframes with the same name overrides the earlier one — last wins.
+   Literal colour values (not CSS variables) are required for smooth CSS animation
+   interpolation without @property registration. #}
+<style>
+    @keyframes pimcore-color-pulse {
+        0%   { background: color-mix(in srgb, {{ branding.brandColor }} 42%, transparent); }
+        50%  { background: rgba(55, 217, 243, 0.20); }
+        100% { background: color-mix(in srgb, {{ branding.brandColor }} 42%, transparent); }
+    }
+</style>
+{% endif %}
+
+<div id="app-preloader"{% if branding.brandColor %} style="--pimcore-brand-color: {{ branding.brandColor }}; --pimcore-brand-background-color: {{ branding.brandColor }}"{% endif %}>
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>
+    <img
+        class="preloader-logo"
+        src="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
+        alt="Logo"
+    />
 </div>
