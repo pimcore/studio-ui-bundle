@@ -21,14 +21,16 @@ interface UseFileUploadProps {
   onUploadError?: (error: Error, file: File) => void
 }
 
+export type FileUploadStatus = 'normal' | 'active' | 'success' | 'exception'
+
 export interface FileUploadState {
   progress: number
-  status: 'normal' | 'active' | 'success' | 'exception'
+  status: FileUploadStatus
 }
 
 interface UseFileUploadReturn {
   uploadProgress: number
-  uploadStatus: 'normal' | 'active' | 'success' | 'exception'
+  uploadStatus: FileUploadStatus
   loading: boolean
   isUploading: boolean
   upload: (file: File) => Promise<void>
@@ -45,7 +47,7 @@ export const useFileUpload = ({
   onUploadError
 }: UseFileUploadProps): UseFileUploadReturn => {
   const [uploadProgress, setUploadProgress] = useState(0)
-  const [uploadStatus, setUploadStatus] = useState<'normal' | 'active' | 'success' | 'exception'>('normal')
+  const [uploadStatus, setUploadStatus] = useState<FileUploadStatus>('normal')
   const [loading, setLoading] = useState(false)
   const [fileUploadStates, setFileUploadStates] = useState<Record<string, FileUploadState>>({})
 
