@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
-import { Content } from '@Pimcore/components/content/content'
+import { Background } from '@Pimcore/components/background/background'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
@@ -117,7 +117,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     <>
       <GlobalStyles />
 
-      {isLoading && <Content loading />}
+      {isLoading && <Background />}
       {!isLoading && props.children}
     </>
   )
