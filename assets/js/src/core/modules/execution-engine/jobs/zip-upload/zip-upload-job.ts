@@ -10,6 +10,7 @@
 
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type MessageBusJob } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { ProgressFieldStrategy } from '../../message-handlers/message-bus-job/strategies/progress-field-strategy'
 import { isNumber, isUndefined } from 'lodash'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { JobStatus } from '../abstact-job'
@@ -40,7 +41,7 @@ export class ZipUploadJob implements JobInterface {
           if (isNumber(jobRunId)) {
             const handler = new MessageBusJobHandler({
               jobRunId: Number(jobRunId),
-              totalSteps: 2,
+              progressStrategy: new ProgressFieldStrategy(),
               onJobCompletion: async (data) => {
                 if (data.isFinished && !isUndefined(onJobCompletion)) {
                   await onJobCompletion()

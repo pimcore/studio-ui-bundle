@@ -10,7 +10,7 @@
 
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { CombinedProgressJobHandler } from '../../message-handlers/message-bus-job/combined-progress-job-handler'
+import { ProgressFieldStrategy } from '../../message-handlers/message-bus-job/strategies/progress-field-strategy'
 import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
@@ -20,12 +20,6 @@ export interface DownloadJobOptions {
   title: string
   action: () => Promise<number>
   downloadUrl: string
-  /**
-   * When true, the job is split into 2 backend steps (e.g. folder CSV/XLSX export):
-   * step 1 collects data and returns a jobRunChildId, step 2 creates the file.
-   * The download will use the child job run ID automatically.
-   */
-  twoStep?: boolean
 }
 
 export class DownloadJob implements JobInterface {
@@ -52,18 +46,12 @@ export class DownloadJob implements JobInterface {
   }
 
   private createHandler (jobRunId: number, options: JobRunOptions): MessageBusJobHandler {
-    const { title, downloadUrl, twoStep } = this.options
+    const { title, downloadUrl } = this.options
 
-    const handlerOptions = {
+    return new MessageBusJobHandler({
       jobRunId,
       title,
-      ...(twoStep === true && {
-        totalSteps: 2,
-        stepDescriptions: {
-          1: 'jobs.job.step.preparing-elements',
-          2: 'jobs.job.step.creating-export-file'
-        }
-      }),
+      progressStrategy: new ProgressFieldStrategy(),
       onRetry: async () => {
         await this.run(options)
       },
@@ -78,12 +66,6 @@ export class DownloadJob implements JobInterface {
           }
         })
       }
-    }
-
-    if (twoStep === true) {
-      return new CombinedProgressJobHandler(handlerOptions)
-    }
-
-    return new MessageBusJobHandler(handlerOptions)
+    })
   }
 }

@@ -12,6 +12,7 @@ import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { StepCountProgressStrategy } from '../../message-handlers/message-bus-job/strategies/step-count-progress-strategy'
 
 export interface AbstractBatchDeleteJobOptions {
   itemIds: number[]
@@ -44,6 +45,7 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
       const handler = new MessageBusJobHandler({
         jobRunId,
         title: this.title,
+        progressStrategy: new StepCountProgressStrategy(),
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {

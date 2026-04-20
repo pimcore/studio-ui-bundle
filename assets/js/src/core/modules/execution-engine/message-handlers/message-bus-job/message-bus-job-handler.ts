@@ -21,26 +21,31 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
 import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
 import { type MessageBusJob, type JobCompletionData, type MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
+import { StepCountProgressStrategy } from './strategies/step-count-progress-strategy'
+import { PROGRESS_NO_UPDATE, type ProgressStrategy } from './strategies/progress-strategy'
 
 export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
 
 export class MessageBusJobHandler extends AbstractMessageHandler {
-  protected jobRunId: number
+  private jobRunId: number
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
-  protected currentStep: number = 1
-  protected readonly totalSteps?: number
-  protected lastProgressValue: number = -1
+  private currentStep: number = 1
+  private readonly totalSteps?: number
+  private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
-  protected readonly stepDescriptions?: Record<number, string>
-  protected polling: JobRunPolling
+  private readonly stepDescriptions?: Record<number, string>
+  private polling: JobRunPolling
+  private readonly progressStrategy: ProgressStrategy
 
-  private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
+  private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
-    this.lastProgressValue = progress
+    if (progress !== null) {
+      this.lastProgressValue = progress
+    }
   }, 250, { leading: true, trailing: true })
 
   constructor (options: MessageBusJobHandlerOptions) {
@@ -49,6 +54,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.totalSteps = options.totalSteps
     this.title = options.title
     this.stepDescriptions = options.stepDescriptions
+    this.progressStrategy = options.progressStrategy ?? new StepCountProgressStrategy()
 
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
@@ -103,21 +109,6 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return this.title
   }
 
-  protected calculateProgress (data: any): number | null {
-    const hasSteps = !isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1
-    const hasProgress = !isNil(data?.progress)
-
-    if (hasSteps) {
-      return Math.max(0, Math.round(((data.currentStep - 1) / data.totalSteps) * 100))
-    }
-
-    if (hasProgress) {
-      return Math.max(0, Math.min(100, data.progress as number))
-    }
-
-    return null
-  }
-
   private async handleJobCompletion (data: JobCompletionData): Promise<void> {
     if (!isNil(this.onJobCompletion)) {
       await this.onJobCompletion(data)
@@ -138,6 +129,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       progress: 0,
       currentStep: this.currentStep,
       totalSteps: this.totalSteps,
+      stepDescriptionKey: this.stepDescriptions?.[this.currentStep],
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
       jobRunId: this.jobRunId
@@ -148,7 +140,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return job
   }
 
-  protected updateJob (changes: Partial<MessageBusJob>): void {
+  private updateJob (changes: Partial<MessageBusJob>): void {
     const job = this.getJob()
     const nextJobState = { ...job, ...changes }
 
@@ -166,7 +158,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }))
   }
 
-  protected transitionToChildJob (newJobRunId: number): void {
+  private transitionToChildJob (newJobRunId: number): void {
     const oldJobRunId = this.jobRunId
 
     this.jobRunId = newJobRunId
@@ -186,6 +178,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     })
 
     this.lastProgressValue = -1
+    this.progressStrategy.onStepTransition?.()
 
     this.updateJob({
       status: JobStatus.RUNNING,
@@ -233,26 +226,31 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return false
   }
 
-  protected handleProgressUpdate (progress: number, data: any): void {
-    if (progress < this.lastProgressValue && progress !== 0) {
-      return
-    }
+  private handleProgressUpdate (progress: number | null, data: any): void {
+    // For determinate progress, skip backwards movement and insignificant changes
+    if (progress !== null) {
+      if (progress < this.lastProgressValue && progress !== 0) {
+        return
+      }
 
-    if (Math.abs(progress - this.lastProgressValue) < 1 && progress !== 100) {
-      return
+      if (Math.abs(progress - this.lastProgressValue) < 1 && progress !== 100) {
+        return
+      }
     }
 
     this.throttledProgressUpdate(progress, data)
   }
 
-  private performProgressUpdate (progress: number, data: any): void {
+  private performProgressUpdate (progress: number | null, data: any): void {
     if (isNil(data?.status)) {
       this.updateJob({ status: JobStatus.RUNNING })
     }
 
-    this.updateJob({
-      progress
-    })
+    if (progress === null) {
+      this.updateJob({ indeterminate: true })
+    } else {
+      this.updateJob({ indeterminate: false, progress })
+    }
   }
 
   private async handlePolledStatusUpdate (data: JobStatusUpdateData): Promise<void> {
@@ -266,7 +264,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     await this.processUpdate(polledData)
   }
 
-  protected async processUpdate (data: any): Promise<void> {
+  private async processUpdate (data: any): Promise<void> {
     if (!isNil(data?.status)) {
       const transitioned = await this.handleStatusUpdate(data)
       if (transitioned) {
@@ -275,10 +273,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }
 
     const stepChanges: Partial<MessageBusJob> = {}
-    if (!isNil(data?.currentStep) && isNil(this.totalSteps) && data.currentStep !== this.currentStep) {
+    if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
       this.currentStep = data.currentStep
       stepChanges.currentStep = data.currentStep
       stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
+
+      // Notify strategy and reset progress tracking on every step change.
+      // For handler-owned steps (totalSteps set at construction), transitionToChildJob
+      // handles this for child-job transitions; here we cover same-job step advances.
+      this.progressStrategy.onStepTransition?.()
+      this.lastProgressValue = -1
     }
     if (!isNil(data?.totalSteps) && isNil(this.totalSteps)) {
       stepChanges.totalSteps = data.totalSteps
@@ -287,9 +291,14 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       this.updateJob(stepChanges)
     }
 
-    const progress = this.calculateProgress(data)
-    if (!isNil(progress)) {
-      this.handleProgressUpdate(progress, data)
+    const result = this.progressStrategy.calculateProgress(data, {
+      currentStep: this.currentStep,
+      totalSteps: this.totalSteps,
+      lastProgressValue: this.lastProgressValue
+    })
+
+    if (result !== PROGRESS_NO_UPDATE) {
+      this.handleProgressUpdate(result, data)
     }
   }
 }

@@ -9,8 +9,8 @@
  */
 
 import { AbstractBatchEditJob, type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
-import { type MessageBusJobHandler, type MessageBusJobHandlerOptions } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { CombinedProgressJobHandler } from '../../message-handlers/message-bus-job/combined-progress-job-handler'
+import { MessageBusJobHandler, type MessageBusJobHandlerOptions } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { ProgressFieldStrategy } from '../../message-handlers/message-bus-job/strategies/progress-field-strategy'
 
 export interface AssetFolderBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchAssetsInFolder: (args: any) => Promise<any>
@@ -34,13 +34,14 @@ export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
   }
 
   protected override createHandler (options: MessageBusJobHandlerOptions): MessageBusJobHandler {
-    return new CombinedProgressJobHandler({
+    return new MessageBusJobHandler({
       ...options,
       totalSteps: 2,
       stepDescriptions: {
-        1: 'jobs.job.step.preparing-elements',
-        2: 'jobs.job.step.patching-elements'
-      }
+        1: 'jobs.job.step.batch-edit.preparing',
+        2: 'jobs.job.step.batch-edit.applying'
+      },
+      progressStrategy: new ProgressFieldStrategy()
     })
   }
 
