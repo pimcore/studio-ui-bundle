@@ -21,6 +21,7 @@ import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/u
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type DataObjectEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
+import { useShareViaNotification } from '@Pimcore/modules/notifications/actions/share-via-notification/use-share-via-notification'
 import { type MenuProps } from 'antd'
 import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,7 +39,15 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.dataObjectEditorToolbar.name, contextMenuProps)
 
-  const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
+  const { shareViaNotificationContextMenuItem, shareViaNotificationModal } = useShareViaNotification(
+    dataObject !== undefined
+      ? { type: 'object', id: dataObject.id, fullPath: dataObject.fullPath ?? undefined }
+      : undefined
+  )
+
+  const allItems = [...items, shareViaNotificationContextMenuItem]
+
+  const visibleItems = allItems.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     if (e.key === ContextMenuActionName.unpublish) {
@@ -57,7 +66,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       <Dropdown
         key="dropdown-button"
         menu={ {
-          items,
+          items: allItems,
           onClick: handleMenuClick
         } }
         open={ isOpen }
@@ -70,9 +79,12 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   }
 
   return (
-    <ButtonGroup
-      items={ buttonGroupItems }
-      noSpacing
-    />
+    <>
+      <ButtonGroup
+        items={ buttonGroupItems }
+        noSpacing
+      />
+      {shareViaNotificationModal}
+    </>
   )
 }

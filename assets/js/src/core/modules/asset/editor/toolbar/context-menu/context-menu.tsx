@@ -22,6 +22,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type AssetEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
+import { useShareViaNotification } from '@Pimcore/modules/notifications/actions/share-via-notification/use-share-via-notification'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -35,7 +36,15 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   const items: DropdownMenuProps['items'] = useContextMenuSlot(contextMenuConfig.assetEditorToolbar.name, contextMenuProps)
 
-  const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
+  const { shareViaNotificationContextMenuItem, shareViaNotificationModal } = useShareViaNotification(
+    asset !== undefined
+      ? { type: 'asset', id: asset.id, fullPath: asset.fullPath ?? undefined }
+      : undefined
+  )
+
+  const allItems = [...items, shareViaNotificationContextMenuItem]
+
+  const visibleItems = allItems.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
   const buttonGroupItems: ReactElement[] = []
 
@@ -58,7 +67,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     buttonGroupItems.push(
       <Dropdown
         key="more-button"
-        menu={ { items } }
+        menu={ { items: allItems } }
       >
         <DropdownButton key="dropdown-button">
           {t('toolbar.more')}
@@ -68,10 +77,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   }
 
   return (
-    <ButtonGroup
-      items={ buttonGroupItems }
-      noSpacing
-    />
+    <>
+      <ButtonGroup
+        items={ buttonGroupItems }
+        noSpacing
+      />
+      {shareViaNotificationModal}
+    </>
   )
 
   function hasDataChanged (): boolean {
