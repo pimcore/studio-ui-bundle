@@ -8,24 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Tooltip, Typography } from 'antd'
-import { Trans } from 'react-i18next'
-import { isObject } from 'lodash'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Trans, useTranslation } from 'react-i18next'
+import { isObject, isNull, isUndefined } from 'lodash'
+import { linter, lintGutter, type Diagnostic } from '@codemirror/lint'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { useStyles } from './pql-query-input.styles'
+import { CodeEditor } from '@Pimcore/components/code-editor/code-editor'
+import type { IApiErrorDetails } from '@Pimcore/modules/app/error-handler/types'
 import { Icon } from '../icon/icon'
+import { useStyles } from './pql-query-input.styles'
 
 const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
 
 interface IPQLQueryInputProps {
   value: string
-  handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  handleBlur: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  handleChange: (value: string) => void
+  handleBlur?: () => void
   errorData?: FetchBaseQueryError
   isShowError: boolean
 }
@@ -33,17 +35,45 @@ interface IPQLQueryInputProps {
 export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isShowError }: IPQLQueryInputProps): React.JSX.Element => {
   const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
 
+  const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const getDescription = (): string => {
-    const error = errorData?.data
+  const getErrorDetails = (): IApiErrorDetails | null => {
+    const data = errorData?.data
 
-    if (error !== null && isObject(error) && 'message' in error) {
-      return (error as { message: string }).message
+    if (!isNull(data) && isObject(data)) {
+      return data as IApiErrorDetails
     }
 
-    return 'Something went wrong.'
+    return null
   }
+
+  const getDescription = (): string => {
+    return getErrorDetails()?.message ?? t('error.error_something_generic_went_wrong')
+  }
+
+  const pqlErrorExtensions = useMemo(() => {
+    if (!isShowError) return []
+
+    const errorDetails = getErrorDetails()
+
+    if (isNull(errorDetails)) return []
+
+    const position = errorDetails?.position
+    const message = errorDetails?.message ?? t('error.syntax_error')
+
+    const pqlLinter = linter((): Diagnostic[] => {
+      if (isUndefined(position)) return []
+
+      const from = position
+      const tokenLength = errorDetails?.token?.length ?? 1
+      const to = from + tokenLength
+
+      return [{ from, to, severity: 'error', message }]
+    })
+
+    return [lintGutter(), pqlLinter]
+  }, [isShowError, errorData])
 
   return (
     <Flex
@@ -84,14 +114,18 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
           </Tooltip>
         </div>
       </Flex>
-      <TextArea
-        allowClear
-        onBlur={ handleBlur }
-        onChange={ handleChange }
-        placeholder='Type your Query'
-        style={ { height: '150px' } }
-        value={ value }
-      />
+
+      <div className={ isShowError ? styles.editorError : undefined }>
+        <CodeEditor
+          extensions={ pqlErrorExtensions }
+          lineWrapping
+          onBlur={ handleBlur }
+          onChange={ handleChange }
+          placeholder={ t('component.pql.placeholder') }
+          value={ value }
+        />
+      </div>
+
       {isShowError && (
         <Alert
           banner
