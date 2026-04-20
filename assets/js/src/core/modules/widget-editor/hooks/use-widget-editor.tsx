@@ -18,7 +18,7 @@ import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface UseWidgetEditorReturn {
-  createWidget: (name: string, widgetType: string, onFinish?: (newName: string) => void) => Promise<void>
+  createWidget: (name: string, widgetType: string, onFinish?: (id: string) => void) => Promise<void>
   getWidgetById: (widgetId: string, widgetType: string) => Promise<WidgetConfig | undefined>
   updateWidget: (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void) => Promise<void>
   removeWithConfirmation: (widgetId: string, widgetType: string, onFinish?: () => void) => void
@@ -63,7 +63,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
     }
   }, [widgetDeleteMutation])
 
-  const createWidget = useCallback(async (name: string, widgetType: string, onFinish?: (name: string) => void): Promise<void> => {
+  const createWidget = useCallback(async (name: string, widgetType: string, onFinish?: (id: string) => void): Promise<void> => {
     const widgetCreateTask = widgetCreateMutation({
       widgetType,
       body: {
@@ -78,9 +78,11 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+        return
       }
 
-      onFinish?.(name)
+      const { id } = response.data as { id: string }
+      onFinish?.(id)
       void successRef.current(tRef.current('widget-editor.create.success'))
     } catch {
       trackError(new GeneralError('Failed to create new widget.'))
