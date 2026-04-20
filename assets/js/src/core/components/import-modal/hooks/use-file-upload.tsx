@@ -17,6 +17,8 @@ interface UseFileUploadProps {
   action: string
   headers?: Record<string, string>
   data?: Record<string, any>
+  fileKey?: string
+  filesKey?: string
   onUploadSuccess?: (response: any, file: File) => void
   onUploadError?: (error: Error, file: File) => void
 }
@@ -43,6 +45,8 @@ export const useFileUpload = ({
   action,
   headers,
   data,
+  fileKey = 'file',
+  filesKey = 'files[]',
   onUploadSuccess,
   onUploadError
 }: UseFileUploadProps): UseFileUploadReturn => {
@@ -64,7 +68,7 @@ export const useFileUpload = ({
     setUploadProgress(0)
 
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append(fileKey, file)
 
     if (!isNil(data)) {
       Object.keys(data).forEach(key => {
@@ -109,7 +113,7 @@ export const useFileUpload = ({
 
       throw error
     }
-  }, [action, headers, data, onUploadSuccess, onUploadError])
+  }, [action, headers, data, fileKey, onUploadSuccess, onUploadError])
 
   const uploadMultiple = useCallback(async (entries: Array<{ id: string, file: File }>): Promise<void> => {
     setLoading(true)
@@ -118,7 +122,7 @@ export const useFileUpload = ({
       setFileUploadStates(prev => ({ ...prev, [id]: { progress: 0, status: 'active' } }))
 
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append(filesKey, file)
 
       if (!isNil(data)) {
         Object.keys(data).forEach(key => {
@@ -164,7 +168,7 @@ export const useFileUpload = ({
     }
 
     setLoading(false)
-  }, [action, headers, data, onUploadSuccess, onUploadError])
+  }, [action, headers, data, filesKey, onUploadSuccess, onUploadError])
 
   return {
     uploadProgress,

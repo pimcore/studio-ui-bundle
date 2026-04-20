@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Modal, IconTextButton, ModalFooter, Button, useMessage } from '@sdk/components'
+import { Modal, IconTextButton, ModalFooter, Button, Flex, useMessage } from '@sdk/components'
 import type { UploadProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isNil, isEmpty } from 'lodash'
@@ -17,34 +17,7 @@ import { useFileValidation } from './hooks/use-file-validation'
 import { useFileUpload } from './hooks/use-file-upload'
 import { FileDropZone } from './components/file-drop-zone/file-drop-zone'
 import { SelectedFileView } from './components/selected-file-view/selected-file-view'
-
-interface FileEntry {
-  id: string
-  file: File
-}
-
-export interface ImportModalProps {
-  action: string
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  title?: string
-  uploadButtonLabel?: string
-  browseButtonLabel?: string
-  dragDropLabel?: string
-  accept?: string
-  acceptMimeTypes?: string[]
-  validateFile?: (file: File) => boolean
-  onValidationError?: (file: File) => void
-  maxFileSize?: number
-  headers?: Record<string, string>
-  data?: Record<string, any>
-  onUploadSuccess?: (response: any, file: File) => void
-  onUploadError?: (error: Error, file: File) => void
-  showSuccessMessage?: boolean
-  successMessage?: React.ReactNode
-  multiple?: boolean
-  children?: React.ReactNode
-}
+import { type FileEntry, type ImportModalProps } from './types'
 
 export const ImportModal = ({
   action,
@@ -61,6 +34,8 @@ export const ImportModal = ({
   maxFileSize,
   headers,
   data,
+  fileKey,
+  filesKey,
   onUploadSuccess,
   onUploadError,
   showSuccessMessage = true,
@@ -90,6 +65,8 @@ export const ImportModal = ({
     action,
     headers,
     data,
+    fileKey,
+    filesKey,
     onUploadSuccess,
     onUploadError
   })
@@ -267,31 +244,36 @@ export const ImportModal = ({
           type="file"
         />
 
-        {(!hasFiles || multiple) && (
-          <FileDropZone
-            dragDropLabel={ dragDropLabel }
-            uploadProps={ uploadProps }
-          />
-        )}
-
-        {hasFiles && selectedFiles.map(({ id, file }) => {
-          const fileState = fileUploadStates[id]
-          const fileProgress = fileState?.progress ?? uploadProgress
-          const fileStatus = fileState?.status ?? uploadStatus
-          const fileIsUploading = fileState?.status === 'active'
-
-          return (
-            <SelectedFileView
-              file={ file }
-              isUploading={ multiple ? fileIsUploading : isUploading }
-              key={ id }
-              loading={ multiple ? fileIsUploading : loading }
-              onRemove={ multiple ? () => { handleFileRemove(id) } : handleFileReset }
-              uploadProgress={ multiple ? fileProgress : uploadProgress }
-              uploadStatus={ multiple ? fileStatus : uploadStatus }
+        <Flex
+          gap="mini"
+          vertical
+        >
+          {(!hasFiles || multiple) && (
+            <FileDropZone
+              dragDropLabel={ dragDropLabel }
+              uploadProps={ uploadProps }
             />
-          )
-        })}
+          )}
+
+          {hasFiles && selectedFiles.map(({ id, file }) => {
+            const fileState = fileUploadStates[id]
+            const fileProgress = fileState?.progress ?? uploadProgress
+            const fileStatus = fileState?.status ?? uploadStatus
+            const fileIsUploading = fileState?.status === 'active'
+
+            return (
+              <SelectedFileView
+                file={ file }
+                isUploading={ multiple ? fileIsUploading : isUploading }
+                key={ id }
+                loading={ multiple ? fileIsUploading : loading }
+                onRemove={ multiple ? () => { handleFileRemove(id) } : handleFileReset }
+                uploadProgress={ multiple ? fileProgress : uploadProgress }
+                uploadStatus={ multiple ? fileStatus : uploadStatus }
+              />
+            )
+          })}
+        </Flex>
       </Modal>
     </>
   )
