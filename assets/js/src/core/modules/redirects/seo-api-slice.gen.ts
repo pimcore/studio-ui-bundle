@@ -86,21 +86,6 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/bundle/seo/redirects/types` }),
                 providesTags: ["Bundle Seo"],
             }),
-            bundleSeoRobotsTxtGet: build.query<BundleSeoRobotsTxtGetApiResponse, BundleSeoRobotsTxtGetApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/bundle/seo/robots-txt` }),
-                providesTags: ["Bundle Seo"],
-            }),
-            bundleSeoRobotsTxtUpdate: build.mutation<
-                BundleSeoRobotsTxtUpdateApiResponse,
-                BundleSeoRobotsTxtUpdateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/seo/robots-txt`,
-                    method: "PUT",
-                    body: queryArg.bundleSeoRobotsTxtUpdate,
-                }),
-                invalidatesTags: ["Bundle Seo"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -162,13 +147,6 @@ export type BundleSeoRedirectListTypesApiResponse = /** status 200 List of avail
     types: string[];
 };
 export type BundleSeoRedirectListTypesApiArg = void;
-export type BundleSeoRobotsTxtGetApiResponse = /** status 200 Robots.txt configuration data */ BundleSeoRobotsTxtConfig;
-export type BundleSeoRobotsTxtGetApiArg = void;
-export type BundleSeoRobotsTxtUpdateApiResponse =
-    /** status 200 Updated robots.txt configuration data */ BundleSeoRobotsTxtConfig;
-export type BundleSeoRobotsTxtUpdateApiArg = {
-    bundleSeoRobotsTxtUpdate: BundleSeoRobotsTxtUpdate;
-};
 export type BundleSeoRedirect = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -277,26 +255,6 @@ export type BundleSeoRedirectStatus = {
     /** Status label */
     label: string;
 };
-export type BundleSeoRobotsTxtSiteConfig = {
-    /** Site ID (0 for default site) */
-    siteId: number;
-    /** Robots.txt content for this site */
-    content: string;
-};
-export type BundleSeoRobotsTxtConfig = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Robots.txt configuration per site */
-    data: BundleSeoRobotsTxtSiteConfig[];
-    /** Whether a physical robots.txt file exists on the filesystem */
-    onFileSystem: boolean;
-};
-export type BundleSeoRobotsTxtUpdate = {
-    /** Robots.txt configuration per site */
-    data: BundleSeoRobotsTxtSiteConfig[];
-};
 export const {
     useBundleSeoRedirectAddMutation,
     useBundleSeoRedirectCleanupMutation,
@@ -308,6 +266,4 @@ export const {
     useBundleSeoRedirectListPrioritiesQuery,
     useBundleSeoRedirectListStatusesQuery,
     useBundleSeoRedirectListTypesQuery,
-    useBundleSeoRobotsTxtGetQuery,
-    useBundleSeoRobotsTxtUpdateMutation,
 } = injectedRtkApi;

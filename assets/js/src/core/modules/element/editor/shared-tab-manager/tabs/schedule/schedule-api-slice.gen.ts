@@ -38,13 +38,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Schedule"],
             }),
-            scheduleListActionsForElementType: build.query<
-                ScheduleListActionsForElementTypeApiResponse,
-                ScheduleListActionsForElementTypeApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/schedules/actions/${queryArg.elementType}` }),
-                providesTags: ["Schedule"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -82,13 +75,6 @@ export type ScheduleCreateForElementByTypeAndIdApiArg = {
     /** Id of the element */
     id: number;
 };
-export type ScheduleListActionsForElementTypeApiResponse = /** status 200 List of available schedule actions */ {
-    items: ScheduleAction[];
-};
-export type ScheduleListActionsForElementTypeApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-};
 export type Error = {
     /** Message */
     message: string;
@@ -111,9 +97,7 @@ export type Schedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?:
-        | ("publish-version" | "publish" | "unpublish" | "delete")
-        | ("publish-version" | "publish" | "unpublish" | "delete");
+    action?: ("publish" | "delete") | ("publish" | "delete");
     /** Version ID */
     version?: number | null;
     /** Active */
@@ -129,26 +113,15 @@ export type UpdateSchedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?:
-        | ("publish-version" | "publish" | "unpublish" | "delete")
-        | ("publish-version" | "publish" | "unpublish" | "delete");
+    action?: ("publish" | "delete") | ("publish" | "delete");
     /** Version ID */
     version?: number | null;
     /** Active */
     active: boolean;
-};
-export type ScheduleAction = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Action key */
-    key: string;
 };
 export const {
     useScheduleDeleteByIdMutation,
     useScheduleGetCollectionForElementByTypeAndIdQuery,
     useScheduleUpdateForElementByTypeAndIdMutation,
     useScheduleCreateForElementByTypeAndIdMutation,
-    useScheduleListActionsForElementTypeQuery,
 } = injectedRtkApi;
