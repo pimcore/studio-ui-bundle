@@ -55,6 +55,16 @@ const orbitBR = keyframes`
   to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
 `
 
+// ---------------------------------------------------------------------------
+// Logo glow — slow opacity breathe in sync with the orbit animations.
+// Oscillates the white radial glow behind the logo between soft and bright.
+// ---------------------------------------------------------------------------
+const logoGlow = keyframes`
+  0%   { opacity: 0.55; }
+  50%  { opacity: 0.90; }
+  100% { opacity: 0.55; }
+`
+
 export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
   const isLoading = phase === 'loading'
   const isOrbiting = phase === 'loading' || phase === 'outro'
@@ -160,14 +170,27 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
         }
       }
     `,
-    logoImage: css`
+    logoWrap: css`
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 1;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -80px -100px;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
+        animation: ${logoGlow} 7s ease-in-out infinite;
+      }
+    `,
+    logoImage: css`
+      position: relative;
+      display: block;
       max-width: 586px;
       max-height: 373px;
-      z-index: 1;
     `
   }
 }, { hashPriority: 'low' })

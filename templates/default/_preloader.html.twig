@@ -75,15 +75,31 @@
         100% { background: color-mix(in srgb, #7a3ad4 42%, transparent); }
     }
 
-    #app-preloader .preloader-logo {
+    #app-preloader .preloader-logo-wrap {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+    #app-preloader .preloader-logo-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -80px -100px;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
+        animation: pimcore-logo-glow 7s ease-in-out infinite;
+    }
+    #app-preloader .preloader-logo {
+        position: relative;
+        display: block;
         max-width: 586px;
         max-height: 373px;
-        z-index: 1;
-        opacity: 1;
+    }
+    @keyframes pimcore-logo-glow {
+        0%   { opacity: 0.55; }
+        50%  { opacity: 0.90; }
+        100% { opacity: 0.55; }
     }
 </style>
 
@@ -105,9 +121,11 @@
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>
-    <img
-        class="preloader-logo"
-        src="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
-        alt="Logo"
-    />
+    <div class="preloader-logo-wrap">
+        <img
+            class="preloader-logo"
+            src="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
+            alt="Logo"
+        />
+    </div>
 </div>
