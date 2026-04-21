@@ -15,6 +15,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 
 export interface DeleteJobOptions {
@@ -68,6 +69,7 @@ export class DeleteJob implements JobInterface {
       const handler = new MessageBusJobHandler({
         jobRunId,
         title: this.title,
+        progressCalculator: new StepCompletionCalculator(),
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {

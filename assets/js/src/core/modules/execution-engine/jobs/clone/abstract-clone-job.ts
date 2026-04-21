@@ -13,6 +13,8 @@ import { store } from '@Pimcore/app/store'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { MessageBusJobHandler, type MessageBusJob } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { ChildJobStepTracker } from '../../message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
+import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { JobStatus } from '../abstact-job'
@@ -67,6 +69,8 @@ export abstract class AbstractCloneJob implements JobInterface {
           }
           return this.title
         },
+        stepTracker: new ChildJobStepTracker(),
+        progressCalculator: new StepCompletionCalculator(),
         onJobCompletion: async (data: any) => {
           try {
             await this.handleCompletion()

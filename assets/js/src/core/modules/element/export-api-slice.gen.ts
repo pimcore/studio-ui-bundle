@@ -23,7 +23,7 @@ const injectedRtkApi = api
             }),
             exportCsvFolder: build.mutation<ExportCsvFolderApiResponse, ExportCsvFolderApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/export/csv/folder`,
+                    url: `/pimcore-studio/api/export/csv/folder/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -46,7 +46,7 @@ const injectedRtkApi = api
             }),
             exportXlsxFolder: build.mutation<ExportXlsxFolderApiResponse, ExportXlsxFolderApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/export/xlsx/folder`,
+                    url: `/pimcore-studio/api/export/xlsx/folder/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -80,8 +80,9 @@ export type ExportCsvApiArg = {
                 | "custom_report_config"
                 | "custom_report_to_export"
                 | "element_class_id"
-                | "element_to_export"
+                | "elements_to_export"
                 | "element_type"
+                | "export_format"
                 | "folder_to_export"
                 | "grid_export_data"
                 | "grid_export_data_info"
@@ -101,6 +102,7 @@ export type ExportCsvApiArg = {
             delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
+        classId?: string | null;
     };
 };
 export type ExportCsvFolderApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
@@ -108,8 +110,9 @@ export type ExportCsvFolderApiResponse = /** status 201 Successfully created <st
     jobRunId: number;
 };
 export type ExportCsvFolderApiArg = {
+    /** Id of the folder */
+    id: number;
     body: {
-        folders?: number[];
         columns?: GridColumnRequest[];
         filters?: ExportAllFilter;
         config?: {
@@ -118,8 +121,9 @@ export type ExportCsvFolderApiArg = {
                 | "custom_report_config"
                 | "custom_report_to_export"
                 | "element_class_id"
-                | "element_to_export"
+                | "elements_to_export"
                 | "element_type"
+                | "export_format"
                 | "folder_to_export"
                 | "grid_export_data"
                 | "grid_export_data_info"
@@ -166,8 +170,9 @@ export type ExportXlsxApiArg = {
                 | "custom_report_config"
                 | "custom_report_to_export"
                 | "element_class_id"
-                | "element_to_export"
+                | "elements_to_export"
                 | "element_type"
+                | "export_format"
                 | "folder_to_export"
                 | "grid_export_data"
                 | "grid_export_data_info"
@@ -186,6 +191,7 @@ export type ExportXlsxApiArg = {
                 | "bool";
         };
         elementType?: "data-object" | "object" | "asset" | "document";
+        classId?: string | null;
     };
 };
 export type ExportXlsxFolderApiResponse =
@@ -194,8 +200,9 @@ export type ExportXlsxFolderApiResponse =
         jobRunId: number;
     };
 export type ExportXlsxFolderApiArg = {
+    /** Id of the folder */
+    id: number;
     body: {
-        folders?: number[];
         columns?: GridColumnRequest[];
         filters?: ExportAllFilter;
         config?: {
@@ -204,8 +211,9 @@ export type ExportXlsxFolderApiArg = {
                 | "custom_report_config"
                 | "custom_report_to_export"
                 | "element_class_id"
-                | "element_to_export"
+                | "elements_to_export"
                 | "element_type"
+                | "export_format"
                 | "folder_to_export"
                 | "grid_export_data"
                 | "grid_export_data_info"

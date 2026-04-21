@@ -22,6 +22,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useColumns } from './hooks/use-columns'
+import { useStyles } from './grid.styles'
 
 export interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -45,6 +46,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { getStateClasses } = useDroppable()
   const { mapToLegacyElementType } = useElementHelper()
   const { columns } = useColumns(props)
+  const { styles } = useStyles({ height: toCssDimension(props.height) ?? null })
   const [data, setData] = useState(getDataArray())
 
   useEffect(() => {
@@ -87,19 +89,20 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
   const content = useMemo(() => (
     <Content
+      overflow={ { x: 'hidden', y: 'hidden' } }
       style={ {
-        width: toCssDimension(props.width),
-        height: toCssDimension(props.height)
+        width: toCssDimension(props.width)
       } }
     >
       <div style={ { maxWidth: 'calc(100% - 2px)' } }>
         <Grid
           autoWidth
-          className={ props.className }
+          className={ cn(styles.grid, props.className) }
           columns={ columns }
           data={ data }
           disabled={ props.disabled === true || props.inherited === true }
           enableRowDrag={ props.enableRowDrag }
+          enableRowVirtualizer
           handleDragEnd={ handleDragEnd }
           onUpdateCellData={ props.onUpdateCellData }
           resizable
