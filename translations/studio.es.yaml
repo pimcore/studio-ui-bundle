@@ -1029,13 +1029,14 @@ jobs.job.button-download: descargar
 jobs.job.button-ignore-and-reload: ignorar y recargar
 jobs.job.step_hint: "Paso {{step}}/{{total}}"
 jobs.job.step_hint_single: "Paso {{step}}"
+jobs.job.step.batch-edit.preparing: Preparando edición por lotes
+jobs.job.step.batch-edit.applying: Aplicando edición por lotes
 jobs.job.download-error: Error en la descarga
 jobs.job.button-show-errors: Mostrar errores
 jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
 jobs.job.abort-confirm: ¿Realmente desea cancelar este trabajo?
 jobs.zip-job.title: "Descarga ZIP de {{title}}"
-jobs.batch-edit-job.title: "Edición por lotes de {{title}}"
 jobs.csv-job.title: "Descarga CSV de {{title}}"
 jobs.xlsx-job.title: "Descarga XLSX de {{title}}"
 batch-edit.job-title: Edición por lotes

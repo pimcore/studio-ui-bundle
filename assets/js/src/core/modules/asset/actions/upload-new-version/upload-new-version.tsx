@@ -9,6 +9,7 @@
  */
 
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +23,9 @@ import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
-import { renameNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { updateNodeData, setNodeFetchingInAllTrees } from '@Pimcore/components/element-tree/element-tree-slice'
+import { transformApiDataToNode } from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'
+import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, onFinish?: () => void) => void
@@ -36,21 +39,55 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const { triggerUpload } = useUploadModalContext()
   const { isTreeActionAllowed } = useTreePermission()
 
+  const refreshTreeNode = async (id: number): Promise<void> => {
+    dispatch(setNodeFetchingInAllTrees({ nodeId: String(id), elementType: 'asset', isFetching: true }))
+
+    const fetcher = dispatch(api.endpoints.assetGetTree.initiate(
+      { page: 1, pageSize: 1, pqlQuery: `id = ${id}`, pathIncludeParent: true },
+      { forceRefetch: true }
+    ))
+
+    try {
+      const { data } = await fetcher
+
+      if (!isNil(data?.items?.[0])) {
+        const freshNode = transformApiDataToNode(
+          data.items[0],
+          { id: String(id), internalKey: String(id) }
+        )
+
+        const assetItem = data.items[0]
+        const cacheBustedItem = 'imageThumbnailPath' in assetItem && !isNil(assetItem.imageThumbnailPath)
+          ? { ...assetItem, imageThumbnailPath: addCacheBusterToUrl(assetItem.imageThumbnailPath) }
+          : assetItem
+
+        const cacheBustedIcon = freshNode.icon.type === 'path'
+          ? { ...freshNode.icon, value: addCacheBusterToUrl(freshNode.icon.value) }
+          : freshNode.icon
+
+        dispatch(updateNodeData({
+          nodeId: String(id),
+          elementType: 'asset',
+          data: {
+            icon: cacheBustedIcon,
+            label: freshNode.label,
+            metaData: { asset: cacheBustedItem }
+          }
+        }))
+      }
+    } finally {
+      fetcher.unsubscribe()
+      dispatch(setNodeFetchingInAllTrees({ nodeId: String(id), elementType: 'asset', isFetching: false }))
+    }
+  }
+
   const uploadNewVersion = (id: number, onFinish?: () => void): void => {
     triggerUpload({
       action: `${getPrefix()}/assets/${id}/replace`,
       maxItems: 1,
       multiple: false,
       onSuccess: async (result: any) => {
-        if (!isNil(result?.[0]?.response?.data)) {
-          const newFilename = result[0].response.data
-
-          dispatch(renameNode({
-            nodeId: String(id),
-            elementType: 'asset',
-            newLabel: newFilename
-          }))
-        }
+        await refreshTreeNode(id)
         onFinish?.()
       }
     })

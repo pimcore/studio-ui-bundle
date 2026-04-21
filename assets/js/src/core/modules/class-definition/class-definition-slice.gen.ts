@@ -1160,7 +1160,7 @@ export type CustomLayouts = {
     /** Modification date timestamp */
     modificationDate: number;
     /** User id of owner */
-    userOwner: number;
+    userOwner: number | null;
     /** Class id */
     classId: string;
     /** Whether it is the default layout */
@@ -1226,7 +1226,7 @@ export type ClassDefinition = {
     /** Modification date timestamp */
     modificationDate: number | null;
     /** User id of owner */
-    userOwner: number;
+    userOwner: number | null;
     /** Namespace of parent class */
     parentClass: string;
     /** Interface implementations */

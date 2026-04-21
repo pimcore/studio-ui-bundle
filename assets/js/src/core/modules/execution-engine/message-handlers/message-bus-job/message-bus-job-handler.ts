@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
 import { jobReceived, jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
-import { JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
+import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { getUniqueId } from '@Pimcore/modules/execution-engine/jobs/factory-helper'
 import { isFunction, isNil, throttle } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
@@ -20,11 +21,14 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
 import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
+import { type MessageBusJob, type JobCompletionData, type MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
+import { DefaultStepTracker } from './step-tracker/default-step-tracker'
+import { type StepTracker } from './step-tracker/step-tracker.interface'
+import { ProgressFieldCalculator } from './progress-calculator/progress-field-calculator'
+import { PROGRESS_NO_UPDATE, type ProgressCalculator } from './progress-calculator/progress-calculator.interface'
 
-/**
- * Default job handler that provides common functionality for job management, Redux integration, status mapping, and progress handling
- * Can be used directly or extended by specific job handlers
- */
+export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
+
 export class MessageBusJobHandler extends AbstractMessageHandler {
   private jobRunId: number
   private job: MessageBusJob | null = null
@@ -32,22 +36,27 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly onRetry?: () => void | Promise<void>
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
-  private currentStep: number = 1
-  private readonly totalSteps?: number
+  private readonly stepTracker: StepTracker
+  private readonly stepDescriptions?: Record<number, string>
+  private readonly progressCalculator: ProgressCalculator
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
-  private readonly polling: JobRunPolling
+  private polling: JobRunPolling
 
-  private readonly throttledProgressUpdate = throttle((progress: number, data: any) => {
+  private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
-    this.lastProgressValue = progress
+    if (progress !== null) {
+      this.lastProgressValue = progress
+    }
   }, 250, { leading: true, trailing: true })
 
   constructor (options: MessageBusJobHandlerOptions) {
     super()
     this.jobRunId = options.jobRunId
-    this.totalSteps = options.totalSteps
     this.title = options.title
+    this.stepDescriptions = options.stepDescriptions
+    this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
+    this.progressCalculator = options.progressCalculator ?? new ProgressFieldCalculator()
 
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
@@ -102,22 +111,6 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     return this.title
   }
 
-  /**
-   * Calculate progress percent from message data
-   * Handles both step-based progress (if totalSteps > 1) and direct progress values (0-100)
-   */
-  private calculateProgress (data: any): number | null {
-    if (!isNil(data?.currentStep) && !isNil(data?.totalSteps) && data.totalSteps > 1) {
-      return Math.max(0, Math.round(((data.currentStep - 1) / data.totalSteps) * 100))
-    }
-
-    if (!isNil(data?.progress)) {
-      return Math.max(0, Math.min(100, data.progress as number))
-    }
-
-    return null
-  }
-
   private async handleJobCompletion (data: JobCompletionData): Promise<void> {
     if (!isNil(this.onJobCompletion)) {
       await this.onJobCompletion(data)
@@ -130,14 +123,17 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   }
 
   private createJob (): MessageBusJob {
+    const { currentStep, totalSteps } = this.stepTracker.state
+
     const job: MessageBusJob = {
       id: getUniqueId(),
       type: 'default-message-bus',
       title: '',
       status: JobStatus.QUEUED,
       progress: 0,
-      currentStep: this.currentStep,
-      totalSteps: this.totalSteps,
+      currentStep: this.stepTracker.showStepLabel ? currentStep : undefined,
+      totalSteps: this.stepTracker.showStepLabel ? totalSteps : undefined,
+      stepDescriptionKey: this.stepDescriptions?.[currentStep],
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
       jobRunId: this.jobRunId
@@ -170,47 +166,50 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     const oldJobRunId = this.jobRunId
 
     this.jobRunId = newJobRunId
-    if (isNil(this.totalSteps) || this.currentStep < this.totalSteps) {
-      this.currentStep++
-    }
 
-    // Re-register handler with new ID to ensure proper unregistration later
+    const newState = this.stepTracker.onChildJobTransition()
+
+    // Re-register handler with new ID
     const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
     messageBus.unregisterHandler(oldJobRunId)
     messageBus.registerHandler(this)
 
+    // Recreate polling for the child job
+    this.polling = new JobRunPolling(this.jobRunId, {
+      onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
+      onError: (error) => { console.error('Job run polling error:', error) }
+    })
+
     this.lastProgressValue = -1
+    this.progressCalculator.onStepChange?.()
 
     this.updateJob({
       status: JobStatus.RUNNING,
       progress: 0,
-      currentStep: this.currentStep
+      ...(this.stepTracker.showStepLabel && {
+        currentStep: newState.currentStep,
+        totalSteps: newState.totalSteps,
+        stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
+      }),
+      jobRunId: newJobRunId
     })
   }
 
-  private async handleStatusUpdate (data: any): Promise<void> {
+  private async handleStatusUpdate (data: any): Promise<boolean> {
     if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
       this.transitionToChildJob(Number(data.messages.jobRunChildId))
-      return
+      return true
     }
 
     const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
 
     if (isComplete) {
-      let jobStatus: JobStatus
-      switch (data.status) {
-        case 'finished':
-          jobStatus = JobStatus.SUCCESS
-          break
-        case 'finished_with_errors':
-          jobStatus = JobStatus.FINISHED_WITH_ERRORS
-          break
-        case 'failed':
-          jobStatus = JobStatus.FAILED
-          break
-        default:
-          jobStatus = JobStatus.FAILED
+      const statusMap: Record<string, JobStatus> = {
+        finished: JobStatus.SUCCESS,
+        finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
+        failed: JobStatus.FAILED
       }
+      const jobStatus = statusMap[data.status] ?? JobStatus.FAILED
 
       const completionData: JobCompletionData = {
         isSuccessful: String(data.status) === 'finished',
@@ -222,31 +221,42 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
       await this.handleJobCompletion(completionData)
 
-      this.updateJob({ status: jobStatus, messages: data.messages })
+      const messages = Array.isArray(data.messages) ? data.messages as string[] : undefined
+      this.updateJob({ status: jobStatus, messages })
 
       const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
       messageBus.unregisterHandler(this.jobRunId)
     } else if (data.status === 'running') {
       this.updateJob({ status: JobStatus.RUNNING })
     }
+
+    return false
   }
 
-  private handleProgressUpdate (progress: number, data: any): void {
-    if (Math.abs(progress - this.lastProgressValue) < 1 && progress !== 100) {
-      return
+  private handleProgressUpdate (progress: number | null, data: any): void {
+    if (progress !== null) {
+      if (progress < this.lastProgressValue && progress !== 0) {
+        return
+      }
+
+      if (Math.abs(progress - this.lastProgressValue) < 1 && progress !== 100) {
+        return
+      }
     }
 
     this.throttledProgressUpdate(progress, data)
   }
 
-  private performProgressUpdate (progress: number, data: any): void {
+  private performProgressUpdate (progress: number | null, data: any): void {
     if (isNil(data?.status)) {
       this.updateJob({ status: JobStatus.RUNNING })
     }
 
-    this.updateJob({
-      progress
-    })
+    if (progress === null) {
+      this.updateJob({ indeterminate: true })
+    } else {
+      this.updateJob({ indeterminate: false, progress })
+    }
   }
 
   private async handlePolledStatusUpdate (data: JobStatusUpdateData): Promise<void> {
@@ -262,39 +272,50 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   private async processUpdate (data: any): Promise<void> {
     if (!isNil(data?.status)) {
-      await this.handleStatusUpdate(data)
+      const transitioned = await this.handleStatusUpdate(data)
+      if (transitioned) {
+        return
+      }
     }
 
-    const progress = this.calculateProgress(data)
-    if (!isNil(progress)) {
-      this.handleProgressUpdate(progress, data)
+    // Notify the step tracker of incoming backend step data
+    if (!isNil(data?.currentStep)) {
+      const newState = this.stepTracker.onBackendStep(data.currentStep as number)
+
+      if (newState !== null) {
+        // Step advanced — notify calculator and reset progress tracking
+        this.progressCalculator.onStepChange?.()
+        this.lastProgressValue = -1
+
+        if (this.stepTracker.showStepLabel) {
+          // Also pick up totalSteps from backend if the tracker now knows it
+          this.updateJob({
+            currentStep: newState.currentStep,
+            totalSteps: newState.totalSteps,
+            stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
+          })
+        }
+      }
+    }
+
+    // For DefaultStepTracker: pick up totalSteps from backend on first message
+    if (!isNil(data?.totalSteps) && this.stepTracker.showStepLabel) {
+      const currentTrackerState = this.stepTracker.state
+      if (isNil(currentTrackerState.totalSteps) && 'onBackendTotalSteps' in this.stepTracker) {
+        (this.stepTracker as any).onBackendTotalSteps(data.totalSteps as number)
+        this.updateJob({ totalSteps: data.totalSteps as number })
+      }
+    }
+
+    const { currentStep, totalSteps } = this.stepTracker.state
+    const result = this.progressCalculator.calculateProgress(data, {
+      currentStep,
+      totalSteps,
+      lastProgressValue: this.lastProgressValue
+    })
+
+    if (result !== PROGRESS_NO_UPDATE) {
+      this.handleProgressUpdate(result, data)
     }
   }
-}
-
-export interface MessageBusJob extends AbstractJob {
-  progress?: number
-  currentStep?: number
-  totalSteps?: number
-  onRetry?: () => void | Promise<void>
-  onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
-  messages?: string[]
-  jobRunId: number
-}
-
-export interface JobCompletionData {
-  isSuccessful: boolean
-  isFinished: boolean
-  isFailed: boolean
-  status: JobStatus
-  payload: any
-}
-
-export interface MessageBusJobHandlerOptions {
-  jobRunId: number
-  title: string | ((job: MessageBusJob) => string)
-  totalSteps?: number
-  onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
-  onRetry?: () => void | Promise<void>
-  onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 }

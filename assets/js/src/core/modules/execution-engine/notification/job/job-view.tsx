@@ -32,8 +32,10 @@ export interface JobViewProps extends JobProps {
   finishedWithErrorsButtonActions?: ButtonAction[]
   onAbort?: () => void | Promise<void>
   progress: number
+  indeterminate?: boolean
   currentStep?: number
   totalSteps?: number
+  stepDescriptionKey?: string
 }
 
 export const JobView = (props: JobViewProps): React.JSX.Element => {
@@ -51,7 +53,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
       return null
     }
 
-    if (!isUndefined(props.totalSteps)) {
+    if (!isUndefined(props.totalSteps) && props.totalSteps > 1) {
       return <strong>{ t('jobs.job.step_hint', { step: props.currentStep, total: props.totalSteps }) }: </strong>
     }
 
@@ -108,7 +110,26 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
             </Flex>
           ) }
 
-          { props.status === JobStatus.RUNNING && (
+          { props.status === JobStatus.RUNNING && props.indeterminate === true && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Spin type="classic" />
+                <span>
+                  {stepHint}
+                  { !isUndefined(props.stepDescriptionKey) ? t(props.stepDescriptionKey) : t('jobs.job.in-progress', { title: props.title }) }
+                </span>
+              </Flex>
+              { renderAbortButton() }
+            </Flex>
+          ) }
+
+          { props.status === JobStatus.RUNNING && props.indeterminate !== true && (
             <Progressbar
               description={ <>{stepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
               descriptionAction={ renderAbortButton() }

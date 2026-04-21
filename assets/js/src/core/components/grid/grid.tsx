@@ -390,6 +390,7 @@ export const Grid = ({
         columns={ columns }
         contextMenu={ props.contextMenu }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
+        enableRowVirtualizer={ isEnableRowVirtualizer }
         isSelected={ row.getIsSelected() }
         key={ row.id }
         measureElement={ measureElement }
@@ -461,11 +462,13 @@ export const Grid = ({
                                 header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
                                   ? {
                                       width: 'auto',
-                                      minWidth: header.column.getSize()
+                                      minWidth: header.column.getSize(),
+                                      ...(isEnableRowVirtualizer ? { flexShrink: 1, flexGrow: 1 } : {})
                                     }
                                   : {
                                       width: header.column.getSize(),
-                                      maxWidth: header.column.getSize()
+                                      maxWidth: header.column.getSize(),
+                                      ...(isEnableRowVirtualizer ? { flexShrink: 0 } : {})
                                     }
                               }
                             >

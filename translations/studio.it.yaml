@@ -1029,13 +1029,14 @@ jobs.job.button-download: scarica
 jobs.job.button-ignore-and-reload: ignora e ricarica
 jobs.job.step_hint: "Passo {{step}}/{{total}}"
 jobs.job.step_hint_single: "Passo {{step}}"
+jobs.job.step.batch-edit.preparing: Preparazione modifica in blocco
+jobs.job.step.batch-edit.applying: Applicazione modifica in blocco
 jobs.job.download-error: Download fallito
 jobs.job.button-show-errors: Mostra errori
 jobs.job.error-modal.title: Errori lavoro
 jobs.job.button-abort: Interrompi lavoro
 jobs.job.abort-confirm: Interrompere questo lavoro?
 jobs.zip-job.title: "Download ZIP di {{title}}"
-jobs.batch-edit-job.title: "Modifica in blocco di {{title}}"
 jobs.csv-job.title: "Download CSV di {{title}}"
 jobs.xlsx-job.title: "Download XLSX di {{title}}"
 batch-edit.job-title: Modifica in blocco
