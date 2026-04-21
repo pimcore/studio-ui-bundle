@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { Background } from '@Pimcore/components/background/background'
+import { appIntro } from '@Pimcore/components/background/background.styles'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
@@ -31,6 +32,8 @@ import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loa
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
+import { WidgetRestorer } from '@Pimcore/modules/widget-manager/components/widget-restorer'
+import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -38,6 +41,21 @@ export interface IAppLoaderProps {
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(true)
+
+  const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
+  const registerLoader = useCallback((id: string) => {
+    setPendingLoaders(prev => new Set(prev).add(id))
+  }, [])
+  const unregisterLoader = useCallback((id: string) => {
+    setPendingLoaders(prev => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
+  }, [])
+  const appLoadingContextValue: AppLoadingContextValue = { registerLoader, unregisterLoader }
+
+  const loading = isLoading || pendingLoaders.size > 0
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
@@ -117,8 +135,18 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     <>
       <GlobalStyles />
 
-      {isLoading && <Background loading />}
-      {!isLoading && props.children}
+      <AppLoadingContext.Provider value={ appLoadingContextValue }>
+        <Background loading={ loading } />
+        {!isLoading && (
+          <div style={ {
+            animation: `${appIntro} 600ms ease 200ms both`
+          } }>
+            <WidgetRestorer>
+              {props.children}
+            </WidgetRestorer>
+          </div>
+        )}
+      </AppLoadingContext.Provider>
     </>
   )
 }

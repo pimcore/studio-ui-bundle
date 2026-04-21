@@ -22,6 +22,23 @@ interface StyleProps {
 // the emotion hashing mismatch that broke the previous @keyframes-in-css approach.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// App intro — fade + subtle scale-up for the main UI when loading completes.
+// Starts after a short delay so the background opacity transition has already
+// begun, creating a depth-aware crossfade handoff.
+// ---------------------------------------------------------------------------
+
+export const appIntro = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`
+
 const orbitTL = keyframes`
   from { transform: translate(-50%, -50%) rotate(0deg)   translateX(340px); }
   to   { transform: translate(-50%, -50%) rotate(360deg) translateX(340px); }
