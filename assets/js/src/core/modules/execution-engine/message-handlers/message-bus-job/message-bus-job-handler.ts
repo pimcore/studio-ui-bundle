@@ -220,7 +220,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
       await this.handleJobCompletion(completionData)
 
-      this.updateJob({ status: jobStatus, messages: data.messages })
+      const messages = Array.isArray(data.messages) ? data.messages as string[] : undefined
+      this.updateJob({ status: jobStatus, messages })
 
       const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
       messageBus.unregisterHandler(this.jobRunId)
