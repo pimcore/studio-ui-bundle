@@ -64,7 +64,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     setPhase('outro')
     outroTimerRef.current = setTimeout(() => {
       setPhase('idle')
-    }, 500)
+    }, 1000)
   }, [])
 
   useEffect(() => {

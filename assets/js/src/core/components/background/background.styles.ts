@@ -78,7 +78,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       background: #FFF;
       overflow: hidden;
       opacity: ${isLoading ? 1 : 0.3};
-      transition: opacity ${isOutro ? '400ms' : '1200ms'} ease;
+      transition: opacity ${isOutro ? '900ms' : '1200ms'} ease;
 
       .background-figure {
         position: absolute;
