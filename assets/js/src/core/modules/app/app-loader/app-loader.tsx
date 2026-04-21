@@ -138,6 +138,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         <Background loading={ loading } />
         {!isLoading && (
           <div style={ {
+            position: 'absolute',
+            inset: 0,
             animation: `${appIntro} 600ms ease 200ms both`
           } }>
             {props.children}
