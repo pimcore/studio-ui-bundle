@@ -1029,13 +1029,14 @@ jobs.job.button-download: Herunterladen
 jobs.job.button-ignore-and-reload: Ignorieren und neu laden
 jobs.job.step_hint: "Schritt {{step}}/{{total}}"
 jobs.job.step_hint_single: "Schritt {{step}}"
+jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
+jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
 jobs.job.abort-confirm: Möchten Sie diesen Auftrag wirklich abbrechen?
 jobs.zip-job.title: "ZIP-Download von {{title}}"
-jobs.batch-edit-job.title: "Stapelbearbeitung von {{title}}"
 jobs.csv-job.title: "CSV-Download von {{title}}"
 jobs.xlsx-job.title: "XLSX-Download von {{title}}"
 batch-edit.job-title: Stapelbearbeitung

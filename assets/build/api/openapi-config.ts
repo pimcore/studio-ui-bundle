@@ -193,7 +193,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/thumbnails/i)
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/(login|logout)/i)
+      filterEndpoints: pathMatcher(/\/api\/(login|logout)/i)
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/class\//i)

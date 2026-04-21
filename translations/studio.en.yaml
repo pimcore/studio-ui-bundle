@@ -1040,8 +1040,9 @@ jobs.job.button-show-errors: Show errors
 jobs.job.error-modal.title: Job Errors
 jobs.job.button-abort: Abort Job
 jobs.job.abort-confirm: Do you really want to abort this job?
+jobs.job.step.batch-edit.preparing: Preparing batch edit
+jobs.job.step.batch-edit.applying: Applying batch edit
 jobs.zip-job.title: "ZIP download of {{title}}"
-jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV download of {{title}}"
 jobs.xlsx-job.title: "XLSX download of {{title}}"
 batch-edit.job-title: Batch Edit

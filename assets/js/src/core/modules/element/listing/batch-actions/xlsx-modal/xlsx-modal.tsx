@@ -112,7 +112,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
     const job = new DownloadJob({
       title: t('jobs.xlsx-job.title', { title: jobTitle }),
       downloadUrl: `${getPrefix()}/export/download/xlsx/{jobRunId}`,
-      action: async () => await getDownloadAction(values.header)
+      action: async () => await getDownloadAction(values.header),
+      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
     })
     void executionEngine.runJob(job)
 
@@ -146,8 +147,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
       }
 
       const promise = fetchCreateFolderXlsx({
+        id,
         body: {
-          folders: [id],
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
@@ -171,7 +172,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             header
-          }
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 
