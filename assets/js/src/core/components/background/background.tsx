@@ -29,14 +29,12 @@ const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
       <div className='background-figure background-figure--bottom-left'></div>
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
-      <div className={ styles.logoWrap }>
-        <img
-          alt="Logo"
-          className={ styles.logoImage }
-          data-testid="studio-background-logo"
-          src={ logoUrl }
-        />
-      </div>
+      <img
+        alt="Logo"
+        className={ styles.logoImage }
+        data-testid="studio-background-logo"
+        src={ logoUrl }
+      />
     </div>
   )
 }
