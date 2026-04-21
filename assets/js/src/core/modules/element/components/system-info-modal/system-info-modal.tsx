@@ -127,9 +127,9 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
       <FormKit.Panel>
         {renderInputItem({ label: t('system-information.id'), name: 'id' })}
         {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
-        {(data.type === 'image' || data.type === 'page') &&
-            renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
-          }
+        {(data.type === 'image' || data.type === 'page' || data.type === 'document') &&
+          renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
+        }
         {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
         {renderInputItem({
           label: t('system-information.type'),
