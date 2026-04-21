@@ -39,7 +39,7 @@ const SORT_KEY_MAP: Record<string, string> = {
   baseUnit: 'baseunit'
 }
 
-function toSortKey(columnId: string): string {
+function toSortKey (columnId: string): string {
   return SORT_KEY_MAP[columnId] ?? columnId
 }
 
@@ -61,9 +61,9 @@ export const QuantityValueContainer = (): React.JSX.Element => {
         columnFilters: isNil(filter) ? [] : [{ type: 'search', filterValue: filter }],
         sortFilter: sorting.length > 0
           ? {
-            key: toSortKey(sorting[0].id),
-            direction: sorting[0].desc ? 'DESC' : 'ASC'
-          }
+              key: toSortKey(sorting[0].id),
+              direction: sorting[0].desc ? 'DESC' : 'ASC'
+            }
           : {}
       }
     }
@@ -160,19 +160,19 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           >
             <div>
               <IconTextButton
-                disabled={isFetching || exportLoading || quantityValueUnitRows.length < 1}
-                icon={{ value: 'download' }}
-                loading={exportLoading}
-                onClick={handleExport}
-                type={'link'}
+                disabled={ isFetching || exportLoading || quantityValueUnitRows.length < 1 }
+                icon={ { value: 'download' } }
+                loading={ exportLoading }
+                onClick={ handleExport }
+                type={ 'link' }
               >
                 {t('quantity-values.export')}
               </IconTextButton>
               <IconTextButton
-                disabled={isFetching}
-                icon={{ value: 'upload-import' }}
-                onClick={() => { setIsImportModalOpen(true) }}
-                type={'link'}
+                disabled={ isFetching }
+                icon={ { value: 'upload-import' } }
+                onClick={ () => { setIsImportModalOpen(true) } }
+                type={ 'link' }
               >
                 {t('quantity-values.import')}
               </IconTextButton>
@@ -183,92 +183,92 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               <Split>
                 <Flex align='center'>
                   <IconButton
-                    disabled={isFetching}
-                    icon={{ value: 'refresh' }}
-                    onClick={handleRefetch}
+                    disabled={ isFetching }
+                    icon={ { value: 'refresh' } }
+                    onClick={ handleRefetch }
                     variant='minimal'
                   />
                 </Flex>
                 <Pagination
-                  current={currentPage}
-                  onChange={handlePageChange}
+                  current={ currentPage }
+                  onChange={ handlePageChange }
                   showSizeChanger
-                  showTotal={(total) => t('pagination.show-total', { total })}
-                  total={totalItems}
+                  showTotal={ (total) => t('pagination.show-total', { total }) }
+                  total={ totalItems }
                 />
               </Split>
-            )
+              )
             : (
               <Flex align='center'>
                 <IconButton
-                  disabled={isFetching}
-                  icon={{ value: 'refresh' }}
-                  onClick={handleRefetch}
+                  disabled={ isFetching }
+                  icon={ { value: 'refresh' } }
+                  onClick={ handleRefetch }
                 />
               </Flex>
-            )}
-        </Toolbar>}
+              )}
+        </Toolbar> }
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={{
+          margin={ {
             x: 'mini',
             y: 'none'
-          }}
+          } }
           theme='secondary'
         >
-          <Flex gap={'small'}>
+          <Flex gap={ 'small' }>
             <Title>{t('widget.quantity-values')}</Title>
             <IconTextButton
-              disabled={isLoading || createLoading}
-              icon={{ value: 'new' }}
-              loading={createLoading}
-              onClick={openCreateModal}
+              disabled={ isLoading || createLoading }
+              icon={ { value: 'new' } }
+              loading={ createLoading }
+              onClick={ openCreateModal }
             >{t('quantity-values.new')}</IconTextButton>
           </Flex>
           <SearchInput
-            loading={isFetching}
-            onSearch={(value) => {
+            loading={ isFetching }
+            onSearch={ (value) => {
               setFilter(value)
               setCurrentPage(1)
-            }}
+            } }
             placeholder="Search"
-            withPrefix={false}
-            withoutAddon={false}
+            withPrefix={ false }
+            withoutAddon={ false }
           />
         </Toolbar>
       }
     >
       <Content
-        loading={isLoading}
-        margin={{
+        loading={ isLoading }
+        margin={ {
           x: 'extra-small',
           y: 'none'
-        }}
-        none={!isLoading && (isUndefined(items) || items.length === 0)}
+        } }
+        none={ !isLoading && (isUndefined(items) || items.length === 0) }
       >
         <Box
-          margin={{
+          margin={ {
             x: 'extra-small',
             y: 'none'
-          }}
+          } }
         >
           <Table
-            onSortingChange={handleSortingChange}
-            quantityValueUnitRows={quantityValueUnitRows}
-            setQuantityValueUnitRows={setQuantityValueUnitRows}
-            sorting={sorting}
+            onSortingChange={ handleSortingChange }
+            quantityValueUnitRows={ quantityValueUnitRows }
+            setQuantityValueUnitRows={ setQuantityValueUnitRows }
+            sorting={ sorting }
           />
         </Box>
       </Content>
       <ImportModal
         accept=".json,application/json"
-        acceptMimeTypes={['application/json']}
-        action={`${getPrefix()}/unit/quantity-value/units/import`}
-        onOpenChange={setIsImportModalOpen}
-        onUploadSuccess={handleImportSuccess}
-        open={isImportModalOpen}
-        title={t('quantity-values.import-modal.title')}
+        acceptMimeTypes={ ['application/json'] }
+        action={ `${getPrefix()}/unit/quantity-value/units/import` }
+        onOpenChange={ setIsImportModalOpen }
+        onUploadSuccess={ handleImportSuccess }
+        open={ isImportModalOpen }
+        title={ t('quantity-values.import-modal.title') }
       />
     </ContentLayout>
   )
