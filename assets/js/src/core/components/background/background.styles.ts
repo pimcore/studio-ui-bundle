@@ -56,17 +56,18 @@ const orbitBR = keyframes`
 `
 
 // ---------------------------------------------------------------------------
-// Logo orbit — two small near-white blobs counter-rotating around the logo.
-// The logo bounding box (~586×373px) sets the orbit radius (~320px).
+// Logo orbit — two large near-white blobs counter-rotating directly behind
+// the logo. Large size + tight radius keeps them centred on the logo.
+// Heavy blur and low opacity make them a barely-visible soft halo.
 // ---------------------------------------------------------------------------
 const logoOrbitCW = keyframes`
-  from { transform: translate(-50%, -50%) rotate(0deg)   translateX(320px); }
-  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(320px); }
+  from { transform: translate(-50%, -50%) rotate(0deg)   translateX(80px); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(80px); }
 `
 
 const logoOrbitCCW = keyframes`
-  from { transform: translate(-50%, -50%) rotate(180deg)  translateX(320px); }
-  to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(320px); }
+  from { transform: translate(-50%, -50%) rotate(180deg)  translateX(80px); }
+  to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(80px); }
 `
 
 export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
@@ -187,11 +188,11 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 180px;
-      height: 180px;
+      width: 500px;
+      height: 500px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.65);
-      filter: blur(60px);
+      background: rgba(253, 255, 255, 0.18);
+      filter: blur(90px);
       animation: ${logoOrbitCW} 5s linear infinite;
       pointer-events: none;
     `,
@@ -199,11 +200,11 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 180px;
-      height: 180px;
+      width: 500px;
+      height: 500px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.65);
-      filter: blur(60px);
+      background: rgba(253, 255, 255, 0.18);
+      filter: blur(90px);
       animation: ${logoOrbitCCW} 7s linear infinite;
       pointer-events: none;
     `

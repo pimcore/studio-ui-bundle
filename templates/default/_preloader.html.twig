@@ -90,23 +90,23 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 180px;
-        height: 180px;
+        width: 500px;
+        height: 500px;
         border-radius: 50%;
-        background: rgba(253, 255, 255, 0.65);
-        filter: blur(60px);
+        background: rgba(253, 255, 255, 0.18);
+        filter: blur(90px);
         pointer-events: none;
     }
     #app-preloader .logo-orbit--cw  { animation: pimcore-logo-orbit-cw  5s linear infinite; }
     #app-preloader .logo-orbit--ccw { animation: pimcore-logo-orbit-ccw 7s linear infinite; }
 
     @keyframes pimcore-logo-orbit-cw {
-        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(320px); }
-        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(320px); }
+        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(80px); }
     }
     @keyframes pimcore-logo-orbit-ccw {
-        from { transform: translate(-50%, -50%) rotate(180deg)  translateX(320px); }
-        to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(320px); }
+        from { transform: translate(-50%, -50%) rotate(180deg)  translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(80px); }
     }
 </style>
 
