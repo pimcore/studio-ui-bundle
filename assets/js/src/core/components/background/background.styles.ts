@@ -188,8 +188,8 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 500px;
-      height: 500px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
       background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
@@ -200,8 +200,8 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 500px;
-      height: 500px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
       background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
