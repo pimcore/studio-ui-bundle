@@ -21,8 +21,10 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
 import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
 import { type MessageBusJob, type JobCompletionData, type MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
-import { StepCountProgressStrategy } from './strategies/step-count-progress-strategy'
-import { PROGRESS_NO_UPDATE, type ProgressStrategy } from './strategies/progress-strategy'
+import { DefaultStepTracker } from './step-tracker/default-step-tracker'
+import { type StepTracker } from './step-tracker/step-tracker.interface'
+import { StepCompletionCalculator } from './progress-calculator/step-completion-calculator'
+import { PROGRESS_NO_UPDATE, type ProgressCalculator } from './progress-calculator/progress-calculator.interface'
 
 export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
 
@@ -33,13 +35,12 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly onRetry?: () => void | Promise<void>
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
-  private currentStep: number = 1
-  private readonly totalSteps?: number
+  private readonly stepTracker: StepTracker
+  private readonly stepDescriptions?: Record<number, string>
+  private readonly progressCalculator: ProgressCalculator
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
-  private readonly stepDescriptions?: Record<number, string>
   private polling: JobRunPolling
-  private readonly progressStrategy: ProgressStrategy
 
   private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -51,10 +52,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   constructor (options: MessageBusJobHandlerOptions) {
     super()
     this.jobRunId = options.jobRunId
-    this.totalSteps = options.totalSteps
     this.title = options.title
     this.stepDescriptions = options.stepDescriptions
-    this.progressStrategy = options.progressStrategy ?? new StepCountProgressStrategy()
+    this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
+    this.progressCalculator = options.progressCalculator ?? new StepCompletionCalculator()
 
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry
@@ -121,15 +122,17 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   }
 
   private createJob (): MessageBusJob {
+    const { currentStep, totalSteps } = this.stepTracker.state
+
     const job: MessageBusJob = {
       id: getUniqueId(),
       type: 'default-message-bus',
       title: '',
       status: JobStatus.QUEUED,
       progress: 0,
-      currentStep: this.currentStep,
-      totalSteps: this.totalSteps,
-      stepDescriptionKey: this.stepDescriptions?.[this.currentStep],
+      currentStep: this.stepTracker.showStepLabel ? currentStep : undefined,
+      totalSteps: this.stepTracker.showStepLabel ? totalSteps : undefined,
+      stepDescriptionKey: this.stepDescriptions?.[currentStep],
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
       jobRunId: this.jobRunId
@@ -162,11 +165,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     const oldJobRunId = this.jobRunId
 
     this.jobRunId = newJobRunId
-    if (isNil(this.totalSteps) || this.currentStep < this.totalSteps) {
-      this.currentStep++
-    }
 
-    // Re-register handler with new ID to ensure proper unregistration later
+    const newState = this.stepTracker.onChildJobTransition()
+
+    // Re-register handler with new ID
     const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
     messageBus.unregisterHandler(oldJobRunId)
     messageBus.registerHandler(this)
@@ -178,13 +180,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     })
 
     this.lastProgressValue = -1
-    this.progressStrategy.onStepTransition?.()
+    this.progressCalculator.onStepChange?.()
 
     this.updateJob({
       status: JobStatus.RUNNING,
       progress: 0,
-      currentStep: this.currentStep,
-      stepDescriptionKey: this.stepDescriptions?.[this.currentStep],
+      ...(this.stepTracker.showStepLabel && {
+        currentStep: newState.currentStep,
+        totalSteps: newState.totalSteps,
+        stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
+      }),
       jobRunId: newJobRunId
     })
   }
@@ -227,7 +232,6 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   }
 
   private handleProgressUpdate (progress: number | null, data: any): void {
-    // For determinate progress, skip backwards movement and insignificant changes
     if (progress !== null) {
       if (progress < this.lastProgressValue && progress !== 0) {
         return
@@ -272,38 +276,39 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       }
     }
 
-    const stepChanges: Partial<MessageBusJob> = {}
-    if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
-      const backendStep = data.currentStep as number
+    // Notify the step tracker of incoming backend step data
+    if (!isNil(data?.currentStep)) {
+      const newState = this.stepTracker.onBackendStep(data.currentStep as number)
 
-      // Accept forward step movement from the backend in all cases.
-      // Block backward movement: when a child job starts it resets its own
-      // currentStep to 1, but transitionToChildJob already advanced
-      // this.currentStep to the correct handler-owned value — we must not
-      // let the child's step 1 clobber it.
-      if (backendStep > this.currentStep) {
-        this.currentStep = backendStep
-
-        // Surface currentStep in Redux only when the handler owns the step structure
-        // (totalSteps set at construction). For backend-driven jobs (delete etc.)
-        // we track currentStep internally but never show the step label.
-        if (!isNil(this.totalSteps)) {
-          stepChanges.currentStep = this.currentStep
-          stepChanges.stepDescriptionKey = this.stepDescriptions?.[this.currentStep]
-        }
-
-        // Notify strategy and reset progress tracking on step advance.
-        this.progressStrategy.onStepTransition?.()
+      if (newState !== null) {
+        // Step advanced — notify calculator and reset progress tracking
+        this.progressCalculator.onStepChange?.()
         this.lastProgressValue = -1
+
+        if (this.stepTracker.showStepLabel) {
+          // Also pick up totalSteps from backend if the tracker now knows it
+          this.updateJob({
+            currentStep: newState.currentStep,
+            totalSteps: newState.totalSteps,
+            stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
+          })
+        }
       }
     }
-    if (Object.keys(stepChanges).length > 0) {
-      this.updateJob(stepChanges)
+
+    // For DefaultStepTracker: pick up totalSteps from backend on first message
+    if (!isNil(data?.totalSteps) && this.stepTracker.showStepLabel) {
+      const currentTrackerState = this.stepTracker.state
+      if (isNil(currentTrackerState.totalSteps) && 'onBackendTotalSteps' in this.stepTracker) {
+        (this.stepTracker as any).onBackendTotalSteps(data.totalSteps as number)
+        this.updateJob({ totalSteps: data.totalSteps as number })
+      }
     }
 
-    const result = this.progressStrategy.calculateProgress(data, {
-      currentStep: this.currentStep,
-      totalSteps: this.totalSteps,
+    const { currentStep, totalSteps } = this.stepTracker.state
+    const result = this.progressCalculator.calculateProgress(data, {
+      currentStep,
+      totalSteps,
       lastProgressValue: this.lastProgressValue
     })
 

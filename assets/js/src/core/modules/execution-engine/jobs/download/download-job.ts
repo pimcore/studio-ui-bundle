@@ -10,7 +10,9 @@
 
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { ProgressFieldStrategy } from '../../message-handlers/message-bus-job/strategies/progress-field-strategy'
+import { ProgressFieldCalculator } from '../../message-handlers/message-bus-job/progress-calculator/progress-field-calculator'
+import { ChildJobStepTracker } from '../../message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
+import { DefaultStepTracker } from '../../message-handlers/message-bus-job/step-tracker/default-step-tracker'
 import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
@@ -21,11 +23,11 @@ export interface DownloadJobOptions {
   action: () => Promise<number>
   downloadUrl: string
   /**
-   * Number of handler-owned steps to display (e.g. 2 for folder exports that
-   * spawn a child job: step 1 = collect, step 2 = create file).
-   * When set, the UI shows "Step 1/N" / "Step 2/N" etc.
+   * Set to true for folder exports that spawn a child job (collect → create file).
+   * Shows "Step 1/2" / "Step 2/2" in the UI.
+   * Leave unset for selected-row exports (single job run, no child).
    */
-  totalSteps?: number
+  hasChildJob?: boolean
 }
 
 export class DownloadJob implements JobInterface {
@@ -52,13 +54,15 @@ export class DownloadJob implements JobInterface {
   }
 
   private createHandler (jobRunId: number, options: JobRunOptions): MessageBusJobHandler {
-    const { title, downloadUrl, totalSteps } = this.options
+    const { title, downloadUrl, hasChildJob } = this.options
 
     return new MessageBusJobHandler({
       jobRunId,
       title,
-      totalSteps,
-      progressStrategy: new ProgressFieldStrategy(),
+      stepTracker: hasChildJob === true
+        ? new ChildJobStepTracker({ totalSteps: 2 })
+        : new DefaultStepTracker(),
+      progressCalculator: new ProgressFieldCalculator(),
       onRetry: async () => {
         await this.run(options)
       },

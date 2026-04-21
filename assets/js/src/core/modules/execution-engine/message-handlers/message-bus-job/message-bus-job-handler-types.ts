@@ -10,7 +10,8 @@
 
 import { type JobStatus, type AbstractJob } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type JobButtonCustomizationContext } from './message-bus-job-notification'
-import { type ProgressStrategy } from './strategies/progress-strategy'
+import { type ProgressCalculator } from './progress-calculator/progress-calculator.interface'
+import { type StepTracker } from './step-tracker/step-tracker.interface'
 
 export interface MessageBusJob extends AbstractJob {
   progress?: number
@@ -35,9 +36,9 @@ export interface JobCompletionData {
 export interface MessageBusJobHandlerOptions {
   jobRunId: number
   title: string | ((job: MessageBusJob) => string)
-  totalSteps?: number
   stepDescriptions?: Record<number, string>
-  progressStrategy?: ProgressStrategy
+  stepTracker?: StepTracker
+  progressCalculator?: ProgressCalculator
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void

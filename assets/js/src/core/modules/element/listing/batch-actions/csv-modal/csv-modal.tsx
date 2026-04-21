@@ -114,7 +114,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       title: t('jobs.csv-job.title', { title: jobTitle }),
       downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
       action: async () => await getDownloadAction(values.delimiter, values.header),
-      ...(numberedSelectedRows.length === 0 && { totalSteps: 2 })
+      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
     })
     void executionEngine.runJob(job)
 

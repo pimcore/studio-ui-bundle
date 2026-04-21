@@ -9,7 +9,7 @@
  */
 
 /**
- * Sentinel value returned by a ProgressStrategy to signal that the progress
+ * Sentinel value returned by a ProgressCalculator to signal that the progress
  * bar should not be updated at all (e.g. no relevant data in the message).
  *
  * Distinct from `null` which signals an indeterminate (spinner) state.
@@ -19,38 +19,33 @@ export const PROGRESS_NO_UPDATE = Symbol('progress-no-update')
 /**
  * The result of a progress calculation:
  *
- * - `number`            – determinate progress value (0–100)
- * - `null`              – indeterminate state (show spinner)
- * - `PROGRESS_NO_UPDATE`– skip update entirely, leave bar as-is
+ * - `number`             – determinate progress value (0–100)
+ * - `null`               – indeterminate state (show spinner)
+ * - `PROGRESS_NO_UPDATE` – skip update entirely, leave bar as-is
  */
 export type ProgressResult = number | null | typeof PROGRESS_NO_UPDATE
 
-export interface ProgressStrategyContext {
-  /** Current job step (1-based), as tracked by the handler */
+export interface ProgressCalculatorContext {
+  /** Current step as tracked by the step tracker */
   currentStep: number
-  /**
-   * Handler-owned total step count set at construction time.
-   * Undefined when the handler does not own the step count
-   * and instead derives it from backend messages.
-   */
+  /** Total steps if known */
   totalSteps?: number
   /** Last progress value successfully applied (-1 if none yet) */
   lastProgressValue: number
 }
 
-export interface ProgressStrategy {
+export interface ProgressCalculator {
   /**
    * Calculate the progress result from a raw SSE message payload.
    *
    * @param data    Raw message payload from the backend
    * @param context Current handler state
-   * @returns ProgressResult
    */
-  calculateProgress: (data: any, context: ProgressStrategyContext) => ProgressResult
+  calculateProgress: (data: any, context: ProgressCalculatorContext) => ProgressResult
 
   /**
-   * Called when the handler transitions to a child job (step change).
-   * Strategies that maintain internal state should reset it here.
+   * Called when the step advances (same-job step change or child job transition).
+   * Calculators that maintain internal state should reset it here.
    */
-  onStepTransition?: () => void
+  onStepChange?: () => void
 }

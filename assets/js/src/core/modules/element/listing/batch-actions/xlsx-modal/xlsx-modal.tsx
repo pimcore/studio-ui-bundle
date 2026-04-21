@@ -113,7 +113,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
       title: t('jobs.xlsx-job.title', { title: jobTitle }),
       downloadUrl: `${getPrefix()}/export/download/xlsx/{jobRunId}`,
       action: async () => await getDownloadAction(values.header),
-      ...(numberedSelectedRows.length === 0 && { totalSteps: 2 })
+      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
     })
     void executionEngine.runJob(job)
 
