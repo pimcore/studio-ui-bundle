@@ -275,17 +275,22 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     const stepChanges: Partial<MessageBusJob> = {}
     if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
       this.currentStep = data.currentStep
-      stepChanges.currentStep = data.currentStep
-      stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
+
+      // Only surface currentStep/totalSteps in the Redux job state (and thus the UI
+      // step label) when the handler was constructed with an explicit totalSteps —
+      // i.e. the job has a known, handler-owned step structure to display.
+      // For jobs like delete where totalSteps comes purely from the backend and can be
+      // arbitrarily large, we track currentStep internally for the strategy only.
+      if (!isNil(this.totalSteps)) {
+        stepChanges.currentStep = data.currentStep
+        stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
+      }
 
       // Notify strategy and reset progress tracking on every step change.
       // For handler-owned steps (totalSteps set at construction), transitionToChildJob
       // handles this for child-job transitions; here we cover same-job step advances.
       this.progressStrategy.onStepTransition?.()
       this.lastProgressValue = -1
-    }
-    if (!isNil(data?.totalSteps) && isNil(this.totalSteps)) {
-      stepChanges.totalSteps = data.totalSteps
     }
     if (Object.keys(stepChanges).length > 0) {
       this.updateJob(stepChanges)
