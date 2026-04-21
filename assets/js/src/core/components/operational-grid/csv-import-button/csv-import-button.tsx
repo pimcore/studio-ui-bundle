@@ -14,14 +14,10 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { CsvImportModal } from '../csv-import-modal/csv-import-modal'
 import { useOperationalGridContext } from '../provider/operational-grid-provider'
 
-export const CsvImportButton = (): React.JSX.Element | null => {
+export const CsvImportButton = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { value, columns, onChange, disableCsvImport } = useOperationalGridContext()
+  const { value, columns, onChange } = useOperationalGridContext()
   const [isOpen, setIsOpen] = useState(false)
-
-  if (disableCsvImport === true) {
-    return null
-  }
 
   const handleConfirm = (newRows: any[]): void => {
     onChange?.(newRows)

@@ -18,7 +18,6 @@ export interface IOperationalGridContext {
   columns: Array<ColumnDef<any>>
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   finalGridProps: GridProps
-  disableCsvImport?: boolean
 }
 
 export const OperationalGridContext = createContext<IOperationalGridContext | undefined>(undefined)

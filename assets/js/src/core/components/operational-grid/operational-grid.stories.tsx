@@ -454,17 +454,3 @@ export const WithDragAndDrop = {
     return <ComponentWrapper />
   }
 }
-
-export const WithCsvImportDisabled = {
-  args: {
-    value: initialData,
-    columns,
-    enableSorting: true,
-    enableRowSelection: true,
-    enableMultipleRowSelection: true,
-    disableCsvImport: true,
-    onChange: (value: Item[]) => {
-      console.log('Data changed:', value)
-    }
-  }
-}

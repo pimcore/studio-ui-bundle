@@ -21,11 +21,10 @@ export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdate
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   children: React.ReactNode
   onUpdateCellData?: GridProps['onUpdateCellData']
-  disableCsvImport?: boolean
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value = [], onChange, onColumnsChange, children, onUpdateCellData, columns = [], disableCsvImport, ...gridProps } = props
+  const { value = [], onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
 
   const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event
@@ -45,7 +44,6 @@ const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
   return (
     <OperationalGridProvider
       columns={ columns }
-      disableCsvImport={ disableCsvImport }
       finalGridProps={ finalGridProps }
       onChange={ onChange }
       onColumnsChange={ onColumnsChange }
